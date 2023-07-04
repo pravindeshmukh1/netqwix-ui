@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
 import Link from "next/link";
 
 const Auth_SignIn = () => {
@@ -35,6 +37,24 @@ const Auth_SignIn = () => {
   const redirectToSignUpPage = () => {
     router.push("/auth/signUp");
   };
+
+  const login = useGoogleLogin({
+    onSuccess: async (codeResponse) => {
+      console.log("Code response", codeResponse);
+      await axios
+        .get(
+          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${codeResponse.access_token}`,
+        )
+        .then((res) => {
+          console.log("userDetail", res.data);
+        })
+        .catch((err) => console.log(err));
+    },
+    onError: (error) => {
+      console.log("Login Error:", error);
+    },
+  });
+
 
   return (
     <div className="login-page1">
@@ -93,19 +113,9 @@ const Auth_SignIn = () => {
                   <div className="medialogo">
                     <ul>
                       <li>
-                        <Link className="icon-btn btn-danger button-effect" href="https://www.google.com/">
+                      <div onClick={() => login()} className="icon-btn btn-danger button-effect" href="https://www.google.com/">
                           <i className="fa fa-google"></i>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="icon-btn btn-primary button-effect" href="https://twitter.com/">
-                          <i className="fa fa-twitter"></i>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="icon-btn btn-facebook button-effect" href="https://www.facebook.com/">
-                          <i className="fa fa-facebook-f"></i>
-                        </Link>
+                      </div>
                       </li>
                     </ul>
                   </div>
