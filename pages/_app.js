@@ -41,13 +41,13 @@ export default function MyAppComponent({ Component, pageProps }) {
       <Head>
         <meta httpEquiv="content-type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Chitchat" />
-        <meta name="keywords" content="Chitchat" />
-        <meta name="author" content="Chitchat" />
+        <meta name="description" content="Netquix" />
+        <meta name="keywords" content="Netquix" />
+        <meta name="author" content="Netquix" />
         <link rel="icon" href="/favicon.png" />
         <link rel="shortcut icon" href="/favicon.png" />
 
-        <title>Chitchat - chat messenger html templlete</title>
+        <title>Netquix</title>
       </Head>
       {loader && (
         <div className="chitchat-loader">
