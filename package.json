@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.11.0",
     "@zeit/next-css": "^1.0.1",
     "axios": "^0.26.1",
     "bootstrap": "^5.1.3",
