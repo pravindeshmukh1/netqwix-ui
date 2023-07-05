@@ -9,7 +9,7 @@ const BasicInfo = (props) => {
         <label className="col-form-label">User name</label>
         <input
           className="form-control"
-          onChange={(e) => handleChange(e)}
+          onChange={handleChange}
           type="text"
           name="userName"
           placeholder="User name"
@@ -20,7 +20,7 @@ const BasicInfo = (props) => {
         <label className="col-form-label">Email Address</label>
         <input
           className="form-control"
-          onChange={(e) => handleChange(e)}
+          onChange={handleChange}
           type="email"
           name="email"
           placeholder="Email"
@@ -35,7 +35,7 @@ const BasicInfo = (props) => {
         <input
           className="form-control"
           id="inputPassword3"
-          onChange={(e) => handleChange(e)}
+          onChange={handleChange}
           type="password"
           name="password"
           placeholder="Password"

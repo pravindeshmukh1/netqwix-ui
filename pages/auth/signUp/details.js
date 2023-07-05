@@ -9,7 +9,7 @@ const Details = (props) => {
         <label className="col-form-label">Phone No</label>
         <input
           className="form-control"
-          onChange={(e) => handleChange(e)}
+          onChange={handleChange}
           type="number"
           name="phoneNo"
           placeholder="Phone No"
@@ -24,9 +24,10 @@ const Details = (props) => {
           id="accountType"
           className="form-control"
           name="accountType"
-          onChange={(e) => handleChange(e)}
+          onChange={handleChange}
           defaultValue={values.accountType}
         >
+          <option>Choose account type</option>
           {LIST_OF_ACCOUNT_TYPE.map((accountType, index) => {
             return (
               <option key={index} value={accountType.label}>
