@@ -5,6 +5,8 @@ import "../public/assets/scss/color.scss";
 import { ToastContainer } from "react-toastify";
 import ChatContextProvider from "../helpers/chatContext/chatCtx";
 import CustomizerContextProvider from "../helpers/customizerContext/customizerCtx";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 
 export default function MyAppComponent({ Component, pageProps }) {
   const router = useRouter();
@@ -38,16 +40,17 @@ export default function MyAppComponent({ Component, pageProps }) {
 
   return (
     <Fragment>
+      <GoogleOAuthProvider clientId="378280665890-gdb7rkg1t181kksi0et73ridtrop0hnh.apps.googleusercontent.com">
       <Head>
         <meta httpEquiv="content-type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Chitchat" />
-        <meta name="keywords" content="Chitchat" />
-        <meta name="author" content="Chitchat" />
+        <meta name="description" content="Netquix" />
+        <meta name="keywords" content="Netquix" />
+        <meta name="author" content="Netquix" />
         <link rel="icon" href="/favicon.png" />
         <link rel="shortcut icon" href="/favicon.png" />
 
-        <title>Chitchat - chat messenger html templlete</title>
+        <title>Netquix</title>
       </Head>
       {loader && (
         <div className="chitchat-loader">
@@ -65,6 +68,7 @@ export default function MyAppComponent({ Component, pageProps }) {
         </CustomizerContextProvider>
         <ToastContainer />
       </div>
+      </GoogleOAuthProvider>
     </Fragment>
   );
 }
