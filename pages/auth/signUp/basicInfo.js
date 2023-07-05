@@ -1,10 +1,10 @@
-import React, {useState} from "react";
+import React from "react";
 
 const BasicInfo = (props) => {
   const { values, handleChange } = props;
 
   return (
-    <form className="form1">
+    <React.Fragment>
       <div className="form-group">
         <label className="col-form-label">User name</label>
         <input
@@ -23,7 +23,7 @@ const BasicInfo = (props) => {
           onChange={(e) => handleChange(e)}
           type="email"
           name="email"
-          placeholder="Demo@123gmail.com"
+          placeholder="Email"
           value={values.email}
         />
       </div>
@@ -38,11 +38,11 @@ const BasicInfo = (props) => {
           onChange={(e) => handleChange(e)}
           type="password"
           name="password"
-          placeholder="********"
+          placeholder="Password"
           value={values.password}
         />
       </div>
-    </form>
+    </React.Fragment>
   );
 };
 

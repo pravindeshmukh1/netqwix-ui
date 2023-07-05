@@ -2,9 +2,11 @@ import React, { useState, useRef } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Stepper from "react-stepper-horizontal";
-import { signUpSteps } from "../../common/constants";
+import { Errors, signUpSteps } from "../../common/constants";
 import BasicInfo from "./basicInfo";
 import Details from "./details";
+import { toast } from "react-toastify";
+import { Utils } from "../../../utils/utils";
 
 const Auth_SignUp = (props) => {
   const router = useRouter();
@@ -18,40 +20,77 @@ const Auth_SignUp = (props) => {
 
   const [details, setDetails] = useState({
     phoneNo: "",
-    accountType: ""
+    accountType: "",
   });
-
 
   const handleChangeBasicInfo = (e) => {
     const { name, value } = e.target;
     setBasicInfo({ ...basicInfo, [name]: value });
-  }
+  };
 
   const handleChangeDetails = (e) => {
     const { name, value } = e.target;
-    setDetails({ ...basicInfo, [name]: value });
-  }
+    setDetails({ ...details, [name]: value });
+  };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const checkValidation = () => {
+    switch (activeStep + 1) {
+      case 1:
+        if (basicInfo.email && Utils.isEmailValid(basicInfo.email)) {
+          return true;
+        } else {
+          return false;
+        }
+      default:
+        break;
+    }
+  };
+
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  }
+    switch (activeStep + 1) {
+      case 1:
+        const isBasicInfoNotEmpty = Object.values(basicInfo).every(
+          (info) => info !== ""
+        );
+        if (isBasicInfoNotEmpty) {
+          const isBasicInfoValid = checkValidation();
+          if (isBasicInfoValid) {
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          } else {
+            toast.error(Errors.invalidEmail);
+          }
+        } else {
+          toast.error(Errors.signUp.basicInfo);
+        }
 
-  const handleSubmit = () => {
-    router.push("/auth/signIn");
-  }
-
-  
+        break;
+      case 2:
+        if (
+          !details.accountType ||
+          details.accountType === "Choose account type"
+        ) {
+          toast.error(Errors.signUp.detailsTab);
+        } else {
+          router.push("/auth/signIn");
+        }
+        break;
+      default:
+        break;
+    }
+  };
 
   const signUpStep = () => {
     switch (activeStep + 1) {
       case 1:
-        return <BasicInfo values={basicInfo} handleChange={handleChangeBasicInfo} />;
+        return (
+          <BasicInfo values={basicInfo} handleChange={handleChangeBasicInfo} />
+        );
       case 2:
-        return <Details values={details} handleChange={handleChangeDetails}/>;
+        return <Details values={details} handleChange={handleChangeDetails} />;
     }
   };
 
@@ -77,39 +116,39 @@ const Auth_SignUp = (props) => {
                   <div>
                     <Stepper steps={signUpSteps} activeStep={activeStep} />
                   </div>
-                  <div className="my-4">
-                  {signUpStep()}
-                  </div>
-                  <div className="form-group">
-                    <div className="buttons">
-                      {activeStep != 0 && (
-                        <Link
-                          className="btn btn-primary button-effect"
-                          href="#"
-                          onClick={handleBack}
-                        >
-                          Back
-                        </Link>
-                      )}
-                      {activeStep === signUpSteps.length - 1 ? (
-                        <Link
-                        className="btn button-effect btn-signup"
-                          href="#"
-                          onClick={() => handleSubmit()}
-                        >
-                          Submit
-                        </Link>
-                      ) : (
-                        <Link
-                        className="btn btn-primary button-effect"
-                        href="#"
-                        onClick={() => handleNext()}
-                      >
-                        Next
-                      </Link>
-                      )}
+                  <form className="form1">
+                    <div className="my-4">{signUpStep()}</div>
+                    <div className="form-group">
+                      <div className="buttons">
+                        {activeStep != 0 && (
+                          <Link
+                            className="btn btn-primary button-effect"
+                            href="#"
+                            onClick={handleBack}
+                          >
+                            Back
+                          </Link>
+                        )}
+                        {activeStep === signUpSteps.length - 1 ? (
+                          <Link
+                            className="btn button-effect btn-signup"
+                            href="#"
+                            onClick={() => handleNext()}
+                          >
+                            Submit
+                          </Link>
+                        ) : (
+                          <Link
+                            className="btn btn-primary button-effect"
+                            href="#"
+                            onClick={() => handleNext()}
+                          >
+                            Next
+                          </Link>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  </form>
                   <div className="termscondition">
                     <h4 className="mb-0">
                       <span>*</span>Terms and condition<b>&amp;</b>Privacy
