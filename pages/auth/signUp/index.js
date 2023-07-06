@@ -2,26 +2,44 @@ import React, { useState, useRef } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Stepper from "react-stepper-horizontal";
-import { Errors, signUpSteps } from "../../../app/common/constants";
+import {
+  Errors,
+  SuccessMsgs,
+  signUpSteps,
+} from "../../../app/common/constants";
 import BasicInfo from "../../../app/components/auth/signUp/basicInfo";
 import Details from "../../../app/components/auth/signUp/details";
 import { toast } from "react-toastify";
 import { Utils } from "../../../utils/utils";
+import axios from "axios";
 
 const Auth_SignUp = (props) => {
   const router = useRouter();
   const [activeStep, setActiveStep] = useState(0);
 
   const [basicInfo, setBasicInfo] = useState({
-    userName: "",
+    username: "",
     email: "",
     password: "",
   });
 
   const [details, setDetails] = useState({
-    phoneNo: "",
-    accountType: "",
+    phone_no: "",
+    account_type: "",
   });
+
+  const signUp = () => {
+    const signUpObj = { ...basicInfo, ...details };
+    axios
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signup`, signUpObj)
+      .then((response) => {
+        toast.success(SuccessMsgs.signUp.success);
+        router.push("/auth/signIn");
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
 
   const handleChangeBasicInfo = (e) => {
     const { name, value } = e.target;
@@ -70,12 +88,12 @@ const Auth_SignUp = (props) => {
         break;
       case 2:
         if (
-          !details.accountType ||
-          details.accountType === "Choose account type"
+          !details.account_type ||
+          details.account_type === "Choose account type"
         ) {
           toast.error(Errors.signUp.detailsTab);
         } else {
-          router.push("/auth/signIn");
+          signUp();
         }
         break;
       default:

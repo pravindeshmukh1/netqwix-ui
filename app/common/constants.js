@@ -21,6 +21,12 @@ export const Errors = {
   invalidEmail: "Please enter valid email",
 };
 
+export const SuccessMsgs = {
+  signUp: {
+    success: "You have successfully signed up",
+  },
+};
+
 export const Regex = {
   email: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
 };

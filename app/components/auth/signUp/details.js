@@ -11,27 +11,27 @@ const Details = (props) => {
           className="form-control"
           onChange={handleChange}
           type="number"
-          name="phoneNo"
+          name="phone_no"
           placeholder="Phone No"
-          value={values.phoneNo}
+          value={values.phone_no}
         />
       </div>
       <div className="form-group">
-        <label className="col-form-label" htmlFor="accountType">
+        <label className="col-form-label" htmlFor="account_type">
           Choose Account Type
         </label>
         <select
-          id="accountType"
+          id="account_type"
           className="form-control"
-          name="accountType"
+          name="account_type"
           onChange={handleChange}
-          defaultValue={values.accountType}
+          defaultValue={values.account_type}
         >
           <option>Choose account type</option>
-          {LIST_OF_ACCOUNT_TYPE.map((accountType, index) => {
+          {LIST_OF_ACCOUNT_TYPE.map((account_type, index) => {
             return (
-              <option key={index} value={accountType.label}>
-                {accountType.label}
+              <option key={index} value={account_type.label}>
+                {account_type.label}
               </option>
             );
           })}

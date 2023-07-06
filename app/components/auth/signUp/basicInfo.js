@@ -10,9 +10,9 @@ const BasicInfo = (props) => {
           className="form-control"
           onChange={handleChange}
           type="text"
-          name="userName"
+          name="username"
           placeholder="User name"
-          value={values.userName}
+          value={values.username}
         />
       </div>
       <div className="form-group">
