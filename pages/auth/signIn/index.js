@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import Link from "next/link";
-import { googleOAuthLink } from "../../common/constants";
+import { googleOAuthLink } from "../../../app/common/constants";
 
 const Auth_SignIn = () => {
   const [credential, setCredential] = useState({

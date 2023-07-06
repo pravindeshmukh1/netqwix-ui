@@ -5,8 +5,7 @@ import "../public/assets/scss/color.scss";
 import { ToastContainer } from "react-toastify";
 import ChatContextProvider from "../helpers/chatContext/chatCtx";
 import CustomizerContextProvider from "../helpers/customizerContext/customizerCtx";
-import { GoogleOAuthProvider } from '@react-oauth/google';
-
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export default function MyAppComponent({ Component, pageProps }) {
   const router = useRouter();
@@ -40,34 +39,34 @@ export default function MyAppComponent({ Component, pageProps }) {
 
   return (
     <Fragment>
-      <GoogleOAuthProvider clientId="378280665890-gdb7rkg1t181kksi0et73ridtrop0hnh.apps.googleusercontent.com">
-      <Head>
-        <meta httpEquiv="content-type" content="text/html; charset=UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Netquix" />
-        <meta name="keywords" content="Netquix" />
-        <meta name="author" content="Netquix" />
-        <link rel="icon" href="/favicon.png" />
-        <link rel="shortcut icon" href="/favicon.png" />
+      <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
+        <Head>
+          <meta httpEquiv="content-type" content="text/html; charset=UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <meta name="description" content="Netquix" />
+          <meta name="keywords" content="Netquix" />
+          <meta name="author" content="Netquix" />
+          <link rel="icon" href="/favicon.png" />
+          <link rel="shortcut icon" href="/favicon.png" />
 
-        <title>Netquix</title>
-      </Head>
-      {loader && (
-        <div className="chitchat-loader">
-          <div>
-            <img src="/assets/images/logo/logo_big.png" alt="" />
-            <h3>Simple, secure messaging for fast connect to world..!</h3>
+          <title>Netquix</title>
+        </Head>
+        {loader && (
+          <div className="chitchat-loader">
+            <div>
+              <img src="/assets/images/logo/logo_big.png" alt="" />
+              <h3>Simple, secure messaging for fast connect to world..!</h3>
+            </div>
           </div>
+        )}
+        <div>
+          <CustomizerContextProvider>
+            <ChatContextProvider>
+              <Component {...pageProps} />
+            </ChatContextProvider>
+          </CustomizerContextProvider>
+          <ToastContainer />
         </div>
-      )}
-      <div>
-        <CustomizerContextProvider>
-          <ChatContextProvider>
-            <Component {...pageProps} />
-          </ChatContextProvider>
-        </CustomizerContextProvider>
-        <ToastContainer />
-      </div>
       </GoogleOAuthProvider>
     </Fragment>
   );
