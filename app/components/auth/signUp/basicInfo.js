@@ -2,7 +2,6 @@ import React from "react";
 
 const BasicInfo = (props) => {
   const { values, handleChange } = props;
-
   return (
     <React.Fragment>
       <div className="form-group">

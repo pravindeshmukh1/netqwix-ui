@@ -1,5 +1,5 @@
 import React from "react";
-import { LIST_OF_ACCOUNT_TYPE } from "../../common/constants";
+import { LIST_OF_ACCOUNT_TYPE } from "../../../common/constants";
 
 const Details = (props) => {
   const { values, handleChange } = props;

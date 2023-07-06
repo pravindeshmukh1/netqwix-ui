@@ -2,9 +2,9 @@ import React, { useState, useRef } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Stepper from "react-stepper-horizontal";
-import { Errors, signUpSteps } from "../../common/constants";
-import BasicInfo from "./basicInfo";
-import Details from "./details";
+import { Errors, signUpSteps } from "../../../app/common/constants";
+import BasicInfo from "../../../app/components/auth/signUp/basicInfo";
+import Details from "../../../app/components/auth/signUp/details";
 import { toast } from "react-toastify";
 import { Utils } from "../../../utils/utils";
 
