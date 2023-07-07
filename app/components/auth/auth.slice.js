@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { login } from "./auth.api";
+import { googleLogin, login } from "./auth.api";
 import { toast } from "react-toastify";
 import { LOCAL_STORAGE_KEYS } from "../../common/constants";
 
@@ -22,6 +22,18 @@ export const loginAsync = createAsyncThunk("login", async (payload) => {
     toast.error(err.response.data.error);
   }
 });
+
+export const googleLoginAsync = createAsyncThunk(
+  "googleLogin",
+  async (payload) => {
+    try {
+      const response = await googleLogin(payload);
+      return response;
+    } catch (err) {
+      toast.error(err.response.data.error);
+    }
+  }
+);
 
 export const authSlice = createSlice({
   name: "auth",
@@ -61,6 +73,16 @@ export const authSlice = createSlice({
             action.payload.result.data.account_type
           );
         }
+      })
+      .addCase(googleLoginAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(googleLoginAsync.rejected, (state) => {
+        state.status = "rejected";
+      })
+      .addCase(googleLoginAsync.fulfilled, (state, action) => {
+        state.status = "fulfilled";
+        // if(action.payload)
       });
   },
 });

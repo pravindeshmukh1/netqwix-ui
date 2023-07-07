@@ -5,7 +5,10 @@ import axios from "axios";
 import Link from "next/link";
 import { googleOAuthLink } from "../../../app/common/constants";
 import { useAppDispatch } from "../../../app/store";
-import { loginAsync } from "../../../app/components/auth/auth.slice";
+import {
+  googleLoginAsync,
+  loginAsync,
+} from "../../../app/components/auth/auth.slice";
 
 const Auth_SignIn = () => {
   const dispatch = useAppDispatch();
@@ -35,6 +38,7 @@ const Auth_SignIn = () => {
         .get(`${googleOAuthLink}${codeResponse.access_token}`)
         .then((res) => {
           console.log("userDetail", res.data);
+          dispatch(googleLoginAsync({ email: res.data.email }));
         })
         .catch((err) => console.log(err));
     },
