@@ -25,6 +25,7 @@ export const login = async (payload) => {
       data: JSON.stringify(payload),
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
     });
     return res.data;
