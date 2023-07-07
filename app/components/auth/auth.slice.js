@@ -7,6 +7,10 @@ const initialState = {
   status: "pending",
   userAccType: "",
   isUserLoggedIn: false,
+  showGoogleRegistrationForm: {
+    isFromGoogle: false,
+    email: null,
+  },
 };
 
 export const signupAsync = createAsyncThunk("signup", async (payload) => {
@@ -64,6 +68,7 @@ export const authSlice = createSlice({
         state.status = "fulfilled";
         state.isUserLoggedIn = true;
         if (action.payload) {
+          toast.success(action.payload.msg);
           localStorage.setItem(
             LOCAL_STORAGE_KEYS.ACCESS_TOKEN,
             action.payload.result.data.access_token
@@ -75,18 +80,39 @@ export const authSlice = createSlice({
         }
       })
       .addCase(googleLoginAsync.pending, (state) => {
+        state.showGoogleRegistrationForm.isFromGoogle = false;
         state.status = "loading";
       })
       .addCase(googleLoginAsync.rejected, (state) => {
+        state.showGoogleRegistrationForm.isFromGoogle = false;
         state.status = "rejected";
       })
       .addCase(googleLoginAsync.fulfilled, (state, action) => {
         state.status = "fulfilled";
-        // if(action.payload)
+        if(action.payload) {
+          console.log(`action.payload === `, action.payload)
+          // user needs to register
+          if(action.payload && action.payload.data && !action.payload.data.isRegistered) {
+            toast.success(action.payload.msg);
+            state.showGoogleRegistrationForm.isFromGoogle = true;
+            state.showGoogleRegistrationForm.email = action.payload.data.email;
+          }
+          // user can do login
+          // toast.success(action.payload.msg);
+          // localStorage.setItem(
+          //   LOCAL_STORAGE_KEYS.ACCESS_TOKEN,
+          //   action.payload.result.data.access_token
+          // );
+          // localStorage.setItem(
+          //   LOCAL_STORAGE_KEYS.ACC_TYPE,
+          //   action.payload.result.data.account_type
+          // );
+
+        }
       });
   },
 });
 
 export default authSlice.reducer;
-export const authState = (state) => state;
+export const authState = (state) => state.auth;
 export const authAction = authSlice.actions;

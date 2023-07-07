@@ -1,7 +1,7 @@
 import React from "react";
 
 const BasicInfo = (props) => {
-  const { values, handleChange } = props;
+  const { values, handleChange, isFromGoogle = false } = props;
   return (
     <React.Fragment>
       <div className="form-group">
@@ -26,7 +26,7 @@ const BasicInfo = (props) => {
           value={values.email}
         />
       </div>
-      <div className="form-group">
+      {isFromGoogle ? <></> :  <div className="form-group">
         <label className="col-form-label" htmlFor="inputPassword3">
           Password
         </label>
@@ -40,7 +40,8 @@ const BasicInfo = (props) => {
           placeholder="Password"
           value={values.password}
         />
-      </div>
+      </div>}
+     
     </React.Fragment>
   );
 };
