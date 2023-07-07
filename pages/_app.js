@@ -6,6 +6,9 @@ import { ToastContainer } from "react-toastify";
 import ChatContextProvider from "../helpers/chatContext/chatCtx";
 import CustomizerContextProvider from "../helpers/customizerContext/customizerCtx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { Provider } from "react-redux";
+import store from "../app/store";
+import AuthGuard from "../app/components/auth/AuthGuard";
 
 export default function MyAppComponent({ Component, pageProps }) {
   const router = useRouter();
@@ -51,22 +54,26 @@ export default function MyAppComponent({ Component, pageProps }) {
 
           <title>Netquix</title>
         </Head>
-        {loader && (
-          <div className="chitchat-loader">
+        <Provider store={store}>
+          <AuthGuard>
+            {loader && (
+              <div className="chitchat-loader">
+                <div>
+                  <img src="/assets/images/logo/logo_big.png" alt="" />
+                  <h3>Simple, secure messaging for fast connect to world..!</h3>
+                </div>
+              </div>
+            )}
             <div>
-              <img src="/assets/images/logo/logo_big.png" alt="" />
-              <h3>Simple, secure messaging for fast connect to world..!</h3>
+              <CustomizerContextProvider>
+                <ChatContextProvider>
+                  <Component {...pageProps} />
+                </ChatContextProvider>
+              </CustomizerContextProvider>
+              <ToastContainer />
             </div>
-          </div>
-        )}
-        <div>
-          <CustomizerContextProvider>
-            <ChatContextProvider>
-              <Component {...pageProps} />
-            </ChatContextProvider>
-          </CustomizerContextProvider>
-          <ToastContainer />
-        </div>
+          </AuthGuard>
+        </Provider>
       </GoogleOAuthProvider>
     </Fragment>
   );

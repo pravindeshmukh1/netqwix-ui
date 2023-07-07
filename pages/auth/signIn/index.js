@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { toast } from "react-toastify";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import Link from "next/link";
 import { googleOAuthLink } from "../../../app/common/constants";
+import { useAppDispatch } from "../../../app/store";
+import { loginAsync } from "../../../app/components/auth/auth.slice";
 
 const Auth_SignIn = () => {
+  const dispatch = useAppDispatch();
   const [credential, setCredential] = useState({
-    email: "test@gmail.com",
-    password: "test123",
+    email: "",
+    password: "",
   });
   const router = useRouter();
 
@@ -19,23 +21,8 @@ const Auth_SignIn = () => {
   };
 
   // simple  login
-  const Login = (email, password) => {
-    localStorage.setItem("email", email);
-    localStorage.setItem("password", password);
-
-    if (
-      localStorage.getItem("email") === "test@gmail.com" &&
-      localStorage.getItem("password") === "test123"
-    ) {
-      setTimeout(() => {
-        toast.success("Login Success");
-        router.push(`/`);
-      }, 200);
-    } else {
-      setTimeout(() => {
-        toast.error("please enter correct email or password");
-      }, 200);
-    }
+  const Login = () => {
+    dispatch(loginAsync(credential));
   };
 
   const redirectToSignUpPage = () => {
@@ -131,9 +118,7 @@ const Auth_SignIn = () => {
                         <Link
                           className="btn btn-primary button-effect"
                           href="#"
-                          onClick={() =>
-                            Login(credential.email, credential.password)
-                          }
+                          onClick={() => Login()}
                         >
                           Login
                         </Link>

@@ -33,3 +33,8 @@ export const Regex = {
 
 export const googleOAuthLink =
   "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
+
+export const LOCAL_STORAGE_KEYS = {
+  ACCESS_TOKEN: "token",
+  ACC_TYPE: "acc_type",
+};
