@@ -82,7 +82,7 @@ const Index = (props) => {
   };
 
   const Logout = () => {
-    localStorage.removeItem("email");
+    localStorage.clear();
     router.push("/auth/signIn");
   };
 
@@ -101,7 +101,11 @@ const Index = (props) => {
           <ul className="sidebar-top">
             <li>
               <Tooltip title="Status" position="top" trigger="mouseenter">
-                <NavLink className="button-effect step1" onClick={() => TogglTab("status")} data-intro="Check Status here">
+                <NavLink
+                  className="button-effect step1"
+                  onClick={() => TogglTab("status")}
+                  data-intro="Check Status here"
+                >
                   <div className="user-popup status one">
                     <div
                       className="bg-size"
@@ -110,8 +114,14 @@ const Index = (props) => {
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                         display: "block",
-                      }}>
-                      <img className="bg-img" src="/assets/images/avtar/2.jpg" alt="Avatar" style={{ display: "none" }} />
+                      }}
+                    >
+                      <img
+                        className="bg-img"
+                        src="/assets/images/avtar/2.jpg"
+                        alt="Avatar"
+                        style={{ display: "none" }}
+                      />
                     </div>
                   </div>
                 </NavLink>
@@ -119,14 +129,24 @@ const Index = (props) => {
             </li>
             <li>
               <Tooltip title="Favourite" position="top" trigger="mouseenter">
-                <NavLink className={`icon-btn btn-light button-effect ${activeTab === "fevorite" ? "active" : ""}`} onClick={() => TogglTab("fevorite")}>
+                <NavLink
+                  className={`icon-btn btn-light button-effect ${
+                    activeTab === "fevorite" ? "active" : ""
+                  }`}
+                  onClick={() => TogglTab("fevorite")}
+                >
                   <i className="fa fa-star"></i>
                 </NavLink>
               </Tooltip>
             </li>
             <li>
               <Tooltip title="Document" position="top" trigger="mouseenter">
-                <NavLink className={`icon-btn btn-light button-effect ${activeTab === "document" ? "active" : ""}`} onClick={() => TogglTab("document")}>
+                <NavLink
+                  className={`icon-btn btn-light button-effect ${
+                    activeTab === "document" ? "active" : ""
+                  }`}
+                  onClick={() => TogglTab("document")}
+                >
                   {" "}
                   <i className="fa fa-file-text"></i>
                 </NavLink>
@@ -134,7 +154,12 @@ const Index = (props) => {
             </li>
             <li>
               <Tooltip title="Contact" position="top" trigger="mouseenter">
-                <NavLink className={`icon-btn btn-light button-effect ${activeTab === "contact" ? "active" : ""}`} onClick={() => TogglTab("contact")}>
+                <NavLink
+                  className={`icon-btn btn-light button-effect ${
+                    activeTab === "contact" ? "active" : ""
+                  }`}
+                  onClick={() => TogglTab("contact")}
+                >
                   {" "}
                   <i className="fa fa-users"></i>
                 </NavLink>
@@ -143,8 +168,18 @@ const Index = (props) => {
 
             <li>
               <div className="dot-btn dot-danger grow">
-                <Tooltip title="Notification" position="top-end" size="small" trigger="mouseenter">
-                  <NavLink className={`icon-btn btn-light button-effect ${activeTab === "notification" ? "active" : ""}`} onClick={() => TogglTab("notification")}>
+                <Tooltip
+                  title="Notification"
+                  position="top-end"
+                  size="small"
+                  trigger="mouseenter"
+                >
+                  <NavLink
+                    className={`icon-btn btn-light button-effect ${
+                      activeTab === "notification" ? "active" : ""
+                    }`}
+                    onClick={() => TogglTab("notification")}
+                  >
                     <i className="fa fa-bell"></i>
                   </NavLink>
                 </Tooltip>
@@ -152,7 +187,13 @@ const Index = (props) => {
             </li>
             <li>
               <Tooltip title="Settings" position="top" trigger="mouseenter">
-                <NavLink className={`icon-btn btn-light button-effect step2 ${activeTab === "setting" ? "active" : ""}`} onClick={() => TogglTab("setting")} data-intro="You can change settings by clicking here">
+                <NavLink
+                  className={`icon-btn btn-light button-effect step2 ${
+                    activeTab === "setting" ? "active" : ""
+                  }`}
+                  onClick={() => TogglTab("setting")}
+                  data-intro="You can change settings by clicking here"
+                >
                   <i className="fa fa-cog"></i>
                 </NavLink>
               </Tooltip>
@@ -160,15 +201,29 @@ const Index = (props) => {
           </ul>
           <ul className="sidebar-bottom">
             <li>
-              <Tooltip title="Change Mode" size="small" position="top-end" trigger="mouseenter">
-                <NavLink className="icon-btn btn-light button-effect mode step3" data-intro="Change mode" onClick={() => toggleLightMode(mode)}>
-                  <i className={mode ? "fa fa-lightbulb-o" : "fa fa-moon-o"}></i>
+              <Tooltip
+                title="Change Mode"
+                size="small"
+                position="top-end"
+                trigger="mouseenter"
+              >
+                <NavLink
+                  className="icon-btn btn-light button-effect mode step3"
+                  data-intro="Change mode"
+                  onClick={() => toggleLightMode(mode)}
+                >
+                  <i
+                    className={mode ? "fa fa-lightbulb-o" : "fa fa-moon-o"}
+                  ></i>
                 </NavLink>
               </Tooltip>
             </li>
             <li>
               <Tooltip title="SignOut" position="top" trigger="mouseenter">
-                <NavLink className="icon-btn btn-light" onClick={() => Logout()}>
+                <NavLink
+                  className="icon-btn btn-light"
+                  onClick={() => Logout()}
+                >
                   {" "}
                   <i className="fa fa-power-off"> </i>
                 </NavLink>

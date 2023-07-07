@@ -21,9 +21,20 @@ export const Errors = {
   invalidEmail: "Please enter valid email",
 };
 
+export const SuccessMsgs = {
+  signUp: {
+    success: "You have successfully signed up",
+  },
+};
+
 export const Regex = {
   email: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
 };
 
 export const googleOAuthLink =
   "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
+
+export const LOCAL_STORAGE_KEYS = {
+  ACCESS_TOKEN: "token",
+  ACC_TYPE: "acc_type",
+};
