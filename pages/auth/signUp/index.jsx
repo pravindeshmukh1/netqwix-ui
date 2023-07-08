@@ -1,80 +1,81 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {useRouter} from 'next/router';
-import Link from 'next/link';
-import Stepper from 'react-stepper-horizontal';
-import {Errors, SuccessMsgs, signUpSteps} from '../../../app/common/constants';
-import BasicInfo from '../../../app/components/auth/signUp/basicInfo';
-import Details from '../../../app/components/auth/signUp/details';
-import {toast} from 'react-toastify';
-import {Utils} from '../../../utils/utils';
-import axios from 'axios';
-import {useAppSelector} from '../../../app/store';
-import {authState} from '../../../app/components/auth/auth.slice';
+import React, { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import Stepper from "react-stepper-horizontal";
+import {
+  Errors,
+  SuccessMsgs,
+  signUpSteps,
+} from "../../../app/common/constants";
+import BasicInfo from "../../../app/components/auth/signUp/basicInfo";
+import Details from "../../../app/components/auth/signUp/details";
+import { toast } from "react-toastify";
+import { Utils } from "../../../utils/utils";
+import axios from "axios";
+import { useAppSelector } from "../../../app/store";
+import { authState } from "../../../app/components/auth/auth.slice";
 
-const Auth_SignUp = props => {
-  const router = useRouter ();
-  const authSelector = useAppSelector (authState);
-  const [activeStep, setActiveStep] = useState (0);
+const Auth_SignUp = (props) => {
+  const router = useRouter();
+  const authSelector = useAppSelector(authState);
+  const [activeStep, setActiveStep] = useState(0);
 
-  const [basicInfo, setBasicInfo] = useState ({
-    username: '',
-    email: '',
-    password: '',
+  const [basicInfo, setBasicInfo] = useState({
+    username: "",
+    email: "",
+    password: "",
   });
 
-  const [details, setDetails] = useState ({
-    phone_no: '',
-    account_type: '',
+  const [details, setDetails] = useState({
+    phone_no: "",
+    account_type: "",
   });
 
-  useEffect (
-    () => {
-      if (
-        authSelector &&
-        authSelector.showGoogleRegistrationForm &&
-        authSelector.showGoogleRegistrationForm.isFromGoogle
-      ) {
-        setBasicInfo ({
-          ...basicInfo,
-          email: authSelector.showGoogleRegistrationForm.email,
-          password: '*****'
-        });
-      }
-    },
-    [authSelector]
-  );
+  useEffect(() => {
+    if (
+      authSelector &&
+      authSelector.showGoogleRegistrationForm &&
+      authSelector.showGoogleRegistrationForm.isFromGoogle
+    ) {
+      setBasicInfo({
+        ...basicInfo,
+        email: authSelector.showGoogleRegistrationForm.email,
+        password: "*****",
+      });
+    }
+  }, [authSelector]);
 
   const signUp = () => {
-    const signUpObj = {...basicInfo, ...details};
+    const signUpObj = { ...basicInfo, ...details };
     axios
-      .post (`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signup`, signUpObj)
-      .then (response => {
-        toast.success (SuccessMsgs.signUp.success);
-        router.push ('/auth/signIn');
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signup`, signUpObj)
+      .then((response) => {
+        toast.success(SuccessMsgs.signUp.success);
+        router.push("/auth/signIn");
       })
-      .catch (error => {
-        toast.error (error.message);
+      .catch((error) => {
+        toast.error(error.message);
       });
   };
 
-  const handleChangeBasicInfo = e => {
-    const {name, value} = e.target;
-    setBasicInfo ({...basicInfo, [name]: value});
+  const handleChangeBasicInfo = (e) => {
+    const { name, value } = e.target;
+    setBasicInfo({ ...basicInfo, [name]: value });
   };
 
-  const handleChangeDetails = e => {
-    const {name, value} = e.target;
-    setDetails ({...details, [name]: value});
+  const handleChangeDetails = (e) => {
+    const { name, value } = e.target;
+    setDetails({ ...details, [name]: value });
   };
 
   const handleBack = () => {
-    setActiveStep (prevActiveStep => prevActiveStep - 1);
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
   const checkValidation = () => {
     switch (activeStep + 1) {
       case 1:
-        if (basicInfo.email && Utils.isEmailValid (basicInfo.email)) {
+        if (basicInfo.email && Utils.isEmailValid(basicInfo.email)) {
           return true;
         } else {
           return false;
@@ -87,29 +88,29 @@ const Auth_SignUp = props => {
   const handleNext = () => {
     switch (activeStep + 1) {
       case 1:
-        const isBasicInfoNotEmpty = Object.values (basicInfo).every (
-          info => info !== ''
+        const isBasicInfoNotEmpty = Object.values(basicInfo).every(
+          (info) => info !== ""
         );
         if (isBasicInfoNotEmpty) {
-          const isBasicInfoValid = checkValidation ();
+          const isBasicInfoValid = checkValidation();
           if (isBasicInfoValid) {
-            setActiveStep (prevActiveStep => prevActiveStep + 1);
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
           } else {
-            toast.error (Errors.invalidEmail);
+            toast.error(Errors.invalidEmail);
           }
         } else {
-          toast.error (Errors.signUp.basicInfo);
+          toast.error(Errors.signUp.basicInfo);
         }
 
         break;
       case 2:
         if (
           !details.account_type ||
-          details.account_type === 'Choose account type'
+          details.account_type === "Choose account type"
         ) {
-          toast.error (Errors.signUp.detailsTab);
+          toast.error(Errors.signUp.detailsTab);
         } else {
-          signUp ();
+          signUp();
         }
         break;
       default:
@@ -121,7 +122,11 @@ const Auth_SignUp = props => {
     switch (activeStep + 1) {
       case 1:
         return (
-          <BasicInfo isFromGoogle={authSelector.showGoogleRegistrationForm.isFromGoogle} values={basicInfo} handleChange={handleChangeBasicInfo} />
+          <BasicInfo
+            isFromGoogle={authSelector.showGoogleRegistrationForm.isFromGoogle}
+            values={basicInfo}
+            handleChange={handleChangeBasicInfo}
+          />
         );
       case 2:
         return <Details values={details} handleChange={handleChangeDetails} />;
@@ -151,32 +156,35 @@ const Auth_SignUp = props => {
                     <Stepper steps={signUpSteps} activeStep={activeStep} />
                   </div>
                   <form className="form1">
-                    <div className="my-4">{signUpStep ()}</div>
+                    <div className="my-4">{signUpStep()}</div>
                     <div className="form-group">
                       <div className="buttons">
-                        {activeStep != 0 &&
+                        {activeStep != 0 && (
                           <Link
                             className="btn btn-primary button-effect"
-                            href="#"
+                            href=""
                             onClick={handleBack}
                           >
                             Back
-                          </Link>}
-                        {activeStep === signUpSteps.length - 1
-                          ? <Link
-                              className="btn button-effect btn-signup"
-                              href="#"
-                              onClick={() => handleNext ()}
-                            >
-                              Submit
-                            </Link>
-                          : <Link
-                              className="btn btn-primary button-effect"
-                              href="#"
-                              onClick={() => handleNext ()}
-                            >
-                              Next
-                            </Link>}
+                          </Link>
+                        )}
+                        {activeStep === signUpSteps.length - 1 ? (
+                          <Link
+                            className="btn button-effect btn-signup"
+                            href=""
+                            onClick={() => handleNext()}
+                          >
+                            Submit
+                          </Link>
+                        ) : (
+                          <Link
+                            className="btn btn-primary button-effect"
+                            href=""
+                            onClick={() => handleNext()}
+                          >
+                            Next
+                          </Link>
+                        )}
                       </div>
                     </div>
                   </form>
