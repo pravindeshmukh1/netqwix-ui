@@ -119,17 +119,15 @@ const Auth_SignIn = () => {
                     </div>
                     <div className="form-group">
                       <div className="buttons">
-                        <Link
+                        <div
                           className="btn btn-primary button-effect"
-                          href="#"
                           onClick={() => Login()}
                         >
                           Login
-                        </Link>
+                        </div>
                         <Link
                           className="btn button-effect btn-signup"
-                          href="#"
-                          onClick={() => redirectToSignUpPage()}
+                          href="/auth/signUp"
                         >
                           SignUp
                         </Link>
