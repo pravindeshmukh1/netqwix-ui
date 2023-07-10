@@ -24,6 +24,7 @@ const Auth_SignUp = (props) => {
     username: "",
     email: "",
     password: "",
+    isGoogleRegister: false,
   });
 
   const [details, setDetails] = useState({
@@ -41,6 +42,7 @@ const Auth_SignUp = (props) => {
         ...basicInfo,
         email: authSelector.showGoogleRegistrationForm.email,
         password: "*****",
+        isGoogleRegister: true,
       });
     }
   }, [authSelector]);
@@ -50,6 +52,8 @@ const Auth_SignUp = (props) => {
     axios
       .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signup`, signUpObj)
       .then((response) => {
+        // TODO: add action to make isFromGoogle as false on API success.
+        setBasicInfo({...basicInfo, isGoogleRegister: false });
         toast.success(SuccessMsgs.signUp.success);
         router.push("/auth/signIn");
       })

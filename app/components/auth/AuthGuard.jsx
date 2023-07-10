@@ -12,7 +12,6 @@ const AuthGuard = ({ children }) => {
   const authSelector = useAppSelector(authState);
 
   useEffect(() => {
-    console.log(`auth --- `, authSelector);
     if(authSelector.showGoogleRegistrationForm) {
       router.push("/auth/signUp");
     }
