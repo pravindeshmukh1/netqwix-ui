@@ -103,10 +103,11 @@ export const authSlice = createSlice ({
             toast.success (action.payload.msg);
             state.showGoogleRegistrationForm.isFromGoogle = true;
             state.showGoogleRegistrationForm.email = action.payload.data.email;
+          } else {
+            state.isUserLoggedIn = true;
+            // user can do login
+            setupLogin(action);
           }
-          state.isUserLoggedIn = true;
-          // user can do login
-          setupLogin(action);
         }
       });
   },
