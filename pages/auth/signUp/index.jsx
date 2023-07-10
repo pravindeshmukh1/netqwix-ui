@@ -30,6 +30,7 @@ const Auth_SignUp = (props) => {
   const [details, setDetails] = useState({
     phone_no: "",
     account_type: "",
+    category_type:""
   });
 
   useEffect(() => {
@@ -113,6 +114,8 @@ const Auth_SignUp = (props) => {
           details.account_type === "Choose account type"
         ) {
           toast.error(Errors.signUp.detailsTab);
+        }else if(details.account_type === 'Trainer' && !details.category_type){
+          toast.error(Errors.signUp.detailsTabCategory);
         } else {
           signUp();
         }

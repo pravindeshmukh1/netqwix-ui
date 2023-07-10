@@ -1,5 +1,5 @@
 import React from "react";
-import { LIST_OF_ACCOUNT_TYPE } from "../../../common/constants";
+import { LIST_OF_ACCOUNT_TYPE, LIST_OF_CATEGORY } from "../../../common/constants";
 
 const Details = (props) => {
   const { values, handleChange } = props;
@@ -37,6 +37,31 @@ const Details = (props) => {
           })}
         </select>
       </div>
+      {values.account_type === "Trainer" && (
+        <div className="form-group" if>
+        <label className="col-form-label" htmlFor="account_type">
+          Choose Category Type
+        </label>
+        <select
+          id="category_type"
+          className="form-control"
+          name="category_type"
+          onChange={handleChange}
+          defaultValue={values.category_type}
+        >
+          <option>Choose category</option>
+          {LIST_OF_CATEGORY.map((category_type, index) => {
+            return (
+              <option key={index} value={category_type.label}>
+                {category_type.label}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+          )}
+
+      
     </React.Fragment>
   );
 };
