@@ -12,8 +12,8 @@ import { NavLink, TabContent, TabPane } from "reactstrap";
 import { useRouter } from "next/router";
 import { Tooltip } from "react-tippy";
 import Link from "next/link";
-import { useAppDispatch } from "../../app/store";
-import { authAction } from "../../app/components/auth/auth.slice";
+import { useAppDispatch, useAppSelector } from "../../app/store";
+import { authAction, authState } from "../../app/components/auth/auth.slice";
 import { LOCAL_STORAGE_KEYS } from "../../app/common/constants";
 
 const steps = [
@@ -37,9 +37,10 @@ const steps = [
 
 const Index = (props) => {
   // const width = useWindowSize();
+  const { sidebarActiveTab } = useAppSelector(authState);
   const [width, setWidth] = useState(0);
   const [opentour, setopentour] = useState(true);
-  const [activeTab, setActiveTab] = useState("");
+  const [activeTab, setActiveTab] = useState(sidebarActiveTab);
   const [mode, setMode] = useState(false);
   const router = useRouter();
   const [size, setSize] = useState([0, 0]);
@@ -68,6 +69,7 @@ const Index = (props) => {
 
   const TogglTab = (value) => {
     setActiveTab(value);
+    dispatch(authAction.setActiveTab(value));
     document.querySelector(".recent-default").classList.remove("active");
     if (width < 800) {
       document.querySelector(".app-sidebar").classList.remove("active");
@@ -110,9 +112,24 @@ const Index = (props) => {
         <div className="sidebar-main">
           <ul className="sidebar-top">
             <li>
+              <Tooltip title="Home" position="top" trigger="mouseenter">
+                <NavLink
+                  className={`icon-btn btn-light button-effect ${
+                    activeTab === "home" ? "active" : ""
+                  }`}
+                  onClick={() => TogglTab("home")}
+                >
+                  <i className="fa fa-home"></i>
+                </NavLink>
+              </Tooltip>
+            </li>
+            <li>
               <Tooltip title="Status" position="top" trigger="mouseenter">
                 <NavLink
-                  className="button-effect step1"
+                  // className="button-effect step1"
+                  className={`icon-btn btn-light button-effect ${
+                    activeTab === "status" ? "active" : ""
+                  }`}
                   onClick={() => TogglTab("status")}
                   data-intro="Check Status here"
                 >
@@ -254,13 +271,14 @@ const Index = (props) => {
           </ul>
         </div>
       </nav>
-      <aside className="chitchat-left-sidebar left-disp">
-        {!activeTab && (
+      {activeTab !== "home" && (
+        <aside className="chitchat-left-sidebar left-disp">
+          {/* {!activeTab && (
           <React.Fragment>
-            <div className="recent-default dynemic-sidebar active">
-              {/* <RecentSection />
+            <div className="recent-default dynemic-sidebar active"> */}
+          {/* <RecentSection />
               <ChatSection /> */}
-              <div className="recent">
+          {/* <div className="recent">
                 <div className="theme-title">
                   <div className="media">
                     <div>
@@ -272,34 +290,39 @@ const Index = (props) => {
               </div>
             </div>
           </React.Fragment>
-        )}
+        )} */}
 
-        <TabContent activeTab={activeTab}>
-          <TabPane tabId="fevorite">
-            <FevoriteSection tab={activeTab} ActiveTab={setActiveTab} />
-          </TabPane>
-          <TabPane tabId="chats">
-            <div className="recent-default dynemic-sidebar active">
-              <ChatSection />
-            </div>
-          </TabPane>
-          <TabPane tabId="document">
-            <DocumentSection tab={activeTab} ActiveTab={setActiveTab} />
-          </TabPane>
-          <TabPane tabId="contact">
-            <ContactListSection tab={activeTab} ActiveTab={setActiveTab} />
-          </TabPane>
-          <TabPane tabId="notification">
-            <NotificationSection tab={activeTab} ActiveTab={setActiveTab} />
-          </TabPane>
-          <TabPane tabId="setting">
-            <SettingSection tab={activeTab} ActiveTab={setActiveTab} />
-          </TabPane>
-          <TabPane tabId="status">
-            <StatusSection tab={activeTab} ActiveTab={setActiveTab} />
-          </TabPane>
-        </TabContent>
-      </aside>
+          <TabContent activeTab={activeTab}>
+            <TabPane tabId="fevorite">
+              <FevoriteSection tab={activeTab} ActiveTab={setActiveTab} />
+            </TabPane>
+            <TabPane tabId="fevorite">
+              <FevoriteSection tab={activeTab} ActiveTab={setActiveTab} />
+            </TabPane>
+            <TabPane tabId="chats">
+              <div className="recent-default dynemic-sidebar active">
+                <RecentSection />
+                <ChatSection />
+              </div>
+            </TabPane>
+            <TabPane tabId="document">
+              <DocumentSection tab={activeTab} ActiveTab={setActiveTab} />
+            </TabPane>
+            <TabPane tabId="contact">
+              <ContactListSection tab={activeTab} ActiveTab={setActiveTab} />
+            </TabPane>
+            <TabPane tabId="notification">
+              <NotificationSection tab={activeTab} ActiveTab={setActiveTab} />
+            </TabPane>
+            <TabPane tabId="setting">
+              <SettingSection tab={activeTab} ActiveTab={setActiveTab} />
+            </TabPane>
+            <TabPane tabId="status">
+              <StatusSection tab={activeTab} ActiveTab={setActiveTab} />
+            </TabPane>
+          </TabContent>
+        </aside>
+      )}
     </Fragment>
   );
 };

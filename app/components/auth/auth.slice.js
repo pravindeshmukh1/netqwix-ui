@@ -11,6 +11,7 @@ const initialState = {
     isFromGoogle: false,
     email: null,
   },
+  sidebarActiveTab: "home",
 };
 
 export const signupAsync = createAsyncThunk("signup", async (payload) => {
@@ -60,6 +61,9 @@ export const authSlice = createSlice({
     },
     updateIsUserLoggedIn: (state, action) => {
       state.isUserLoggedIn = false;
+    },
+    setActiveTab: (state, action) => {
+      state.sidebarActiveTab = action.payload;
     },
   },
   extraReducers: (builder) => {
