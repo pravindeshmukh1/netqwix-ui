@@ -12,7 +12,7 @@ const AuthGuard = ({ children }) => {
   const authSelector = useAppSelector(authState);
 
   useEffect(() => {
-    if(authSelector.showGoogleRegistrationForm) {
+    if(authSelector.showGoogleRegistrationForm.isFromGoogle) {
       router.push("/auth/signUp");
     }
   }, [authSelector.showGoogleRegistrationForm])

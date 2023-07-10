@@ -12,6 +12,9 @@ import { NavLink, TabContent, TabPane } from "reactstrap";
 import { useRouter } from "next/router";
 import { Tooltip } from "react-tippy";
 import Link from "next/link";
+import { useAppDispatch } from "../../app/store";
+import { authAction } from "../../app/components/auth/auth.slice";
+import { LOCAL_STORAGE_KEYS } from "../../app/common/constants";
 
 const steps = [
   {
@@ -40,6 +43,12 @@ const Index = (props) => {
   const [mode, setMode] = useState(false);
   const router = useRouter();
   const [size, setSize] = useState([0, 0]);
+  const [accountType, setAccountType] = useState("");
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setAccountType(localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE));
+  });
 
   useEffect(() => {
     if (localStorage.getItem("layout_mode") === "dark") {
@@ -84,6 +93,7 @@ const Index = (props) => {
   const Logout = () => {
     localStorage.clear();
     router.push("/auth/signIn");
+    dispatch(authAction.updateIsUserLoggedIn());
   };
 
   return (
@@ -124,6 +134,18 @@ const Index = (props) => {
                       />
                     </div>
                   </div>
+                </NavLink>
+              </Tooltip>
+            </li>
+            <li>
+              <Tooltip title="Chats" position="top" trigger="mouseenter">
+                <NavLink
+                  className={`icon-btn btn-light button-effect ${
+                    activeTab === "chats" ? "active" : ""
+                  }`}
+                  onClick={() => TogglTab("chats")}
+                >
+                  <i className="fa fa-comment"></i>
                 </NavLink>
               </Tooltip>
             </li>
@@ -232,15 +254,34 @@ const Index = (props) => {
           </ul>
         </div>
       </nav>
-
       <aside className="chitchat-left-sidebar left-disp">
-        <div className="recent-default dynemic-sidebar active">
-          <RecentSection />
-          <ChatSection />
-        </div>
+        {!activeTab && (
+          <React.Fragment>
+            <div className="recent-default dynemic-sidebar active">
+              {/* <RecentSection />
+              <ChatSection /> */}
+              <div className="recent">
+                <div className="theme-title">
+                  <div className="media">
+                    <div>
+                      <h2>Welcome </h2>
+                      <h4>{accountType}</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </React.Fragment>
+        )}
+
         <TabContent activeTab={activeTab}>
           <TabPane tabId="fevorite">
             <FevoriteSection tab={activeTab} ActiveTab={setActiveTab} />
+          </TabPane>
+          <TabPane tabId="chats">
+            <div className="recent-default dynemic-sidebar active">
+              <ChatSection />
+            </div>
           </TabPane>
           <TabPane tabId="document">
             <DocumentSection tab={activeTab} ActiveTab={setActiveTab} />
