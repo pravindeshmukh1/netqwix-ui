@@ -65,6 +65,9 @@ export const authSlice = createSlice({
     setActiveTab: (state, action) => {
       state.sidebarActiveTab = action.payload;
     },
+    updateIsGoogleForm: (state) => {
+      state.showGoogleRegistrationForm.isFromGoogle = false;
+    },
   },
   extraReducers: (builder) => {
     builder

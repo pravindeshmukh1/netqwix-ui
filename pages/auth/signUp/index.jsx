@@ -12,25 +12,26 @@ import Details from "../../../app/components/auth/signUp/details";
 import { toast } from "react-toastify";
 import { Utils } from "../../../utils/utils";
 import axios from "axios";
-import { useAppSelector } from "../../../app/store";
-import { authState } from "../../../app/components/auth/auth.slice";
+import { useAppSelector, useAppDispatch } from "../../../app/store";
+import { authState, authAction } from "../../../app/components/auth/auth.slice";
 
 const Auth_SignUp = (props) => {
   const router = useRouter();
   const authSelector = useAppSelector(authState);
+  const dispatch = useAppDispatch();
   const [activeStep, setActiveStep] = useState(0);
 
   const [basicInfo, setBasicInfo] = useState({
-    username: "",
+    fullname: "",
     email: "",
     password: "",
     isGoogleRegister: false,
   });
 
   const [details, setDetails] = useState({
-    phone_no: "",
+    mobile_no: "",
     account_type: "",
-    category_type:null
+    category: null,
   });
 
   useEffect(() => {
@@ -51,13 +52,13 @@ const Auth_SignUp = (props) => {
   const signUp = () => {
     const signUpObj = { ...basicInfo, ...details };
     if (signUpObj.account_type === "Trainee") {
-      delete signUpObj.category_type;
+      delete signUpObj.category;
     }
     axios
       .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signup`, signUpObj)
       .then((response) => {
-        // TODO: add action to make isFromGoogle as false on API success.
-        setBasicInfo({...basicInfo, isGoogleRegister: false });
+        dispatch(authAction.updateIsGoogleForm());
+        setBasicInfo({ ...basicInfo, isGoogleRegister: false });
         toast.success(SuccessMsgs.signUp.success);
         router.push("/auth/signIn");
       })
@@ -117,7 +118,7 @@ const Auth_SignUp = (props) => {
           details.account_type === "Choose account type"
         ) {
           toast.error(Errors.signUp.detailsTab);
-        }else if(details.account_type === 'Trainer' && !details.category_type){
+        } else if (details.account_type === "Trainer" && !details.category) {
           toast.error(Errors.signUp.detailsTabCategory);
         } else {
           signUp();

@@ -273,24 +273,10 @@ const Index = (props) => {
       </nav>
       {activeTab !== "home" && (
         <aside className="chitchat-left-sidebar left-disp">
-          {/* {!activeTab && (
-          <React.Fragment>
-            <div className="recent-default dynemic-sidebar active"> */}
-          {/* <RecentSection />
-              <ChatSection /> */}
-          {/* <div className="recent">
-                <div className="theme-title">
-                  <div className="media">
-                    <div>
-                      <h2>Welcome </h2>
-                      <h4>{accountType}</h4>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </React.Fragment>
-        )} */}
+          {/* <div className="recent-default dynemic-sidebar active">
+            <RecentSection />
+            <ChatSection />
+          </div> */}
 
           <TabContent activeTab={activeTab}>
             <TabPane tabId="fevorite">

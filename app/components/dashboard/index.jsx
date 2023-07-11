@@ -7,7 +7,7 @@ const DashboardContainer = () => {
     setAccountType(localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE));
   });
   return (
-    <div className="dashboard-container">
+    <div className="container m-25">
       <h2>Welcome </h2>
       <h4>{accountType}</h4>
     </div>

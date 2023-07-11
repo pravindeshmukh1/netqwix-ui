@@ -10,9 +10,9 @@ const BasicInfo = (props) => {
           className="form-control"
           onChange={handleChange}
           type="text"
-          name="username"
+          name="fullname"
           placeholder="User name"
-          value={values.username}
+          value={values.fullname}
         />
       </div>
       <div className="form-group">
@@ -26,22 +26,25 @@ const BasicInfo = (props) => {
           value={values.email}
         />
       </div>
-      {isFromGoogle ? <></> :  <div className="form-group">
-        <label className="col-form-label" htmlFor="inputPassword3">
-          Password
-        </label>
-        <span> </span>
-        <input
-          className="form-control"
-          id="inputPassword3"
-          onChange={handleChange}
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={values.password}
-        />
-      </div>}
-     
+      {isFromGoogle ? (
+        <></>
+      ) : (
+        <div className="form-group">
+          <label className="col-form-label" htmlFor="inputPassword3">
+            Password
+          </label>
+          <span> </span>
+          <input
+            className="form-control"
+            id="inputPassword3"
+            onChange={handleChange}
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={values.password}
+          />
+        </div>
+      )}
     </React.Fragment>
   );
 };

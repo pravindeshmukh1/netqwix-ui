@@ -1,8 +1,26 @@
-import React from "react";
-import { LIST_OF_ACCOUNT_TYPE, LIST_OF_CATEGORY } from "../../../common/constants";
+import React, { useEffect, useState } from "react";
+import { LIST_OF_ACCOUNT_TYPE } from "../../../common/constants";
+import { useAppSelector, useAppDispatch } from "../../../store";
+import { masterState, getMasterDataAsync } from "../../master/master.slice";
 
 const Details = (props) => {
   const { values, handleChange } = props;
+  const { status, masterData } = useAppSelector(masterState).master;
+  const dispatch = useAppDispatch();
+  const [categories, setCategories] = useState(masterData);
+
+  useEffect(() => {
+    fetchMasterData();
+  }, []);
+
+  useEffect(() => {
+    setCategories(masterData);
+  }, [status]);
+
+  const fetchMasterData = () => {
+    dispatch(getMasterDataAsync());
+  };
+
   return (
     <React.Fragment>
       <div className="form-group">
@@ -11,9 +29,9 @@ const Details = (props) => {
           className="form-control"
           onChange={handleChange}
           type="number"
-          name="phone_no"
+          name="mobile_no"
           placeholder="Phone No"
-          value={values.phone_no}
+          value={values.mobile_no}
         />
       </div>
       <div className="form-group">
@@ -39,29 +57,27 @@ const Details = (props) => {
       </div>
       {values.account_type === "Trainer" && (
         <div className="form-group">
-        <label className="col-form-label" htmlFor="account_type">
-          Choose Category Type
-        </label>
-        <select
-          id="category_type"
-          className="form-control"
-          name="category_type"
-          onChange={handleChange}
-          defaultValue={values.category_type}
-        >
-          <option>Choose category</option>
-          {LIST_OF_CATEGORY.map((category_type, index) => {
-            return (
-              <option key={index} value={category_type.label}>
-                {category_type.label}
-              </option>
-            );
-          })}
-        </select>
-      </div>
-          )}
-
-      
+          <label className="col-form-label" htmlFor="account_type">
+            Choose Category Type
+          </label>
+          <select
+            id="category"
+            className="form-control"
+            name="category"
+            onChange={handleChange}
+            defaultValue={values.category}
+          >
+            <option>Choose category</option>
+            {categories.category.map((category, index) => {
+              return (
+                <option key={index} value={category}>
+                  {category}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      )}
     </React.Fragment>
   );
 };
