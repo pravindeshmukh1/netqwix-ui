@@ -70,7 +70,7 @@ const Index = (props) => {
   const TogglTab = (value) => {
     setActiveTab(value);
     dispatch(authAction.setActiveTab(value));
-    document.querySelector(".recent-default").classList.remove("active");
+    // document.querySelector(".recent-default").classList.remove("active");
     if (width < 800) {
       document.querySelector(".app-sidebar").classList.remove("active");
     }
