@@ -17,6 +17,7 @@ export const Errors = {
   signUp: {
     basicInfo: "All fields are mandatory",
     detailsTab: "Please select one account type",
+    detailsTabCategory: "Please select category for trainer",
   },
   invalidEmail: "Please enter valid email",
 };
@@ -37,4 +38,9 @@ export const googleOAuthLink =
 export const LOCAL_STORAGE_KEYS = {
   ACCESS_TOKEN: "token",
   ACC_TYPE: "acc_type",
+};
+
+export const AccountType = {
+  TRAINER: "Trainer",
+  TRAINEE: "Trainee",
 };

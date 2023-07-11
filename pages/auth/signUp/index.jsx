@@ -1,8 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Stepper from "react-stepper-horizontal";
 import {
+  AccountType,
   Errors,
   SuccessMsgs,
   signUpSteps,
@@ -12,32 +13,58 @@ import Details from "../../../app/components/auth/signUp/details";
 import { toast } from "react-toastify";
 import { Utils } from "../../../utils/utils";
 import axios from "axios";
+import { useAppSelector, useAppDispatch } from "../../../app/store";
+import { authState, authAction } from "../../../app/components/auth/auth.slice";
 
 const Auth_SignUp = (props) => {
   const router = useRouter();
+  const authSelector = useAppSelector(authState);
+  const dispatch = useAppDispatch();
   const [activeStep, setActiveStep] = useState(0);
 
   const [basicInfo, setBasicInfo] = useState({
-    username: "",
+    fullname: "",
     email: "",
     password: "",
+    isGoogleRegister: false,
   });
 
   const [details, setDetails] = useState({
-    phone_no: "",
+    mobile_no: "",
     account_type: "",
+    category: null,
   });
+
+  useEffect(() => {
+    if (
+      authSelector &&
+      authSelector.showGoogleRegistrationForm &&
+      authSelector.showGoogleRegistrationForm.isFromGoogle
+    ) {
+      setBasicInfo({
+        ...basicInfo,
+        email: authSelector.showGoogleRegistrationForm.email,
+        password: "*****",
+        isGoogleRegister: true,
+      });
+    }
+  }, [authSelector.showGoogleRegistrationForm.isFromGoogle]);
 
   const signUp = () => {
     const signUpObj = { ...basicInfo, ...details };
+    if (signUpObj.account_type === "Trainee") {
+      delete signUpObj.category;
+    }
     axios
       .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signup`, signUpObj)
       .then((response) => {
+        dispatch(authAction.updateIsGoogleForm());
+        setBasicInfo({ ...basicInfo, isGoogleRegister: false });
         toast.success(SuccessMsgs.signUp.success);
         router.push("/auth/signIn");
       })
       .catch((error) => {
-        toast.error(error.message);
+        toast.error(error.response.data.error);
       });
   };
 
@@ -92,6 +119,11 @@ const Auth_SignUp = (props) => {
           details.account_type === "Choose account type"
         ) {
           toast.error(Errors.signUp.detailsTab);
+        } else if (
+          details.account_type === AccountType.TRAINER &&
+          !details.category
+        ) {
+          toast.error(Errors.signUp.detailsTabCategory);
         } else {
           signUp();
         }
@@ -105,7 +137,11 @@ const Auth_SignUp = (props) => {
     switch (activeStep + 1) {
       case 1:
         return (
-          <BasicInfo values={basicInfo} handleChange={handleChangeBasicInfo} />
+          <BasicInfo
+            isFromGoogle={authSelector.showGoogleRegistrationForm.isFromGoogle}
+            values={basicInfo}
+            handleChange={handleChangeBasicInfo}
+          />
         );
       case 2:
         return <Details values={details} handleChange={handleChangeDetails} />;
@@ -139,30 +175,27 @@ const Auth_SignUp = (props) => {
                     <div className="form-group">
                       <div className="buttons">
                         {activeStep != 0 && (
-                          <Link
+                          <div
                             className="btn btn-primary button-effect"
-                            href="#"
                             onClick={handleBack}
                           >
                             Back
-                          </Link>
+                          </div>
                         )}
                         {activeStep === signUpSteps.length - 1 ? (
-                          <Link
+                          <div
                             className="btn button-effect btn-signup"
-                            href="#"
                             onClick={() => handleNext()}
                           >
                             Submit
-                          </Link>
+                          </div>
                         ) : (
-                          <Link
+                          <div
                             className="btn btn-primary button-effect"
-                            href="#"
                             onClick={() => handleNext()}
                           >
                             Next
-                          </Link>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -179,30 +212,30 @@ const Auth_SignUp = (props) => {
                 <div className="right-login animat-rate">
                   <div className="animation-block">
                     <div className="bg_circle">
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
+                      <div />
                     </div>
-                    <div className="cross"></div>
-                    <div className="cross1"></div>
-                    <div className="cross2"></div>
-                    <div className="dot"></div>
-                    <div className="dot1"></div>
-                    <div className="maincircle"></div>
-                    <div className="top-circle"></div>
-                    <div className="center-circle"></div>
-                    <div className="bottom-circle"></div>
-                    <div className="bottom-circle1"></div>
-                    <div className="right-circle"></div>
-                    <div className="right-circle1"></div>
+                    <div className="cross" />
+                    <div className="cross1" />
+                    <div className="cross2" />
+                    <div className="dot" />
+                    <div className="dot1" />
+                    <div className="maincircle" />
+                    <div className="top-circle" />
+                    <div className="center-circle" />
+                    <div className="bottom-circle" />
+                    <div className="bottom-circle1" />
+                    <div className="right-circle" />
+                    <div className="right-circle1" />
                     <img
                       className="heart-logo"
                       src="/assets/images/login_signup/5.png"

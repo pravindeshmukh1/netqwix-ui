@@ -5,7 +5,10 @@ import axios from "axios";
 import Link from "next/link";
 import { googleOAuthLink } from "../../../app/common/constants";
 import { useAppDispatch } from "../../../app/store";
-import { loginAsync } from "../../../app/components/auth/auth.slice";
+import {
+  googleLoginAsync,
+  loginAsync,
+} from "../../../app/components/auth/auth.slice";
 
 const Auth_SignIn = () => {
   const dispatch = useAppDispatch();
@@ -35,6 +38,7 @@ const Auth_SignIn = () => {
         .get(`${googleOAuthLink}${codeResponse.access_token}`)
         .then((res) => {
           console.log("userDetail", res.data);
+          dispatch(googleLoginAsync({ email: res.data.email }));
         })
         .catch((err) => console.log(err));
     },
@@ -115,17 +119,15 @@ const Auth_SignIn = () => {
                     </div>
                     <div className="form-group">
                       <div className="buttons">
-                        <Link
+                        <div
                           className="btn btn-primary button-effect"
-                          href="#"
                           onClick={() => Login()}
                         >
                           Login
-                        </Link>
+                        </div>
                         <Link
                           className="btn button-effect btn-signup"
-                          href="#"
-                          onClick={() => redirectToSignUpPage()}
+                          href="/auth/signUp"
                         >
                           SignUp
                         </Link>

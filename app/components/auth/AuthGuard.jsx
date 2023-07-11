@@ -7,8 +7,17 @@ import { authState } from "./auth.slice";
 const AuthGuard = ({ children }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { isUserLoggedIn } = useAppSelector(authState).auth;
+  const { isUserLoggedIn } = useAppSelector(authState);
   const path = router.asPath;
+  const authSelector = useAppSelector(authState);
+
+  useEffect(() => {
+    if(authSelector.showGoogleRegistrationForm.isFromGoogle) {
+      router.push("/auth/signUp");
+    }
+  }, [authSelector.showGoogleRegistrationForm])
+
+
 
   useEffect(() => {
     const isTokenExists = localStorage.getItem(LOCAL_STORAGE_KEYS.ACCESS_TOKEN)
