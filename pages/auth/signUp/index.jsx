@@ -175,30 +175,27 @@ const Auth_SignUp = (props) => {
                     <div className="form-group">
                       <div className="buttons">
                         {activeStep != 0 && (
-                          <Link
+                          <div
                             className="btn btn-primary button-effect"
-                            href=""
                             onClick={handleBack}
                           >
                             Back
-                          </Link>
+                          </div>
                         )}
                         {activeStep === signUpSteps.length - 1 ? (
-                          <Link
+                          <div
                             className="btn button-effect btn-signup"
-                            href=""
                             onClick={() => handleNext()}
                           >
                             Submit
-                          </Link>
+                          </div>
                         ) : (
-                          <Link
+                          <div
                             className="btn btn-primary button-effect"
-                            href=""
                             onClick={() => handleNext()}
                           >
                             Next
-                          </Link>
+                          </div>
                         )}
                       </div>
                     </div>
