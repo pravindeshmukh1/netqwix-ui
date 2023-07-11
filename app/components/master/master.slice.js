@@ -11,8 +11,7 @@ export const getMasterDataAsync = createAsyncThunk("master/get", async () => {
     const response = await getMasterData();
     return response;
   } catch (err) {
-    console.log(err);
-    // throw err;
+    throw err;
   }
 });
 

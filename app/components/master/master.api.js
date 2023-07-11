@@ -6,7 +6,6 @@ export const getMasterData = async () => {
       method: "get",
       url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/master/master-data`,
     });
-    console.log("response---", response);
     return response;
   } catch (error) {
     throw error;

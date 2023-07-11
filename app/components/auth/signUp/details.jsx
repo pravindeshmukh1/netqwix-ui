@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { LIST_OF_ACCOUNT_TYPE } from "../../../common/constants";
+import { AccountType, LIST_OF_ACCOUNT_TYPE } from "../../../common/constants";
 import { useAppSelector, useAppDispatch } from "../../../store";
 import { masterState, getMasterDataAsync } from "../../master/master.slice";
 
@@ -55,7 +55,7 @@ const Details = (props) => {
           })}
         </select>
       </div>
-      {values.account_type === "Trainer" && (
+      {values.account_type === AccountType.TRAINER && (
         <div className="form-group">
           <label className="col-form-label" htmlFor="account_type">
             Choose Category Type

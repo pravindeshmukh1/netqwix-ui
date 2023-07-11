@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Stepper from "react-stepper-horizontal";
 import {
+  AccountType,
   Errors,
   SuccessMsgs,
   signUpSteps,
@@ -63,7 +64,7 @@ const Auth_SignUp = (props) => {
         router.push("/auth/signIn");
       })
       .catch((error) => {
-        toast.error(error.message);
+        toast.error(error.response.data.error);
       });
   };
 
@@ -118,7 +119,10 @@ const Auth_SignUp = (props) => {
           details.account_type === "Choose account type"
         ) {
           toast.error(Errors.signUp.detailsTab);
-        } else if (details.account_type === "Trainer" && !details.category) {
+        } else if (
+          details.account_type === AccountType.TRAINER &&
+          !details.category
+        ) {
           toast.error(Errors.signUp.detailsTabCategory);
         } else {
           signUp();
