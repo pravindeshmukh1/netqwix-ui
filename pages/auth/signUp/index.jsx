@@ -30,7 +30,7 @@ const Auth_SignUp = (props) => {
   const [details, setDetails] = useState({
     phone_no: "",
     account_type: "",
-    category_type:""
+    category_type:null
   });
 
   useEffect(() => {
@@ -46,10 +46,13 @@ const Auth_SignUp = (props) => {
         isGoogleRegister: true,
       });
     }
-  }, [authSelector]);
+  }, [authSelector.showGoogleRegistrationForm.isFromGoogle]);
 
   const signUp = () => {
     const signUpObj = { ...basicInfo, ...details };
+    if (signUpObj.account_type === "Trainee") {
+      delete signUpObj.category_type;
+    }
     axios
       .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signup`, signUpObj)
       .then((response) => {

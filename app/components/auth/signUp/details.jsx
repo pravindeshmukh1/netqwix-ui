@@ -38,7 +38,7 @@ const Details = (props) => {
         </select>
       </div>
       {values.account_type === "Trainer" && (
-        <div className="form-group" if>
+        <div className="form-group">
         <label className="col-form-label" htmlFor="account_type">
           Choose Category Type
         </label>
