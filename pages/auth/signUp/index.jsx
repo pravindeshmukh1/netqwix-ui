@@ -14,14 +14,18 @@ import { toast } from "react-toastify";
 import { Utils } from "../../../utils/utils";
 import axios from "axios";
 import { useAppSelector, useAppDispatch } from "../../../app/store";
-import { authState, authAction } from "../../../app/components/auth/auth.slice";
+import {
+  authState,
+  authAction,
+  signUpAPI,
+  signupAsync,
+} from "../../../app/components/auth/auth.slice";
 
 const Auth_SignUp = (props) => {
   const router = useRouter();
   const authSelector = useAppSelector(authState);
   const dispatch = useAppDispatch();
   const [activeStep, setActiveStep] = useState(0);
-
   const [basicInfo, setBasicInfo] = useState({
     fullname: "",
     email: "",
@@ -50,22 +54,20 @@ const Auth_SignUp = (props) => {
     }
   }, [authSelector.showGoogleRegistrationForm.isFromGoogle]);
 
+  useEffect(() => {
+    if (authSelector.status === "fulfilled") {
+      dispatch(authAction.updateIsGoogleForm());
+      setBasicInfo({ ...basicInfo, isGoogleRegister: false });
+      router.push("/auth/signIn");
+    }
+  }, [authSelector.status]);
+
   const signUp = () => {
     const signUpObj = { ...basicInfo, ...details };
     if (signUpObj.account_type === "Trainee") {
       delete signUpObj.category;
     }
-    axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signup`, signUpObj)
-      .then((response) => {
-        dispatch(authAction.updateIsGoogleForm());
-        setBasicInfo({ ...basicInfo, isGoogleRegister: false });
-        toast.success(SuccessMsgs.signUp.success);
-        router.push("/auth/signIn");
-      })
-      .catch((error) => {
-        toast.error(error.response.data.error);
-      });
+    dispatch(signupAsync(signUpObj));
   };
 
   const handleChangeBasicInfo = (e) => {
