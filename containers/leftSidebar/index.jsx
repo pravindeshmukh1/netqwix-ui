@@ -137,18 +137,19 @@ const Index = (props) => {
                     <div
                       className="bg-size"
                       style={{
-                        backgroundImage: `url("/assets/images/avtar/2.jpg")`,
+                        // TODO: Get url from the api for background Image
+                        backgroundImage: `url("/assets/images/avtar/statusMenuIcon.jpeg")`,
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                         display: "block",
                       }}
                     >
-                      <img
+                      {/* <img
                         className="bg-img"
                         src="/assets/images/avtar/2.jpg"
                         alt="Avatar"
                         style={{ display: "none" }}
-                      />
+                      /> */}
                     </div>
                   </div>
                 </NavLink>

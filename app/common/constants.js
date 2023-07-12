@@ -44,3 +44,5 @@ export const AccountType = {
   TRAINER: "Trainer",
   TRAINEE: "Trainee",
 };
+
+export const leftSideBarOptions = {};

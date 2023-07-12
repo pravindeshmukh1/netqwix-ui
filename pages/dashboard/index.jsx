@@ -5,9 +5,16 @@ import RightSide from "../../containers/rightSidebar";
 import { useAppSelector } from "../../app/store";
 import { authState } from "../../app/components/auth/auth.slice";
 import DashboardContainer from "../../app/components/dashboard";
+import { AccountType, LOCAL_STORAGE_KEYS } from "../../app/common/constants";
+import TraineeDashboardContainer from "../../app/components/trainee/dashboard";
+import TrainerDashboardContainer from "../../app/components/trainer/dashboard";
 
 const Dashboard = () => {
   const { sidebarActiveTab } = useAppSelector(authState);
+  const [accountType, setAccountType] = useState("");
+  useEffect(() => {
+    setAccountType(localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE));
+  });
   return (
     <Fragment>
       <div className="chitchat-container sidebar-toggle ">
@@ -18,7 +25,12 @@ const Dashboard = () => {
             <RightSide />
           </React.Fragment>
         )}
-        {sidebarActiveTab === "home" && <DashboardContainer />}
+        {sidebarActiveTab === "home" &&
+          (accountType === AccountType.TRAINEE ? (
+            <TraineeDashboardContainer />
+          ) : (
+            <TrainerDashboardContainer />
+          ))}
       </div>
     </Fragment>
   );
