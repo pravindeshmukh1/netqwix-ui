@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { googleLogin, login } from "./auth.api";
+import { googleLogin, login, signup } from "./auth.api";
 import { toast } from "react-toastify";
-import { LOCAL_STORAGE_KEYS } from "../../common/constants";
+import { LOCAL_STORAGE_KEYS, SuccessMsgs } from "../../common/constants";
 
 const initialState = {
-  status: "pending",
+  status: "idle",
   userAccType: "",
   isUserLoggedIn: false,
   showGoogleRegistrationForm: {
@@ -16,7 +16,12 @@ const initialState = {
 
 export const signupAsync = createAsyncThunk("signup", async (payload) => {
   try {
-  } catch (err) {}
+    const response = await signup(payload);
+    return response;
+  } catch (err) {
+    toast.error(err.response.data.error);
+    throw err;
+  }
 });
 
 export const loginAsync = createAsyncThunk("login", async (payload) => {
@@ -25,6 +30,7 @@ export const loginAsync = createAsyncThunk("login", async (payload) => {
     return response;
   } catch (err) {
     toast.error(err.response.data.error);
+    throw err;
   }
 });
 
@@ -36,6 +42,7 @@ export const googleLoginAsync = createAsyncThunk(
       return response;
     } catch (err) {
       toast.error(err.response.data.error);
+      throw err;
     }
   }
 );
@@ -72,13 +79,14 @@ export const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(signupAsync.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(signupAsync.rejected, (state) => {
-        state.status = "rejected";
+        state.status = "pending";
       })
       .addCase(signupAsync.fulfilled, (state, action) => {
         state.status = "fulfilled";
+        toast.success(SuccessMsgs.signUp.success);
+      })
+      .addCase(signupAsync.rejected, (state) => {
+        state.status = "rejected";
       })
       .addCase(loginAsync.pending, (state) => {
         state.status = "loading";
