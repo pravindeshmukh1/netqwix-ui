@@ -30,8 +30,12 @@ export const masterSlice = createSlice({
       })
       .addCase(getMasterDataAsync.fulfilled, (state, action) => {
         state.status = "fulfilled";
-        state.masterData = action.payload.data.data[0];
-        console.log("action.payload.data", action.payload.data.data[0]);
+        state.masterData =
+          action.payload &&
+          action.payload.data &&
+          action.payload.data.data &&
+          action.payload.data.data.length &&
+          action.payload.data.data[0];
       });
   },
 });

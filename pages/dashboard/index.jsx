@@ -4,10 +4,14 @@ import ChitChat from "../../containers/chatBoard";
 import RightSide from "../../containers/rightSidebar";
 import { useAppSelector } from "../../app/store";
 import { authState } from "../../app/components/auth/auth.slice";
-import DashboardContainer from "../../app/components/dashboard";
-import { AccountType, LOCAL_STORAGE_KEYS } from "../../app/common/constants";
+import {
+  AccountType,
+  LOCAL_STORAGE_KEYS,
+  leftSideBarOptions,
+} from "../../app/common/constants";
 import TraineeDashboardContainer from "../../app/components/trainee/dashboard";
 import TrainerDashboardContainer from "../../app/components/trainer/dashboard";
+import ScheduleTraining from "../../app/components/trainee/scheduleTraining";
 
 const Dashboard = () => {
   const { sidebarActiveTab } = useAppSelector(authState);
@@ -15,22 +19,40 @@ const Dashboard = () => {
   useEffect(() => {
     setAccountType(localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE));
   });
-  return (
-    <Fragment>
-      <div className="chitchat-container sidebar-toggle ">
-        <LeftSide />
-        {sidebarActiveTab === "chats" && (
+
+  const getDashboard = () => {
+    switch (accountType) {
+      case AccountType.TRAINEE:
+        return <TraineeDashboardContainer />;
+      case AccountType.TRAINER:
+        return <TrainerDashboardContainer />;
+    }
+  };
+
+  const getActiveTabs = () => {
+    switch (sidebarActiveTab) {
+      case leftSideBarOptions.CHATS:
+        return (
           <React.Fragment>
             <ChitChat />
             <RightSide />
           </React.Fragment>
-        )}
-        {sidebarActiveTab === "home" &&
-          (accountType === AccountType.TRAINEE ? (
-            <TraineeDashboardContainer />
-          ) : (
-            <TrainerDashboardContainer />
-          ))}
+        );
+      case leftSideBarOptions.HOME:
+        return getDashboard();
+
+      case leftSideBarOptions.SCHEDULE_TRAINING:
+        return <ScheduleTraining />;
+      default:
+        break;
+    }
+  };
+
+  return (
+    <Fragment>
+      <div className="chitchat-container sidebar-toggle ">
+        <LeftSide />
+        {getActiveTabs()}
       </div>
     </Fragment>
   );

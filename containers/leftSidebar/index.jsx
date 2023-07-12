@@ -14,7 +14,11 @@ import { Tooltip } from "react-tippy";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import { authAction, authState } from "../../app/components/auth/auth.slice";
-import { LOCAL_STORAGE_KEYS } from "../../app/common/constants";
+import {
+  AccountType,
+  LOCAL_STORAGE_KEYS,
+  leftSideBarOptions,
+} from "../../app/common/constants";
 
 const steps = [
   {
@@ -155,6 +159,28 @@ const Index = (props) => {
                 </NavLink>
               </Tooltip>
             </li>
+            {accountType === AccountType.TRAINEE && (
+              <li>
+                <Tooltip
+                  title="Schedule Training"
+                  position="top"
+                  trigger="mouseenter"
+                >
+                  <NavLink
+                    className={`icon-btn btn-light button-effect ${
+                      activeTab === leftSideBarOptions.SCHEDULE_TRAINING
+                        ? "active"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      TogglTab(leftSideBarOptions.SCHEDULE_TRAINING)
+                    }
+                  >
+                    <i className="fa fa-calendar"></i>
+                  </NavLink>
+                </Tooltip>
+              </li>
+            )}
             <li>
               <Tooltip title="Chats" position="top" trigger="mouseenter">
                 <NavLink
@@ -272,44 +298,42 @@ const Index = (props) => {
           </ul>
         </div>
       </nav>
-      {activeTab !== "home" && (
-        <aside className="chitchat-left-sidebar left-disp">
-          {/* <div className="recent-default dynemic-sidebar active">
+      {activeTab !== leftSideBarOptions.HOME &&
+        activeTab !== leftSideBarOptions.SCHEDULE_TRAINING && (
+          <aside className="chitchat-left-sidebar left-disp">
+            {/* <div className="recent-default dynemic-sidebar active">
             <RecentSection />
             <ChatSection />
           </div> */}
 
-          <TabContent activeTab={activeTab}>
-            <TabPane tabId="fevorite">
-              <FevoriteSection tab={activeTab} ActiveTab={setActiveTab} />
-            </TabPane>
-            <TabPane tabId="fevorite">
-              <FevoriteSection tab={activeTab} ActiveTab={setActiveTab} />
-            </TabPane>
-            <TabPane tabId="chats">
-              <div className="recent-default dynemic-sidebar active">
-                <RecentSection />
-                <ChatSection />
-              </div>
-            </TabPane>
-            <TabPane tabId="document">
-              <DocumentSection tab={activeTab} ActiveTab={setActiveTab} />
-            </TabPane>
-            <TabPane tabId="contact">
-              <ContactListSection tab={activeTab} ActiveTab={setActiveTab} />
-            </TabPane>
-            <TabPane tabId="notification">
-              <NotificationSection tab={activeTab} ActiveTab={setActiveTab} />
-            </TabPane>
-            <TabPane tabId="setting">
-              <SettingSection tab={activeTab} ActiveTab={setActiveTab} />
-            </TabPane>
-            <TabPane tabId="status">
-              <StatusSection tab={activeTab} ActiveTab={setActiveTab} />
-            </TabPane>
-          </TabContent>
-        </aside>
-      )}
+            <TabContent activeTab={activeTab}>
+              <TabPane tabId="fevorite">
+                <FevoriteSection tab={activeTab} ActiveTab={setActiveTab} />
+              </TabPane>
+              <TabPane tabId="chats">
+                <div className="recent-default dynemic-sidebar active">
+                  <RecentSection />
+                  <ChatSection />
+                </div>
+              </TabPane>
+              <TabPane tabId="document">
+                <DocumentSection tab={activeTab} ActiveTab={setActiveTab} />
+              </TabPane>
+              <TabPane tabId="contact">
+                <ContactListSection tab={activeTab} ActiveTab={setActiveTab} />
+              </TabPane>
+              <TabPane tabId="notification">
+                <NotificationSection tab={activeTab} ActiveTab={setActiveTab} />
+              </TabPane>
+              <TabPane tabId="setting">
+                <SettingSection tab={activeTab} ActiveTab={setActiveTab} />
+              </TabPane>
+              <TabPane tabId="status">
+                <StatusSection tab={activeTab} ActiveTab={setActiveTab} />
+              </TabPane>
+            </TabContent>
+          </aside>
+        )}
     </Fragment>
   );
 };
