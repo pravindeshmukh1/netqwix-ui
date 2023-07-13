@@ -16,9 +16,10 @@ import ScheduleTraining from "../../app/components/trainee/scheduleTraining";
 const Dashboard = () => {
   const { sidebarActiveTab } = useAppSelector(authState);
   const [accountType, setAccountType] = useState("");
+
   useEffect(() => {
     setAccountType(localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE));
-  });
+  }, []);
 
   const getDashboard = () => {
     switch (accountType) {

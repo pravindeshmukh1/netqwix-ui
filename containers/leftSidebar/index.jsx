@@ -142,7 +142,7 @@ const Index = (props) => {
                       className="bg-size"
                       style={{
                         // TODO: Get url from the api for background Image
-                        backgroundImage: `url("/assets/images/avtar/statusMenuIcon.jpeg")`,
+                        backgroundImage: `url("/assets/images/status-img/statusMenuIcon.png")`,
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                         display: "block",
