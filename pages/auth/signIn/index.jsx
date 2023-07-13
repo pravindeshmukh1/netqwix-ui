@@ -37,7 +37,6 @@ const Auth_SignIn = () => {
       await axios
         .get(`${googleOAuthLink}${codeResponse.access_token}`)
         .then((res) => {
-          console.log("userDetail", res.data);
           dispatch(googleLoginAsync({ email: res.data.email }));
         })
         .catch((err) => console.log(err));

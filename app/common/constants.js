@@ -44,3 +44,10 @@ export const AccountType = {
   TRAINER: "Trainer",
   TRAINEE: "Trainee",
 };
+
+export const leftSideBarOptions = {
+  HOME: "home",
+  STATUS: "status",
+  SCHEDULE_TRAINING: "scheduleTraining",
+  CHATS: "chats",
+};
