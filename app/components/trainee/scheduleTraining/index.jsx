@@ -1,22 +1,40 @@
 import Table from "rc-table";
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
-
 import "../scheduleTraining/index.css";
 import {
-  bookTrainingSessionDayTableHeadingMockData,
-  bookTrainingSessionDayTableMockData,
   bookTrainingSessionTableHeadingMockData,
   bookTrainingSessionTableMockData,
-  filterOption,
-  trainers,
-  week,
 } from "../../../common/constants";
-import { Autocomplete } from "../../../common/autocomplete";
+import { Utils } from "../../../../utils/utils";
 
 const ScheduleTraining = () => {
-  const [selectFilter, setSelectFilter] = useState(filterOption.week);
   const [startDate, setStartDate] = useState(new Date());
+  const [search, setSearch] = useState(null);
+  const Input = ({ onChange, placeholder, value, isSecure, id, onClick }) => (
+    <div>
+      <img
+        className="mt-1 ml-2 mr-3 cursor-pointer"
+        src={"../assets/images/arrow-left.svg"}
+      />
+      <span
+        onChange={onChange}
+        placeholder={placeholder}
+        value={value}
+        isSecure={isSecure}
+        id={id}
+        onClick={onClick}
+        className="select_date"
+      >
+        {Utils.formateDate(startDate)}
+      </span>
+      <img
+        className="ml-3 arrow-right"
+        src={"../assets/images/arrow-right.svg"}
+      />
+    </div>
+  );
+
   return (
     <div>
       <div className="m-25 header">
@@ -24,64 +42,33 @@ const ScheduleTraining = () => {
           Book Training Session
         </h3>
       </div>
-      <div className="pt-3 m-25">
-        <div className="row">
-          <div className="col col-lg-2">
-            <h5 for="exampleFormControlInput1" className="form-label mb-1">
-              Search by Trainer Name
-            </h5>
-            <Autocomplete
-              options={trainers}
-              isMulti={true}
-              name={"trainers"}
-              key={"trainers"}
-              isClearable={false}
-              placeholder={"Select"}
+      <div>
+        <div className="m-25 header">
+          <div className="input-group">
+            <input
+              className="form-control border border-primary"
+              type="search"
+              id="Search"
+              name="Search"
+              placeholder="Search"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
             />
-          </div>
-          <div className="ml-3 col col-lg-2">
-            <h5 for="exampleFormControlInput1" className="form-label mb-1">
-              Search by Date
-            </h5>
-            <Autocomplete
-              options={week}
-              isMulti={true}
-              name={"week"}
-              key={"week"}
-              isClearable={false}
-              placeholder={"Select"}
-            />
-          </div>
-          <div className="col-sm mt-3">
-            <button type="button" className="btn btn-primary btn-sm">
-              Schedule instant Meeting
-            </button>
           </div>
         </div>
       </div>
       <div className="m-25">
         <div className="row">
-          <DatePicker
-            className="customDatePickerWidth ml-3"
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-          />
-          <div className="ml-4 col col-lg-2 mt-1">
+          <div className="">
+            <DatePicker
+              className="datePicker"
+              onChange={(date) => setStartDate(date)}
+              selected={startDate}
+              customInput={<Input />}
+            />
             <button
               type="button"
-              className={`border 
-          ${selectFilter === filterOption.day && `border-primary`}
-          mb-2btn btn-sm bg-white`}
-              onClick={() => setSelectFilter("Day")}
-            >
-              Day
-            </button>
-            <button
-              type="button"
-              className={`border ${
-                selectFilter === filterOption.week && `border-primary`
-              } mb-2btn btn-sm bg-white ml-2`}
-              onClick={() => setSelectFilter("Week")}
+              className={"border mb-2btn btn-sm bg-white ml-2 border-dark"}
             >
               Week
             </button>
@@ -92,16 +79,8 @@ const ScheduleTraining = () => {
         key={"book-training-session"}
         className="ml-4 mt-4 book-table-session"
         scroll={{ x: 1500, y: 600 }}
-        columns={
-          selectFilter === filterOption.week
-            ? bookTrainingSessionTableHeadingMockData
-            : bookTrainingSessionDayTableHeadingMockData
-        }
-        data={
-          selectFilter === filterOption.week
-            ? bookTrainingSessionTableMockData
-            : bookTrainingSessionDayTableMockData
-        }
+        columns={bookTrainingSessionTableHeadingMockData}
+        data={bookTrainingSessionTableMockData}
       />
     </div>
   );
