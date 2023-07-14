@@ -21,7 +21,10 @@ const TrainerDashboardContainer = () => {
 
   const handleOnSubmit = () => {};
 
-  const handleAddSlots = () => {};
+  const handleAddSlots = (day) => {
+    // const emptySlot = { start_date: "", end_date: "" };
+    // setTimePickerDiv({ ...timePickerDiv, [day]: [day].push(emptySlot) });
+  };
 
   const handleStartDate = (value) => {
     console.log(value && value.format(format));
@@ -43,38 +46,41 @@ const TrainerDashboardContainer = () => {
                   <div className="col-4">
                     <h4>{day}</h4>
                   </div>
-                  {/* {timePickerDiv[day].map((timePickerDiv, index) => { */}
-                  <div className="col-6">
-                    <div className="row">
-                      <div className="col-6">
-                        {" "}
-                        <TimePicker
-                          defaultValue={moment()}
-                          showSecond={false}
-                          minuteStep={15}
-                          use12Hours
-                          onChange={handleStartDate}
-                        />
+                  {timePickerDiv[day].map((time, index) => {
+                    return (
+                      <div key={index} className="col-6">
+                        <div className="row">
+                          <div className="col-6">
+                            {" "}
+                            <TimePicker
+                              placeholder="Select time"
+                              // defaultValue={moment()}
+                              showSecond={false}
+                              minuteStep={15}
+                              use12Hours
+                              onChange={handleStartDate}
+                            />
+                          </div>
+                          <div className="col-6">
+                            {" "}
+                            <TimePicker
+                              placeholder="Select time"
+                              // defaultValue={moment()}
+                              showSecond={false}
+                              minuteStep={15}
+                              use12Hours
+                              // onChange={handleEndDate}
+                            />
+                          </div>
+                        </div>
                       </div>
-                      <div className="col-6">
-                        {" "}
-                        <TimePicker
-                          disabled
-                          defaultValue={moment()}
-                          showSecond={false}
-                          minuteStep={15}
-                          use12Hours
-                          // onChange={handleEndDate}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  {/* })} */}
+                    );
+                  })}
                   <div className="col-2">
                     <button
                       type="button"
                       className="btn btn-circle bg-primary text-white"
-                      onClick={() => handleAddSlots()}
+                      onClick={() => handleAddSlots(day)}
                     >
                       <i className="fa fa-plus"></i>
                     </button>
