@@ -43,6 +43,14 @@ export const AccountType = {
   TRAINER: "Trainer",
   TRAINEE: "Trainee",
 };
+
+export const weekDays = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+];
 export const bookTrainingSessionTableHeadingMockData = [
   {
     title: "Available Trainers",
