@@ -1,6 +1,4 @@
-import { Tooltip } from "react-tippy";
 export const signUpSteps = [{ title: "Basic Info" }, { title: "Details" }];
-
 export const LIST_OF_ACCOUNT_TYPE = [
   {
     id: 1,
@@ -75,7 +73,7 @@ export const bookTrainingSessionTableHeadingMockData = [
     width: 100,
     render() {
       return (
-        <div class="rounded-pill bg-primary text-white text-center text-center">
+        <div className="rounded-pill bg-primary text-white text-center text-center">
           7:00am-9:30am
         </div>
       );
@@ -89,10 +87,10 @@ export const bookTrainingSessionTableHeadingMockData = [
     render() {
       return (
         <div>
-          <div class="rounded-pill bg-primary text-white text-center mb-1">
+          <div className="rounded-pill bg-primary text-white text-center mb-1">
             9:00am-11:30am
           </div>
-          <div class="rounded-pill bg-primary text-white text-center mb-1">
+          <div className="rounded-pill bg-primary text-white text-center mb-1">
             1:00pm-3:30pm
           </div>
         </div>
@@ -107,19 +105,19 @@ export const bookTrainingSessionTableHeadingMockData = [
     render() {
       return (
         <div>
-          <div class="rounded-pill bg-primary text-white text-center mb-1">
+          <div className="rounded-pill bg-primary text-white text-center mb-1">
             5:00pm-7:30pm
           </div>
-          <div class="rounded-pill bg-primary text-white text-center mb-1">
+          <div className="rounded-pill bg-primary text-white text-center mb-1">
             3:00pm-5:30pm
           </div>
-          <div class="rounded-pill bg-primary text-white text-center mb-1">
+          <div className="rounded-pill bg-primary text-white text-center mb-1">
             8:00am-9:30pm
           </div>
-          <div class="rounded-pill bg-primary text-white text-center mb-1">
+          <div className="rounded-pill bg-primary text-white text-center mb-1">
             2:00pm-6:30pm
           </div>
-          <div class="rounded-pill bg-primary text-white text-center mb-1">
+          <div className="rounded-pill bg-primary text-white text-center mb-1">
             10:00am-11:30am
           </div>
         </div>
@@ -134,10 +132,10 @@ export const bookTrainingSessionTableHeadingMockData = [
     render() {
       return (
         <div>
-          <div class="rounded-pill bg-primary text-white text-center mb-1">
+          <div className="rounded-pill bg-primary text-white text-center mb-1">
             1:00am-11:30am
           </div>
-          <div class="rounded-pill bg-primary text-white text-center mb-1">
+          <div className="rounded-pill bg-primary text-white text-center mb-1">
             1:00am-11:30am
           </div>
         </div>
@@ -152,10 +150,10 @@ export const bookTrainingSessionTableHeadingMockData = [
     render() {
       return (
         <>
-          <div class="rounded-pill bg-primary text-white text-center mb-1">
+          <div className="rounded-pill bg-primary text-white text-center mb-1">
             1:00am-11:30am
           </div>
-          <div class="rounded-pill bg-primary text-white text-center mb-1">
+          <div className="rounded-pill bg-primary text-white text-center mb-1">
             1:00am-11:30am
           </div>
         </>
@@ -193,7 +191,7 @@ export const bookTrainingSessionDayTableHeadingMockData = [
     width: 70,
     render() {
       return (
-        <div class="rounded-pill bg-primary text-white text-center mb-1">
+        <div className="rounded-pill bg-primary text-white text-center mb-1">
           8:00am-8:30am
         </div>
       );
@@ -206,7 +204,7 @@ export const bookTrainingSessionDayTableHeadingMockData = [
     width: 70,
     render() {
       return (
-        <div class="rounded-pill bg-primary text-white text-center mb-1">
+        <div className="rounded-pill bg-primary text-white text-center mb-1">
           9:00am-9:30am
         </div>
       );
@@ -219,7 +217,7 @@ export const bookTrainingSessionDayTableHeadingMockData = [
     width: 70,
     render() {
       return (
-        <div class="rounded-pill bg-primary text-white text-center mb-1">
+        <div className="rounded-pill bg-primary text-white text-center mb-1">
           10:00am-10:30am
         </div>
       );
@@ -232,7 +230,7 @@ export const bookTrainingSessionDayTableHeadingMockData = [
     width: 70,
     render() {
       return (
-        <div class="rounded-pill bg-primary text-white text-center mb-1">
+        <div className="rounded-pill bg-primary text-white text-center mb-1">
           11:00am-11:30am
         </div>
       );
@@ -245,7 +243,7 @@ export const bookTrainingSessionDayTableHeadingMockData = [
     width: 70,
     render() {
       return (
-        <div class="rounded-pill bg-primary text-white text-center mb-1">
+        <div className="rounded-pill bg-primary text-white text-center mb-1">
           12:00pm-12:30pm
         </div>
       );
@@ -258,7 +256,7 @@ export const bookTrainingSessionDayTableHeadingMockData = [
     width: 70,
     render() {
       return (
-        <div class="rounded-pill bg-primary text-white text-center mb-1">
+        <div className="rounded-pill bg-primary text-white text-center mb-1">
           1:00pm-1:30pm
         </div>
       );
@@ -271,7 +269,7 @@ export const bookTrainingSessionDayTableHeadingMockData = [
     width: 70,
     render() {
       return (
-        <div class="rounded-pill bg-primary text-white text-center mb-1">
+        <div className="rounded-pill bg-primary text-white text-center mb-1">
           2:00pm-2:30pm
         </div>
       );
@@ -284,7 +282,7 @@ export const bookTrainingSessionDayTableHeadingMockData = [
     width: 70,
     render() {
       return (
-        <div class="rounded-pill bg-primary text-white text-center mb-1">
+        <div className="rounded-pill bg-primary text-white text-center mb-1">
           3:00pm-3:30pm
         </div>
       );
@@ -297,7 +295,7 @@ export const bookTrainingSessionDayTableHeadingMockData = [
     width: 70,
     render() {
       return (
-        <div class="rounded-pill bg-primary text-white text-center mb-1">
+        <div className="rounded-pill bg-primary text-white text-center mb-1">
           4:00pm-4:30pm
         </div>
       );
@@ -310,14 +308,9 @@ export const bookTrainingSessionDayTableHeadingMockData = [
     width: 70,
     render() {
       return (
-        <Tooltip
-          title={`<p className="text-danger bg-white">5:00pm-5:30pm</p><button>Book</button>`}
-          position="bottom-end"
-          className="rounded-pill bg-primary text-white text-center mb-1"
-          trigger="mouseenter"
-        >
+        <div className="rounded-pill bg-primary text-white text-center mb-1">
           5:00pm-5:30pm
-        </Tooltip>
+        </div>
       );
     },
   },
@@ -328,7 +321,7 @@ export const bookTrainingSessionDayTableHeadingMockData = [
     width: 70,
     render() {
       return (
-        <div class="rounded-pill bg-primary text-white text-center mb-1">
+        <div className="rounded-pill bg-primary text-white text-center mb-1">
           6:00pm-6:30am
         </div>
       );

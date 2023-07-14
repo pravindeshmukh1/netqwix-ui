@@ -1,5 +1,7 @@
-import React, { useState } from "react";
 import Table from "rc-table";
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+
 import "../scheduleTraining/index.css";
 import {
   bookTrainingSessionDayTableHeadingMockData,
@@ -11,10 +13,10 @@ import {
   week,
 } from "../../../common/constants";
 import { Autocomplete } from "../../../common/autocomplete";
-import { DatePicker } from "../../../common/calendar";
 
 const ScheduleTraining = () => {
   const [selectFilter, setSelectFilter] = useState(filterOption.week);
+  const [startDate, setStartDate] = useState(new Date());
   return (
     <div>
       <div className="m-25 header">
@@ -59,10 +61,12 @@ const ScheduleTraining = () => {
       </div>
       <div className="m-25">
         <div className="row">
-          <div className="col col-lg-2">
-            <DatePicker onChange={() => {}} value={null} />
-          </div>
-          <div className="ml-3 col col-lg-2">
+          <DatePicker
+            className="customDatePickerWidth ml-3"
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+          />
+          <div className="ml-4 col col-lg-2 mt-1">
             <button
               type="button"
               className={`border 
@@ -85,6 +89,7 @@ const ScheduleTraining = () => {
         </div>
       </div>
       <Table
+        key={"book-training-session"}
         className="ml-4 mt-4 book-table-session"
         scroll={{ x: 1500, y: 600 }}
         columns={
