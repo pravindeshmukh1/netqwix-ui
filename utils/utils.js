@@ -18,4 +18,12 @@ export class Utils {
   static getFormattedDateDb = (value) => {
     return moment(value.format("h:mm A"), "'hh:mm A'").format("HH:mm:ss");
   };
+
+  static formateDate = (value) => {
+    const date = moment(value);
+    const startDate = date.startOf("week").format("MMM D");
+    const endDate = date.endOf("week").format("D,YYYY");
+    const formattedDateRange = `${startDate}-${endDate}`;
+    return formattedDateRange;
+  };
 }
