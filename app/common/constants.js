@@ -213,6 +213,15 @@ export const STATUS = {
   fulfilled: "fulfilled",
   rejected: "rejected",
 };
+export const BookedSession = {
+  confirmed: "confirmed",
+  booked: "booked",
+  canceled: "canceled",
+};
+export const BookedSessionMessage = {
+  canceled: "This Booked Schedule Training Are Canceled",
+  confirmed: "This Booked Schedule Training Are Confirmed",
+};
 export const trainers = [
   {
     id: 1,

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import authReducer from "./components/auth/auth.slice";
 import masterReducer from "./components/master/master.slice";
 import traineeReducer from "./components/trainee/trainee.slice";
+import bookingsReducer from "./components/common/common.slice";
 
 const makeStore = () => {
   return configureStore({
@@ -10,6 +11,7 @@ const makeStore = () => {
       auth: authReducer,
       master: masterReducer,
       trainee: traineeReducer,
+      bookings: bookingsReducer,
     },
   });
 };
