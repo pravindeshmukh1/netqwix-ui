@@ -303,3 +303,11 @@ input[type="search"]::-webkit-search-cancel-button {
       transparent 100%
     );
 }
+.search-trainee .form-group input {
+  border: 1px solid #eff1f2;
+  height: 4rem;
+  width: 100%;
+  border-radius: 15px;
+  margin: 0 auto;
+  font-size: 16px;
+}

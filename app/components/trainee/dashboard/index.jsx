@@ -1,10 +1,10 @@
 import React from "react";
+import ScheduleTraining from "../scheduleTraining";
 
 const TraineeDashboardContainer = () => {
   return (
-    <div className="container m-25">
-      <h2>Welcome </h2>
-      <h4>Trainee</h4>
+    <div>
+      <ScheduleTraining />
     </div>
   );
 };

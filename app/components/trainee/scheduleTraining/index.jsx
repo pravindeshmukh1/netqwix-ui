@@ -1,22 +1,26 @@
 import Table from "rc-table";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "../scheduleTraining/index.css";
 import {
   bookTrainingSessionTableHeadingMockData,
   bookTrainingSessionTableMockData,
+  params,
 } from "../../../common/constants";
 import { Utils } from "../../../../utils/utils";
+import { useAppDispatch, useAppSelector } from "../../../store";
+import { getTraineeWithSlotsAsync, traineeState } from "../trainee.slice";
 
 const ScheduleTraining = () => {
   const [startDate, setStartDate] = useState(new Date());
-  const [search, setSearch] = useState(null);
+  const dispatch = useAppDispatch();
+  const [getParams, setParams] = useState(params);
+  const { getTraineeSlots } = useAppSelector(traineeState);
+  useEffect(() => {
+    dispatch(getTraineeWithSlotsAsync(getParams));
+  }, [getParams]);
   const Input = ({ onChange, placeholder, value, isSecure, id, onClick }) => (
     <div>
-      <img
-        className="mt-1 ml-2 mr-3 cursor-pointer"
-        src={"../assets/images/arrow-left.svg"}
-      />
       <span
         onChange={onChange}
         placeholder={placeholder}
@@ -28,10 +32,6 @@ const ScheduleTraining = () => {
       >
         {Utils.formateDate(startDate)}
       </span>
-      <img
-        className="ml-3 arrow-right"
-        src={"../assets/images/arrow-right.svg"}
-      />
     </div>
   );
 
@@ -42,46 +42,45 @@ const ScheduleTraining = () => {
           Book Training Session
         </h3>
       </div>
-      <div>
-        <div className="m-25 header">
-          <div className="input-group">
-            <input
-              className="form-control border border-primary"
-              type="search"
-              id="Search"
-              name="Search"
-              placeholder="Search"
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-            />
-          </div>
+      <div
+        className={`form-inline search-form open mb-5`}
+        style={{
+          width: "92vw",
+          height: "4rem",
+          marginTop: "60px",
+          marginLeft: "6rem",
+        }}
+      >
+        <div className="form-group">
+          <input
+            className="form-control-plaintext"
+            type="search"
+            value={getParams.search}
+            placeholder="Search..."
+            onChange={(event) => {
+              const { value } = event.target;
+              setParams({ search: value });
+            }}
+          />
+        </div>
+        <div className="mt-3 ml-1">
+          <DatePicker
+            className="datePicker"
+            onChange={(date) => setStartDate(date)}
+            selected={startDate}
+            customInput={<Input />}
+          />
         </div>
       </div>
-      <div className="m-25">
-        <div className="row">
-          <div className="">
-            <DatePicker
-              className="datePicker"
-              onChange={(date) => setStartDate(date)}
-              selected={startDate}
-              customInput={<Input />}
-            />
-            <button
-              type="button"
-              className={"border mb-2btn btn-sm bg-white ml-2 border-dark"}
-            >
-              Week
-            </button>
-          </div>
-        </div>
+      <div className="pt-5" style={{ marginTop: "6rem" }}>
+        <Table
+          key={"book-training-session"}
+          className="ml-4 book-table-session"
+          scroll={{ x: 1500, y: 600 }}
+          columns={bookTrainingSessionTableHeadingMockData}
+          data={bookTrainingSessionTableMockData}
+        />
       </div>
-      <Table
-        key={"book-training-session"}
-        className="ml-4 mt-4 book-table-session"
-        scroll={{ x: 1500, y: 600 }}
-        columns={bookTrainingSessionTableHeadingMockData}
-        data={bookTrainingSessionTableMockData}
-      />
     </div>
   );
 };

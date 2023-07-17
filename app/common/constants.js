@@ -205,6 +205,14 @@ export const bookTrainingSessionTableMockData = [
   },
 ];
 
+export const params = {
+  search: "",
+};
+export const STATUS = {
+  pending: "pending",
+  fulfilled: "fulfilled",
+  rejected: "rejected",
+};
 export const trainers = [
   {
     id: 1,
