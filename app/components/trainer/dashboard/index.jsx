@@ -1,30 +1,79 @@
 import "rc-time-picker/assets/index.css";
 import "../dashboard/index.css";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import moment from "moment";
 import TimePicker from "rc-time-picker";
-import { weekDays } from "../../../common/constants";
+import { Form, Formik, FieldArray } from "formik";
+import { useAppSelector, useAppDispatch } from "../../../store";
+import { timeFormatInDb, weekDays } from "../../../common/constants";
+import {
+  getScheduleInventoryDataAsync,
+  scheduleInventoryState,
+  updateScheduleInventoryAsync,
+} from "../scheduleInventory/scheduleInventory.slice";
+import { Utils } from "../../../../utils/utils";
 
 const timerPickerInitialState = {
-  Monday: [{ start_date: "", end_date: "" }],
-  Tuesday: [{ start_date: "", end_date: "" }],
-  Wednesday: [{ start_date: "", end_date: "" }],
-  Thursday: [{ start_date: "", end_date: "" }],
-  Friday: [{ start_date: "", end_date: "" }],
+  monday: [{ start_time: "", end_time: "" }],
+  tuesday: [{ start_time: "", end_time: "" }],
+  wednesday: [{ start_time: "", end_time: "" }],
+  thursday: [{ start_time: "", end_time: "" }],
+  friday: [{ start_time: "", end_time: "" }],
 };
 
-const TrainerDashboardContainer = () => {
-  const [timePickerDiv, setTimePickerDiv] = useState(timerPickerInitialState);
+const timeObj = [
+  {
+    day: "monday",
 
-  const format = "h:mm a";
+    slots: [{ start_time: "08:00:00", end_time: "12:00:00" }],
+  },
+  {
+    day: "tuesday",
+
+    slots: [{ start_time: "04:00:00", end_time: "07:00:00" }],
+  },
+];
+
+const TrainerDashboardContainer = () => {
+  const { status, scheduleInventoryData } = useAppSelector(
+    scheduleInventoryState
+  );
+  const dispatch = useAppDispatch();
+  const [timePickerDiv, setTimePickerDiv] = useState(scheduleInventoryData);
+
+  useEffect(() => {
+    fetchScheduleInventoryData();
+  }, []);
+
+  useEffect(() => {
+    // console.log("scheduleInventoryData", scheduleInventoryData);
+    setTimePickerDiv(scheduleInventoryData);
+  }, [status]);
+
+  const fetchScheduleInventoryData = () => {
+    dispatch(getScheduleInventoryDataAsync());
+  };
+
+  // const format = "h:mm a";
+  const format = "HH:mm a";
 
   const handleOnSubmit = () => {};
 
-  const handleAddSlots = () => {};
+  const handleAddSlots = (day) => {
+    const emptySlot = { start_time: "", end_time: "" };
+    const timePickrObj = [...timePickerDiv[day], emptySlot];
+    setTimePickerDiv({ ...timePickerDiv, [day]: timePickrObj });
+  };
 
-  const handleStartDate = (value) => {
-    console.log(value && value.format(format));
+  const handleRemoveSlots = (day, index) => {
+    console.log("day", day, "index", index);
+    const slots = [...timePickerDiv[day]];
+    console.log("slots", [...timePickerDiv[day]]);
+    slots.splice(index, 1);
+    console.log("slotsssss", slots);
+    timePickerDiv[day] = slots;
+    setTimePickerDiv({ ...timePickerDiv });
   };
 
   return (
@@ -35,66 +84,53 @@ const TrainerDashboardContainer = () => {
         </h3>
       </div>
       <div className="px-5 pt-3 m-25">
-        <div>
-          <form>
-            {weekDays.map((day, index) => {
-              return (
-                <div key={index} className="row my-4">
-                  <div className="col-4">
-                    <h4>{day}</h4>
-                  </div>
-                  {/* {timePickerDiv[day].map((timePickerDiv, index) => { */}
-                  <div className="col-6">
-                    <div className="row">
-                      <div className="col-6">
-                        {" "}
-                        <TimePicker
-                          defaultValue={moment()}
-                          showSecond={false}
-                          minuteStep={15}
-                          use12Hours
-                          onChange={handleStartDate}
-                        />
-                      </div>
-                      <div className="col-6">
-                        {" "}
-                        <TimePicker
-                          disabled
-                          defaultValue={moment()}
-                          showSecond={false}
-                          minuteStep={15}
-                          use12Hours
-                          // onChange={handleEndDate}
-                        />
-                      </div>
+        <Formik
+          initialValues={timeObj}
+          // validationSchema={}
+          onSubmit={() => {}}
+        >
+          {({ errors, touched, values, setValues }) => (
+            <Form>
+              {values.map(({ day, slots }, index) => {
+                return (
+                  <div key={index} className="row my-4">
+                    <div className="col-1"></div>
+                    <div className="col-4 text-capitalize">
+                      <h4>{day}</h4>
+                      {/* <h4>{JSON.stringify(values)}</h4> */}
                     </div>
-                  </div>
-                  {/* })} */}
-                  <div className="col-2">
-                    <button
-                      type="button"
-                      className="btn btn-circle bg-primary text-white"
-                      onClick={() => handleAddSlots()}
-                    >
-                      <i className="fa fa-plus"></i>
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
 
-            <div className="row mt-4">
-              <div className="col-12"></div>
-              <button
-                type="submit"
-                class="btn btn-primary"
-                onClick={() => handleOnSubmit()}
-              >
-                Submit Your Scheduling
-              </button>
-            </div>
-          </form>
-        </div>
+                    <FieldArray name="slots">
+                      {({ remove, push, insert }) => {
+                        return (
+                          <div className="col-6">
+                            {JSON.stringify(slots)}
+                            {/* values.slot */}
+                            {slots.map((time, slotIndex) => {
+                              return (
+                                <button
+                                  type="button"
+                                  className="btn btn-circle bg-primary text-white"
+                                  // onClick={() => handleAddSlots(day)}
+                                  onClick={() => {
+                                    alert("Inside");
+                                    push("");
+                                  }}
+                                >
+                                  <i className="fa fa-plus"></i>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        );
+                      }}
+                    </FieldArray>
+                  </div>
+                );
+              })}
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );

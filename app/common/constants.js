@@ -47,11 +47,11 @@ export const AccountType = {
 };
 
 export const weekDays = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
 ];
 export const bookTrainingSessionTableHeadingMockData = [
   {
@@ -501,3 +501,7 @@ export const filterOption = {
   day: "Day",
   week: "Week",
 };
+
+export const timeFormat = "h:mm";
+
+export const timeFormatInDb = "h:mm:ss";
