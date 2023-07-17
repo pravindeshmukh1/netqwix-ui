@@ -43,7 +43,7 @@ const Dashboard = () => {
         return getDashboard();
 
       case leftSideBarOptions.SCHEDULE_TRAINING:
-        return <ScheduleTraining />;
+        return <></>;
       default:
         break;
     }
