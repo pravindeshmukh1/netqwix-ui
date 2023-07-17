@@ -1,10 +1,9 @@
 import Table from 'rc-table';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import '../scheduleTraining/index.css';
+import { Popover } from 'react-tiny-popover'
 import {
-  bookTrainingSessionTableHeadingMockData,
-  bookTrainingSessionTableMockData,
   params,
   weekDays,
 } from '../../../common/constants';
@@ -17,9 +16,12 @@ const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
   const [getParams, setParams] = useState(params);
   const { getTraineeSlots } = useAppSelector(traineeState);
-
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [bookingColumns, setBookingColumns] = useState([]);
   const [bookingTableData, setBookingTableData] = useState([]);
+  const popoverRef = useRef()
+
+
 
   useEffect(
     () => {
@@ -31,7 +33,7 @@ const ScheduleTraining = () => {
   useEffect(
     () => {
       const todaySDate = Utils.getDateInFormat(new Date());
-      const { weekDates, weekDateFormatted} = Utils.getCurrentWeekByDate(todaySDate);
+      const { weekDates, weekDateFormatted } = Utils.getCurrentWeekByDate(todaySDate);
       setTableData(getTraineeSlots, weekDates);
       setColumns(weekDateFormatted);
 
@@ -48,11 +50,11 @@ const ScheduleTraining = () => {
       };
       return {
         trainer_info,
-        monday: {date: selectedDate[0], trainer_info, slot: getSlotByDate(available_slots, weekDays[0]) },
-        tuesday: {date: selectedDate[1], trainer_info, slot: getSlotByDate(available_slots, weekDays[1]) },
-        wednesday: {date: selectedDate[2], trainer_info, slot: getSlotByDate(available_slots, weekDays[2]) },
-        thursday: {date: selectedDate[3], trainer_info, slot: getSlotByDate(available_slots, weekDays[3]) },
-        friday: {date: selectedDate[4], trainer_info, slot: getSlotByDate(available_slots, weekDays[4]) },
+        monday: { date: selectedDate[0], trainer_info, slot: getSlotByDate(available_slots, weekDays[0]) },
+        tuesday: { date: selectedDate[1], trainer_info, slot: getSlotByDate(available_slots, weekDays[1]) },
+        wednesday: { date: selectedDate[2], trainer_info, slot: getSlotByDate(available_slots, weekDays[2]) },
+        thursday: { date: selectedDate[3], trainer_info, slot: getSlotByDate(available_slots, weekDays[3]) },
+        friday: { date: selectedDate[4], trainer_info, slot: getSlotByDate(available_slots, weekDays[4]) },
       }
     })
     setBookingTableData(result);
@@ -78,7 +80,7 @@ const ScheduleTraining = () => {
       key: 'Available_Trainers',
       width: 70,
       render: ({ category, email, fullname, profilePicture, trainer_id, _id }, record) => {
-        return <div className='text-center'>
+        return (<div className='text-center'>
           <img
             height={100}
             width={100}
@@ -91,9 +93,34 @@ const ScheduleTraining = () => {
           >
             {fullname}
           </p>
-        </div>
+        </div>)
       }
     };
+
+    const onStatusChange = () => {
+      console.log(`change --- `)
+      setIsPopoverOpen(!isPopoverOpen)
+    }
+
+    const popover = () => {
+      return <Popover
+        isOpen={isPopoverOpen}
+        positions={['top', 'left']} // if you'd like, you can limit the positions
+        padding={10} // adjust padding here!
+        reposition={true} // prevents automatic readjustment of content position that keeps your popover content within its parent's bounds
+        onClickOutside={() => setIsPopoverOpen(false)} // handle click events outside of the popover/target here!
+        content={({ position, nudgedLeft, nudgedTop }) => ( // you can also provide a render function that injects some useful stuff!
+          <div className=''>
+            <div>Hi! I'm popover content. Here's my current position: {position}.</div>
+            <div>I'm {` ${nudgedLeft} `} pixels beyond my boundary horizontally!</div>
+            <div>I'm {` ${nudgedTop} `} pixels beyond my boundary vertically!</div>
+          </div>
+        )}
+      >
+        <div onClick={() => setIsPopoverOpen(!isPopoverOpen)}>Click me! {JSON.stringify(isPopoverOpen)}</div>
+      </Popover>;
+    }
+
 
     const weekCols = weeks.map((week, index) => {
       return {
@@ -104,20 +131,23 @@ const ScheduleTraining = () => {
         width: 100,
         render: ({ slot, trainer_info, date }, record) => {
           return slot.map((content, index) => {
-            return <div
-              onClick={() => {
-                console.log(`content --- `, trainer_info, date);
-                const payload = {
-                  "trainer_id": trainer_info.trainer_id,
-                  // TODO: get from constance
-                  "status": "booked",
-                  "booked_date": date,
-                  "session_start_time": content.start_time,
-                  "session_end_time": content.end_time
-                };
-                dispatch(bookSessionAsync(payload))
-              }}
-              key={`slot-${index}-content`} className="rounded-pill bg-primary text-white text-center mb-1 pointer">{content.start_time}-{content.end_time}</div>
+            return (
+              <div
+                onClick={() => {
+                  setIsPopoverOpen(!isPopoverOpen);
+                  console.log(`content --- `, trainer_info, date);
+                  const payload = {
+                    "trainer_id": trainer_info.trainer_id,
+                    // TODO: get from constance
+                    "status": "booked",
+                    "booked_date": date,
+                    "session_start_time": content.start_time,
+                    "session_end_time": content.end_time
+                  };
+                  // dispatch(bookSessionAsync(payload))
+                }}
+                key={`slot-${index}-content`} className="rounded-pill bg-primary text-white text-center mb-1 pointer">{content.start_time}-{content.end_time} </div>
+            )
           })
         }
       };
@@ -125,6 +155,8 @@ const ScheduleTraining = () => {
 
     setBookingColumns([initialHeader, ...weekCols]);
   };
+
+
 
   const Input = ({ onChange, placeholder, value, isSecure, id, onClick }) => (
     <div>
@@ -149,6 +181,7 @@ const ScheduleTraining = () => {
           Book Training Session
         </h3>
       </div>
+
       <div
         className={`form-inline search-form open mb-5`}
         style={{
@@ -176,7 +209,7 @@ const ScheduleTraining = () => {
             onChange={date => {
               setStartDate(date);
               const todaySDate = Utils.getDateInFormat(date.toString());
-              const { weekDateFormatted, weekDates} = Utils.getCurrentWeekByDate(
+              const { weekDateFormatted, weekDates } = Utils.getCurrentWeekByDate(
                 todaySDate
               );
               setColumns(weekDateFormatted);
@@ -195,6 +228,8 @@ const ScheduleTraining = () => {
           data={bookingTableData}
         />
       </div>
+      {/* {popover()} */}
+
     </div>
   );
 };
