@@ -1,7 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { googleLogin, login, signup } from "./auth.api";
 import { toast } from "react-toastify";
-import { LOCAL_STORAGE_KEYS, SuccessMsgs } from "../../common/constants";
+import {
+  LOCAL_STORAGE_KEYS,
+  SuccessMsgs,
+  leftSideBarOptions,
+} from "../../common/constants";
 
 const initialState = {
   status: "idle",
@@ -11,7 +15,7 @@ const initialState = {
     isFromGoogle: false,
     email: null,
   },
-  sidebarActiveTab: "home",
+  sidebarActiveTab: leftSideBarOptions.HOME,
 };
 
 export const signupAsync = createAsyncThunk("signup", async (payload) => {
@@ -68,6 +72,7 @@ export const authSlice = createSlice({
     },
     updateIsUserLoggedIn: (state, action) => {
       state.isUserLoggedIn = false;
+      state.sidebarActiveTab = leftSideBarOptions.HOME;
     },
     setActiveTab: (state, action) => {
       state.sidebarActiveTab = action.payload;
