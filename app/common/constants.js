@@ -219,8 +219,8 @@ export const BookedSession = {
   canceled: "canceled",
 };
 export const BookedSessionMessage = {
-  canceled: "This Booked Schedule Training Are Canceled",
-  confirmed: "This Booked Schedule Training Are Confirmed",
+  canceled: "This Booked Schedule Training Canceled",
+  confirmed: "This Booked Schedule Training Confirmed",
 };
 export const trainers = [
   {

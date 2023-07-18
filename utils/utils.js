@@ -1,4 +1,4 @@
-import {Regex, weekDays} from '../app/common/constants';
+import {LOCAL_STORAGE_KEYS, Regex, weekDays} from '../app/common/constants';
 import moment from 'moment';
 
 export class Utils {

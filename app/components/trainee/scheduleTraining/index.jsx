@@ -56,7 +56,6 @@ const ScheduleTraining = () => {
         friday: { date: selectedDate[4], trainer_info, slot: getSlotByDate(available_slots, weekDays[4]) },
       }
     })
-    console.log(`table data --- `, result);
     setBookingTableData(result);
   }
 
@@ -210,9 +209,7 @@ const ScheduleTraining = () => {
           <div
             style={{ border: '1px solid red' }}
             onClick={() => {
-              // console.log(`trainer_info.trainer_id + date === isPopoverOpen --- `, trainer_info.trainer_id + date === isPopoverOpen);
               setIsPopoverOpen(`${trainer_info._id}_${index}-${date.toString()}`);
-              // console.log(`content --- `, trainer_info, date);
 
             }}
             key={`slot-${index}-content`} className="rounded-pill bg-primary text-white text-center mb-1 pointer">{content.start_time}-{content.end_time} </div>

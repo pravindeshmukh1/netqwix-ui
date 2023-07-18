@@ -11,6 +11,7 @@ import {
   BookedSession,
   BookedSessionMessage,
 } from "../../common/constants";
+import { Utils } from "../../../utils/utils";
 const Bookings = ({ accountType = null }) => {
   const [bookedSession, setBookedSession] = useState({
     id: "",
@@ -36,9 +37,9 @@ const Bookings = ({ accountType = null }) => {
     <>
       <div className="m-25 w-100">
         {!scheduledMeetingDetails.length ? (
-          <h1 className="d-flex justify-content-center">
+          <h3 className="d-flex justify-content-center mt-20">
             No Booked Schedule Training Found
-          </h1>
+          </h3>
         ) : (
           scheduledMeetingDetails.map((data) => {
             const {
@@ -65,7 +66,7 @@ const Bookings = ({ accountType = null }) => {
                     <div className="col">
                       <dl className="row ml-1">
                         <dd>Date :</dd>
-                        <dt className="ml-1">{booked_date}</dt>
+                        <dt className="ml-1">{Utils.getDateInFormat(booked_date)}</dt>
                       </dl>
                     </div>
                     <div className="w-100"></div>
