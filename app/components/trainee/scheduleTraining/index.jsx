@@ -3,6 +3,7 @@ import DatePicker from 'react-datepicker';
 import '../scheduleTraining/index.css';
 import { Popover } from 'react-tiny-popover'
 import {
+  BookedSession,
   params,
   weekDays,
 } from '../../../common/constants';
@@ -104,6 +105,50 @@ const ScheduleTraining = () => {
         dataIndex: `${week.split(' ')[0].toLowerCase()}`,
         key: `week-col-${index}`,
         width: 100,
+        render: ({ slot, trainer_info, date }, record) => {
+          return slot.map((content, index) => {
+            return (
+              <Popover
+                isOpen={`${trainer_info._id}_${index}-${date.toString()}` === isPopoverOpen}
+                positions={['top', 'left']} // if you'd like, you can limit the positions
+                padding={10} // adjust padding here!
+                reposition={true} // prevents automatic readjustment of content position that keeps your popover content within its parent's bounds
+                onClickOutside={() => setIsPopoverOpen(null)} // handle click events outside of the popover/target here!
+                content={({ position, nudgedLeft, nudgedTop }) => ( // you can also provide a render function that injects some useful stuff!
+                  <div style={{ zIndex: 5000 }}>
+                    <button
+                      type="button"
+                      className="owl-prev"
+                      onClick={() => {
+                        const payload = {
+                          "trainer_id": trainer_info.trainer_id,
+                          "status": BookedSession.booked,
+                          "booked_date": date,
+                          "session_start_time": content.start_time,
+                          "session_end_time": content.end_time
+                        };
+
+                        console.log(`payload --- `, payload);
+                        // dispatch(bookSessionAsync(payload))
+                        // setIsPopoverOpen(null);
+                      }}
+                    >
+                      <span>Book slot now</span>
+                    </button>
+
+                  </div>
+                )}
+              >
+                <div
+                  onClick={() => {
+                    setIsPopoverOpen(`${trainer_info._id}_${index}-${date.toString()}`);
+                  }}
+                  key={`slot-${index}-content`} className="rounded-pill bg-primary text-white text-center mb-1 pointer">{content.start_time}-{content.end_time}</div>
+              </Popover>
+            )
+          })
+
+        }
       };
     });
 
@@ -149,8 +194,7 @@ const ScheduleTraining = () => {
                   onClick={() => {
                     const payload = {
                       "trainer_id": trainer_info.trainer_id,
-                      // TODO: get from constance
-                      "status": "booked",
+                      "status": BookedSession.booked,
                       "booked_date": date,
                       "session_start_time": content.start_time,
                       "session_end_time": content.end_time

@@ -33,6 +33,129 @@ const Bookings = ({ accountType = null }) => {
     }
   }, [bookedSession]);
 
+  const handleBookedScheduleTraining = (status, _id) => {
+    if (accountType === AccountType.TRAINEE) {
+      return (
+        <>
+          <button
+            className="btn btn-danger button-effect btn-sm mr-4"
+            type="button"
+            style={{
+              cursor:
+                status === BookedSession.canceled ? "not-allowed" : "pointer",
+            }}
+            disabled={status === BookedSession.canceled}
+            onClick={() => {
+              if (
+                status === BookedSession.booked ||
+                status === BookedSession.confirmed
+              ) {
+                setBookedSession({
+                  ...bookedSession,
+                  id: _id,
+                  booked_status: BookedSession.canceled,
+                });
+              }
+            }}
+          >
+            {status === BookedSession.canceled ? "Canceled" : "Cancel"}
+          </button>
+          {status === BookedSession.booked ? (
+            <button
+              className={`btn btn-dark button-effect btn-sm`}
+              type="button"
+              style={{
+                cursor: accountType === AccountType.TRAINEE && "not-allowed",
+              }}
+              disabled={accountType === AccountType.TRAINEE}
+            >
+              Booked
+            </button>
+          ) : (
+            <>
+              {!status === BookedSession.canceled ||
+                (status === BookedSession.confirmed && (
+                  <button
+                    className={`btn btn-primary button-effect btn-sm`}
+                    type="button"
+                    style={{
+                      cursor:
+                        status === BookedSession.confirmed
+                          ? "not-allowed"
+                          : "pointer",
+                    }}
+                    disabled={status === BookedSession.confirmed}
+                  >
+                    Confirmed
+                  </button>
+                ))}
+            </>
+          )}
+        </>
+      );
+    } else if (accountType === AccountType.TRAINER) {
+      return (
+        <>
+          {status === BookedSession.canceled ? (
+            <button
+              className={`btn btn-danger button-effect btn-sm`}
+              type="button"
+              style={{
+                cursor: status === BookedSession.canceled && "not-allowed",
+              }}
+              disabled={status === BookedSession.canceled}
+            >
+              Canceled
+            </button>
+          ) : (
+            <>
+              <button
+                className={`btn btn-primary button-effect btn-sm`}
+                type="button"
+                style={{
+                  cursor: status === BookedSession.confirmed && "not-allowed",
+                }}
+                disabled={status === BookedSession.confirmed}
+                onClick={() =>
+                  setBookedSession({
+                    ...bookedSession,
+                    id: _id,
+                    booked_status: BookedSession.confirmed,
+                  })
+                }
+              >
+                Confirmed
+              </button>
+              <button
+                className={`btn btn-primary button-effect btn-sm ml-4`}
+                type="button"
+                disabled={status === BookedSession.confirmed ? false : true}
+                style={{
+                  cursor:
+                    status === BookedSession.booked ? "not-allowed" : "pointer",
+                }}
+              >
+                Start
+              </button>
+              <button
+                className="btn btn-danger button-effect btn-sm ml-4"
+                type="button"
+                onClick={() =>
+                  setBookedSession({
+                    ...bookedSession,
+                    id: _id,
+                    booked_status: BookedSession.canceled,
+                  })
+                }
+              >
+                Cancel
+              </button>
+            </>
+          )}
+        </>
+      );
+    }
+  };
   return (
     <>
       <div className="m-25 w-100 overflow-auto">
@@ -58,7 +181,7 @@ const Bookings = ({ accountType = null }) => {
                 className="card mb-4"
                 key={`booking-schedule-training${index}`}
               >
-                <div className="card-body"> 
+                <div className="card-body">
                   <div className="row">
                     <div className="col">
                       <dl className="row">
@@ -84,66 +207,15 @@ const Bookings = ({ accountType = null }) => {
                     <div className="col">
                       <dl className="row">
                         <dd className="ml-3">Time Durations :</dd>
-                        <dt className="ml-1">{`${session_start_time}-${session_end_time}`}</dt>
+                        <dt className="ml-1">{`${Utils.convertToAmPm(
+                          session_start_time
+                        )}-${Utils.convertToAmPm(session_end_time)}`}</dt>
                       </dl>
                     </div>
                   </div>
                 </div>
                 <div className="card-footer px-5 pb-3 d-flex justify-content-end">
-                  {data.status === BookedSession.canceled ||
-                  data.status === BookedSession.confirmed ? (
-                    <p className={"text-dark"}>
-                      Note:{" "}
-                      {data.status === BookedSession.canceled
-                        ? BookedSessionMessage.canceled
-                        : BookedSessionMessage.confirmed}
-                    </p>
-                  ) : (
-                    <>
-                      {!data.status === BookedSession.confirmed ||
-                        (data.status === BookedSession.booked && (
-                          <button
-                            className="btn btn-danger button-effect btn-sm mr-4"
-                            type="button"
-                            onClick={() =>
-                              setBookedSession({
-                                ...bookedSession,
-                                id: _id,
-                                booked_status: BookedSession.canceled,
-                              })
-                            }
-                          >
-                            Cancel
-                          </button>
-                        ))}
-                      {!data.status === BookedSession.confirmed ||
-                        (data.status === BookedSession.booked && (
-                          <button
-                            className={`btn ${
-                              accountType === AccountType.TRAINEE
-                                ? "btn-dark"
-                                : "btn-primary"
-                            } button-effect btn-sm`}
-                            type="button"
-                            onClick={() =>
-                              setBookedSession({
-                                ...bookedSession,
-                                id: _id,
-                                booked_status: BookedSession.confirmed,
-                              })
-                            }
-                            style={{
-                              cursor:
-                                accountType === AccountType.TRAINEE &&
-                                "not-allowed",
-                            }}
-                            disabled={accountType === AccountType.TRAINEE}
-                          >
-                            Confirmed
-                          </button>
-                        ))}
-                    </>
-                  )}
+                  {handleBookedScheduleTraining(data.status, _id)}
                 </div>
               </div>
             );
