@@ -12,14 +12,13 @@ import { useAppDispatch, useAppSelector } from '../../../store';
 import { bookSessionAsync, getTraineeWithSlotsAsync, traineeState } from '../trainee.slice';
 
 const ScheduleTraining = () => {
-  const [startDate, setStartDate] = useState(new Date());
   const dispatch = useAppDispatch();
-  const [getParams, setParams] = useState(params);
   const { getTraineeSlots } = useAppSelector(traineeState);
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [startDate, setStartDate] = useState(new Date());
+  const [isPopoverOpen, setIsPopoverOpen] = useState(null);
+  const [getParams, setParams] = useState(params);
   const [bookingColumns, setBookingColumns] = useState([]);
   const [bookingTableData, setBookingTableData] = useState([]);
-  const popoverRef = useRef()
 
 
 
@@ -57,6 +56,7 @@ const ScheduleTraining = () => {
         friday: { date: selectedDate[4], trainer_info, slot: getSlotByDate(available_slots, weekDays[4]) },
       }
     })
+    console.log(`table data --- `, result);
     setBookingTableData(result);
   }
 
@@ -97,29 +97,6 @@ const ScheduleTraining = () => {
       }
     };
 
-    const onStatusChange = () => {
-      console.log(`change --- `)
-      setIsPopoverOpen(!isPopoverOpen)
-    }
-
-    const popover = () => {
-      return <Popover
-        isOpen={isPopoverOpen}
-        positions={['top', 'left']} // if you'd like, you can limit the positions
-        padding={10} // adjust padding here!
-        reposition={true} // prevents automatic readjustment of content position that keeps your popover content within its parent's bounds
-        onClickOutside={() => setIsPopoverOpen(false)} // handle click events outside of the popover/target here!
-        content={({ position, nudgedLeft, nudgedTop }) => ( // you can also provide a render function that injects some useful stuff!
-          <div className=''>
-            <div>Hi! I'm popover content. Here's my current position: {position}.</div>
-            <div>I'm {` ${nudgedLeft} `} pixels beyond my boundary horizontally!</div>
-            <div>I'm {` ${nudgedTop} `} pixels beyond my boundary vertically!</div>
-          </div>
-        )}
-      >
-        <div onClick={() => setIsPopoverOpen(!isPopoverOpen)}>Click me! {JSON.stringify(isPopoverOpen)}</div>
-      </Popover>;
-    }
 
 
     const weekCols = weeks.map((week, index) => {
@@ -132,30 +109,52 @@ const ScheduleTraining = () => {
         render: ({ slot, trainer_info, date }, record) => {
           return slot.map((content, index) => {
             return (
-              <div
-                onClick={() => {
-                  setIsPopoverOpen(!isPopoverOpen);
-                  console.log(`content --- `, trainer_info, date);
-                  const payload = {
-                    "trainer_id": trainer_info.trainer_id,
-                    // TODO: get from constance
-                    "status": "booked",
-                    "booked_date": date,
-                    "session_start_time": content.start_time,
-                    "session_end_time": content.end_time
-                  };
-                  // dispatch(bookSessionAsync(payload))
-                }}
-                key={`slot-${index}-content`} className="rounded-pill bg-primary text-white text-center mb-1 pointer">{content.start_time}-{content.end_time} </div>
+
+              <Popover
+                isOpen={`${trainer_info._id}_${index}-${date.toString()}` === isPopoverOpen}
+                positions={['top', 'left']} // if you'd like, you can limit the positions
+                padding={10} // adjust padding here!
+                reposition={true} // prevents automatic readjustment of content position that keeps your popover content within its parent's bounds
+                onClickOutside={() => setIsPopoverOpen(null)} // handle click events outside of the popover/target here!
+                content={({ position, nudgedLeft, nudgedTop }) => ( // you can also provide a render function that injects some useful stuff!
+                  <div style={{ zIndex: 5000 }}>
+                    <button
+                      type="button"
+                      className="owl-prev"
+                      onClick={() => {
+                        const payload = {
+                          "trainer_id": trainer_info.trainer_id,
+                          // TODO: get from constance
+                          "status": "booked",
+                          "booked_date": date,
+                          "session_start_time": content.start_time,
+                          "session_end_time": content.end_time
+                        };
+                        dispatch(bookSessionAsync(payload))
+                        setIsPopoverOpen(null);
+                      }}
+                    >
+                      <span>Book slot now</span>
+                    </button>
+
+                  </div>
+                )}
+              >
+                <div
+                  onClick={() => {
+                    setIsPopoverOpen(`${trainer_info._id}_${index}-${date.toString()}`);
+                  }}
+                  key={`slot-${index}-content`} className="rounded-pill bg-primary text-white text-center mb-1 pointer">{content.start_time}-{content.end_time}</div>
+              </Popover>
             )
           })
+
         }
       };
     });
 
     setBookingColumns([initialHeader, ...weekCols]);
   };
-
 
 
   const Input = ({ onChange, placeholder, value, isSecure, id, onClick }) => (
@@ -173,6 +172,120 @@ const ScheduleTraining = () => {
       </span>
     </div>
   );
+
+  const renderSlotsByDay = ({ slot, date, trainer_info }) => {
+    return slot.map((content, index) =>
+      <>
+        <Popover
+          isOpen={`${trainer_info._id}_${index}-${date.toString()}` === isPopoverOpen}
+          positions={['top', 'left']} // if you'd like, you can limit the positions
+          padding={10} // adjust padding here!
+          reposition={true} // prevents automatic readjustment of content position that keeps your popover content within its parent's bounds
+          onClickOutside={() => setIsPopoverOpen(null)} // handle click events outside of the popover/target here!
+          content={({ position, nudgedLeft, nudgedTop }) => ( // you can also provide a render function that injects some useful stuff!
+            <div style={{ zIndex: 5000 }}>
+              <button
+                type="button"
+                className="owl-prev"
+                onClick={() => {
+                  const payload = {
+                    "trainer_id": trainer_info.trainer_id,
+                    // TODO: get from constance
+                    "status": "booked",
+                    "booked_date": date,
+                    "session_start_time": content.start_time,
+                    "session_end_time": content.end_time
+                  };
+                  dispatch(bookSessionAsync(payload))
+                  setIsPopoverOpen(null);
+                }}
+              >
+                <span>Book slot now</span>
+              </button>
+
+            </div>
+          )}
+        >
+
+          <div
+            style={{ border: '1px solid red' }}
+            onClick={() => {
+              // console.log(`trainer_info.trainer_id + date === isPopoverOpen --- `, trainer_info.trainer_id + date === isPopoverOpen);
+              setIsPopoverOpen(`${trainer_info._id}_${index}-${date.toString()}`);
+              // console.log(`content --- `, trainer_info, date);
+
+            }}
+            key={`slot-${index}-content`} className="rounded-pill bg-primary text-white text-center mb-1 pointer">{content.start_time}-{content.end_time} </div>
+        </Popover>
+      </>
+    )
+  }
+
+  const renderTable = () => (
+    <table class="table">
+      <thead>
+        <tr>
+          {bookingColumns.map((columns, index) => {
+            return <th scope="col" key={`booking-col-${index}`}>{columns.title}</th>
+          })}
+        </tr>
+      </thead>
+      <tbody>
+        {bookingTableData.map(({ trainer_info, monday,
+          tuesday,
+          wednesday,
+          thursday,
+          friday, }, index) =>
+          <tr key={`table-data-${index}`}>
+            <>
+              <td>
+                <div className='text-center' onClick={() => {
+                  // setIsPopoverOpen(trainer_info.fullname)
+                }}>
+                  <img
+                    height={100}
+                    width={100}
+                    src={trainer_info.profilePicture}
+                    className="rounded"
+                  />
+                  <p
+                    for="exampleFormControlInput1"
+                    className="form-label mt-2"
+                  >
+                    {trainer_info.fullname}
+                  </p>
+                </div>
+              </td>
+              <td>
+                {/* <Popover
+                isOpen={monday.trainer_info._id === isPopoverOpen}
+                positions={['top', 'left']} // if you'd like, you can limit the positions
+                padding={10} // adjust padding here!
+                reposition={true} // prevents automatic readjustment of content position that keeps your popover content within its parent's bounds
+                onClickOutside={() => setIsPopoverOpen(null)} // handle click events outside of the popover/target here!
+                content={({ position, nudgedLeft, nudgedTop }) => ( // you can also provide a render function that injects some useful stuff!
+                  <div style={{ backgroundColor: 'red', zIndex: 5000 }}>
+                    <div>Hi! I'm popover content. Here's my current position: {position}.</div>
+                    <div>I'm {` ${nudgedLeft} `} pixels beyond my boundary horizontally!</div>
+                    <div>I'm {` ${nudgedTop} `} pixels beyond my boundary vertically!</div>
+                  </div>
+                )}
+              > */}
+                {renderSlotsByDay(monday)}
+                {/* </Popover> */}
+
+              </td>
+              <td>{renderSlotsByDay(tuesday)}</td>
+              <td>{renderSlotsByDay(wednesday)}</td>
+              <td>{renderSlotsByDay(thursday)}</td>
+              <td>{renderSlotsByDay(friday)}</td>
+            </>
+          </tr>
+        )}
+
+      </tbody>
+    </table>
+  )
 
   return (
     <div>
@@ -220,16 +333,15 @@ const ScheduleTraining = () => {
         </div>
       </div>
       <div className="pt-5" style={{ marginTop: '6rem' }}>
-        <Table
+        {/* <Table
           key={'book-training-session'}
           className="ml-4 book-table-session"
           scroll={{ x: 1500, y: 600 }}
           columns={bookingColumns}
           data={bookingTableData}
-        />
+        /> */}
+        {renderTable()}
       </div>
-      {/* {popover()} */}
-
     </div>
   );
 };
