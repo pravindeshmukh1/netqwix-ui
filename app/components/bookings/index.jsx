@@ -35,13 +35,16 @@ const Bookings = ({ accountType = null }) => {
 
   return (
     <>
-      <div className="m-25 w-100">
+      <div className="m-25 w-100 overflow-auto">
+        <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
+          Booked Schedule Training
+        </h3>
         {!scheduledMeetingDetails.length ? (
           <h3 className="d-flex justify-content-center mt-20">
-            No Booked Schedule Training Found
+            No bookings available
           </h3>
         ) : (
-          scheduledMeetingDetails.map((data) => {
+          scheduledMeetingDetails.map((data, index) => {
             const {
               _id,
               trainee_info,
@@ -51,11 +54,11 @@ const Bookings = ({ accountType = null }) => {
               session_end_time,
             } = data;
             return (
-              <div className="card mb-5">
-                <div className="card-header pt-0 px-0">
-                  <h5 className="mt-3 ml-3">Booked Schedule Training</h5>
-                </div>
-                <div className="card-body">
+              <div
+                className="card mb-4"
+                key={`booking-schedule-training${index}`}
+              >
+                <div className="card-body"> 
                   <div className="row">
                     <div className="col">
                       <dl className="row">
@@ -66,7 +69,9 @@ const Bookings = ({ accountType = null }) => {
                     <div className="col">
                       <dl className="row ml-1">
                         <dd>Date :</dd>
-                        <dt className="ml-1">{Utils.getDateInFormat(booked_date)}</dt>
+                        <dt className="ml-1">
+                          {Utils.getDateInFormat(booked_date)}
+                        </dt>
                       </dl>
                     </div>
                     <div className="w-100"></div>
@@ -108,7 +113,7 @@ const Bookings = ({ accountType = null }) => {
                               })
                             }
                           >
-                            Canceled
+                            Cancel
                           </button>
                         ))}
                       {!data.status === BookedSession.confirmed ||
