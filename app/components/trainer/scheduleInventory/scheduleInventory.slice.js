@@ -3,16 +3,32 @@ import {
   getScheduleInventoryData,
   updateSchedulingSlots,
 } from "./scheduleInventory.api";
+import { toast } from "react-toastify";
 
 const initialState = {
   status: "pending",
-  scheduleInventoryData: {
-    monday: [{ start_time: "", end_time: "" }],
-    tuesday: [{ start_time: "", end_time: "" }],
-    wednesday: [{ start_time: "", end_time: "" }],
-    thursday: [{ start_time: "", end_time: "" }],
-    friday: [{ start_time: "", end_time: "" }],
-  },
+  scheduleInventoryData: [
+    {
+      day: "monday",
+      slots: [{ start_time: "", end_time: "" }],
+    },
+    {
+      day: "tuesday",
+      slots: [{ start_time: "", end_time: "" }],
+    },
+    {
+      day: "wednesday",
+      slots: [{ start_time: "", end_time: "" }],
+    },
+    {
+      day: "thursday",
+      slots: [{ start_time: "", end_time: "" }],
+    },
+    {
+      day: "friday",
+      slots: [{ start_time: "", end_time: "" }],
+    },
+  ],
 };
 
 export const getScheduleInventoryDataAsync = createAsyncThunk(
@@ -62,17 +78,9 @@ export const scheduleInventorySlice = createSlice({
           action.payload.data.data.available_slots &&
           action.payload.data.data.available_slots.length
         ) {
-          const result = action.payload.data.data.available_slots;
-          console.log("result", result);
-          let scheduleInventoryObj = {};
-          result.forEach((data) => {
-            scheduleInventoryObj[data.day] =
-              data.slots && data.slots.length
-                ? data.slots
-                : [{ start_time: "", end_time: "" }];
-          });
-          console.log("scheduleInventoryObj", scheduleInventoryObj);
-          state.scheduleInventoryData = scheduleInventoryObj;
+          const availableSlots = action.payload.data.data.available_slots;
+
+          state.scheduleInventoryData = availableSlots;
         } else {
           state.scheduleInventoryData = null;
         }
@@ -85,9 +93,11 @@ export const scheduleInventorySlice = createSlice({
       })
       .addCase(updateScheduleInventoryAsync.fulfilled, (state, action) => {
         state.status = "fulfilled";
+        toast.success(action.payload.data.message);
       })
       .addCase(updateScheduleInventoryAsync.rejected, (state) => {
         state.status = "rejected";
+        toast.error(action.payload.data.message);
       });
   },
 });
