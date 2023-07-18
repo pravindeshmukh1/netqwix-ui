@@ -1,5 +1,5 @@
 import { axiosInstance } from "../../../config/axios-interceptor";
-import { LocalStorage } from "../../../utils/localStorage";
+import { Utils } from "../../../utils/utils";
 import { LOCAL_STORAGE_KEYS } from "../../common/constants";
 
 export const getScheduledMeetingDetails = async () => {
@@ -10,7 +10,7 @@ export const getScheduledMeetingDetails = async () => {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        Authorization: `Bearer ${LocalStorage.getItem(
+        Authorization: `Bearer ${Utils.getToken(
           LOCAL_STORAGE_KEYS.ACCESS_TOKEN
         )}`,
       },
@@ -30,7 +30,7 @@ export const updateBookedSessionScheduledMeeting = async (payload) => {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
-        Authorization: `Bearer ${LocalStorage.getItem(
+        Authorization: `Bearer ${Utils.getToken(
           LOCAL_STORAGE_KEYS.ACCESS_TOKEN
         )}`,
       },
