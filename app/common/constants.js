@@ -1,5 +1,4 @@
 export const signUpSteps = [{ title: "Basic Info" }, { title: "Details" }];
-
 export const LIST_OF_ACCOUNT_TYPE = [
   {
     id: 1,
@@ -45,9 +44,42 @@ export const AccountType = {
   TRAINEE: "Trainee",
 };
 
+export const weekDays = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+];
+
+export const params = {
+  search: "",
+};
+export const STATUS = {
+  pending: "pending",
+  fulfilled: "fulfilled",
+  rejected: "rejected",
+};
+export const BookedSession = {
+  confirmed: "confirmed",
+  booked: "booked",
+  canceled: "canceled",
+};
+export const BookedSessionMessage = {
+  canceled: "This Booked Schedule Training Canceled",
+  confirmed: "This Booked Schedule Training Confirmed",
+};
 export const leftSideBarOptions = {
   HOME: "home",
   STATUS: "status",
   SCHEDULE_TRAINING: "scheduleTraining",
   CHATS: "chats",
 };
+export const filterOption = {
+  day: "Day",
+  week: "Week",
+};
+
+export const timeFormat = "h:mm";
+
+export const timeFormatInDb = "h:mm:ss";

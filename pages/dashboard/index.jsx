@@ -11,8 +11,7 @@ import {
 } from "../../app/common/constants";
 import TraineeDashboardContainer from "../../app/components/trainee/dashboard";
 import TrainerDashboardContainer from "../../app/components/trainer/dashboard";
-import ScheduleTraining from "../../app/components/trainee/scheduleTraining";
-
+import Bookings from "../../app/components/bookings/index";
 const Dashboard = () => {
   const { sidebarActiveTab } = useAppSelector(authState);
   const [accountType, setAccountType] = useState("");
@@ -30,6 +29,9 @@ const Dashboard = () => {
     }
   };
 
+  const getBooking = () => {
+    return <Bookings accountType={accountType} />;
+  };
   const getActiveTabs = () => {
     switch (sidebarActiveTab) {
       case leftSideBarOptions.CHATS:
@@ -43,7 +45,7 @@ const Dashboard = () => {
         return getDashboard();
 
       case leftSideBarOptions.SCHEDULE_TRAINING:
-        return <ScheduleTraining />;
+        return getBooking();
       default:
         break;
     }
