@@ -9,6 +9,7 @@ import {
 import { Utils } from '../../../../utils/utils';
 import { useAppDispatch, useAppSelector } from '../../../store';
 import { bookSessionAsync, getTraineeWithSlotsAsync, traineeState } from '../trainee.slice';
+import moment from 'moment/moment';
 
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
@@ -40,7 +41,6 @@ const ScheduleTraining = () => {
   );
 
 
-
   const setTableData = (data = [], selectedDate) => {
     const result = data.map(({ available_slots, category, email, fullname, profilePicture, trainer_id, _id }) => {
       const trainer_info = {
@@ -67,7 +67,7 @@ const ScheduleTraining = () => {
 
   const getSpliitedTime = (time = '') => {
     const splittedTime = time.split(":");
-    return `${splittedTime[0]}: ${splittedTime[1]}`
+    return `${splittedTime[0]}:${splittedTime[1]}`;
   }
 
   const setColumns = (weeks = []) => {
@@ -104,51 +104,6 @@ const ScheduleTraining = () => {
         dataIndex: `${week.split(' ')[0].toLowerCase()}`,
         key: `week-col-${index}`,
         width: 100,
-        render: ({ slot, trainer_info, date }, record) => {
-          return slot.map((content, index) => {
-            return (
-              <Popover
-                isOpen={`${trainer_info._id}_${index}-${date.toString()}` === isPopoverOpen}
-                positions={['top', 'left']} // if you'd like, you can limit the positions
-                padding={10} // adjust padding here!
-                reposition={true} // prevents automatic readjustment of content position that keeps your popover content within its parent's bounds
-                onClickOutside={() => setIsPopoverOpen(null)} // handle click events outside of the popover/target here!
-                content={({ position, nudgedLeft, nudgedTop }) => ( // you can also provide a render function that injects some useful stuff!
-                  <div style={{ zIndex: 5000 }}>
-                    <button
-                      type="button"
-                      className="owl-prev"
-                      onClick={() => {
-                        const payload = {
-                          "trainer_id": trainer_info.trainer_id,
-                          // TODO: get from constance
-                          "status": "booked",
-                          "booked_date": date,
-                          "session_start_time": content.start_time,
-                          "session_end_time": content.end_time
-                        };
-
-                        console.log(`payload --- `, payload);
-                        // dispatch(bookSessionAsync(payload))
-                        // setIsPopoverOpen(null);
-                      }}
-                    >
-                      <span>Book slot now</span>
-                    </button>
-
-                  </div>
-                )}
-              >
-                <div
-                  onClick={() => {
-                    setIsPopoverOpen(`${trainer_info._id}_${index}-${date.toString()}`);
-                  }}
-                  key={`slot-${index}-content`} className="rounded-pill bg-primary text-white text-center mb-1 pointer">{content.start_time}-{content.end_time}</div>
-              </Popover>
-            )
-          })
-
-        }
       };
     });
 
@@ -218,7 +173,7 @@ const ScheduleTraining = () => {
               setIsPopoverOpen(`${trainer_info._id}_${index}-${date.toString()}`);
 
             }}
-            key={`slot-${index}-content`} className="rounded-pill bg-primary text-white text-center p-1 mb-1 pointer">{content.start_time}-{content.end_time} </div>
+            key={`slot-${index}-content`} className="rounded-pill bg-primary text-white text-center p-1 mb-1 pointer">{Utils.convertToAmPm(content.start_time)} - {Utils.convertToAmPm(content.end_time)} </div>
         </Popover>
       </>
     )
@@ -312,6 +267,7 @@ const ScheduleTraining = () => {
         </div>
         <div className="mt-3 ml-1 datePicker">
           <DatePicker
+            minDate={moment().toDate()}
             onChange={date => {
               setStartDate(date);
               const todaySDate = Utils.getDateInFormat(date.toString());
