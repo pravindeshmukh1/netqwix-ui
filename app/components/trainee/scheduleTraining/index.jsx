@@ -61,7 +61,7 @@ const ScheduleTraining = () => {
 
   const getSlotByDate = (slots = [], day) => {
     const slot = slots.find((slot) => slot?.day && slot?.day?.toLowerCase() === day?.toLowerCase()).slots || [];
-    return slot.map(({ start_time, end_time }) => { return { start_time: getSpliitedTime(start_time), end_time: getSpliitedTime(end_time) } })
+    return slot.filter(({ start_time }) => start_time && start_time.length).map(({ start_time, end_time }) => { return { start_time: getSpliitedTime(start_time), end_time: getSpliitedTime(end_time) } })
   }
 
 
@@ -202,7 +202,7 @@ const ScheduleTraining = () => {
                     };
                     dispatch(bookSessionAsync(payload))
                     setIsPopoverOpen(null);
-                    
+
                   }}
                 >
                   Book slot now
@@ -321,7 +321,7 @@ const ScheduleTraining = () => {
               setColumns(weekDateFormatted);
               setTableData(getTraineeSlots, weekDates);
               setColumns(weekDateFormatted);
-        
+
             }}
             selected={startDate}
             customInput={<Input />}
