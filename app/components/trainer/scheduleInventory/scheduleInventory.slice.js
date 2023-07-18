@@ -5,30 +5,32 @@ import {
 } from "./scheduleInventory.api";
 import { toast } from "react-toastify";
 
+const scheduleInventoryData = [
+  {
+    day: "monday",
+    slots: [{ start_time: "", end_time: "" }],
+  },
+  {
+    day: "tuesday",
+    slots: [{ start_time: "", end_time: "" }],
+  },
+  {
+    day: "wednesday",
+    slots: [{ start_time: "", end_time: "" }],
+  },
+  {
+    day: "thursday",
+    slots: [{ start_time: "", end_time: "" }],
+  },
+  {
+    day: "friday",
+    slots: [{ start_time: "", end_time: "" }],
+  },
+];
+
 const initialState = {
   status: "pending",
-  scheduleInventoryData: [
-    {
-      day: "monday",
-      slots: [{ start_time: "", end_time: "" }],
-    },
-    {
-      day: "tuesday",
-      slots: [{ start_time: "", end_time: "" }],
-    },
-    {
-      day: "wednesday",
-      slots: [{ start_time: "", end_time: "" }],
-    },
-    {
-      day: "thursday",
-      slots: [{ start_time: "", end_time: "" }],
-    },
-    {
-      day: "friday",
-      slots: [{ start_time: "", end_time: "" }],
-    },
-  ],
+  scheduleInventoryData: [],
 };
 
 export const getScheduleInventoryDataAsync = createAsyncThunk(
@@ -79,10 +81,14 @@ export const scheduleInventorySlice = createSlice({
           action.payload.data.data.available_slots.length
         ) {
           const availableSlots = action.payload.data.data.available_slots;
-
+          availableSlots.forEach(({ slots }) => {
+            if (!(slots && slots.length)) {
+              slots.push({ start_time: "", end_time: "" });
+            }
+          });
           state.scheduleInventoryData = availableSlots;
         } else {
-          state.scheduleInventoryData = null;
+          state.scheduleInventoryData = scheduleInventoryData;
         }
       })
       .addCase(getScheduleInventoryDataAsync.rejected, (state) => {
