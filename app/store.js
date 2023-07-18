@@ -4,6 +4,7 @@ import authReducer from "./components/auth/auth.slice";
 import masterReducer from "./components/master/master.slice";
 import scheduleInventoryReducer from "./components/trainer/scheduleInventory/scheduleInventory.slice";
 import traineeReducer from "./components/trainee/trainee.slice";
+import bookingsReducer from "./components/common/common.slice";
 
 const makeStore = () => {
   return configureStore({
@@ -12,6 +13,7 @@ const makeStore = () => {
       master: masterReducer,
       scheduleInventory: scheduleInventoryReducer,
       trainee: traineeReducer,
+      bookings: bookingsReducer,
     },
   });
 };
