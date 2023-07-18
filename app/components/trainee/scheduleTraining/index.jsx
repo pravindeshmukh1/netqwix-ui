@@ -12,6 +12,7 @@ import {
 } from "../trainee.slice";
 import moment from "moment/moment";
 import { Nav, NavItem, NavLink } from "reactstrap";
+import Modal from "../../../common/modal";
 
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
@@ -385,6 +386,19 @@ const ScheduleTraining = () => {
             customInput={<Input />}
           />
         </div>
+        <button
+          type="button"
+          className="btn btn-primary btn-sm mt-3 ml-3"
+          data-toggle="modal"
+          data-target="#scheduleMeeting"
+        >
+          Schedule Instant Meeting
+        </button>
+        <Modal
+          id={"scheduleMeeting"}
+          key={"scheduleMeeting"}
+          element={<>sksj</>}
+        />
       </div>
       <div className="pt-5" style={{ marginTop: "7rem" }}>
         {renderTable()}
