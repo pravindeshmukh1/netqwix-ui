@@ -162,7 +162,7 @@ const Index = (props) => {
             <li>
               <Tooltip
                 title="Schedule Training"
-                position="top"
+                position="right-end"
                 trigger="mouseenter"
               >
                 <NavLink
