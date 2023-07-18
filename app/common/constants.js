@@ -45,11 +45,11 @@ export const AccountType = {
 };
 
 export const weekDays = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
 ];
 export const bookTrainingSessionTableHeadingMockData = [
   {
@@ -213,6 +213,15 @@ export const STATUS = {
   fulfilled: "fulfilled",
   rejected: "rejected",
 };
+export const BookedSession = {
+  confirmed: "confirmed",
+  booked: "booked",
+  canceled: "canceled",
+};
+export const BookedSessionMessage = {
+  canceled: "This Booked Schedule Training Are Canceled",
+  confirmed: "This Booked Schedule Training Are Confirmed",
+};
 export const trainers = [
   {
     id: 1,
@@ -246,3 +255,11 @@ export const leftSideBarOptions = {
   SCHEDULE_TRAINING: "scheduleTraining",
   CHATS: "chats",
 };
+export const filterOption = {
+  day: "Day",
+  week: "Week",
+};
+
+export const timeFormat = "h:mm";
+
+export const timeFormatInDb = "h:mm:ss";

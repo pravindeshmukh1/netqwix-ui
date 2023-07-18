@@ -159,28 +159,24 @@ const Index = (props) => {
                 </NavLink>
               </Tooltip>
             </li>
-            {accountType === AccountType.TRAINEE && (
-              <li>
-                <Tooltip
-                  title="Schedule Training"
-                  position="top"
-                  trigger="mouseenter"
+            <li>
+              <Tooltip
+                title="Schedule Training"
+                position="top"
+                trigger="mouseenter"
+              >
+                <NavLink
+                  className={`icon-btn btn-light button-effect ${
+                    activeTab === leftSideBarOptions.SCHEDULE_TRAINING
+                      ? "active"
+                      : ""
+                  }`}
+                  onClick={() => TogglTab(leftSideBarOptions.SCHEDULE_TRAINING)}
                 >
-                  <NavLink
-                    className={`icon-btn btn-light button-effect ${
-                      activeTab === leftSideBarOptions.SCHEDULE_TRAINING
-                        ? "active"
-                        : ""
-                    }`}
-                    onClick={() =>
-                      TogglTab(leftSideBarOptions.SCHEDULE_TRAINING)
-                    }
-                  >
-                    <i className="fa fa-calendar"></i>
-                  </NavLink>
-                </Tooltip>
-              </li>
-            )}
+                  <i className="fa fa-calendar"></i>
+                </NavLink>
+              </Tooltip>
+            </li>
             <li>
               <Tooltip title="Chats" position="top" trigger="mouseenter">
                 <NavLink
