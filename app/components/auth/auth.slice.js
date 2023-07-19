@@ -72,7 +72,7 @@ export const authSlice = createSlice({
     },
     updateIsUserLoggedIn: (state, action) => {
       state.isUserLoggedIn = false;
-      state.sidebarActiveTab = leftSideBarOptions.HOME;
+      state.sidebarActiveTab = "";
     },
     setActiveTab: (state, action) => {
       state.sidebarActiveTab = action.payload;
@@ -105,6 +105,7 @@ export const authSlice = createSlice({
         if (action.payload) {
           setupLogin(action);
         }
+        state.sidebarActiveTab = leftSideBarOptions.HOME;
       })
       .addCase(googleLoginAsync.pending, (state) => {
         state.showGoogleRegistrationForm.isFromGoogle = false;
