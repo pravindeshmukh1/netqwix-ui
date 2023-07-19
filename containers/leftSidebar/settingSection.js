@@ -62,10 +62,9 @@ const SettingSection = (props) => {
 
   return (
     <div
-      className={`settings-tab dynemic-sidebar custom-scroll ${
-        props.tab === "setting" ? "active" : ""
-      }`}
-      id="settings"
+      className={`settings-tab submenu-width dynemic-sidebar custom-scroll ${props.tab === 'setting' ? 'active' : ''
+        }`}
+      id='settings'
     >
       <div className="theme-title">
         <div className="media">
