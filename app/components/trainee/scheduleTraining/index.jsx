@@ -13,6 +13,7 @@ import {
 import moment from "moment/moment";
 import { Nav, NavItem, NavLink } from "reactstrap";
 import Modal from "../../../common/modal";
+import ScheduleInstantMeeting from "../scheduleInstantMeeting";
 
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
@@ -22,6 +23,9 @@ const ScheduleTraining = () => {
   const [getParams, setParams] = useState(params);
   const [bookingColumns, setBookingColumns] = useState([]);
   const [bookingTableData, setBookingTableData] = useState([]);
+  const [isOpenInstantScheduleMeeting, setInstantScheduleMeeting] =
+    useState(false);
+  const toggle = () => setInstantScheduleMeeting(!isOpenInstantScheduleMeeting);
 
   useEffect(() => {
     dispatch(getTraineeWithSlotsAsync(getParams));
@@ -232,7 +236,7 @@ const ScheduleTraining = () => {
             { position, nudgedLeft, nudgedTop } // you can also provide a render function that injects some useful stuff!
           ) => (
             <div style={{ zIndex: 5000 }}>
-              <div class="alert alert-info m-20" role="alert">
+              <div className="alert alert-info m-20" role="alert">
                 <p>
                   Want to schedule a meeting with{" "}
                   <b>{trainer_info.fullname}?</b>
@@ -280,7 +284,7 @@ const ScheduleTraining = () => {
 
   const renderTable = () => (
     <div className="table-responsive">
-      <table class="table rc-table ml-30 mr-30">
+      <table className="table rc-table ml-30 mr-30">
         <thead className="justify-center align-center">
           <tr>
             {bookingColumns.map((columns, index) => {
@@ -301,7 +305,7 @@ const ScheduleTraining = () => {
               ) => (
                 <tr key={`table-data-${index}`}>
                   <>
-                    <td>
+                    <td key={index}>
                       <div
                         className="text-center"
                         onClick={() => {
@@ -333,7 +337,7 @@ const ScheduleTraining = () => {
             )
           ) : (
             <tr className="no-data">
-              <td colspan="6">No data available.</td>
+              <td colSpan="6">No data available.</td>
             </tr>
           )}
         </tbody>
@@ -386,19 +390,28 @@ const ScheduleTraining = () => {
             customInput={<Input />}
           />
         </div>
-        <button
+        {/* <button
           type="button"
           className="btn btn-primary btn-sm mt-3 ml-3"
           data-toggle="modal"
+          onClick={() => setInstantScheduleMeeting(true)}
           data-target="#scheduleMeeting"
         >
           Schedule Instant Meeting
         </button>
         <Modal
+          isOpen={isOpenInstantScheduleMeeting}
           id={"scheduleMeeting"}
+          toggle={toggle}
           key={"scheduleMeeting"}
-          element={<>sksj</>}
-        />
+          isCenter={true}
+          size={"lg"}
+          element={
+            <ScheduleInstantMeeting
+              isClose={() => setInstantScheduleMeeting(false)}
+            />
+          }
+        /> */}
       </div>
       <div className="pt-5" style={{ marginTop: "7rem" }}>
         {renderTable()}

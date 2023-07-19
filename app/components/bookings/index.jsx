@@ -6,16 +6,18 @@ import {
 } from "../common/common.slice";
 
 import { useAppSelector, useAppDispatch } from "../../store";
-import {
-  AccountType,
-  BookedSession,
-  BookedSessionMessage,
-} from "../../common/constants";
+import { AccountType, BookedSession } from "../../common/constants";
 import { Utils } from "../../../utils/utils";
+import Modal from "../../common/modal";
+import StartMeeting from "./start";
 const Bookings = ({ accountType = null }) => {
   const [bookedSession, setBookedSession] = useState({
     id: "",
     booked_status: "",
+  });
+  const [startMeeting, setStartMeeting] = useState({
+    id: null,
+    isOpenModal: false,
   });
   const dispatch = useAppDispatch();
   const { scheduledMeetingDetails } = useAppSelector(bookingsState);
@@ -32,6 +34,8 @@ const Bookings = ({ accountType = null }) => {
       dispatch(updateBookedSessionScheduledMeetingAsync(updatePayload));
     }
   }, [bookedSession]);
+
+  const toggle = () => setStartMeeting(!startMeeting);
 
   const handleBookedScheduleTraining = (status, _id) => {
     if (accountType === AccountType.TRAINEE) {
@@ -134,9 +138,33 @@ const Bookings = ({ accountType = null }) => {
                   cursor:
                     status === BookedSession.booked ? "not-allowed" : "pointer",
                 }}
+                onClick={() => {
+                  setStartMeeting({
+                    ...startMeeting,
+                    id: _id,
+                    isOpenModal: true,
+                  });
+                }}
               >
                 Start
               </button>
+              <Modal
+                key={"startMeeting"}
+                toggle={toggle}
+                width={"100%"}
+                isOpen={startMeeting.isOpenModal}
+                element={
+                  <StartMeeting
+                    isClose={() =>
+                      setStartMeeting({
+                        ...startMeeting,
+                        id: null,
+                        isOpenModal: false,
+                      })
+                    }
+                  />
+                }
+              />
               <button
                 className="btn btn-danger button-effect btn-sm ml-4"
                 type="button"

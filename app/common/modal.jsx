@@ -1,34 +1,18 @@
 import React from "react";
+import { Modal as ReactStrapModal, ModalBody, ModalFooter } from "reactstrap";
 
-const Modal = ({ element, id, title }) => {
+const Modal = ({ isOpen, id, element, toggle, footer, isCenter, width }) => {
   return (
-    <div
-      className="modal fade"
-      id={id}
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
+    <ReactStrapModal
+      isOpen={isOpen}
+      toggle={toggle}
+      key={id}
+      isCenter={isCenter}
+      style={{ maxWidth: "100%", width: width, marginTop: "0%" }}
     >
-      <div className="modal-dialog" role="document">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title" id="exampleModalLabel">
-              {title}
-            </h5>
-            <button
-              type="button"
-              className="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div className="modal-body">{element}</div>
-        </div>
-      </div>
-    </div>
+      <ModalBody>{element}</ModalBody>
+      <ModalFooter>{footer}</ModalFooter>
+    </ReactStrapModal>
   );
 };
 

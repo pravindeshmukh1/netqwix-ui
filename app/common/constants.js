@@ -27,6 +27,18 @@ export const SuccessMsgs = {
   },
 };
 
+export const scheduleInstantMeetingMockDate = [
+  {
+    id: 1,
+    name: "Phil Auerbach",
+    email: "philauerbach@gmail.com",
+  },
+  {
+    id: 2,
+    name: "John Doe",
+    email: "johndoe@gmail.com",
+  },
+];
 export const Regex = {
   email: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
 };
