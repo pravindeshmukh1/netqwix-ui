@@ -19,6 +19,8 @@ import {
   LOCAL_STORAGE_KEYS,
   leftSideBarOptions,
 } from "../../app/common/constants";
+import ReminderSection from "../rightSidebar/reminderSection";
+import TodoSection from "../rightSidebar/todoSection";
 
 const steps = [
   {
@@ -183,6 +185,30 @@ const Index = (props) => {
               </Tooltip>
             </li> */}
             <li>
+              <Tooltip title="Todo" position="top" trigger="mouseenter">
+                <NavLink
+                  className={`icon-btn btn-light button-effect ${
+                    activeTab === "todo" ? "active" : ""
+                  }`}
+                  onClick={() => TogglTab("todo")}
+                >
+                  <i className="fa fa-list"></i>
+                </NavLink>
+              </Tooltip>
+            </li>
+            <li>
+              <Tooltip title="Reminder" position="top" trigger="mouseenter">
+                <NavLink
+                  className={`icon-btn btn-light button-effect ${
+                    activeTab === "reminder" ? "active" : ""
+                  }`}
+                  onClick={() => TogglTab("reminder")}
+                >
+                  <i className="fa fa-clock-o"></i>
+                </NavLink>
+              </Tooltip>
+            </li>
+            <li>
               <Tooltip title="Favourite" position="top" trigger="mouseenter">
                 <NavLink
                   className={`icon-btn btn-light button-effect ${
@@ -304,6 +330,12 @@ const Index = (props) => {
                   <RecentSection />
                   <ChatSection />
                 </div>
+              </TabPane>
+              <TabPane tabId="todo">
+                <TodoSection />
+              </TabPane>
+              <TabPane tabId="reminder">
+                <ReminderSection />
               </TabPane>
               <TabPane tabId="document">
                 <DocumentSection tab={activeTab} ActiveTab={setActiveTab} />
