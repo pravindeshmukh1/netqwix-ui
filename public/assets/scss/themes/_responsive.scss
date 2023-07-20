@@ -49,7 +49,13 @@
       }
     }
   }
-  .chitchat-main .messages .contact-details .left.media .media-right .mute i:after {
+  .chitchat-main
+    .messages
+    .contact-details
+    .left.media
+    .media-right
+    .mute
+    i:after {
     top: 14px;
     left: 5px;
   }
@@ -259,6 +265,13 @@
       .status-tab {
         padding: 40px 20px;
       }
+    }
+    .chitchat-left-sidebar-submenu {
+      min-width: 84%;
+      width: 84%;
+      left: 8%;
+      animation: fadeInright 300ms ease-in-out;
+      transition: all 0.3s ease;
     }
     .chitchat-left-sidebar {
       min-width: 300px;
@@ -676,7 +689,11 @@
   .mobile-version-sec .chitchat-back-block .chit-chat2 {
     display: none;
   }
-  .collaboration-main .collaboration-content ul.collab-tab.nav.nav-pills li.nav-item a.nav-link {
+  .collaboration-main
+    .collaboration-content
+    ul.collab-tab.nav.nav-pills
+    li.nav-item
+    a.nav-link {
     .tab-content {
       h3 {
         margin-bottom: 3px !important;
@@ -1433,7 +1450,9 @@
             > ul {
               > li {
                 > a {
-                  font-size: calc(13px + (18 - 14) * ((100vw - 320px) / (800 - 320)));
+                  font-size: calc(
+                    13px + (18 - 14) * ((100vw - 320px) / (800 - 320))
+                  );
                   padding: 5px 40px;
                   svg {
                     height: 14px;
@@ -2651,11 +2670,22 @@
     width: 100vw;
     min-width: 100vw;
   }
-  .chitchat-container .main-nav.on ~ .chitchat-left-sidebar .dynemic-sidebar:not(.recent-default) {
+  .chitchat-container
+    .main-nav.on
+    ~ .chitchat-left-sidebar
+    .dynemic-sidebar:not(.recent-default) {
     margin-left: 100px;
   }
-  .chitchat-container .main-nav.on ~ .chitchat-left-sidebar .dynemic-sidebar.recent-default .recent,
-  .chitchat-container .main-nav.on ~ .chitchat-left-sidebar .dynemic-sidebar.recent-default .chat {
+  .chitchat-container
+    .main-nav.on
+    ~ .chitchat-left-sidebar
+    .dynemic-sidebar.recent-default
+    .recent,
+  .chitchat-container
+    .main-nav.on
+    ~ .chitchat-left-sidebar
+    .dynemic-sidebar.recent-default
+    .chat {
     width: 100vw;
   }
   .landing_page_slider {
@@ -2996,7 +3026,10 @@
       }
     }
   }
-  .chitchat-container .main-nav.on ~ .chitchat-left-sidebar .dynemic-sidebar:not(.recent-default).active {
+  .chitchat-container
+    .main-nav.on
+    ~ .chitchat-left-sidebar
+    .dynemic-sidebar:not(.recent-default).active {
     min-width: 100%;
     width: 100%;
     margin-left: 0;
@@ -3070,7 +3103,14 @@
   .contact-chat > ul > li.replies .msg-box li:first-child h5 {
     border-radius: 30px 25px 0 30px;
   }
-  .chitchat-container .chitchat-left-sidebar .recent-default .chat > .theme-tab .nav-tabs .nav-item .nav-link {
+  .chitchat-container
+    .chitchat-left-sidebar
+    .recent-default
+    .chat
+    > .theme-tab
+    .nav-tabs
+    .nav-item
+    .nav-link {
     min-width: 50px;
   }
   .chat-landing-page {
