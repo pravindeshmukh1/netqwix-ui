@@ -47,7 +47,7 @@
 
 .canvas-print {
     z-index: 1 !important;
-    border: 2px solid red;
+    // border: 2px solid red;
 }
 
 
@@ -97,9 +97,17 @@
 
 //   for small screen
 @media only screen and (max-width: 600px) {
-
     #end-user-video {
         height: 150px;
         width: 150px;
     }
+}
+
+
+.no-user-joined {
+    margin: auto;
+    top:30px;
+    font-size: 20px;
+    // font-weight: 200;
+    z-index: 1000;
 }

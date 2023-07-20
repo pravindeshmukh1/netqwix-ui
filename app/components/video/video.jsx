@@ -10,7 +10,7 @@ let storedLocalDrawPaths = { sender: [], receiver: [] };
 let XAndYCoordinates = [];
 // default setup;
 let isDrawing = false;
-let isVideoMuted = true;
+let isVideoMuted = false;
 
 export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     const socket = useContext(SocketContext);
@@ -282,7 +282,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
 
     const getMosuePositionOnCanvas = (event) => {
-        if((event.clientX || event.clientY) || event?.touches && event?.touches[0]) {
+        if ((event.clientX || event.clientY) || event?.touches && event?.touches[0]) {
             const clientX = event.clientX || event?.touches[0]?.clientX;
             const clientY = event.clientY || event?.touches[0]?.clientY;
             const { offsetLeft, offsetTop } = event.target;
@@ -393,7 +393,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             });
             videoRef.current.srcObject.getVideoTracks().forEach((track) => track.stop());
             videoRef.current.srcObject.src = '';
-            videoRef.current= null;
+            videoRef.current = null;
             // setLocalStream(null);
         }
 
@@ -452,6 +452,9 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
     return (
         <React.Fragment>
+                {!(removeVideoRef && removeVideoRef.current) ? <div className="no-user-joined">
+                    Waiting for <b>{toUser?.fullname}</b>  to join...
+                </div> : <></>}
             <div className="flex">
                 <div className="absolute z-50 bottom-0 left-21">
                     <div className="flex items-center">
@@ -479,7 +482,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 )} */}
             </div>
             {/* action buttons */}
-            <div className=" z-50 ml-2 absolute bottom-0 right-2 mb-4">
+            {/* <div className=" z-50 ml-2 absolute bottom-0 right-2 mb-4">
                 <div className="flex">
                     <div className="ml-2 bg-blue-500 text-white font-bold py-2 px-2 rounded"
                         onClick={() => {
@@ -517,7 +520,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
                     </div>
                 </div>
-            </div>
+            </div> */}
             <div className="call-action-buttons  z-50 ml-2 absolute bottom-0  z-50">
                 <div
                     className="icon-btn btn-danger button-effect btn-xl is-animating"
