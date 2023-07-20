@@ -46,7 +46,6 @@ export const HandleVideoCall = () => {
 
     useEffect(() => {
         windowsRef.current = window;
-        socket.connect();
         handleStartCall();
     }, []);
 
@@ -416,7 +415,7 @@ export const HandleVideoCall = () => {
     return (
         <React.Fragment>
             <div className="flex">
-                <div className="absolute z-50 bottom-[0px] left-[21px]">
+                <div className="absolute z-50 bottom-0 left-21">
                     <div className="flex items-center">
                         <div>
                             {videoRef &&
@@ -442,7 +441,7 @@ export const HandleVideoCall = () => {
                 )} */}
             </div>
             {/* action buttons */}
-            <div className=" z-50 ml-2 absolute bottom-0 right-2 mb-4">
+            {/* <div className=" z-50 ml-2 absolute bottom-0 right-2 mb-4">
                 <div className="flex">
                     <div className="ml-2 bg-blue-500 text-white font-bold py-2 px-2 rounded"
                         onClick={() => {
@@ -480,7 +479,7 @@ export const HandleVideoCall = () => {
 
                     </div>
                 </div>
-            </div>
+            </div> */}
 
         </React.Fragment>
     )

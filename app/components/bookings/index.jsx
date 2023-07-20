@@ -79,6 +79,7 @@ const Bookings = ({ accountType = null }) => {
             <>
               {!status === BookedSession.canceled ||
                 (status === BookedSession.confirmed && (
+                  <>
                   <button
                     className={`btn btn-primary button-effect btn-sm`}
                     type="button"
@@ -92,6 +93,25 @@ const Bookings = ({ accountType = null }) => {
                   >
                     Confirmed
                   </button>
+                  <button
+                className={`btn btn-primary button-effect btn-sm ml-4`}
+                type="button"
+                disabled={status === BookedSession.confirmed ? false : true}
+                style={{
+                  cursor:
+                    status === BookedSession.booked ? "not-allowed" : "pointer",
+                }}
+                onClick={() => {
+                  setStartMeeting({
+                    ...startMeeting,
+                    id: _id,
+                    isOpenModal: true,
+                  });
+                }}
+              >
+                Start
+              </button>
+              </>
                 ))}
             </>
           )}
