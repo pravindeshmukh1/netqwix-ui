@@ -14,8 +14,8 @@
         padding: $sidebar-spacing 0;
     }
     .chitchat-left-sidebar{
-        min-width: $left-sidebar-width;
-        width: $left-sidebar-width;
+        min-width: 93%;
+        width: 93%;
         height: 100vh;
         max-height: 100vh;
         overflow: hidden;
@@ -64,7 +64,7 @@
                 position: absolute;
                 padding: 20px;
                 &.active{
-                    right: 90px;
+                    left: 0;
                     opacity: 1;
                     animation: fadeInRight 300ms ease-in-out;
                     transition: all 0.3s ease;
