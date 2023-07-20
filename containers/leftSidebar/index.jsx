@@ -323,7 +323,7 @@ const Index = (props) => {
           <aside
             className={`chitchat-left-sidebar left-disp ${
               activeTab === "todo" || activeTab === "reminder"
-                ? `app-sidebar active`
+                ? `app-sidebar active chitchat-left-sidebar-submenu`
                 : null
             }`}
           >
