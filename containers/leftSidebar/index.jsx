@@ -20,6 +20,8 @@ import {
   leftSideBarOptions,
 } from "../../app/common/constants";
 import { SocketContext } from "../../app/components/socket";
+import TodoSection from "../rightSidebar/todoSection";
+import ReminderSection from "../rightSidebar/reminderSection";
 
 const steps = [
   {
@@ -77,8 +79,13 @@ const Index = (props) => {
   const TogglTab = (value) => {
     setActiveTab(value);
     dispatch(authAction.setActiveTab(value));
-    // document.querySelector(".recent-default").classList.remove("active");
-    if (width < 800  && document && document.querySelector && document.querySelector(".app-sidebar")) {
+    // // document.querySelector(".recent-default").classList.remove("active");
+    if (
+      width < 800 &&
+      document &&
+      document.querySelector &&
+      document.querySelector(".app-sidebar")
+    ) {
       document.querySelector(".app-sidebar").classList.remove("active");
     }
   };
@@ -187,6 +194,30 @@ const Index = (props) => {
               </Tooltip>
             </li> */}
             <li>
+              <Tooltip title="Todo" position="top" trigger="mouseenter">
+                <NavLink
+                  className={`icon-btn btn-light button-effect ${
+                    activeTab === "todo" ? "active" : ""
+                  }`}
+                  onClick={() => TogglTab("todo")}
+                >
+                  <i className="fa fa-list"></i>
+                </NavLink>
+              </Tooltip>
+            </li>
+            <li>
+              <Tooltip title="Reminder" position="top" trigger="mouseenter">
+                <NavLink
+                  className={`icon-btn btn-light button-effect ${
+                    activeTab === "reminder" ? "active" : ""
+                  }`}
+                  onClick={() => TogglTab("reminder")}
+                >
+                  <i className="fa fa-clock-o"></i>
+                </NavLink>
+              </Tooltip>
+            </li>
+            <li>
               <Tooltip title="Favourite" position="top" trigger="mouseenter">
                 <NavLink
                   className={`icon-btn btn-light button-effect ${
@@ -293,38 +324,59 @@ const Index = (props) => {
       </nav>
       {activeTab !== leftSideBarOptions.HOME &&
         activeTab !== leftSideBarOptions.SCHEDULE_TRAINING && (
-          <aside className="chitchat-left-sidebar left-disp">
-            {/* <div className="recent-default dynemic-sidebar active">
+          <aside
+            className={`chitchat-left-sidebar left-disp ${
+              activeTab === "todo" || activeTab === "reminder"
+                ? `app-sidebar active chitchat-left-sidebar-submenu`
+                : null
+            }`}
+          >
+            <div className="apps">
+              <div className="apps-ul">
+                {/* <div className="recent-default dynemic-sidebar active">
             <RecentSection />
             <ChatSection />
           </div> */}
-
-            <TabContent activeTab={activeTab}>
-              <TabPane tabId="fevorite">
-                <FevoriteSection tab={activeTab} ActiveTab={setActiveTab} />
-              </TabPane>
-              <TabPane tabId="chats">
-                <div className="recent-default dynemic-sidebar active">
-                  <RecentSection />
-                  <ChatSection />
-                </div>
-              </TabPane>
-              <TabPane tabId="document">
-                <DocumentSection tab={activeTab} ActiveTab={setActiveTab} />
-              </TabPane>
-              <TabPane tabId="contact">
-                <ContactListSection tab={activeTab} ActiveTab={setActiveTab} />
-              </TabPane>
-              <TabPane tabId="notification">
-                <NotificationSection tab={activeTab} ActiveTab={setActiveTab} />
-              </TabPane>
-              <TabPane tabId="setting">
-                <SettingSection tab={activeTab} ActiveTab={setActiveTab} />
-              </TabPane>
-              <TabPane tabId="status">
-                <StatusSection tab={activeTab} ActiveTab={setActiveTab} />
-              </TabPane>
-            </TabContent>
+                <TabContent activeTab={activeTab}>
+                  <TabPane tabId="fevorite">
+                    <FevoriteSection tab={activeTab} ActiveTab={setActiveTab} />
+                  </TabPane>
+                  <TabPane tabId="chats">
+                    <div className="recent-default dynemic-sidebar active">
+                      <RecentSection />
+                      <ChatSection />
+                    </div>
+                  </TabPane>
+                  <TabPane tabId="todo">
+                    <TodoSection tab={activeTab} ActiveTab={setActiveTab} />
+                  </TabPane>
+                  <TabPane tabId="reminder">
+                    <ReminderSection tab={activeTab} ActiveTab={setActiveTab} />
+                  </TabPane>
+                  <TabPane tabId="document">
+                    <DocumentSection tab={activeTab} ActiveTab={setActiveTab} />
+                  </TabPane>
+                  <TabPane tabId="contact">
+                    <ContactListSection
+                      tab={activeTab}
+                      ActiveTab={setActiveTab}
+                    />
+                  </TabPane>
+                  <TabPane tabId="notification">
+                    <NotificationSection
+                      tab={activeTab}
+                      ActiveTab={setActiveTab}
+                    />
+                  </TabPane>
+                  <TabPane tabId="setting">
+                    <SettingSection tab={activeTab} ActiveTab={setActiveTab} />
+                  </TabPane>
+                  <TabPane tabId="status">
+                    <StatusSection tab={activeTab} ActiveTab={setActiveTab} />
+                  </TabPane>
+                </TabContent>
+              </div>
+            </div>
           </aside>
         )}
     </Fragment>

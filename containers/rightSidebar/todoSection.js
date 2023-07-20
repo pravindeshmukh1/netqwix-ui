@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Plus, X } from 'react-feather';
-import DatePicker from 'react-datepicker';
+import React, { useState } from "react";
+import { Plus, X } from "react-feather";
+import DatePicker from "react-datepicker";
 
 import {
   Nav,
@@ -16,8 +16,8 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-} from 'reactstrap';
-import Link from 'next/link';
+} from "reactstrap";
+import Link from "next/link";
 
 const TodoSection = (props) => {
   const [assignTo, setAssign] = useState({
@@ -27,13 +27,13 @@ const TodoSection = (props) => {
     togglefour: false,
   });
   const [seleted, setSelected] = useState({
-    assignOne: '',
-    assignTwo: '',
-    assignThree: '',
-    assignFour: '',
+    assignOne: "",
+    assignTwo: "",
+    assignThree: "",
+    assignFour: "",
   });
-  const [date, setDate] = useState({ one: '', two: '', three: '', four: '' });
-  const [activeTab, setActiveTab] = useState('all');
+  const [date, setDate] = useState({ one: "", two: "", three: "", four: "" });
+  const [activeTab, setActiveTab] = useState("all");
   const [todoArray, setTodoArray] = useState([]);
   const [todoModal, setTodoModal] = useState(false);
   const [todoModal2, setTodoModal2] = useState(false);
@@ -112,31 +112,38 @@ const TodoSection = (props) => {
     const arrayUpdated = todoArray.filter((item) => id !== item);
     setTodoArray([...arrayUpdated]);
   };
-
+  const closeLeftSide = () => {
+    document.querySelector(".document-tab").classList.remove("active");
+    document.querySelector(".recent-default").classList.add("active");
+    props.ActiveTab("");
+  };
   return (
     <>
-      <div className="apps-content" id='todo'>
-        <div className='todo-main'>
-          <div className='theme-title'>
-            <div className='media'>
+      <div
+        className={`${props.tab === "todo" ? "active" : ""} apps-content`}
+        id="todo"
+      >
+        <div className="todo-main">
+          <div className="theme-title">
+            <div className="media">
               <div>
                 <h2>Todo</h2>
                 <h4>to create your task</h4>
               </div>
-              <div className='media-body media-body text-right'>
+              <div className="media-body media-body text-right">
                 <Link
-                  className='icon-btn btn-sm btn-outline-light close-apps'
-                  href='#'
-                  onClick={() => props.smallSideBarToggle()}
+                  className="icon-btn btn-sm btn-outline-light close-apps"
+                  href=""
+                  onClick={() => closeLeftSide()}
                 >
                   <X />
                 </Link>
               </div>
             </div>
           </div>
-          <div className='todo-name'>
-            <form className='default-form'>
-              <select className='custom-scroll' name='support[support_type]'>
+          <div className="todo-name">
+            <form className="default-form">
+              <select className="custom-scroll" name="support[support_type]">
                 <option>All Conversations</option>
                 <option>Josephin water</option>
                 <option>Jony Lynetin</option>
@@ -146,27 +153,29 @@ const TodoSection = (props) => {
               </select>
             </form>
           </div>
-          <div className='todo-tab theme-tab custom-scroll'>
+          <div className="todo-tab theme-tab custom-scroll">
             <Nav tabs>
               <NavItem>
                 <NavLink
-                  className={`button-effect  ${activeTab === 'all' ? 'active show' : ''
-                    }`}
-                  href='#todo1'
-                  onClick={() => setActiveTab('all')}
+                  className={`button-effect  ${
+                    activeTab === "all" ? "active show" : ""
+                  }`}
+                  href="#todo1"
+                  onClick={() => setActiveTab("all")}
                 >
                   All
-              </NavLink>
+                </NavLink>
               </NavItem>
               <NavItem>
                 <NavLink
-                  className={`button-effect  ${activeTab === 'mytodo' ? 'active show' : ''
-                    }`}
-                  href='#todo2'
-                  onClick={() => setActiveTab('mytodo')}
+                  className={`button-effect  ${
+                    activeTab === "mytodo" ? "active show" : ""
+                  }`}
+                  href="#todo2"
+                  onClick={() => setActiveTab("mytodo")}
                 >
                   My to-dos
-              </NavLink>
+                </NavLink>
               </NavItem>
               {/* <li>
                 <Link
@@ -316,391 +325,394 @@ const TodoSection = (props) => {
               </li> */}
             </Nav>
             <TabContent activeTab={activeTab}>
-              <TabPane tabId='all' className='fade show'>
-                <div style={{overflow:"auto",height:"100vh"}} className='custom-scroll tab-card text-left'>
-                  <div className='todo-task'>
+              <TabPane tabId="all" className="fade show">
+                <div
+                  style={{ overflow: "auto", height: "100vh" }}
+                  className="custom-scroll tab-card text-left"
+                >
+                  <div className="todo-task">
                     <h4>Designer Discussion </h4>
-                    <div className='todo-main-content'>
-                      <div className='input-text'>
+                    <div className="todo-main-content">
+                      <div className="input-text">
                         <input
-                          type='checkbox'
-                          aria-label='Checkbox for following text input'
+                          type="checkbox"
+                          aria-label="Checkbox for following text input"
                         />
                         <input
-                          id='user_input12'
-                          type='text'
-                          name='todo-text'
-                          placeholder='Give me review on our side'
+                          id="user_input12"
+                          type="text"
+                          name="todo-text"
+                          placeholder="Give me review on our side"
                         />
                       </div>
-                      <div className='drop-picker'>
+                      <div className="drop-picker">
                         {date.one ? (
                           <DatePicker
-                            className='ditsatepicker-here form-control digits'
+                            className="ditsatepicker-here form-control digits"
                             selected={date.one}
                             onChange={handleChangeOne}
-                            placeholderText='Due date'
+                            placeholderText="Due date"
                           />
                         ) : (
-                            <DatePicker
-                              className='datepicker-here form-control digits'
-                              onChange={handleChangeOne}
-                              placeholderText='Due date'
-                            />
-                          )}
+                          <DatePicker
+                            className="datepicker-here form-control digits"
+                            onChange={handleChangeOne}
+                            placeholderText="Due date"
+                          />
+                        )}
                         <Dropdown
-                          className='dropdown currency'
+                          className="dropdown currency"
                           isOpen={assignTo.toggleOne}
                           toggle={AssignToOne}
                         >
                           <DropdownToggle
-                            tag='span'
-                            role='button'
-                            data-toggle='dropdown'
+                            tag="span"
+                            role="button"
+                            data-toggle="dropdown"
                             aria-expanded={assignTo.toggleOne}
                           >
                             <span
                               style={{
-                                fontSize: '13px',
-                                color: '#647589',
-                                fontWeight: '400',
-                                cursor: 'pointer',
+                                fontSize: "13px",
+                                color: "#647589",
+                                fontWeight: "400",
+                                cursor: "pointer",
                               }}
                             >
                               {seleted.assignOne
                                 ? seleted.assignOne
-                                : 'Assign To'}
+                                : "Assign To"}
                             </span>
                           </DropdownToggle>
                           <ul
-                            className='dropdown-menu'
+                            className="dropdown-menu"
                             style={
                               assignTo.toggleOne
-                                ? { display: 'block' }
-                                : { display: 'none' }
+                                ? { display: "block" }
+                                : { display: "none" }
                             }
                           >
-                            <li className='dropdown-divider'>
-                              <div className='fa fa-user'></div>
-                              <h5 className='text-muted'>Assign To</h5>
+                            <li className="dropdown-divider">
+                              <div className="fa fa-user"></div>
+                              <h5 className="text-muted">Assign To</h5>
                             </li>
                             <li>
                               <Link
-                                href='#'
+                                href="#"
                                 onClick={() =>
-                                  selectAssignToValueOne('Josephin john')
+                                  selectAssignToValueOne("Josephin john")
                                 }
                               >
                                 Josephin john
-                            </Link>
+                              </Link>
                             </li>
                             <li>
                               <Link
-                                href='#'
+                                href="#"
                                 onClick={() =>
-                                  selectAssignToValueOne('Lynetin john')
+                                  selectAssignToValueOne("Lynetin john")
                                 }
                               >
                                 Lynetin john
-                            </Link>
+                              </Link>
                             </li>
                             <li>
                               <Link
-                                href='#'
+                                href="#"
                                 onClick={() =>
-                                  selectAssignToValueOne('Sufiya john')
+                                  selectAssignToValueOne("Sufiya john")
                                 }
                               >
                                 Sufiya john
-                            </Link>
+                              </Link>
                             </li>
                             <li>
                               <Link
-                                href='#'
+                                href="#"
                                 onClick={() =>
-                                  selectAssignToValueOne('Jhon john')
+                                  selectAssignToValueOne("Jhon john")
                                 }
                               >
                                 Jhon john
-                            </Link>
+                              </Link>
                             </li>
                           </ul>
                         </Dropdown>
                       </div>
                     </div>
-                    <div className='todo-list'>
-                      <div className='element' id='div_3'>
-                        <span className='add add-to-do'>Add-To-Do</span>
+                    <div className="todo-list">
+                      <div className="element" id="div_3">
+                        <span className="add add-to-do">Add-To-Do</span>
                       </div>
                     </div>
-                    <div className='todo-main-content'>
-                      <div className='input-text'>
+                    <div className="todo-main-content">
+                      <div className="input-text">
                         <input
-                          type='checkbox'
-                          aria-label='Checkbox for following text input'
+                          type="checkbox"
+                          aria-label="Checkbox for following text input"
                         />
                         <input
-                          id='user_input13'
-                          type='text'
-                          name='todo-text'
-                          placeholder='Redesign Your Design'
+                          id="user_input13"
+                          type="text"
+                          name="todo-text"
+                          placeholder="Redesign Your Design"
                         />
                       </div>
-                      <div className='drop-picker'>
+                      <div className="drop-picker">
                         {date.two ? (
                           <DatePicker
-                            className='datepicker-here form-control digits'
+                            className="datepicker-here form-control digits"
                             selected={date.two}
                             onChange={handleChangeTwo}
-                            placeholderText='Due date'
+                            placeholderText="Due date"
                           />
                         ) : (
-                            <DatePicker
-                              className='datepicker-here form-control digits'
-                              onChange={handleChangeTwo}
-                              placeholderText='Due date'
-                            />
-                          )}
+                          <DatePicker
+                            className="datepicker-here form-control digits"
+                            onChange={handleChangeTwo}
+                            placeholderText="Due date"
+                          />
+                        )}
                         <Dropdown
-                          className='dropdown currency'
+                          className="dropdown currency"
                           isOpen={assignTo.toggleTwo}
                           toggle={AssignToTwo}
                         >
                           <DropdownToggle
-                            tag='span'
-                             role='button'
-                            data-toggle='dropdown'
+                            tag="span"
+                            role="button"
+                            data-toggle="dropdown"
                             aria-expanded={assignTo.toggleTwo}
                           >
                             <span
                               style={{
-                                fontSize: '13px',
-                                color: '#647589',
-                                fontWeight: '400',
-                                cursor: 'pointer',
+                                fontSize: "13px",
+                                color: "#647589",
+                                fontWeight: "400",
+                                cursor: "pointer",
                               }}
                             >
                               {seleted.assignTwo
                                 ? seleted.assignTwo
-                                : 'Assign To'}
+                                : "Assign To"}
                             </span>
                           </DropdownToggle>
                           <ul
-                            className='dropdown-menu'
+                            className="dropdown-menu"
                             style={
                               assignTo.toggleTwo
-                                ? { display: 'block' }
-                                : { display: 'none' }
+                                ? { display: "block" }
+                                : { display: "none" }
                             }
                           >
-                            <li className='dropdown-divider'>
-                              <div className='fa fa-user'></div>
-                              <h5 className='text-muted'>Assign To</h5>
+                            <li className="dropdown-divider">
+                              <div className="fa fa-user"></div>
+                              <h5 className="text-muted">Assign To</h5>
                             </li>
                             <li>
                               <Link
-                                href='#'
+                                href="#"
                                 onClick={() =>
-                                  selectAssignToValueTwo('Josephin john')
+                                  selectAssignToValueTwo("Josephin john")
                                 }
                               >
                                 Josephin john
-                            </Link>
+                              </Link>
                             </li>
                             <li>
                               <Link
-                                href='#'
+                                href="#"
                                 onClick={() =>
-                                  selectAssignToValueTwo('Lynetin john')
+                                  selectAssignToValueTwo("Lynetin john")
                                 }
                               >
                                 Lynetin john
-                            </Link>
+                              </Link>
                             </li>
                             <li>
                               <Link
-                                href='#'
+                                href="#"
                                 onClick={() =>
-                                  selectAssignToValueTwo('Sufiya john')
+                                  selectAssignToValueTwo("Sufiya john")
                                 }
                               >
                                 Sufiya john
-                            </Link>
+                              </Link>
                             </li>
                             <li>
                               <Link
-                                href='#'
+                                href="#"
                                 onClick={() =>
-                                  selectAssignToValueTwo('Jhon john')
+                                  selectAssignToValueTwo("Jhon john")
                                 }
                               >
                                 Jhon john
-                            </Link>
+                              </Link>
                             </li>
                           </ul>
                         </Dropdown>
                       </div>
                     </div>
-                    <div className='todo-list'>
-                      <div className='element' id='div_2'>
-                        <span className='add add-to-do'>Add-To-Do</span>
+                    <div className="todo-list">
+                      <div className="element" id="div_2">
+                        <span className="add add-to-do">Add-To-Do</span>
                       </div>
                     </div>
-                    <div className='todo-main-content'>
-                      <div className='input-text'>
+                    <div className="todo-main-content">
+                      <div className="input-text">
                         <input
-                          type='checkbox'
-                          aria-label='Checkbox for following text input'
+                          type="checkbox"
+                          aria-label="Checkbox for following text input"
                         />
                         <input
-                          id='user_input14'
-                          type='text'
-                          name='todo-text'
-                          placeholder=' Complete Project report'
+                          id="user_input14"
+                          type="text"
+                          name="todo-text"
+                          placeholder=" Complete Project report"
                         />
                       </div>
-                      <div className='drop-picker'>
+                      <div className="drop-picker">
                         {date.three ? (
                           <DatePicker
-                            className='datepicker-here form-control digits'
+                            className="datepicker-here form-control digits"
                             selected={date.three}
                             onChange={handleChangeThree}
-                            placeholderText='Due date'
+                            placeholderText="Due date"
                           />
                         ) : (
-                            <DatePicker
-                              className='datepicker-here form-control digits'
-                              onChange={handleChangeThree}
-                              placeholderText='Due date'
-                            />
-                          )}
+                          <DatePicker
+                            className="datepicker-here form-control digits"
+                            onChange={handleChangeThree}
+                            placeholderText="Due date"
+                          />
+                        )}
                         <Dropdown
-                          className='dropdown currency'
+                          className="dropdown currency"
                           isOpen={assignTo.toggleThree}
                           toggle={AssignToThree}
                         >
                           <DropdownToggle
-                            tag='span'
-                            role='button'
-                            data-toggle='dropdown'
+                            tag="span"
+                            role="button"
+                            data-toggle="dropdown"
                             aria-expanded={assignTo.toggleThree}
                           >
                             <span
                               style={{
-                                fontSize: '13px',
-                                color: '#647589',
-                                fontWeight: '400',
-                                cursor: 'pointer',
+                                fontSize: "13px",
+                                color: "#647589",
+                                fontWeight: "400",
+                                cursor: "pointer",
                               }}
                             >
                               {seleted.assignThree
                                 ? seleted.assignThree
-                                : 'Assign To'}
+                                : "Assign To"}
                             </span>
                           </DropdownToggle>
                           <ul
-                            className='dropdown-menu'
+                            className="dropdown-menu"
                             style={
                               assignTo.toggleThree
-                                ? { display: 'block' }
-                                : { display: 'none' }
+                                ? { display: "block" }
+                                : { display: "none" }
                             }
                           >
-                            <li className='dropdown-divider'>
-                              <div className='fa fa-user'></div>
-                              <h5 className='text-muted'>Assign To</h5>
+                            <li className="dropdown-divider">
+                              <div className="fa fa-user"></div>
+                              <h5 className="text-muted">Assign To</h5>
                             </li>
                             <li>
                               <Link
-                                href='#'
+                                href="#"
                                 onClick={() =>
-                                  selectAssignToValueThree('Josephin john')
+                                  selectAssignToValueThree("Josephin john")
                                 }
                               >
                                 Josephin john
-                            </Link>
+                              </Link>
                             </li>
                             <li>
                               <Link
-                                href='#'
+                                href="#"
                                 onClick={() =>
-                                  selectAssignToValueThree('Lynetin john')
+                                  selectAssignToValueThree("Lynetin john")
                                 }
                               >
                                 Lynetin john
-                            </Link>
+                              </Link>
                             </li>
                             <li>
                               <Link
-                                href='#'
+                                href="#"
                                 onClick={() =>
-                                  selectAssignToValueThree('Sufiya john')
+                                  selectAssignToValueThree("Sufiya john")
                                 }
                               >
                                 Sufiya john
-                            </Link>
+                              </Link>
                             </li>
                             <li>
                               <Link
-                                href='#'
+                                href="#"
                                 onClick={() =>
-                                  selectAssignToValueThree('Jhon john')
+                                  selectAssignToValueThree("Jhon john")
                                 }
                               >
                                 Jhon john
-                            </Link>
+                              </Link>
                             </li>
                           </ul>
                         </Dropdown>
                       </div>
                     </div>
-                    <div className='todo-list'>
-                      <div className='element' id='div_1'>
+                    <div className="todo-list">
+                      <div className="element" id="div_1">
                         <span
-                          className='add add-to-do'
+                          className="add add-to-do"
                           onClick={() => addToTodo()}
                         >
                           Add-To-Do
-                      </span>
+                        </span>
                       </div>
                       {todoArray.map((item, i) => {
                         return (
-                          <div className='element' key={i}>
-                            <form className='p-15'>
+                          <div className="element" key={i}>
+                            <form className="p-15">
                               <div
-                                className='form-group'
-                                style={{ display: 'flex' }}
+                                className="form-group"
+                                style={{ display: "flex" }}
                               >
-                                <input type='checkbox' id='txt_4' />
-                                <input type='text' className='m-l-15' />
+                                <input type="checkbox" id="txt_4" />
+                                <input type="text" className="m-l-15" />
                               </div>
-                              <div className='todo-buttons'>
+                              <div className="todo-buttons">
                                 <Link
-                                  className='badge badge-success font_label'
-                                  href='#'
-                                  style={{ padding: '7px 12px' }}
+                                  className="badge badge-success font_label"
+                                  href="#"
+                                  style={{ padding: "7px 12px" }}
                                 >
                                   Save
-                              </Link>
+                                </Link>
                                 <Link
-                                  className='badge badge-outline-primary font_label'
-                                  href='#'
+                                  className="badge badge-outline-primary font_label"
+                                  href="#"
                                   style={{
-                                    marginLeft: '15px',
-                                    padding: '7px 12px',
+                                    marginLeft: "15px",
+                                    padding: "7px 12px",
                                   }}
                                 >
                                   Cancel
-                              </Link>
+                                </Link>
                                 <span
-                                  id='remove_4'
-                                  className='remove'
-                                  style={{ marginLeft: '40px' }}
+                                  id="remove_4"
+                                  className="remove"
+                                  style={{ marginLeft: "40px" }}
                                   onClick={() => removeFromTodo(item)}
                                 >
                                   <i
-                                    className='fa fa-trash'
-                                    style={{ fontSize: '20px' }}
+                                    className="fa fa-trash"
+                                    style={{ fontSize: "20px" }}
                                   ></i>
                                 </span>
                               </div>
@@ -712,7 +724,7 @@ const TodoSection = (props) => {
                   </div>
                 </div>
               </TabPane>
-              <TabPane tabId='mytodo' className='fade show' id='todo2'>
+              <TabPane tabId="mytodo" className="fade show" id="todo2">
                 {/* <div className='converstaion-docs tab-card'>
                   <i className='fa fa-sticky-note-o'></i>
                   <h5 className='mb-3'>No Open To-Dos Here</h5>
