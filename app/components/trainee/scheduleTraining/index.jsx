@@ -390,28 +390,6 @@ const ScheduleTraining = () => {
             customInput={<Input />}
           />
         </div>
-        {/* <button
-          type="button"
-          className="btn btn-primary btn-sm mt-3 ml-3"
-          data-toggle="modal"
-          onClick={() => setInstantScheduleMeeting(true)}
-          data-target="#scheduleMeeting"
-        >
-          Schedule Instant Meeting
-        </button>
-        <Modal
-          isOpen={isOpenInstantScheduleMeeting}
-          id={"scheduleMeeting"}
-          toggle={toggle}
-          key={"scheduleMeeting"}
-          isCenter={true}
-          size={"lg"}
-          element={
-            <ScheduleInstantMeeting
-              isClose={() => setInstantScheduleMeeting(false)}
-            />
-          }
-        /> */}
       </div>
       <div className="pt-5" style={{ marginTop: "7rem" }}>
         {renderTable()}

@@ -148,23 +148,6 @@ const Bookings = ({ accountType = null }) => {
               >
                 Start
               </button>
-              <Modal
-                key={"startMeeting"}
-                toggle={toggle}
-                width={"100%"}
-                isOpen={startMeeting.isOpenModal}
-                element={
-                  <StartMeeting
-                    isClose={() =>
-                      setStartMeeting({
-                        ...startMeeting,
-                        id: null,
-                        isOpenModal: false,
-                      })
-                    }
-                  />
-                }
-              />
               <button
                 className="btn btn-danger button-effect btn-sm ml-4"
                 type="button"
@@ -250,6 +233,28 @@ const Bookings = ({ accountType = null }) => {
           })
         )}
       </div>
+
+
+      {/* calling popup */}
+      <Modal
+        key={"startMeeting"}
+        toggle={toggle}
+        allowFullWidth={true}
+        isOpen={startMeeting.isOpenModal}
+        height="100vh"
+        element={
+          <StartMeeting
+            isClose={() =>
+              setStartMeeting({
+                ...startMeeting,
+                id: null,
+                isOpenModal: false,
+              })
+            }
+          />
+        }
+      />
+
     </>
   );
 };

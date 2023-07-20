@@ -9,6 +9,8 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Provider } from "react-redux";
 import store from "../app/store";
 import AuthGuard from "../app/components/auth/AuthGuard";
+import { SocketContext, getSocket } from "../app/components/socket";
+import { LOCAL_STORAGE_KEYS } from "../app/common/constants";
 
 export default function MyAppComponent({ Component, pageProps }) {
   const router = useRouter();
@@ -56,6 +58,8 @@ export default function MyAppComponent({ Component, pageProps }) {
         </Head>
         <Provider store={store}>
           <AuthGuard>
+            {/* adding socket as context hook */}
+          <SocketContext.Provider  value={getSocket()}> 
             {loader && (
               <div className="chitchat-loader">
                 <div>
@@ -72,6 +76,7 @@ export default function MyAppComponent({ Component, pageProps }) {
               </CustomizerContextProvider>
               <ToastContainer />
             </div>
+            </SocketContext.Provider>
           </AuthGuard>
         </Provider>
       </GoogleOAuthProvider>

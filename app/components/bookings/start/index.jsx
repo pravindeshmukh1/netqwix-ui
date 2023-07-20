@@ -1,17 +1,22 @@
-import React from "react";
+import React from 'react';
+import {Link, Phone} from 'react-feather';
+import {HandleVideoCall} from '../../video/video';
 
-const StartMeeting = ({ isClose }) => {
+const StartMeeting = ({isClose}) => {
   return (
     <div>
-      <div className="d-flex justify-content-end mr-3">
-        <h2
-          type="button"
-          className="btn-close"
-          aria-label="Close"
-          onClick={isClose}
-        >
-          &times;
-        </h2>
+      <div className="d-flex justify-content-end mr-3 full-height">
+        <HandleVideoCall />
+        <div className="call-action-buttons">
+          <div
+            className="icon-btn btn-danger button-effect btn-xl is-animating"
+            onClick={() => {
+              isClose ();
+            }}
+          >
+            <Phone />
+          </div>
+        </div>
       </div>
     </div>
   );
