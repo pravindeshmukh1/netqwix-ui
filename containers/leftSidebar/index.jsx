@@ -78,7 +78,7 @@ const Index = (props) => {
     setActiveTab(value);
     dispatch(authAction.setActiveTab(value));
     // document.querySelector(".recent-default").classList.remove("active");
-    if (width < 800) {
+    if (width < 800  && document && document.querySelector && document.querySelector(".app-sidebar")) {
       document.querySelector(".app-sidebar").classList.remove("active");
     }
   };

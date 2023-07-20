@@ -1,28 +1,29 @@
-import React, { useContext } from 'react';
+import React, {useContext, useEffect} from 'react';
 import {Link, Phone} from 'react-feather';
 import {HandleVideoCall} from '../../video/video';
-import { SocketContext } from '../../socket';
-import { EVENTS } from '../../../../helpers/events';
+import {SocketContext} from '../../socket';
+import {EVENTS} from '../../../../helpers/events';
+import { AccountType } from '../../../common/constants';
 
-const StartMeeting = ({isClose}) => {
-  const socket = useContext(SocketContext);
+const StartMeeting = ({isClose, accountType, traineeInfo, trainerInfo}) => {
+  const socket = useContext (SocketContext);
 
+  socket.on (EVENTS.VIDEO_CALL.ON_CLOSE, () => {
+    setTimeout (() => {
+      // closing video call window in 5 sec
+      isClose ();
+    }, 5000);
+  });
 
   return (
     <div>
       <div className="d-flex justify-content-end mr-3 full-height">
-        <HandleVideoCall />
-        <div className="call-action-buttons z-50">
-          <div
-            className="icon-btn btn-danger button-effect btn-xl is-animating"
-            onClick={() => {
-              socket.emit(EVENTS.VIDEO_CALL.ON_CLOSE)
-              isClose ();
-            }}
-          >
-            <Phone />
-          </div>
-        </div>
+        <HandleVideoCall
+        isClose={isClose}
+          accountType={accountType}
+          fromUser = {accountType === AccountType.TRAINEE ? traineeInfo: trainerInfo}
+          toUser = {accountType === AccountType.TRAINEE ? trainerInfo: traineeInfo}
+        />
       </div>
     </div>
   );

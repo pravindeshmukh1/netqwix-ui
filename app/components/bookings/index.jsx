@@ -10,12 +10,15 @@ import { AccountType, BookedSession } from "../../common/constants";
 import { Utils } from "../../../utils/utils";
 import Modal from "../../common/modal";
 import StartMeeting from "./start";
+
 const Bookings = ({ accountType = null }) => {
   const [bookedSession, setBookedSession] = useState({
     id: "",
     booked_status: "",
   });
   const [startMeeting, setStartMeeting] = useState({
+    trainerInfo: null,
+    traineeInfo: null,
     id: null,
     isOpenModal: false,
   });
@@ -37,7 +40,7 @@ const Bookings = ({ accountType = null }) => {
 
   const toggle = () => setStartMeeting(!startMeeting);
 
-  const handleBookedScheduleTraining = (status, _id) => {
+  const handleBookedScheduleTraining = (status, _id, trainee_info, trainer_info) => {
     if (accountType === AccountType.TRAINEE) {
       return (
         <>
@@ -80,38 +83,40 @@ const Bookings = ({ accountType = null }) => {
               {!status === BookedSession.canceled ||
                 (status === BookedSession.confirmed && (
                   <>
-                  <button
-                    className={`btn btn-primary button-effect btn-sm`}
-                    type="button"
-                    style={{
-                      cursor:
-                        status === BookedSession.confirmed
-                          ? "not-allowed"
-                          : "pointer",
-                    }}
-                    disabled={status === BookedSession.confirmed}
-                  >
-                    Confirmed
-                  </button>
-                  <button
-                className={`btn btn-primary button-effect btn-sm ml-4`}
-                type="button"
-                disabled={status === BookedSession.confirmed ? false : true}
-                style={{
-                  cursor:
-                    status === BookedSession.booked ? "not-allowed" : "pointer",
-                }}
-                onClick={() => {
-                  setStartMeeting({
-                    ...startMeeting,
-                    id: _id,
-                    isOpenModal: true,
-                  });
-                }}
-              >
-                Start
-              </button>
-              </>
+                    <button
+                      className={`btn btn-primary button-effect btn-sm`}
+                      type="button"
+                      style={{
+                        cursor:
+                          status === BookedSession.confirmed
+                            ? "not-allowed"
+                            : "pointer",
+                      }}
+                      disabled={status === BookedSession.confirmed}
+                    >
+                      Confirmed
+                    </button>
+                    <button
+                      className={`btn btn-primary button-effect btn-sm ml-4`}
+                      type="button"
+                      disabled={status === BookedSession.confirmed ? false : true}
+                      style={{
+                        cursor:
+                          status === BookedSession.booked ? "not-allowed" : "pointer",
+                      }}
+                      onClick={() => {
+                        setStartMeeting({
+                          ...startMeeting,
+                          id: _id,
+                          isOpenModal: true,
+                          traineeInfo: trainee_info,
+                          trainerInfo: trainer_info,
+                        });
+                      }}
+                    >
+                      Start
+                    </button>
+                  </>
                 ))}
             </>
           )}
@@ -163,6 +168,8 @@ const Bookings = ({ accountType = null }) => {
                     ...startMeeting,
                     id: _id,
                     isOpenModal: true,
+                    traineeInfo: trainee_info,
+                    trainerInfo: trainer_info,
                   });
                 }}
               >
@@ -246,7 +253,9 @@ const Bookings = ({ accountType = null }) => {
                   </div>
                 </div>
                 <div className="card-footer px-5 pb-3 d-flex justify-content-end">
-                  {handleBookedScheduleTraining(data.status, _id)}
+                  {handleBookedScheduleTraining(data.status, _id, trainee_info,
+                    trainer_info,
+                  )}
                 </div>
               </div>
             );
@@ -264,11 +273,16 @@ const Bookings = ({ accountType = null }) => {
         height="100vh"
         element={
           <StartMeeting
+            accountType = {accountType}
+            traineeInfo={startMeeting.traineeInfo}
+            trainerInfo={startMeeting.trainerInfo}
             isClose={() =>
               setStartMeeting({
                 ...startMeeting,
                 id: null,
                 isOpenModal: false,
+                traineeInfo: null,
+                trainerInfo: null,
               })
             }
           />

@@ -4,6 +4,7 @@ import SimplePeer from 'simple-peer';
 import Image from 'next/image'
 import { EVENTS } from '../../../helpers/events';
 import { SocketContext } from "../socket";
+import { Phone } from "react-feather";
 
 let storedLocalDrawPaths = { sender: [], receiver: [] };
 let XAndYCoordinates = [];
@@ -11,9 +12,10 @@ let XAndYCoordinates = [];
 let isDrawing = false;
 let isVideoMuted = true;
 
-export const HandleVideoCall = () => {
+export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     const socket = useContext(SocketContext);
-    const [localStream, setLocalStream] = useState(null);
+    const [userPayload, setUserPayload] = useState(null)
+    // const [localStream, setLocalStream] = useState(null);
     const [remoteStream, setRemoteStream] = useState(null);
     const [isCalling, setIsCalling] = useState(false);
     const videoRef = useRef(null);
@@ -48,6 +50,15 @@ export const HandleVideoCall = () => {
         windowsRef.current = window;
         handleStartCall();
     }, []);
+
+    // useEffect(() => {
+    //     if(from && to && from._id && to._id) {
+    //         console.log(`from, ---`, from, to, from && to && from._id && to._id)
+    //         setUserPayload({
+    //             from_user: from['_id'], to_user: to['_id']
+    //         })
+    //     }
+    // }, [from, to])
 
     useEffect(() => {
         const video = videoRef.current;
@@ -204,15 +215,16 @@ export const HandleVideoCall = () => {
         }
     }, [remoteStream]);
 
-    useEffect(() => {
-        if (videoRef.current && localStream) {
-            videoRef.current.srcObject = localStream;
-        }
-    }, [localStream]);
+    // useEffect(() => {
+    //     if (videoRef.current && localStream) {
+    //         videoRef.current.srcObject = localStream;
+    //     }
+    // }, [localStream]);
 
     const listenSocketEvents = () => {
         // Handle signaling events from the signaling server
         socket.on(EVENTS.VIDEO_CALL.ON_OFFER, (offer) => {
+            // cleanupFunctionV2()
             peerRef.current?.signal(offer);
         });
 
@@ -260,19 +272,25 @@ export const HandleVideoCall = () => {
             storedLocalDrawPaths.sender = receiver;
             storedLocalDrawPaths.receiver = sender;
             undoDrawing({ coordinates: sender, theme: canvasConfigs.receiver, }, { coordinates: receiver, theme: { lineWidth: canvasConfigs.sender.lineWidth, strokeStyle: canvasConfigs.sender.strokeStyle } }, false);
+        });
+
+        socket.on(EVENTS.VIDEO_CALL.ON_CLOSE, () => {
+            cleanupFunctionV2();
         })
     }
 
 
 
     const getMosuePositionOnCanvas = (event) => {
-        const clientX = event.clientX || event.touches[0].clientX;
-        const clientY = event.clientY || event.touches[0].clientY;
-        const { offsetLeft, offsetTop } = event.target;
-        const canvasX = clientX - offsetLeft;
-        const canvasY = clientY - offsetTop;
+        if((event.clientX || event.clientY) || event?.touches && event?.touches[0]) {
+            const clientX = event.clientX || event?.touches[0]?.clientX;
+            const clientY = event.clientY || event?.touches[0]?.clientY;
+            const { offsetLeft, offsetTop } = event.target;
+            const canvasX = clientX - offsetLeft;
+            const canvasY = clientY - offsetTop;
+            return { x: canvasX, y: canvasY };
+        }
 
-        return { x: canvasX, y: canvasY };
     }
 
     const clearCanvas = () => {
@@ -290,13 +308,21 @@ export const HandleVideoCall = () => {
                     video: true,
                     audio: true,
                 });
-                setLocalStream(stream);
+                // setLocalStream(stream);
+                videoRef.current.srcObject = stream;
 
-                const peer = new SimplePeer({ initiator: true, stream });
+                const peer = new SimplePeer({
+                    initiator: true,
+                    // trickle: false,
+                    stream
+                });
+
+                peerRef.current = peer;
 
                 peer.on(EVENTS.VIDEO_CALL.ON_SIGNAL, (offer) => {
                     // Send the offer to the signaling server
-                    socket.emit(EVENTS.VIDEO_CALL.ON_OFFER, offer);
+                    console.log(`userPayload --- `, fromUser._id, toUser._id);
+                    socket.emit(EVENTS.VIDEO_CALL.ON_OFFER, { offer, userInfo: { from_user: fromUser._id, to_user: toUser._id } });
                 });
 
                 peer.on(EVENTS.VIDEO_CALL.ON_STREAM, (stream) => {
@@ -312,51 +338,72 @@ export const HandleVideoCall = () => {
                     cleanupFunction();
                 });
 
-                peerRef.current = peer;
+
 
                 cleanupFunction = () => {
-                    if (peerRef.current) {
-                        peerRef.current.destroy();
-                        peerRef.current = null;
-                    }
-                    if (localStream) {
-                        localStream.getTracks().forEach((track) => track.stop());
-                        setLocalStream(null);
-                    }
-                    setRemoteStream(null);
+                    // if (peerRef.current) {
+                    //     peerRef.current.destroy();
+                    //     peerRef.current = null;
+                    // }
+                    // if (localStream) {
+                    //     localStream.getTracks().forEach((track) => track.stop());
+                    //     setLocalStream(null);
+                    // }
+
+                    // if (videoRef.current) {
+                    //     videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
+                    //     videoRef.current.srcObject.getVideoTracks().forEach((track) => track.stop());
+                    //     videoRef.current.srcObject.src = '';
+                    //     setLocalStream(null);
+                    // }
+
+                    // setRemoteStream(null);
                 };
             } catch (error) {
                 console.error('Error accessing media devices:', error);
             }
         };
-        startVideoCall();
+        startVideoCall().then(() => { });
         listenSocketEvents();
     }
 
 
-    const endVideoCall = () => {
-        if (peerRef.current) {
-            peerRef.current.destroy();
-            peerRef.current = null;
-        }
-        if (localStream) {
-            localStream.getTracks().forEach((track) => track.stop());
-            setLocalStream(null);
-        }
-        setRemoteStream(null);
-    };
+
+
 
     const sendDrawEvent = (storedEvents) => {
-        socket.emit(EVENTS.DRAW, { storedEvents });
+        socket.emit(EVENTS.DRAW, { storedEvents, userInfo: { from_user: fromUser._id, to_user: toUser._id } });
     }
 
     const sendStopDrawingEvent = () => {
-        socket.emit(EVENTS.STOP_DRAWING, {});
+        socket.emit(EVENTS.STOP_DRAWING, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
     }
 
     const sendClearCanvasEvent = () => {
-        socket.emit(EVENTS.EMIT_CLEAR_CANVAS, {});
+        socket.emit(EVENTS.EMIT_CLEAR_CANVAS, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
     }
+
+    const cleanupFunctionV2 = () => {
+        if (videoRef.current) {
+            videoRef.current.srcObject.getTracks().forEach((track) => {
+                if (track.readyState == 'live') {
+                    track.stop();
+                }
+
+            });
+            videoRef.current.srcObject.getVideoTracks().forEach((track) => track.stop());
+            videoRef.current.srcObject.src = '';
+            videoRef.current= null;
+            // setLocalStream(null);
+        }
+
+        if (peerRef.current) {
+
+            peerRef.current.destroy();
+            peerRef.current = null;
+        }
+        setRemoteStream(null);
+    };
 
     const undoDrawing = async (senderConfig, extraCoordinateConfig, removeLastCoordinate = true) => {
         const canvas = canvasRef.current;
@@ -370,15 +417,6 @@ export const HandleVideoCall = () => {
             context.strokeStyle = senderConfig.theme.strokeStyle;
             context.lineWidth = senderConfig.theme.lineWidth;
             context.lineCap = 'round';
-
-            // if (path && Array.isArray(path)) {
-            //     // context.
-            //     context.moveTo(path[0].x, path[0].y);
-            //     for (let i = 0; i < path.length; i++) {
-            //         context.lineTo(path[i].x, path[i].y);
-            //     }
-            //     context.stroke();
-            // }
             if (path && Array.isArray(path)) {
                 // context.
                 context.moveTo(path[0][0], path[0][1]);
@@ -408,7 +446,7 @@ export const HandleVideoCall = () => {
 
         // sending event to end user
         if (removeLastCoordinate) {
-            socket.emit(EVENTS.EMIT_UNDO, { sender: storedLocalDrawPaths.sender, receiver: extraCoordinateConfig.coordinates })
+            socket.emit(EVENTS.EMIT_UNDO, { sender: storedLocalDrawPaths.sender, receiver: extraCoordinateConfig.coordinates, userInfo: { from_user: fromUser._id, to_user: toUser._id } })
         }
     }
 
@@ -441,7 +479,7 @@ export const HandleVideoCall = () => {
                 )} */}
             </div>
             {/* action buttons */}
-            {/* <div className=" z-50 ml-2 absolute bottom-0 right-2 mb-4">
+            <div className=" z-50 ml-2 absolute bottom-0 right-2 mb-4">
                 <div className="flex">
                     <div className="ml-2 bg-blue-500 text-white font-bold py-2 px-2 rounded"
                         onClick={() => {
@@ -479,8 +517,19 @@ export const HandleVideoCall = () => {
 
                     </div>
                 </div>
-            </div> */}
-
+            </div>
+            <div className="call-action-buttons  z-50 ml-2 absolute bottom-0  z-50">
+                <div
+                    className="icon-btn btn-danger button-effect btn-xl is-animating"
+                    onClick={() => {
+                        socket.emit(EVENTS.VIDEO_CALL.ON_CLOSE, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
+                        cleanupFunctionV2();
+                        isClose();
+                    }}
+                >
+                    <Phone />
+                </div>
+            </div>
         </React.Fragment>
     )
 }
