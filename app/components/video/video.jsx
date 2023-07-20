@@ -191,7 +191,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
 
 
-        if (canvas) {
+        if (canvas && false) {
             canvas.addEventListener('mousedown', startDrawing);
             canvas.addEventListener('mousemove', draw);
             canvas.addEventListener('mouseup', stopDrawing);
@@ -215,11 +215,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         }
     }, [remoteStream]);
 
-    // useEffect(() => {
-    //     if (videoRef.current && localStream) {
-    //         videoRef.current.srcObject = localStream;
-    //     }
-    // }, [localStream]);
 
     const listenSocketEvents = () => {
         // Handle signaling events from the signaling server
@@ -372,7 +367,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
 
     const sendDrawEvent = (storedEvents) => {
-        socket.emit(EVENTS.DRAW, { storedEvents, userInfo: { from_user: fromUser._id, to_user: toUser._id } });
+        // socket.emit(EVENTS.DRAW, { storedEvents, userInfo: { from_user: fromUser._id, to_user: toUser._id } });
     }
 
     const sendStopDrawingEvent = () => {
@@ -452,9 +447,9 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
     return (
         <React.Fragment>
-                {!(removeVideoRef && removeVideoRef.current) ? <div className="no-user-joined">
-                    Waiting for <b>{toUser?.fullname}</b>  to join...
-                </div> : <></>}
+            {!(removeVideoRef && removeVideoRef.current) ? <div className="no-user-joined">
+                Waiting for <b>{toUser?.fullname}</b>  to join...
+            </div> : <></>}
             <div className="flex">
                 <div className="absolute z-50 bottom-0 left-21">
                     <div className="flex items-center">
