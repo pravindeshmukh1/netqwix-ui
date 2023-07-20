@@ -11,7 +11,8 @@ import {
 } from "../../app/common/constants";
 import TraineeDashboardContainer from "../../app/components/trainee/dashboard";
 import TrainerDashboardContainer from "../../app/components/trainer/dashboard";
-import Bookings from "../../app/components/bookings/index";
+import ScheduleInventory from "../../app/components/trainer/scheduleInventory";
+import Bookings from "../../app/components/bookings";
 const Dashboard = () => {
   const { sidebarActiveTab } = useAppSelector(authState);
   const [accountType, setAccountType] = useState("");
@@ -25,12 +26,16 @@ const Dashboard = () => {
       case AccountType.TRAINEE:
         return <TraineeDashboardContainer />;
       case AccountType.TRAINER:
-        return <TrainerDashboardContainer />;
+        return <TrainerDashboardContainer accountType={accountType} />;
     }
   };
 
-  const getBooking = () => {
-    return <Bookings accountType={accountType} />;
+  const getScheduledInventory = () => {
+    return accountType === AccountType.TRAINEE ? (
+      <Bookings accountType={accountType} />
+    ) : (
+      <ScheduleInventory />
+    );
   };
   const getActiveTabs = () => {
     switch (sidebarActiveTab) {
@@ -45,7 +50,7 @@ const Dashboard = () => {
         return getDashboard();
 
       case leftSideBarOptions.SCHEDULE_TRAINING:
-        return getBooking();
+        return getScheduledInventory();
       default:
         break;
     }

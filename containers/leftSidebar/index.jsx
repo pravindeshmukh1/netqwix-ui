@@ -131,10 +131,9 @@ const Index = (props) => {
                 </NavLink>
               </Tooltip>
             </li>
-            <li>
+            {/* <li>
               <Tooltip title="Status" position="top" trigger="mouseenter">
                 <NavLink
-                  // className="button-effect step1"
                   className={`icon-btn btn-light button-effect ${
                     activeTab === "status" ? "active" : ""
                   }`}
@@ -152,17 +151,11 @@ const Index = (props) => {
                         display: "block",
                       }}
                     >
-                      {/* <img
-                        className="bg-img"
-                        src="/assets/images/avtar/2.jpg"
-                        alt="Avatar"
-                        style={{ display: "none" }}
-                      /> */}
                     </div>
                   </div>
                 </NavLink>
               </Tooltip>
-            </li>
+            </li> */}
             <li>
               <Tooltip
                 title="Schedule Training"
@@ -181,7 +174,7 @@ const Index = (props) => {
                 </NavLink>
               </Tooltip>
             </li>
-            <li>
+            {/* <li>
               <Tooltip title="Chats" position="top" trigger="mouseenter">
                 <NavLink
                   className={`icon-btn btn-light button-effect ${
@@ -192,7 +185,7 @@ const Index = (props) => {
                   <i className="fa fa-comment"></i>
                 </NavLink>
               </Tooltip>
-            </li>
+            </li> */}
             <li>
               <Tooltip title="Favourite" position="top" trigger="mouseenter">
                 <NavLink
@@ -205,7 +198,7 @@ const Index = (props) => {
                 </NavLink>
               </Tooltip>
             </li>
-            <li>
+            {/* <li>
               <Tooltip title="Document" position="top" trigger="mouseenter">
                 <NavLink
                   className={`icon-btn btn-light button-effect ${
@@ -217,8 +210,8 @@ const Index = (props) => {
                   <i className="fa fa-file-text"></i>
                 </NavLink>
               </Tooltip>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <Tooltip title="Contact" position="top" trigger="mouseenter">
                 <NavLink
                   className={`icon-btn btn-light button-effect ${
@@ -230,7 +223,7 @@ const Index = (props) => {
                   <i className="fa fa-users"></i>
                 </NavLink>
               </Tooltip>
-            </li>
+            </li> */}
 
             <li>
               <div className="dot-btn dot-danger grow">

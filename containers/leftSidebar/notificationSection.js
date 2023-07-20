@@ -7,7 +7,7 @@ const NotificationSection = (props) => {
       props.ActiveTab("")
     }
     return (
-        <div className={`notification-tab dynemic-sidebar custom-scroll ${props.tab === "notification" ? "active" : ""}`} id="notification">
+        <div  className={`notification-tab submenu-width dynemic-sidebar custom-scroll ${props.tab === "notification" ? "active" : ""}`} id="notification">
             <div className="theme-title">
               <div className="media">
                 <div> 
