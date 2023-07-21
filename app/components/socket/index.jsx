@@ -10,7 +10,7 @@ export const getSocket = () => {
 
   if (token) {
     return socketio.connect (URL, {
-      query: {authorization: token, autoConnect: true},
+      query: {authorization: token, autoConnect: false},
     });
   } else {
     // return socketio.connect (URL);
