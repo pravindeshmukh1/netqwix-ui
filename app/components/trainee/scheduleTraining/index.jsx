@@ -330,7 +330,7 @@ const ScheduleTraining = () => {
               )
             )
           ) : (
-            <tr key={`no-date`} className="no-data">
+            <tr key={"no-data"} className="no-data">
               <td colSpan="6">No data available.</td>
             </tr>
           )}

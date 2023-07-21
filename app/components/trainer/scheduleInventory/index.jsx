@@ -61,7 +61,7 @@ const ScheduleInventory = () => {
             <Form>
               {values.map(({ day, slots }, parentIndex) => {
                 return (
-                  <div key={`schedule-inventory${parentIndex}`}>
+                  <div key={`schedule-inventory-${parentIndex}`}>
                     <div key={parentIndex} className="row my-4">
                       <div className="col-2" />
                       <div className="col-2 text-capitalize">
@@ -73,7 +73,10 @@ const ScheduleInventory = () => {
                             <div className="col-8">
                               {slots.map((time, slotIndex) => {
                                 return (
-                                  <div key={slotIndex} className="row mb-3">
+                                  <div
+                                    key={`${slotIndex}-key`}
+                                    className="row mb-3"
+                                  >
                                     <div className="col-4">
                                       {" "}
                                       <TimePicker
