@@ -38,7 +38,6 @@ export const getScheduleInventoryDataAsync = createAsyncThunk(
   async () => {
     try {
       const response = await getScheduleInventoryData();
-      console.log("response", response);
       return response;
     } catch (err) {
       throw err;
