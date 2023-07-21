@@ -50,7 +50,6 @@ const Index = (props) => {
   const [opentour, setopentour] = useState(true);
   const [activeTab, setActiveTab] = useState(sidebarActiveTab);
   const [mode, setMode] = useState(false);
-
   const router = useRouter();
   const [size, setSize] = useState([0, 0]);
   const [accountType, setAccountType] = useState("");

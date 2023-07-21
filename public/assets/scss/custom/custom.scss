@@ -106,8 +106,10 @@
 
 .no-user-joined {
     margin: auto;
-    top:30px;
+    top: 30px;
     font-size: 20px;
-    // font-weight: 200;
     z-index: 1000;
+    background: white;
+    height: 40vh;
+    padding: 20px;
 }

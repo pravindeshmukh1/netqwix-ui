@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from 'next/router'
 
 import {
@@ -12,6 +12,7 @@ import { AccountType, BookedSession } from "../../common/constants";
 import { Utils } from "../../../utils/utils";
 import Modal from "../../common/modal";
 import StartMeeting from "./start";
+import { SocketContext } from "../socket";
 
 const Bookings = ({ accountType = null }) => {
   const router = useRouter()
@@ -26,10 +27,16 @@ const Bookings = ({ accountType = null }) => {
     id: null,
     isOpenModal: false,
   });
+  const socket = useContext(SocketContext);
+
   const dispatch = useAppDispatch();
   const { scheduledMeetingDetails } = useAppSelector(bookingsState);
   useEffect(() => {
     dispatch(getScheduledMeetingDetailsAsync());
+
+    if(!socket.connected) {
+        socket.connect();
+    }
   }, []);
 
   useEffect(() => {

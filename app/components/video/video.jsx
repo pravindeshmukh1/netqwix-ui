@@ -17,6 +17,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     const [userPayload, setUserPayload] = useState(null)
     // const [localStream, setLocalStream] = useState(null);
     const [remoteStream, setRemoteStream] = useState(null);
+    const [displayMsg, setDisplayMsg] = useState({showMsg: false, msg: ''});
     const [isCalling, setIsCalling] = useState(false);
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
@@ -270,6 +271,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         });
 
         socket.on(EVENTS.VIDEO_CALL.ON_CLOSE, () => {
+            setDisplayMsg({ showMsg: true, msg: `${toUser?.fullname} left the meeting, redirecting back to home screen in 5 seconds...` });
             cleanupFunctionV2();
         })
     }
@@ -296,6 +298,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     }
 
     const handleStartCall = () => {
+        console.log(`handleStartCall ---`)
         let cleanupFunction;
         const startVideoCall = async () => {
             try {
@@ -304,6 +307,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     audio: true,
                 });
                 // setLocalStream(stream);
+                setDisplayMsg({ showMsg: true, msg: `Waiting for ${toUser?.fullname}  to join...`});
                 videoRef.current.srcObject = stream;
 
                 const peer = new SimplePeer({
@@ -321,6 +325,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 });
 
                 peer.on(EVENTS.VIDEO_CALL.ON_STREAM, (stream) => {
+                    setDisplayMsg({ showMsg: false, msg: '' });
                     setRemoteStream(stream);
                 });
 
@@ -392,6 +397,19 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             // setLocalStream(null);
         }
 
+        if (removeVideoRef.current && removeVideoRef.current.srcObject) {
+            removeVideoRef.current.srcObject.getTracks().forEach((track) => {
+                if (track.readyState == 'live') {
+                    track.stop();
+                }
+
+            });
+            removeVideoRef.current.srcObject.getVideoTracks().forEach((track) => track.stop());
+            removeVideoRef.current.srcObject.src = '';
+            removeVideoRef.current = null;
+            // setLocalStream(null);
+        }
+
         if (peerRef.current) {
 
             peerRef.current.destroy();
@@ -447,8 +465,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
     return (
         <React.Fragment>
-            {!(removeVideoRef) ? <div className="no-user-joined">
-                Waiting for <b>{toUser?.fullname}</b>  to join...
+            {(displayMsg.showMsg) ? <div className="no-user-joined">
+                {displayMsg.msg}
             </div> : <></>}
             <div className="flex">
                 <div className="absolute z-50 bottom-0 left-21">

@@ -12,7 +12,7 @@ const StartMeeting = ({isClose, accountType, traineeInfo, trainerInfo}) => {
     setTimeout (() => {
       // closing video call window in 5 sec
       isClose ();
-    }, 5000);
+    }, 3000);
   });
 
   return (
