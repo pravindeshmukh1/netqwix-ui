@@ -10,10 +10,11 @@ export const getSocket = () => {
 
   if (token) {
     return socketio.connect (URL, {
-      query: {authorization: token},
+      query: {authorization: token, autoConnect: true},
     });
+  } else {
+    return socketio.connect (URL);
   }
-  return socketio.connect (URL);
 };
 
 export const SocketContext = createContext();
