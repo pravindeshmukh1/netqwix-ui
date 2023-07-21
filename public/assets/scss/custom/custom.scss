@@ -1,115 +1,115 @@
 .react-strap-modal-full {
-    height: 100% !important;
-    max-width: 100% !important;
-    margin-top: 0% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  margin-top: 0% !important;
 
-    .modal-content {
-        height: 100vh !important;
-    }
-
+  .modal-content {
+    height: 100vh !important;
+  }
 }
-
-
 
 // call view css
 
+::placeholder {
+  color: gray !important;
+  opacity: 1;
+}
+
+:-ms-input-placeholder {
+  color: gray !important;
+}
+
+::-ms-input-placeholder {
+  color: gray !important;
+}
 
 .full-height {
-    height: vh !important;
+  height: vh !important;
 }
-
 
 .call-action-buttons {
-    position: absolute !important;
-    bottom: 0;
-    left: 50%
+  position: absolute !important;
+  bottom: 0;
+  left: 50%;
 }
 
-
-
 .video-canvas {
-    /* height: 480px !important;
+  /* height: 480px !important;
     width: 640px!important; */
 }
 
 .canvas-container {
-    /* width: 100% !important; */
+  /* width: 100% !important; */
 }
 
-
 .bg-video {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .canvas-print {
-    z-index: 1 !important;
-    // border: 2px solid red;
+  z-index: 1 !important;
+  // border: 2px solid red;
 }
-
 
 #end-user-video {
-    height: 250px;
-    width: 250px;
+  height: 250px;
+  width: 250px;
 }
-
-
 
 .absolute {
-    position: absolute;
+  position: absolute;
 }
 
-
 .bottom-0 {
-    bottom: 0 !important;
+  bottom: 0 !important;
 }
 
 .right-2 {
-    right: 2px !important;
+  right: 2px !important;
 }
 
 .z-50 {
-    z-index: 5000;
+  z-index: 5000;
 }
 
 .rounded {
-    border-radius: 20px;
+  border-radius: 20px;
 }
 
 .flex {
-    display: flex;
+  display: flex;
 }
 
 .bottom-0 {
-    bottom: 0px;
+  bottom: 0px;
 }
 
 .left-21 {
-    left: 21px
+  left: 21px;
 }
 
 .items-center {
-    align-items: center;
+  align-items: center;
 }
 
 //   for small screen
 @media only screen and (max-width: 600px) {
-    #end-user-video {
-        height: 150px;
-        width: 150px;
-    }
+  #end-user-video {
+    height: 150px;
+    width: 150px;
+  }
 }
 
-
 .no-user-joined {
-    margin: auto;
-    top: 30px;
-    font-size: 20px;
-    z-index: 1000;
-    background: white;
-    height: 40vh;
-    padding: 20px;
+  margin: auto;
+  top: 30px;
+  font-size: 20px;
+  z-index: 1000;
+  background: white;
+  height: 40vh;
+  padding: 20px;
 }
