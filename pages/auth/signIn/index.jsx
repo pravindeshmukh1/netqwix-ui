@@ -93,7 +93,7 @@ const Auth_SignIn = () => {
                         onChange={(e) => handleChange(e)}
                         name="email"
                         type="email"
-                        placeholder="enter email"
+                        placeholder="Enter email"
                         style={{ placeholder: "red" }}
                       />
                     </div>
@@ -121,7 +121,7 @@ const Auth_SignIn = () => {
                         onChange={(e) => handleChange(e)}
                         name="password"
                         type="password"
-                        placeholder="*******"
+                        placeholder="Enter password"
                       />
                     </div>
                     <div className="form-group">

@@ -59,14 +59,14 @@ export default function MyAppComponent({ Component, pageProps }) {
         <Provider store={store}>
           <AuthGuard>
             {/* adding socket as context hook */}
-          <SocketContext.Provider  value={getSocket()}> 
+          {/* <SocketContext.Provider  value={getSocket()}>  */}
             {loader && (
               // <div className="chitchat-loader">
               //   <img src="/assets/images/logo/logo_big.png" alt="" />
               //   <h3>Simple, secure messaging for fast connect to world..!</h3>
               // </div>
               <div className="chitchat-loader">
-                <h3>Loading..!</h3>
+                <h3>Loading...</h3>
               </div>
             )}
             <div>
@@ -77,7 +77,7 @@ export default function MyAppComponent({ Component, pageProps }) {
               </CustomizerContextProvider>
               <ToastContainer />
             </div>
-            </SocketContext.Provider>
+            {/* </SocketContext.Provider> */}
           </AuthGuard>
         </Provider>
       </GoogleOAuthProvider>
