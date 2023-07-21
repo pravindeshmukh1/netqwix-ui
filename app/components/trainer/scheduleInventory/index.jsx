@@ -61,7 +61,7 @@ const ScheduleInventory = () => {
             <Form>
               {values.map(({ day, slots }, parentIndex) => {
                 return (
-                  <>
+                  <div key={`schedule-inventory${parentIndex}`}>
                     <div key={parentIndex} className="row my-4">
                       <div className="col-2" />
                       <div className="col-2 text-capitalize">
@@ -70,173 +70,169 @@ const ScheduleInventory = () => {
                       <FieldArray name="slots">
                         {({ remove, push }) => {
                           return (
-                            <>
-                              <div className="col-8">
-                                {slots.map((time, slotIndex) => {
-                                  return (
-                                    <div key={slotIndex} className="row mb-3">
-                                      <div className="col-4">
-                                        {" "}
-                                        <TimePicker
-                                          name="startTime"
-                                          placeholder="Select time"
-                                          defaultValue={
-                                            time.start_time &&
-                                            Utils.getFormattedTime(
-                                              time.start_time
-                                            )
-                                          }
-                                          showSecond={false}
-                                          minuteStep={15}
-                                          use12Hours
-                                          onChange={(value) => {
-                                            const formattedDate = value
-                                              ? Utils.getFormattedDateDb(value)
-                                              : "";
-                                            const result = values[
-                                              parentIndex
-                                            ].slots.map((slot, index) => {
-                                              if (index === slotIndex) {
-                                                return {
-                                                  ...slot,
-                                                  start_time: formattedDate,
-                                                };
-                                              } else {
-                                                return slot;
-                                              }
-                                            });
-
-                                            const updatedValues = values.map(
-                                              (value, index) => {
-                                                if (index === parentIndex) {
-                                                  return {
-                                                    ...value,
-                                                    slots: result,
-                                                  };
-                                                } else {
-                                                  return value;
-                                                }
-                                              }
-                                            );
-                                            setValues(updatedValues);
-                                          }}
-                                        />
-                                      </div>
-                                      <div className="col-4">
-                                        {" "}
-                                        <TimePicker
-                                          placeholder="Select time"
-                                          defaultValue={
-                                            time.end_time &&
-                                            Utils.getFormattedTime(
-                                              time.end_time
-                                            )
-                                          }
-                                          showSecond={false}
-                                          minuteStep={15}
-                                          use12Hours
-                                          onChange={(value) => {
-                                            const formattedDate = value
-                                              ? Utils.getFormattedDateDb(value)
-                                              : "";
-                                            const result = values[
-                                              parentIndex
-                                            ].slots.map((slot, index) => {
-                                              if (index === slotIndex) {
-                                                return {
-                                                  ...slot,
-                                                  end_time: formattedDate,
-                                                };
-                                              } else {
-                                                return slot;
-                                              }
-                                            });
-
-                                            const updatedValues = values.map(
-                                              (value, index) => {
-                                                if (index === parentIndex) {
-                                                  return {
-                                                    ...value,
-                                                    slots: result,
-                                                  };
-                                                } else {
-                                                  return value;
-                                                }
-                                              }
-                                            );
-                                            setValues(updatedValues);
-                                          }}
-                                        />
-                                      </div>
-                                      <div className="col-2">
-                                        {slots.length - 1 === slotIndex && (
-                                          <button
-                                            type="button"
-                                            className="btn btn-circle bg-primary text-white"
-                                            onClick={() => {
-                                              const addSlot = [
-                                                ...values[parentIndex].slots,
-                                                emptySlot,
-                                              ];
-                                              const updatedObj = {
-                                                ...values[parentIndex],
-                                                slots: addSlot,
+                            <div className="col-8">
+                              {slots.map((time, slotIndex) => {
+                                return (
+                                  <div key={slotIndex} className="row mb-3">
+                                    <div className="col-4">
+                                      {" "}
+                                      <TimePicker
+                                        name="startTime"
+                                        placeholder="Select time"
+                                        defaultValue={
+                                          time.start_time &&
+                                          Utils.getFormattedTime(
+                                            time.start_time
+                                          )
+                                        }
+                                        showSecond={false}
+                                        minuteStep={15}
+                                        use12Hours
+                                        onChange={(value) => {
+                                          const formattedDate = value
+                                            ? Utils.getFormattedDateDb(value)
+                                            : "";
+                                          const result = values[
+                                            parentIndex
+                                          ].slots.map((slot, index) => {
+                                            if (index === slotIndex) {
+                                              return {
+                                                ...slot,
+                                                start_time: formattedDate,
                                               };
-                                              const updatedValues = values.map(
-                                                (value, index) => {
-                                                  if (index === parentIndex) {
-                                                    return (value = updatedObj);
-                                                  } else {
-                                                    return value;
-                                                  }
-                                                }
-                                              );
-                                              setValues(updatedValues);
-                                            }}
-                                          >
-                                            <i className="fa fa-plus"></i>
-                                          </button>
-                                        )}
-                                        {slots.length - 1 !== slotIndex && (
-                                          <button
-                                            type="button"
-                                            className="btn btn-circle bg-primary text-white"
-                                            onClick={() => {
-                                              const updatedDaySlots = values[
-                                                parentIndex
-                                              ].slots.filter((slot, index) => {
-                                                return index !== slotIndex;
-                                              });
-                                              const updatedValues = values.map(
-                                                (value, index) => {
-                                                  if (index === parentIndex) {
-                                                    return {
-                                                      ...value,
-                                                      slots: updatedDaySlots,
-                                                    };
-                                                  } else {
-                                                    return value;
-                                                  }
-                                                }
-                                              );
-                                              setValues(updatedValues);
-                                            }}
-                                          >
-                                            <i className="fa fa-minus"></i>
-                                          </button>
-                                        )}
-                                      </div>
+                                            } else {
+                                              return slot;
+                                            }
+                                          });
+
+                                          const updatedValues = values.map(
+                                            (value, index) => {
+                                              if (index === parentIndex) {
+                                                return {
+                                                  ...value,
+                                                  slots: result,
+                                                };
+                                              } else {
+                                                return value;
+                                              }
+                                            }
+                                          );
+                                          setValues(updatedValues);
+                                        }}
+                                      />
                                     </div>
-                                  );
-                                })}
-                              </div>
-                            </>
+                                    <div className="col-4">
+                                      {" "}
+                                      <TimePicker
+                                        placeholder="Select time"
+                                        defaultValue={
+                                          time.end_time &&
+                                          Utils.getFormattedTime(time.end_time)
+                                        }
+                                        showSecond={false}
+                                        minuteStep={15}
+                                        use12Hours
+                                        onChange={(value) => {
+                                          const formattedDate = value
+                                            ? Utils.getFormattedDateDb(value)
+                                            : "";
+                                          const result = values[
+                                            parentIndex
+                                          ].slots.map((slot, index) => {
+                                            if (index === slotIndex) {
+                                              return {
+                                                ...slot,
+                                                end_time: formattedDate,
+                                              };
+                                            } else {
+                                              return slot;
+                                            }
+                                          });
+
+                                          const updatedValues = values.map(
+                                            (value, index) => {
+                                              if (index === parentIndex) {
+                                                return {
+                                                  ...value,
+                                                  slots: result,
+                                                };
+                                              } else {
+                                                return value;
+                                              }
+                                            }
+                                          );
+                                          setValues(updatedValues);
+                                        }}
+                                      />
+                                    </div>
+                                    <div className="col-2">
+                                      {slots.length - 1 === slotIndex && (
+                                        <button
+                                          type="button"
+                                          className="btn btn-circle bg-primary text-white"
+                                          onClick={() => {
+                                            const addSlot = [
+                                              ...values[parentIndex].slots,
+                                              emptySlot,
+                                            ];
+                                            const updatedObj = {
+                                              ...values[parentIndex],
+                                              slots: addSlot,
+                                            };
+                                            const updatedValues = values.map(
+                                              (value, index) => {
+                                                if (index === parentIndex) {
+                                                  return (value = updatedObj);
+                                                } else {
+                                                  return value;
+                                                }
+                                              }
+                                            );
+                                            setValues(updatedValues);
+                                          }}
+                                        >
+                                          <i className="fa fa-plus"></i>
+                                        </button>
+                                      )}
+                                      {slots.length - 1 !== slotIndex && (
+                                        <button
+                                          type="button"
+                                          className="btn btn-circle bg-primary text-white"
+                                          onClick={() => {
+                                            const updatedDaySlots = values[
+                                              parentIndex
+                                            ].slots.filter((slot, index) => {
+                                              return index !== slotIndex;
+                                            });
+                                            const updatedValues = values.map(
+                                              (value, index) => {
+                                                if (index === parentIndex) {
+                                                  return {
+                                                    ...value,
+                                                    slots: updatedDaySlots,
+                                                  };
+                                                } else {
+                                                  return value;
+                                                }
+                                              }
+                                            );
+                                            setValues(updatedValues);
+                                          }}
+                                        >
+                                          <i className="fa fa-minus"></i>
+                                        </button>
+                                      )}
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
                           );
                         }}
                       </FieldArray>
                     </div>
                     <hr className="divider" />
-                  </>
+                  </div>
                 );
               })}
               {scheduleInventoryData.length && (
