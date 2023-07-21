@@ -61,11 +61,12 @@ export default function MyAppComponent({ Component, pageProps }) {
             {/* adding socket as context hook */}
           <SocketContext.Provider  value={getSocket()}> 
             {loader && (
+              // <div className="chitchat-loader">
+              //   <img src="/assets/images/logo/logo_big.png" alt="" />
+              //   <h3>Simple, secure messaging for fast connect to world..!</h3>
+              // </div>
               <div className="chitchat-loader">
-                <div>
-                  <img src="/assets/images/logo/logo_big.png" alt="" />
-                  <h3>Simple, secure messaging for fast connect to world..!</h3>
-                </div>
+                <h3>Loading..!</h3>
               </div>
             )}
             <div>

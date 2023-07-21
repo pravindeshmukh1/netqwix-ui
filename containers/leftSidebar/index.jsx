@@ -324,10 +324,10 @@ const Index = (props) => {
       {activeTab !== leftSideBarOptions.HOME &&
         activeTab !== leftSideBarOptions.SCHEDULE_TRAINING && (
           <aside
-            className={`chitchat-left-sidebar left-disp ${
+            className={`left-disp ${
               activeTab === "todo" || activeTab === "reminder"
                 ? `app-sidebar active chitchat-left-sidebar-submenu`
-                : null
+                : `chitchat-left-sidebar left-disp`
             }`}
           >
             <div className="apps">
