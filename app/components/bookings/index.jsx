@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useRouter } from 'next/router'
+
 import {
   bookingsState,
   getScheduledMeetingDetailsAsync,
@@ -12,6 +14,8 @@ import Modal from "../../common/modal";
 import StartMeeting from "./start";
 
 const Bookings = ({ accountType = null }) => {
+  const router = useRouter()
+
   const [bookedSession, setBookedSession] = useState({
     id: "",
     booked_status: "",
@@ -276,7 +280,7 @@ const Bookings = ({ accountType = null }) => {
             accountType = {accountType}
             traineeInfo={startMeeting.traineeInfo}
             trainerInfo={startMeeting.trainerInfo}
-            isClose={() =>
+            isClose={() => {
               setStartMeeting({
                 ...startMeeting,
                 id: null,
@@ -284,6 +288,8 @@ const Bookings = ({ accountType = null }) => {
                 traineeInfo: null,
                 trainerInfo: null,
               })
+              router.reload(window.location.pathname);
+            }
             }
           />
         }

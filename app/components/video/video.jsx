@@ -447,7 +447,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
     return (
         <React.Fragment>
-            {!(removeVideoRef && removeVideoRef.current) ? <div className="no-user-joined">
+            {!(removeVideoRef) ? <div className="no-user-joined">
                 Waiting for <b>{toUser?.fullname}</b>  to join...
             </div> : <></>}
             <div className="flex">
