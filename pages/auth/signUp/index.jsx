@@ -160,15 +160,22 @@ const Auth_SignUp = (props) => {
                 <div className="login-content">
                   <div className="login-content-header">
                     <Link href="/landing">
-                      <img
+                      {/* <img
                         className="image-fluid"
                         src="/assets/images/logo/landing-logo.png"
+                        alt="images"
+                      /> */}
+                      <img
+                        className="image-fluid"
+                        src="/assets/images/logo/logo.png"
                         alt="images"
                       />
                     </Link>
                   </div>
-                  <h3>Hello Everyone , We are Chitchat</h3>
-                  <h4>Welcome to chitchat please Register to your account.</h4>
+                  {/* <h3>Hello Everyone , We are Chitchat</h3>
+                  <h4>Welcome to chitchat please Register to your account.</h4> */}
+                  <h3>Hello Everyone</h3>
+                  <h4>Please register to your account.</h4>
                   <div>
                     <Stepper steps={signUpSteps} activeStep={activeStep} />
                   </div>

@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useRouter } from 'next/router'
+
 import {
   bookingsState,
   getScheduledMeetingDetailsAsync,
@@ -6,21 +8,35 @@ import {
 } from "../common/common.slice";
 
 import { useAppSelector, useAppDispatch } from "../../store";
-import {
-  AccountType,
-  BookedSession,
-  BookedSessionMessage,
-} from "../../common/constants";
+import { AccountType, BookedSession } from "../../common/constants";
 import { Utils } from "../../../utils/utils";
+import Modal from "../../common/modal";
+import StartMeeting from "./start";
+import { SocketContext } from "../socket";
+
 const Bookings = ({ accountType = null }) => {
+  const router = useRouter()
+
   const [bookedSession, setBookedSession] = useState({
     id: "",
     booked_status: "",
   });
+  const [startMeeting, setStartMeeting] = useState({
+    trainerInfo: null,
+    traineeInfo: null,
+    id: null,
+    isOpenModal: false,
+  });
+  const socket = useContext(SocketContext);
+
   const dispatch = useAppDispatch();
   const { scheduledMeetingDetails } = useAppSelector(bookingsState);
   useEffect(() => {
     dispatch(getScheduledMeetingDetailsAsync());
+
+    if(!socket.connected) {
+        socket.connect();
+    }
   }, []);
 
   useEffect(() => {
@@ -33,7 +49,9 @@ const Bookings = ({ accountType = null }) => {
     }
   }, [bookedSession]);
 
-  const handleBookedScheduleTraining = (status, _id) => {
+  const toggle = () => setStartMeeting(!startMeeting);
+
+  const handleBookedScheduleTraining = (status, _id, trainee_info, trainer_info) => {
     if (accountType === AccountType.TRAINEE) {
       return (
         <>
@@ -75,19 +93,41 @@ const Bookings = ({ accountType = null }) => {
             <>
               {!status === BookedSession.canceled ||
                 (status === BookedSession.confirmed && (
-                  <button
-                    className={`btn btn-primary button-effect btn-sm`}
-                    type="button"
-                    style={{
-                      cursor:
-                        status === BookedSession.confirmed
-                          ? "not-allowed"
-                          : "pointer",
-                    }}
-                    disabled={status === BookedSession.confirmed}
-                  >
-                    Confirmed
-                  </button>
+                  <>
+                    <button
+                      className={`btn btn-primary button-effect btn-sm`}
+                      type="button"
+                      style={{
+                        cursor:
+                          status === BookedSession.confirmed
+                            ? "not-allowed"
+                            : "pointer",
+                      }}
+                      disabled={status === BookedSession.confirmed}
+                    >
+                      Confirmed
+                    </button>
+                    <button
+                      className={`btn btn-primary button-effect btn-sm ml-4`}
+                      type="button"
+                      disabled={status === BookedSession.confirmed ? false : true}
+                      style={{
+                        cursor:
+                          status === BookedSession.booked ? "not-allowed" : "pointer",
+                      }}
+                      onClick={() => {
+                        setStartMeeting({
+                          ...startMeeting,
+                          id: _id,
+                          isOpenModal: true,
+                          traineeInfo: trainee_info,
+                          trainerInfo: trainer_info,
+                        });
+                      }}
+                    >
+                      Start
+                    </button>
+                  </>
                 ))}
             </>
           )}
@@ -133,6 +173,15 @@ const Bookings = ({ accountType = null }) => {
                 style={{
                   cursor:
                     status === BookedSession.booked ? "not-allowed" : "pointer",
+                }}
+                onClick={() => {
+                  setStartMeeting({
+                    ...startMeeting,
+                    id: _id,
+                    isOpenModal: true,
+                    traineeInfo: trainee_info,
+                    trainerInfo: trainer_info,
+                  });
                 }}
               >
                 Start
@@ -215,13 +264,44 @@ const Bookings = ({ accountType = null }) => {
                   </div>
                 </div>
                 <div className="card-footer px-5 pb-3 d-flex justify-content-end">
-                  {handleBookedScheduleTraining(data.status, _id)}
+                  {handleBookedScheduleTraining(data.status, _id, trainee_info,
+                    trainer_info,
+                  )}
                 </div>
               </div>
             );
           })
         )}
       </div>
+
+
+      {/* calling popup */}
+      <Modal
+        key={"startMeeting"}
+        toggle={toggle}
+        allowFullWidth={true}
+        isOpen={startMeeting.isOpenModal}
+        height="100vh"
+        element={
+          <StartMeeting
+            accountType = {accountType}
+            traineeInfo={startMeeting.traineeInfo}
+            trainerInfo={startMeeting.trainerInfo}
+            isClose={() => {
+              setStartMeeting({
+                ...startMeeting,
+                id: null,
+                isOpenModal: false,
+                traineeInfo: null,
+                trainerInfo: null,
+              })
+              router.reload(window.location.pathname);
+            }
+            }
+          />
+        }
+      />
+
     </>
   );
 };

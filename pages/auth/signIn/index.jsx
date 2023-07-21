@@ -56,21 +56,28 @@ const Auth_SignIn = () => {
                 <div className="login-content">
                   <div className="login-content-header">
                     <Link href="/landing">
-                      <img
+                      {/* <img
                         className="image-fluid"
                         src="/assets/images/logo/landing-logo.png"
+                        alt="images"
+                      /> */}
+                      <img
+                        className="image-fluid"
+                        src="/assets/images/logo/logo.png"
                         alt="images"
                       />
                     </Link>
                   </div>
-                  <h3>Hello Everyone , We are Chitchat</h3>
-                  <h4>Welcome to chitchat please login to your account.</h4>
+                  {/* <h3>Hello Everyone , We are Chitchat</h3>
+                  <h4>Welcome to chitchat please login to your account.</h4> */}
+                  <h3>Hello Everyone</h3>
+                  <h4>Please login to your account.</h4>
                   <form className="form1">
                     <div className="form-group">
                       <label className="col-form-label" htmlFor="inputEmail3">
                         Email Address
                       </label>
-                      <input
+                      {/* <input
                         className="form-control"
                         id="inputEmail3"
                         value={credential.email}
@@ -78,6 +85,16 @@ const Auth_SignIn = () => {
                         name="email"
                         type="email"
                         placeholder="Demo@123gmail.com"
+                      /> */}
+                      <input
+                        className="form-control"
+                        id="inputEmail3"
+                        value={credential.email}
+                        onChange={(e) => handleChange(e)}
+                        name="email"
+                        type="email"
+                        placeholder="Enter email"
+                        style={{ placeholder: "red" }}
                       />
                     </div>
                     <div className="form-group">
@@ -88,7 +105,7 @@ const Auth_SignIn = () => {
                         Password
                       </label>
                       <span> </span>
-                      <input
+                      {/* <input
                         className="form-control"
                         id="inputPassword3"
                         defaultValue={credential.password}
@@ -96,6 +113,15 @@ const Auth_SignIn = () => {
                         name="password"
                         type="password"
                         placeholder="*******"
+                      /> */}
+                      <input
+                        className="form-control"
+                        id="inputPassword3"
+                        defaultValue={credential.password}
+                        onChange={(e) => handleChange(e)}
+                        name="password"
+                        type="password"
+                        placeholder="Enter password"
                       />
                     </div>
                     <div className="form-group">

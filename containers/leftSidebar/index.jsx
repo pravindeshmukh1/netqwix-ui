@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useContext, useEffect, useLayoutEffect } from "react";
 import FevoriteSection from "./fevoriteSection";
 import DocumentSection from "./documentSection";
 import ContactListSection from "./contactListSection";
@@ -19,6 +19,7 @@ import {
   LOCAL_STORAGE_KEYS,
   leftSideBarOptions,
 } from "../../app/common/constants";
+import { SocketContext } from "../../app/components/socket";
 import TodoSection from "../rightSidebar/todoSection";
 import ReminderSection from "../rightSidebar/reminderSection";
 
@@ -43,6 +44,7 @@ const steps = [
 
 const Index = (props) => {
   // const width = useWindowSize();
+  const socket = useContext(SocketContext);
   const { sidebarActiveTab } = useAppSelector(authState);
   const [width, setWidth] = useState(0);
   const [opentour, setopentour] = useState(true);
@@ -104,6 +106,7 @@ const Index = (props) => {
   };
 
   const Logout = () => {
+    socket.disconnect();
     localStorage.clear();
     router.push("/auth/signIn");
     dispatch(authAction.updateIsUserLoggedIn());
