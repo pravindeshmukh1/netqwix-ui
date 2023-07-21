@@ -13,7 +13,7 @@ export const getSocket = () => {
       query: {authorization: token, autoConnect: false},
     });
   } else {
-    // return socketio.connect (URL);
+    return socketio.connect (URL);
   }
 };
 
