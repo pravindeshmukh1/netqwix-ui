@@ -114,34 +114,30 @@
   padding: 20px;
 }
 
-
-
-
 .videoBg {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 105%;
+  height: 100vh !important;
 }
 
 @media (min-aspect-ratio: 16/9) {
   .videoBg {
     width: 100%;
-    height: 105%;
-    padding: 0
+    height: 100vh !important;
+    padding: 0;
   }
 }
 
 @media (max-aspect-ratio: 16/9) {
   .videoBg {
-
     width: 100%;
-    height: 105%;
-    padding: 0
+    height: 100vh !important;
+    padding: 0;
   }
 }
 
 video {
-  object-fit: fill
+  object-fit: fill;
 }

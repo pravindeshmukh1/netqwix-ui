@@ -140,7 +140,7 @@ const ScheduleTraining = () => {
 
     const weekCols = weeks.map((week, index) => {
       return {
-        title: week,
+        title: Utils.capitalizeFirstLetter(week),
         // a key using which we'll show records
         dataIndex: `${week.split(" ")[0].toLowerCase()}`,
         key: `week-col-${index}`,
