@@ -42,7 +42,7 @@ const ScheduleInventory = () => {
     <div className="m-25 schedule-inventory">
       <div id="header" className="header">
         <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
-          Schedule Inventory
+          Schedule Slots
         </h3>
       </div>
       <div id="slots" className="px-5 pt-3 m-25">
@@ -107,7 +107,7 @@ const ScheduleInventory = () => {
                                               return slot;
                                             }
                                           });
-
+                                          console.log("result", result);
                                           const updatedValues = values.map(
                                             (value, index) => {
                                               if (index === parentIndex) {
@@ -151,7 +151,6 @@ const ScheduleInventory = () => {
                                               return slot;
                                             }
                                           });
-
                                           const updatedValues = values.map(
                                             (value, index) => {
                                               if (index === parentIndex) {
