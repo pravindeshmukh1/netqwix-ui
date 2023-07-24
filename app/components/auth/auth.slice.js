@@ -11,6 +11,7 @@ const initialState = {
   status: "idle",
   userAccType: "",
   isUserLoggedIn: false,
+  authToken: '',
   showGoogleRegistrationForm: {
     isFromGoogle: false,
     email: null,
@@ -94,6 +95,7 @@ export const authSlice = createSlice({
         state.status = "rejected";
       })
       .addCase(loginAsync.pending, (state) => {
+        state.authToken = '';
         state.status = "loading";
       })
       .addCase(loginAsync.rejected, (state) => {
@@ -103,6 +105,7 @@ export const authSlice = createSlice({
         state.status = "fulfilled";
         state.isUserLoggedIn = true;
         if (action.payload) {
+          state.authToken = action.payload.result.data.access_token;
           setupLogin(action);
         }
         state.sidebarActiveTab = leftSideBarOptions.HOME;

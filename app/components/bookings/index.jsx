@@ -34,9 +34,6 @@ const Bookings = ({ accountType = null }) => {
   useEffect(() => {
     dispatch(getScheduledMeetingDetailsAsync());
 
-    if(!socket.connected) {
-        socket.connect();
-    }
   }, []);
 
   useEffect(() => {
@@ -295,7 +292,7 @@ const Bookings = ({ accountType = null }) => {
                 traineeInfo: null,
                 trainerInfo: null,
               })
-              router.reload(window.location.pathname);
+              // router.reload(window.location.pathname);
             }
             }
           />
