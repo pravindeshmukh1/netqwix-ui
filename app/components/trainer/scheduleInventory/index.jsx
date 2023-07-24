@@ -39,13 +39,13 @@ const ScheduleInventory = () => {
   };
 
   return (
-    <div>
-      <div className="m-25 header">
+    <div className="m-25 schedule-inventory">
+      <div id="header" className="header">
         <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
           Schedule Inventory
         </h3>
       </div>
-      <div className="px-5 pt-3 m-25">
+      <div id="slots" className="px-5 pt-3 m-25">
         <Formik
           initialValues={scheduleInventoryData}
           enableReinitialize
@@ -241,7 +241,10 @@ const ScheduleInventory = () => {
               {scheduleInventoryData.length && (
                 <div className="row mt-5 justify-content-end">
                   <div className="col-12"></div>
-                  <button type="submit" className="btn btn-primary">
+                  <button
+                    type="submit"
+                    className="submit-schedule-inventory btn btn-primary"
+                  >
                     Submit Your Scheduling
                   </button>
                 </div>
