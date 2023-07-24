@@ -4,7 +4,7 @@ import SimplePeer from 'simple-peer';
 import Image from 'next/image'
 import { EVENTS } from '../../../helpers/events';
 import { SocketContext } from "../socket";
-import { Phone } from "react-feather";
+import { MicOff, Pause, Phone } from "react-feather";
 
 let storedLocalDrawPaths = { sender: [], receiver: [] };
 let XAndYCoordinates = [];
@@ -17,6 +17,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     const [userPayload, setUserPayload] = useState(null)
     // const [localStream, setLocalStream] = useState(null);
     const [remoteStream, setRemoteStream] = useState(null);
+    const [isMuted, setIsMuted] = useState(false);
     const [displayMsg, setDisplayMsg] = useState({ showMsg: false, msg: '' });
     const [isCalling, setIsCalling] = useState(false);
     const videoRef = useRef(null);
@@ -234,6 +235,14 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
         socket.on(EVENTS.ON_CLEAR_CANVAS, () => {
             clearCanvas();
+        })
+
+        socket.on(EVENTS.VIDEO_CALL.MUTE_ME, ( { muteStatus }) => {
+            console.log(`is muted --- `, muteStatus);
+            if(removeVideoRef.current) {
+                removeVideoRef.current.srcObject.getTracks()[0].enabled = muteStatus;
+            }
+
         })
 
         socket.on(EVENTS.EMIT_DRAWING_CORDS, ({ storedEvents }) => {
@@ -538,9 +547,9 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     </div>
                 </div>
             </div> */}
-            <div className="call-action-buttons  z-50 ml-2 absolute bottom-0  z-50">
+            <div className="call-action-buttons  z-50 ml-2  absolute bottom-0  z-50">
                 <div
-                    className="icon-btn btn-danger button-effect btn-xl is-animating"
+                    className="icon-btn btn-danger button-effect btn-xl is-animating mr-3"
                     onClick={() => {
                         socket.emit(EVENTS.VIDEO_CALL.ON_CLOSE, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
                         cleanupFunctionV2();
@@ -548,6 +557,15 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     }}
                 >
                     <Phone />
+                </div>
+                <div
+                    className={`icon-btn ${isMuted ? 'btn-danger' : 'btn-light'} btn-xl button-effect mic`}
+                    onClick={() => {
+                        setIsMuted(!isMuted)
+                        socket.emit(EVENTS.VIDEO_CALL.MUTE_ME, { userInfo: { from_user: fromUser._id, to_user: toUser._id }, muteStatus: !isMuted });
+                    }}
+                >
+                    <MicOff />
                 </div>
             </div>
         </React.Fragment>

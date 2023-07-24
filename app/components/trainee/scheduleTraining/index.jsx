@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "../scheduleTraining/index.css";
 import { Popover } from "react-tiny-popover";
