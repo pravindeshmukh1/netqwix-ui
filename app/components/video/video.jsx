@@ -562,7 +562,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     className={`icon-btn ${isMuted ? 'btn-danger' : 'btn-light'} btn-xl button-effect mic`}
                     onClick={() => {
                         setIsMuted(!isMuted)
-                        socket.emit(EVENTS.VIDEO_CALL.MUTE_ME, { userInfo: { from_user: fromUser._id, to_user: toUser._id }, muteStatus: !isMuted });
+                        socket.emit(EVENTS.VIDEO_CALL.MUTE_ME, { userInfo: { from_user: fromUser._id, to_user: toUser._id }, muteStatus: isMuted });
                     }}
                 >
                     <MicOff />
