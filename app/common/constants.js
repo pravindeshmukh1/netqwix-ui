@@ -73,6 +73,7 @@ export const STATUS = {
   rejected: "rejected",
 };
 export const BookedSession = {
+  confirm: "confirm",
   confirmed: "confirmed",
   booked: "booked",
   canceled: "canceled",
