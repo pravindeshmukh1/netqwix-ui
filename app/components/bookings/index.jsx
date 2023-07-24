@@ -220,7 +220,7 @@ const Bookings = ({ accountType = null }) => {
     <>
       <div className="m-25 w-100 overflow-auto">
         <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
-          Booked Schedule Training
+          Bookings
         </h3>
         {!scheduledMeetingDetails.length ? (
           <h3 className="d-flex justify-content-center mt-20">

@@ -62,9 +62,10 @@ const SettingSection = (props) => {
 
   return (
     <div
-      className={`settings-tab submenu-width dynemic-sidebar custom-scroll ${props.tab === 'setting' ? 'active' : ''
-        }`}
-      id='settings'
+      className={`settings-tab submenu-width dynemic-sidebar custom-scroll ${
+        props.tab === "setting" ? "active" : ""
+      }`}
+      id="settings"
     >
       <div className="theme-title">
         <div className="media">
@@ -948,24 +949,24 @@ const SettingSection = (props) => {
                 <a href="#">Terms and Privacy Policy</a>
               </h5>
             </li>
-            <li>
+            {/* <li>
               <h5>
                 {" "}
                 <a href="#">Licenses</a>
               </h5>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <h5>
                 {" "}
                 <a href="#">2019 - 20 Powered by Pixelstrap</a>
               </h5>
-            </li>
+            </li> */}
           </ul>
         </div>
         <div className="media">
           <div className="media-body">
             <h3>Help</h3>
-            <h4>You are Confusion, Tell me</h4>
+            <h4>How can we help you?</h4>
           </div>
           <div className="media-right">
             {" "}

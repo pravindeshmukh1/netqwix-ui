@@ -205,7 +205,7 @@ const Index = (props) => {
                 </NavLink>
               </Tooltip>
             </li>
-            <li>
+            {/* <li>
               <Tooltip title="Notes" position="top" trigger="mouseenter">
                 <NavLink
                   className={`icon-btn btn-light button-effect ${
@@ -213,10 +213,10 @@ const Index = (props) => {
                   }`}
                   onClick={() => TogglTab("notes")}
                 >
-                  <i className="fa fa-list"></i>
+                  <i className="fa fa-book"></i>
                 </NavLink>
               </Tooltip>
-            </li>
+            </li> */}
             <li>
               <Tooltip title="Reminder" position="top" trigger="mouseenter">
                 <NavLink
