@@ -165,7 +165,11 @@ const Index = (props) => {
             </li> */}
             <li>
               <Tooltip
-                title="Schedule Training"
+                title={
+                  accountType === AccountType.TRAINEE
+                    ? "Booking"
+                    : "Schedule Slots"
+                }
                 position="right-end"
                 trigger="mouseenter"
               >
