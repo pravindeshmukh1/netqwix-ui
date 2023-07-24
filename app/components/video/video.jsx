@@ -483,8 +483,10 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                             <canvas width={windowsRef.current ? windowsRef.current.innerWidth : 500}
                                 height={windowsRef.current ? windowsRef.current.innerHeight : 500}
                                 className="canvas-print absolute" ref={canvasRef}></canvas>
-                            <video muted={isVideoMuted} ref={removeVideoRef} playsInline autoPlay width={windowsRef.current ? windowsRef.current.innerWidth : 500}
-                                height={windowsRef.current ? windowsRef.current.innerHeight : 500} className="bg-video" id="video" ></video>
+                            <video muted={isVideoMuted} ref={removeVideoRef} playsInline autoPlay 
+                            // width={windowsRef.current ? windowsRef.current.innerWidth : 500}
+                            //     height={windowsRef.current ? windowsRef.current.innerHeight : 500} 
+                                className="videoBg" id="video" ></video>
                         </div>
                     }
                 </div>
