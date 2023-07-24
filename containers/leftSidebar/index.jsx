@@ -22,6 +22,7 @@ import {
 import { SocketContext } from "../../app/components/socket";
 import TodoSection from "../rightSidebar/todoSection";
 import ReminderSection from "../rightSidebar/reminderSection";
+import NoteSection from "../rightSidebar/noteSection";
 
 const steps = [
   {
@@ -205,6 +206,18 @@ const Index = (props) => {
               </Tooltip>
             </li>
             <li>
+              <Tooltip title="Notes" position="top" trigger="mouseenter">
+                <NavLink
+                  className={`icon-btn btn-light button-effect ${
+                    activeTab === "notes" ? "active" : ""
+                  }`}
+                  onClick={() => TogglTab("notes")}
+                >
+                  <i className="fa fa-list"></i>
+                </NavLink>
+              </Tooltip>
+            </li>
+            <li>
               <Tooltip title="Reminder" position="top" trigger="mouseenter">
                 <NavLink
                   className={`icon-btn btn-light button-effect ${
@@ -325,7 +338,9 @@ const Index = (props) => {
         activeTab !== leftSideBarOptions.SCHEDULE_TRAINING && (
           <aside
             className={`left-disp ${
-              activeTab === "todo" || activeTab === "reminder"
+              activeTab === "todo" ||
+              activeTab === "reminder" ||
+              activeTab === "notes"
                 ? `app-sidebar active chitchat-left-sidebar-submenu`
                 : `chitchat-left-sidebar left-disp`
             }`}
@@ -351,6 +366,9 @@ const Index = (props) => {
                   </TabPane>
                   <TabPane tabId="reminder">
                     <ReminderSection tab={activeTab} ActiveTab={setActiveTab} />
+                  </TabPane>
+                  <TabPane tabId="notes">
+                    <NoteSection tab={activeTab} ActiveTab={setActiveTab} />
                   </TabPane>
                   <TabPane tabId="document">
                     <DocumentSection tab={activeTab} ActiveTab={setActiveTab} />
