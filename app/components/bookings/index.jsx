@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 
 import {
   bookingsState,
@@ -15,7 +15,7 @@ import StartMeeting from "./start";
 import { SocketContext } from "../socket";
 
 const Bookings = ({ accountType = null }) => {
-  const router = useRouter()
+  const router = useRouter();
 
   const [bookedSession, setBookedSession] = useState({
     id: "",
@@ -34,8 +34,8 @@ const Bookings = ({ accountType = null }) => {
   useEffect(() => {
     dispatch(getScheduledMeetingDetailsAsync());
 
-    if(!socket.connected) {
-        socket.connect();
+    if (!socket.connected) {
+      socket.connect();
     }
   }, []);
 
@@ -51,33 +51,15 @@ const Bookings = ({ accountType = null }) => {
 
   const toggle = () => setStartMeeting(!startMeeting);
 
-  const handleBookedScheduleTraining = (status, _id, trainee_info, trainer_info) => {
+  const handleBookedScheduleTraining = (
+    status,
+    _id,
+    trainee_info,
+    trainer_info
+  ) => {
     if (accountType === AccountType.TRAINEE) {
       return (
         <>
-          <button
-            className="btn btn-danger button-effect btn-sm mr-4"
-            type="button"
-            style={{
-              cursor:
-                status === BookedSession.canceled ? "not-allowed" : "pointer",
-            }}
-            disabled={status === BookedSession.canceled}
-            onClick={() => {
-              if (
-                status === BookedSession.booked ||
-                status === BookedSession.confirmed
-              ) {
-                setBookedSession({
-                  ...bookedSession,
-                  id: _id,
-                  booked_status: BookedSession.canceled,
-                });
-              }
-            }}
-          >
-            {status === BookedSession.canceled ? "Canceled" : "Cancel"}
-          </button>
           {status === BookedSession.booked ? (
             <button
               className={`btn btn-dark button-effect btn-sm`}
@@ -110,10 +92,14 @@ const Bookings = ({ accountType = null }) => {
                     <button
                       className={`btn btn-primary button-effect btn-sm ml-4`}
                       type="button"
-                      disabled={status === BookedSession.confirmed ? false : true}
+                      disabled={
+                        status === BookedSession.confirmed ? false : true
+                      }
                       style={{
                         cursor:
-                          status === BookedSession.booked ? "not-allowed" : "pointer",
+                          status === BookedSession.booked
+                            ? "not-allowed"
+                            : "pointer",
                       }}
                       onClick={() => {
                         setStartMeeting({
@@ -131,6 +117,29 @@ const Bookings = ({ accountType = null }) => {
                 ))}
             </>
           )}
+          <button
+            className="btn btn-danger button-effect btn-sm mr-4 ml-4"
+            type="button"
+            style={{
+              cursor:
+                status === BookedSession.canceled ? "not-allowed" : "pointer",
+            }}
+            disabled={status === BookedSession.canceled}
+            onClick={() => {
+              if (
+                status === BookedSession.booked ||
+                status === BookedSession.confirmed
+              ) {
+                setBookedSession({
+                  ...bookedSession,
+                  id: _id,
+                  booked_status: BookedSession.canceled,
+                });
+              }
+            }}
+          >
+            {status === BookedSession.canceled ? "Canceled" : "Cancel"}
+          </button>
         </>
       );
     } else if (accountType === AccountType.TRAINER) {
@@ -164,7 +173,9 @@ const Bookings = ({ accountType = null }) => {
                   })
                 }
               >
-                Confirmed
+                {status === BookedSession.confirmed
+                  ? BookedSession.confirmed
+                  : BookedSession.confirm}
               </button>
               <button
                 className={`btn btn-primary button-effect btn-sm ml-4`}
@@ -209,7 +220,7 @@ const Bookings = ({ accountType = null }) => {
     <>
       <div className="m-25 w-100 overflow-auto">
         <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
-          Booked Schedule Training
+          Bookings
         </h3>
         {!scheduledMeetingDetails.length ? (
           <h3 className="d-flex justify-content-center mt-20">
@@ -264,8 +275,11 @@ const Bookings = ({ accountType = null }) => {
                   </div>
                 </div>
                 <div className="card-footer px-5 pb-3 d-flex justify-content-end">
-                  {handleBookedScheduleTraining(data.status, _id, trainee_info,
-                    trainer_info,
+                  {handleBookedScheduleTraining(
+                    data.status,
+                    _id,
+                    trainee_info,
+                    trainer_info
                   )}
                 </div>
               </div>
@@ -273,7 +287,6 @@ const Bookings = ({ accountType = null }) => {
           })
         )}
       </div>
-
 
       {/* calling popup */}
       <Modal
@@ -284,7 +297,7 @@ const Bookings = ({ accountType = null }) => {
         height="100vh"
         element={
           <StartMeeting
-            accountType = {accountType}
+            accountType={accountType}
             traineeInfo={startMeeting.traineeInfo}
             trainerInfo={startMeeting.trainerInfo}
             isClose={() => {
@@ -294,14 +307,12 @@ const Bookings = ({ accountType = null }) => {
                 isOpenModal: false,
                 traineeInfo: null,
                 trainerInfo: null,
-              })
+              });
               router.reload(window.location.pathname);
-            }
-            }
+            }}
           />
         }
       />
-
     </>
   );
 };

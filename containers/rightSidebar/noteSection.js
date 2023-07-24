@@ -4,8 +4,16 @@ import { X, Plus } from "react-feather";
 import { Button, Modal, ModalBody, ModalHeader } from "reactstrap";
 const NoteSection = (props) => {
   const [noteModal, setNoteModal] = useState(false);
+  const closeLeftSide = () => {
+    document.querySelector(".document-tab").classList.remove("active");
+    document.querySelector(".recent-default").classList.add("active");
+    props.ActiveTab("");
+  };
   return (
-    <div className="apps-content" id="notes">
+    <div
+      className={`${props.tab === "notes" ? "active" : ""} apps-content`}
+      id="notes"
+    >
       <div className="notes-main">
         <div className="theme-title">
           <div className="media">
@@ -17,7 +25,7 @@ const NoteSection = (props) => {
               <Link
                 className="icon-btn btn-sm btn-outline-light close-apps"
                 href="#"
-                onClick={() => props.smallSideBarToggle()}
+                onClick={() => closeLeftSide()}
               >
                 <X />
               </Link>
