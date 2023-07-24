@@ -70,16 +70,19 @@ export class Utils {
   };
 
   static convertToAmPm = (timeString) => {
-    const [hours, minutes] = timeString.split(':');
+    const [hours, minutes] = timeString.split(":");
     let formattedHours = parseInt(hours, 10);
-  
-    const period = formattedHours >= 12 ? 'PM' : 'AM';
-    
+
+    const period = formattedHours >= 12 ? "PM" : "AM";
+
     if (formattedHours > 12) {
       formattedHours -= 12;
     }
-  
-  
-    return `${formattedHours.toString().padStart(2, '0')}:${minutes} ${period}`;
-  }
+
+    return `${formattedHours.toString().padStart(2, "0")}:${minutes} ${period}`;
+  };
+
+  static capitalizeFirstLetter = (text) => {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  };
 }

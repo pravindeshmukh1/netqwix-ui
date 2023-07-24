@@ -259,7 +259,7 @@
       }
     }
     .submenu-width {
-      width: -webkit-fill-available !important;
+      width: 92% !important;
     }
   }
 }
@@ -575,7 +575,10 @@
         }
       }
     }
-    .sidebar-toggle .main-nav.on ~ .chitchat-main.small-sidebar .contact-details {
+    .sidebar-toggle
+      .main-nav.on
+      ~ .chitchat-main.small-sidebar
+      .contact-details {
       width: calc(100vw - 680px);
       transition: all 0.3s ease;
     }

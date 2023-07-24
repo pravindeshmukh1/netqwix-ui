@@ -294,7 +294,7 @@ const Bookings = ({ accountType = null }) => {
         toggle={toggle}
         allowFullWidth={true}
         isOpen={startMeeting.isOpenModal}
-        height="100vh"
+        // height="100vh"
         element={
           <StartMeeting
             accountType={accountType}
