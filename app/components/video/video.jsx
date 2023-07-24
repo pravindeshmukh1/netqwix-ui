@@ -17,7 +17,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     const [userPayload, setUserPayload] = useState(null)
     // const [localStream, setLocalStream] = useState(null);
     const [remoteStream, setRemoteStream] = useState(null);
-    const [displayMsg, setDisplayMsg] = useState({showMsg: false, msg: ''});
+    const [displayMsg, setDisplayMsg] = useState({ showMsg: false, msg: '' });
     const [isCalling, setIsCalling] = useState(false);
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
@@ -307,7 +307,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     audio: true,
                 });
                 // setLocalStream(stream);
-                setDisplayMsg({ showMsg: true, msg: `Waiting for ${toUser?.fullname}  to join...`});
+                setDisplayMsg({ showMsg: true, msg: `Waiting for ${toUser?.fullname}  to join...` });
                 videoRef.current.srcObject = stream;
 
                 const peer = new SimplePeer({
@@ -483,11 +483,13 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                             <canvas width={windowsRef.current ? windowsRef.current.innerWidth : 500}
                                 height={windowsRef.current ? windowsRef.current.innerHeight : 500}
                                 className="canvas-print absolute" ref={canvasRef}></canvas>
-                            <video muted={isVideoMuted} ref={removeVideoRef} playsInline autoPlay 
+                            {/* <video muted={isVideoMuted} ref={removeVideoRef} playsInline autoPlay 
                             // width={windowsRef.current ? windowsRef.current.innerWidth : 500}
                             //     height={windowsRef.current ? windowsRef.current.innerHeight : 500} 
-                                className="videoBg" id="video" ></video>
-                        </div>
+                                className="videoBg" id="video" ></video> */}
+                           <video muted={isVideoMuted} ref={removeVideoRef} playsInline autoPlay width={windowsRef.current ? windowsRef.current.innerWidth : 500}
+                                height={windowsRef.current ? windowsRef.current.innerHeight : 500} className="bg-video" id="video" ></video>
+               </div>
                     }
                 </div>
                 {/* {isCalling ? (
