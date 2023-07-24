@@ -24,14 +24,6 @@ export const getSocket = () => {
     [authToken]
   );
 
-  // if (token) {
-  //   return socketio.connect (URL, {
-  //     query: { authorization: token, autoConnect: false},
-  //   });
-  // } else {
-  //   console.log(`here ---- `);
-  //   // return socketio.connect (URL);
-  // }
   return socket;
 };
 

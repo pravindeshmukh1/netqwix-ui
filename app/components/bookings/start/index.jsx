@@ -1,5 +1,4 @@
 import React, {useContext, useEffect} from 'react';
-import {Link, Phone} from 'react-feather';
 import {HandleVideoCall} from '../../video/video';
 import {SocketContext} from '../../socket';
 import {EVENTS} from '../../../../helpers/events';
