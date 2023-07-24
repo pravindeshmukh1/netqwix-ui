@@ -33,10 +33,6 @@ const Bookings = ({ accountType = null }) => {
   const { scheduledMeetingDetails } = useAppSelector(bookingsState);
   useEffect(() => {
     dispatch(getScheduledMeetingDetailsAsync());
-
-    if (!socket.connected) {
-      socket.connect();
-    }
   }, []);
 
   useEffect(() => {

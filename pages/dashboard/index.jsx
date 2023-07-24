@@ -57,14 +57,16 @@ const Dashboard = () => {
 
   return (
     // TODO: move socket to root folder
-    <SocketContext.Provider value={getSocket ()}>
+    (
       <Fragment>
-        <div className="chitchat-container sidebar-toggle ">
-          <LeftSide />
-          {getActiveTabs ()}
-        </div>
+        <SocketContext.Provider value={getSocket ()}>
+          <div className="chitchat-container sidebar-toggle ">
+            <LeftSide />
+            {getActiveTabs ()}
+          </div>
+        </SocketContext.Provider>
       </Fragment>
-    </SocketContext.Provider>
+    )
   );
 };
 
