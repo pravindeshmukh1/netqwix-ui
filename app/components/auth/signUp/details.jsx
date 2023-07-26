@@ -68,13 +68,13 @@ const Details = (props) => {
             defaultValue={values.category}
           >
             <option>Choose category</option>
-            {categories.category.map((category, index) => {
+            {categories && Array.isArray(categories.category) ? categories.category.map((category, index) => {
               return (
                 <option key={index} value={category}>
                   {category}
                 </option>
               );
-            })}
+            }): <> No categories available </>}
           </select>
         </div>
       )}

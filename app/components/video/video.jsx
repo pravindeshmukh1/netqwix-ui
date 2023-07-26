@@ -11,7 +11,7 @@ let storedLocalDrawPaths = { sender: [], receiver: [] };
 let XAndYCoordinates = [];
 // default setup;
 let isDrawing = false;
-let isVideoMuted = false;
+let isVideoMuted = true;
 
 export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     const socket = useContext(SocketContext);
@@ -219,6 +219,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
         socket.on(EVENTS.VIDEO_CALL.MUTE_ME, ({ muteStatus }) => {
             if (removeVideoRef.current) {
+                console.log(`muteStatus --- `, muteStatus);
                 removeVideoRef.current.srcObject.getAudioTracks()[0].enabled = muteStatus;
             }
 
@@ -343,15 +344,21 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
 
     const sendDrawEvent = (storedEvents) => {
-        socket.emit(EVENTS.DRAW, { userInfo: { from_user: fromUser._id, to_user: toUser._id }, storedEvents });
+        if (removeVideoRef && removeVideoRef.current) {
+            socket.emit(EVENTS.DRAW, { userInfo: { from_user: fromUser._id, to_user: toUser._id }, storedEvents });
+        }
     }
 
     const sendStopDrawingEvent = () => {
-        socket.emit(EVENTS.STOP_DRAWING, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
+        if (removeVideoRef && removeVideoRef.current) {
+            socket.emit(EVENTS.STOP_DRAWING, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
+        }
     }
 
     const sendClearCanvasEvent = () => {
-        socket.emit(EVENTS.EMIT_CLEAR_CANVAS, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
+        if (removeVideoRef && removeVideoRef.current) {
+            socket.emit(EVENTS.EMIT_CLEAR_CANVAS, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
+        }
     }
 
     const cleanupFunctionV2 = () => {
@@ -478,8 +485,10 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     className="icon-btn btn-danger button-effect btn-xl is-animating mr-3"
                     onClick={() => {
                         cleanupFunctionV2();
-                        socket.emit(EVENTS.VIDEO_CALL.ON_CLOSE, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
                         isClose();
+                        if (removeVideoRef && removeVideoRef.current) {
+                            socket.emit(EVENTS.VIDEO_CALL.ON_CLOSE, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
+                        }
                     }}
                 >
                     <Phone />
@@ -488,7 +497,9 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     className={`icon-btn ${isMuted ? 'btn-danger' : 'btn-light'} btn-xl button-effect mic`}
                     onClick={() => {
                         setIsMuted(!isMuted)
-                        socket.emit(EVENTS.VIDEO_CALL.MUTE_ME, { userInfo: { from_user: fromUser._id, to_user: toUser._id }, muteStatus: isMuted });
+                        if (removeVideoRef && removeVideoRef.current) {
+                            socket.emit(EVENTS.VIDEO_CALL.MUTE_ME, { userInfo: { from_user: fromUser._id, to_user: toUser._id }, muteStatus: isMuted });
+                        }
                     }}
                 >
                     <MicOff />
@@ -522,7 +533,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                             // width={windowsRef.current ? windowsRef.current.innerWidth : 500}
                             //     height={windowsRef.current ? windowsRef.current.innerHeight : 500} 
                                 className="videoBg" id="video" ></video> */}
-                            <video muted={isVideoMuted} ref={removeVideoRef} playsInline autoPlay width={windowsRef.current ? windowsRef.current.innerWidth : 500}
+                            <video ref={removeVideoRef} playsInline autoPlay width={windowsRef.current ? windowsRef.current.innerWidth : 500}
                                 height={windowsRef.current ? windowsRef.current.innerHeight : 500} className="bg-video" id="video" ></video>
                         </div>
                     }
