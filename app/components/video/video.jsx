@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { EVENTS } from '../../../helpers/events';
 import { SocketContext } from "../socket";
 import { MicOff, Pause, Phone } from "react-feather";
+import { AccountType } from "../../common/constants";
 
 let storedLocalDrawPaths = { sender: [], receiver: [] };
 let XAndYCoordinates = [];
@@ -171,15 +172,17 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
 
 
-        if (canvas && false) {
-            canvas.addEventListener('mousedown', startDrawing);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('mouseup', stopDrawing);
-            canvas.addEventListener('mouseout', stopDrawing);
+        // allowing trainer to draw
+        if (canvas && accountType === AccountType.TRAINER) {
             // for mobile
             canvas.addEventListener('touchstart', startMobileDrawing);
             canvas.addEventListener('touchmove', drawMobile);
             canvas.addEventListener('touchend', stopMobileDrawing);
+            // for web
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
         }
 
         return () => {
@@ -216,7 +219,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
         socket.on(EVENTS.VIDEO_CALL.MUTE_ME, ({ muteStatus }) => {
             if (removeVideoRef.current) {
-                removeVideoRef.current.srcObject.getTracks()[0].enabled = muteStatus;
+                removeVideoRef.current.srcObject.getAudioTracks()[0].enabled = muteStatus;
             }
 
         })
@@ -289,7 +292,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 const stream = await navigator.mediaDevices.getUserMedia({
                     video: true,
                     audio: true,
-                    
+
                 }).catch((err) => {
                     console.log(`unable to access video call ---- `, err);
                 });
@@ -326,7 +329,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
 
 
-               
+
             } catch (error) {
                 console.error('Error accessing media devices:', error);
             }
@@ -340,7 +343,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
 
     const sendDrawEvent = (storedEvents) => {
-        // socket.emit(EVENTS.DRAW, { storedEvents, userInfo: { from_user: fromUser._id, to_user: toUser._id } });
+        socket.emit(EVENTS.DRAW, { userInfo: { from_user: fromUser._id, to_user: toUser._id }, storedEvents });
     }
 
     const sendStopDrawingEvent = () => {
@@ -351,52 +354,30 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         socket.emit(EVENTS.EMIT_CLEAR_CANVAS, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
     }
 
-    const cleanupFunctionV2 =  () => {
+    const cleanupFunctionV2 = () => {
         let videorefSrc = videoRef.current;
         if (videoRef && videorefSrc && videorefSrc.srcObject) {
-            const availableTracks =  videorefSrc.srcObject.getTracks();
-            const availableVideoTracks =  videorefSrc.srcObject.getVideoTracks();
+            const availableTracks = videorefSrc.srcObject.getTracks();
+            const availableVideoTracks = videorefSrc.srcObject.getVideoTracks();
             for (let videoRefIndex = 0; videoRefIndex < availableTracks.length; videoRefIndex++) {
                 const track = availableTracks[videoRefIndex];
-                // if (track.readyState == 'live') {
-                    // track.enabled = false;
-                     track.stop();
-                // }
+                track.stop();
             }
-
-            // videoRef.srcObject.tracks = availableTracks;
-            // videorefSrc.srcObject.getTracks().forEach((track) => {
-            // });
 
             for (let videoRefIndex = 0; videoRefIndex < availableVideoTracks.length; videoRefIndex++) {
                 const track = availableVideoTracks[videoRefIndex];
-                // track.enabled = false;
-                 track.stop();
+                track.stop();
             }
-
-            // videorefSrc.srcObject = null;
-            // videoRef.current = null;
-
         }
 
-
-        // if (removeVideoRef && removeVideoRef.current && removeVideoRef.current.srcObject) {
-        //     removeVideoRef.current.srcObject.getVideoTracks()[0].stop();
-        //     removeVideoRef.current.srcObject.getTracks().forEach((track) => {
-        //         if (track.readyState == 'live') {
-        //             track.stop();
-        //         }
-
-        //     });
-        //     removeVideoRef.current.srcObject.getVideoTracks().forEach((track) => track.stop());
-        //     removeVideoRef.current.srcObject = '';
-        //     removeVideoRef.current = null;
-        // }
 
         if (peerRef.current) {
             peerRef.current.destroy();
             peerRef.current = null;
         }
+
+        clearCanvas();
+
     };
 
     const undoDrawing = async (senderConfig, extraCoordinateConfig, removeLastCoordinate = true) => {
