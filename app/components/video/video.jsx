@@ -283,7 +283,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     }
 
     const handleStartCall = () => {
-        console.log(`handleStartCall ---`)
+        console.log(`--- handleStartCall ---`)
         const startVideoCall = async () => {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({
@@ -375,23 +375,23 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             }
 
             // videorefSrc.srcObject = null;
-            videoRef.current = null;
+            // videoRef.current = null;
 
         }
 
 
-        if (removeVideoRef && removeVideoRef.current && removeVideoRef.current.srcObject) {
-            removeVideoRef.current.srcObject.getVideoTracks()[0].stop();
-            removeVideoRef.current.srcObject.getTracks().forEach((track) => {
-                if (track.readyState == 'live') {
-                    track.stop();
-                }
+        // if (removeVideoRef && removeVideoRef.current && removeVideoRef.current.srcObject) {
+        //     removeVideoRef.current.srcObject.getVideoTracks()[0].stop();
+        //     removeVideoRef.current.srcObject.getTracks().forEach((track) => {
+        //         if (track.readyState == 'live') {
+        //             track.stop();
+        //         }
 
-            });
-            removeVideoRef.current.srcObject.getVideoTracks().forEach((track) => track.stop());
-            removeVideoRef.current.srcObject = '';
-            removeVideoRef.current = null;
-        }
+        //     });
+        //     removeVideoRef.current.srcObject.getVideoTracks().forEach((track) => track.stop());
+        //     removeVideoRef.current.srcObject = '';
+        //     removeVideoRef.current = null;
+        // }
 
         if (peerRef.current) {
             peerRef.current.destroy();
