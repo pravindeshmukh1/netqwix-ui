@@ -20,6 +20,7 @@ export const EVENTS = {
         ON_ICE_CANDIDATE: "ice-candidate",
         ON_STREAM: "stream",
         ON_CONNECT: "connect",
-        ON_CLOSE: "close"
+        ON_CLOSE: "close",
+        MUTE_ME: "MUTE_ME"
     }
 }

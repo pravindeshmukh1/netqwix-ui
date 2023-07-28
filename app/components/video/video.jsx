@@ -4,21 +4,20 @@ import SimplePeer from 'simple-peer';
 import Image from 'next/image'
 import { EVENTS } from '../../../helpers/events';
 import { SocketContext } from "../socket";
-import { Phone } from "react-feather";
+import { MicOff, Pause, Phone } from "react-feather";
+import { AccountType } from "../../common/constants";
 
 let storedLocalDrawPaths = { sender: [], receiver: [] };
 let XAndYCoordinates = [];
 // default setup;
 let isDrawing = false;
-let isVideoMuted = false;
+let isVideoMuted = true;
 
 export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     const socket = useContext(SocketContext);
-    const [userPayload, setUserPayload] = useState(null)
-    // const [localStream, setLocalStream] = useState(null);
     const [remoteStream, setRemoteStream] = useState(null);
+    const [isMuted, setIsMuted] = useState(false);
     const [displayMsg, setDisplayMsg] = useState({ showMsg: false, msg: '' });
-    const [isCalling, setIsCalling] = useState(false);
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const state = {
@@ -52,30 +51,11 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         handleStartCall();
     }, []);
 
-    // useEffect(() => {
-    //     if(from && to && from._id && to._id) {
-    //         console.log(`from, ---`, from, to, from && to && from._id && to._id)
-    //         setUserPayload({
-    //             from_user: from['_id'], to_user: to['_id']
-    //         })
-    //     }
-    // }, [from, to])
-
     useEffect(() => {
         const video = videoRef.current;
         const canvas = canvasRef.current;
         const context = canvas?.getContext('2d');
         if (!context) return;
-
-        navigator?.mediaDevices?.getUserMedia({ video: true })
-            .then((stream) => {
-                if (video) {
-                    video.srcObject = stream;
-                }
-            })
-            .catch((error) => {
-                console.error('Error accessing camera:', error);
-            });
 
         const drawFrame = () => {
             if (canvas && context && video) {
@@ -192,15 +172,17 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
 
 
-        if (canvas && false) {
-            canvas.addEventListener('mousedown', startDrawing);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('mouseup', stopDrawing);
-            canvas.addEventListener('mouseout', stopDrawing);
+        // allowing trainer to draw
+        if (canvas && accountType === AccountType.TRAINER) {
             // for mobile
             canvas.addEventListener('touchstart', startMobileDrawing);
             canvas.addEventListener('touchmove', drawMobile);
             canvas.addEventListener('touchend', stopMobileDrawing);
+            // for web
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
         }
 
         return () => {
@@ -211,7 +193,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
     useEffect(() => {
         if (removeVideoRef.current && remoteStream) {
-            console.log(`remoteStream--- `, remoteStream);
             removeVideoRef.current.srcObject = remoteStream;
         }
     }, [remoteStream]);
@@ -234,6 +215,14 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
         socket.on(EVENTS.ON_CLEAR_CANVAS, () => {
             clearCanvas();
+        })
+
+        socket.on(EVENTS.VIDEO_CALL.MUTE_ME, ({ muteStatus }) => {
+            if (removeVideoRef.current) {
+                console.log(`muteStatus --- `, muteStatus);
+                removeVideoRef.current.srcObject.getAudioTracks()[0].enabled = muteStatus;
+            }
+
         })
 
         socket.on(EVENTS.EMIT_DRAWING_CORDS, ({ storedEvents }) => {
@@ -298,13 +287,15 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     }
 
     const handleStartCall = () => {
-        console.log(`handleStartCall ---`)
-        let cleanupFunction;
+        console.log(`--- handleStartCall ---`)
         const startVideoCall = async () => {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({
                     video: true,
                     audio: true,
+
+                }).catch((err) => {
+                    console.log(`unable to access video call ---- `, err);
                 });
                 // setLocalStream(stream);
                 setDisplayMsg({ showMsg: true, msg: `Waiting for ${toUser?.fullname}  to join...` });
@@ -320,7 +311,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
                 peer.on(EVENTS.VIDEO_CALL.ON_SIGNAL, (offer) => {
                     // Send the offer to the signaling server
-                    console.log(`userPayload --- `, fromUser._id, toUser._id);
                     socket.emit(EVENTS.VIDEO_CALL.ON_OFFER, { offer, userInfo: { from_user: fromUser._id, to_user: toUser._id } });
                 });
 
@@ -330,35 +320,17 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 });
 
                 peer.on(EVENTS.VIDEO_CALL.ON_CONNECT, () => {
-                    setIsCalling(true);
+                    // setIsCalling(true);
                 });
 
                 peer.on(EVENTS.VIDEO_CALL.ON_CLOSE, () => {
-                    setIsCalling(false);
-                    cleanupFunction();
+                    // setIsCalling(false);
+                    cleanupFunctionV2();
                 });
 
 
 
-                cleanupFunction = () => {
-                    // if (peerRef.current) {
-                    //     peerRef.current.destroy();
-                    //     peerRef.current = null;
-                    // }
-                    // if (localStream) {
-                    //     localStream.getTracks().forEach((track) => track.stop());
-                    //     setLocalStream(null);
-                    // }
 
-                    // if (videoRef.current) {
-                    //     videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
-                    //     videoRef.current.srcObject.getVideoTracks().forEach((track) => track.stop());
-                    //     videoRef.current.srcObject.src = '';
-                    //     setLocalStream(null);
-                    // }
-
-                    // setRemoteStream(null);
-                };
             } catch (error) {
                 console.error('Error accessing media devices:', error);
             }
@@ -372,50 +344,47 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
 
     const sendDrawEvent = (storedEvents) => {
-        // socket.emit(EVENTS.DRAW, { storedEvents, userInfo: { from_user: fromUser._id, to_user: toUser._id } });
+        if (removeVideoRef && removeVideoRef.current) {
+            socket.emit(EVENTS.DRAW, { userInfo: { from_user: fromUser._id, to_user: toUser._id }, storedEvents });
+        }
     }
 
     const sendStopDrawingEvent = () => {
-        socket.emit(EVENTS.STOP_DRAWING, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
+        if (removeVideoRef && removeVideoRef.current) {
+            socket.emit(EVENTS.STOP_DRAWING, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
+        }
     }
 
     const sendClearCanvasEvent = () => {
-        socket.emit(EVENTS.EMIT_CLEAR_CANVAS, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
+        if (removeVideoRef && removeVideoRef.current) {
+            socket.emit(EVENTS.EMIT_CLEAR_CANVAS, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
+        }
     }
 
     const cleanupFunctionV2 = () => {
-        if (videoRef.current) {
-            videoRef.current.srcObject.getTracks().forEach((track) => {
-                if (track.readyState == 'live') {
-                    track.stop();
-                }
+        let videorefSrc = videoRef.current;
+        if (videoRef && videorefSrc && videorefSrc.srcObject) {
+            const availableTracks = videorefSrc.srcObject.getTracks();
+            const availableVideoTracks = videorefSrc.srcObject.getVideoTracks();
+            for (let videoRefIndex = 0; videoRefIndex < availableTracks.length; videoRefIndex++) {
+                const track = availableTracks[videoRefIndex];
+                track.stop();
+            }
 
-            });
-            videoRef.current.srcObject.getVideoTracks().forEach((track) => track.stop());
-            videoRef.current.srcObject.src = '';
-            videoRef.current = null;
-            // setLocalStream(null);
+            for (let videoRefIndex = 0; videoRefIndex < availableVideoTracks.length; videoRefIndex++) {
+                const track = availableVideoTracks[videoRefIndex];
+                track.stop();
+            }
         }
 
-        if (removeVideoRef.current && removeVideoRef.current.srcObject) {
-            removeVideoRef.current.srcObject.getTracks().forEach((track) => {
-                if (track.readyState == 'live') {
-                    track.stop();
-                }
-
-            });
-            removeVideoRef.current.srcObject.getVideoTracks().forEach((track) => track.stop());
-            removeVideoRef.current.srcObject.src = '';
-            removeVideoRef.current = null;
-            // setLocalStream(null);
-        }
 
         if (peerRef.current) {
-
             peerRef.current.destroy();
             peerRef.current = null;
         }
-        setRemoteStream(null);
+
+        clearCanvas();
+
     };
 
     const undoDrawing = async (senderConfig, extraCoordinateConfig, removeLastCoordinate = true) => {
@@ -463,43 +432,10 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         }
     }
 
-    return (
-        <React.Fragment>
-            {(displayMsg.showMsg) ? <div className="no-user-joined">
-                {displayMsg.msg}
-            </div> : <></>}
-            <div className="flex">
-                <div className="absolute z-50 bottom-0 left-21">
-                    <div className="flex items-center">
-                        <div>
-                            {videoRef &&
-                                <video muted={isVideoMuted} id='end-user-video' playsInline className="rounded z-50" ref={videoRef} autoPlay />}
-                        </div>
-                    </div>
-                </div>
-                <div className="ml-2">
-                    {removeVideoRef &&
-                        <div className="bg-video bg-white" id="remote-user">
-                            <canvas width={windowsRef.current ? windowsRef.current.innerWidth : 500}
-                                height={windowsRef.current ? windowsRef.current.innerHeight : 500}
-                                className="canvas-print absolute" ref={canvasRef}></canvas>
-                            {/* <video muted={isVideoMuted} ref={removeVideoRef} playsInline autoPlay 
-                            // width={windowsRef.current ? windowsRef.current.innerWidth : 500}
-                            //     height={windowsRef.current ? windowsRef.current.innerHeight : 500} 
-                                className="videoBg" id="video" ></video> */}
-                           <video muted={isVideoMuted} ref={removeVideoRef} playsInline autoPlay width={windowsRef.current ? windowsRef.current.innerWidth : 500}
-                                height={windowsRef.current ? windowsRef.current.innerHeight : 500} className="bg-video" id="video" ></video>
-               </div>
-                    }
-                </div>
-                {/* {isCalling ? (
-                    <button onClick={endVideoCall}>End Call</button>
-                ) : (
-                    <span>Waiting for connection...</span>
-                )} */}
-            </div>
-            {/* action buttons */}
-            {/* <div className=" z-50 ml-2 absolute bottom-0 right-2 mb-4">
+
+    const renderActionItems = () => {
+        return (
+            <div className=" z-50 ml-2 absolute bottom-0 right-2 mb-4">
                 <div className="flex">
                     <div className="ml-2 bg-blue-500 text-white font-bold py-2 px-2 rounded"
                         onClick={() => {
@@ -537,19 +473,77 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
                     </div>
                 </div>
-            </div> */}
-            <div className="call-action-buttons  z-50 ml-2 absolute bottom-0  z-50">
+            </div>
+        )
+    }
+
+
+    const renderCallActionButtons = () => {
+        return (
+            <div className="call-action-buttons  z-50 ml-2  absolute bottom-0  z-50">
                 <div
-                    className="icon-btn btn-danger button-effect btn-xl is-animating"
+                    className="icon-btn btn-danger button-effect btn-xl is-animating mr-3"
                     onClick={() => {
-                        socket.emit(EVENTS.VIDEO_CALL.ON_CLOSE, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
                         cleanupFunctionV2();
                         isClose();
+                        if (removeVideoRef && removeVideoRef.current) {
+                            socket.emit(EVENTS.VIDEO_CALL.ON_CLOSE, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
+                        }
                     }}
                 >
                     <Phone />
                 </div>
+                <div
+                    className={`icon-btn ${isMuted ? 'btn-danger' : 'btn-light'} btn-xl button-effect mic`}
+                    onClick={() => {
+                        setIsMuted(!isMuted)
+                        if (removeVideoRef && removeVideoRef.current) {
+                            socket.emit(EVENTS.VIDEO_CALL.MUTE_ME, { userInfo: { from_user: fromUser._id, to_user: toUser._id }, muteStatus: isMuted });
+                        }
+                    }}
+                >
+                    <MicOff />
+                </div>
             </div>
+
+        )
+    }
+
+    return (
+        <React.Fragment>
+            {(displayMsg.showMsg) ? <div className="no-user-joined">
+                {displayMsg.msg}
+            </div> : <></>}
+            <div className="flex">
+                <div className="absolute z-50 bottom-0 left-21">
+                    <div className="flex items-center">
+                        <div>
+                            {videoRef &&
+                                <video muted={isVideoMuted} id='end-user-video' playsInline className="rounded z-50" ref={videoRef} autoPlay />}
+                        </div>
+                    </div>
+                </div>
+                <div className="ml-2">
+                    {removeVideoRef &&
+                        <div className="bg-video bg-white" id="remote-user">
+                            <canvas width={windowsRef.current ? windowsRef.current.innerWidth : 500}
+                                height={windowsRef.current ? windowsRef.current.innerHeight : 500}
+                                className="canvas-print absolute" ref={canvasRef}></canvas>
+                            {/* <video muted={isVideoMuted} ref={removeVideoRef} playsInline autoPlay 
+                            // width={windowsRef.current ? windowsRef.current.innerWidth : 500}
+                            //     height={windowsRef.current ? windowsRef.current.innerHeight : 500} 
+                                className="videoBg" id="video" ></video> */}
+                            <video ref={removeVideoRef} playsInline autoPlay width={windowsRef.current ? windowsRef.current.innerWidth : 500}
+                                height={windowsRef.current ? windowsRef.current.innerHeight : 500} className="bg-video" id="video" ></video>
+                        </div>
+                    }
+                </div>
+            </div>
+            {/* action buttons */}
+            {renderActionItems()}
+            {/* call cut and mute options */}
+            {renderCallActionButtons()}
+
         </React.Fragment>
     )
 }
