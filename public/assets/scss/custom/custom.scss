@@ -30,7 +30,9 @@
 .call-action-buttons {
   position: absolute !important;
   bottom: 0;
-  left: 50%;
+  left: 0;
+  right: 0;
+  text-align: center;
 }
 
 .video-canvas {

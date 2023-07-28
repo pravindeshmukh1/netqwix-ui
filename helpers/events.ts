@@ -21,6 +21,7 @@ export const EVENTS = {
         ON_STREAM: "stream",
         ON_CONNECT: "connect",
         ON_CLOSE: "close",
-        MUTE_ME: "MUTE_ME"
+        MUTE_ME: "MUTE_ME",
+        STOP_FEED: "STOP_FEED"
     }
 }
