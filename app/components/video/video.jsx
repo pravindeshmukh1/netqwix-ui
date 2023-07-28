@@ -540,7 +540,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 </div>
             </div>
             {/* action buttons */}
-            {renderActionItems()}
+            {accountType === AccountType.TRAINER && renderActionItems()}
             {/* call cut and mute options */}
             {renderCallActionButtons()}
 
