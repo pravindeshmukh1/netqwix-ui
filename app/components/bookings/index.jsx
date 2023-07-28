@@ -304,7 +304,6 @@ const Bookings = ({ accountType = null }) => {
                 traineeInfo: null,
                 trainerInfo: null,
               });
-              router.reload(window.location.pathname);
             }}
           />
         }
