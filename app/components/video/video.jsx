@@ -541,7 +541,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 </div>
                 <div className="ml-2">
                     {removeVideoRef &&
-                        <div className="bg-video bg-white" id="remote-user">
+                        <div className="bg-white" id="remote-user">
                             <canvas width={windowsRef.current ? windowsRef.current.innerWidth : 500}
                                 height={windowsRef.current ? windowsRef.current.innerHeight : 500}
                                 className="canvas-print absolute" ref={canvasRef}></canvas>
@@ -549,8 +549,10 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                             // width={windowsRef.current ? windowsRef.current.innerWidth : 500}
                             //     height={windowsRef.current ? windowsRef.current.innerHeight : 500} 
                                 className="videoBg" id="video" ></video> */}
-                            <video ref={removeVideoRef} playsInline autoPlay width={windowsRef.current ? windowsRef.current.innerWidth : 500}
-                                height={windowsRef.current ? windowsRef.current.innerHeight : 500} className="bg-video" id="video" ></video>
+                            <video ref={removeVideoRef} playsInline autoPlay
+                                //  width={windowsRef.current ? windowsRef.current.innerWidth : 500}
+                                // height={windowsRef.current ? windowsRef.current.innerHeight : 500} 
+                                className="bg-video" id="video" ></video>
                         </div>
                     }
                 </div>
