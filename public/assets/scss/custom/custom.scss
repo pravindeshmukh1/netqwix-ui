@@ -30,7 +30,9 @@
 .call-action-buttons {
   position: absolute !important;
   bottom: 0;
-  left: 50%;
+  left: 0;
+  right: 0;
+  text-align: center;
 }
 
 .video-canvas {
@@ -116,25 +118,28 @@
 
 .videoBg {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh !important;
+  // top: 0;
+  // left: 0;
+  // width: 100%;
+  // height: 100vh !important;
+   width:100vw;
+  height:100vh;
+  object-fit: cover;
 }
 
 @media (min-aspect-ratio: 16/9) {
   .videoBg {
-    width: 100%;
-    height: 100vh !important;
-    padding: 0;
+    // width: 100%;
+    // height: 100vh !important;
+    // padding: 0;
   }
 }
 
 @media (max-aspect-ratio: 16/9) {
   .videoBg {
-    width: 100%;
-    height: 100vh !important;
-    padding: 0;
+    // width: 100%;
+    // height: 100vh !important;
+    // padding: 0;
   }
 }
 
