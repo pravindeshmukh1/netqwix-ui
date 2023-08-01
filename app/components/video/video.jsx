@@ -480,29 +480,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         return (
             <div className="call-action-buttons z-50 ml-2  absolute bottom-0  z-50">
                 <div
-                    className={`icon-btn btn-light  button-effect btn-xl mr-3`}
-                    onClick={() => {
-                        setIsFeedStopped(!isFeedStopped)
-                        if (removeVideoRef && removeVideoRef.current) {
-                            socket.emit(EVENTS.VIDEO_CALL.STOP_FEED, { userInfo: { from_user: fromUser._id, to_user: toUser._id }, feedStatus: isFeedStopped });
-                        }
-                    }}
-                >
-                    {!isFeedStopped ? <PauseCircle /> : <PlayCircle />}
-                </div>
-                <div
-                    className="icon-btn btn-danger button-effect btn-xl  mr-3"
-                    onClick={() => {
-                        cleanupFunctionV2();
-                        isClose();
-                        if (removeVideoRef && removeVideoRef.current) {
-                            socket.emit(EVENTS.VIDEO_CALL.ON_CLOSE, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
-                        }
-                    }}
-                >
-                    <Phone />
-                </div>
-                <div
                     className={`icon-btn ${isMuted ? 'btn-danger' : 'btn-light'} btn-xl button-effect mic`}
                     onClick={() => {
                         setIsMuted(!isMuted)
@@ -512,6 +489,43 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     }}
                 >
                     <MicOff />
+                </div>
+                <div
+                    className={`icon-btn btn-light  button-effect btn-xl ml-3`}
+                    onClick={() => {
+                        setIsFeedStopped(!isFeedStopped)
+                        if (videoRef.current && videoRef.current.srcObject) {
+                            const availableTracks = videoRef.current.srcObject.getTracks();
+                            const availableVideoTracks = videoRef.current.srcObject.getVideoTracks();
+                            for (let videoRefIndex = 0; videoRefIndex < availableTracks.length; videoRefIndex++) {
+                                const track = availableTracks[videoRefIndex];
+                                track.enabled = isFeedStopped;
+                            }
+
+                            for (let videoRefIndex = 0; videoRefIndex < availableVideoTracks.length; videoRefIndex++) {
+                                const track = availableVideoTracks[videoRefIndex];
+                                track.enabled = isFeedStopped;
+                            }
+                        }
+                        if (removeVideoRef && removeVideoRef.current) {
+                            socket.emit(EVENTS.VIDEO_CALL.STOP_FEED, { userInfo: { from_user: fromUser._id, to_user: toUser._id }, feedStatus: isFeedStopped });
+                        }
+                    }}
+                >
+                    {!isFeedStopped ? <PauseCircle /> : <PlayCircle />}
+                </div>
+
+                <div
+                    className="icon-btn btn-danger button-effect btn-xl  ml-3"
+                    onClick={() => {
+                        cleanupFunctionV2();
+                        isClose();
+                        if (removeVideoRef && removeVideoRef.current) {
+                            socket.emit(EVENTS.VIDEO_CALL.ON_CLOSE, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
+                        }
+                    }}
+                >
+                    <Phone />
                 </div>
             </div>
 
