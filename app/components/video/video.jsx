@@ -4,7 +4,7 @@ import SimplePeer from 'simple-peer';
 import Image from 'next/image'
 import { EVENTS } from '../../../helpers/events';
 import { SocketContext } from "../socket";
-import { MicOff, Pause, PauseCircle, Phone, PlayCircle } from "react-feather";
+import { MicOff, Pause, PauseCircle, Phone, PlayCircle, RefreshCw } from "react-feather";
 import { AccountType } from "../../common/constants";
 
 let storedLocalDrawPaths = { sender: [], receiver: [] };
@@ -219,13 +219,13 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         })
 
         socket.on(EVENTS.VIDEO_CALL.MUTE_ME, ({ muteStatus }) => {
-            if (removeVideoRef.current) {
+            if (removeVideoRef.current && removeVideoRef.current.srcObject) {
                 removeVideoRef.current.srcObject.getAudioTracks()[0].enabled = muteStatus;
             }
         })
 
         socket.on(EVENTS.VIDEO_CALL.STOP_FEED, ({ feedStatus }) => {
-            if (removeVideoRef.current) {
+            if (removeVideoRef.current && removeVideoRef.current.srcObject) {
                 removeVideoRef.current.srcObject.getVideoTracks()[0].enabled = feedStatus;
             }
         })
@@ -440,45 +440,38 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
     const renderActionItems = () => {
         return (
-            <div className=" z-50 ml-2 absolute bottom-0 right-2 mb-4">
-                <div className="flex">
-                    <div className="ml-2 bg-blue-500 text-white font-bold py-2 px-2 rounded"
-                        onClick={() => {
-                            // undoing one step
-                            undoDrawing({ coordinates: storedLocalDrawPaths.sender, theme: canvasConfigs.sender, }, { coordinates: storedLocalDrawPaths.receiver, theme: { lineWidth: canvasConfigs.receiver.lineWidth, strokeStyle: canvasConfigs.receiver.strokeStyle } });
-                        }}>
-                        {videoRef && removeVideoRef &&
+            videoRef && removeVideoRef ?
+                <div className=" z-50 ml-2 absolute bottom-0 right-2 mb-4">
+                    <div className="flex">
+                        <div
+                            className={`icon-btn ${isFeedStopped ? 'btn-danger' : 'btn-light'}  button-effect btn-xl mr-3`}
+                            onClick={() => {
+                                undoDrawing({ coordinates: storedLocalDrawPaths.sender, theme: canvasConfigs.sender, }, { coordinates: storedLocalDrawPaths.receiver, theme: { lineWidth: canvasConfigs.receiver.lineWidth, strokeStyle: canvasConfigs.receiver.strokeStyle } });
+                            }}
+                        >
+
                             <Image
                                 src="/icons/undo.png"
                                 width={25}
                                 height={25}
                                 alt="Undo"
                             />
-                        }
+                        </div>
+                        <div
+                            className={`icon-btn ${isFeedStopped ? 'btn-danger' : 'btn-light'}  button-effect btn-xl mr-3`}
+                            onClick={() => {
+                                // deleting the canvas drawing
+                                setStoredCanvasPositions([]);
+                                storedLocalDrawPaths.sender = [];
+                                storedLocalDrawPaths.receiver = [];
+                                clearCanvas();
+                                sendClearCanvasEvent()
+                            }}
+                        >
+                            <RefreshCw />
+                        </div>
                     </div>
-                    <div className="ml-2 bg-blue-500 text-white font-bold py-2 px-2 rounded"
-                        onClick={() => {
-                            // deleting the canvas drawing
-                            setStoredCanvasPositions([]);
-                            storedLocalDrawPaths.sender = [];
-                            storedLocalDrawPaths.receiver = [];
-                            clearCanvas();
-                            sendClearCanvasEvent()
-                        }}
-
-                    >
-                        {videoRef && removeVideoRef &&
-                            <Image
-                                src="/icons/delete.png"
-                                width={25}
-                                height={25}
-                                alt="delete"
-                            />
-                        }
-
-                    </div>
-                </div>
-            </div>
+                </div> : <></>
         )
     }
 
@@ -486,8 +479,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     const renderCallActionButtons = () => {
         return (
             <div className="call-action-buttons z-50 ml-2  absolute bottom-0  z-50">
-                  <div
-                    className={`icon-btn ${isFeedStopped ? 'btn-danger' :'btn-light'}  button-effect btn-xl is-animating mr-3`}
+                <div
+                    className={`icon-btn btn-light  button-effect btn-xl mr-3`}
                     onClick={() => {
                         setIsFeedStopped(!isFeedStopped)
                         if (removeVideoRef && removeVideoRef.current) {
@@ -495,10 +488,10 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                         }
                     }}
                 >
-                    {!isFeedStopped ? <PauseCircle /> : <PlayCircle/>}
+                    {!isFeedStopped ? <PauseCircle /> : <PlayCircle />}
                 </div>
                 <div
-                    className="icon-btn btn-danger button-effect btn-xl is-animating mr-3"
+                    className="icon-btn btn-danger button-effect btn-xl  mr-3"
                     onClick={() => {
                         cleanupFunctionV2();
                         isClose();
@@ -544,7 +537,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                         <div className="bg-white" id="remote-user">
                             <canvas width={windowsRef.current ? windowsRef.current.innerWidth : 500}
                                 height={windowsRef.current ? windowsRef.current.innerHeight : 500}
-                                className="canvas-print absolute" ref={canvasRef}></canvas>
+                                className="canvas-print absolute all-0" ref={canvasRef}></canvas>
                             {/* <video muted={isVideoMuted} ref={removeVideoRef} playsInline autoPlay 
                             // width={windowsRef.current ? windowsRef.current.innerWidth : 500}
                             //     height={windowsRef.current ? windowsRef.current.innerHeight : 500} 
