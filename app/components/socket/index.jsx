@@ -17,6 +17,7 @@ export const getSocket = () => {
       }
       setSocket (
         socketio.connect (URL, {
+          withCredentials: true,
           query: {authorization: token, autoConnect: false},
         })
       );
