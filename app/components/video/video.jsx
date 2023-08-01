@@ -444,7 +444,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 <div className=" z-50 ml-2 absolute bottom-0 right-2 mb-4">
                     <div className="flex">
                         <div
-                            className={`icon-btn ${isFeedStopped ? 'btn-danger' : 'btn-light'}  button-effect btn-xl mr-3`}
+                            className={`icon-btn btn-light  button-effect btn-xl mr-3`}
                             onClick={() => {
                                 undoDrawing({ coordinates: storedLocalDrawPaths.sender, theme: canvasConfigs.sender, }, { coordinates: storedLocalDrawPaths.receiver, theme: { lineWidth: canvasConfigs.receiver.lineWidth, strokeStyle: canvasConfigs.receiver.strokeStyle } });
                             }}
@@ -458,7 +458,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                             />
                         </div>
                         <div
-                            className={`icon-btn ${isFeedStopped ? 'btn-danger' : 'btn-light'}  button-effect btn-xl mr-3`}
+                            className={`icon-btn btn-light  button-effect btn-xl mr-3`}
                             onClick={() => {
                                 // deleting the canvas drawing
                                 setStoredCanvasPositions([]);
