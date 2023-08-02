@@ -23,6 +23,10 @@ import { SocketContext } from "../../app/components/socket";
 import TodoSection from "../rightSidebar/todoSection";
 import ReminderSection from "../rightSidebar/reminderSection";
 import NoteSection from "../rightSidebar/noteSection";
+import FileSection from "../rightSidebar/fileSection";
+import AppListSection from "../rightSidebar/appList";
+import { Book } from "react-feather";
+
 
 const steps = [
   {
@@ -76,6 +80,16 @@ const Index = (props) => {
     return () => window.removeEventListener("resize", updateSize);
   }, []);
 
+  const CloseAppSidebar = () => {
+    document.querySelector(".chitchat-main").classList.remove("small-sidebar");
+    document.querySelector(".app-sidebar").classList.remove("active");
+    document.body.className = `main-page ${localStorage.getItem(
+      "layout_mode"
+    )}`;
+  };
+
+
+
   const TogglTab = (value) => {
     setActiveTab(value);
     dispatch(authAction.setActiveTab(value));
@@ -88,6 +102,16 @@ const Index = (props) => {
     ) {
       document.querySelector(".app-sidebar").classList.remove("active");
     }
+  };
+
+  const ToggleTab = (tab) => {
+    setActiveTab(tab);
+    if (width > 1640 && document
+      .querySelector(".chitchat-main"))  {
+        document
+          .querySelector(".chitchat-main")
+          .classList.remove("small-sidebar");
+      }
   };
 
   const closeTour = () => {
@@ -113,8 +137,21 @@ const Index = (props) => {
     dispatch(authAction.updateIsUserLoggedIn());
   };
 
+  const smallSideBarToggle = () => {
+    if (document && document.querySelector(".chitchat-main")) {
+      document.querySelector(".chitchat-main").classList.add("small-sidebar");
+    }
+    setActiveTab("");
+  };
+
+
   return (
     <Fragment>
+      {/* <AppListSection
+          activeTab={activeTab}
+          CloseAppSidebar={CloseAppSidebar}
+          ToggleTab={ToggleTab}
+        /> */}
       <nav className="main-nav on custom-scroll">
         {/* logo section */}
         <div className="logo-warpper">
@@ -123,8 +160,45 @@ const Index = (props) => {
           </Link>
         </div>
 
-        {/* list section */}
-        <div className="sidebar-main">
+
+        <div className="app-list sidebar-main">
+          {/* <ul className="sidebar-top  custom-scroll">
+            <li>
+              <Tooltip title="Home" position="top" trigger="mouseenter">
+                <NavLink
+                  className={`icon-btn btn-light button-effect ${activeTab === "home" ? "active" : ""
+                    }`}
+                  onClick={() => TogglTab("home")}
+                >
+                  <i className="fa fa-home"></i>
+                </NavLink>
+              </Tooltip>
+            </li>
+            <li>
+              <Tooltip
+                title={
+                  accountType === AccountType.TRAINEE
+                    ? "Booking"
+                    : "Schedule Slots"
+                }
+                position="right-end"
+                trigger="mouseenter"
+              >
+                <NavLink
+                  className={`icon-btn btn-light button-effect ${activeTab === leftSideBarOptions.SCHEDULE_TRAINING
+                    ? "active"
+                    : ""
+                    }`}
+                  onClick={() => TogglTab(leftSideBarOptions.SCHEDULE_TRAINING)}
+                >
+                  <i className="fa fa-calendar"></i>
+                </NavLink>
+              </Tooltip>
+            </li>
+            <li><Link className={`icon-btn btn-outline-primary btn-sm button-effect ${activeTab === "todo" ? "active" : ""}`} href="#" onClick={() => ToggleTab("todo")}><Book /></Link>
+            </li>
+
+          </ul> */}
           <ul className="sidebar-top">
             <li>
               <Tooltip title="Home" position="top" trigger="mouseenter">
@@ -138,31 +212,6 @@ const Index = (props) => {
                 </NavLink>
               </Tooltip>
             </li>
-            {/* <li>
-              <Tooltip title="Status" position="top" trigger="mouseenter">
-                <NavLink
-                  className={`icon-btn btn-light button-effect ${
-                    activeTab === "status" ? "active" : ""
-                  }`}
-                  onClick={() => TogglTab("status")}
-                  data-intro="Check Status here"
-                >
-                  <div className="user-popup status one">
-                    <div
-                      className="bg-size"
-                      style={{
-                        // TODO: Get url from the api for background Image
-                        backgroundImage: `url("/assets/images/status-img/statusMenuIcon.png")`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        display: "block",
-                      }}
-                    >
-                    </div>
-                  </div>
-                </NavLink>
-              </Tooltip>
-            </li> */}
             <li>
               <Tooltip
                 title={
@@ -203,7 +252,7 @@ const Index = (props) => {
                   className={`icon-btn btn-light button-effect ${
                     activeTab === "todo" ? "active" : ""
                   }`}
-                  onClick={() => TogglTab("todo")}
+                  onClick={() => ToggleTab("todo")}
                 >
                   <i className="fa fa-list"></i>
                 </NavLink>
@@ -215,7 +264,7 @@ const Index = (props) => {
                   className={`icon-btn btn-light button-effect ${
                     activeTab === "notes" ? "active" : ""
                   }`}
-                  onClick={() => TogglTab("notes")}
+                  onClick={() => ToggleTab("notes")}
                 >
                   <i className="fa fa-book"></i>
                 </NavLink>
@@ -227,7 +276,7 @@ const Index = (props) => {
                   className={`icon-btn btn-light button-effect ${
                     activeTab === "reminder" ? "active" : ""
                   }`}
-                  onClick={() => TogglTab("reminder")}
+                  onClick={() => ToggleTab("reminder")}
                 >
                   <i className="fa fa-clock-o"></i>
                 </NavLink>
@@ -239,7 +288,7 @@ const Index = (props) => {
                   className={`icon-btn btn-light button-effect ${
                     activeTab === "fevorite" ? "active" : ""
                   }`}
-                  onClick={() => TogglTab("fevorite")}
+                  onClick={() => ToggleTab("fevorite")}
                 >
                   <i className="fa fa-star"></i>
                 </NavLink>
@@ -284,7 +333,7 @@ const Index = (props) => {
                     className={`icon-btn btn-light button-effect ${
                       activeTab === "notification" ? "active" : ""
                     }`}
-                    onClick={() => TogglTab("notification")}
+                    onClick={() => ToggleTab("notification")}
                   >
                     <i className="fa fa-bell"></i>
                   </NavLink>
@@ -297,7 +346,7 @@ const Index = (props) => {
                   className={`icon-btn btn-light button-effect step2 ${
                     activeTab === "setting" ? "active" : ""
                   }`}
-                  onClick={() => TogglTab("setting")}
+                  onClick={() => ToggleTab("setting")}
                   data-intro="You can change settings by clicking here"
                 >
                   <i className="fa fa-cog"></i>
@@ -340,66 +389,52 @@ const Index = (props) => {
       </nav>
       {activeTab !== leftSideBarOptions.HOME &&
         activeTab !== leftSideBarOptions.SCHEDULE_TRAINING && (
-          <aside
-            className={`left-disp ${
-              activeTab === "todo" ||
-              activeTab === "reminder" ||
-              activeTab === "notes"
-                ? `app-sidebar active chitchat-left-sidebar-submenu`
-                : `chitchat-left-sidebar left-disp`
-            }`}
-          >
+
+          <aside className="app-sidebar active">
             <div className="apps">
               <div className="apps-ul">
-                {/* <div className="recent-default dynemic-sidebar active">
-            <RecentSection />
-            <ChatSection />
-          </div> */}
-                <TabContent activeTab={activeTab}>
-                  <TabPane tabId="fevorite">
-                    <FevoriteSection tab={activeTab} ActiveTab={setActiveTab} />
+                <TabContent activeTab={activeTab} >
+                 
+                  <TabPane tabId="todo"  className={`${activeTab === 'todo' ? 'left-90': ''}`}>
+                    <TodoSection smallSideBarToggle={smallSideBarToggle} tab={activeTab} ActiveTab={setActiveTab} />
                   </TabPane>
-                  <TabPane tabId="chats">
-                    <div className="recent-default dynemic-sidebar active">
-                      <RecentSection />
-                      <ChatSection />
-                    </div>
+                  <TabPane tabId="reminder" className={`${activeTab === 'reminder' ? 'left-90': ''}`}>
+                    <ReminderSection smallSideBarToggle={smallSideBarToggle} tab={activeTab} ActiveTab={setActiveTab} />
                   </TabPane>
-                  <TabPane tabId="todo">
-                    <TodoSection tab={activeTab} ActiveTab={setActiveTab} />
+                  <TabPane tabId="notes" className={`${activeTab === 'notes' ? 'left-90': ''}`}>
+                    <NoteSection smallSideBarToggle={smallSideBarToggle} tab={activeTab} ActiveTab={setActiveTab} />
                   </TabPane>
-                  <TabPane tabId="reminder">
-                    <ReminderSection tab={activeTab} ActiveTab={setActiveTab} />
+                  <TabPane tabId="document" className={`${activeTab === 'document' ? 'left-90': ''}`}>
+                    <DocumentSection smallSideBarToggle={smallSideBarToggle} tab={activeTab} ActiveTab={setActiveTab} />
                   </TabPane>
-                  <TabPane tabId="notes">
-                    <NoteSection tab={activeTab} ActiveTab={setActiveTab} />
+                  <TabPane tabId="fevorite" className={`${activeTab === 'fevorite' ? 'left-90': ''}`}>
+                    <FevoriteSection smallSideBarToggle={smallSideBarToggle} tab={activeTab} ActiveTab={setActiveTab} />
                   </TabPane>
-                  <TabPane tabId="document">
-                    <DocumentSection tab={activeTab} ActiveTab={setActiveTab} />
-                  </TabPane>
-                  <TabPane tabId="contact">
+
+                  <TabPane tabId="contact" className={`${activeTab === 'contact' ? 'left-90': ''}`}>
                     <ContactListSection
+                    smallSideBarToggle={smallSideBarToggle}
                       tab={activeTab}
                       ActiveTab={setActiveTab}
                     />
                   </TabPane>
-                  <TabPane tabId="notification">
+                  <TabPane tabId="notification" className={`${activeTab === 'notification' ? 'left-90': ''}`}>
                     <NotificationSection
+                    smallSideBarToggle={smallSideBarToggle}
                       tab={activeTab}
                       ActiveTab={setActiveTab}
                     />
                   </TabPane>
-                  <TabPane tabId="setting">
-                    <SettingSection tab={activeTab} ActiveTab={setActiveTab} />
+                  <TabPane tabId="setting" className={`${activeTab === 'setting' ? 'left-90': ''}`}>
+                    <SettingSection smallSideBarToggle={smallSideBarToggle} tab={activeTab} ActiveTab={setActiveTab} />
                   </TabPane>
-                  <TabPane tabId="status">
-                    <StatusSection tab={activeTab} ActiveTab={setActiveTab} />
+                  <TabPane tabId="status" className={`${activeTab === 'status' ? 'left-90': ''}`}>
+                    <StatusSection smallSideBarToggle={smallSideBarToggle} tab={activeTab} ActiveTab={setActiveTab} />
                   </TabPane>
                 </TabContent>
               </div>
             </div>
-          </aside>
-        )}
+          </aside>)}
     </Fragment>
   );
 };

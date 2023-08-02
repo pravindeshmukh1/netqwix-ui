@@ -41,9 +41,10 @@ const SettingSection = (props) => {
   };
 
   const closeLeftSide = () => {
-    document.querySelector(".settings-tab").classList.remove("active");
-    document.querySelector(".recent-default").classList.add("active");
-    props.ActiveTab("");
+    // document.querySelector(".settings-tab").classList.remove("active");
+    // document.querySelector(".recent-default").classList.add("active");
+    // props.ActiveTab("");
+    props.smallSideBarToggle()
   };
 
   useEffect(() => {

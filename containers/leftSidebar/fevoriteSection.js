@@ -6,9 +6,10 @@ const Section2 = (props) => {
   const [searchToggle, setSearchToggle] = useState(false);
   const [newContactModal, setContactModal] = useState(false);
   const closeLeftSide = () => {
-    document.querySelector(".fevorite-tab").classList.remove("active");
-    document.querySelector(".recent-default").classList.add("active");
-    props.ActiveTab("");
+    // document.querySelector(".fevorite-tab").classList.remove("active");
+    // document.querySelector(".recent-default").classList.add("active");
+    // props.ActiveTab("");
+    props.smallSideBarToggle()
   };
 
   const addToFavourite = (e) => {
