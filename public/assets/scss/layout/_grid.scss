@@ -60,12 +60,13 @@
     animation: fadeInRight 300ms ease-in-out;
     &.active{
         width: auto;
-        right: 0;
+        // right: 0;
+        left: 0;
         transition: all 0.3s ease;
         animation: fadeInRight 300ms ease-in-out;
         .apps-ul{
             > li, > .tab-content > .tab-pane {
-                width: 300px;
+                width: 370px;
                 height: 100vh;
                 opacity: 0;
                 position: absolute;
