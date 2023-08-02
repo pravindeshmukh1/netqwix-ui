@@ -17,7 +17,7 @@ const NotificationSection = (props) => {
                 <div className="media-body text-right">   <Link className="icon-btn btn-outline-light btn-sm close-panel" href="#" onClick={() => props.smallSideBarToggle()}><X/></Link></div>
               </div>
             </div>
-            <ul className="chat-main">
+            <ul className="chat-main custom-scroll">
               <li>
                 <div className="chat-box notification">
                   <div className="profile offline" style={{ backgroundImage: `url('assets/images/contact/1.jpg')`,backgroundSize:"cover",backgroundPosition:"center",display:"block" }}><img className="bg-img" src="/assets/images/contact/1.jpg" alt="Avatar" style={{display:'none'}}/></div>

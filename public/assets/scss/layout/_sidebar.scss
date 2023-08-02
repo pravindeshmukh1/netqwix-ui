@@ -829,7 +829,8 @@
     height: calc(100% - 115px);
     padding: $sidebar-spacing $sidebar-spacing 0 $sidebar-spacing;
     width: 100%;
-    top: 115px;
+    // top: 115px;
+    top: 90px;
     left: 0;
     bottom: 0;
     background-color: $white;
