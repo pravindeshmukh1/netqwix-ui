@@ -12,9 +12,7 @@ import {
 } from "../trainee.slice";
 import moment from "moment/moment";
 import { Nav, NavItem, NavLink } from "reactstrap";
-import Modal from "../../../common/modal";
-import ScheduleInstantMeeting from "../scheduleInstantMeeting";
-
+import TrainerSlider from './trainerSlider';
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
   const { getTraineeSlots } = useAppSelector(traineeState);
@@ -22,6 +20,7 @@ const ScheduleTraining = () => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(null);
   const [getParams, setParams] = useState(params);
   const [bookingColumns, setBookingColumns] = useState([]);
+  const [listOfTrainers, setListOfTrainers] = useState([]);
   const [bookingTableData, setBookingTableData] = useState([]);
   const [isOpenInstantScheduleMeeting, setInstantScheduleMeeting] =
     useState(false);
@@ -37,6 +36,15 @@ const ScheduleTraining = () => {
       Utils.getCurrentWeekByDate(todaySDate);
     setTableData(getTraineeSlots, weekDates);
     setColumns(weekDateFormatted);
+    console.log(`getTraineeSlots--- `, getTraineeSlots);
+    setListOfTrainers(getTraineeSlots.map((trainer) => {
+      return {
+        id: trainer?._id,
+        background_image: trainer?.profilePicture,
+        isActive: true,
+        name: trainer?.fullname
+      }
+    }))
   }, [getTraineeSlots]);
 
   const setTableData = (data = [], selectedDate) => {
@@ -331,7 +339,7 @@ const ScheduleTraining = () => {
             )
           ) : (
             <tr key={"no-data"} className="no-data">
-              <td colSpan="6">No data available.</td>
+              <td colSpan="6">No trainers available.</td>
             </tr>
           )}
         </tbody>
@@ -387,7 +395,10 @@ const ScheduleTraining = () => {
         </div>
       </div>
       <div className="pt-5" style={{ marginTop: "7rem" }}>
-        {renderTable()}
+        <div className="ml-4 ">
+          {((getParams.search && getParams.search.length) || !bookingColumns.length) ? renderTable()
+            : <TrainerSlider list={listOfTrainers} />}
+        </div>
       </div>
     </div>
   );
