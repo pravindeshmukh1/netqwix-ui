@@ -1,3 +1,9 @@
+$sidebar-width-left: 105px;
+$navbar-height-top: 85px;
+
+
+
+
 .react-strap-modal-full {
   height: 100% !important;
   max-width: 100% !important;
@@ -24,7 +30,7 @@
 }
 
 .full-height {
-  height: vh !important;
+  height: 90vh !important;
 }
 
 .call-action-buttons {
@@ -46,16 +52,13 @@
 
 .bg-video {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  left: $sidebar-width-left;
+  top: $navbar-height-top;
 }
 
 .canvas-print {
-  z-index: 1 !important;
-  // border: 2px solid red;
-}
+  z-index: 8 !important;
+} 
 
 #end-user-video {
   height: 250px;
@@ -75,7 +78,7 @@
 }
 
 .z-50 {
-  z-index: 5000;
+  z-index: 8;
 }
 
 .rounded {
@@ -91,7 +94,7 @@
 }
 
 .left-21 {
-  left: 21px;
+  left: 10%;
 }
 
 .items-center {
@@ -104,13 +107,15 @@
     height: 150px;
     width: 150px;
   }
+
+
 }
 
 .no-user-joined {
   margin: auto;
   top: 30px;
   font-size: 20px;
-  z-index: 1000;
+  z-index: 8;
   background: white;
   height: 40vh;
   padding: 20px;
@@ -118,29 +123,17 @@
 
 .videoBg {
   position: absolute;
-  // top: 0;
-  // left: 0;
-  // width: 100%;
-  // height: 100vh !important;
-   width:100vw;
+  width:100vw;
   height:100vh;
   object-fit: cover;
 }
 
 @media (min-aspect-ratio: 16/9) {
-  .videoBg {
-    // width: 100%;
-    // height: 100vh !important;
-    // padding: 0;
-  }
+
 }
 
 @media (max-aspect-ratio: 16/9) {
-  .videoBg {
-    // width: 100%;
-    // height: 100vh !important;
-    // padding: 0;
-  }
+ 
 }
 
 video {
@@ -153,9 +146,10 @@ video {
 }
 
 .all-0 {
-  top: 0;
-  bottom: 0;
-  left: 0;
+  position: absolute;
+  top: $navbar-height-top;
+  bottom: 10;
+  left: $sidebar-width-left;
   right: 0;
 }
 
@@ -174,4 +168,8 @@ video {
 
 .tab-pane {
   overflow: auto;
+}
+
+.bottom-10 {
+  bottom: 10px;
 }

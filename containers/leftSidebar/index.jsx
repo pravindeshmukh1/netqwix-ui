@@ -223,6 +223,17 @@ const Index = props => {
                 </NavLink>
               </Tooltip>
             </li>
+            <li>
+            <Tooltip title="Media" position="top" trigger="mouseenter">
+                <NavLink
+                  className={`icon-btn btn-light button-effect step2 ${activeTab === 'file' ? 'active' : ''}`}
+                  onClick={() => ToggleTab ('file')}
+                  data-intro=""
+                >
+                    <i className="fa fa-film" />
+                </NavLink>
+              </Tooltip>
+            </li>
             {/* <li>
               <Tooltip title="Chats" position="top" trigger="mouseenter">
                 <NavLink
@@ -319,17 +330,7 @@ const Index = props => {
                 </Tooltip>
               </div>
             </li>
-            <li>
-            <Tooltip title="Media" position="top" trigger="mouseenter">
-                <NavLink
-                  className={`icon-btn btn-light button-effect step2 ${activeTab === 'file' ? 'active' : ''}`}
-                  onClick={() => ToggleTab ('file')}
-                  data-intro=""
-                >
-                    <i className="fa fa-file" />
-                </NavLink>
-              </Tooltip>
-            </li>
+           
 
             <li>
               <Tooltip title="Settings" position="top" trigger="mouseenter">

@@ -50,6 +50,10 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     useEffect(() => {
         windowsRef.current = window;
         handleStartCall();
+
+        return () => {
+            cutCall();
+        }
     }, []);
 
     useEffect(() => {
@@ -197,6 +201,16 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             removeVideoRef.current.srcObject = remoteStream;
         }
     }, [remoteStream]);
+
+
+    const cutCall = () => {
+        cleanupFunctionV2();
+        isClose();
+        if (removeVideoRef && removeVideoRef.current) {
+            socket.emit(EVENTS.VIDEO_CALL.ON_CLOSE, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
+        }
+
+    }
 
 
     const listenSocketEvents = () => {
@@ -441,7 +455,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     const renderActionItems = () => {
         return (
             videoRef && removeVideoRef ?
-                <div className=" z-50 ml-2 absolute bottom-0 right-2 mb-4">
+                <div className=" z-50 ml-2 absolute bottom-10 right-2 mb-4">
                     <div className="flex">
                         <div
                             className={`icon-btn btn-light  button-effect btn-xl mr-3`}
@@ -478,7 +492,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
     const renderCallActionButtons = () => {
         return (
-            <div className="call-action-buttons z-50 ml-2  absolute bottom-0  z-50">
+            <div className="call-action-buttons z-50 ml-2  absolute bottom-10  z-50">
                 <div
                     className={`icon-btn ${isMuted ? 'btn-danger' : 'btn-light'} btn-xl button-effect mic`}
                     onClick={() => {
@@ -518,11 +532,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 <div
                     className="icon-btn btn-danger button-effect btn-xl  ml-3"
                     onClick={() => {
-                        cleanupFunctionV2();
-                        isClose();
-                        if (removeVideoRef && removeVideoRef.current) {
-                            socket.emit(EVENTS.VIDEO_CALL.ON_CLOSE, { userInfo: { from_user: fromUser._id, to_user: toUser._id } });
-                        }
+                        cutCall();
                     }}
                 >
                     <Phone />
@@ -542,28 +552,35 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     <div className="flex items-center">
                         <div>
                             {videoRef &&
-                                <video muted={isVideoMuted} id='end-user-video' playsInline className="rounded z-50" ref={videoRef} autoPlay />}
+                                <video muted id='end-user-video' playsInline className="rounded z-50" ref={videoRef} autoPlay />}
                         </div>
                     </div>
                 </div>
-                <div className="ml-2">
+                {/* <div className="ml-2">
                     {removeVideoRef &&
                         <div className="bg-white" id="remote-user">
                             <canvas width={windowsRef.current ? windowsRef.current.innerWidth : 500}
                                 height={windowsRef.current ? windowsRef.current.innerHeight : 500}
                                 className="canvas-print absolute all-0" ref={canvasRef}></canvas>
-                            {/* <video muted={isVideoMuted} ref={removeVideoRef} playsInline autoPlay 
-                            // width={windowsRef.current ? windowsRef.current.innerWidth : 500}
-                            //     height={windowsRef.current ? windowsRef.current.innerHeight : 500} 
-                                className="videoBg" id="video" ></video> */}
-                            <video ref={removeVideoRef} playsInline autoPlay
-                                //  width={windowsRef.current ? windowsRef.current.innerWidth : 500}
-                                // height={windowsRef.current ? windowsRef.current.innerHeight : 500} 
+                            <video muted ref={removeVideoRef} playsInline autoPlay
                                 className="bg-video" id="video" ></video>
                         </div>
                     }
+                </div> */}
+                {removeVideoRef && <div className="" id="remote-user">
+                    <canvas
+                        width={document.getElementById('bookings')?.clientWidth}
+                        height={document.getElementById('bookings')?.clientHeight}
+                        className="canvas-print absolute  all-0" ref={canvasRef}></canvas>
+                    <video width={document.getElementById('bookings')?.clientWidth}
+                        height={document.getElementById('bookings')?.clientHeight}
+                        ref={removeVideoRef} playsInline autoPlay
+                        className="bg-video" id="video" ></video>
                 </div>
+                }
+
             </div>
+
             {/* action buttons */}
             {accountType === AccountType.TRAINER && renderActionItems()}
             {/* call cut and mute options */}

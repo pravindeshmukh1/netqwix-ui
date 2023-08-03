@@ -212,9 +212,88 @@ const Bookings = ({ accountType = null }) => {
       );
     }
   };
+
+  const renderBookings = () => (
+    scheduledMeetingDetails.map((data, index) => {
+      const {
+        _id,
+        trainee_info,
+        trainer_info,
+        booked_date,
+        session_start_time,
+        session_end_time,
+      } = data;
+      return (
+        <div
+          className="card mb-4"
+          key={`booking-schedule-training${index}`}
+        >
+          <div className="card-body">
+            <div className="row">
+              <div className="col">
+                <dl className="row">
+                  <dd className="ml-3">Trainer :</dd>
+                  <dt className="ml-1">{trainer_info.fullname}</dt>
+                </dl>
+              </div>
+              <div className="col">
+                <dl className="row ml-1">
+                  <dd>Date :</dd>
+                  <dt className="ml-1">
+                    {Utils.getDateInFormat(booked_date)}
+                  </dt>
+                </dl>
+              </div>
+              <div className="w-100"></div>
+              <div className="col">
+                <dl className="row">
+                  <dd className="ml-3">Trainee :</dd>
+                  <dt className="ml-1">{trainee_info.fullname}</dt>
+                </dl>
+              </div>
+              <div className="col">
+                <dl className="row">
+                  <dd className="ml-3">Time Durations :</dd>
+                  <dt className="ml-1">{`${Utils.convertToAmPm(
+                    session_start_time
+                  )}-${Utils.convertToAmPm(session_end_time)}`}</dt>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <div className="card-footer px-5 pb-3 d-flex justify-content-end">
+            {handleBookedScheduleTraining(
+              data.status,
+              _id,
+              trainee_info,
+              trainer_info
+            )}
+          </div>
+        </div>
+      );
+    })
+
+  );
+
+  const renderVideoCall = () => (
+    <StartMeeting
+      accountType={accountType}
+      traineeInfo={startMeeting.traineeInfo}
+      trainerInfo={startMeeting.trainerInfo}
+      isClose={() => {
+        setStartMeeting({
+          ...startMeeting,
+          id: null,
+          isOpenModal: false,
+          traineeInfo: null,
+          trainerInfo: null,
+        });
+      }}
+    />
+  );
   return (
     <>
-      <div className="m-25 w-100 overflow-auto">
+      <div className="m-25 w-100 overflow-auto" id="bookings">
         <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
           Bookings
         </h3>
@@ -223,69 +302,14 @@ const Bookings = ({ accountType = null }) => {
             No bookings available
           </h3>
         ) : (
-          scheduledMeetingDetails.map((data, index) => {
-            const {
-              _id,
-              trainee_info,
-              trainer_info,
-              booked_date,
-              session_start_time,
-              session_end_time,
-            } = data;
-            return (
-              <div
-                className="card mb-4"
-                key={`booking-schedule-training${index}`}
-              >
-                <div className="card-body">
-                  <div className="row">
-                    <div className="col">
-                      <dl className="row">
-                        <dd className="ml-3">Trainer :</dd>
-                        <dt className="ml-1">{trainer_info.fullname}</dt>
-                      </dl>
-                    </div>
-                    <div className="col">
-                      <dl className="row ml-1">
-                        <dd>Date :</dd>
-                        <dt className="ml-1">
-                          {Utils.getDateInFormat(booked_date)}
-                        </dt>
-                      </dl>
-                    </div>
-                    <div className="w-100"></div>
-                    <div className="col">
-                      <dl className="row">
-                        <dd className="ml-3">Trainee :</dd>
-                        <dt className="ml-1">{trainee_info.fullname}</dt>
-                      </dl>
-                    </div>
-                    <div className="col">
-                      <dl className="row">
-                        <dd className="ml-3">Time Durations :</dd>
-                        <dt className="ml-1">{`${Utils.convertToAmPm(
-                          session_start_time
-                        )}-${Utils.convertToAmPm(session_end_time)}`}</dt>
-                      </dl>
-                    </div>
-                  </div>
-                </div>
-                <div className="card-footer px-5 pb-3 d-flex justify-content-end">
-                  {handleBookedScheduleTraining(
-                    data.status,
-                    _id,
-                    trainee_info,
-                    trainer_info
-                  )}
-                </div>
-              </div>
-            );
-          })
+
+          startMeeting.isOpenModal ? renderVideoCall() : renderBookings()
+
         )}
       </div>
 
       {/* calling popup */}
-      <Modal
+      {/* <Modal
         key={"startMeeting"}
         toggle={toggle}
         allowFullWidth={true}
@@ -307,7 +331,7 @@ const Bookings = ({ accountType = null }) => {
             }}
           />
         }
-      />
+      /> */}
     </>
   );
 };
