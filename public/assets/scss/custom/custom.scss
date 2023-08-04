@@ -1,6 +1,6 @@
 $sidebar-width-left: 105px;
 $navbar-height-top: 85px;
-
+$canvas-z-index:8;
 
 
 
@@ -57,7 +57,7 @@ $navbar-height-top: 85px;
 }
 
 .canvas-print {
-  z-index: 8 !important;
+  z-index: $canvas-z-index !important;
 } 
 
 #end-user-video {
@@ -78,7 +78,7 @@ $navbar-height-top: 85px;
 }
 
 .z-50 {
-  z-index: 8;
+  z-index: $canvas-z-index;
 }
 
 .rounded {
@@ -115,7 +115,7 @@ $navbar-height-top: 85px;
   margin: auto;
   top: 30px;
   font-size: 20px;
-  z-index: 8;
+  z-index: $canvas-z-index;;
   background: white;
   height: 40vh;
   padding: 20px;
@@ -175,6 +175,7 @@ video {
 }
 
 
+// slider CSS
 
 .recent-slider {
   padding: 20px $sidebar-spacing 0 0;
@@ -235,3 +236,52 @@ slick-slider .slick-list, .slick-slider .slick-track {
 }
 
 
+
+
+
+// canvas menu bar
+.canvas-menus {
+  background-color: white;
+  left: $sidebar-width-left + 35px;
+  position: absolute;
+  bottom: 25%;
+  transform: translate(-50%, -50%);
+  margin: 0 auto;
+  z-index: $canvas-z-index + 1;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  max-height: 70vh;
+  overflow: auto;
+  // width: 70px;
+}
+
+
+.creationBarItem {
+    width: 48px;
+    -ms-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+    pointer-events: auto;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+    box-shadow: 0px 2px 10px rgba(5, 0, 56, 0.08);
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding: 2px;
+
+}
+
+.CreationBarCustomizable {
+  pointer-events: auto;
+  display: block;
+}
+
+// .color-picker {
+//   z-index: $canvas-z-index + 10;
+//   position: absolute;
+// }
+
+.react-tiny-popover-container {
+  z-index: $canvas-z-index + 20 !important; 
+}
