@@ -17,6 +17,7 @@ import {
 } from "react-feather";
 import { AccountType } from "../../common/constants";
 import { SketchPicker, ChromePicker } from "react-color";
+import { CanvasMenuBar } from "./canvas.menubar";
 
 let storedLocalDrawPaths = { sender: [], receiver: [] };
 let XAndYCoordinates = [];
@@ -33,7 +34,6 @@ let canvasConfigs = {
         lineCap: "round",
     },
 };
-
 
 // default setup;
 let isDrawing = false;
@@ -69,7 +69,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
     useEffect(() => {
         windowsRef.current = window;
-        handleStartCall();
+        // handleStartCall();
 
         return () => {
             cutCall();
@@ -134,7 +134,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         const stopDrawing = (event) => {
             event.preventDefault();
             if (storedEvents && storedEvents.length && state.mousedown) {
-                console.log(`--- stop drawing ---- `, XAndYCoordinates);
+                console.log(`--- stop drawing ---- `);
                 if (XAndYCoordinates && XAndYCoordinates.length) {
                     storedLocalDrawPaths.sender.push(XAndYCoordinates);
                 }
@@ -143,9 +143,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 storedPositions.length = 0;
                 setStoredCanvasPositions([]);
                 setStoredEvents([]);
-                setTimeout(() => {
-                    console.log(`storedLocalDrawPaths -- `, storedLocalDrawPaths);
-                }, 2000);
                 isDrawing = false;
                 state.mousedown = false;
             }
@@ -409,7 +406,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             socket.emit(EVENTS.DRAW, {
                 userInfo: { from_user: fromUser._id, to_user: toUser._id },
                 storedEvents,
-                canvasConfigs
+                canvasConfigs,
             });
         }
     };
@@ -582,117 +579,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         );
     };
 
-    const renderMenus = () => {
-        return (
-            <div className="canvas-menus">
-                <div className="creationBarItem">
-                    <div CreationBarCustomizable>
-                        <span>
-                            <div>
-                                {/* {displayColorPicker ?
-                 */}
-                                <Popover
-                                    className="color-picker-popover"
-                                    isOpen={displayColorPicker}
-                                    positions={["left", "right"]} // if you'd like, you can limit the positions
-                                    padding={10} // adjust padding here!
-                                    reposition={true} // prevents automatic readjustment of content position that keeps your popover content within its parent's bounds
-                                    onClickOutside={() => setDisplayColorPicker(false)} // handle click events outside of the popover/target here!
-                                    content={(
-                                        { position, nudgedLeft, nudgedTop } // you can also provide a render function that injects some useful stuff!
-                                    ) => (
-                                        <div>
-                                            <SketchPicker
-                                                onChange={(color) => {
-                                                    const payload = { ...canvasConfigs, sender: { ...canvasConfigs.sender, strokeStyle: color.hex}};
-                                                    // setCanvasConfigs(payload);
-                                                    canvasConfigs =payload;
-                                                    // canvasConfigs.sender.strokeStyle = color.hex;
-                                                    setSketchPickerColor(color.rgb);
-                                                }}
-                                                color={sketchPickerColor}
-                                            />
-                                        </div>
-                                    )}
-                                >
-                                    <div
-                                        className="icon-btn m-5 btn-light button-effect btn-sm"
-                                        onClick={() => {
-                                            setDisplayColorPicker(true);
-                                        }}
-                                    >
-                                        {" "}
-                                        <Edit2 />{" "}
-                                    </div>
-                                </Popover>
-
-                                {/* : null} */}
-                            </div>
-                        </span>
-                        <span>
-                            <div
-                                className="icon-btn m-5 my-3 btn-light button-effect btn-sm"
-                                onClick={() => { }}
-                            >
-                                <Phone />
-                            </div>
-                        </span>
-                        <span>
-                            <div
-                                className="icon-btn m-5 btn-light button-effect btn-sm"
-                                onClick={() => { }}
-                            >
-                                <Phone />
-                            </div>
-                        </span>
-                        <span>
-                            <div
-                                className={`icon-btn m-5 btn-light button-effect btn-sm my-3`}
-                                onClick={() => {
-                                    undoDrawing(
-                                        {
-                                            coordinates: storedLocalDrawPaths.sender,
-                                            theme: canvasConfigs.sender,
-                                        },
-                                        {
-                                            coordinates: storedLocalDrawPaths.receiver,
-                                            theme: {
-                                                lineWidth: canvasConfigs.receiver.lineWidth,
-                                                strokeStyle: canvasConfigs.receiver.strokeStyle,
-                                            },
-                                        }
-                                    );
-                                }}
-                            >
-                                <Image
-                                    src="/icons/undo.png"
-                                    width={20}
-                                    height={20}
-                                    alt="Undo"
-                                />
-                            </div>
-                        </span>
-                        <span>
-                            <div
-                                className={`icon-btn m-5 btn-light button-effect btn-sm my-3`}
-                                onClick={() => {
-                                    // deleting the canvas drawing
-                                    setStoredCanvasPositions([]);
-                                    storedLocalDrawPaths.sender = [];
-                                    storedLocalDrawPaths.receiver = [];
-                                    clearCanvas();
-                                    sendClearCanvasEvent();
-                                }}
-                            >
-                                <RefreshCw />
-                            </div>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        );
-    };
-
     return (
         <React.Fragment>
             {displayMsg.showMsg ? (
@@ -743,7 +629,49 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             {/* call cut and mute options */}
             {renderCallActionButtons()}
             {/* render menubar */}
-            {accountType === AccountType.TRAINER ? <div>{renderMenus()}</div> : <></>}
+            {accountType === AccountType.TRAINER ? (
+                <div>
+                    {" "}
+                    <CanvasMenuBar
+                        setSketchPickerColor={(rgb) => {
+                            setSketchPickerColor(rgb);
+                        }}
+                        undoDrawing={() => {
+                            undoDrawing(
+                                {
+                                    coordinates: storedLocalDrawPaths.sender,
+                                    theme: canvasConfigs.sender,
+                                },
+                                {
+                                    coordinates: storedLocalDrawPaths.receiver,
+                                    theme: {
+                                        lineWidth: canvasConfigs.receiver.lineWidth,
+                                        strokeStyle: canvasConfigs.receiver.strokeStyle,
+                                    },
+                                }
+                            );
+                        }}
+                        sketchPickerColor={sketchPickerColor}
+                        canvasConfigs={canvasConfigs}
+                        setCanvasConfigs={(config) => {
+                            canvasConfigs = config;
+                        }}
+                        drawShapes={(shapeType) => {
+                            selectedShape = shapeType;
+                        }}
+                        refreshDrawing={() => {
+                            // deleting the canvas drawing
+                            setStoredCanvasPositions([]);
+                            storedLocalDrawPaths.sender = [];
+                            storedLocalDrawPaths.receiver = [];
+                            clearCanvas();
+                            sendClearCanvasEvent();
+                        }}
+                    />
+                </div>
+            ) : (
+                <></>
+            )}
         </React.Fragment>
     );
 };

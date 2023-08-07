@@ -244,7 +244,7 @@ slick-slider .slick-list, .slick-slider .slick-track {
   background-color: white;
   left: $sidebar-width-left + 35px;
   position: absolute;
-  bottom: 25%;
+  bottom: 0%;
   transform: translate(-50%, -50%);
   margin: 0 auto;
   z-index: $canvas-z-index + 1;
@@ -284,4 +284,8 @@ slick-slider .slick-list, .slick-slider .slick-track {
 
 .react-tiny-popover-container {
   z-index: $canvas-z-index + 20 !important; 
+}
+
+.rotate-90 {
+  rotate: 90deg;
 }
