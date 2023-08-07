@@ -15,13 +15,13 @@ import {
     PlayCircle,
     RefreshCw,
 } from "react-feather";
-import { AccountType } from "../../common/constants";
+import { AccountType, SHAPES } from "../../common/constants";
 import { SketchPicker, ChromePicker } from "react-color";
 import { CanvasMenuBar } from "./canvas.menubar";
 
 let storedLocalDrawPaths = { sender: [], receiver: [] };
 let XAndYCoordinates = [];
-
+let selectedShape = null;
 let canvasConfigs = {
     sender: {
         strokeStyle: "red",
@@ -38,6 +38,13 @@ let canvasConfigs = {
 // default setup;
 let isDrawing = false;
 let isVideoMuted = true;
+let savedPos;
+let startPos;
+let currPos;
+let strikes = [];
+
+
+
 
 export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     const socket = useContext(SocketContext);
@@ -70,7 +77,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     useEffect(() => {
         windowsRef.current = window;
         // handleStartCall();
-
         return () => {
             cutCall();
         };
@@ -94,8 +100,12 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         const startDrawing = (event) => {
             event.preventDefault();
             isDrawing = true;
-            console.log(`--- start drawing ---- `);
+            console.log(`--- start drawing ---- `, selectedShape);
             if (!context) return;
+            savedPos = context.getImageData(0, 0, document.getElementById("bookings")?.clientWidth, document.getElementById("bookings")?.clientHeight);
+            if (strikes.length >= 10) strikes.shift();  // removing first position if strikes > 10;
+            strikes.push(savedPos);
+            console.log(`savedPos --- `, savedPos);
             storedEvents.length = 0;
             storedEvents.push([event.offsetX, event.offsetY]);
             const mousePos = getMosuePositionOnCanvas(event);
@@ -109,26 +119,132 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             context.moveTo(mousePos.x, mousePos.y);
             context.fill();
             state.mousedown = true;
+            startPos = { x: mousePos.x, y: mousePos.y };
         };
+
+        const findDistance = () => {
+            let dis = Math.sqrt(Math.pow(currPos.x - startPos.x, 2) + Math.pow(currPos.y - startPos.y, 2));
+            return dis;
+        }
+
+        const drawShapes = () => {
+            switch (selectedShape) {
+                case SHAPES.LINE: {
+                    context.moveTo(startPos.x, startPos.y);
+                    context.lineTo(currPos.x, currPos.y);
+                    break;
+                };
+                case SHAPES.CIRCLE: {
+                    let distance = findDistance(startPos, currPos);
+                    context.arc(startPos.x, startPos.y, distance, 0, 2 * Math.PI, false);
+                    break;
+                };
+                case SHAPES.SQUARE: {
+                    // let w = currPos.x - startPos.x;
+                    // let h = currPos.y - startPos.y;
+                    // context.fillStyle = 'white';
+                    // context.fillRect(startPos.x, startPos.y, w, h);
+                    let w = currPos.x - startPos.x;
+                    let h = currPos.y - startPos.y;
+                    context.rect(startPos.x, startPos.y, w, h);
+                    break;
+                };
+                case SHAPES.RECTANGLE: {
+                    let w = currPos.x - startPos.x;
+                    let h = currPos.y - startPos.y;
+                    context.rect(startPos.x, startPos.y, w, h);
+                    break;
+                };
+                case SHAPES.OVAL: {
+                    const transform = context.getTransform();
+                    let w = currPos.x - startPos.x;
+                    let h = currPos.y - startPos.y;
+                    context.fillStyle = 'white';
+                    const radiusX = w * transform.a;
+                    const radiusY = h * transform.d;
+                    if (radiusX > 0 && radiusY > 0) {
+                        context.ellipse(currPos.x, currPos.y, radiusX, radiusY, 0, 0, 2 * Math.PI);
+                        context.fill();
+                    }
+                    break;
+                };
+                case SHAPES.TRIANGLE: {
+                    context.moveTo(startPos.x + (currPos.x - startPos.x) / 2, startPos.y);
+                    context.lineTo(startPos.x, currPos.y);
+                    context.lineTo(currPos.x, currPos.y);
+                    context.closePath();
+                    break;
+                };
+                case SHAPES.ARROW_RIGHT: {
+                    const arrowSize = 10;
+                    const direction = Math.atan2(currPos.y - startPos.y, currPos.x - startPos.x);
+                    // Calculate the coordinates of the arrowhead
+                    const arrowheadX = currPos.x + length * Math.cos(direction);
+                    const arrowheadY = currPos.y + length * Math.sin(direction);
+                    // Draw the line of the arrow
+                    context.moveTo(startPos.x, startPos.y);
+                    context.lineTo(currPos.x, currPos.y);
+                    // Draw the arrowhead
+                    context.moveTo(arrowheadX, arrowheadY);
+                    context.lineTo(currPos.x - arrowSize * Math.cos(direction - (Math.PI / 6)), currPos.y - arrowSize * Math.sin(direction - (Math.PI / 6)));
+                    context.moveTo(currPos.x, currPos.y);
+                    context.lineTo(currPos.x - arrowSize * Math.cos(direction + (Math.PI / 6)), currPos.y - arrowSize * Math.sin(direction + (Math.PI / 6)));
+                    context.stroke();
+                    break;
+                };
+                case SHAPES.TWO_SIDE_ARROW: {
+                    const canvasContent = document.getElementById("bookings");
+                    context.moveTo(startPos.x, startPos.y);
+                    context.lineTo(currPos.x, currPos.y);
+        
+                    const arrowHeadSize = 10;
+                    const angle = Math.atan2(currPos.y - startPos.y, currPos.x - startPos.x);
+                    context.lineTo(currPos.x - arrowHeadSize * Math.cos(angle - Math.PI / 6), currPos.y - arrowHeadSize * Math.sin(angle - Math.PI / 6));
+                    context.moveTo(currPos.x, currPos.y);
+                    context.lineTo(currPos.x - arrowHeadSize * Math.cos(angle + Math.PI / 6), currPos.y - arrowHeadSize * Math.sin(angle + Math.PI / 6));
+        
+                    // Calculate the opposite side arrowheads
+                    context.moveTo(startPos.x, startPos.y);
+                    context.lineTo(startPos.x + arrowHeadSize * Math.cos(angle - Math.PI / 6), startPos.y + arrowHeadSize * Math.sin(angle - Math.PI / 6));
+                    context.moveTo(startPos.x, startPos.y);
+                    context.lineTo(startPos.x + arrowHeadSize * Math.cos(angle + Math.PI / 6), startPos.y + arrowHeadSize * Math.sin(angle + Math.PI / 6));
+        
+                    context.stroke();
+                    break;
+                };
+            }
+        }
 
         const draw = (event) => {
             event.preventDefault();
-            const mousePos = getMosuePositionOnCanvas(event);
             if (!isDrawing || !context || !state.mousedown) return;
-            // XAndYCoordinates.push({ x: mousePos.x, y: mousePos.y })
+            const mousePos = getMosuePositionOnCanvas(event);
+            currPos = { x: mousePos?.x, y: mousePos.y };
+
+            if (selectedShape) {
+                context.putImageData(savedPos, 0, 0);
+                context.beginPath();
+                drawShapes();
+                context.stroke();
+            } else {
+                // XAndYCoordinates.push({ x: mousePos.x, y: mousePos.y })
+                // XAndYCoordinates.push([event.offsetX, event.offsetY]);
+                console.log(`--- drawing ---- `);
+                context.strokeStyle = canvasConfigs.sender.strokeStyle;
+                context.lineWidth = canvasConfigs.sender.lineWidth;
+                context.lineCap = "round";
+
+
+                context.lineTo(mousePos.x, mousePos.y);
+                context.stroke();
+            }
+
             XAndYCoordinates.push([event.offsetX, event.offsetY]);
-            console.log(`--- drawing ---- `);
-            context.strokeStyle = canvasConfigs.sender.strokeStyle;
-            context.lineWidth = canvasConfigs.sender.lineWidth;
-            context.lineCap = "round";
             storedEvents.push([event.offsetX, event.offsetY]);
             if (storedEvents && storedEvents.length) {
                 storedPositions.push([event.offsetX, event.offsetY]);
             }
-
             setStoredEvents(storedEvents);
-            context.lineTo(mousePos.x, mousePos.y);
-            context.stroke();
         };
 
         const stopDrawing = (event) => {
@@ -145,6 +261,13 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 setStoredEvents([]);
                 isDrawing = false;
                 state.mousedown = false;
+                // startPos = { x: null, y: null };
+                // currPos = { x: null, y: null };
+                if (canvas) {
+                    // canvas.removeEventListener("mousemove", draw);
+                    // canvas.removeEventListener("mouseup", stopDrawing);
+
+                }
             }
         };
 
@@ -202,11 +325,12 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             canvas.addEventListener("mousedown", startDrawing);
             canvas.addEventListener("mousemove", draw);
             canvas.addEventListener("mouseup", stopDrawing);
-            canvas.addEventListener("mouseout", stopDrawing);
+            // canvas.addEventListener("mouseout", stopDrawing);
         }
 
         return () => {
             video?.removeEventListener("play", drawFrame);
+            cutCall();
         };
     }, []);
 
@@ -459,6 +583,15 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         clearCanvas();
     };
 
+    // const erase = (eraserSize) => {
+    //     const canvas = canvasRef.current;
+    //     const context = canvas?.getContext("2d");
+
+    //     if(!context) return;
+    //     let w, h = eraserSize;
+    //     context.clearRect(currPos.x, currPos.y, w, h);
+    // }
+
     const undoDrawing = async (
         senderConfig,
         extraCoordinateConfig,
@@ -501,6 +634,10 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 context.stroke();
             }
         });
+
+        if (strikes.length <= 0) return;
+        context.putImageData(strikes[strikes.length - 1], 0, 0);
+        strikes.pop();
 
         // sending event to end user
         if (removeLastCoordinate) {
