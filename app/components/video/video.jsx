@@ -76,11 +76,15 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
     useEffect(() => {
         windowsRef.current = window;
-        // handleStartCall();
+        handleStartCall();
+        listenSocketEvents();
+        initializeLocalStates();
         return () => {
             cutCall();
         };
+
     }, []);
+    
 
     useEffect(() => {
         const video = videoRef.current;
@@ -142,73 +146,76 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 case SHAPES.SQUARE: {
                     // let w = currPos.x - startPos.x;
                     // let h = currPos.y - startPos.y;
-                    // context.fillStyle = 'white';
-                    // context.fillRect(startPos.x, startPos.y, w, h);
-                    let w = currPos.x - startPos.x;
-                    let h = currPos.y - startPos.y;
-                    context.rect(startPos.x, startPos.y, w, h);
+                    // context.rect(startPos.x, startPos.y, w, h);
                     break;
                 };
                 case SHAPES.RECTANGLE: {
-                    let w = currPos.x - startPos.x;
-                    let h = currPos.y - startPos.y;
-                    context.rect(startPos.x, startPos.y, w, h);
+                    // let w = currPos.x - startPos.x;
+                    // let h = currPos.y - startPos.y;
+                    // context.rect(startPos.x, startPos.y, w, h);
                     break;
                 };
                 case SHAPES.OVAL: {
-                    const transform = context.getTransform();
-                    let w = currPos.x - startPos.x;
-                    let h = currPos.y - startPos.y;
-                    context.fillStyle = 'white';
-                    const radiusX = w * transform.a;
-                    const radiusY = h * transform.d;
-                    if (radiusX > 0 && radiusY > 0) {
-                        context.ellipse(currPos.x, currPos.y, radiusX, radiusY, 0, 0, 2 * Math.PI);
-                        context.fill();
-                    }
+                    // const transform = context.getTransform();
+                    // let w = currPos.x - startPos.x;
+                    // let h = currPos.y - startPos.y;
+                    // context.fillStyle = "#FFFFFF";
+                    // context.fillStyle = 'rgba(0, 0, 0, 0)';
+                    // const radiusX = w * transform.a;
+                    // const radiusY = h * transform.d;
+                    // if (radiusX > 0 && radiusY > 0) {
+                    //     context.ellipse(currPos.x, currPos.y, radiusX, radiusY, 0, 0, 2 * Math.PI);
+                    //     context.fill();
+                    // }
                     break;
                 };
                 case SHAPES.TRIANGLE: {
-                    context.moveTo(startPos.x + (currPos.x - startPos.x) / 2, startPos.y);
-                    context.lineTo(startPos.x, currPos.y);
-                    context.lineTo(currPos.x, currPos.y);
-                    context.closePath();
+                    // context.moveTo(startPos.x + (currPos.x - startPos.x) / 2, startPos.y);
+                    // context.lineTo(startPos.x, currPos.y);
+                    // context.lineTo(currPos.x, currPos.y);
+                    // context.closePath();
                     break;
                 };
                 case SHAPES.ARROW_RIGHT: {
-                    const arrowSize = 10;
-                    const direction = Math.atan2(currPos.y - startPos.y, currPos.x - startPos.x);
-                    // Calculate the coordinates of the arrowhead
-                    const arrowheadX = currPos.x + length * Math.cos(direction);
-                    const arrowheadY = currPos.y + length * Math.sin(direction);
-                    // Draw the line of the arrow
-                    context.moveTo(startPos.x, startPos.y);
-                    context.lineTo(currPos.x, currPos.y);
-                    // Draw the arrowhead
-                    context.moveTo(arrowheadX, arrowheadY);
-                    context.lineTo(currPos.x - arrowSize * Math.cos(direction - (Math.PI / 6)), currPos.y - arrowSize * Math.sin(direction - (Math.PI / 6)));
-                    context.moveTo(currPos.x, currPos.y);
-                    context.lineTo(currPos.x - arrowSize * Math.cos(direction + (Math.PI / 6)), currPos.y - arrowSize * Math.sin(direction + (Math.PI / 6)));
-                    context.stroke();
+                    // const arrowSize = 10;
+                    // const direction = Math.atan2(currPos.y - startPos.y, currPos.x - startPos.x);
+                    // // Calculate the coordinates of the arrowhead
+                    // const arrowheadX = currPos.x + length * Math.cos(direction);
+                    // const arrowheadY = currPos.y + length * Math.sin(direction);
+                    // // Draw the line of the arrow
+                    // context.moveTo(startPos.x, startPos.y);
+                    // context.lineTo(currPos.x, currPos.y);
+                    // // Draw the arrowhead
+                    // context.moveTo(arrowheadX, arrowheadY);
+                    // context.lineTo(currPos.x - arrowSize * Math.cos(direction - (Math.PI / 6)), currPos.y - arrowSize * Math.sin(direction - (Math.PI / 6)));
+                    // context.moveTo(currPos.x, currPos.y);
+                    // context.lineTo(currPos.x - arrowSize * Math.cos(direction + (Math.PI / 6)), currPos.y - arrowSize * Math.sin(direction + (Math.PI / 6)));
+                    // context.stroke();
                     break;
                 };
                 case SHAPES.TWO_SIDE_ARROW: {
-                    context.moveTo(startPos.x, startPos.y);
-                    context.lineTo(currPos.x, currPos.y);
-        
-                    const arrowHeadSize = 10;
-                    const angle = Math.atan2(currPos.y - startPos.y, currPos.x - startPos.x);
-                    context.lineTo(currPos.x - arrowHeadSize * Math.cos(angle - Math.PI / 6), currPos.y - arrowHeadSize * Math.sin(angle - Math.PI / 6));
-                    context.moveTo(currPos.x, currPos.y);
-                    context.lineTo(currPos.x - arrowHeadSize * Math.cos(angle + Math.PI / 6), currPos.y - arrowHeadSize * Math.sin(angle + Math.PI / 6));
-        
-                    // Calculate the opposite side arrowheads
-                    context.moveTo(startPos.x, startPos.y);
-                    context.lineTo(startPos.x + arrowHeadSize * Math.cos(angle - Math.PI / 6), startPos.y + arrowHeadSize * Math.sin(angle - Math.PI / 6));
-                    context.moveTo(startPos.x, startPos.y);
-                    context.lineTo(startPos.x + arrowHeadSize * Math.cos(angle + Math.PI / 6), startPos.y + arrowHeadSize * Math.sin(angle + Math.PI / 6));
-        
-                    context.stroke();
+                    // const x1 = startPos.x;
+                    // const y1 = startPos.y;
+                    // const x2 = currPos.x;
+                    // const y2 = currPos.y;
+                    // const size = 10;
+                    // const angle = Math.atan2(y2 - y1, x2 - x1);
+                    // const arrowPoints = [
+                    //     { x: x2 - size * Math.cos(angle - Math.PI / 6), y: y2 - size * Math.sin(angle - Math.PI / 6) },
+                    //     { x: x2 - size * Math.cos(angle + Math.PI / 6), y: y2 - size * Math.sin(angle + Math.PI / 6) },
+                    //     { x: x1 + size * Math.cos(angle - Math.PI / 6), y: y1 + size * Math.sin(angle - Math.PI / 6) },
+                    //     { x: x1 + size * Math.cos(angle + Math.PI / 6), y: y1 + size * Math.sin(angle + Math.PI / 6) }
+                    // ];
+                    // context.moveTo(x1, y1);
+                    // context.lineTo(x2, y2);
+                    // context.moveTo(arrowPoints[0].x, arrowPoints[0].y);
+                    // context.lineTo(x2, y2);
+                    // context.lineTo(arrowPoints[1].x, arrowPoints[1].y);
+                    // context.moveTo(arrowPoints[2].x, arrowPoints[2].y);
+                    // context.lineTo(x1, y1);
+                    // context.lineTo(arrowPoints[3].x, arrowPoints[3].y);
+
+                    // context.stroke();
                     break;
                 };
             }
@@ -263,6 +270,10 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 // startPos = { x: null, y: null };
                 // currPos = { x: null, y: null };
                 if (canvas) {
+                    // const imageData = canvas.toDataURL("image/png").split(",")[1]; // Remove the data URL prefix
+                    // const binaryImageData = Uint8Array.from(atob(imageData), c => c.charCodeAt(0)).buffer;
+
+                    // console.log(`imageData --- `, binaryImageData);
                     // canvas.removeEventListener("mousemove", draw);
                     // canvas.removeEventListener("mouseup", stopDrawing);
 
@@ -270,49 +281,49 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             }
         };
 
-        const startMobileDrawing = (event) => {
-            event.preventDefault();
-            storedEvents.length = 0;
-            const mousePos = getMosuePositionOnCanvas(event);
-            if (!context) return;
-            XAndYCoordinates = [];
-            // XAndYCoordinates.push({ x: mousePos.x, y: mousePos.y })
-            XAndYCoordinates.push([mousePos.x, mousePos.y]);
-            context.beginPath();
-            context.moveTo(mousePos.x, mousePos.y);
-            context.lineWidth = canvasConfigs.sender.lineWidth;
-            context.strokeStyle = canvasConfigs.sender.strokeStyle;
-            context.fill();
-            isDrawing = true;
-            storedEvents.push([mousePos.x, mousePos.y]);
-            setStoredEvents(storedEvents);
-        };
+        // const startMobileDrawing = (event) => {
+        //     event.preventDefault();
+        //     storedEvents.length = 0;
+        //     const mousePos = getMosuePositionOnCanvas(event);
+        //     if (!context) return;
+        //     XAndYCoordinates = [];
+        //     // XAndYCoordinates.push({ x: mousePos.x, y: mousePos.y })
+        //     XAndYCoordinates.push([mousePos.x, mousePos.y]);
+        //     context.beginPath();
+        //     context.moveTo(mousePos.x, mousePos.y);
+        //     context.lineWidth = canvasConfigs.sender.lineWidth;
+        //     context.strokeStyle = canvasConfigs.sender.strokeStyle;
+        //     context.fill();
+        //     isDrawing = true;
+        //     storedEvents.push([mousePos.x, mousePos.y]);
+        //     setStoredEvents(storedEvents);
+        // };
 
-        const drawMobile = (event) => {
-            event.preventDefault();
-            if (isDrawing) {
-                const mousePos = getMosuePositionOnCanvas(event);
-                // XAndYCoordinates.push({ x: mousePos.x, y: mousePos.y })
-                XAndYCoordinates.push([mousePos.x, mousePos.y]);
-                if (!context) return;
-                context.lineTo(mousePos.x, mousePos.y);
-                storedEvents.push([mousePos.x, mousePos.y]);
-                setStoredEvents(storedEvents);
-                context.stroke();
-            }
-        };
+        // const drawMobile = (event) => {
+        //     event.preventDefault();
+        //     if (isDrawing) {
+        //         const mousePos = getMosuePositionOnCanvas(event);
+        //         // XAndYCoordinates.push({ x: mousePos.x, y: mousePos.y })
+        //         XAndYCoordinates.push([mousePos.x, mousePos.y]);
+        //         if (!context) return;
+        //         context.lineTo(mousePos.x, mousePos.y);
+        //         storedEvents.push([mousePos.x, mousePos.y]);
+        //         setStoredEvents(storedEvents);
+        //         context.stroke();
+        //     }
+        // };
 
-        const stopMobileDrawing = (event) => {
-            event.preventDefault();
-            if (!context) return;
-            if (isDrawing) {
-                storedLocalDrawPaths.sender.push(XAndYCoordinates);
-                context.stroke();
-                sendStopDrawingEvent();
-                sendDrawEvent(storedEvents);
-            }
-            isDrawing = false;
-        };
+        // const stopMobileDrawing = (event) => {
+        //     event.preventDefault();
+        //     if (!context) return;
+        //     if (isDrawing) {
+        //         storedLocalDrawPaths.sender.push(XAndYCoordinates);
+        //         context.stroke();
+        //         sendStopDrawingEvent();
+        //         sendDrawEvent(storedEvents);
+        //     }
+        //     isDrawing = false;
+        // };
 
         // allowing trainer to draw
         if (canvas && accountType === AccountType.TRAINER) {
@@ -338,6 +349,10 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             removeVideoRef.current.srcObject = remoteStream;
         }
     }, [remoteStream]);
+
+    const initializeLocalStates = () => {
+        strikes = [];
+    }
 
     const cutCall = () => {
         cleanupFunctionV2();
@@ -382,11 +397,12 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             }
         });
 
-        socket.on(EVENTS.EMIT_DRAWING_CORDS, ({ storedEvents, canvasConfigs }) => {
-            console.log(
-                `--- got coordinates for drawings ---- `,
-                storedLocalDrawPaths
-            );
+        socket.on(EVENTS.EMIT_DRAWING_CORDS, ({ storedEvents, canvasConfigs, strikes }) => {
+            // alert('reciving')
+            // console.log(
+            //     `--- got coordinates for drawings ---- `,
+            //     storedLocalDrawPaths
+            // );
             if (storedEvents && Array.isArray(storedEvents)) {
                 storedLocalDrawPaths.receiver.push(storedEvents);
             }
@@ -521,15 +537,16 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             }
         };
         startVideoCall().then(() => { });
-        listenSocketEvents();
     };
 
     const sendDrawEvent = (storedEvents) => {
+        // alert('sending');
         if (removeVideoRef && removeVideoRef.current) {
             socket.emit(EVENTS.DRAW, {
                 userInfo: { from_user: fromUser._id, to_user: toUser._id },
                 storedEvents,
                 canvasConfigs,
+                strikes: [],
             });
         }
     };
@@ -742,6 +759,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 {removeVideoRef && (
                     <div className="" id="remote-user">
                         <canvas
+                            id="drawing-canvas"
                             width={document.getElementById("bookings")?.clientWidth}
                             height={document.getElementById("bookings")?.clientHeight}
                             className="canvas-print absolute  all-0"
