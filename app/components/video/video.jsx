@@ -193,7 +193,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     break;
                 };
                 case SHAPES.TWO_SIDE_ARROW: {
-                    const canvasContent = document.getElementById("bookings");
                     context.moveTo(startPos.x, startPos.y);
                     context.lineTo(currPos.x, currPos.y);
         
@@ -318,9 +317,9 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         // allowing trainer to draw
         if (canvas && accountType === AccountType.TRAINER) {
             // for mobile
-            canvas.addEventListener("touchstart", startMobileDrawing);
-            canvas.addEventListener("touchmove", drawMobile);
-            canvas.addEventListener("touchend", stopMobileDrawing);
+            canvas.addEventListener("touchstart", startDrawing);
+            canvas.addEventListener("touchmove", draw);
+            canvas.addEventListener("touchend", stopDrawing);
             // for web
             canvas.addEventListener("mousedown", startDrawing);
             canvas.addEventListener("mousemove", draw);
