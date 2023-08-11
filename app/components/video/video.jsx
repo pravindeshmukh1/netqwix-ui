@@ -388,7 +388,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 });
                 videoRef.current.srcObject = stream;
                 // setLocalVideoRef(stream);
-                localVideoRef = { srcObject: stream };
+                // localVideoRef = { srcObject: stream };
                 const peer = new SimplePeer({
                     initiator: true,
                     // trickle: false,
@@ -634,6 +634,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                                 <video
                                     id="end-user-video"
                                     playsInline
+                                    muted
                                     className="rounded z-50"
                                     ref={videoRef}
                                     autoPlay
@@ -644,13 +645,13 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 </div>
                 {remoteVideoRef && (
                     <div id="remote-user">
-                        <canvas
+                        {/* <canvas
                             id="drawing-canvas"
                             width={document.getElementById("bookings")?.clientWidth}
                             height={document.getElementById("bookings")?.clientHeight}
                             className="canvas-print absolute  all-0"
                             ref={canvasRef}
-                        ></canvas>
+                        ></canvas> */}
                         <video
                             width={document.getElementById("bookings")?.clientWidth}
                             height={document.getElementById("bookings")?.clientHeight}
