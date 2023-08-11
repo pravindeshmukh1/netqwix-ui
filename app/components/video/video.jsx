@@ -379,6 +379,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                         audio: true,
                     })
                     .catch((err) => {
+                        toast.error("Please allow media permission to microphone and camera for video call...");
                         console.log(`unable to access video call ---- `, err);
                     });
                 // setLocalStream(stream);
