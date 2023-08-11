@@ -646,13 +646,13 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 </div>
                 {remoteVideoRef && (
                     <div id="remote-user">
-                        {/* <canvas
+                        <canvas
                             id="drawing-canvas"
                             width={document.getElementById("bookings")?.clientWidth}
                             height={document.getElementById("bookings")?.clientHeight}
                             className="canvas-print absolute  all-0"
                             ref={canvasRef}
-                        ></canvas> */}
+                        ></canvas>
                         <video
                             width={document.getElementById("bookings")?.clientWidth}
                             height={document.getElementById("bookings")?.clientHeight}
