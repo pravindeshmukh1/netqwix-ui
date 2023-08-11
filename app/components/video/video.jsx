@@ -632,7 +632,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                         <div>
                             {videoRef && (
                                 <video
-                                    muted
                                     id="end-user-video"
                                     playsInline
                                     className="rounded z-50"
