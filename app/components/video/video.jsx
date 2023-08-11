@@ -1,28 +1,21 @@
 "use client";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import SimplePeer from "simple-peer";
-import NextImage from "next/image";
 import { EVENTS } from "../../../helpers/events";
 import { SocketContext } from "../socket";
 import { Popover } from "react-tiny-popover";
 
 import {
-    Edit2,
     MicOff,
-    Pause,
     PauseCircle,
     Phone,
     PlayCircle,
-    RefreshCw,
 } from "react-feather";
 import { AccountType, SHAPES } from "../../common/constants";
-import { SketchPicker, ChromePicker } from "react-color";
 import { CanvasMenuBar } from "./canvas.menubar";
-// import { updateDrawingAsync } from "../trainer/trainer.slice";
-// import { useAppDispatch } from "../../store";
+import { toast } from "react-toastify";
 
 let storedLocalDrawPaths = { sender: [], receiver: [] };
-let XAndYCoordinates = [];
 let selectedShape = null;
 let canvasConfigs = {
     sender: {
@@ -39,14 +32,11 @@ let canvasConfigs = {
 
 // default setup;
 let isDrawing = false;
-let isVideoMuted = true;
 let savedPos;
 let startPos;
 let currPos;
 let strikes = [];
-
-
-
+let localVideoRef;
 
 export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     // const dispatch = useAppDispatch();
@@ -61,7 +51,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     const [isMuted, setIsMuted] = useState(false);
     const [isFeedStopped, setIsFeedStopped] = useState(false);
     const [displayMsg, setDisplayMsg] = useState({ showMsg: false, msg: "" });
-    const [displayColorPicker, setDisplayColorPicker] = useState(false);
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
     const state = {
@@ -70,12 +59,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
     const windowsRef = useRef(null);
 
-    const removeVideoRef = useRef(null);
+    const remoteVideoRef = useRef(null);
     const peerRef = useRef(null);
-
-    // TODO: type missing
-    const [storedEvents, setStoredEvents] = useState([]);
-    const [storedPositions, setStoredCanvasPositions] = useState([]);
 
     useEffect(() => {
         windowsRef.current = window;
@@ -85,7 +70,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         return () => {
             cutCall();
         };
-
     }, []);
 
 
@@ -112,14 +96,9 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             savedPos = context.getImageData(0, 0, document.getElementById("bookings")?.clientWidth, document.getElementById("bookings")?.clientHeight);
             if (strikes.length >= 10) strikes.shift();  // removing first position if strikes > 10;
             strikes.push(savedPos);
-            storedEvents.length = 0;
-            storedEvents.push([event.offsetX, event.offsetY]);
             const mousePos = getMosuePositionOnCanvas(event);
             context.strokeStyle = canvasConfigs.sender.strokeStyle;
             context.lineWidth = canvasConfigs.sender.lineWidth;
-            XAndYCoordinates = [];
-            // XAndYCoordinates.push({ x: mousePos.x, y: mousePos.y })
-            XAndYCoordinates.push([mousePos.x, mousePos.y]);
             context.lineCap = "round";
             context.beginPath();
             context.moveTo(mousePos.x, mousePos.y);
@@ -235,87 +214,25 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 drawShapes();
                 context.stroke();
             } else {
-                // XAndYCoordinates.push({ x: mousePos.x, y: mousePos.y })
-                // XAndYCoordinates.push([event.offsetX, event.offsetY]);
                 console.log(`--- drawing ---- `);
                 context.strokeStyle = canvasConfigs.sender.strokeStyle;
                 context.lineWidth = canvasConfigs.sender.lineWidth;
                 context.lineCap = "round";
-
-
                 context.lineTo(mousePos.x, mousePos.y);
                 context.stroke();
             }
-
-            XAndYCoordinates.push([event.offsetX, event.offsetY]);
-            storedEvents.push([event.offsetX, event.offsetY]);
-            if (storedEvents && storedEvents.length) {
-                storedPositions.push([event.offsetX, event.offsetY]);
-            }
-            setStoredEvents(storedEvents);
         };
 
         const stopDrawing = (event) => {
             event.preventDefault();
-            if (storedEvents && storedEvents.length && state.mousedown) {
+            if (state.mousedown) {
                 console.log(`--- stop drawing ---- `);
-                if (XAndYCoordinates && XAndYCoordinates.length) {
-                    storedLocalDrawPaths.sender.push(XAndYCoordinates);
-                }
                 sendStopDrawingEvent();
-
-                storedPositions.length = 0;
-                setStoredCanvasPositions([]);
-                setStoredEvents([]);
                 isDrawing = false;
                 state.mousedown = false;
-                sendDrawEvent(storedEvents);
+                sendDrawEvent();
             }
         };
-
-        // const startMobileDrawing = (event) => {
-        //     event.preventDefault();
-        //     storedEvents.length = 0;
-        //     const mousePos = getMosuePositionOnCanvas(event);
-        //     if (!context) return;
-        //     XAndYCoordinates = [];
-        //     // XAndYCoordinates.push({ x: mousePos.x, y: mousePos.y })
-        //     XAndYCoordinates.push([mousePos.x, mousePos.y]);
-        //     context.beginPath();
-        //     context.moveTo(mousePos.x, mousePos.y);
-        //     context.lineWidth = canvasConfigs.sender.lineWidth;
-        //     context.strokeStyle = canvasConfigs.sender.strokeStyle;
-        //     context.fill();
-        //     isDrawing = true;
-        //     storedEvents.push([mousePos.x, mousePos.y]);
-        //     setStoredEvents(storedEvents);
-        // };
-
-        // const drawMobile = (event) => {
-        //     event.preventDefault();
-        //     if (isDrawing) {
-        //         const mousePos = getMosuePositionOnCanvas(event);
-        //         // XAndYCoordinates.push({ x: mousePos.x, y: mousePos.y })
-        //         XAndYCoordinates.push([mousePos.x, mousePos.y]);
-        //         if (!context) return;
-        //         context.lineTo(mousePos.x, mousePos.y);
-        //         storedEvents.push([mousePos.x, mousePos.y]);
-        //         setStoredEvents(storedEvents);
-        //         context.stroke();
-        //     }
-        // };
-
-        // const stopMobileDrawing = (event) => {
-        //     event.preventDefault();
-        //     if (!context) return;
-        //     if (isDrawing) {
-        //         storedLocalDrawPaths.sender.push(XAndYCoordinates);
-        //         context.stroke();
-        //         sendStopDrawingEvent();
-        //         sendDrawEvent(storedEvents);
-        //     }
-        //     isDrawing = false;
-        // };
 
         // allowing trainer to draw
         if (canvas && accountType === AccountType.TRAINER) {
@@ -337,19 +254,21 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     }, []);
 
     useEffect(() => {
-        if (removeVideoRef.current && remoteStream) {
-            removeVideoRef.current.srcObject = remoteStream;
+        if (remoteVideoRef.current && remoteStream) {
+            remoteVideoRef.current.srcObject = remoteStream;
         }
     }, [remoteStream]);
 
     const initializeLocalStates = () => {
         strikes = [];
+        localVideoRef = null;
+        selectedShape = null;
     }
 
     const cutCall = () => {
-        cleanupFunctionV2();
+        cleanupFunction();
         isClose();
-        if (removeVideoRef && removeVideoRef.current) {
+        if (remoteVideoRef && remoteVideoRef.current) {
             socket.emit(EVENTS.VIDEO_CALL.ON_CLOSE, {
                 userInfo: { from_user: fromUser._id, to_user: toUser._id },
             });
@@ -359,7 +278,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     const listenSocketEvents = () => {
         // Handle signaling events from the signaling server
         socket.on(EVENTS.VIDEO_CALL.ON_OFFER, (offer) => {
-            // cleanupFunctionV2()
             peerRef.current?.signal(offer);
         });
 
@@ -376,58 +294,26 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         });
 
         socket.on(EVENTS.VIDEO_CALL.MUTE_ME, ({ muteStatus }) => {
-            if (removeVideoRef.current && removeVideoRef.current.srcObject) {
-                removeVideoRef.current.srcObject.getAudioTracks()[0].enabled =
+            if (remoteVideoRef.current && remoteVideoRef.current.srcObject) {
+                remoteVideoRef.current.srcObject.getAudioTracks()[0].enabled =
                     muteStatus;
             }
         });
 
         socket.on(EVENTS.VIDEO_CALL.STOP_FEED, ({ feedStatus }) => {
-            if (removeVideoRef.current && removeVideoRef.current.srcObject) {
-                removeVideoRef.current.srcObject.getVideoTracks()[0].enabled =
+            if (remoteVideoRef.current && remoteVideoRef.current.srcObject) {
+                remoteVideoRef.current.srcObject.getVideoTracks()[0].enabled =
                     feedStatus;
             }
         });
 
-        socket.on(EVENTS.EMIT_DRAWING_CORDS, ({ storedEvents, canvasConfigs, strikes }) => {
-            // console.log(
-            //     `--- got coordinates for drawings ---- `,
-            //     storedLocalDrawPaths
-            // );
-            // if (storedEvents && Array.isArray(storedEvents)) {
-            //     storedLocalDrawPaths.receiver.push(storedEvents);
-            // }
+        socket.on(EVENTS.EMIT_DRAWING_CORDS, ({ strikes }) => {
             const canvas = canvasRef.current;
             const context = canvas?.getContext("2d");
-            if (!context) return;
-            // context.strokeStyle = canvasConfigs.sender.strokeStyle;
-            // context.lineWidth = canvasConfigs.sender.lineWidth;
-            // context.lineCap = "round";
-            // context.beginPath();
-            // let lastX =
-            //     storedEvents &&
-            //     Array.isArray(storedEvents) &&
-            //     Array.isArray(storedEvents[0]) &&
-            //     storedEvents[0][0];
-            // let lastY =
-            //     storedEvents &&
-            //     Array.isArray(storedEvents) &&
-            //     Array.isArray(storedEvents[0]) &&
-            //     storedEvents[0][1];
-            // if (lastX && lastY) {
-            //     context?.moveTo(lastX, lastY);
-            //     for (let positions in storedEvents) {
-            //         const currentX = storedEvents[positions][0];
-            //         const currentY = storedEvents[positions][1];
-            //         context.fillStyle = "rgba(255, 255, 255, 0.5)";
-            //         context.lineTo(currentX, currentY);
-            //         context.stroke();
-            //     }
-            // }
+            if (!context || !canvas) return;
             const blob = new Blob([strikes]);
             const image = new Image();
             image.src = URL.createObjectURL(blob);
-
             image.onload = () => {
                 context.clearRect(0, 0, canvas.width, canvas.height);
                 context.drawImage(image, 0, 0);
@@ -457,7 +343,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 showMsg: true,
                 msg: `${toUser?.fullname} left the meeting, redirecting back to home screen in 5 seconds...`,
             });
-            cleanupFunctionV2();
+            cleanupFunction();
         });
     };
 
@@ -501,7 +387,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     msg: `Waiting for ${toUser?.fullname}  to join...`,
                 });
                 videoRef.current.srcObject = stream;
-
+                // setLocalVideoRef(stream);
+                localVideoRef = { srcObject: stream };
                 const peer = new SimplePeer({
                     initiator: true,
                     // trickle: false,
@@ -529,38 +416,37 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
                 peer.on(EVENTS.VIDEO_CALL.ON_CLOSE, () => {
                     // setIsCalling(false);
-                    cleanupFunctionV2();
+                    cleanupFunction();
                 });
             } catch (error) {
+                toast.error("Please allow media permission to microphone and camera for video call...");
                 console.error("Error accessing media devices:", error);
             }
         };
         startVideoCall().then(() => { });
     };
 
-    const sendDrawEvent = (storedEvents) => {
-        // alert('sending');
+    const sendDrawEvent = () => {
         const canvas = canvasRef.current;
-        if(!canvas) return;
+        if (!canvas) return;
         canvas.toBlob((blob) => {
             const reader = new FileReader();
             reader.onload = (event) => {
+                if (!(event && event.target)) return;
                 const binaryData = event.target.result;
-                // console.log(`binaryImageData --- `, binaryData);
                 socket.emit(EVENTS.DRAW, {
                     userInfo: { from_user: fromUser._id, to_user: toUser._id },
-                    storedEvents,
-                    canvasConfigs,
+                    // storedEvents,
+                    // canvasConfigs,
                     strikes: binaryData,
                 });
             };
             reader.readAsArrayBuffer(blob);
         });
-        // dispatch(updateDrawingAsync({ booking_id: '1', strikes: binaryImageData }));
     };
 
     const sendStopDrawingEvent = () => {
-        if (removeVideoRef && removeVideoRef.current) {
+        if (remoteVideoRef && remoteVideoRef.current) {
             socket.emit(EVENTS.STOP_DRAWING, {
                 userInfo: { from_user: fromUser._id, to_user: toUser._id },
             });
@@ -568,15 +454,15 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     };
 
     const sendClearCanvasEvent = () => {
-        if (removeVideoRef && removeVideoRef.current) {
+        if (remoteVideoRef && remoteVideoRef.current) {
             socket.emit(EVENTS.EMIT_CLEAR_CANVAS, {
                 userInfo: { from_user: fromUser._id, to_user: toUser._id },
             });
         }
     };
 
-    const cleanupFunctionV2 = () => {
-        let videorefSrc = videoRef.current;
+    const cleanupFunction = () => {
+        let videorefSrc = videoRef.current || localVideoRef;
         if (videoRef && videorefSrc && videorefSrc.srcObject) {
             const availableTracks = videorefSrc.srcObject.getTracks();
             const availableVideoTracks = videorefSrc.srcObject.getVideoTracks();
@@ -607,14 +493,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         clearCanvas();
     };
 
-    // const erase = (eraserSize) => {
-    //     const canvas = canvasRef.current;
-    //     const context = canvas?.getContext("2d");
-
-    //     if(!context) return;
-    //     let w, h = eraserSize;
-    //     context.clearRect(currPos.x, currPos.y, w, h);
-    // }
 
     const undoDrawing = async (
         senderConfig,
@@ -670,7 +548,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             //     receiver: extraCoordinateConfig.coordinates,
             //     userInfo: { from_user: fromUser._id, to_user: toUser._id },
             // });
-            sendDrawEvent(storedEvents)
+            sendDrawEvent()
         }
     };
 
@@ -682,7 +560,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                         } btn-xl button-effect mic`}
                     onClick={() => {
                         setIsMuted(!isMuted);
-                        if (removeVideoRef && removeVideoRef.current) {
+                        if (remoteVideoRef && remoteVideoRef.current) {
                             socket.emit(EVENTS.VIDEO_CALL.MUTE_ME, {
                                 userInfo: { from_user: fromUser._id, to_user: toUser._id },
                                 muteStatus: isMuted,
@@ -718,7 +596,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                                 track.enabled = isFeedStopped;
                             }
                         }
-                        if (removeVideoRef && removeVideoRef.current) {
+                        if (remoteVideoRef && remoteVideoRef.current) {
                             socket.emit(EVENTS.VIDEO_CALL.STOP_FEED, {
                                 userInfo: { from_user: fromUser._id, to_user: toUser._id },
                                 feedStatus: isFeedStopped,
@@ -765,8 +643,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                         </div>
                     </div>
                 </div>
-                {removeVideoRef && (
-                    <div className="" id="remote-user">
+                {remoteVideoRef && (
+                    <div id="remote-user">
                         <canvas
                             id="drawing-canvas"
                             width={document.getElementById("bookings")?.clientWidth}
@@ -777,7 +655,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                         <video
                             width={document.getElementById("bookings")?.clientWidth}
                             height={document.getElementById("bookings")?.clientHeight}
-                            ref={removeVideoRef}
+                            ref={remoteVideoRef}
                             playsInline
                             autoPlay
                             className="bg-video"
@@ -794,7 +672,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             {/* render menubar */}
             {accountType === AccountType.TRAINER ? (
                 <div>
-                    {" "}
                     <CanvasMenuBar
                         setSketchPickerColor={(rgb) => {
                             setSketchPickerColor(rgb);
@@ -824,7 +701,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                         }}
                         refreshDrawing={() => {
                             // deleting the canvas drawing
-                            setStoredCanvasPositions([]);
                             storedLocalDrawPaths.sender = [];
                             storedLocalDrawPaths.receiver = [];
                             clearCanvas();
