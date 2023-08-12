@@ -53,7 +53,7 @@ $canvas-z-index:8;
 .bg-video {
   position: absolute;
   left: $sidebar-width-left;
-  top: $navbar-height-top;
+  top: $navbar-height-top - 55px;
 }
 
 .canvas-print {
@@ -147,7 +147,7 @@ video {
 
 .all-0 {
   position: absolute;
-  top: $navbar-height-top;
+  top: $navbar-height-top - 55px;
   bottom: 10;
   left: $sidebar-width-left;
   right: 0;
@@ -257,7 +257,7 @@ slick-slider .slick-list, .slick-slider .slick-track {
 
 
 .creationBarItem {
-    width: 48px;
+    width: 52px;
     -ms-flex-flow: column nowrap;
     flex-flow: column nowrap;
     pointer-events: auto;

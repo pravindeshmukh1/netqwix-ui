@@ -1,9 +1,10 @@
 "use client";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import SimplePeer from "simple-peer";
 import { EVENTS } from "../../../helpers/events";
 import { SocketContext } from "../socket";
 import { Popover } from "react-tiny-popover";
+import _debounce from 'lodash/debounce';
 
 import {
     MicOff,
@@ -47,6 +48,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         b: 19,
         a: 1,
     });
+    
     const [remoteStream, setRemoteStream] = useState(null);
     const [isMuted, setIsMuted] = useState(false);
     const [isFeedStopped, setIsFeedStopped] = useState(false);
@@ -494,6 +496,9 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         clearCanvas();
     };
 
+    const sendEmitUndoEvent = useCallback(_debounce(sendDrawEvent, 500), []);
+
+
 
     const undoDrawing = async (
         senderConfig,
@@ -549,7 +554,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             //     receiver: extraCoordinateConfig.coordinates,
             //     userInfo: { from_user: fromUser._id, to_user: toUser._id },
             // });
-            sendDrawEvent()
+            sendEmitUndoEvent();
         }
     };
 
@@ -678,6 +683,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                             setSketchPickerColor(rgb);
                         }}
                         undoDrawing={() => {
+
+
                             undoDrawing(
                                 {
                                     coordinates: storedLocalDrawPaths.sender,

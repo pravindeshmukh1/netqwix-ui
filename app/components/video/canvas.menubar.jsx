@@ -17,7 +17,7 @@ export const CanvasMenuBar = ({
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [activeTab, setActiveTab] = useState(SHAPES.FREE_HAND);
   return (
-    <div className="canvas-menus">
+    <div className="canvas-menus custom-scroll">
       <div className="creationBarItem">
         <div CreationBarCustomizable>
           <span>

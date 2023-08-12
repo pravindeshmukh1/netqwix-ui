@@ -15,6 +15,7 @@
     "bootstrap-scss": "^4.6.1",
     "easytimer": "^1.1.1",
     "formik": "^2.4.2",
+    "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "next": "^13.1.1",
     "next-images": "^1.8.4",
