@@ -293,17 +293,19 @@ const Bookings = ({ accountType = null }) => {
   );
   return (
     <>
-      <div className="m-25 w-100 overflow-auto" id="bookings">
-        <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
-          Bookings
-        </h3>
+      <div className="m-25 w-100 custom-scroll" id="bookings">
         {!scheduledMeetingDetails.length ? (
           <h3 className="d-flex justify-content-center mt-20">
             No bookings available
           </h3>
         ) : (
 
-          startMeeting.isOpenModal ? renderVideoCall() : renderBookings()
+          startMeeting.isOpenModal ? renderVideoCall() : <>
+            <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
+              Bookings
+            </h3>
+            {renderBookings()}
+          </>
 
         )}
       </div>
