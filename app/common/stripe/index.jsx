@@ -40,7 +40,7 @@ const CheckoutForm = ({clientSecret, handlePaymentSuccess}) => {
       elements,
       clientSecret,
       confirmParams: {
-        return_url: 'http://localhost:3000/dashboard',
+        return_url: 'https://netquix-ui.vercel.app/dashboard',
       },
       redirect: 'if_required'
     });
