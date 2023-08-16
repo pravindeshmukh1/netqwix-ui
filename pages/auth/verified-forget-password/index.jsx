@@ -7,6 +7,7 @@ const VerifiedForgetPassword = () => {
   const [updatePassword, setUpdatePassword] = useState(null);
   const handleSubmit = () => {
     const payload = {
+      token: "",
       email: updatePassword,
     };
     dispatch(verifiedForgetPasswordAsync(payload));
@@ -29,7 +30,7 @@ const VerifiedForgetPassword = () => {
                   <form className="form1" onSubmit={handleSubmit}>
                     <div className="form-group">
                       <label className="col-form-label" htmlFor="inputEmail3">
-                        Password
+                        New Password
                       </label>
                       {/* <input
                         className="form-control"
@@ -44,7 +45,7 @@ const VerifiedForgetPassword = () => {
                         className="form-control"
                         id="inputEmail3"
                         name="password"
-                        placeholder="Enter password"
+                        placeholder="Enter new password"
                         style={{ placeholder: "red" }}
                         value={updatePassword}
                         onChange={(e) => setUpdatePassword(e.target.value)}
