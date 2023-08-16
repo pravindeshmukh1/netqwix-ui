@@ -66,3 +66,34 @@ export const googleLogin = async (payload) => {
     throw err;
   }
 };
+
+export const forgetPassword = async (payload) => {
+  try {
+    const res = await axiosInstance({
+      method: "post",
+      url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/forgot-password`,
+      data: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const verifiedForgetPassword = async (payload) => {
+  try {
+    const res = await axiosInstance({
+      method: "post",
+      url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/`,
+      data: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (err) {
+    throw err;
+  }
+};

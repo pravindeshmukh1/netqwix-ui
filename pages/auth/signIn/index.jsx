@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import Link from "next/link";
-import { googleOAuthLink } from "../../../app/common/constants";
+import { googleOAuthLink, routingPaths } from "../../../app/common/constants";
 import { useAppDispatch } from "../../../app/store";
 import {
   googleLoginAsync,
@@ -55,7 +55,7 @@ const Auth_SignIn = () => {
               <div className="left-page">
                 <div className="login-content">
                   <div className="login-content-header">
-                    <Link href="/landing">
+                    <Link href={routingPaths.landing}>
                       {/* <img
                         className="image-fluid"
                         src="/assets/images/logo/landing-logo.png"
@@ -138,7 +138,22 @@ const Auth_SignIn = () => {
                           >
                             Remember Me.
                           </label>
-                          <h6>Forgot Password?</h6>
+                          <h6
+                            className="pointer"
+                            onClick={() => {
+                              router.push(routingPaths.forgetPassword);
+                            }}
+                          >
+                            Forgot Password?
+                          </h6>
+                          <h6
+                            className="pointer"
+                            onClick={() => {
+                              router.push(routingPaths.verifiedForgetPassword);
+                            }}
+                          >
+                            Verified Forget Password
+                          </h6>
                         </div>
                       </div>
                     </div>
@@ -152,7 +167,7 @@ const Auth_SignIn = () => {
                         </div>
                         <Link
                           className="btn button-effect btn-signup"
-                          href="/auth/signUp"
+                          href={routingPaths.signUp}
                         >
                           SignUp
                         </Link>

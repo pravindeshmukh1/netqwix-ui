@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { LOCAL_STORAGE_KEYS } from "../../common/constants";
+import { LOCAL_STORAGE_KEYS, routingPaths } from "../../common/constants";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { authState, getMeAsync } from "./auth.slice";
 
@@ -12,12 +12,10 @@ const AuthGuard = ({ children }) => {
   const authSelector = useAppSelector(authState);
 
   useEffect(() => {
-    if(authSelector.showGoogleRegistrationForm.isFromGoogle) {
-      router.push("/auth/signUp");
+    if (authSelector.showGoogleRegistrationForm.isFromGoogle) {
+      router.push(routingPaths.signUp);
     }
-  }, [authSelector.showGoogleRegistrationForm])
-
-
+  }, [authSelector.showGoogleRegistrationForm]);
 
   useEffect(() => {
     const isTokenExists = localStorage.getItem(LOCAL_STORAGE_KEYS.ACCESS_TOKEN)
@@ -25,12 +23,16 @@ const AuthGuard = ({ children }) => {
       : false;
     if (isTokenExists) {
       dispatch(getMeAsync());
-      router.push("/dashboard");
+      router.push(routingPaths.dashboard);
     } else {
-      if (path === "/auth/signUp") {
-        router.push("/auth/signUp");
+      if (path === routingPaths.signUp) {
+        router.push(path);
+      } else if (path === routingPaths.forgetPassword) {
+        router.push(path);
+      } else if (path === routingPaths.verifiedForgetPassword) {
+        router.push(path);
       } else {
-        router.push("/auth/signIn");
+        router.push(routingPaths.signIn);
       }
     }
   }, [isUserLoggedIn, path]);
