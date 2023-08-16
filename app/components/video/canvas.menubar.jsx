@@ -19,7 +19,7 @@ export const CanvasMenuBar = ({
   return (
     <div className="canvas-menus custom-scroll">
       <div className="creationBarItem">
-        <div CreationBarCustomizable>
+        <div className='CreationBarCustomizable'>
           <span>
             <div>
               {/* {displayColorPicker ?

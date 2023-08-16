@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { LOCAL_STORAGE_KEYS } from "../../common/constants";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { authState } from "./auth.slice";
+import { authState, getMeAsync } from "./auth.slice";
 
 const AuthGuard = ({ children }) => {
   const router = useRouter();
@@ -24,6 +24,7 @@ const AuthGuard = ({ children }) => {
       ? true
       : false;
     if (isTokenExists) {
+      dispatch(getMeAsync());
       router.push("/dashboard");
     } else {
       if (path === "/auth/signUp") {
@@ -33,12 +34,6 @@ const AuthGuard = ({ children }) => {
       }
     }
   }, [isUserLoggedIn, path]);
-
-  useEffect(() => {
-    if (isUserLoggedIn) {
-      //   dispatch(getMeAsync());
-    }
-  }, [isUserLoggedIn]);
 
   return children;
 };

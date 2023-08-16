@@ -1,11 +1,14 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {bookSession, fetchTraineeWithSlots} from './trainee.api';
+import {bookSession, createPaymentIntent, fetchTraineeWithSlots} from './trainee.api';
 import { toast } from "react-toastify";
 
 
 const initialState = {
   status: 'idle',
   getTraineeSlots: [],
+  transaction: {
+    intent: null
+  }
 };
 
 export const getTraineeWithSlotsAsync = createAsyncThunk (
@@ -33,6 +36,22 @@ export const bookSessionAsync = createAsyncThunk (
     }
   }
 );
+
+// TODO: should fall under transaction slice
+export const createPaymentIntentAsync = createAsyncThunk (
+  'transaction/create-payment-intent',
+  async payload => {
+    try {
+      const response = await createPaymentIntent (payload);
+      return response;
+    } catch (err) {
+      toast.error (err.response.data.error);
+      throw err;
+    }
+  }
+);
+
+
 export const traineeSlice = createSlice ({
   name: 'trainee',
   initialState,
@@ -58,6 +77,8 @@ export const traineeSlice = createSlice ({
       })
       .addCase (bookSessionAsync.fulfilled, (state, action) => {
         state.status = 'fulfilled';
+        // clearwing payment intent
+        state.transaction.intent = {};
         const { data } = action.payload;
         toast.success(data.message);
 
@@ -65,7 +86,17 @@ export const traineeSlice = createSlice ({
       })
       .addCase (bookSessionAsync.rejected, (state, action) => {
         state.status = 'rejected';
-      });
+      })
+      .addCase (createPaymentIntentAsync.pending, (state, action) => {
+        state.status = 'pending';
+      })
+      .addCase (createPaymentIntentAsync.fulfilled, (state, action) => {
+        state.status = 'fulfilled';
+        state.transaction.intent = action.payload.data;
+      })
+      .addCase (createPaymentIntentAsync.rejected, (state, action) => {
+        state.status = 'rejected';
+      })
   },
 });
 export default traineeSlice.reducer;
