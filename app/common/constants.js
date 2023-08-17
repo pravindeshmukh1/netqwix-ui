@@ -1,42 +1,42 @@
-export const signUpSteps = [{title: 'Basic Info'}, {title: 'Details'}];
+export const signUpSteps = [{ title: "Basic Info" }, { title: "Details" }];
 export const LIST_OF_ACCOUNT_TYPE = [
   {
     id: 1,
-    label: 'Trainee',
+    label: "Trainee",
     value: 1,
   },
   {
     id: 2,
-    label: 'Trainer',
+    label: "Trainer",
     value: 2,
   },
 ];
 
 export const Errors = {
   signUp: {
-    basicInfo: 'All fields are mandatory',
-    detailsTab: 'Please select one account type',
-    detailsTabCategory: 'Please select category for trainer',
+    basicInfo: "All fields are mandatory",
+    detailsTab: "Please select one account type",
+    detailsTabCategory: "Please select category for trainer",
   },
-  invalidEmail: 'Please enter valid email',
+  invalidEmail: "Please enter valid email",
 };
 
 export const SuccessMsgs = {
   signUp: {
-    success: 'You have successfully signed up',
+    success: "You have successfully signed up",
   },
 };
 
 export const scheduleInstantMeetingMockDate = [
   {
     id: 1,
-    name: 'Phil Auerbach',
-    email: 'philauerbach@gmail.com',
+    name: "Phil Auerbach",
+    email: "philauerbach@gmail.com",
   },
   {
     id: 2,
-    name: 'John Doe',
-    email: 'johndoe@gmail.com',
+    name: "John Doe",
+    email: "johndoe@gmail.com",
   },
 ];
 export const Regex = {
@@ -44,67 +44,77 @@ export const Regex = {
 };
 
 export const googleOAuthLink =
-  'https://www.googleapis.com/oauth2/v1/userinfo?access_token=';
+  "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
 
 export const LOCAL_STORAGE_KEYS = {
-  ACCESS_TOKEN: 'token',
-  ACC_TYPE: 'acc_type',
+  ACCESS_TOKEN: "token",
+  ACC_TYPE: "acc_type",
 };
 
 export const AccountType = {
-  TRAINER: 'Trainer',
-  TRAINEE: 'Trainee',
+  TRAINER: "Trainer",
+  TRAINEE: "Trainee",
 };
 
 export const weekDays = [
-  'monday',
-  'tuesday',
-  'wednesday',
-  'thursday',
-  'friday',
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
 ];
+export const routingPaths = {
+  landing: "/landing",
+  dashboard: "/dashboard",
+  signUp: "/auth/signUp",
+  signIn: "/auth/signIn",
+  forgetPassword: "/auth/forgetPassword",
+  verifiedForgetPassword: "/auth/verified-forget-password",
+};
 
 export const params = {
-  search: '',
+  search: "",
 };
 export const STATUS = {
-  pending: 'pending',
-  fulfilled: 'fulfilled',
-  rejected: 'rejected',
+  pending: "pending",
+  fulfilled: "fulfilled",
+  rejected: "rejected",
 };
 export const BookedSession = {
-  confirm: 'confirm',
-  confirmed: 'confirmed',
-  booked: 'booked',
-  canceled: 'canceled',
+  confirm: "confirm",
+  confirmed: "confirmed",
+  booked: "booked",
+  canceled: "canceled",
 };
 export const BookedSessionMessage = {
-  canceled: 'This Booked Schedule Training Canceled',
-  confirmed: 'This Booked Schedule Training Confirmed',
+  canceled: "This Booked Schedule Training Canceled",
+  confirmed: "This Booked Schedule Training Confirmed",
 };
 export const leftSideBarOptions = {
-  HOME: 'home',
-  STATUS: 'status',
-  SCHEDULE_TRAINING: 'scheduleTraining',
-  CHATS: 'chats',
+  HOME: "home",
+  STATUS: "status",
+  SCHEDULE_TRAINING: "scheduleTraining",
+  CHATS: "chats",
 };
 export const filterOption = {
-  day: 'Day',
-  week: 'Week',
+  day: "Day",
+  week: "Week",
 };
 
-export const timeFormat = 'h:mm';
+export const timeFormat = "h:mm";
 
-export const timeFormatInDb = 'h:mm:ss';
+export const timeFormatInDb = "h:mm:ss";
 
 export const SHAPES = {
   FREE_HAND: null,
-  LINE: 'line',
-  CIRCLE: 'circle',
-  SQUARE: 'square',
-  OVAL: 'oval',
-  RECTANGLE: 'rectangle',
-  TRIANGLE: 'triangle',
-  ARROW_RIGHT: 'arrow_right',
-  TWO_SIDE_ARROW: 'two_side_arrow',
+  LINE: "line",
+  CIRCLE: "circle",
+  SQUARE: "square",
+  OVAL: "oval",
+  RECTANGLE: "rectangle",
+  TRIANGLE: "triangle",
+  ARROW_RIGHT: "arrow_right",
+  TWO_SIDE_ARROW: "two_side_arrow",
 };
+
+export const TRAINER_AMOUNT_USD = 5;

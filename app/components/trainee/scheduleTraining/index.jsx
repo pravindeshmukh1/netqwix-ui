@@ -2,28 +2,35 @@ import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "../scheduleTraining/index.css";
 import { Popover } from "react-tiny-popover";
-import { BookedSession, params, weekDays } from "../../../common/constants";
+import { BookedSession, TRAINER_AMOUNT_USD, params, weekDays } from "../../../common/constants";
 import { Utils } from "../../../../utils/utils";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import {
   bookSessionAsync,
+  createPaymentIntentAsync,
   getTraineeWithSlotsAsync,
   traineeState,
 } from "../trainee.slice";
 import moment from "moment/moment";
 import { Nav, NavItem, NavLink } from "reactstrap";
 import TrainerSlider from './trainerSlider';
+import Modal from "../../../common/modal";
+import { X } from "react-feather";
+import StripeCard from "../../../common/stripe";
+import { createPaymentIntent } from "../trainee.api";
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
-  const { getTraineeSlots } = useAppSelector(traineeState);
+  const { getTraineeSlots, transaction } = useAppSelector(traineeState);
   const [startDate, setStartDate] = useState(new Date());
   const [isPopoverOpen, setIsPopoverOpen] = useState(null);
   const [getParams, setParams] = useState(params);
   const [bookingColumns, setBookingColumns] = useState([]);
   const [listOfTrainers, setListOfTrainers] = useState([]);
   const [bookingTableData, setBookingTableData] = useState([]);
+  const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [isOpenInstantScheduleMeeting, setInstantScheduleMeeting] =
     useState(false);
+    const [bookSessionPayload, setBookSessionPayload] = useState({});
   const toggle = () => setInstantScheduleMeeting(!isOpenInstantScheduleMeeting);
 
   useEffect(() => {
@@ -36,7 +43,6 @@ const ScheduleTraining = () => {
       Utils.getCurrentWeekByDate(todaySDate);
     setTableData(getTraineeSlots, weekDates);
     setColumns(weekDateFormatted);
-    console.log(`getTraineeSlots--- `, getTraineeSlots);
     setListOfTrainers(getTraineeSlots.map((trainer) => {
       return {
         id: trainer?._id,
@@ -46,6 +52,13 @@ const ScheduleTraining = () => {
       }
     }))
   }, [getTraineeSlots]);
+
+  useEffect(() => {
+    if (transaction && transaction.intent && transaction.intent.client_secret) {
+      setShowTransactionModal(true);
+    }
+
+  }, [transaction])
 
   const setTableData = (data = [], selectedDate) => {
     const result = data.map(
@@ -153,59 +166,6 @@ const ScheduleTraining = () => {
         dataIndex: `${week.split(" ")[0].toLowerCase()}`,
         key: `week-col-${index}`,
         width: 100,
-        render: ({ slot, trainer_info, date }, record) => {
-          return slot.map((content, index) => {
-            return (
-              <Popover
-                isOpen={
-                  `${trainer_info._id}_${index}-${date.toString()}` ===
-                  isPopoverOpen
-                }
-                positions={["top", "left"]} // if you'd like, you can limit the positions
-                padding={10} // adjust padding here!
-                reposition={true} // prevents automatic readjustment of content position that keeps your popover content within its parent's bounds
-                onClickOutside={() => setIsPopoverOpen(null)} // handle click events outside of the popover/target here!
-                content={(
-                  { position, nudgedLeft, nudgedTop } // you can also provide a render function that injects some useful stuff!
-                ) => (
-                  <div style={{ zIndex: 5000 }}>
-                    <button
-                      type="button"
-                      className="owl-prev"
-                      onClick={() => {
-                        const payload = {
-                          trainer_id: trainer_info.trainer_id,
-                          status: BookedSession.booked,
-                          booked_date: date,
-                          session_start_time: content.start_time,
-                          session_end_time: content.end_time,
-                        };
-
-                        console.log(`payload --- `, payload);
-                        // dispatch(bookSessionAsync(payload))
-                        // setIsPopoverOpen(null);
-                      }}
-                    >
-                      <span>Book slot now</span>
-                    </button>
-                  </div>
-                )}
-              >
-                <div
-                  onClick={() => {
-                    setIsPopoverOpen(
-                      `${trainer_info._id}_${index}-${date.toString()}`
-                    );
-                  }}
-                  key={`slot-${index}-content`}
-                  className="rounded-pill bg-primary text-white text-center mb-1 pointer"
-                >
-                  {content.start_time}-{content.end_time}
-                </div>
-              </Popover>
-            );
-          });
-        },
       };
     });
 
@@ -227,6 +187,7 @@ const ScheduleTraining = () => {
       </span>
     </div>
   );
+
 
   const renderSlotsByDay = ({ slot, date, trainer_info }) => {
     return slot.map((content, index) => (
@@ -260,8 +221,9 @@ const ScheduleTraining = () => {
                         session_start_time: content.start_time,
                         session_end_time: content.end_time,
                       };
-                      dispatch(bookSessionAsync(payload));
-                      setIsPopoverOpen(null);
+                      setBookSessionPayload(payload);
+                      dispatch(createPaymentIntentAsync({ amount: TRAINER_AMOUNT_USD }))
+
                     }}
                   >
                     Book slot now
@@ -347,6 +309,34 @@ const ScheduleTraining = () => {
     </div>
   );
 
+  const renderStripePaymentContent = () => (
+    transaction && transaction.intent ?
+      <div>
+        <div className="d-flex justify-content-end mr-3">
+          <h2
+            type="button"
+            className="btn-close"
+            aria-label="Close"
+            onClick={() => { setShowTransactionModal(false) }}
+          >
+            <X />
+          </h2>
+        </div>
+        <div>
+          {/* <h5>To book a slot, please pay {TRAINER_AMOUNT_USD}$.</h5> */}
+          <div>
+            <StripeCard clientSecret={transaction.intent.client_secret} handlePaymentSuccess={() => {
+              setShowTransactionModal(false);
+              const payload = bookSessionPayload;
+              dispatch(bookSessionAsync(payload));
+              setIsPopoverOpen(null);
+              setBookSessionPayload({});
+            }} />
+          </div>
+        </div>
+      </div> : <></>
+  )
+
   return (
     <div>
       <div className="m-25 header">
@@ -400,7 +390,9 @@ const ScheduleTraining = () => {
             : <TrainerSlider list={listOfTrainers} />}
         </div>
       </div>
+      <Modal isOpen={showTransactionModal} element={renderStripePaymentContent()} />
     </div>
+
   );
 };
 

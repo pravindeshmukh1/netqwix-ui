@@ -306,7 +306,6 @@ const Bookings = ({ accountType = null }) => {
             </h3>
             {renderBookings()}
           </>
-
         )}
       </div>
 

@@ -1,5 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { googleLogin, login, signup } from "./auth.api";
+import {
+  forgetPassword,
+  getMe,
+  googleLogin,
+  login,
+  signup,
+  verifiedForgetPassword,
+} from "./auth.api";
 import { toast } from "react-toastify";
 import {
   LOCAL_STORAGE_KEYS,
@@ -11,7 +18,8 @@ const initialState = {
   status: "idle",
   userAccType: "",
   isUserLoggedIn: false,
-  authToken: '',
+  authToken: "",
+  userInfo: {},
   showGoogleRegistrationForm: {
     isFromGoogle: false,
     email: null,
@@ -39,12 +47,48 @@ export const loginAsync = createAsyncThunk("login", async (payload) => {
   }
 });
 
+export const getMeAsync = createAsyncThunk("get/me", async () => {
+  try {
+    const response = await getMe();
+    return response;
+  } catch (err) {
+    toast.error(err.response.data.error);
+    throw err;
+  }
+});
+
 export const googleLoginAsync = createAsyncThunk(
   "googleLogin",
   async (payload) => {
     try {
       const response = await googleLogin(payload);
       return response;
+    } catch (err) {
+      toast.error(err.response.data.error);
+      throw err;
+    }
+  }
+);
+
+export const forgetPasswordAsync = createAsyncThunk(
+  "forgetPassword",
+  async (payload) => {
+    try {
+      const res = await forgetPassword(payload);
+      return res;
+    } catch (err) {
+      toast.error(err.response.data.error);
+      throw err;
+    }
+  }
+);
+
+export const verifiedForgetPasswordAsync = createAsyncThunk(
+  "verifiedForgetPassword",
+  async (payload) => {
+    try {
+      const res = await verifiedForgetPassword(payload);
+      return res;
     } catch (err) {
       toast.error(err.response.data.error);
       throw err;
@@ -94,8 +138,19 @@ export const authSlice = createSlice({
       .addCase(signupAsync.rejected, (state) => {
         state.status = "rejected";
       })
+      .addCase(getMeAsync.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(getMeAsync.fulfilled, (state, action) => {
+        console.log(`action.payload --- `, action.payload);
+        state.userInfo = action.payload.userInfo;
+        state.status = "fulfilled";
+      })
+      .addCase(getMeAsync.rejected, (state) => {
+        state.status = "rejected";
+      })
       .addCase(loginAsync.pending, (state) => {
-        state.authToken = '';
+        state.authToken = "";
         state.status = "loading";
       })
       .addCase(loginAsync.rejected, (state) => {
@@ -136,6 +191,26 @@ export const authSlice = createSlice({
             setupLogin(action);
           }
         }
+      })
+      .addCase(forgetPasswordAsync.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(forgetPasswordAsync.fulfilled, (state, action) => {
+        state.status = "fulfilled";
+        toast.success(action.payload.msg);
+      })
+      .addCase(forgetPasswordAsync.rejected, (state, action) => {
+        state.status = "rejected";
+      })
+      .addCase(verifiedForgetPasswordAsync.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(verifiedForgetPasswordAsync.fulfilled, (state, action) => {
+        state.status = "fulfilled";
+        toast.success(action.payload.msg);
+      })
+      .addCase(verifiedForgetPasswordAsync.rejected, (state, action) => {
+        state.status = "rejected";
       });
   },
 });

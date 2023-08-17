@@ -268,6 +268,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     }
 
     const cutCall = () => {
+        console.log(`--- cut call --- `)
         cleanupFunction();
         isClose();
         if (remoteVideoRef && remoteVideoRef.current) {
@@ -280,14 +281,17 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     const listenSocketEvents = () => {
         // Handle signaling events from the signaling server
         socket.on(EVENTS.VIDEO_CALL.ON_OFFER, (offer) => {
+            console.log(` -- on OFFER --`);
             peerRef.current?.signal(offer);
         });
 
         socket.on(EVENTS.VIDEO_CALL.ON_ANSWER, (answer) => {
+            console.log(` -- on answer --`);
             peerRef.current?.signal(answer);
         });
 
         socket.on(EVENTS.VIDEO_CALL.ON_ICE_CANDIDATE, (candidate) => {
+            console.log(` -- on ICE candidate --`);
             peerRef.current?.signal(candidate);
         });
 
@@ -308,6 +312,11 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     feedStatus;
             }
         });
+
+        // socket.on (EVENTS.VIDEO_CALL.ON_CLOSE, () => { 
+        //     console.log(` -- on close socket event -- `);
+        //     cleanupFunction();
+        // })
 
         socket.on(EVENTS.EMIT_DRAWING_CORDS, ({ strikes }) => {
             const canvas = canvasRef.current;
@@ -375,6 +384,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         console.log(`--- handleStartCall ---`);
         const startVideoCall = async () => {
             try {
+                if(!(videoRef && videoRef.current)) return;
                 const stream = await navigator.mediaDevices
                     .getUserMedia({
                         video: true,
@@ -401,6 +411,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 peerRef.current = peer;
 
                 peer.on(EVENTS.VIDEO_CALL.ON_SIGNAL, (offer) => {
+                    console.log(` -- emit offer --`);
                     // Send the offer to the signaling server
                     socket.emit(EVENTS.VIDEO_CALL.ON_OFFER, {
                         offer,
@@ -409,6 +420,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 });
 
                 peer.on(EVENTS.VIDEO_CALL.ON_STREAM, (stream) => {
+                    console.log(` -- set remote stream --`);
                     setDisplayMsg({ showMsg: false, msg: "" });
                     setRemoteStream(stream);
                 });
@@ -417,10 +429,11 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     // setIsCalling(true);
                 });
 
-                peer.on(EVENTS.VIDEO_CALL.ON_CLOSE, () => {
-                    // setIsCalling(false);
-                    cleanupFunction();
-                });
+                // peer.on(EVENTS.VIDEO_CALL.ON_CLOSE, (data) => {
+                //     console.log(` -- on stream close --`, data);
+                //     // setIsCalling(false);
+                //     cleanupFunction();
+                // });
             } catch (error) {
                 toast.error("Please allow media permission to microphone and camera for video call...");
                 console.error("Error accessing media devices:", error);
