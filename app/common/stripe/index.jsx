@@ -14,7 +14,7 @@ const stripePromise = loadStripe (
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 );
 
-const CheckoutForm = ({clientSecret, handlePaymentSuccess}) => {
+const CheckoutForm = ({clientSecret, handlePaymentSuccess, extraContent = <></>}) => {
   const stripe = useStripe ();
   const elements = useElements ();
 
@@ -61,6 +61,7 @@ const CheckoutForm = ({clientSecret, handlePaymentSuccess}) => {
 
   return (
     <form onSubmit={handleSubmit}>
+      {extraContent}
       <PaymentElement />
       <button
         className="btn btn-primary mt-4 w-100"
@@ -75,7 +76,7 @@ const CheckoutForm = ({clientSecret, handlePaymentSuccess}) => {
   );
 };
 
-const StripeCard = ({clientSecret, handlePaymentSuccess}) => {
+const StripeCard = ({clientSecret, handlePaymentSuccess, extraContent = <></>}) => {
   const options = {
     name: 'netquix',
     description: 'netquix trainer payment',
@@ -89,7 +90,7 @@ const StripeCard = ({clientSecret, handlePaymentSuccess}) => {
         <PaymentElement />
         <button className='btn btn-primary mt-4 w-100'>Submit</button>
       </form> */}
-      <CheckoutForm clientSecret={clientSecret} handlePaymentSuccess={handlePaymentSuccess} />
+      <CheckoutForm clientSecret={clientSecret} handlePaymentSuccess={handlePaymentSuccess} extraContent={extraContent} />
     </Elements>
   );
 };

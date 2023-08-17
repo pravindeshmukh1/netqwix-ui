@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
+import moment from "moment";
 import "../scheduleTraining/index.css";
 import { Popover } from "react-tiny-popover";
 import { BookedSession, TRAINER_AMOUNT_USD, params, weekDays } from "../../../common/constants";
@@ -11,13 +12,13 @@ import {
   getTraineeWithSlotsAsync,
   traineeState,
 } from "../trainee.slice";
-import moment from "moment/moment";
 import { Nav, NavItem, NavLink } from "reactstrap";
 import TrainerSlider from './trainerSlider';
 import Modal from "../../../common/modal";
 import { X } from "react-feather";
 import StripeCard from "../../../common/stripe";
 import { createPaymentIntent } from "../trainee.api";
+import { toast } from "react-toastify";
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
@@ -30,7 +31,7 @@ const ScheduleTraining = () => {
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [isOpenInstantScheduleMeeting, setInstantScheduleMeeting] =
     useState(false);
-    const [bookSessionPayload, setBookSessionPayload] = useState({});
+  const [bookSessionPayload, setBookSessionPayload] = useState({});
   const toggle = () => setInstantScheduleMeeting(!isOpenInstantScheduleMeeting);
 
   useEffect(() => {
@@ -45,7 +46,7 @@ const ScheduleTraining = () => {
     setColumns(weekDateFormatted);
     setListOfTrainers(getTraineeSlots.map((trainer) => {
       return {
-        id: trainer?._id,
+        id: trainer._id,
         background_image: trainer?.profilePicture,
         isActive: true,
         name: trainer?.fullname
@@ -214,15 +215,22 @@ const ScheduleTraining = () => {
                   <NavLink
                     style={{ background: "white" }}
                     onClick={() => {
-                      const payload = {
-                        trainer_id: trainer_info.trainer_id,
-                        status: BookedSession.booked,
-                        booked_date: date,
-                        session_start_time: content.start_time,
-                        session_end_time: content.end_time,
-                      };
-                      setBookSessionPayload(payload);
-                      dispatch(createPaymentIntentAsync({ amount: TRAINER_AMOUNT_USD }))
+                      const amountPayable = Utils.getMinutesFromHourMM(content.start_time, content.end_time);
+                      if(amountPayable > 0) {
+                        const payload = {
+                          charging_price: amountPayable,
+                          trainer_id: trainer_info.trainer_id,
+                          trainer_info,
+                          status: BookedSession.booked,
+                          booked_date: date,
+                          session_start_time: content.start_time,
+                          session_end_time: content.end_time,
+                        };
+                        setBookSessionPayload(payload);
+                        dispatch(createPaymentIntentAsync({ amount: amountPayable }))
+                      } else {
+                          toast.error('Invalid slot timing...');
+                      }
 
                     }}
                   >
@@ -309,6 +317,20 @@ const ScheduleTraining = () => {
     </div>
   );
 
+
+  const renderPaymentContent = () => {
+    return (<div>
+      <h3> Trainer: {bookSessionPayload.trainer_info.fullname} (Price per hour {TRAINER_AMOUNT_USD}$) </h3>
+      <h4 className="mt-3 mb-3">
+        Booking time: {moment(bookSessionPayload.booked_date).format('ll')} | From: {bookSessionPayload.session_start_time} To: {bookSessionPayload.session_end_time}
+      </h4>
+      <h4 className="mb-3">
+        Price: <b>{bookSessionPayload.charging_price}$</b> 
+      </h4>
+    </div>)
+  }
+
+
   const renderStripePaymentContent = () => (
     transaction && transaction.intent ?
       <div>
@@ -331,7 +353,9 @@ const ScheduleTraining = () => {
               dispatch(bookSessionAsync(payload));
               setIsPopoverOpen(null);
               setBookSessionPayload({});
-            }} />
+            }}
+              extraContent={bookSessionPayload && bookSessionPayload.trainer_id ? renderPaymentContent() : <></>}
+            />
           </div>
         </div>
       </div> : <></>

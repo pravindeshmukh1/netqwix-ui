@@ -64,14 +64,14 @@ const ForgetPassword = () => {
                       />
                     </div>
                     <div className="form-group">
-                      <div className="buttons">
-                        <button
+                      <div className="d-flex justify-content-center">
+                        {/* <button
                           className="btn btn-primary button-effect mr-5"
                           type="button"
                           onClick={() => redirectToSignInPage()}
                         >
                           Back
-                        </button>
+                        </button> */}
                         <button
                           className="btn btn-primary button-effect"
                           type="submit"
