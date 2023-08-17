@@ -197,6 +197,7 @@ export const authSlice = createSlice({
       })
       .addCase(forgetPasswordAsync.fulfilled, (state, action) => {
         state.status = "fulfilled";
+        toast.success(action.payload.msg);
       })
       .addCase(forgetPasswordAsync.rejected, (state, action) => {
         state.status = "rejected";
@@ -206,6 +207,7 @@ export const authSlice = createSlice({
       })
       .addCase(verifiedForgetPasswordAsync.fulfilled, (state, action) => {
         state.status = "fulfilled";
+        toast.success(action.payload.msg);
       })
       .addCase(verifiedForgetPasswordAsync.rejected, (state, action) => {
         state.status = "rejected";

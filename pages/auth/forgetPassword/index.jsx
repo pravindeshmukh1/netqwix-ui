@@ -1,16 +1,30 @@
-import React, { useState } from "react";
-import { useAppDispatch } from "../../../app/store";
-import { forgetPasswordAsync } from "../../../app/components/auth/auth.slice";
+import React, { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../app/store";
+import {
+  authState,
+  forgetPasswordAsync,
+} from "../../../app/components/auth/auth.slice";
+import { STATUS, routingPaths } from "../../../app/common/constants";
+import { useRouter } from "next/router";
 
 const ForgetPassword = () => {
   const dispatch = useAppDispatch();
-  const [forgetPassword, setForgetPassword] = useState(null);
-  const handleSubmit = () => {
+  const router = useRouter();
+  const { status } = useAppSelector(authState);
+  const [forgetPassword, setForgetPassword] = useState('');
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const payload = {
       email: forgetPassword,
     };
     dispatch(forgetPasswordAsync(payload));
   };
+  const redirectToSignInPage = () => {
+    router.push(routingPaths.signIn);
+  };
+  useEffect(() => {
+    status === STATUS.fulfilled && redirectToSignInPage();
+  }, [status]);
   return (
     <div className="login-page1">
       <div className="container-fluid p-0">
@@ -24,7 +38,7 @@ const ForgetPassword = () => {
                   <h4>Welcome to chitchat please login to your account.</h4> */}
                   <h3>Hello Everyone</h3>
                   <h4>Please enter your email to reset your password.</h4>
-                  <form className="form1" onSubmit={handleSubmit}>
+                  <form className="form1" onSubmit={handleSubmit} method="post">
                     <div className="form-group">
                       <label className="col-form-label" htmlFor="inputEmail3">
                         Email Address

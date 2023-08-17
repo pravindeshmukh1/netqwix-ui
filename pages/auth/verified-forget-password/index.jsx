@@ -1,17 +1,43 @@
-import React, { useState } from "react";
-import { useAppDispatch } from "../../../app/store";
-import { verifiedForgetPasswordAsync } from "../../../app/components/auth/auth.slice";
+import React, { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../app/store";
+import {
+  authState,
+  verifiedForgetPasswordAsync,
+} from "../../../app/components/auth/auth.slice";
+import { useRouter } from "next/router";
+import { STATUS, routingPaths } from "../../../app/common/constants";
 
 const VerifiedForgetPassword = () => {
   const dispatch = useAppDispatch();
-  const [updatePassword, setUpdatePassword] = useState(null);
-  const handleSubmit = () => {
+  const { status } = useAppSelector(authState);
+  const router = useRouter();
+  const { token } = router.query;
+  const [getToken, setToken] = useState("");
+  const [updatePassword, setUpdatePassword] = useState('');
+
+  useEffect(() => {
+    if (token) {
+      setToken(token);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    status === STATUS.fulfilled && redirectToSignInPage();
+  }, [status]);
+
+  const redirectToSignInPage = () => {
+    router.push(routingPaths.signIn);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const payload = {
-      token: "",
-      email: updatePassword,
+      token: getToken,
+      password: updatePassword,
     };
     dispatch(verifiedForgetPasswordAsync(payload));
   };
+
   return (
     <div className="login-page1">
       <div className="container-fluid p-0">
@@ -27,7 +53,7 @@ const VerifiedForgetPassword = () => {
                   <h4>
                     Please enter your new password to reset your old password.
                   </h4>
-                  <form className="form1" onSubmit={handleSubmit}>
+                  <form className="form1" onSubmit={handleSubmit} method="post">
                     <div className="form-group">
                       <label className="col-form-label" htmlFor="inputEmail3">
                         New Password
@@ -57,7 +83,7 @@ const VerifiedForgetPassword = () => {
                           className="btn btn-primary button-effect"
                           type="submit"
                         >
-                          Forget Password
+                          Submit
                         </button>
                       </div>
                     </div>

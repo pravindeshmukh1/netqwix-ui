@@ -146,14 +146,6 @@ const Auth_SignIn = () => {
                           >
                             Forgot Password?
                           </h6>
-                          <h6
-                            className="pointer"
-                            onClick={() => {
-                              router.push(routingPaths.verifiedForgetPassword);
-                            }}
-                          >
-                            Verified Forget Password
-                          </h6>
                         </div>
                       </div>
                     </div>

@@ -86,7 +86,7 @@ export const forgetPassword = async (payload) => {
 export const verifiedForgetPassword = async (payload) => {
   try {
     const res = await axiosInstance({
-      method: "post",
+      method: "put",
       url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/confirm-reset-password`,
       data: JSON.stringify(payload),
       headers: {
