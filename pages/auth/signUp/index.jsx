@@ -58,6 +58,7 @@ const Auth_SignUp = (props) => {
     if (authSelector.status === "fulfilled") {
       dispatch(authAction.updateIsGoogleForm());
       setBasicInfo({ ...basicInfo, isGoogleRegister: false });
+      console.log(`redirecting >>> `);
       router.push("/auth/signIn");
     }
   }, [authSelector.status]);

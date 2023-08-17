@@ -43,7 +43,6 @@ const ScheduleTraining = () => {
       Utils.getCurrentWeekByDate(todaySDate);
     setTableData(getTraineeSlots, weekDates);
     setColumns(weekDateFormatted);
-    console.log(`getTraineeSlots--- `, getTraineeSlots);
     setListOfTrainers(getTraineeSlots.map((trainer) => {
       return {
         id: trainer?._id,

@@ -9,6 +9,7 @@ const AuthGuard = ({ children }) => {
   const dispatch = useAppDispatch();
   const { isUserLoggedIn } = useAppSelector(authState);
   const path = router.asPath;
+    const pathName = router.pathname;
   const authSelector = useAppSelector(authState);
 
   useEffect(() => {
@@ -25,19 +26,25 @@ const AuthGuard = ({ children }) => {
       dispatch(getMeAsync());
       router.push(routingPaths.dashboard);
     } else {
-      if (path === routingPaths.signUp) {
-        router.push(path);
-      } else if (path === routingPaths.forgetPassword) {
-        router.push(path);
-      } else if (path === routingPaths.verifiedForgetPassword) {
-        router.push(path);
-      } else {
-        router.push(routingPaths.signIn);
-      }
+     handlePublicRoutes(pathName, path, router);
     }
   }, [isUserLoggedIn, path]);
 
   return children;
 };
+
+
+export const handlePublicRoutes = (pathName, path, router) => {
+   if (pathName  === routingPaths.signUp) {
+        router.push(path);
+      } else if (pathName  === routingPaths.forgetPassword) {
+        router.push(path);
+      } else if (pathName  === routingPaths.verifiedForgetPassword) {
+        router.push(path);
+      } else {
+        router.push(routingPaths.signIn);
+      }
+}
+
 
 export default AuthGuard;

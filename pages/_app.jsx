@@ -8,12 +8,14 @@ import CustomizerContextProvider from "../helpers/customizerContext/customizerCt
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Provider } from "react-redux";
 import store from "../app/store";
-import AuthGuard from "../app/components/auth/AuthGuard";
+import AuthGuard, { handlePublicRoutes } from "../app/components/auth/AuthGuard";
 import { SocketContext, getSocket } from "../app/components/socket";
-import { LOCAL_STORAGE_KEYS } from "../app/common/constants";
+import { LOCAL_STORAGE_KEYS, routingPaths } from "../app/common/constants";
 
 export default function MyAppComponent({ Component, pageProps }) {
   const router = useRouter();
+  const path = router.asPath;
+  const pathName = router.pathname;
   const [currentUser, setCurrentUser] = useState(undefined);
   const [loader, setLoader] = useState(true);
   let componentMounted = true;
@@ -23,15 +25,19 @@ export default function MyAppComponent({ Component, pageProps }) {
     let localStorageUser = localStorage.getItem("email");
     // get all details about authenticate login users
     if (currentUser === undefined) {
-      router.push("/auth/signIn"); // you can not login please login
+      console.log(`redirecting >>> `);
+      handlePublicRoutes(pathName, path, router);
     } else {
       setCurrentUser(localStorageUser);
     }
-    if (currentUser !== null) {
-      router.push("/"); // you can get login user
-    } else {
-      router.push("/auth/signIn"); // you can not login please login
-    }
+    // if (currentUser !== null) {
+    //   router.push("/"); // you can get login user
+    // } else {
+    //   console.log(`redirecting >>> `);
+
+     
+    //   handlePublicRoutes(pathName, path, router);
+    // }
     // Page Loader
     setTimeout(() => {
       setLoader(false);
