@@ -5,13 +5,13 @@ const BasicInfo = (props) => {
   return (
     <React.Fragment>
       <div className="form-group">
-        <label className="col-form-label">User name</label>
+        <label className="col-form-label">Full Name</label>
         <input
           className="form-control"
           onChange={handleChange}
           type="text"
           name="fullname"
-          placeholder="User name"
+          placeholder="Full Name"
           value={values.fullname}
         />
       </div>

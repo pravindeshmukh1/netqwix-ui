@@ -79,16 +79,16 @@ const VerifiedForgetPassword = () => {
                       />
                     </div>
                     <div className="form-group">
-                      <div className="buttons">
-                        <button
+                      <div className="d-flex justify-content-center">
+                        {/* <button
                           className="btn btn-primary button-effect mr-5"
                           type="button"
                           onClick={() => router.push(routingPaths.signIn)}
                         >
                           Back
-                        </button>
+                        </button> */}
                         <button
-                          className="btn btn-primary button-effect mr-5"
+                          className="btn btn-primary button-effect"
                           type="submit"
                         >
                           Submit
