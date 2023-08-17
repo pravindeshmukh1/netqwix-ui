@@ -3,6 +3,7 @@ import {
   Regex,
   weekDays,
   timeFormat,
+  TRAINER_AMOUNT_USD,
 } from "../app/common/constants";
 import moment from "moment";
 
@@ -85,4 +86,14 @@ export class Utils {
   static capitalizeFirstLetter = (text) => {
     return text.charAt(0).toUpperCase() + text.slice(1);
   };
+
+  static getMinutesFromHourMM =(startTime, endTime, chargingRate = TRAINER_AMOUNT_USD) => {
+    const [startHour, startMinute] = startTime.split(':').map(Number);
+    const [endHour, endMinute] = endTime.split(':').map(Number);
+  
+    const totalMinutes = (endHour - startHour) * 60 + (endMinute - startMinute);
+    const finalPrice = (totalMinutes / 60) * chargingRate;
+  
+    return finalPrice;
+  }
 }
