@@ -52,7 +52,9 @@ export default function MyAppComponent({ Component, pageProps }) {
     <Fragment>
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
         <Head>
-        <meta http-equiv="Content-Security-Policy" content="default-src *; img-src * 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src  'self' 'unsafe-inline' *" />
+        <meta httpEquiv="content-type" content="text/html; charset=UTF-8" />
+
+        {/* <meta http-equiv="Content-Security-Policy" content="default-src *; img-src * 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src  'self' 'unsafe-inline' *" /> */}
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta name="description" content="Netquix" />
           <meta name="keywords" content="Netquix" />
