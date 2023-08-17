@@ -13,7 +13,7 @@ const VerifiedForgetPassword = () => {
   const router = useRouter();
   const { token } = router.query;
   const [getToken, setToken] = useState("");
-  const [updatePassword, setUpdatePassword] = useState('');
+  const [updatePassword, setUpdatePassword] = useState("");
 
   useEffect(() => {
     if (token) {
@@ -56,7 +56,7 @@ const VerifiedForgetPassword = () => {
                   <form className="form1" onSubmit={handleSubmit} method="post">
                     <div className="form-group">
                       <label className="col-form-label" htmlFor="inputEmail3">
-                        New Password
+                        Password
                       </label>
                       {/* <input
                         className="form-control"
@@ -70,8 +70,9 @@ const VerifiedForgetPassword = () => {
                       <input
                         className="form-control"
                         id="inputEmail3"
+                        type="password"
                         name="password"
-                        placeholder="Enter new password"
+                        placeholder="Enter password"
                         style={{ placeholder: "red" }}
                         value={updatePassword}
                         onChange={(e) => setUpdatePassword(e.target.value)}
@@ -80,7 +81,14 @@ const VerifiedForgetPassword = () => {
                     <div className="form-group">
                       <div className="buttons">
                         <button
-                          className="btn btn-primary button-effect"
+                          className="btn btn-primary button-effect mr-5"
+                          type="button"
+                          onClick={() => router.push(routingPaths.signIn)}
+                        >
+                          Back
+                        </button>
+                        <button
+                          className="btn btn-primary button-effect mr-5"
                           type="submit"
                         >
                           Submit

@@ -11,7 +11,7 @@ const ForgetPassword = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { status } = useAppSelector(authState);
-  const [forgetPassword, setForgetPassword] = useState('');
+  const [forgetPassword, setForgetPassword] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
     const payload = {
@@ -65,6 +65,13 @@ const ForgetPassword = () => {
                     </div>
                     <div className="form-group">
                       <div className="buttons">
+                        <button
+                          className="btn btn-primary button-effect mr-5"
+                          type="button"
+                          onClick={() => redirectToSignInPage()}
+                        >
+                          Back
+                        </button>
                         <button
                           className="btn btn-primary button-effect"
                           type="submit"
