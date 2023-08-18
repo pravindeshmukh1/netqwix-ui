@@ -43,6 +43,89 @@ const ScheduleInventory = () => {
     end_time: "",
   };
 
+  const handleStartTimeChange = (
+    value,
+    values,
+    parentIndex,
+    slotIndex,
+    setFormValues
+  ) => {
+    const formattedDate = value ? Utils.getFormattedDateDb(value) : "";
+
+    // Check for slot time conflict
+    const hasTimeConflict = values[parentIndex].slots.some((slot, index) => {
+      if (index !== slotIndex) {
+        return (
+          formattedDate >= slot.start_time && formattedDate <= slot.end_time
+        );
+      }
+      return false;
+    });
+
+    const updatedSlots = values[parentIndex].slots.map((slot, index) => {
+      if (index === slotIndex) {
+        console.log(slot.end_time + "" + formattedDate);
+        console.log(slot.end_time <= formattedDate);
+        return {
+          ...slot,
+          end_time: formattedDate,
+          error: slot.end_time <= formattedDate,
+          timeConflict: hasTimeConflict,
+        };
+      } else {
+        return slot;
+      }
+    });
+
+    const updatedValues = values.map((value, index) => {
+      if (index === parentIndex) {
+        return {
+          ...value,
+          slots: updatedSlots,
+        };
+      } else {
+        return value;
+      }
+    });
+
+    setFormValues(updatedValues);
+  };
+
+  const handleEndTimeChange = (
+    value,
+    values,
+    parentIndex,
+    slotIndex,
+    setFormValues
+  ) => {
+    const formattedDate = value ? Utils.getFormattedDateDb(value) : "";
+
+    const updatedSlots = values[parentIndex].slots.map((slot, index) => {
+      if (index === slotIndex) {
+        return {
+          ...slot,
+          end_time: formattedDate,
+          error: slot.start_time >= formattedDate,
+        };
+      } else {
+        return slot;
+      }
+    });
+
+    const updatedValues = values.map((value, index) => {
+      if (index === parentIndex) {
+        return {
+          ...value,
+          slots: updatedSlots,
+        };
+      } else {
+        return value;
+      }
+    });
+
+    setFormValues(updatedValues);
+  };
+
   return (
     <div className="m-25 schedule-inventory">
       <div id="header" className="header">
@@ -101,38 +184,26 @@ const ScheduleInventory = () => {
                                         showSecond={false}
                                         minuteStep={15}
                                         use12Hours
-                                        onChange={(value) => {
-                                          const formattedDate = value
-                                            ? Utils.getFormattedDateDb(value)
-                                            : "";
-                                          const result = values[
-                                            parentIndex
-                                          ].slots.map((slot, index) => {
-                                            if (index === slotIndex) {
-                                              return {
-                                                ...slot,
-                                                start_time: formattedDate,
-                                              };
-                                            } else {
-                                              return slot;
-                                            }
-                                          });
-                                          const updatedValues = values.map(
-                                            (value, index) => {
-                                              if (index === parentIndex) {
-                                                return {
-                                                  ...value,
-                                                  slots: result,
-                                                };
-                                              } else {
-                                                return value;
-                                              }
-                                            }
-                                          );
-                                          setValues(updatedValues);
-                                        }}
+                                        onChange={(value) =>
+                                          handleStartTimeChange(
+                                            value,
+                                            values,
+                                            parentIndex,
+                                            slotIndex,
+                                            setValues
+                                          )
+                                        }
                                       />
                                     </div>
+                                    {values[parentIndex].slots[slotIndex]
+                                      .error === true && (
+                                      <p>Please select valid end time.</p>
+                                    )}
+                                    {values[parentIndex].slots[slotIndex]
+                                      .timeConflict === true && (
+                                      <p>Slot time is tentative.</p>
+                                    )}
+
                                     <div className="col-4">
                                       {" "}
                                       <TimePicker
@@ -144,36 +215,15 @@ const ScheduleInventory = () => {
                                         showSecond={false}
                                         minuteStep={15}
                                         use12Hours
-                                        onChange={(value) => {
-                                          const formattedDate = value
-                                            ? Utils.getFormattedDateDb(value)
-                                            : "";
-                                          const result = values[
-                                            parentIndex
-                                          ].slots.map((slot, index) => {
-                                            if (index === slotIndex) {
-                                              return {
-                                                ...slot,
-                                                end_time: formattedDate,
-                                              };
-                                            } else {
-                                              return slot;
-                                            }
-                                          });
-                                          const updatedValues = values.map(
-                                            (value, index) => {
-                                              if (index === parentIndex) {
-                                                return {
-                                                  ...value,
-                                                  slots: result,
-                                                };
-                                              } else {
-                                                return value;
-                                              }
-                                            }
-                                          );
-                                          setValues(updatedValues);
-                                        }}
+                                        onChange={(value) =>
+                                          handleEndTimeChange(
+                                            value,
+                                            values,
+                                            parentIndex,
+                                            slotIndex,
+                                            setValues
+                                          )
+                                        }
                                       />
                                     </div>
                                     <div className="col-2">
