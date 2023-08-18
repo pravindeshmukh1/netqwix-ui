@@ -117,4 +117,5 @@ export const SHAPES = {
   TWO_SIDE_ARROW: "two_side_arrow",
 };
 
-export const TRAINER_AMOUNT_USD = 10;
+export const TRAINER_AMOUNT_USD = 5;
+export const isInvalidForm= "Invalid Form !"

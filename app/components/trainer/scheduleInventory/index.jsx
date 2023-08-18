@@ -6,13 +6,18 @@ import moment from "moment";
 import TimePicker from "rc-time-picker";
 import { Form, Formik, FieldArray } from "formik";
 import { useAppSelector, useAppDispatch } from "../../../store";
-import { timeFormatInDb, weekDays } from "../../../common/constants";
+import {
+  isInvalidForm,
+  timeFormatInDb,
+  weekDays,
+} from "../../../common/constants";
 import {
   getScheduleInventoryDataAsync,
   scheduleInventoryState,
   updateScheduleInventoryAsync,
 } from "../scheduleInventory/scheduleInventory.slice";
 import { Utils } from "../../../../utils/utils";
+import { toast } from "react-toastify";
 
 const ScheduleInventory = () => {
   const { status, scheduleInventoryData } = useAppSelector(
@@ -54,7 +59,12 @@ const ScheduleInventory = () => {
             const updateSlotsPayload = {
               available_slots: value,
             };
-            dispatch(updateScheduleInventoryAsync(updateSlotsPayload));
+            const isNotValid = Utils.checkTimeConflicts(value);
+            if (isNotValid) {
+              toast.success(isInvalidForm, { type: "error" });
+            } else {
+              dispatch(updateScheduleInventoryAsync(updateSlotsPayload));
+            }
           }}
         >
           {({ errors, touched, values, setValues }) => (
@@ -107,7 +117,6 @@ const ScheduleInventory = () => {
                                               return slot;
                                             }
                                           });
-                                          console.log("result", result);
                                           const updatedValues = values.map(
                                             (value, index) => {
                                               if (index === parentIndex) {
