@@ -7,6 +7,7 @@ import TimePicker from "rc-time-picker";
 import { Form, Formik, FieldArray } from "formik";
 import { useAppSelector, useAppDispatch } from "../../../store";
 import {
+  Message,
   isInvalidForm,
   timeFormatInDb,
   weekDays,
@@ -25,6 +26,7 @@ const ScheduleInventory = () => {
   );
   const dispatch = useAppDispatch();
   const [timePickerDiv, setTimePickerDiv] = useState(scheduleInventoryData);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     fetchScheduleInventoryData();
@@ -51,7 +53,6 @@ const ScheduleInventory = () => {
     setFormValues
   ) => {
     const formattedDate = value ? Utils.getFormattedDateDb(value) : "";
-
     // Check for slot time conflict
     const hasTimeConflict = values[parentIndex].slots.some((slot, index) => {
       if (index !== slotIndex) {
@@ -64,12 +65,10 @@ const ScheduleInventory = () => {
 
     const updatedSlots = values[parentIndex].slots.map((slot, index) => {
       if (index === slotIndex) {
-        console.log(slot.end_time + "" + formattedDate);
-        console.log(slot.end_time <= formattedDate);
         return {
           ...slot,
-          end_time: formattedDate,
-          error: slot.end_time <= formattedDate,
+          start_time: formattedDate,
+          error: slot.end_time && slot.end_time <= formattedDate,
           timeConflict: hasTimeConflict,
         };
       } else {
@@ -126,6 +125,19 @@ const ScheduleInventory = () => {
     setFormValues(updatedValues);
   };
 
+  const handleCheckIsError = (values) => {
+    let isError = false;
+    values.forEach((data) => {
+      data.slots.forEach((slot) => {
+        if (slot.error || slot.timeConflict) {
+          isError = true;
+        }
+      });
+    });
+    setIsError(isError);
+    return isError;
+  };
+
   return (
     <div className="m-25 schedule-inventory">
       <div id="header" className="header">
@@ -155,6 +167,7 @@ const ScheduleInventory = () => {
               {values.map(({ day, slots }, parentIndex) => {
                 return (
                   <div key={`schedule-inventory-${parentIndex}`}>
+                      {JSON.stringify(values[parentIndex].slots)}
                     <div key={parentIndex} className="row my-4">
                       <div className="col-2" />
                       <div className="col-2 text-capitalize">
@@ -171,9 +184,15 @@ const ScheduleInventory = () => {
                                     className="row mb-3"
                                   >
                                     <div className="col-4">
-                                      {" "}
                                       <TimePicker
                                         name="startTime"
+                                        className={`${
+                                          (values[parentIndex].slots[slotIndex]
+                                            .error ||
+                                            values[parentIndex].slots[slotIndex]
+                                              .timeConflict) === true &&
+                                          "border border-danger"
+                                        }`}
                                         placeholder="Select time"
                                         defaultValue={
                                           time.start_time &&
@@ -194,16 +213,20 @@ const ScheduleInventory = () => {
                                           )
                                         }
                                       />
+                                      {values[parentIndex].slots[slotIndex]
+                                        .error === true ? (
+                                        <p className="text-danger mt-1">
+                                          {Message.errorMessage.invalidTime}
+                                        </p>
+                                      ) : (
+                                        values[parentIndex].slots[slotIndex]
+                                          .timeConflict === true && (
+                                          <p className="text-danger mt-1">
+                                            {Message.errorMessage.timeConflicts}
+                                          </p>
+                                        )
+                                      )}
                                     </div>
-                                    {values[parentIndex].slots[slotIndex]
-                                      .error === true && (
-                                      <p>Please select valid end time.</p>
-                                    )}
-                                    {values[parentIndex].slots[slotIndex]
-                                      .timeConflict === true && (
-                                      <p>Slot time is tentative.</p>
-                                    )}
-
                                     <div className="col-4">
                                       {" "}
                                       <TimePicker
@@ -212,6 +235,11 @@ const ScheduleInventory = () => {
                                           time.end_time &&
                                           Utils.getFormattedTime(time.end_time)
                                         }
+                                        className={`${
+                                          values[parentIndex].slots[slotIndex]
+                                            .error === true &&
+                                          "border border-danger"
+                                        }`}
                                         showSecond={false}
                                         minuteStep={15}
                                         use12Hours
@@ -225,11 +253,23 @@ const ScheduleInventory = () => {
                                           )
                                         }
                                       />
+                                      {values[parentIndex].slots[slotIndex]
+                                        .error === true && (
+                                        <p className="text-danger mt-1">
+                                          {Message.errorMessage.invalidTime}
+                                        </p>
+                                      )}
                                     </div>
                                     <div className="col-2">
                                       {slots.length - 1 === slotIndex && (
                                         <button
                                           type="button"
+                                          disabled={
+                                            values[parentIndex].slots[slotIndex]
+                                              .timeConflict ||
+                                            values[parentIndex].slots[slotIndex]
+                                              .error
+                                          }
                                           className="btn btn-circle bg-primary text-white"
                                           onClick={() => {
                                             const addSlot = [
@@ -300,8 +340,9 @@ const ScheduleInventory = () => {
                 <div className="row mt-5 justify-content-end">
                   <div className="col-12"></div>
                   <button
+                    disabled={handleCheckIsError(values)}
                     type="submit"
-                    className="submit-schedule-inventory btn btn-primary"
+                    className={`submit-schedule-inventory btn btn-primary`}
                   >
                     Submit Your Scheduling
                   </button>

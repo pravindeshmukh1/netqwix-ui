@@ -118,4 +118,10 @@ export const SHAPES = {
 };
 
 export const TRAINER_AMOUNT_USD = 5;
-export const isInvalidForm= "Invalid Form !"
+
+export const Message = {
+  errorMessage: {
+    timeConflicts: "These slots are already booked.",
+    invalidTime: "Please select valid time",
+  },
+};
