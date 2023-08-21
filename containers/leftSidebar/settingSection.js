@@ -129,7 +129,7 @@ const SettingSection = props => {
               <h5>{profile.username}</h5>
               <h6>{profile.address}</h6>
               {accountType === AccountType.TRAINER && 
-              <h6> Wallet Amount: <b> {profile.wallet_amount}$ </b>  </h6> }
+              <h6> Wallet Amount: <b> ${profile.wallet_amount} </b>  </h6> }
 
             </div>
             <div className="details edit">
