@@ -105,6 +105,10 @@ export const timeFormat = "h:mm";
 
 export const timeFormatInDb = "h:mm:ss";
 
+export const FormateDate = {
+  YYYY_MM_DD:"YYYY-MM-DD"
+};
+
 export const SHAPES = {
   FREE_HAND: null,
   LINE: "line",

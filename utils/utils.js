@@ -4,6 +4,7 @@ import {
   weekDays,
   timeFormat,
   TRAINER_AMOUNT_USD,
+  FormateDate,
 } from "../app/common/constants";
 import moment from "moment";
 
@@ -87,16 +88,20 @@ export class Utils {
     return text.charAt(0).toUpperCase() + text.slice(1);
   };
 
-  static getMinutesFromHourMM =(startTime, endTime, chargingRate = TRAINER_AMOUNT_USD) => {
-    const [startHour, startMinute] = startTime.split(':').map(Number);
-    const [endHour, endMinute] = endTime.split(':').map(Number);
-  
+  static getMinutesFromHourMM = (
+    startTime,
+    endTime,
+    chargingRate = TRAINER_AMOUNT_USD
+  ) => {
+    const [startHour, startMinute] = startTime.split(":").map(Number);
+    const [endHour, endMinute] = endTime.split(":").map(Number);
+
     const totalMinutes = (endHour - startHour) * 60 + (endMinute - startMinute);
     const finalPrice = (totalMinutes / 60) * chargingRate;
-  
+
     return finalPrice;
-  }
-  
+  };
+
   static checkTimeConflicts = (values) => {
     let isTimeConflicts = false;
     for (const dayData of values) {
@@ -112,5 +117,54 @@ export class Utils {
       }
     }
     return isTimeConflicts;
+  };
+
+  // static meetingScheduler = (scheduledMeetingDetails) => {
+  //   scheduledMeetingDetails.forEach((bookings, bookingIndex) => {
+  //     let isDuringSession = false;
+  //     const { booked_date, session_start_time, session_end_time } = bookings;
+  //     const currentDate = moment().format(FormateDate);
+  //     const currentHour = moment().hours();
+  //     const currentMinute = moment().minutes();
+  //     const currentTime = `${currentHour}:${currentMinute}`;
+  //     const convertToAmPm = this.convertToAmPm(currentTime);
+  //     if (currentDate === booked_date) {
+  //       if (
+  //         convertToAmPm >= session_start_time &&
+  //         convertToAmPm <= session_end_time
+  //       ) {
+  //         isDuringSession = true;
+  //       } else {
+  //         isDuringSession = false;
+  //       }
+  //     }
+  //     return isDuringSession;
+  //   });
+  // };
+
+  static checkMeetingAvailability = (scheduledMeetingDetails) => {
+    const currentTime = moment().format("HH:mm");
+    const currentFormattedTime = this.convertToAmPm(currentTime);
+    const availabilityStatus = scheduledMeetingDetails.map((booking) => {
+      const { booked_date, session_start_time, session_end_time } = booking;
+      const currentFormattedSessionStartTime =
+        this.convertToAmPm(session_start_time);
+      const currentFormattedSessionEndTime =
+        this.convertToAmPm(session_end_time);
+      const currentDate = moment().format(FormateDate.YYYY_MM_DD);
+      const bookedDate = this.getDateInFormat(booked_date);
+      if (currentDate === bookedDate) {
+        if (
+          currentFormattedTime >= currentFormattedSessionStartTime &&
+          currentFormattedTime <= currentFormattedSessionEndTime
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      return false;
+    });
+    return availabilityStatus;
   };
 }

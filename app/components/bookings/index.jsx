@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import ReactStrapModal from "../../common/modal";
 
 import {
   bookingsState,
@@ -13,6 +14,7 @@ import { Utils } from "../../../utils/utils";
 import Modal from "../../common/modal";
 import StartMeeting from "./start";
 import { SocketContext } from "../socket";
+import Ratings from "./ratings";
 
 const Bookings = ({ accountType = null }) => {
   const router = useRouter();
@@ -21,6 +23,8 @@ const Bookings = ({ accountType = null }) => {
     id: "",
     booked_status: "",
   });
+  const [rating, setRating] = useState({ _id: "", isOpen: false });
+
   const [startMeeting, setStartMeeting] = useState({
     trainerInfo: null,
     traineeInfo: null,
@@ -48,6 +52,8 @@ const Bookings = ({ accountType = null }) => {
   const toggle = () => setStartMeeting(!startMeeting);
 
   const handleBookedScheduleTraining = (
+    scheduledMeetingDetails,
+    index,
     status,
     _id,
     trainee_info,
@@ -139,8 +145,22 @@ const Bookings = ({ accountType = null }) => {
         </>
       );
     } else if (accountType === AccountType.TRAINER) {
+      const meetingAvailability = Utils.checkMeetingAvailability(
+        scheduledMeetingDetails
+      );
       return (
         <>
+          {!meetingAvailability[index] && (
+            <button
+              className={`btn btn-success button-effect btn-sm mr-4`}
+              type="button"
+              onClick={() =>
+                setRating((prev) => ({ ...prev, _id, isOpen: true }))
+              }
+            >
+              Rating
+            </button>
+          )}
           {status === BookedSession.canceled ? (
             <button
               className={`btn btn-danger button-effect btn-sm`}
@@ -176,10 +196,13 @@ const Bookings = ({ accountType = null }) => {
               <button
                 className={`btn btn-primary button-effect btn-sm ml-4`}
                 type="button"
-                disabled={status === BookedSession.confirmed ? false : true}
+                disabled={!meetingAvailability[index]}
                 style={{
                   cursor:
-                    status === BookedSession.booked ? "not-allowed" : "pointer",
+                    status === BookedSession.booked ||
+                    !meetingAvailability[index]
+                      ? "not-allowed"
+                      : "pointer",
                 }}
                 onClick={() => {
                   setStartMeeting({
@@ -213,7 +236,7 @@ const Bookings = ({ accountType = null }) => {
     }
   };
 
-  const renderBookings = () => (
+  const renderBookings = () =>
     scheduledMeetingDetails.map((data, index) => {
       const {
         _id,
@@ -224,10 +247,7 @@ const Bookings = ({ accountType = null }) => {
         session_end_time,
       } = data;
       return (
-        <div
-          className="card mb-4"
-          key={`booking-schedule-training${index}`}
-        >
+        <div className="card mb-4" key={`booking-schedule-training${index}`}>
           <div className="card-body">
             <div className="row">
               <div className="col">
@@ -239,9 +259,7 @@ const Bookings = ({ accountType = null }) => {
               <div className="col">
                 <dl className="row ml-1">
                   <dd>Date :</dd>
-                  <dt className="ml-1">
-                    {Utils.getDateInFormat(booked_date)}
-                  </dt>
+                  <dt className="ml-1">{Utils.getDateInFormat(booked_date)}</dt>
                 </dl>
               </div>
               <div className="w-100"></div>
@@ -263,6 +281,8 @@ const Bookings = ({ accountType = null }) => {
           </div>
           <div className="card-footer px-5 pb-3 d-flex justify-content-end">
             {handleBookedScheduleTraining(
+              scheduledMeetingDetails,
+              index,
               data.status,
               _id,
               trainee_info,
@@ -271,9 +291,17 @@ const Bookings = ({ accountType = null }) => {
           </div>
         </div>
       );
-    })
+    });
 
-  );
+  const renderRating = () => {
+    return (
+      <ReactStrapModal
+        element={<Ratings />}
+        isOpen={rating.isOpen}
+        id={rating.id}
+      />
+    );
+  };
 
   const renderVideoCall = () => (
     <StartMeeting
@@ -294,13 +322,15 @@ const Bookings = ({ accountType = null }) => {
   return (
     <>
       <div className="m-25 w-100 custom-scroll" id="bookings">
+        {rating.isOpen ? renderRating() : null}
         {!scheduledMeetingDetails.length ? (
           <h3 className="d-flex justify-content-center mt-20">
             No bookings available
           </h3>
+        ) : startMeeting.isOpenModal ? (
+          renderVideoCall()
         ) : (
-
-          startMeeting.isOpenModal ? renderVideoCall() : <>
+          <>
             <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
               Bookings
             </h3>
