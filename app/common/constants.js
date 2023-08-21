@@ -106,7 +106,11 @@ export const timeFormat = "h:mm";
 export const timeFormatInDb = "h:mm:ss";
 
 export const FormateDate = {
-  YYYY_MM_DD:"YYYY-MM-DD"
+  YYYY_MM_DD: "YYYY-MM-DD",
+};
+
+export const FormateHours = {
+  HH_MM: "HH:mm",
 };
 
 export const SHAPES = {
@@ -127,5 +131,8 @@ export const Message = {
   errorMessage: {
     timeConflicts: "These slots are already booked.",
     invalidTime: "Please select valid time",
+  },
+  successMessage: {
+    rating: "Providing a Rating",
   },
 };

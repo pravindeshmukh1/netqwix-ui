@@ -5,6 +5,7 @@ import {
   timeFormat,
   TRAINER_AMOUNT_USD,
   FormateDate,
+  FormateHours,
 } from "../app/common/constants";
 import moment from "moment";
 
@@ -120,31 +121,19 @@ export class Utils {
     return isTimeConflicts;
   };
 
-  // static meetingScheduler = (scheduledMeetingDetails) => {
-  //   scheduledMeetingDetails.forEach((bookings, bookingIndex) => {
-  //     let isDuringSession = false;
-  //     const { booked_date, session_start_time, session_end_time } = bookings;
-  //     const currentDate = moment().format(FormateDate);
-  //     const currentHour = moment().hours();
-  //     const currentMinute = moment().minutes();
-  //     const currentTime = `${currentHour}:${currentMinute}`;
-  //     const convertToAmPm = this.convertToAmPm(currentTime);
-  //     if (currentDate === booked_date) {
-  //       if (
-  //         convertToAmPm >= session_start_time &&
-  //         convertToAmPm <= session_end_time
-  //       ) {
-  //         isDuringSession = true;
-  //       } else {
-  //         isDuringSession = false;
-  //       }
-  //     }
-  //     return isDuringSession;
-  //   });
-  // };
+  static has24HoursPassed = (referenceTime) => {
+    const currentDateTime = moment();
+    const referenceDateTime = moment(referenceTime, "YYYY-MM-DD HH:mm");
+
+    // Calculate the time difference in milliseconds between the reference time and current time
+    const timeDifferenceMs = currentDateTime - referenceDateTime;
+    const timeDifferenceHours = timeDifferenceMs / (1000 * 60 * 60); // Convert to hours
+
+    return timeDifferenceHours >= 24;
+  };
 
   static checkMeetingAvailability = (scheduledMeetingDetails) => {
-    const currentTime = moment().format("HH:mm");
+    const currentTime = moment().format(FormateHours.HH_MM);
     const currentFormattedTime = this.convertToAmPm(currentTime);
     const availabilityStatus = scheduledMeetingDetails.map((booking) => {
       const { booked_date, session_start_time, session_end_time } = booking;
@@ -168,4 +157,5 @@ export class Utils {
     });
     return availabilityStatus;
   };
+  
 }
