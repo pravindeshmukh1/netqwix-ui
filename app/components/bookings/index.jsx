@@ -313,18 +313,6 @@ const Bookings = ({ accountType = null }) => {
                 </dl>
               </div>
             </div>
-            <div className="col">
-              <dl className="row">
-                {traineeRating || trainerRating ? (
-                  <>
-                    <dd className="">Rating : </dd>
-                    <dt className="ml-1 medium">
-                      {""}Trainer : {traineeRating} Trainee : {traineeRating}{" "}
-                    </dt>
-                  </>
-                ) : null}
-              </dl>
-            </div>
           </div>
           <div className="card-footer px-5 pb-3 d-flex justify-content-end">
             {handleBookedScheduleTraining(
