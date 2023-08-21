@@ -4,7 +4,7 @@ import "../dashboard/index.css";
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import TimePicker from "rc-time-picker";
-import { Form, Formik, FieldArray } from "formik";
+import { Form, Formik, FieldArray, validateYupSchema } from "formik";
 import { useAppSelector, useAppDispatch } from "../../../store";
 import {
   Message,
@@ -43,6 +43,8 @@ const ScheduleInventory = () => {
   const emptySlot = {
     start_time: "",
     end_time: "",
+    error: false,
+    timeConflict: false,
   };
 
   const handleStartTimeChange = (
@@ -121,7 +123,6 @@ const ScheduleInventory = () => {
         return value;
       }
     });
-
     setFormValues(updatedValues);
   };
 
@@ -138,6 +139,35 @@ const ScheduleInventory = () => {
     return isError;
   };
 
+  const handleAddSlotToDaySlots = (parentIndex, values, setValues) => {
+    const addSlot = [...values[parentIndex].slots, emptySlot];
+    const updatedObj = {
+      ...values[parentIndex],
+      slots: addSlot,
+    };
+    const updatedValues = values.map((value, index) => {
+      if (index === parentIndex) {
+        return (value = updatedObj);
+      } else {
+        return value;
+      }
+    });
+    setValues(updatedValues);
+  };
+
+  const handleRemoveDaySlots = (parentIndex, slotIndex, values, setValues) => {
+    const updatedValues = values.map((value, index) => {
+      if (index === parentIndex) {
+        const updatedSlots = value.slots.filter(
+          (_, slotIndexToRemove) => slotIndexToRemove !== slotIndex
+        );
+        return { ...value, slots: updatedSlots };
+      }
+      return value;
+    });
+    setValues(updatedValues);
+  };
+
   return (
     <div className="m-25 schedule-inventory">
       <div id="header" className="header">
@@ -151,12 +181,22 @@ const ScheduleInventory = () => {
           enableReinitialize
           // validationSchema={}
           onSubmit={(value) => {
+            // Filtering out empty slots before submitting
+            const filteredSlots = value.map((day) => ({
+              ...day,
+              slots: day.slots.filter(
+                (slot) => slot.start_time || slot.end_time
+              ),
+            }));
+
             const updateSlotsPayload = {
-              available_slots: value,
+              available_slots: filteredSlots,
             };
-            const isNotValid = Utils.checkTimeConflicts(value);
+
+            const isNotValid = Utils.checkTimeConflicts(filteredSlots);
+
             if (isNotValid) {
-              toast.success(isInvalidForm, { type: "error" });
+              toast.error(isInvalidForm, { type: "error" });
             } else {
               dispatch(updateScheduleInventoryAsync(updateSlotsPayload));
             }
@@ -167,7 +207,6 @@ const ScheduleInventory = () => {
               {values.map(({ day, slots }, parentIndex) => {
                 return (
                   <div key={`schedule-inventory-${parentIndex}`}>
-                      {JSON.stringify(values[parentIndex].slots)}
                     <div key={parentIndex} className="row my-4">
                       <div className="col-2" />
                       <div className="col-2 text-capitalize">
@@ -260,65 +299,38 @@ const ScheduleInventory = () => {
                                         </p>
                                       )}
                                     </div>
-                                    <div className="col-2">
-                                      {slots.length - 1 === slotIndex && (
+                                    <div class="d-flex justify-content-around">
+                                      <button
+                                        className="btn btn-circle bg-primary text-white"
+                                        type="button"
+                                        disabled={
+                                          values[parentIndex].slots[slotIndex]
+                                            .timeConflict ||
+                                          values[parentIndex].slots[slotIndex]
+                                            .error
+                                        }
+                                        onClick={() =>
+                                          handleAddSlotToDaySlots(
+                                            parentIndex,
+                                            values,
+                                            setValues
+                                          )
+                                        }
+                                      >
+                                        <i className="fa fa-plus"></i>
+                                      </button>
+                                      {slotIndex !== 0 && (
                                         <button
+                                          className="ml-4 btn btn-circle bg-primary text-white"
                                           type="button"
-                                          disabled={
-                                            values[parentIndex].slots[slotIndex]
-                                              .timeConflict ||
-                                            values[parentIndex].slots[slotIndex]
-                                              .error
+                                          onClick={() =>
+                                            handleRemoveDaySlots(
+                                              parentIndex,
+                                              slotIndex,
+                                              values,
+                                              setValues
+                                            )
                                           }
-                                          className="btn btn-circle bg-primary text-white"
-                                          onClick={() => {
-                                            const addSlot = [
-                                              ...values[parentIndex].slots,
-                                              emptySlot,
-                                            ];
-                                            const updatedObj = {
-                                              ...values[parentIndex],
-                                              slots: addSlot,
-                                            };
-                                            const updatedValues = values.map(
-                                              (value, index) => {
-                                                if (index === parentIndex) {
-                                                  return (value = updatedObj);
-                                                } else {
-                                                  return value;
-                                                }
-                                              }
-                                            );
-                                            setValues(updatedValues);
-                                          }}
-                                        >
-                                          <i className="fa fa-plus"></i>
-                                        </button>
-                                      )}
-                                      {slots.length - 1 !== slotIndex && (
-                                        <button
-                                          type="button"
-                                          className="btn btn-circle bg-primary text-white"
-                                          onClick={() => {
-                                            const updatedDaySlots = values[
-                                              parentIndex
-                                            ].slots.filter((slot, index) => {
-                                              return index !== slotIndex;
-                                            });
-                                            const updatedValues = values.map(
-                                              (value, index) => {
-                                                if (index === parentIndex) {
-                                                  return {
-                                                    ...value,
-                                                    slots: updatedDaySlots,
-                                                  };
-                                                } else {
-                                                  return value;
-                                                }
-                                              }
-                                            );
-                                            setValues(updatedValues);
-                                          }}
                                         >
                                           <i className="fa fa-minus"></i>
                                         </button>

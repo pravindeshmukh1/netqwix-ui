@@ -111,7 +111,6 @@ export class Utils {
         }
       }
     }
-    console.log(isTimeConflicts);
     return isTimeConflicts;
   };
 }
