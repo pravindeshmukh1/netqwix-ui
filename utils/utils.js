@@ -104,18 +104,19 @@ export class Utils {
 
   static checkTimeConflicts = (values) => {
     let isTimeConflicts = false;
-    for (const dayData of values) {
-      for (const slot of dayData.slots) {
-        const { start_time, end_time } = slot;
-        if (start_time && end_time) {
-          if (end_time >= start_time) {
-            isTimeConflicts = false;
-          } else {
-            isTimeConflicts = true;
-          }
-        }
-      }
-    }
+    // TODO: will remove when validation needs to do
+    // for (const dayData of values) {
+    //   for (const slot of dayData.slots) {
+    //     const { start_time, end_time } = slot;
+    //     if (start_time && end_time) {
+    //       if (end_time >= start_time) {
+    //         isTimeConflicts = false;
+    //       } else {
+    //         isTimeConflicts = true;
+    //       }
+    //     }
+    //   }
+    // }
     return isTimeConflicts;
   };
 

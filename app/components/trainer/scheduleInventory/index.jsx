@@ -300,7 +300,7 @@ const ScheduleInventory = () => {
                                       )}
                                     </div>
                                     <div class="d-flex justify-content-around">
-                                      <button
+                                    {slotIndex === 0 && ( <button
                                         className="btn btn-circle bg-primary text-white"
                                         type="button"
                                         disabled={
@@ -318,10 +318,10 @@ const ScheduleInventory = () => {
                                         }
                                       >
                                         <i className="fa fa-plus"></i>
-                                      </button>
+                                      </button>)}
                                       {slotIndex !== 0 && (
                                         <button
-                                          className="ml-4 btn btn-circle bg-primary text-white"
+                                          className="btn btn-circle bg-primary text-white"
                                           type="button"
                                           onClick={() =>
                                             handleRemoveDaySlots(
