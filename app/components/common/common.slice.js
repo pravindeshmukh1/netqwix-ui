@@ -101,7 +101,7 @@ export const bookingsSlice = createSlice({
       .addCase(addRatingAsync.fulfilled, (state, action) => {
         state.status = "fulfilled";
         state.addRatingModel = { _id: null, isOpen: false };
-        toast.success("Successfully add rating", { type: "success" });
+        toast.success(action.payload.message, { type: "success" });
       })
       .addCase(addRatingAsync.rejected, (state, action) => {
         state.status = "rejected";
