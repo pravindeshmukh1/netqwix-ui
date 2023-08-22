@@ -6,6 +6,7 @@ import {
   TRAINER_AMOUNT_USD,
   FormateDate,
   FormateHours,
+  meetingRatingTimeout,
 } from "../app/common/constants";
 import moment from "moment";
 
@@ -121,15 +122,27 @@ export class Utils {
     return isTimeConflicts;
   };
 
-  static has24HoursPassed = (referenceTime) => {
-    const currentDateTime = moment();
-    const referenceDateTime = moment(referenceTime, "YYYY-MM-DD HH:mm");
-
-    // Calculate the time difference in milliseconds between the reference time and current time
-    const timeDifferenceMs = currentDateTime - referenceDateTime;
-    const timeDifferenceHours = timeDifferenceMs / (1000 * 60 * 60); // Convert to hours
-
-    return timeDifferenceHours >= 24;
+  static has24HoursPassed = (scheduledMeetingDetails) => {
+    const has24HoursPassed = scheduledMeetingDetails.map((booking) => {
+      const { booked_date, session_start_time } = booking;
+      const currentDate = moment().format(FormateDate.YYYY_MM_DD);
+      const currentTime = moment().format(FormateHours.HH_MM);
+      const currentFormattedTime = this.convertToAmPm(currentTime);
+      const bookedDate = this.getDateInFormat(booked_date);
+      const sessionStartTime = this.convertToAmPm(session_start_time);
+      const bookingDateTime = moment(
+        `${bookedDate} ${sessionStartTime}`,
+        `${FormateDate.YYYY_MM_DD} ${FormateHours.HH_MM}`
+      );
+      const currentDateTime = moment(
+        `${currentDate} ${currentFormattedTime}`,
+        `${FormateDate.YYYY_MM_DD} ${FormateHours.HH_MM}`
+      );
+      const hoursDifference = currentDateTime.diff(bookingDateTime, "hours");
+      const hasPassed = hoursDifference >= 24;
+      return hasPassed;
+    });
+    return has24HoursPassed;
   };
 
   static checkMeetingAvailability = (scheduledMeetingDetails) => {
@@ -157,5 +170,4 @@ export class Utils {
     });
     return availabilityStatus;
   };
-  
 }

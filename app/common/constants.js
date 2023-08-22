@@ -136,3 +136,17 @@ export const Message = {
     rating: "Providing a Rating",
   },
 };
+
+export const meetingRatingTimeout = {
+  has24passed: "has24passed",
+};
+
+export const validationMessage = {
+  rating: {
+    howWasYourSession: "Required this field",
+    rateAudioVideo: "Required this field",
+    stronglyWouldYouLikeRecommend: "Required this field",
+    title: "Required this field",
+    addRemark: "Required this field",
+  },
+};
