@@ -1,6 +1,6 @@
 export const HandleErrorLabel = ({ isTouched = false, isError }) => {
   return (
-    <div>
+    <div className="mb-3">
       {isTouched && isError ? (
         <h4 className="text-danger">
           {isTouched && isError}

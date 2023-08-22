@@ -1,9 +1,13 @@
 import Rating from "react-rating";
 
-const ColoredRating = ({ onChange, key }) => {
+const ColoredRating = ({ onChange, key, initialRating }) => {
   return (
     <Rating
       key={key}
+      initialRating={initialRating}
+      start={0}
+      
+      stop={5}
       emptySymbol={[
         "fa fa-star-o fa-2x mediumRating",
         "fa fa-star-o fa-2x mediumRating",
@@ -21,7 +25,9 @@ const ColoredRating = ({ onChange, key }) => {
         "fa fa-star fa-2x mediumRating",
       ]}
       fractions={2}
-      onChange={onChange}
+      onChange={(value) => {
+        onChange(value)
+      }}
     />
   );
 };

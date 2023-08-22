@@ -14,10 +14,28 @@ const initialState = {
 
 export const addRatingAsync = createAsyncThunk(
   "add/rating",
-  async (payload) => {
+  async (payload, {dispatch}) => {
     try {
       const res = await addRating(payload);
+      dispatch(getScheduledMeetingDetailsAsync());
       return res;
+    } catch (err) {
+      console.log(`rre `,err)
+      toast.error(err.response.data.error);
+      throw err;
+    }
+  }
+);
+
+
+export const updateBookedSessionScheduledMeetingAsync = createAsyncThunk(
+  "update/booked/session",
+  async (payload, { dispatch }) => {
+    try {
+      dispatch(getScheduledMeetingDetailsAsync());
+      const response = await updateBookedSessionScheduledMeeting(payload);
+      //TODO:update redux state not calling get api
+      return response;
     } catch (err) {
       toast.error(err.response.data.error);
       throw err;
@@ -38,20 +56,6 @@ export const getScheduledMeetingDetailsAsync = createAsyncThunk(
   }
 );
 
-export const updateBookedSessionScheduledMeetingAsync = createAsyncThunk(
-  "update/booked/session",
-  async (payload, { dispatch }) => {
-    try {
-      const response = await updateBookedSessionScheduledMeeting(payload);
-      //TODO:update redux state not calling get api
-      dispatch(getScheduledMeetingDetailsAsync());
-      return response;
-    } catch (err) {
-      toast.error(err.response.data.error);
-      throw err;
-    }
-  }
-);
 
 export const bookingsSlice = createSlice({
   name: "bookings",

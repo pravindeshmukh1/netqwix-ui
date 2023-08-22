@@ -85,6 +85,7 @@ export const BookedSession = {
   confirmed: "confirmed",
   booked: "booked",
   canceled: "canceled",
+  completed: 'completed'
 };
 export const BookedSessionMessage = {
   canceled: "This Booked Schedule Training Canceled",
@@ -125,7 +126,7 @@ export const SHAPES = {
   TWO_SIDE_ARROW: "two_side_arrow",
 };
 
-export const TRAINER_AMOUNT_USD = 5;
+export const TRAINER_AMOUNT_USD = 10;
 
 export const Message = {
   errorMessage: {

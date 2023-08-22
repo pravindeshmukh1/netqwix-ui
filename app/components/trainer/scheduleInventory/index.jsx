@@ -8,7 +8,6 @@ import { Form, Formik, FieldArray, validateYupSchema } from "formik";
 import { useAppSelector, useAppDispatch } from "../../../store";
 import {
   Message,
-  isInvalidForm,
   timeFormatInDb,
   weekDays,
 } from "../../../common/constants";
@@ -196,7 +195,7 @@ const ScheduleInventory = () => {
             const isNotValid = Utils.checkTimeConflicts(filteredSlots);
 
             if (isNotValid) {
-              toast.error(isInvalidForm, { type: "error" });
+              toast.error('invalid form', { type: "error" });
             } else {
               dispatch(updateScheduleInventoryAsync(updateSlotsPayload));
             }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Rating from "react-rating";
 import {
   AccountType,
@@ -15,315 +15,47 @@ import ColoredRating from "../../../common/rating";
 
 const Ratings = ({ onClose, booking_id, accountType }) => {
   const dispatch = useAppDispatch();
-  const [rating, setRating] = useState(null);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const payload = {
-      rating,
-      booking_id,
-    };
-    dispatch(addRatingAsync(payload));
-  };
+  const formRef = useRef(null);
 
   const initialValues = {
-    howWasYourSession: null,
-    rateAudioVideo: null,
-    stronglyWouldYouLikeRecommend: null,
+    sessionRating: null,
+    audioVideoRating: null,
+    recommendRating: null,
     title: "",
-    addRemark: "",
+    remarksInfo: "",
   };
 
   const validationSchema = Yup.object().shape({
-    howWasYourSession: Yup.number()
+    accountType: Yup.string().default(accountType),
+    sessionRating: Yup.number()
       .nullable()
-      .required(validationMessage.rating.howWasYourSession),
-    rateAudioVideo: Yup.number()
+      .required(validationMessage.rating.sessionRating),
+    audioVideoRating: Yup.number()
       .nullable()
-      .required(validationMessage.rating.rateAudioVideo),
-    stronglyWouldYouLikeRecommend: Yup.number()
-      .nullable()
-      .required(validationMessage.rating.stronglyWouldYouLikeRecommend)
-      .optional(),
-    title: Yup.string().nullable().required(validationMessage.rating.title),
-    addRemark: Yup.string()
-      .nullable()
-      .required(validationMessage.rating.addRemark),
-  });
+      .required(validationMessage.rating.audioVideoRating),
+    recommendRating:
 
-  const handleContentOnUserWise = (
-    values,
-    errors,
-    touched,
-    handleSubmit,
-    handleBlur,
-    setValues,
-    isValid
-  ) => {
-    if (accountType === AccountType.TRAINER) {
-      return (
-        <>
-          <div className="d-flex justify-content-end">
-            <div className="media-body media-body text-right">
-              <div
-                className="icon-btn btn-sm btn-outline-light close-apps pointer"
-                onClick={onClose}
-              >
-                <X />
-              </div>
-            </div>
-          </div>
-          <h3 className="fs-1 p-3 mb-2 rounded">
-            {Message.successMessage.rating}
-          </h3>
-          <div className="container">
-            <div className="row">
-              <h4 className="col">How was your session</h4>
-              <div className="col">
-                <ColoredRating
-                  key={"howWasYourSession"}
-                  onChange={(value) => {
-                    setValues({ ...values, howWasYourSession: value });
-                  }}
-                />
-                <HandleErrorLabel
-                  isError={errors.howWasYourSession}
-                  isTouched={
-                    touched.howWasYourSession && errors.howWasYourSession
-                      ? true
-                      : false
-                  }
-                />
-              </div>
-            </div>
-            <div className="row mt-3 mb-3">
-              <h4 className="col">Audio/Video</h4>
-              <div className="col">
-                <ColoredRating
-                  key={"rateAudioVideo"}
-                  onChange={(value) => {
-                    setValues({ ...values, rateAudioVideo: value });
-                  }}
-                />
-                <HandleErrorLabel
-                  isError={errors.howWasYourSession}
-                  isTouched={
-                    touched.howWasYourSession && errors.howWasYourSession
-                      ? true
-                      : false
-                  }
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col">
-                <div className="form-group">
-                  <input
-                    className="form-control"
-                    aria-describedby="emailHelp"
-                    placeholder="Title"
-                    onChange={(event) => {
-                      const { value } = event.target;
-                      setValues({ ...values, title: value });
-                    }}
-                    onBlur={handleBlur}
-                  />
-                  <HandleErrorLabel
-                    isError={errors.howWasYourSession}
-                    isTouched={
-                      touched.howWasYourSession && errors.howWasYourSession
-                        ? true
-                        : false
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col">
-                <div className="form-group">
-                  <textarea
-                    class="form-control"
-                    rows="3"
-                    placeholder="Add remark"
-                    onChange={(event) => {
-                      const { value } = event.target;
-                      setValues({ ...values, addRemark: value });
-                    }}
-                    onBlur={handleBlur}
-                  />
-                  <HandleErrorLabel
-                    isError={errors.howWasYourSession}
-                    isTouched={
-                      touched.howWasYourSession && errors.howWasYourSession
-                        ? true
-                        : false
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="d-flex justify-content-center mt-4">
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={!isValid}
-                style={{ cursor: `${!rating ? "not-allowed" : "pointer"}` }}
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        </>
-      );
-    } else {
-      return (
-        <>
-          <div className="d-flex justify-content-end">
-            <div className="media-body media-body text-right">
-              <div
-                className="icon-btn btn-sm btn-outline-light close-apps pointer"
-                onClick={onClose}
-              >
-                <X />
-              </div>
-            </div>
-          </div>
-          <h3 className="fs-1 p-3 mb-2 rounded">
-            {Message.successMessage.rating}
-          </h3>
-          <div className="container">
-            <div className="row">
-              <h4 className="col">How was your session</h4>
-              <div className="col">
-                <ColoredRating
-                  key={"howWasYourSession"}
-                  onChange={(value) => {
-                    setValues({ ...values, howWasYourSession: value });
-                  }}
-                />
-              </div>
-              <div>
-                <HandleErrorLabel
-                  isError={errors.howWasYourSession}
-                  isTouched={
-                    touched.howWasYourSession && errors.howWasYourSession
-                      ? true
-                      : false
-                  }
-                />
-              </div>
-            </div>
-            <div className="row mt-3 mb-3">
-              <h4 className="col">Rate Audio/Video connection</h4>
-              <div className="col">
-                <ColoredRating
-                  key={"rateAudioVideo"}
-                  onChange={(value) => {
-                    setValues({ ...values, rateAudioVideo: value });
-                  }}
-                />
-              </div>
-              <div>
-                <HandleErrorLabel
-                  isError={errors.rateAudioVideo}
-                  isTouched={
-                    touched.rateAudioVideo && errors.rateAudioVideo
-                      ? true
-                      : false
-                  }
-                />
-              </div>
-            </div>
-            <div className="row mt-3 mb-3">
-              <h4 className="col">How strongly would you like to recommend</h4>
-              <div className="col">
-                <ColoredRating
-                  key={"stronglyWouldYouLikeRecommend"}
-                  onChange={(value) => {
-                    setValues({
-                      ...values,
-                      stronglyWouldYouLikeRecommend: value,
-                    });
-                  }}
-                />
-                <div className="mt-2">
-                  <HandleErrorLabel
-                    isError={errors.stronglyWouldYouLikeRecommend}
-                    isTouched={
-                      touched.stronglyWouldYouLikeRecommend &&
-                      errors.stronglyWouldYouLikeRecommend
-                        ? true
-                        : false
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col">
-                <div className="form-group">
-                  <input
-                    className="form-control"
-                    placeholder="Title"
-                    value={values.title}
-                    onBlur={handleBlur}
-                    onChange={(event) => {
-                      const { value } = event.target;
-                      setValues({ ...values, title: value });
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-            <div>
-              <HandleErrorLabel
-                isError={errors.title}
-                isTouched={touched.title && errors.title ? true : false}
-              />
-            </div>
-            <div className="row mt-2">
-              <div className="col">
-                <div className="form-group">
-                  <input
-                    className="form-control mt-1"
-                    placeholder="Add remark"
-                    onChange={(event) => {
-                      const { value } = event.target;
-                      setValues({ ...values, addRemark: value });
-                    }}
-                    value={values.addRemark}
-                    onBlur={handleBlur}
-                  />
-                </div>
-              </div>
-            </div>
-            <div>
-              <HandleErrorLabel
-                isError={errors.addRemark}
-                isTouched={touched.addRemark && errors.addRemark ? true : false}
-              />
-            </div>
-            <div className="d-flex justify-content-center mt-4">
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={!isValid}
-                style={{ cursor: `${!rating ? "not-allowed" : "pointer"}` }}
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        </>
-      );
-    }
-  };
+      Yup.number()
+        .when('accountType', ([type], schema) => {
+          if (type !== AccountType.TRAINER)
+            return Yup.number().nullable()
+              .required(validationMessage.rating.recommandRating);
+          return Yup.number().nullable().optional()
+        }),
+    title: Yup.string().nullable().required(validationMessage.rating.title),
+    remarksInfo: Yup.string()
+      .nullable()
+      .required(validationMessage.rating.remarksInfo),
+  });
 
   return (
     <Formik
+      innerRef={formRef}
       initialValues={initialValues}
       validationSchema={validationSchema}
+
       onSubmit={(values) => {
+        dispatch(addRatingAsync({...values, booking_id}));
         console.info("values", values);
       }}
     >
@@ -337,7 +69,7 @@ const Ratings = ({ onClose, booking_id, accountType }) => {
         isValid,
       }) => (
         <Form onSubmit={handleSubmit}>
-          {handleContentOnUserWise(
+          {/* {handleContentOnUserWise(
             values,
             errors,
             touched,
@@ -345,7 +77,150 @@ const Ratings = ({ onClose, booking_id, accountType }) => {
             handleBlur,
             setValues,
             isValid
-          )}
+          )} */}
+          <>
+            <div className="d-flex justify-content-end">
+              <div className="media-body media-body text-right">
+                <div
+                  className="icon-btn btn-sm btn-outline-light close-apps pointer"
+                  onClick={onClose}
+                >
+                  <X />
+                </div>
+              </div>
+            </div>
+            <h3 className="fs-1 p-3 mb-2 rounded">
+              {Message.successMessage.rating}
+            </h3>
+            <div className="container">
+              <div className="row">
+                <h4 className="col-8">How was your session?</h4>
+                <div className="col">
+                  <ColoredRating
+                    initialRating={values.sessionRating}
+
+                    key={"sessionRating"}
+                    onChange={(value) => {
+                      setValues({ ...values, sessionRating: value });
+                    }}
+                  />
+                </div>
+              </div>
+              <div>
+                <HandleErrorLabel
+                  isError={errors.sessionRating}
+                  isTouched={
+                    touched.sessionRating && errors.sessionRating
+                      ? true
+                      : false
+                  }
+                />
+              </div>
+              <div className="row mt-3 mb-3">
+                <h4 className="col-8">Please rate Audio/Video connection</h4>
+                <div className="col">
+                  <ColoredRating
+                    key={"audioVideoRating"}
+                    initialRating={values.audioVideoRating}
+
+                    onChange={(value) => {
+                      setValues({ ...values, audioVideoRating: value });
+                    }}
+                  />
+                </div>
+              </div>
+              <div>
+                <HandleErrorLabel
+                  isError={errors.audioVideoRating}
+                  isTouched={
+                    touched.audioVideoRating && errors.audioVideoRating
+                      ? true
+                      : false
+                  }
+                />
+              </div>
+              {accountType === AccountType.TRAINER ? <></> :
+                <>
+                  <div className="row mt-3 mb-3">
+                    <h4 className="col-8">How strongly would you like to recommend?</h4>
+                    <div className="col">
+                      <ColoredRating
+                        initialRating={values.recommendRating}
+
+                        key={"recommandRating"}
+                        onChange={(value) => {
+                          setValues({
+                            ...values,
+                            recommendRating: value,
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="mt-2">
+                    <HandleErrorLabel
+                      isError={errors.recommendRating}
+                      isTouched={
+                        touched.recommendRating &&
+                          errors.recommendRating
+                          ? true
+                          : false
+                      }
+                    />
+                  </div>
+                </>
+              }
+              <div className="row">
+                <div className="col">
+                  <div className="form-group">
+                    <input
+                      className="form-control"
+                      placeholder="Title"
+                      value={values.title}
+                      onBlur={handleBlur}
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setValues({ ...values, title: value });
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <HandleErrorLabel
+                  isError={errors.title}
+                  isTouched={touched.title && errors.title ? true : false}
+                />
+              </div>
+              <div className="row mt-2">
+                <div className="col">
+                  <div className="form-group">
+                    <textarea onChange={(event) => {
+                      const { value } = event.target;
+                      setValues({ ...values, remarksInfo: value });
+                    }}
+                      value={values.remarksInfo}
+                      placeholder="Add remarks"
+                      onBlur={handleBlur} className="form-control mt-1" name="" id="" cols="10" rows="4"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <HandleErrorLabel
+                  isError={errors.remarksInfo}
+                  isTouched={touched.remarksInfo && errors.remarksInfo ? true : false}
+                />
+              </div>
+              <div className="d-flex justify-content-center mt-4">
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          </>
         </Form>
       )}
     </Formik>

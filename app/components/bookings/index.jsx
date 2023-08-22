@@ -42,6 +42,7 @@ const Bookings = ({ accountType = null }) => {
   const { scheduledMeetingDetails, addRatingModel } =
     useAppSelector(bookingsState);
   const { addRating } = bookingsAction;
+
   useEffect(() => {
     dispatch(getScheduledMeetingDetailsAsync());
   }, []);
@@ -63,6 +64,11 @@ const Bookings = ({ accountType = null }) => {
   };
 
 
+  const isMeetingCompleted = (detail) => {
+    return detail.status === BookedSession.completed || (detail && detail.ratings && detail.ratings[accountType.toLowerCase()] && detail.ratings[accountType.toLowerCase()].sessionRating);
+  }
+
+
   const handleBookedScheduleTraining = (
     scheduledMeetingDetails,
     index,
@@ -76,10 +82,11 @@ const Bookings = ({ accountType = null }) => {
         scheduledMeetingDetails
       );
       const has24HoursPassed = Utils.has24HoursPassed(scheduledMeetingDetails);
+      const isMeetingDone = has24HoursPassed[index] || isMeetingCompleted(scheduledMeetingDetails[index]);
       return (
         <>
-          {has24HoursPassed[index] && <h3>Completed</h3>}
-          {!has24HoursPassed[index] &&
+          {( isMeetingDone) && <h3>Completed</h3>}
+          {!isMeetingDone &&
             status === BookedSession.confirmed &&
             !meetingAvailability[index] && (
               <button
@@ -96,7 +103,7 @@ const Bookings = ({ accountType = null }) => {
                 Rating
               </button>
             )}
-          {!has24HoursPassed[index] && status === BookedSession.booked ? (
+          {!isMeetingDone && status === BookedSession.booked ? (
             <button
               className={`btn btn-dark button-effect btn-sm`}
               type="button"
@@ -111,7 +118,7 @@ const Bookings = ({ accountType = null }) => {
             <>
               {!status === BookedSession.canceled ||
                 (status === BookedSession.confirmed &&
-                  !has24HoursPassed[index] && (
+                  !isMeetingDone && (
                     <>
                       <button
                         className={`btn btn-primary button-effect btn-sm`}
@@ -130,7 +137,7 @@ const Bookings = ({ accountType = null }) => {
                         className={`btn btn-primary button-effect btn-sm ml-4`}
                         type="button"
                         disabled={
-                          status === BookedSession.confirmed ||
+                          status === BookedSession.confirmed &&
                           !meetingAvailability[index]
                         }
                         style={{
@@ -157,7 +164,7 @@ const Bookings = ({ accountType = null }) => {
                   ))}
             </>
           )}
-          {!has24HoursPassed[index] && (
+          {!isMeetingDone && (
             <button
               className="btn btn-danger button-effect btn-sm mr-4 ml-4"
               type="button"
@@ -189,10 +196,11 @@ const Bookings = ({ accountType = null }) => {
         scheduledMeetingDetails
       );
       const has24HoursPassed = Utils.has24HoursPassed(scheduledMeetingDetails);
+      const isMeetingDone = has24HoursPassed[index] || isMeetingCompleted(scheduledMeetingDetails[index]);
       return (
         <>
-          {has24HoursPassed[index] && <h3>Completed</h3>}
-          {!has24HoursPassed[index] &&
+          {( isMeetingDone) && <h3>Completed</h3>}
+          {!isMeetingDone &&
             status === BookedSession.confirmed &&
             !meetingAvailability[index] && (
               <button
@@ -209,7 +217,7 @@ const Bookings = ({ accountType = null }) => {
                 Rating
               </button>
             )}
-          {!has24HoursPassed[index] && status === BookedSession.canceled ? (
+          {!isMeetingDone && status === BookedSession.canceled ? (
             <button
               className={`btn btn-danger button-effect btn-sm`}
               type="button"
@@ -222,7 +230,7 @@ const Bookings = ({ accountType = null }) => {
             </button>
           ) : (
             <>
-              {!has24HoursPassed[index] && (
+              {!isMeetingDone && (
                 <>
                   <button
                     className={`btn btn-primary button-effect btn-sm`}
