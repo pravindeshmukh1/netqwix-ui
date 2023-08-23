@@ -1,28 +1,31 @@
-import React, {useState, useContext, useEffect} from 'react';
-import {Edit, ChevronLeft, X, ChevronRight, PlusCircle} from 'react-feather';
-import {Input, Label} from 'reactstrap';
+import React, { useState, useContext, useEffect } from 'react';
+import { Edit, ChevronLeft, X, ChevronRight, PlusCircle } from 'react-feather';
+import { Input, Label } from 'reactstrap';
 import CustomizerContext from '../../helpers/customizerContext';
 import config from '../../config/customizerConfig';
 import Link from 'next/link';
-import {useAppSelector} from '../../app/store';
-import {authState} from '../../app/components/auth/auth.slice';
+import { useAppDispatch, useAppSelector } from '../../app/store';
+import { authState } from '../../app/components/auth/auth.slice';
 import { AccountType, LOCAL_STORAGE_KEYS } from '../../app/common/constants';
+import { UpdateSettingProfileForm } from '../../app/components/trainer/settings/form';
+import { updateProfileAsync } from '../../app/components/trainer/trainer.slice';
 
 const SettingSection = props => {
-  const {userInfo} = useAppSelector (authState);
-  const customizerCtx = useContext (CustomizerContext);
+  const dispatch = useAppDispatch();
+  const { userInfo } = useAppSelector(authState);
+  const customizerCtx = useContext(CustomizerContext);
   const addBackgroundWallpaper = customizerCtx.addBackgroundWallpaper;
-  const [acctRequestDisable, setDisable] = useState (false);
-  const [isCheck, setIsChecked] = useState (false);
-  const [deleteAcct, setDeleteDisable] = useState (false);
-  const [settingTab, setSettingTab] = useState ('');
-  const [profile, setProfile] = useState ({
+  const [acctRequestDisable, setDisable] = useState(false);
+  const [isCheck, setIsChecked] = useState(false);
+  const [deleteAcct, setDeleteDisable] = useState(false);
+  const [settingTab, setSettingTab] = useState('');
+  const [profile, setProfile] = useState({
     username: 'Josephin water',
     address: 'Alabma , USA',
     wallet_amount: 0,
     editStatus: false,
   });
-  const [collapseShow, setCollapseShow] = useState ({
+  const [collapseShow, setCollapseShow] = useState({
     security: false,
     privacy: false,
     verfication: false,
@@ -31,16 +34,16 @@ const SettingSection = props => {
     deleteAccount: false,
   });
 
-  const [accountType, setAccountType] = useState ('');
+  const [accountType, setAccountType] = useState('');
 
-  useEffect (() => {
-    setAccountType (localStorage.getItem (LOCAL_STORAGE_KEYS.ACC_TYPE));
+  useEffect(() => {
+    setAccountType(localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE));
   }, []);
 
 
-  useEffect (
+  useEffect(
     () => {
-      setProfile ({
+      setProfile({
         ...profile,
         username: userInfo.fullname,
         address: userInfo.email,
@@ -51,37 +54,37 @@ const SettingSection = props => {
   );
 
   const funcChecked = val => {
-    setIsChecked (val);
+    setIsChecked(val);
   };
 
   const ProfileHandle = e => {
-    const {name, value} = e.target;
-    setProfile ({...profile, [name]: value});
+    const { name, value } = e.target;
+    setProfile({ ...profile, [name]: value });
   };
 
   const EditProfile = e => {
-    e.preventDefault ();
-    setProfile ({...profile, editStatus: !profile.editStatus});
+    e.preventDefault();
+    setProfile({ ...profile, editStatus: !profile.editStatus });
   };
 
   const closeLeftSide = () => {
     // document.querySelector(".settings-tab").classList.remove("active");
     // document.querySelector(".recent-default").classList.add("active");
     // props.ActiveTab("");
-    props.smallSideBarToggle ();
+    props.smallSideBarToggle();
   };
 
-  useEffect (() => {
+  useEffect(() => {
     // wallpaper
     if (config.wallpaper) {
-      document.querySelector (
+      document.querySelector(
         '.wallpapers'
       ).style = `background-image: url(${`/assets/images/wallpaper/${config.wallpaper}.jpg`}) ; background-color: transparent; background-blend-mode: unset`;
     }
   }, []);
 
   const setBackgroundWallpaper = (e, wallpaper) => {
-    addBackgroundWallpaper (e, wallpaper);
+    addBackgroundWallpaper(e, wallpaper);
     config.wallpaper = wallpaper;
   };
 
@@ -101,7 +104,7 @@ const SettingSection = props => {
             <a
               className="icon-btn btn-outline-light btn-sm close-panel"
               href="#"
-              onClick={() => closeLeftSide ()}
+              onClick={() => {closeLeftSide(); setSettingTab('')}}
             >
               <X />
             </a>
@@ -122,14 +125,14 @@ const SettingSection = props => {
                 className="bg-img"
                 src="/assets/images/contact/2.jpg"
                 alt="Avatar"
-                style={{display: 'none'}}
+                style={{ display: 'none' }}
               />
             </div>
             <div className="details">
               <h5>{profile.username}</h5>
               <h6>{profile.address}</h6>
-              {accountType === AccountType.TRAINER && 
-              <h6> Wallet Amount: <b> ${profile.wallet_amount} </b>  </h6> }
+              {accountType === AccountType.TRAINER &&
+                <h6> Wallet Amount: <b> ${profile.wallet_amount} </b>  </h6>}
 
             </div>
             <div className="details edit">
@@ -140,7 +143,7 @@ const SettingSection = props => {
                     type="text"
                     name="username"
                     defaultValue={profile.username}
-                    onChange={e => ProfileHandle (e)}
+                    onChange={e => ProfileHandle(e)}
                   />
                 </div>
                 <div className="form-group mb-0">
@@ -149,7 +152,7 @@ const SettingSection = props => {
                     type="text"
                     name="address"
                     defaultValue={profile.address}
-                    onChange={e => ProfileHandle (e)}
+                    onChange={e => ProfileHandle(e)}
                   />
                 </div>
               </form>
@@ -158,7 +161,7 @@ const SettingSection = props => {
               <a
                 className="icon-btn btn-outline-light btn-sm pull-right edit-btn"
                 href="#"
-                onClick={e => EditProfile (e)}
+                onClick={e => EditProfile(e)}
               >
                 {' '}
                 <Edit />
@@ -177,7 +180,7 @@ const SettingSection = props => {
               <a
                 className="icon-btn btn-outline-light btn-sm pull-right previous"
                 href="#"
-                onClick={() => setSettingTab ('')}
+                onClick={() => setSettingTab('')}
               >
                 {' '}
                 <ChevronLeft />
@@ -189,7 +192,7 @@ const SettingSection = props => {
               <div
                 className="card-header"
                 onClick={() =>
-                  setCollapseShow ({
+                  setCollapseShow({
                     ...collapseShow,
                     security: !collapseShow.security,
                     privacy: false,
@@ -353,7 +356,7 @@ const SettingSection = props => {
               <div
                 className="card-header collapsed"
                 onClick={() =>
-                  setCollapseShow ({
+                  setCollapseShow({
                     ...collapseShow,
                     verfication: !collapseShow.verfication,
                     changeNumber: false,
@@ -397,7 +400,7 @@ const SettingSection = props => {
               <div
                 className="card-header"
                 onClick={() =>
-                  setCollapseShow ({
+                  setCollapseShow({
                     ...collapseShow,
                     changeNumber: !collapseShow.changeNumber,
                     verfication: false,
@@ -467,7 +470,7 @@ const SettingSection = props => {
               <div
                 className="card-header"
                 onClick={() =>
-                  setCollapseShow ({
+                  setCollapseShow({
                     ...collapseShow,
                     accountInfo: !collapseShow.accountInfo,
                     changeNumber: false,
@@ -490,7 +493,7 @@ const SettingSection = props => {
                     id="demo"
                     href="#"
                     disabled={acctRequestDisable}
-                    onClick={() => setDisable (true)}
+                    onClick={() => setDisable(true)}
                   >
                     Request Info
                   </a>
@@ -506,7 +509,7 @@ const SettingSection = props => {
               <div
                 className="card-header"
                 onClick={() =>
-                  setCollapseShow ({
+                  setCollapseShow({
                     ...collapseShow,
                     deleteAccount: !collapseShow.deleteAccount,
                     changeNumber: false,
@@ -528,7 +531,7 @@ const SettingSection = props => {
                     className={`p-0 req-info font-danger ${deleteAcct ? 'disabled' : ''}`}
                     href="#"
                     disabled={deleteAcct}
-                    onClick={() => setDeleteDisable (true)}
+                    onClick={() => setDeleteDisable(true)}
                   >
                     Delete Account{' '}
                   </a>
@@ -552,7 +555,7 @@ const SettingSection = props => {
             <a
               className="icon-btn btn-outline-light btn-sm pull-right next"
               href="#"
-              onClick={() => setSettingTab ('account')}
+              onClick={() => setSettingTab('account')}
             >
               {' '}
               <ChevronRight />
@@ -560,6 +563,48 @@ const SettingSection = props => {
           </div>
         </div>
       </div>
+      {(accountType === AccountType.TRAINER) ? <div className='setting-block'>
+        <div className={`block ${settingTab === 'my-profile' ? 'open' : ''}`}>
+          <div className='media'>
+            <div className='media-body'>
+              <h3>My profile</h3>
+            </div>
+            <div className='media-right'>
+              <a
+                className='icon-btn btn-outline-light btn-sm pull-right previous'
+                href='#'
+                onClick={() => setSettingTab('')}
+              >
+                {' '}
+                <ChevronLeft />
+              </a>
+            </div>
+          </div>
+          {/* for trainer settings form */}
+          <UpdateSettingProfileForm userInfo={userInfo} extraInfo={userInfo?.extraInfo || {}} onFormSubmit={(formValue) => {
+            console.log(`formValue ---- `, formValue);
+            dispatch(updateProfileAsync(formValue))
+          }}/>
+        </div>
+        <div className='media'>
+          <div className='media-body'>
+            <h3>My profile</h3>
+            <h4>Update profile settings</h4>
+          </div>
+          <div className='media-right'>
+            {' '}
+            <a
+              className='icon-btn btn-outline-light btn-sm pull-right next'
+              href='#'
+              onClick={() => setSettingTab('my-profile')}
+            >
+              {' '}
+              <ChevronRight />
+            </a>
+          </div>
+        </div>
+      </div>
+        : <></>}
       {/* <div className='setting-block'>
         <div className={`block ${settingTab === 'chat' ? 'open' : ''}`}>
           <div className='media'>
@@ -753,7 +798,7 @@ const SettingSection = props => {
               <a
                 className="icon-btn btn-outline-light btn-sm pull-right previous"
                 href="#"
-                onClick={() => setSettingTab ('')}
+                onClick={() => setSettingTab('')}
               >
                 <ChevronLeft />
               </a>
@@ -786,7 +831,7 @@ const SettingSection = props => {
                       className="bg-img"
                       src="/assets/images/contact/1.jpg"
                       alt="Avatar"
-                      style={{display: 'none'}}
+                      style={{ display: 'none' }}
                     />
                   </div>
                 </div>
@@ -818,7 +863,7 @@ const SettingSection = props => {
                       className="bg-img"
                       src="/assets/images/contact/2.jpg"
                       alt="Avatar"
-                      style={{display: 'none'}}
+                      style={{ display: 'none' }}
                     />
                   </div>
                 </div>
@@ -850,7 +895,7 @@ const SettingSection = props => {
                       className="bg-img"
                       src="/assets/images/contact/3.jpg"
                       alt="Avatar"
-                      style={{display: 'none'}}
+                      style={{ display: 'none' }}
                     />
                   </div>
                 </div>
@@ -882,7 +927,7 @@ const SettingSection = props => {
                       className="bg-img"
                       src="/assets/images/contact/2.jpg"
                       alt="Avatar"
-                      style={{display: 'none'}}
+                      style={{ display: 'none' }}
                     />
                   </div>
                 </div>
@@ -917,7 +962,7 @@ const SettingSection = props => {
             <a
               className="icon-btn btn-outline-light btn-sm pull-right next"
               href="#"
-              onClick={() => setSettingTab ('integratin')}
+              onClick={() => setSettingTab('integratin')}
             >
               {' '}
               <ChevronRight />
@@ -936,7 +981,7 @@ const SettingSection = props => {
               <a
                 className="icon-btn btn-outline-light btn-sm pull-right previous"
                 href="#"
-                onClick={() => setSettingTab ('')}
+                onClick={() => setSettingTab('')}
               >
                 {' '}
                 <ChevronLeft />
@@ -986,13 +1031,14 @@ const SettingSection = props => {
             <a
               className="icon-btn btn-outline-light btn-sm pull-right next"
               href="#"
-              onClick={() => setSettingTab ('help')}
+              onClick={() => setSettingTab('help')}
             >
               {' '}
               <ChevronRight />
             </a>
           </div>
         </div>
+
       </div>
     </div>
   );

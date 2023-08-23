@@ -17,3 +17,21 @@ export const updateDrawing = async (payload) => {
     throw err;
   }
 };
+
+export const updateProfile = async (payload) => {
+  try {
+    const response = await axiosInstance({
+      method: "put",
+      url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/trainer/profile`,
+      data: payload,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
