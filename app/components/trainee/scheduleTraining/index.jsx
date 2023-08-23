@@ -19,14 +19,16 @@ import { X } from "react-feather";
 import StripeCard from "../../../common/stripe";
 import { createPaymentIntent } from "../trainee.api";
 import { toast } from "react-toastify";
-import SearchableDropdown from "../../../../helpers/searchableDropdown";
+import SearchableDropdown from "../helper/searchableDropdown";
+import { masterState } from "../../master/master.slice";
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
+  const {master} = useAppSelector (masterState);
   const [startDate, setStartDate] = useState(new Date());
   const [isPopoverOpen, setIsPopoverOpen] = useState(null);
   const [getParams, setParams] = useState(params);
-  const [trainerList, setTrainerList] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
   const [bookingColumns, setBookingColumns] = useState([]);
   const [listOfTrainers, setListOfTrainers] = useState([]);
   const [bookingTableData, setBookingTableData] = useState([]);
@@ -52,10 +54,22 @@ const ScheduleTraining = () => {
         background_image: trainer?.profilePicture,
         isActive: true,
         category: trainer?.category,
-        name: trainer?.fullname
+        name: trainer?.fullname,
+        isCategory: false,
       }
     }))
   }, [getTraineeSlots]);
+
+  useEffect(() => {
+    const { masterData } = master;
+    setCategoryList([]);
+    if(masterData && masterData.category && masterData.category.length) {
+        const payload = masterData.category.map((category) => {
+          return { id: category, name: category, isCategory: true}
+        });
+        setCategoryList(payload);
+    }
+  }, [master])
 
   useEffect(() => {
     if (transaction && transaction.intent && transaction.intent.client_secret) {
@@ -368,7 +382,7 @@ const ScheduleTraining = () => {
     <div className="custom-search-menu">
       <SearchableDropdown
       placeholder="Search Trainers..."
-        options={listOfTrainers}
+        options={[...listOfTrainers, ...categoryList]}
         label="name"
         id="id"
         customClasses= {{ searchBar: '', dropdown: 'custom-dropdown-width' }}
