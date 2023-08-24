@@ -154,10 +154,7 @@
   width: 91vw !important;
 }
 .table-responsive-width {
-  width: 52vw !important;
-  margin-top: 15px;
-  z-index: auto !important;
-  margin-left: 12px;
+  width: 64vw !important;
 }
 
 @media only screen and (min-width: 1024px) and (max-width: 1280px) {
@@ -229,6 +226,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .datePicker {
   border: 1px solid #000 !important;
   padding: 10px !important;
+  margin-left: 3.5rem !important;
 }
 table.table-bordered {
   border: 1px solid #000;

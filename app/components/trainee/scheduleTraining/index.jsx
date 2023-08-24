@@ -5,6 +5,7 @@ import "../scheduleTraining/index.css";
 import { Popover } from "react-tiny-popover";
 import {
   BookedSession,
+  Message,
   TRAINER_AMOUNT_USD,
   params,
   weekDays,
@@ -43,8 +44,7 @@ const ScheduleTraining = () => {
   const [isOpenInstantScheduleMeeting, setInstantScheduleMeeting] =
     useState(false);
   const [trainerInfo, setTrainerInfo] = useState({
-    userInfo: {},
-    isOpen: false,
+    userInfo: null,
   });
   const [bookSessionPayload, setBookSessionPayload] = useState({});
   const toggle = () => setInstantScheduleMeeting(!isOpenInstantScheduleMeeting);
@@ -61,6 +61,7 @@ const ScheduleTraining = () => {
     setColumns(weekDateFormatted);
     setListOfTrainers(
       getTraineeSlots.map((trainer) => {
+        const {} = trainer;
         return {
           id: trainer._id,
           background_image: trainer?.profilePicture,
@@ -90,6 +91,13 @@ const ScheduleTraining = () => {
       setShowTransactionModal(true);
     }
   }, [transaction]);
+
+  useEffect(() => {
+    setTrainerInfo((prev) => ({
+      ...prev,
+      userInfo: null,
+    }));
+  }, []);
 
   const setTableData = (data = [], selectedDate) => {
     const result = data.map(
@@ -292,7 +300,7 @@ const ScheduleTraining = () => {
   const renderTable = () => (
     <div
       className={`${
-        trainerInfo.isOpen ? "table-responsive-width" : "table-responsive"
+        trainerInfo.userInfo ? "table-responsive-width" : "table-responsive"
       }`}
     >
       <table className="table rc-table ml-30 mr-30">
@@ -434,7 +442,6 @@ const ScheduleTraining = () => {
             setTrainerInfo((prev) => ({
               ...prev,
               userInfo: option,
-              isOpen: true,
             }));
           }
         }}
@@ -442,147 +449,34 @@ const ScheduleTraining = () => {
           setParams({ search: value });
         }}
       />
-      {renderUserDetails()}
     </div>
   );
 
   const renderUserDetails = () => {
     return (
-      <>
-        <Modal
-          element={
-            <TrainerDetails
-              isPopoverOpen={isPopoverOpen}
-              key={`trainerDetails`}
-              trainerInfo={trainerInfo.userInfo}
-              onClose={() => {
-                setTrainerInfo((prev) => ({
-                  ...prev,
-                  isOpen: false,
-                  userInfo: null,
-                }));
-                setParams((prev) => ({
-                  ...prev,
-                  search: null,
-                }));
-              }}
-              element={renderBookingTable()}
-            />
-          }
-          id={"userDetails"}
-          isOpen={trainerInfo.isOpen}
-          key={`trainerDetails`}
-          allowFullWidth={true}
-        />
-      </>
+      <TrainerDetails
+        isPopoverOpen={isPopoverOpen}
+        key={`trainerDetails`}
+        trainerInfo={trainerInfo.userInfo}
+        onClose={() => {
+          setTrainerInfo((prev) => ({
+            ...prev,
+            userInfo: null,
+          }));
+          setParams((prev) => ({
+            ...prev,
+            search: null,
+          }));
+        }}
+        element={renderBookingTable()}
+      />
     );
   };
 
   const renderBookingTable = () => (
-    <>
-      <>
-        {/* <div className="mt-3 ml-4 datePicker">
-      <DatePicker
-        minDate={moment().toDate()}
-        onChange={(date) => {
-          setStartDate(date);
-          const todaySDate = Utils.getDateInFormat(date.toString());
-          const { weekDateFormatted, weekDates } =
-            Utils.getCurrentWeekByDate(todaySDate);
-          setColumns(weekDateFormatted);
-          setTableData(getTraineeSlots, weekDates);
-          setColumns(weekDateFormatted);
-        }}
-        selected={startDate}
-        // ref={null}
-        customInput={<Input />}
-      />
-    </div>
-    <div>
-      <div>
-        {(getParams.search && getParams.search.length) ||
-        !bookingColumns.length ? (
-          renderTable()
-        ) : (
-          <TrainerSlider list={listOfTrainers} />
-        )}
-      </div>
-    </div> */}
-      </>
-      <div className="container">
-        <div className="row">
-          <div className="col ml-5">
-            <div className="mt-3 ml-4 datePicker">
-              <DatePicker
-                minDate={moment().toDate()}
-                onChange={(date) => {
-                  setStartDate(date);
-                  const todaySDate = Utils.getDateInFormat(date.toString());
-                  const { weekDateFormatted, weekDates } =
-                    Utils.getCurrentWeekByDate(todaySDate);
-                  setColumns(weekDateFormatted);
-                  setTableData(getTraineeSlots, weekDates);
-                  setColumns(weekDateFormatted);
-                }}
-                selected={startDate}
-                // ref={null}
-                customInput={<Input />}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col">
-            <div className="pt-5">
-              <div>
-                {(getParams.search && getParams.search.length) ||
-                !bookingColumns.length ? (
-                  renderTable()
-                ) : (
-                  <TrainerSlider list={listOfTrainers} />
-                )}
-              </div>
-            </div>
-            <Modal
-              isOpen={showTransactionModal}
-              element={renderStripePaymentContent()}
-            />
-          </div>
-        </div>
-      </div>
-    </>
-  );
-
-  return (
-    <div>
-      {/* <div className="m-25 header">
-        <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
-          Book Training Session
-        </h3>
-      </div>
-
-      <div
-        className={`form-inline search-form open mb-5`}
-        style={{
-          width: "92vw",
-          height: "4rem",
-          marginTop: "60px",
-          marginLeft: "6rem",
-        }}
-      >
-        <div className="form-group">
-          <input
-            className="form-control-plaintext"
-            type="search"
-            value={getParams.search}
-            placeholder="Search..."
-            onChange={(event) => {
-              const { value } = event.target;
-              setParams({ search: value });
-            }}
-          />
-        </div>
-        <div className="mt-3 ml-1 datePicker">
+    <div className="row">
+      <div className="col-sm-10">
+        <div className="mt-3 datePicker ml-5">
           <DatePicker
             minDate={moment().toDate()}
             onChange={(date) => {
@@ -599,9 +493,9 @@ const ScheduleTraining = () => {
             customInput={<Input />}
           />
         </div>
-      </div> */}
-      {/* <div className="pt-5" style={{ marginTop: "7rem" }}>
-        <div className="ml-4 ">
+      </div>
+      <div className="col-sm-4 mb-5">
+        <div className="pt-3">
           {(getParams.search && getParams.search.length) ||
           !bookingColumns.length ? (
             renderTable()
@@ -609,14 +503,95 @@ const ScheduleTraining = () => {
             <TrainerSlider list={listOfTrainers} />
           )}
         </div>
-      </div> */}
-      {/* <Modal isOpen={showTransactionModal} element={renderStripePaymentContent()} /> */}
-      {renderSearchMenu()}
-      <div className="trainer-slider p02">
-        <h2>Available Trainers...</h2>
-        <TrainerSlider list={listOfTrainers} />
+        <Modal
+          isOpen={showTransactionModal}
+          element={renderStripePaymentContent()}
+        />
       </div>
     </div>
+  );
+
+  return (
+    <>
+      <div>
+        {/* <div className="m-25 header">
+      <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
+        Book Training Session
+      </h3>
+    </div>
+
+    <div
+      className={`form-inline search-form open mb-5`}
+      style={{
+        width: "92vw",
+        height: "4rem",
+        marginTop: "60px",
+        marginLeft: "6rem",
+      }}
+    >
+      <div className="form-group">
+        <input
+          className="form-control-plaintext"
+          type="search"
+          value={getParams.search}
+          placeholder="Search..."
+          onChange={(event) => {
+            const { value } = event.target;
+            setParams({ search: value });
+          }}
+        />
+      </div>
+      <div className="mt-3 ml-1 datePicker">
+        <DatePicker
+          minDate={moment().toDate()}
+          onChange={(date) => {
+            setStartDate(date);
+            const todaySDate = Utils.getDateInFormat(date.toString());
+            const { weekDateFormatted, weekDates } =
+              Utils.getCurrentWeekByDate(todaySDate);
+            setColumns(weekDateFormatted);
+            setTableData(getTraineeSlots, weekDates);
+            setColumns(weekDateFormatted);
+          }}
+          selected={startDate}
+          // ref={null}
+          customInput={<Input />}
+        />
+      </div>
+    </div> */}
+        {/* <div className="pt-5" style={{ marginTop: "7rem" }}>
+      <div className="ml-4 ">
+        {(getParams.search && getParams.search.length) ||
+        !bookingColumns.length ? (
+          renderTable()
+        ) : (
+          <TrainerSlider list={listOfTrainers} />
+        )}
+      </div>
+    </div> */}
+        {/* <Modal isOpen={showTransactionModal} element={renderStripePaymentContent()} /> */}
+        {/* {renderSearchMenu()}
+    <div className="trainer-slider p02">
+      <h2>Available Trainers...</h2>
+      <TrainerSlider list={listOfTrainers} />
+    </div> */}
+    
+        {trainerInfo &&
+        trainerInfo.userInfo &&
+        trainerInfo.userInfo.extraInfo &&
+        Object.keys(trainerInfo.userInfo.extraInfo).length ? (
+          renderUserDetails()
+        ) : (
+          <>
+            <div>{renderSearchMenu()}</div>
+            <div className="trainer-slider p02">
+              <h2>Available Trainers...</h2>
+              <TrainerSlider list={listOfTrainers} />
+            </div>
+          </>
+        )}
+      </div>
+    </>
   );
 };
 

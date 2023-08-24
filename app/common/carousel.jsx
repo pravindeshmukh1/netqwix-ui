@@ -37,7 +37,7 @@ const Carousel = ({ media }) => {
 
   const slides = media.map((item, index) => (
     <CarouselItem onExiting={onExiting} onExited={onExited} key={`${index}`}>
-      <div key={`item_${index}`} className="d-flex justify-content-center">
+      <div key={`item_${index}`} className="d-flex justify-content-center ml-4 mt-4">
         {item.url ? (
           <img
             key={`image_${index}`}
@@ -62,13 +62,13 @@ const Carousel = ({ media }) => {
       />
       {slides}
       <CarouselControl
-        direction="prev"
-        directionText="Previous"
+        direction={slides.length ? "prev" : null}
+        directionText={slides.length ? "Previous" : null}
         onClickHandler={previous}
       />
       <CarouselControl
-        direction="next"
-        directionText="Next"
+        direction={slides.length ? "next" : null}
+        directionText={slides.length ? "Next" : null}
         onClickHandler={next}
       />
     </ReactCarousel>
