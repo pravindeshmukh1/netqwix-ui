@@ -36,8 +36,8 @@ const Carousel = ({ media }) => {
   };
 
   const slides = media.map((item, index) => (
-    <CarouselItem onExiting={onExiting} onExited={onExited} key={item.src}>
-      <div key={`${index}`} className="d-flex justify-content-center">
+    <CarouselItem onExiting={onExiting} onExited={onExited} key={`${index}`}>
+      <div key={`item_${index}`} className="d-flex justify-content-center">
         {item.url ? (
           <img
             key={`image_${index}`}

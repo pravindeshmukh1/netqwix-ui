@@ -6,14 +6,18 @@ import { traineeState } from "../trainee/trainee.slice";
 import Accordion from "../../common/accordion";
 import Carousel from "../../common/carousel";
 
-const TrainerDetails = ({ onClose, element }) => {
+const TrainerDetails = ({ onClose, element, trainerInfo, isPopoverOpen }) => {
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector(authState);
   const { getTraineeSlots } = useAppSelector(traineeState);
   useEffect(() => {
     dispatch(getMeAsync());
   }, []);
-
+  const accordionData = [
+    {
+      id: 1,
+    },
+  ];
   return (
     <div>
       <div className="media-body media-body text-right" onClick={onClose}>
@@ -21,7 +25,7 @@ const TrainerDetails = ({ onClose, element }) => {
           <X />
         </div>
       </div>
-      {getTraineeSlots.map((data, index) => {
+      {/* {getTraineeSlots.map((data, index) => {
         const {
           fullname,
           about,
@@ -46,14 +50,15 @@ const TrainerDetails = ({ onClose, element }) => {
             value: curriculum,
           },
         ];
-        return (
-          <div className="row" key={`data_${index}`}>
-            <div className="col">
-              <h2 className="mb-3">{fullname}</h2>
-              <h3 className="mb-3 font-weight-bold">About</h3>
-              <p>{about}</p>
-              <div className="accordion">
-                {accordionData.map((data, index) => {
+        return ( */}
+      <div className="row">
+        <div className="col">
+          <h2 className="mb-3">{trainerInfo ? trainerInfo.name : null}</h2>
+          <h3 className="mb-3 font-weight-bold">About</h3>
+          <p>{trainerInfo ? trainerInfo.extraInfo.about : null}</p>
+          <div className="accordion">
+            {[].length
+              ? [].map((data, index) => {
                   return (
                     <Accordion key={`accordion_${index}`}>
                       <Accordion.Item>
@@ -62,24 +67,27 @@ const TrainerDetails = ({ onClose, element }) => {
                       </Accordion.Item>
                     </Accordion>
                   );
-                })}
-              </div>
-            </div>
-            <div className="col">
-              <div className="row">
-                <div className="col-8 mb-5">
-                  <Carousel media={data.extraInfo.media} />
-                </div>
-              </div>
-              <div className="container">
-                <div className="row">
-                  <div className="col">{element}</div>
-                </div>
-              </div>
+                })
+              : "No data found"}
+          </div>
+        </div>
+        <div className="col">
+          <div className="row">
+            <div className="col-8 mb-5">
+              <Carousel
+                media={trainerInfo ? trainerInfo.extraInfo.media : []}
+              />
             </div>
           </div>
-        );
-      })}
+          <div className="container">
+            <div className="row">
+              <div className="col">{element ? element : "No data found"}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* ); */}
+      {/* })} */}
     </div>
   );
 };

@@ -154,8 +154,9 @@
   width: 91vw !important;
 }
 .table-responsive-width {
-  width: 53vw !important;
+  width: 52vw !important;
   margin-top: 15px;
+  z-index: auto !important;
   margin-left: 12px;
 }
 
