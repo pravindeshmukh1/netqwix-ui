@@ -385,7 +385,7 @@ const ScheduleTraining = () => {
         options={[...listOfTrainers, ...categoryList]}
         label="name"
         id="id"
-        customClasses= {{ searchBar: '', dropdown: 'custom-dropdown-width' }}
+        customClasses= {{ searchBar: 'search-bar-trainee', searchButton: 'search-button-trainee', dropdown: 'custom-dropdown-width' }}
         selectedVal={getParams.search}
         handleChange={(value) => {
           setParams({ search: value });

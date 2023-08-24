@@ -60,7 +60,7 @@ const SearchableDropdown = ({
             }}
             onClick={toggle}
           />
-          <button className="btn btn-primary rounded-0"> <Search /> </button>
+          <button className={`btn btn-primary rounded-0 ${customClasses.searchButton}`}> <Search /> </button>
         </div>
         <div className={`arrow ${isOpen ? 'open' : ''}`} />
       </div>
