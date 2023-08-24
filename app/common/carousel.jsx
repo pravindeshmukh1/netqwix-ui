@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ArrowLeft, ArrowRight } from "react-feather";
 import {
   Carousel as ReactCarousel,
   CarouselItem,
@@ -37,16 +38,30 @@ const Carousel = ({ media }) => {
 
   const slides = media.map((item, index) => (
     <CarouselItem onExiting={onExiting} onExited={onExited} key={`${index}`}>
-      <div key={`item_${index}`} className="d-flex justify-content-center ml-4 mt-4">
-        {item.url ? (
+      <div key={`item_${index}`} className=" d-flex justify-content-center ml-4 mt-4">
+        {/* TODO: get from constance */}
+        {item.url && item.type === 'image' ? (
           <img
             key={`image_${index}`}
             src={item.url}
             alt={item.altText}
-            width={"100%"}
-            height={"100%"}
+            // width={"100%"}
+            // height={"400px"}
+            className="d-block w-50"
           />
-        ) : (
+        ) : item.url && item.type === 'video' ? <>
+        {/* TODO: video */}
+          {/* <iframe
+          height='100%'
+          width={'100%'}
+                      // className="d-block w-50"
+            src={`https://www.youtube.com/embed/rokGy0huYEA`}
+            // frameBorder="0"
+            // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            title="Embedded youtube"
+          /> */}
+        </> : (
           "No media found!"
         )}
       </div>
@@ -54,7 +69,7 @@ const Carousel = ({ media }) => {
   ));
 
   return (
-    <ReactCarousel activeIndex={activeIndex} next={next} previous={previous}>
+    <ReactCarousel  activeIndex={activeIndex} next={next} previous={previous}>
       <CarouselIndicators
         items={media}
         activeIndex={activeIndex}
@@ -63,12 +78,12 @@ const Carousel = ({ media }) => {
       {slides}
       <CarouselControl
         direction={slides.length ? "prev" : null}
-        directionText={slides.length ? "Previous" : null}
+        directionText={slides.length ? <ArrowLeft /> : null}
         onClickHandler={previous}
       />
       <CarouselControl
         direction={slides.length ? "next" : null}
-        directionText={slides.length ? "Next" : null}
+        directionText={slides.length ? <ArrowRight /> : null}
         onClickHandler={next}
       />
     </ReactCarousel>

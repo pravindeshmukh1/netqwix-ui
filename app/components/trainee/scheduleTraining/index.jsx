@@ -61,7 +61,6 @@ const ScheduleTraining = () => {
     setColumns(weekDateFormatted);
     setListOfTrainers(
       getTraineeSlots.map((trainer) => {
-        const {} = trainer;
         return {
           id: trainer._id,
           background_image: trainer?.profilePicture,
@@ -299,9 +298,8 @@ const ScheduleTraining = () => {
 
   const renderTable = () => (
     <div
-      className={`${
-        trainerInfo.userInfo ? "table-responsive-width" : "table-responsive"
-      }`}
+      className={`${trainerInfo.userInfo ? "table-responsive-width" : "table-responsive"
+        }`}
     >
       <table className="table rc-table ml-30 mr-30">
         <thead className="justify-center align-center">
@@ -438,7 +436,11 @@ const ScheduleTraining = () => {
         }}
         selectedVal={getParams.search}
         selectedOption={(option) => {
-          if (option) {
+          // WIP: for category selection 
+          if (option.isCategory) {
+            toast.warning('You selected category which is in progress...');
+          } else {
+            // showing trainer info
             setTrainerInfo((prev) => ({
               ...prev,
               userInfo: option,
@@ -475,8 +477,8 @@ const ScheduleTraining = () => {
 
   const renderBookingTable = () => (
     <div className="row">
-      <div className="col-sm-10">
-        <div className="mt-3 datePicker ml-5">
+      <div className="col-sm-3">
+        <div className="mt-3 datePicker ">
           <DatePicker
             minDate={moment().toDate()}
             onChange={(date) => {
@@ -494,10 +496,10 @@ const ScheduleTraining = () => {
           />
         </div>
       </div>
-      <div className="col-sm-4 mb-5">
+      <div className="col-sm-14 mb-5 ml-4">
         <div className="pt-3">
           {(getParams.search && getParams.search.length) ||
-          !bookingColumns.length ? (
+            !bookingColumns.length ? (
             renderTable()
           ) : (
             <TrainerSlider list={listOfTrainers} />
@@ -575,11 +577,9 @@ const ScheduleTraining = () => {
       <h2>Available Trainers...</h2>
       <TrainerSlider list={listOfTrainers} />
     </div> */}
-    
+
         {trainerInfo &&
-        trainerInfo.userInfo &&
-        trainerInfo.userInfo.extraInfo &&
-        Object.keys(trainerInfo.userInfo.extraInfo).length ? (
+          trainerInfo.userInfo ? (
           renderUserDetails()
         ) : (
           <>
