@@ -85,7 +85,7 @@ export const BookedSession = {
   confirmed: "confirmed",
   booked: "booked",
   canceled: "canceled",
-  completed: 'completed'
+  completed: "completed",
 };
 export const BookedSessionMessage = {
   canceled: "This Booked Schedule Training Canceled",
@@ -129,7 +129,9 @@ export const SHAPES = {
 export const TRAINER_AMOUNT_USD = 10;
 
 export const Message = {
+  notFound: "No data available",
   errorMessage: {
+    wip: "work in progress",
     timeConflicts: "These slots are already booked.",
     invalidTime: "Please select valid time",
   },
@@ -144,10 +146,16 @@ export const meetingRatingTimeout = {
 
 export const validationMessage = {
   rating: {
-    howWasYourSession: "Required this field",
-    rateAudioVideo: "Required this field",
-    stronglyWouldYouLikeRecommend: "Required this field",
-    title: "Required this field",
-    addRemark: "Required this field",
+    howWasYourSession: "This field is required",
+    rateAudioVideo: "This field is required",
+    stronglyWouldYouLikeRecommend: "This field is required",
+    title: "This field is required",
+    addRemark: "This field is required",
+  },
+  edit_trainer_profile: {
+    about: "This field is required ",
+    teaching_style: "This field is required ",
+    credentials_and_affiliations: "This field is required ",
+    curriculum: "This field is required ",
   },
 };

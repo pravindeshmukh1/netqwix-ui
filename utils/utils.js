@@ -124,14 +124,14 @@ export class Utils {
 
   static has24HoursPassed = (scheduledMeetingDetails) => {
     const has24HoursPassed = scheduledMeetingDetails.map((booking) => {
-      const { booked_date, session_start_time } = booking;
+      const { booked_date, session_end_time } = booking;
       const currentDate = moment().format(FormateDate.YYYY_MM_DD);
       const currentTime = moment().format(FormateHours.HH_MM);
       const currentFormattedTime = this.convertToAmPm(currentTime);
       const bookedDate = this.getDateInFormat(booked_date);
-      const sessionStartTime = this.convertToAmPm(session_start_time);
+      const sessionEndTime = this.convertToAmPm(session_end_time);
       const bookingDateTime = moment(
-        `${bookedDate} ${sessionStartTime}`,
+        `${bookedDate} ${sessionEndTime}`,
         `${FormateDate.YYYY_MM_DD} ${FormateHours.HH_MM}`
       );
       const currentDateTime = moment(

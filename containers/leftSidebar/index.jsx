@@ -461,7 +461,7 @@ const Index = props => {
                 </TabPane>
                 <TabPane
                   tabId="setting"
-                  className={`${activeTab === 'setting' ? 'left-90' : ''}`}
+                  className={`${activeTab === 'setting' ? 'left-90 ' : ''} ${accountType === AccountType.TRAINER ? 'sidebar-full-width': ''}`}
                 >
                   <SettingSection
                     smallSideBarToggle={smallSideBarToggle}

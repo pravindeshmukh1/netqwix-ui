@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import moment from "moment";
 import { useRouter } from "next/router";
 import ReactStrapModal from "../../common/modal";
 import { Formik } from "formik";
@@ -13,6 +14,8 @@ import { useAppSelector, useAppDispatch } from "../../store";
 import {
   AccountType,
   BookedSession,
+  FormateDate,
+  FormateHours,
   meetingRatingTimeout,
 } from "../../common/constants";
 import { Utils } from "../../../utils/utils";
@@ -68,6 +71,24 @@ const Bookings = ({ accountType = null }) => {
     return detail.status === BookedSession.completed || (detail && detail.ratings && detail.ratings[accountType.toLowerCase()] && detail.ratings[accountType.toLowerCase()].sessionRating);
   }
 
+  const isMeetingTimePassed = ({ booked_date, session_start_time }) => {
+    const currentDate = moment().format(FormateDate.YYYY_MM_DD);
+    const currentTime = moment().format(FormateHours.HH_MM);
+    const currentFormattedTime = Utils.convertToAmPm(currentTime);
+    const bookedDate = Utils.getDateInFormat(booked_date);
+    const sessionEndTime = Utils.convertToAmPm(session_start_time);
+    const bookingDateTime = moment(
+      `${bookedDate} ${sessionEndTime}`,
+      `${FormateDate.YYYY_MM_DD} ${FormateHours.HH_MM}`
+    );
+    const currentDateTime = moment(
+      `${currentDate} ${currentFormattedTime}`,
+      `${FormateDate.YYYY_MM_DD} ${FormateHours.HH_MM}`
+    );
+
+    return bookingDateTime < currentDateTime;
+  }
+
 
   const handleBookedScheduleTraining = (
     scheduledMeetingDetails,
@@ -77,6 +98,8 @@ const Bookings = ({ accountType = null }) => {
     trainee_info,
     trainer_info
   ) => {
+    // not showing cancle button if missing start time is passed
+    const showCancelButton = isMeetingTimePassed(scheduledMeetingDetails[index]);
     if (accountType === AccountType.TRAINEE) {
       const meetingAvailability = Utils.checkMeetingAvailability(
         scheduledMeetingDetails
@@ -85,7 +108,7 @@ const Bookings = ({ accountType = null }) => {
       const isMeetingDone = has24HoursPassed[index] || isMeetingCompleted(scheduledMeetingDetails[index]);
       return (
         <>
-          {( isMeetingDone) && <h3>Completed</h3>}
+          {(isMeetingDone) && <h3>Completed</h3>}
           {!isMeetingDone &&
             status === BookedSession.confirmed &&
             !meetingAvailability[index] && (
@@ -143,8 +166,8 @@ const Bookings = ({ accountType = null }) => {
                         style={{
                           cursor:
                             status === BookedSession.booked ||
-                            status === BookedSession.confirmed ||
-                            !meetingAvailability[index]
+                              status === BookedSession.confirmed ||
+                              !meetingAvailability[index]
                               ? "not-allowed"
                               : "pointer",
                         }}
@@ -164,15 +187,25 @@ const Bookings = ({ accountType = null }) => {
                   ))}
             </>
           )}
-          {!isMeetingDone && (
+
+          {!isMeetingDone && (status === BookedSession.canceled) ? (
             <button
+              className={`btn btn-danger button-effect btn-sm`}
+              type="button"
+              style={{
+                cursor: status === BookedSession.canceled && "not-allowed",
+              }}
+              disabled={status === BookedSession.canceled}
+            >
+              Canceled
+            </button>) : <>
+            {!showCancelButton && <button
               className="btn btn-danger button-effect btn-sm mr-4 ml-4"
               type="button"
               style={{
                 cursor:
-                  status === BookedSession.canceled ? "not-allowed" : "pointer",
+                  "pointer",
               }}
-              disabled={status === BookedSession.canceled}
               onClick={() => {
                 if (
                   status === BookedSession.booked ||
@@ -186,9 +219,10 @@ const Bookings = ({ accountType = null }) => {
                 }
               }}
             >
-              {status === BookedSession.canceled ? "Canceled" : "Cancel"}
-            </button>
-          )}
+              Cancel
+            </button>}
+
+          </>}
         </>
       );
     } else if (accountType === AccountType.TRAINER) {
@@ -199,7 +233,7 @@ const Bookings = ({ accountType = null }) => {
       const isMeetingDone = has24HoursPassed[index] || isMeetingCompleted(scheduledMeetingDetails[index]);
       return (
         <>
-          {( isMeetingDone) && <h3>Completed</h3>}
+          {(isMeetingDone) && <h3>Completed</h3>}
           {!isMeetingDone &&
             status === BookedSession.confirmed &&
             !meetingAvailability[index] && (
@@ -262,7 +296,7 @@ const Bookings = ({ accountType = null }) => {
                     style={{
                       cursor:
                         status === BookedSession.booked ||
-                        !meetingAvailability[index]
+                          !meetingAvailability[index]
                           ? "not-allowed"
                           : "pointer",
                     }}
@@ -278,7 +312,8 @@ const Bookings = ({ accountType = null }) => {
                   >
                     Start
                   </button>
-                  <button
+
+                  {!showCancelButton && <button
                     className="btn btn-danger button-effect btn-sm ml-4"
                     type="button"
                     onClick={() =>
@@ -291,6 +326,7 @@ const Bookings = ({ accountType = null }) => {
                   >
                     Cancel
                   </button>
+                  }
                 </>
               )}
             </>
