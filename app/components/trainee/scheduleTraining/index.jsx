@@ -3,7 +3,12 @@ import DatePicker from "react-datepicker";
 import moment from "moment";
 import "../scheduleTraining/index.css";
 import { Popover } from "react-tiny-popover";
-import { BookedSession, TRAINER_AMOUNT_USD, params, weekDays } from "../../../common/constants";
+import {
+  BookedSession,
+  TRAINER_AMOUNT_USD,
+  params,
+  weekDays,
+} from "../../../common/constants";
 import { Utils } from "../../../../utils/utils";
 import { useAppDispatch, useAppSelector } from "../../../store";
 import {
@@ -13,7 +18,7 @@ import {
   traineeState,
 } from "../trainee.slice";
 import { Nav, NavItem, NavLink } from "reactstrap";
-import TrainerSlider from './trainerSlider';
+import TrainerSlider from "./trainerSlider";
 import Modal from "../../../common/modal";
 import { X } from "react-feather";
 import StripeCard from "../../../common/stripe";
@@ -21,10 +26,11 @@ import { createPaymentIntent } from "../trainee.api";
 import { toast } from "react-toastify";
 import SearchableDropdown from "../helper/searchableDropdown";
 import { masterState } from "../../master/master.slice";
+import TrainerDetails from "../../trainer/trainerDetails";
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
-  const {master} = useAppSelector (masterState);
+  const { master } = useAppSelector(masterState);
   const [startDate, setStartDate] = useState(new Date());
   const [isPopoverOpen, setIsPopoverOpen] = useState(null);
   const [getParams, setParams] = useState(params);
@@ -35,6 +41,7 @@ const ScheduleTraining = () => {
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [isOpenInstantScheduleMeeting, setInstantScheduleMeeting] =
     useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [bookSessionPayload, setBookSessionPayload] = useState({});
   const toggle = () => setInstantScheduleMeeting(!isOpenInstantScheduleMeeting);
 
@@ -48,35 +55,36 @@ const ScheduleTraining = () => {
       Utils.getCurrentWeekByDate(todaySDate);
     setTableData(getTraineeSlots, weekDates);
     setColumns(weekDateFormatted);
-    setListOfTrainers(getTraineeSlots.map((trainer) => {
-      return {
-        id: trainer._id,
-        background_image: trainer?.profilePicture,
-        isActive: true,
-        category: trainer?.category,
-        name: trainer?.fullname,
-        isCategory: false,
-      }
-    }))
+    setListOfTrainers(
+      getTraineeSlots.map((trainer) => {
+        return {
+          id: trainer._id,
+          background_image: trainer?.profilePicture,
+          isActive: true,
+          category: trainer?.category,
+          name: trainer?.fullname,
+          isCategory: false,
+        };
+      })
+    );
   }, [getTraineeSlots]);
 
   useEffect(() => {
     const { masterData } = master;
     setCategoryList([]);
-    if(masterData && masterData.category && masterData.category.length) {
-        const payload = masterData.category.map((category) => {
-          return { id: category, name: category, isCategory: true}
-        });
-        setCategoryList(payload);
+    if (masterData && masterData.category && masterData.category.length) {
+      const payload = masterData.category.map((category) => {
+        return { id: category, name: category, isCategory: true };
+      });
+      setCategoryList(payload);
     }
-  }, [master])
+  }, [master]);
 
   useEffect(() => {
     if (transaction && transaction.intent && transaction.intent.client_secret) {
       setShowTransactionModal(true);
     }
-
-  }, [transaction])
+  }, [transaction]);
 
   const setTableData = (data = [], selectedDate) => {
     const result = data.map(
@@ -206,7 +214,6 @@ const ScheduleTraining = () => {
     </div>
   );
 
-
   const renderSlotsByDay = ({ slot, date, trainer_info }) => {
     return slot.map((content, index) => (
       <Popover
@@ -232,7 +239,10 @@ const ScheduleTraining = () => {
                   <NavLink
                     style={{ background: "white" }}
                     onClick={() => {
-                      const amountPayable = Utils.getMinutesFromHourMM(content.start_time, content.end_time);
+                      const amountPayable = Utils.getMinutesFromHourMM(
+                        content.start_time,
+                        content.end_time
+                      );
                       if (amountPayable > 0) {
                         const payload = {
                           charging_price: amountPayable,
@@ -244,11 +254,12 @@ const ScheduleTraining = () => {
                           session_end_time: content.end_time,
                         };
                         setBookSessionPayload(payload);
-                        dispatch(createPaymentIntentAsync({ amount: amountPayable }))
+                        dispatch(
+                          createPaymentIntentAsync({ amount: amountPayable })
+                        );
                       } else {
-                        toast.error('Invalid slot timing...');
+                        toast.error("Invalid slot timing...");
                       }
-
                     }}
                   >
                     Book slot now
@@ -274,7 +285,9 @@ const ScheduleTraining = () => {
   };
 
   const renderTable = () => (
-    <div className="table-responsive">
+    <div
+      className={`${isOpen ? "table-responsive-width" : "table-responsive"}`}
+    >
       <table className="table rc-table ml-30 mr-30">
         <thead className="justify-center align-center">
           <tr>
@@ -334,29 +347,37 @@ const ScheduleTraining = () => {
     </div>
   );
 
-
   const renderPaymentContent = () => {
-    return (<div>
-      <h3> Trainer: {bookSessionPayload.trainer_info.fullname} (Price per hour ${TRAINER_AMOUNT_USD}) </h3>
-      <h4 className="mt-3 mb-3">
-        Booking time: {moment(bookSessionPayload.booked_date).format('ll')} | From: {bookSessionPayload.session_start_time} To: {bookSessionPayload.session_end_time}
-      </h4>
-      <h4 className="mb-3">
-        Price: <b>${bookSessionPayload.charging_price}</b>
-      </h4>
-    </div>)
-  }
+    return (
+      <div>
+        <h3>
+          {" "}
+          Trainer: {bookSessionPayload.trainer_info.fullname} (Price per hour $
+          {TRAINER_AMOUNT_USD}){" "}
+        </h3>
+        <h4 className="mt-3 mb-3">
+          Booking time: {moment(bookSessionPayload.booked_date).format("ll")} |
+          From: {bookSessionPayload.session_start_time} To:{" "}
+          {bookSessionPayload.session_end_time}
+        </h4>
+        <h4 className="mb-3">
+          Price: <b>${bookSessionPayload.charging_price}</b>
+        </h4>
+      </div>
+    );
+  };
 
-
-  const renderStripePaymentContent = () => (
-    transaction && transaction.intent ?
+  const renderStripePaymentContent = () =>
+    transaction && transaction.intent ? (
       <div>
         <div className="d-flex justify-content-end mr-3">
           <h2
             type="button"
             className="btn-close"
             aria-label="Close"
-            onClick={() => { setShowTransactionModal(false) }}
+            onClick={() => {
+              setShowTransactionModal(false);
+            }}
           >
             <X />
           </h2>
@@ -364,35 +385,144 @@ const ScheduleTraining = () => {
         <div>
           {/* <h5>To book a slot, please pay {TRAINER_AMOUNT_USD}$.</h5> */}
           <div>
-            <StripeCard clientSecret={transaction.intent.client_secret} handlePaymentSuccess={() => {
-              setShowTransactionModal(false);
-              const payload = bookSessionPayload;
-              dispatch(bookSessionAsync(payload));
-              setIsPopoverOpen(null);
-              setBookSessionPayload({});
-            }}
-              extraContent={bookSessionPayload && bookSessionPayload.trainer_id ? renderPaymentContent() : <></>}
+            <StripeCard
+              clientSecret={transaction.intent.client_secret}
+              handlePaymentSuccess={() => {
+                setShowTransactionModal(false);
+                const payload = bookSessionPayload;
+                dispatch(bookSessionAsync(payload));
+                setIsPopoverOpen(null);
+                setBookSessionPayload({});
+              }}
+              extraContent={
+                bookSessionPayload && bookSessionPayload.trainer_id ? (
+                  renderPaymentContent()
+                ) : (
+                  <></>
+                )
+              }
             />
           </div>
         </div>
-      </div> : <></>
-  )
+      </div>
+    ) : (
+      <></>
+    );
 
   const renderSearchMenu = () => (
     <div className="custom-search-menu">
       <SearchableDropdown
-      placeholder="Search Trainers..."
+        placeholder="Search Trainers..."
         options={[...listOfTrainers, ...categoryList]}
         label="name"
         id="id"
-        customClasses= {{ searchBar: 'search-bar-trainee', searchButton: 'search-button-trainee', dropdown: 'custom-dropdown-width' }}
+        customClasses={{
+          searchBar: "search-bar-trainee",
+          searchButton: "search-button-trainee",
+          dropdown: "custom-dropdown-width",
+        }}
         selectedVal={getParams.search}
+        selectedOption={(option) => {
+          if (option) {
+            setIsOpen(option.isActive);
+          }
+        }}
         handleChange={(value) => {
           setParams({ search: value });
         }}
       />
+      {renderUserDetails()}
     </div>
-  )
+  );
+
+  const renderUserDetails = () => {
+    return (
+      <Modal
+        element={
+          <TrainerDetails
+            onClose={() => setIsOpen(null)}
+            element={renderBookingTable()}
+          />
+        }
+        id={"userDetails"}
+        isOpen={isOpen}
+        allowFullWidth={true}
+      />
+    );
+  };
+
+  const renderBookingTable = () => (
+    <>
+      <div className="mt-3 ml-4 datePicker">
+        <DatePicker
+          minDate={moment().toDate()}
+          onChange={(date) => {
+            setStartDate(date);
+            const todaySDate = Utils.getDateInFormat(date.toString());
+            const { weekDateFormatted, weekDates } =
+              Utils.getCurrentWeekByDate(todaySDate);
+            setColumns(weekDateFormatted);
+            setTableData(getTraineeSlots, weekDates);
+            setColumns(weekDateFormatted);
+          }}
+          selected={startDate}
+          // ref={null}
+          customInput={<Input />}
+        />
+      </div>
+      <div>
+        <div>
+          {(getParams.search && getParams.search.length) ||
+          !bookingColumns.length ? (
+            renderTable()
+          ) : (
+            <TrainerSlider list={listOfTrainers} />
+          )}
+        </div>
+      </div>
+    </>
+    // <div className="container">
+    //   <div className="row">
+    //     <div className="col ml-5">
+    //       <div className="mt-3 ml-4 datePicker">
+    //         <DatePicker
+    //           minDate={moment().toDate()}
+    //           onChange={(date) => {
+    //             setStartDate(date);
+    //             const todaySDate = Utils.getDateInFormat(date.toString());
+    //             const { weekDateFormatted, weekDates } =
+    //               Utils.getCurrentWeekByDate(todaySDate);
+    //             setColumns(weekDateFormatted);
+    //             setTableData(getTraineeSlots, weekDates);
+    //             setColumns(weekDateFormatted);
+    //           }}
+    //           selected={startDate}
+    //           // ref={null}
+    //           customInput={<Input />}
+    //         />
+    //       </div>
+    //     </div>
+    //   </div>
+    //   <div className="row">
+    //     <div className="col">
+    //       <div className="pt-5">
+    //         <div>
+    //           {(getParams.search && getParams.search.length) ||
+    //           !bookingColumns.length ? (
+    //             renderTable()
+    //           ) : (
+    //             <TrainerSlider list={listOfTrainers} />
+    //           )}
+    //         </div>
+    //       </div>
+    //       <Modal
+    //         isOpen={showTransactionModal}
+    //         element={renderStripePaymentContent()}
+    //       />
+    //     </div>
+    //   </div>
+    // </div>
+  );
 
   return (
     <div>
@@ -443,20 +573,21 @@ const ScheduleTraining = () => {
       </div> */}
       {/* <div className="pt-5" style={{ marginTop: "7rem" }}>
         <div className="ml-4 ">
-          {((getParams.search && getParams.search.length) || !bookingColumns.length) ? renderTable()
-            : <TrainerSlider list={listOfTrainers} />}
+          {(getParams.search && getParams.search.length) ||
+          !bookingColumns.length ? (
+            renderTable()
+          ) : (
+            <TrainerSlider list={listOfTrainers} />
+          )}
         </div>
-      </div>
-      <Modal isOpen={showTransactionModal} element={renderStripePaymentContent()} /> */}
+      </div> */}
+      {/* <Modal isOpen={showTransactionModal} element={renderStripePaymentContent()} /> */}
       {renderSearchMenu()}
-        <div className="trainer-slider p02">
-          <h2>
-              Available Trainers...
-          </h2>
+      <div className="trainer-slider p02">
+        <h2>Available Trainers...</h2>
         <TrainerSlider list={listOfTrainers} />
-        </div>
+      </div>
     </div>
-
   );
 };
 

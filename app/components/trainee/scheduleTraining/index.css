@@ -153,6 +153,12 @@
 .table-responsive {
   width: 91vw !important;
 }
+.table-responsive-width {
+  width: 53vw !important;
+  margin-top: 15px;
+  margin-left: 12px;
+}
+
 @media only screen and (min-width: 1024px) and (max-width: 1280px) {
   .header {
     width: 97%;
