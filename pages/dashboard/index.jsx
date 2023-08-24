@@ -2,7 +2,7 @@ import React, {Fragment, useState, useEffect} from 'react';
 import LeftSide from '../../containers/leftSidebar';
 import ChitChat from '../../containers/chatBoard';
 import RightSide from '../../containers/rightSidebar';
-import {useAppSelector} from '../../app/store';
+import {useAppDispatch, useAppSelector} from '../../app/store';
 import {authState} from '../../app/components/auth/auth.slice';
 import {
   AccountType,
@@ -14,12 +14,16 @@ import TrainerDashboardContainer from '../../app/components/trainer/dashboard';
 import ScheduleInventory from '../../app/components/trainer/scheduleInventory';
 import Bookings from '../../app/components/bookings';
 import {SocketContext, getSocket} from '../../app/components/socket';
+import { getMasterDataAsync, masterState } from '../../app/components/master/master.slice';
 const Dashboard = () => {
+  const dispatch = useAppDispatch();
   const {sidebarActiveTab} = useAppSelector (authState);
   const [accountType, setAccountType] = useState ('');
 
   useEffect (() => {
     setAccountType (localStorage.getItem (LOCAL_STORAGE_KEYS.ACC_TYPE));
+    // fetching master data, TODO: stop over calling API calls.
+    dispatch(getMasterDataAsync());
   }, []);
 
   const getDashboard = () => {

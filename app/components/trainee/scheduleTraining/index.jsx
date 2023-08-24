@@ -19,12 +19,16 @@ import { X } from "react-feather";
 import StripeCard from "../../../common/stripe";
 import { createPaymentIntent } from "../trainee.api";
 import { toast } from "react-toastify";
+import SearchableDropdown from "../helper/searchableDropdown";
+import { masterState } from "../../master/master.slice";
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
+  const {master} = useAppSelector (masterState);
   const [startDate, setStartDate] = useState(new Date());
   const [isPopoverOpen, setIsPopoverOpen] = useState(null);
   const [getParams, setParams] = useState(params);
+  const [categoryList, setCategoryList] = useState([]);
   const [bookingColumns, setBookingColumns] = useState([]);
   const [listOfTrainers, setListOfTrainers] = useState([]);
   const [bookingTableData, setBookingTableData] = useState([]);
@@ -49,10 +53,23 @@ const ScheduleTraining = () => {
         id: trainer._id,
         background_image: trainer?.profilePicture,
         isActive: true,
-        name: trainer?.fullname
+        category: trainer?.category,
+        name: trainer?.fullname,
+        isCategory: false,
       }
     }))
   }, [getTraineeSlots]);
+
+  useEffect(() => {
+    const { masterData } = master;
+    setCategoryList([]);
+    if(masterData && masterData.category && masterData.category.length) {
+        const payload = masterData.category.map((category) => {
+          return { id: category, name: category, isCategory: true}
+        });
+        setCategoryList(payload);
+    }
+  }, [master])
 
   useEffect(() => {
     if (transaction && transaction.intent && transaction.intent.client_secret) {
@@ -216,7 +233,7 @@ const ScheduleTraining = () => {
                     style={{ background: "white" }}
                     onClick={() => {
                       const amountPayable = Utils.getMinutesFromHourMM(content.start_time, content.end_time);
-                      if(amountPayable > 0) {
+                      if (amountPayable > 0) {
                         const payload = {
                           charging_price: amountPayable,
                           trainer_id: trainer_info.trainer_id,
@@ -229,7 +246,7 @@ const ScheduleTraining = () => {
                         setBookSessionPayload(payload);
                         dispatch(createPaymentIntentAsync({ amount: amountPayable }))
                       } else {
-                          toast.error('Invalid slot timing...');
+                        toast.error('Invalid slot timing...');
                       }
 
                     }}
@@ -325,7 +342,7 @@ const ScheduleTraining = () => {
         Booking time: {moment(bookSessionPayload.booked_date).format('ll')} | From: {bookSessionPayload.session_start_time} To: {bookSessionPayload.session_end_time}
       </h4>
       <h4 className="mb-3">
-        Price: <b>${bookSessionPayload.charging_price}</b> 
+        Price: <b>${bookSessionPayload.charging_price}</b>
       </h4>
     </div>)
   }
@@ -361,9 +378,25 @@ const ScheduleTraining = () => {
       </div> : <></>
   )
 
+  const renderSearchMenu = () => (
+    <div className="custom-search-menu">
+      <SearchableDropdown
+      placeholder="Search Trainers..."
+        options={[...listOfTrainers, ...categoryList]}
+        label="name"
+        id="id"
+        customClasses= {{ searchBar: '', dropdown: 'custom-dropdown-width' }}
+        selectedVal={getParams.search}
+        handleChange={(value) => {
+          setParams({ search: value });
+        }}
+      />
+    </div>
+  )
+
   return (
     <div>
-      <div className="m-25 header">
+      {/* <div className="m-25 header">
         <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
           Book Training Session
         </h3>
@@ -407,14 +440,21 @@ const ScheduleTraining = () => {
             customInput={<Input />}
           />
         </div>
-      </div>
-      <div className="pt-5" style={{ marginTop: "7rem" }}>
+      </div> */}
+      {/* <div className="pt-5" style={{ marginTop: "7rem" }}>
         <div className="ml-4 ">
           {((getParams.search && getParams.search.length) || !bookingColumns.length) ? renderTable()
             : <TrainerSlider list={listOfTrainers} />}
         </div>
       </div>
-      <Modal isOpen={showTransactionModal} element={renderStripePaymentContent()} />
+      <Modal isOpen={showTransactionModal} element={renderStripePaymentContent()} /> */}
+      {renderSearchMenu()}
+        <div className="trainer-slider p02">
+          <h2>
+              Available Trainers...
+          </h2>
+        <TrainerSlider list={listOfTrainers} />
+        </div>
     </div>
 
   );
