@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
+  addRating,
   getScheduledMeetingDetails,
   updateBookedSessionScheduledMeeting,
 } from "./common.api";
@@ -8,7 +9,21 @@ import { toast } from "react-toastify";
 const initialState = {
   status: "idle",
   scheduledMeetingDetails: [],
+  addRatingModel: { _id: null, isOpen: false },
 };
+
+export const addRatingAsync = createAsyncThunk(
+  "add/rating",
+  async (payload) => {
+    try {
+      const res = await addRating(payload);
+      return res;
+    } catch (err) {
+      toast.error(err.response.data.error);
+      throw err;
+    }
+  }
+);
 
 export const getScheduledMeetingDetailsAsync = createAsyncThunk(
   "get/scheduled/meetings",
@@ -45,6 +60,9 @@ export const bookingsSlice = createSlice({
     bookings: (state) => {
       return state;
     },
+    addRating: (state, action) => {
+      state.addRatingModel = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -76,7 +94,18 @@ export const bookingsSlice = createSlice({
         (state, action) => {
           state.status = "rejected";
         }
-      );
+      )
+      .addCase(addRatingAsync.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(addRatingAsync.fulfilled, (state, action) => {
+        state.status = "fulfilled";
+        state.addRatingModel = { _id: null, isOpen: false };
+        toast.success(action.payload.message, { type: "success" });
+      })
+      .addCase(addRatingAsync.rejected, (state, action) => {
+        state.status = "rejected";
+      });
   },
 });
 

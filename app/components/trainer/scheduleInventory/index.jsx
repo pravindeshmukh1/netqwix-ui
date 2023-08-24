@@ -4,15 +4,21 @@ import "../dashboard/index.css";
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import TimePicker from "rc-time-picker";
-import { Form, Formik, FieldArray } from "formik";
+import { Form, Formik, FieldArray, validateYupSchema } from "formik";
 import { useAppSelector, useAppDispatch } from "../../../store";
-import { timeFormatInDb, weekDays } from "../../../common/constants";
+import {
+  Message,
+  isInvalidForm,
+  timeFormatInDb,
+  weekDays,
+} from "../../../common/constants";
 import {
   getScheduleInventoryDataAsync,
   scheduleInventoryState,
   updateScheduleInventoryAsync,
 } from "../scheduleInventory/scheduleInventory.slice";
 import { Utils } from "../../../../utils/utils";
+import { toast } from "react-toastify";
 
 const ScheduleInventory = () => {
   const { status, scheduleInventoryData } = useAppSelector(
@@ -20,6 +26,7 @@ const ScheduleInventory = () => {
   );
   const dispatch = useAppDispatch();
   const [timePickerDiv, setTimePickerDiv] = useState(scheduleInventoryData);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     fetchScheduleInventoryData();
@@ -36,6 +43,129 @@ const ScheduleInventory = () => {
   const emptySlot = {
     start_time: "",
     end_time: "",
+    error: false,
+    timeConflict: false,
+  };
+
+  const handleStartTimeChange = (
+    value,
+    values,
+    parentIndex,
+    slotIndex,
+    setFormValues
+  ) => {
+    const formattedDate = value ? Utils.getFormattedDateDb(value) : "";
+    // Check for slot time conflict
+    const hasTimeConflict = values[parentIndex].slots.some((slot, index) => {
+      if (index !== slotIndex) {
+        return (
+          formattedDate >= slot.start_time && formattedDate <= slot.end_time
+        );
+      }
+      return false;
+    });
+
+    const updatedSlots = values[parentIndex].slots.map((slot, index) => {
+      if (index === slotIndex) {
+        return {
+          ...slot,
+          start_time: formattedDate,
+          error: slot.end_time && slot.end_time <= formattedDate,
+          timeConflict: hasTimeConflict,
+        };
+      } else {
+        return slot;
+      }
+    });
+
+    const updatedValues = values.map((value, index) => {
+      if (index === parentIndex) {
+        return {
+          ...value,
+          slots: updatedSlots,
+        };
+      } else {
+        return value;
+      }
+    });
+
+    setFormValues(updatedValues);
+  };
+
+  const handleEndTimeChange = (
+    value,
+    values,
+    parentIndex,
+    slotIndex,
+    setFormValues
+  ) => {
+    const formattedDate = value ? Utils.getFormattedDateDb(value) : "";
+
+    const updatedSlots = values[parentIndex].slots.map((slot, index) => {
+      if (index === slotIndex) {
+        return {
+          ...slot,
+          end_time: formattedDate,
+          error: slot.start_time >= formattedDate,
+        };
+      } else {
+        return slot;
+      }
+    });
+
+    const updatedValues = values.map((value, index) => {
+      if (index === parentIndex) {
+        return {
+          ...value,
+          slots: updatedSlots,
+        };
+      } else {
+        return value;
+      }
+    });
+    setFormValues(updatedValues);
+  };
+
+  const handleCheckIsError = (values) => {
+    let isError = false;
+    values.forEach((data) => {
+      data.slots.forEach((slot) => {
+        if (slot.error || slot.timeConflict) {
+          isError = true;
+        }
+      });
+    });
+    setIsError(isError);
+    return isError;
+  };
+
+  const handleAddSlotToDaySlots = (parentIndex, values, setValues) => {
+    const addSlot = [...values[parentIndex].slots, emptySlot];
+    const updatedObj = {
+      ...values[parentIndex],
+      slots: addSlot,
+    };
+    const updatedValues = values.map((value, index) => {
+      if (index === parentIndex) {
+        return (value = updatedObj);
+      } else {
+        return value;
+      }
+    });
+    setValues(updatedValues);
+  };
+
+  const handleRemoveDaySlots = (parentIndex, slotIndex, values, setValues) => {
+    const updatedValues = values.map((value, index) => {
+      if (index === parentIndex) {
+        const updatedSlots = value.slots.filter(
+          (_, slotIndexToRemove) => slotIndexToRemove !== slotIndex
+        );
+        return { ...value, slots: updatedSlots };
+      }
+      return value;
+    });
+    setValues(updatedValues);
   };
 
   return (
@@ -51,10 +181,25 @@ const ScheduleInventory = () => {
           enableReinitialize
           // validationSchema={}
           onSubmit={(value) => {
+            // Filtering out empty slots before submitting
+            const filteredSlots = value.map((day) => ({
+              ...day,
+              slots: day.slots.filter(
+                (slot) => slot.start_time || slot.end_time
+              ),
+            }));
+
             const updateSlotsPayload = {
-              available_slots: value,
+              available_slots: filteredSlots,
             };
-            dispatch(updateScheduleInventoryAsync(updateSlotsPayload));
+
+            const isNotValid = Utils.checkTimeConflicts(filteredSlots);
+
+            if (isNotValid) {
+              toast.error(isInvalidForm, { type: "error" });
+            } else {
+              dispatch(updateScheduleInventoryAsync(updateSlotsPayload));
+            }
           }}
         >
           {({ errors, touched, values, setValues }) => (
@@ -78,9 +223,15 @@ const ScheduleInventory = () => {
                                     className="row mb-3"
                                   >
                                     <div className="col-4">
-                                      {" "}
                                       <TimePicker
                                         name="startTime"
+                                        className={`${
+                                          (values[parentIndex].slots[slotIndex]
+                                            .error ||
+                                            values[parentIndex].slots[slotIndex]
+                                              .timeConflict) === true &&
+                                          "border border-danger"
+                                        }`}
                                         placeholder="Select time"
                                         defaultValue={
                                           time.start_time &&
@@ -91,38 +242,29 @@ const ScheduleInventory = () => {
                                         showSecond={false}
                                         minuteStep={15}
                                         use12Hours
-                                        onChange={(value) => {
-                                          const formattedDate = value
-                                            ? Utils.getFormattedDateDb(value)
-                                            : "";
-                                          const result = values[
-                                            parentIndex
-                                          ].slots.map((slot, index) => {
-                                            if (index === slotIndex) {
-                                              return {
-                                                ...slot,
-                                                start_time: formattedDate,
-                                              };
-                                            } else {
-                                              return slot;
-                                            }
-                                          });
-                                          console.log("result", result);
-                                          const updatedValues = values.map(
-                                            (value, index) => {
-                                              if (index === parentIndex) {
-                                                return {
-                                                  ...value,
-                                                  slots: result,
-                                                };
-                                              } else {
-                                                return value;
-                                              }
-                                            }
-                                          );
-                                          setValues(updatedValues);
-                                        }}
+                                        onChange={(value) =>
+                                          handleStartTimeChange(
+                                            value,
+                                            values,
+                                            parentIndex,
+                                            slotIndex,
+                                            setValues
+                                          )
+                                        }
                                       />
+                                      {values[parentIndex].slots[slotIndex]
+                                        .error === true ? (
+                                        <p className="text-danger mt-1">
+                                          {Message.errorMessage.invalidTime}
+                                        </p>
+                                      ) : (
+                                        values[parentIndex].slots[slotIndex]
+                                          .timeConflict === true && (
+                                          <p className="text-danger mt-1">
+                                            {Message.errorMessage.timeConflicts}
+                                          </p>
+                                        )
+                                      )}
                                     </div>
                                     <div className="col-4">
                                       {" "}
@@ -132,94 +274,63 @@ const ScheduleInventory = () => {
                                           time.end_time &&
                                           Utils.getFormattedTime(time.end_time)
                                         }
+                                        className={`${
+                                          values[parentIndex].slots[slotIndex]
+                                            .error === true &&
+                                          "border border-danger"
+                                        }`}
                                         showSecond={false}
                                         minuteStep={15}
                                         use12Hours
-                                        onChange={(value) => {
-                                          const formattedDate = value
-                                            ? Utils.getFormattedDateDb(value)
-                                            : "";
-                                          const result = values[
-                                            parentIndex
-                                          ].slots.map((slot, index) => {
-                                            if (index === slotIndex) {
-                                              return {
-                                                ...slot,
-                                                end_time: formattedDate,
-                                              };
-                                            } else {
-                                              return slot;
-                                            }
-                                          });
-                                          const updatedValues = values.map(
-                                            (value, index) => {
-                                              if (index === parentIndex) {
-                                                return {
-                                                  ...value,
-                                                  slots: result,
-                                                };
-                                              } else {
-                                                return value;
-                                              }
-                                            }
-                                          );
-                                          setValues(updatedValues);
-                                        }}
+                                        onChange={(value) =>
+                                          handleEndTimeChange(
+                                            value,
+                                            values,
+                                            parentIndex,
+                                            slotIndex,
+                                            setValues
+                                          )
+                                        }
                                       />
-                                    </div>
-                                    <div className="col-2">
-                                      {slots.length - 1 === slotIndex && (
-                                        <button
-                                          type="button"
-                                          className="btn btn-circle bg-primary text-white"
-                                          onClick={() => {
-                                            const addSlot = [
-                                              ...values[parentIndex].slots,
-                                              emptySlot,
-                                            ];
-                                            const updatedObj = {
-                                              ...values[parentIndex],
-                                              slots: addSlot,
-                                            };
-                                            const updatedValues = values.map(
-                                              (value, index) => {
-                                                if (index === parentIndex) {
-                                                  return (value = updatedObj);
-                                                } else {
-                                                  return value;
-                                                }
-                                              }
-                                            );
-                                            setValues(updatedValues);
-                                          }}
-                                        >
-                                          <i className="fa fa-plus"></i>
-                                        </button>
+                                      {values[parentIndex].slots[slotIndex]
+                                        .error === true && (
+                                        <p className="text-danger mt-1">
+                                          {Message.errorMessage.invalidTime}
+                                        </p>
                                       )}
-                                      {slots.length - 1 !== slotIndex && (
+                                    </div>
+                                    <div class="d-flex justify-content-around">
+                                    {slotIndex === 0 && ( <button
+                                        className="btn btn-circle bg-primary text-white"
+                                        type="button"
+                                        disabled={
+                                          values[parentIndex].slots[slotIndex]
+                                            .timeConflict ||
+                                          values[parentIndex].slots[slotIndex]
+                                            .error
+                                        }
+                                        onClick={() =>
+                                          handleAddSlotToDaySlots(
+                                            parentIndex,
+                                            values,
+                                            setValues
+                                          )
+                                        }
+                                      >
+                                        <i className="fa fa-plus"></i>
+                                      </button>)}
+                                      {slotIndex !== 0 && (
                                         <button
-                                          type="button"
                                           className="btn btn-circle bg-primary text-white"
-                                          onClick={() => {
-                                            const updatedDaySlots = values[
-                                              parentIndex
-                                            ].slots.filter((slot, index) => {
-                                              return index !== slotIndex;
-                                            });
-                                            const updatedValues = values.map(
-                                              (value, index) => {
-                                                if (index === parentIndex) {
-                                                  return {
-                                                    ...value,
-                                                    slots: updatedDaySlots,
-                                                  };
-                                                } else {
-                                                  return value;
-                                                }
-                                              }
-                                            );
-                                            setValues(updatedValues);
-                                          }}
+                                          type="button"
+                                          onClick={() =>
+                                            handleRemoveDaySlots(
+                                              parentIndex,
+                                              slotIndex,
+                                              values,
+                                              setValues
+                                            )
+                                          }
                                         >
                                           <i className="fa fa-minus"></i>
                                         </button>
@@ -241,8 +352,9 @@ const ScheduleInventory = () => {
                 <div className="row mt-5 justify-content-end">
                   <div className="col-12"></div>
                   <button
+                    disabled={handleCheckIsError(values)}
                     type="submit"
-                    className="submit-schedule-inventory btn btn-primary"
+                    className={`submit-schedule-inventory btn btn-primary`}
                   >
                     Submit Your Scheduling
                   </button>

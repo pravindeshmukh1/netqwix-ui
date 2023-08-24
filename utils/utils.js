@@ -4,6 +4,8 @@ import {
   weekDays,
   timeFormat,
   TRAINER_AMOUNT_USD,
+  FormateDate,
+  FormateHours,
 } from "../app/common/constants";
 import moment from "moment";
 
@@ -87,13 +89,73 @@ export class Utils {
     return text.charAt(0).toUpperCase() + text.slice(1);
   };
 
-  static getMinutesFromHourMM =(startTime, endTime, chargingRate = TRAINER_AMOUNT_USD) => {
-    const [startHour, startMinute] = startTime.split(':').map(Number);
-    const [endHour, endMinute] = endTime.split(':').map(Number);
-  
+  static getMinutesFromHourMM = (
+    startTime,
+    endTime,
+    chargingRate = TRAINER_AMOUNT_USD
+  ) => {
+    const [startHour, startMinute] = startTime.split(":").map(Number);
+    const [endHour, endMinute] = endTime.split(":").map(Number);
+
     const totalMinutes = (endHour - startHour) * 60 + (endMinute - startMinute);
     const finalPrice = (totalMinutes / 60) * chargingRate;
-  
+
     return finalPrice;
-  }
+  };
+
+  static checkTimeConflicts = (values) => {
+    let isTimeConflicts = false;
+    // TODO: will remove when validation needs to do
+    // for (const dayData of values) {
+    //   for (const slot of dayData.slots) {
+    //     const { start_time, end_time } = slot;
+    //     if (start_time && end_time) {
+    //       if (end_time >= start_time) {
+    //         isTimeConflicts = false;
+    //       } else {
+    //         isTimeConflicts = true;
+    //       }
+    //     }
+    //   }
+    // }
+    return isTimeConflicts;
+  };
+
+  static has24HoursPassed = (referenceTime) => {
+    const currentDateTime = moment();
+    const referenceDateTime = moment(referenceTime, "YYYY-MM-DD HH:mm");
+
+    // Calculate the time difference in milliseconds between the reference time and current time
+    const timeDifferenceMs = currentDateTime - referenceDateTime;
+    const timeDifferenceHours = timeDifferenceMs / (1000 * 60 * 60); // Convert to hours
+
+    return timeDifferenceHours >= 24;
+  };
+
+  static checkMeetingAvailability = (scheduledMeetingDetails) => {
+    const currentTime = moment().format(FormateHours.HH_MM);
+    const currentFormattedTime = this.convertToAmPm(currentTime);
+    const availabilityStatus = scheduledMeetingDetails.map((booking) => {
+      const { booked_date, session_start_time, session_end_time } = booking;
+      const currentFormattedSessionStartTime =
+        this.convertToAmPm(session_start_time);
+      const currentFormattedSessionEndTime =
+        this.convertToAmPm(session_end_time);
+      const currentDate = moment().format(FormateDate.YYYY_MM_DD);
+      const bookedDate = this.getDateInFormat(booked_date);
+      if (currentDate === bookedDate) {
+        if (
+          currentFormattedTime >= currentFormattedSessionStartTime &&
+          currentFormattedTime <= currentFormattedSessionEndTime
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+      return false;
+    });
+    return availabilityStatus;
+  };
+  
 }

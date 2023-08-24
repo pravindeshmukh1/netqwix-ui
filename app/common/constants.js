@@ -105,6 +105,14 @@ export const timeFormat = "h:mm";
 
 export const timeFormatInDb = "h:mm:ss";
 
+export const FormateDate = {
+  YYYY_MM_DD: "YYYY-MM-DD",
+};
+
+export const FormateHours = {
+  HH_MM: "HH:mm",
+};
+
 export const SHAPES = {
   FREE_HAND: null,
   LINE: "line",
@@ -117,4 +125,14 @@ export const SHAPES = {
   TWO_SIDE_ARROW: "two_side_arrow",
 };
 
-export const TRAINER_AMOUNT_USD = 10;
+export const TRAINER_AMOUNT_USD = 5;
+
+export const Message = {
+  errorMessage: {
+    timeConflicts: "These slots are already booked.",
+    invalidTime: "Please select valid time",
+  },
+  successMessage: {
+    rating: "Providing a Rating",
+  },
+};
