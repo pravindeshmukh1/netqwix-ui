@@ -147,7 +147,7 @@ const Index = props => {
           CloseAppSidebar={CloseAppSidebar}
           ToggleTab={ToggleTab}
         /> */}
-      <nav className="main-nav on custom-scroll">
+      <nav className="main-nav on custom-scroll container">
         {/* logo section */}
         <div className="logo-warpper">
           <Link href="/landing">

@@ -479,7 +479,7 @@ const ScheduleTraining = () => {
   };
 
   const renderBookingTable = () => (
-    <div class="container">
+    <div>
       <div class="row">
         <div class="mt-4 col-3 datePicker">
           <DatePicker
@@ -517,7 +517,7 @@ const ScheduleTraining = () => {
   );
 
   return (
-    <div className="custom-trainer-details-scroll-bar">
+    <div>
       {/* <div className="m-25 header">
       <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
         Book Training Session
