@@ -481,9 +481,9 @@ const ScheduleTraining = () => {
   };
 
   const renderBookingTable = () => (
-    <div className="row">
-      <div className="col-sm-3">
-        <div className="mt-3 datePicker ">
+    <div class="container">
+      <div class="row">
+        <div class="mt-4 col-3 datePicker">
           <DatePicker
             minDate={moment().toDate()}
             onChange={(date) => {
@@ -501,8 +501,8 @@ const ScheduleTraining = () => {
           />
         </div>
       </div>
-      <div className="col-sm-14 mb-5 ml-4">
-        <div className="pt-3">
+      <div class="row">
+        <div class="col-8 pt-3">
           {(getParams.search && getParams.search.length) ||
           !bookingColumns.length ? (
             renderTable()

@@ -10,12 +10,12 @@ const TrainerDetails = ({ onClose, element, trainerInfo }) => {
   // TODO: showing dummy records, will replace it with actual records
   const mediaData = [
     {
-      url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3274&q=80',
-      type: 'image',
+      url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3274&q=80",
+      type: "image",
     },
     {
-      url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3374&q=80',
-      type: 'image',
+      url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3374&q=80",
+      type: "image",
     },
     // {
     //   url: 'https://youtu.be/mUxzKVrSAjs?si=v6oqi-0-rG7BJ5sk',
@@ -54,7 +54,92 @@ const TrainerDetails = ({ onClose, element, trainerInfo }) => {
           <X />
         </div>
       </div>
-      <div className="row ml-4 ">
+      <div className="row p-30">
+        <div className="col-5">
+          <h2 className="mb-3">
+            {trainerInfo && trainerInfo.name ? trainerInfo.name : null}
+          </h2>
+          <h3 className="mb-3"> Hourly Rate: ${TRAINER_AMOUNT_USD} </h3>
+          <p>
+            {trainerInfo && trainerInfo.extraInfo
+              ? trainerInfo.extraInfo.about
+              : "No data available... "}
+          </p>
+          {accordionData.length
+            ? accordionData.map((data, index) => {
+                return (
+                  <Accordion key={`accordion_${index}`} className="mb-5">
+                    <Accordion.Item>
+                      <Accordion.Header>{data.label}</Accordion.Header>
+                      <Accordion.Body>
+                        {!data.value ? Message.notFound : data.value}
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  </Accordion>
+                );
+              })
+            : "No data found"}
+        </div>
+        <div className="col-7">
+          <Carousel
+            media={
+              // TODO: for now passing dummy values
+              mediaData
+              // trainerInfo && trainerInfo.extraInfo
+              //   ? trainerInfo.extraInfo.media
+              //   : mediaData
+            }
+          />
+          {element}
+        </div>
+      </div>
+      {/* <div className="container">
+        <div className="row">
+          <div className="col-6">
+            <h2 className="mb-3">
+              {trainerInfo && trainerInfo.name ? trainerInfo.name : null}
+            </h2>
+            <h3 className="mb-3"> Hourly Rate: ${TRAINER_AMOUNT_USD} </h3>
+            <p>
+              {trainerInfo && trainerInfo.extraInfo
+                ? trainerInfo.extraInfo.about
+                : "No data available... "}
+            </p>
+          </div>
+          <div className="col-6">
+            <Carousel
+              media={
+                // TODO: for now passing dummy values
+                mediaData
+                // trainerInfo && trainerInfo.extraInfo
+                //   ? trainerInfo.extraInfo.media
+                //   : mediaData
+              }
+            />
+          </div>
+          <div className="w-100"></div>
+          <div className="col-6">
+            <div className="accordion mb-3">
+              {accordionData.length
+                ? accordionData.map((data, index) => {
+                    return (
+                      <Accordion key={`accordion_${index}`} className="mb-5">
+                        <Accordion.Item>
+                          <Accordion.Header>{data.label}</Accordion.Header>
+                          <Accordion.Body>
+                            {!data.value ? Message.notFound : data.value}
+                          </Accordion.Body>
+                        </Accordion.Item>
+                      </Accordion>
+                    );
+                  })
+                : "No data found"}
+            </div>
+          </div>
+          <div className="col-6">{element}</div>
+        </div>
+      </div> */}
+      {/* <div className="row ml-4 ">
         <div className="col">
           <h2 className="mb-3">
             {trainerInfo && trainerInfo.name ? trainerInfo.name : null}
@@ -101,7 +186,7 @@ const TrainerDetails = ({ onClose, element, trainerInfo }) => {
             <div className="col">{element ? element : "No data found"}</div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
