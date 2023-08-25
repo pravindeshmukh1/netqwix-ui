@@ -130,6 +130,7 @@ export const TRAINER_AMOUNT_USD = 10;
 
 export const Message = {
   notFound: "No data available",
+  noMediaFound:"No media found!",
   errorMessage: {
     wip: "work in progress",
     timeConflicts: "These slots are already booked.",
@@ -165,5 +166,20 @@ export const validationMessage = {
 
 export const trainerReview = {
   review: "5.0",
-  totalReviews: "271 reviews",
+  totalReviews: "2 reviews",
 };
+
+export const mediaData = [
+  {
+    url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3274&q=80",
+    type: "image",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3374&q=80",
+    type: "image",
+  },
+  // {
+  //   url: "https://youtu.be/mUxzKVrSAjs?si=v6oqi-0-rG7BJ5sk",
+  //   type: "video",
+  // },
+];

@@ -436,7 +436,7 @@ const Bookings = ({ accountType = null }) => {
   );
   return (
     <>
-      <div className="m-25 w-100 custom-scroll" id="bookings">
+      <div id="bookings" className="bookings container-content">
         {addRatingModel.isOpen ? renderRating() : null}
         {!scheduledMeetingDetails.length ? (
           <h3 className="d-flex justify-content-center mt-20">
@@ -445,12 +445,12 @@ const Bookings = ({ accountType = null }) => {
         ) : startMeeting.isOpenModal ? (
           renderVideoCall()
         ) : (
-          <>
+          <div>
             <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
               Bookings
             </h3>
             {renderBookings()}
-          </>
+          </div>
         )}
       </div>
 

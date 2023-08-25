@@ -43,20 +43,29 @@ const AccordionItem = ({children, isOpen, onClick}) => (
   </Card>
 );
 
-const AccordionHeader = ({children, onClick, onAClick, index, activeAccordion}) => (
-  <CardHeader>
+const AccordionHeader = ({
+  children,
+  onClick,
+  onAClick,
+  index,
+  activeAccordion,
+}) => (
+  <CardHeader className="accordion-header">
     <h5 className="mb-0">
       <div className="row items-center">
         <div className="col-10">
-          <Button color="link" onClick={() => {
-            onAClick();
-            onClick();
-          }}>
+          <Button
+            color="link"
+            onClick={() => {
+              onAClick();
+              onClick();
+            }}
+          >
             {children}
           </Button>
         </div>
         <div className="col-2">
-          {activeAccordion[index] ? <ArrowUp/>: <ArrowDown/>}
+          {activeAccordion[index] ? <ArrowUp /> : <ArrowDown />}
         </div>
       </div>
     </h5>
