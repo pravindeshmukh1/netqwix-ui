@@ -162,3 +162,8 @@ export const validationMessage = {
     curriculum: "This field is required ",
   },
 };
+
+export const trainerReview = {
+  review: "5.0",
+  totalReviews: "271 reviews",
+};

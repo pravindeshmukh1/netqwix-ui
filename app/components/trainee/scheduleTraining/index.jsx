@@ -23,6 +23,7 @@ import TrainerSlider from "./trainerSlider";
 import Modal from "../../../common/modal";
 import { X } from "react-feather";
 import StripeCard from "../../../common/stripe";
+import { createPaymentIntent } from "../trainee.api";
 import { toast } from "react-toastify";
 import SearchableDropdown from "../helper/searchableDropdown";
 import { masterState } from "../../master/master.slice";
@@ -210,19 +211,17 @@ const ScheduleTraining = () => {
   };
 
   const Input = ({ onChange, placeholder, value, isSecure, id, onClick }) => (
-    <div>
-      <span
-        onChange={onChange}
-        placeholder={placeholder}
-        value={value}
-        isSecure={isSecure}
-        id={id}
-        onClick={onClick}
-        className="select_date"
-      >
-        {Utils.formateDate(startDate)}
-      </span>
-    </div>
+    <span
+      onChange={onChange}
+      placeholder={placeholder}
+      value={value}
+      isSecure={isSecure}
+      id={id}
+      onClick={onClick}
+      className="select_date"
+    >
+      {Utils.formateDate(startDate)}
+    </span>
   );
 
   const renderSlotsByDay = ({ slot, date, trainer_info }) => {
@@ -518,9 +517,8 @@ const ScheduleTraining = () => {
   );
 
   return (
-    <>
-      <div>
-        {/* <div className="m-25 header">
+    <div className="custom-trainer-details-scroll-bar">
+      {/* <div className="m-25 header">
       <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
         Book Training Session
       </h3>
@@ -565,7 +563,7 @@ const ScheduleTraining = () => {
         />
       </div>
     </div> */}
-        {/* <div className="pt-5" style={{ marginTop: "7rem" }}>
+      {/* <div className="pt-5" style={{ marginTop: "7rem" }}>
       <div className="ml-4 ">
         {(getParams.search && getParams.search.length) ||
         !bookingColumns.length ? (
@@ -575,26 +573,24 @@ const ScheduleTraining = () => {
         )}
       </div>
     </div> */}
-        {/* <Modal isOpen={showTransactionModal} element={renderStripePaymentContent()} /> */}
-        {/* {renderSearchMenu()}
+      {/* <Modal isOpen={showTransactionModal} element={renderStripePaymentContent()} /> */}
+      {/* {renderSearchMenu()}
     <div className="trainer-slider p02">
       <h2>Available Trainers...</h2>
       <TrainerSlider list={listOfTrainers} />
     </div> */}
-
-        {trainerInfo && trainerInfo.userInfo ? (
-          renderUserDetails()
-        ) : (
-          <>
-            <div>{renderSearchMenu()}</div>
-            <div className="trainer-slider p02">
-              <h2>Recommended...</h2>
-              <TrainerSlider list={listOfTrainers} />
-            </div>
-          </>
-        )}
-      </div>
-    </>
+      {trainerInfo && trainerInfo.userInfo ? (
+        renderUserDetails()
+      ) : (
+        <div>
+          {renderSearchMenu()}
+          <div className="trainer-slider p02">
+            <h2>Recommended</h2>
+            <TrainerSlider list={listOfTrainers} />
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
