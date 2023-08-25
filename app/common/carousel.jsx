@@ -73,6 +73,7 @@ const Carousel = ({ media }) => {
   return (
     <ReactCarousel activeIndex={activeIndex} next={next} previous={previous}>
       <CarouselIndicators
+      
         items={media}
         activeIndex={activeIndex}
         onClickHandler={goToIndex}
