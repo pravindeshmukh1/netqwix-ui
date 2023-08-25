@@ -589,7 +589,7 @@ const ScheduleTraining = () => {
           <>
             <div>{renderSearchMenu()}</div>
             <div className="trainer-slider p02">
-              <h2>Available Trainers...</h2>
+              <h2>Recommended...</h2>
               <TrainerSlider list={listOfTrainers} />
             </div>
           </>
