@@ -138,6 +138,9 @@ export const Message = {
   successMessage: {
     rating: "Providing a Rating",
   },
+  info: {
+    categoryWip: "You selected category which is in progress...",
+  },
 };
 
 export const meetingRatingTimeout = {
@@ -158,4 +161,9 @@ export const validationMessage = {
     credentials_and_affiliations: "This field is required ",
     curriculum: "This field is required ",
   },
+};
+
+export const trainerReview = {
+  review: "5.0",
+  totalReviews: "271 reviews",
 };

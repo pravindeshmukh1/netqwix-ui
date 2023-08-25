@@ -45,8 +45,6 @@ const Carousel = ({ media }) => {
             key={`image_${index}`}
             src={item.url}
             alt={item.altText}
-            // width={"100%"}
-            // height={"400px"}
             className="d-block w-50"
           />
         ) : item.url && item.type === 'video' ? <>

@@ -211,19 +211,17 @@ const ScheduleTraining = () => {
   };
 
   const Input = ({ onChange, placeholder, value, isSecure, id, onClick }) => (
-    <div>
-      <span
-        onChange={onChange}
-        placeholder={placeholder}
-        value={value}
-        isSecure={isSecure}
-        id={id}
-        onClick={onClick}
-        className="select_date"
-      >
-        {Utils.formateDate(startDate)}
-      </span>
-    </div>
+    <span
+      onChange={onChange}
+      placeholder={placeholder}
+      value={value}
+      isSecure={isSecure}
+      id={id}
+      onClick={onClick}
+      className="select_date"
+    >
+      {Utils.formateDate(startDate)}
+    </span>
   );
 
   const renderSlotsByDay = ({ slot, date, trainer_info }) => {
@@ -298,8 +296,9 @@ const ScheduleTraining = () => {
 
   const renderTable = () => (
     <div
-      className={`${trainerInfo.userInfo ? "table-responsive-width" : "table-responsive"
-        }`}
+      className={`${
+        trainerInfo.userInfo ? "table-responsive-width" : "table-responsive"
+      }`}
     >
       <table className="table rc-table ml-30 mr-30">
         <thead className="justify-center align-center">
@@ -313,49 +312,53 @@ const ScheduleTraining = () => {
             })}
           </tr>
         </thead>
-        <tbody>
-          {bookingTableData && bookingTableData.length ? (
-            bookingTableData.map(
+        {bookingTableData && bookingTableData.length ? (
+          bookingTableData
+            .filter(({ trainer_info }) => {
+              return trainer_info._id === trainerInfo.userInfo.id;
+            })
+            .map(
               (
                 { trainer_info, monday, tuesday, wednesday, thursday, friday },
                 index
-              ) => (
-                <tr key={`table-data-${index}`}>
-                  <td key={index}>
-                    <div
-                      className="text-center"
-                      onClick={() => {
-                        // setIsPopoverOpen(trainer_info.fullname)
-                      }}
-                    >
-                      <img
-                        height={100}
-                        width={100}
-                        src={trainer_info.profilePicture}
-                        className="rounded"
-                      />
-                      <p
-                        htmlFor="exampleFormControlInput1"
-                        className="form-label mt-2"
+              ) => {
+                return (
+                  <tr key={`table-data-${index}`}>
+                    <td key={index}>
+                      <div
+                        className="text-center"
+                        onClick={() => {
+                          // setIsPopoverOpen(trainer_info.fullname)
+                        }}
                       >
-                        {trainer_info.fullname}
-                      </p>
-                    </div>
-                  </td>
-                  <td>{renderSlotsByDay(monday)}</td>
-                  <td>{renderSlotsByDay(tuesday)}</td>
-                  <td>{renderSlotsByDay(wednesday)}</td>
-                  <td>{renderSlotsByDay(thursday)}</td>
-                  <td>{renderSlotsByDay(friday)}</td>
-                </tr>
-              )
+                        <img
+                          height={100}
+                          width={100}
+                          src={trainer_info.profilePicture}
+                          className="rounded"
+                        />
+                        <p
+                          htmlFor="exampleFormControlInput1"
+                          className="form-label mt-2"
+                        >
+                          {trainer_info.fullname}
+                        </p>
+                      </div>
+                    </td>
+                    <td>{renderSlotsByDay(monday)}</td>
+                    <td>{renderSlotsByDay(tuesday)}</td>
+                    <td>{renderSlotsByDay(wednesday)}</td>
+                    <td>{renderSlotsByDay(thursday)}</td>
+                    <td>{renderSlotsByDay(friday)}</td>
+                  </tr>
+                );
+              }
             )
-          ) : (
-            <tr key={"no-data"} className="no-data">
-              <td colSpan="6">No trainers available.</td>
-            </tr>
-          )}
-        </tbody>
+        ) : (
+          <tr key={"no-data"} className="no-data">
+            <td colSpan="6">No trainers available.</td>
+          </tr>
+        )}
       </table>
     </div>
   );
@@ -436,9 +439,9 @@ const ScheduleTraining = () => {
         }}
         selectedVal={getParams.search}
         selectedOption={(option) => {
-          // WIP: for category selection 
+          // WIP: for category selection
           if (option.isCategory) {
-            toast.warning('You selected category which is in progress...');
+            toast.warning(Message.info.categoryWip);
           } else {
             // showing trainer info
             setTrainerInfo((prev) => ({
@@ -476,9 +479,9 @@ const ScheduleTraining = () => {
   };
 
   const renderBookingTable = () => (
-    <div className="row">
-      <div className="col-sm-3">
-        <div className="mt-3 datePicker ">
+    <div class="container">
+      <div class="row">
+        <div class="mt-4 col-3 datePicker">
           <DatePicker
             minDate={moment().toDate()}
             onChange={(date) => {
@@ -496,10 +499,10 @@ const ScheduleTraining = () => {
           />
         </div>
       </div>
-      <div className="col-sm-14 mb-5 ml-4">
-        <div className="pt-3">
+      <div class="row">
+        <div class="col-8 pt-3">
           {(getParams.search && getParams.search.length) ||
-            !bookingColumns.length ? (
+          !bookingColumns.length ? (
             renderTable()
           ) : (
             <TrainerSlider list={listOfTrainers} />
@@ -514,9 +517,8 @@ const ScheduleTraining = () => {
   );
 
   return (
-    <>
-      <div>
-        {/* <div className="m-25 header">
+    <div className="custom-trainer-details-scroll-bar">
+      {/* <div className="m-25 header">
       <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
         Book Training Session
       </h3>
@@ -561,7 +563,7 @@ const ScheduleTraining = () => {
         />
       </div>
     </div> */}
-        {/* <div className="pt-5" style={{ marginTop: "7rem" }}>
+      {/* <div className="pt-5" style={{ marginTop: "7rem" }}>
       <div className="ml-4 ">
         {(getParams.search && getParams.search.length) ||
         !bookingColumns.length ? (
@@ -571,27 +573,24 @@ const ScheduleTraining = () => {
         )}
       </div>
     </div> */}
-        {/* <Modal isOpen={showTransactionModal} element={renderStripePaymentContent()} /> */}
-        {/* {renderSearchMenu()}
+      {/* <Modal isOpen={showTransactionModal} element={renderStripePaymentContent()} /> */}
+      {/* {renderSearchMenu()}
     <div className="trainer-slider p02">
       <h2>Available Trainers...</h2>
       <TrainerSlider list={listOfTrainers} />
     </div> */}
-
-        {trainerInfo &&
-          trainerInfo.userInfo ? (
-          renderUserDetails()
-        ) : (
-          <>
-            <div>{renderSearchMenu()}</div>
-            <div className="trainer-slider p02">
-              <h2>Available Trainers...</h2>
-              <TrainerSlider list={listOfTrainers} />
-            </div>
-          </>
-        )}
-      </div>
-    </>
+      {trainerInfo && trainerInfo.userInfo ? (
+        renderUserDetails()
+      ) : (
+        <div>
+          {renderSearchMenu()}
+          <div className="trainer-slider p02">
+            <h2>Recommended</h2>
+            <TrainerSlider list={listOfTrainers} />
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
