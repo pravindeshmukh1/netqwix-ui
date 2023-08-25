@@ -168,7 +168,7 @@ const ScheduleInventory = () => {
   };
 
   return (
-    <div className="m-25 schedule-inventory">
+    <div className="m-25 schedule-inventory container-content">
       <div id="header" className="header">
         <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
           Schedule Slots
@@ -195,7 +195,7 @@ const ScheduleInventory = () => {
             const isNotValid = Utils.checkTimeConflicts(filteredSlots);
 
             if (isNotValid) {
-              toast.error('invalid form', { type: "error" });
+              toast.error("invalid form", { type: "error" });
             } else {
               dispatch(updateScheduleInventoryAsync(updateSlotsPayload));
             }
@@ -299,25 +299,27 @@ const ScheduleInventory = () => {
                                       )}
                                     </div>
                                     <div class="d-flex justify-content-around">
-                                    {slotIndex === 0 && ( <button
-                                        className="btn btn-circle bg-primary text-white"
-                                        type="button"
-                                        disabled={
-                                          values[parentIndex].slots[slotIndex]
-                                            .timeConflict ||
-                                          values[parentIndex].slots[slotIndex]
-                                            .error
-                                        }
-                                        onClick={() =>
-                                          handleAddSlotToDaySlots(
-                                            parentIndex,
-                                            values,
-                                            setValues
-                                          )
-                                        }
-                                      >
-                                        <i className="fa fa-plus"></i>
-                                      </button>)}
+                                      {slotIndex === 0 && (
+                                        <button
+                                          className="btn btn-circle bg-primary text-white"
+                                          type="button"
+                                          disabled={
+                                            values[parentIndex].slots[slotIndex]
+                                              .timeConflict ||
+                                            values[parentIndex].slots[slotIndex]
+                                              .error
+                                          }
+                                          onClick={() =>
+                                            handleAddSlotToDaySlots(
+                                              parentIndex,
+                                              values,
+                                              setValues
+                                            )
+                                          }
+                                        >
+                                          <i className="fa fa-plus"></i>
+                                        </button>
+                                      )}
                                       {slotIndex !== 0 && (
                                         <button
                                           className="btn btn-circle bg-primary text-white"
