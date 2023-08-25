@@ -138,6 +138,9 @@ export const Message = {
   successMessage: {
     rating: "Providing a Rating",
   },
+  info: {
+    categoryWip: "You selected category which is in progress...",
+  },
 };
 
 export const meetingRatingTimeout = {

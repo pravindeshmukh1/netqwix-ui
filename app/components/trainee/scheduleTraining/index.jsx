@@ -298,8 +298,9 @@ const ScheduleTraining = () => {
 
   const renderTable = () => (
     <div
-      className={`${trainerInfo.userInfo ? "table-responsive-width" : "table-responsive"
-        }`}
+      className={`${
+        trainerInfo.userInfo ? "table-responsive-width" : "table-responsive"
+      }`}
     >
       <table className="table rc-table ml-30 mr-30">
         <thead className="justify-center align-center">
@@ -313,49 +314,53 @@ const ScheduleTraining = () => {
             })}
           </tr>
         </thead>
-        <tbody>
-          {bookingTableData && bookingTableData.length ? (
-            bookingTableData.map(
+        {bookingTableData && bookingTableData.length ? (
+          bookingTableData
+            .filter(({ trainer_info }) => {
+              return trainer_info._id === trainerInfo.userInfo.id;
+            })
+            .map(
               (
                 { trainer_info, monday, tuesday, wednesday, thursday, friday },
                 index
-              ) => (
-                <tr key={`table-data-${index}`}>
-                  <td key={index}>
-                    <div
-                      className="text-center"
-                      onClick={() => {
-                        // setIsPopoverOpen(trainer_info.fullname)
-                      }}
-                    >
-                      <img
-                        height={100}
-                        width={100}
-                        src={trainer_info.profilePicture}
-                        className="rounded"
-                      />
-                      <p
-                        htmlFor="exampleFormControlInput1"
-                        className="form-label mt-2"
+              ) => {
+                return (
+                  <tr key={`table-data-${index}`}>
+                    <td key={index}>
+                      <div
+                        className="text-center"
+                        onClick={() => {
+                          // setIsPopoverOpen(trainer_info.fullname)
+                        }}
                       >
-                        {trainer_info.fullname}
-                      </p>
-                    </div>
-                  </td>
-                  <td>{renderSlotsByDay(monday)}</td>
-                  <td>{renderSlotsByDay(tuesday)}</td>
-                  <td>{renderSlotsByDay(wednesday)}</td>
-                  <td>{renderSlotsByDay(thursday)}</td>
-                  <td>{renderSlotsByDay(friday)}</td>
-                </tr>
-              )
+                        <img
+                          height={100}
+                          width={100}
+                          src={trainer_info.profilePicture}
+                          className="rounded"
+                        />
+                        <p
+                          htmlFor="exampleFormControlInput1"
+                          className="form-label mt-2"
+                        >
+                          {trainer_info.fullname}
+                        </p>
+                      </div>
+                    </td>
+                    <td>{renderSlotsByDay(monday)}</td>
+                    <td>{renderSlotsByDay(tuesday)}</td>
+                    <td>{renderSlotsByDay(wednesday)}</td>
+                    <td>{renderSlotsByDay(thursday)}</td>
+                    <td>{renderSlotsByDay(friday)}</td>
+                  </tr>
+                );
+              }
             )
-          ) : (
-            <tr key={"no-data"} className="no-data">
-              <td colSpan="6">No trainers available.</td>
-            </tr>
-          )}
-        </tbody>
+        ) : (
+          <tr key={"no-data"} className="no-data">
+            <td colSpan="6">No trainers available.</td>
+          </tr>
+        )}
       </table>
     </div>
   );
@@ -436,9 +441,9 @@ const ScheduleTraining = () => {
         }}
         selectedVal={getParams.search}
         selectedOption={(option) => {
-          // WIP: for category selection 
+          // WIP: for category selection
           if (option.isCategory) {
-            toast.warning('You selected category which is in progress...');
+            toast.warning(Message.info.categoryWip);
           } else {
             // showing trainer info
             setTrainerInfo((prev) => ({
@@ -499,7 +504,7 @@ const ScheduleTraining = () => {
       <div className="col-sm-14 mb-5 ml-4">
         <div className="pt-3">
           {(getParams.search && getParams.search.length) ||
-            !bookingColumns.length ? (
+          !bookingColumns.length ? (
             renderTable()
           ) : (
             <TrainerSlider list={listOfTrainers} />
@@ -578,8 +583,7 @@ const ScheduleTraining = () => {
       <TrainerSlider list={listOfTrainers} />
     </div> */}
 
-        {trainerInfo &&
-          trainerInfo.userInfo ? (
+        {trainerInfo && trainerInfo.userInfo ? (
           renderUserDetails()
         ) : (
           <>
