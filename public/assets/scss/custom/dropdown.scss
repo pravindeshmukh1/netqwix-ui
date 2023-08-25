@@ -54,7 +54,10 @@
     overflow-y: auto;
     position: absolute;
     top: 100%;
+    // width: 100% - 13.5%;
     width: 100%;
+    border-radius: 15px 15px 0 0;
+    margin-top: 7px;
     z-index: 10;
     -webkit-overflow-scrolling: touch;
   }
@@ -80,7 +83,7 @@
   .custom-search-menu {
     position: absolute;
     margin: auto;
-    left: 25%;
+    left: 29%;
     top: 40%;
   }
 

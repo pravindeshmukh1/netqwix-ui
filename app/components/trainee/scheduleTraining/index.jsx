@@ -23,7 +23,6 @@ import TrainerSlider from "./trainerSlider";
 import Modal from "../../../common/modal";
 import { X } from "react-feather";
 import StripeCard from "../../../common/stripe";
-import { createPaymentIntent } from "../trainee.api";
 import { toast } from "react-toastify";
 import SearchableDropdown from "../helper/searchableDropdown";
 import { masterState } from "../../master/master.slice";
