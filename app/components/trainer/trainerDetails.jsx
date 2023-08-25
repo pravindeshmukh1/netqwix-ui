@@ -1,8 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {X} from 'react-feather';
 import Accordion from '../../common/accordion';
-import Carousel from '../../common/carousel';
-import {Message, TRAINER_AMOUNT_USD} from '../../common/constants';
+import { Star, X } from "react-feather";
+import Carousel from "../../common/carousel";
+import {
+  Message,
+  TRAINER_AMOUNT_USD,
+  trainerReview,
+} from "../../common/constants";
 
 const TrainerDetails = ({onClose, element, trainerInfo}) => {
   const [accordion, setAccordion] = useState ({});
@@ -62,6 +66,13 @@ const TrainerDetails = ({onClose, element, trainerInfo}) => {
           <h2 className="mb-3">
             {trainerInfo && trainerInfo.name ? trainerInfo.name : null}
           </h2>
+          <div className="mb-3 d-flex">
+            <Star color="#FFC436" size={23}  />
+            <p className="ml-1 mt-1 mr-1 font-weight-light">
+              {trainerReview.review}
+            </p>
+            <p className="mt-1">({trainerReview.totalReviews})</p>
+          </div>
           <h3 className="mb-3"> Hourly Rate: ${TRAINER_AMOUNT_USD} </h3>
           <p>
             {trainerInfo && trainerInfo.extraInfo
@@ -112,100 +123,6 @@ const TrainerDetails = ({onClose, element, trainerInfo}) => {
           {element}
         </div>
       </div>
-      {/* <div className="container">
-        <div className="row">
-          <div className="col-6">
-            <h2 className="mb-3">
-              {trainerInfo && trainerInfo.name ? trainerInfo.name : null}
-            </h2>
-            <h3 className="mb-3"> Hourly Rate: ${TRAINER_AMOUNT_USD} </h3>
-            <p>
-              {trainerInfo && trainerInfo.extraInfo
-                ? trainerInfo.extraInfo.about
-                : "No data available... "}
-            </p>
-          </div>
-          <div className="col-6">
-            <Carousel
-              media={
-                // TODO: for now passing dummy values
-                mediaData
-                // trainerInfo && trainerInfo.extraInfo
-                //   ? trainerInfo.extraInfo.media
-                //   : mediaData
-              }
-            />
-          </div>
-          <div className="w-100"></div>
-          <div className="col-6">
-            <div className="accordion mb-3">
-              {accordionData.length
-                ? accordionData.map((data, index) => {
-                    return (
-                      <Accordion key={`accordion_${index}`} className="mb-5">
-                        <Accordion.Item>
-                          <Accordion.Header>{data.label}</Accordion.Header>
-                          <Accordion.Body>
-                            {!data.value ? Message.notFound : data.value}
-                          </Accordion.Body>
-                        </Accordion.Item>
-                      </Accordion>
-                    );
-                  })
-                : "No data found"}
-            </div>
-          </div>
-          <div className="col-6">{element}</div>
-        </div>
-      </div> */}
-      {/* <div className="row ml-4 ">
-        <div className="col">
-          <h2 className="mb-3">
-            {trainerInfo && trainerInfo.name ? trainerInfo.name : null}
-          </h2>
-              <h3> Hourly Rate: ${TRAINER_AMOUNT_USD} </h3>
-          <h3 className="mt-3 mb-3 font-weight-bold">About</h3>
-          <p>
-            {trainerInfo && trainerInfo.extraInfo
-              ? trainerInfo.extraInfo.about
-              : 'No data available... '}
-          </p>
-          <div className="accordion mb-3">
-            {accordionData.length
-              ? accordionData.map((data, index) => {
-                  return (
-                    <Accordion key={`accordion_${index}`} className="mb-5">
-                      <Accordion.Item>
-                        <Accordion.Header>{data.label}</Accordion.Header>
-                        <Accordion.Body>
-                          {!data.value ? Message.notFound : data.value}
-                        </Accordion.Body>
-                      </Accordion.Item>
-                    </Accordion>
-                  );
-                })
-              : "No data found"}
-          </div>
-        </div>
-        <div className="col">
-          <div className="row  ml-4">
-            <div className="ml-5">
-              <Carousel
-                media={
-                  // TODO: for now passing dummy values
-                  mediaData
-                  // trainerInfo && trainerInfo.extraInfo
-                  //   ? trainerInfo.extraInfo.media
-                  //   : mediaData
-                }
-              />
-            </div>
-          </div>
-          <div className="row mt-5 ml-5">
-            <div className="col">{element ? element : "No data found"}</div>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 };
