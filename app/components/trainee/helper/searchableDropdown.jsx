@@ -13,7 +13,6 @@ const SearchableDropdown = ({
 }) => {
   const [query, setQuery] = useState ('');
   const [isOpen, setIsOpen] = useState (false);
-
   const inputRef = useRef (null);
 
   useEffect (() => {
@@ -39,9 +38,10 @@ const SearchableDropdown = ({
   };
 
   const filter = options => {
-    return options.filter (
+    const result = options.filter (
       option => option[label].toLowerCase ().indexOf (query.toLowerCase ()) > -1
     );
+    return result;
   };
 
   return (
@@ -65,7 +65,7 @@ const SearchableDropdown = ({
               />
 
             </div>
-            <div className={`arrow ${isOpen ? 'open' : ''}`} />
+            {/* <div className={`arrow ${isOpen ? 'open' : ''}`} /> */}
           </div>
         </div>
         <div className="col-2 p-0 m-0">
@@ -77,9 +77,9 @@ const SearchableDropdown = ({
           </button>
         </div>
       </div>
-      <div className="row">
+      {query && query.length ?      <div className="row">
         <div className="col-10 p-0 m-0">
-          <div className={`options ${isOpen ? 'open' : ''}`}>
+          <div className={`options ${(isOpen && filter (options).length) ? 'open' : ''}`}>
             {filter (options).map ((option, index) => {
               return (
                 <div
@@ -111,6 +111,7 @@ const SearchableDropdown = ({
         </div>
         <div />
       </div>
+ : <></>}
 
     </div>
   );
