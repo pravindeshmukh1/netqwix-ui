@@ -122,52 +122,68 @@ export class Utils {
     return isTimeConflicts;
   };
 
-  static has24HoursPassed = (scheduledMeetingDetails) => {
-    const has24HoursPassed = scheduledMeetingDetails.map((booking) => {
-      const { booked_date, session_end_time } = booking;
-      const currentDate = moment().format(FormateDate.YYYY_MM_DD);
-      const currentTime = moment().format(FormateHours.HH_MM);
-      const currentFormattedTime = this.convertToAmPm(currentTime);
-      const bookedDate = this.getDateInFormat(booked_date);
-      const sessionEndTime = this.convertToAmPm(session_end_time);
-      const bookingDateTime = moment(
-        `${bookedDate} ${sessionEndTime}`,
-        `${FormateDate.YYYY_MM_DD} ${FormateHours.HH_MM}`
-      );
-      const currentDateTime = moment(
-        `${currentDate} ${currentFormattedTime}`,
-        `${FormateDate.YYYY_MM_DD} ${FormateHours.HH_MM}`
-      );
-      const hoursDifference = currentDateTime.diff(bookingDateTime, "hours");
-      const hasPassed = hoursDifference >= 24;
-      return hasPassed;
-    });
-    return has24HoursPassed;
+  static isStartButtonEnabled = (
+    bookedDate,
+    currentDate,
+    currentFormattedTime,
+    sessionStartTime,
+    sessionEndTime
+  ) => {
+    return (
+      currentDate === bookedDate &&
+      currentFormattedTime >= sessionStartTime &&
+      currentFormattedTime <= sessionEndTime
+    );
   };
 
-  static checkMeetingAvailability = (scheduledMeetingDetails) => {
+  static has24HoursPassedSinceBooking = (
+    bookedDate,
+    currentDate,
+    currentFormattedTime,
+    sessionEndTime
+  ) => {
+    const { YYYY_MM_DD } = FormateDate;
+    const { HH_MM } = FormateHours;
+    const bookingEndTime = moment(
+      `${bookedDate} ${sessionEndTime}`,
+      `${YYYY_MM_DD} ${HH_MM}`
+    );
+    const currentDateTime = moment(
+      `${currentDate} ${currentFormattedTime}`,
+      `${YYYY_MM_DD} ${HH_MM}`
+    );
+    const hoursElapsed = currentDateTime.diff(bookingEndTime, "hours");
+    const hasPassed = hoursElapsed >= 24;
+    return hasPassed;
+  };
+
+  static meetingAvailability = (
+    booked_date,
+    session_start_time,
+    session_end_time
+  ) => {
+    const bookedDate = this.getDateInFormat(booked_date);
+    const sessionStartTime = this.convertToAmPm(session_start_time);
+    const sessionEndTime = this.convertToAmPm(session_end_time);
+    const currentDate = moment().format(FormateDate.YYYY_MM_DD);
     const currentTime = moment().format(FormateHours.HH_MM);
     const currentFormattedTime = this.convertToAmPm(currentTime);
-    const availabilityStatus = scheduledMeetingDetails.map((booking) => {
-      const { booked_date, session_start_time, session_end_time } = booking;
-      const currentFormattedSessionStartTime =
-        this.convertToAmPm(session_start_time);
-      const currentFormattedSessionEndTime =
-        this.convertToAmPm(session_end_time);
-      const currentDate = moment().format(FormateDate.YYYY_MM_DD);
-      const bookedDate = this.getDateInFormat(booked_date);
-      if (currentDate === bookedDate) {
-        if (
-          currentFormattedTime >= currentFormattedSessionStartTime &&
-          currentFormattedTime <= currentFormattedSessionEndTime
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-      return false;
-    });
-    return availabilityStatus;
+    const isStartButtonEnabled = this.isStartButtonEnabled(
+      bookedDate,
+      currentDate,
+      currentFormattedTime,
+      sessionStartTime,
+      sessionEndTime
+    );
+    const has24HoursPassedSinceBooking = this.has24HoursPassedSinceBooking(
+      bookedDate,
+      currentDate,
+      currentFormattedTime,
+      sessionEndTime
+    );
+    return {
+      isStartButtonEnabled,
+      has24HoursPassedSinceBooking,
+    };
   };
 }
