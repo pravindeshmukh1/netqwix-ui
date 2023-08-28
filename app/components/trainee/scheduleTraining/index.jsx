@@ -27,7 +27,7 @@ import { createPaymentIntent } from "../trainee.api";
 import { toast } from "react-toastify";
 import SearchableDropdown from "../helper/searchableDropdown";
 import { masterState } from "../../master/master.slice";
-import TrainerDetails from "../../trainer/trainerDetails";
+import { TrainerDetails } from "../../trainer/trainerDetails";
 
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
@@ -45,6 +45,7 @@ const ScheduleTraining = () => {
     useState(false);
   const [trainerInfo, setTrainerInfo] = useState({
     userInfo: null,
+    selected_category: null,
   });
   const [bookSessionPayload, setBookSessionPayload] = useState({});
   const toggle = () => setInstantScheduleMeeting(!isOpenInstantScheduleMeeting);
@@ -440,15 +441,11 @@ const ScheduleTraining = () => {
         selectedVal={getParams.search}
         selectedOption={(option) => {
           // WIP: for category selection
-          if (option.isCategory) {
-            toast.warning(Message.info.categoryWip);
-          } else {
-            // showing trainer info
-            setTrainerInfo((prev) => ({
-              ...prev,
-              userInfo: option,
-            }));
-          }
+          setTrainerInfo((prev) => ({
+            ...prev,
+            userInfo: option,
+            selected_category: option.name,
+          }));
         }}
         handleChange={(value) => {
           setParams({ search: value });
@@ -460,6 +457,7 @@ const ScheduleTraining = () => {
   const renderUserDetails = () => {
     return (
       <TrainerDetails
+        selectOption={trainerInfo}
         isPopoverOpen={isPopoverOpen}
         key={`trainerDetails`}
         trainerInfo={trainerInfo.userInfo}
@@ -476,6 +474,10 @@ const ScheduleTraining = () => {
         element={renderBookingTable()}
       />
     );
+  };
+
+  const renderCategoryTrainerDetails = () => {
+    return <CategoryTrainerDetails />;
   };
 
   const renderBookingTable = () => (

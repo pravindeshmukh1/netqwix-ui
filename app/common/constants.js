@@ -127,6 +127,7 @@ export const SHAPES = {
 };
 
 export const TRAINER_AMOUNT_USD = 10;
+export const TRAINER_MEETING_TIME = '30 minutes'
 
 export const Message = {
   notFound: "No data available",
