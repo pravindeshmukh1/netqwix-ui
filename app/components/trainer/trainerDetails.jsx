@@ -39,7 +39,7 @@ const TrainerDetails = ({ onClose, element, trainerInfo }) => {
   ];
 
   return (
-    <div className="container-content">
+    <div className="custom-sidebar-content">
       <div className="media-body media-body text-right" onClick={onClose}>
         <div className="mr-4 mt-4">
           <X />
