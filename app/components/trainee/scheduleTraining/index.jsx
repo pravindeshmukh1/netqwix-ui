@@ -517,68 +517,81 @@ const ScheduleTraining = () => {
   );
 
   return (
-    <div>
-      {/* <div className="m-25 header">
-      <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
-        Book Training Session
-      </h3>
-    </div>
+    // <div>
+    //   {/* <div className="m-25 header">
+    //   <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
+    //     Book Training Session
+    //   </h3>
+    // </div>
 
-    <div
-      className={`form-inline search-form open mb-5`}
-      style={{
-        width: "92vw",
-        height: "4rem",
-        marginTop: "60px",
-        marginLeft: "6rem",
-      }}
-    >
-      <div className="form-group">
-        <input
-          className="form-control-plaintext"
-          type="search"
-          value={getParams.search}
-          placeholder="Search..."
-          onChange={(event) => {
-            const { value } = event.target;
-            setParams({ search: value });
-          }}
-        />
-      </div>
-      <div className="mt-3 ml-1 datePicker">
-        <DatePicker
-          minDate={moment().toDate()}
-          onChange={(date) => {
-            setStartDate(date);
-            const todaySDate = Utils.getDateInFormat(date.toString());
-            const { weekDateFormatted, weekDates } =
-              Utils.getCurrentWeekByDate(todaySDate);
-            setColumns(weekDateFormatted);
-            setTableData(getTraineeSlots, weekDates);
-            setColumns(weekDateFormatted);
-          }}
-          selected={startDate}
-          // ref={null}
-          customInput={<Input />}
-        />
-      </div>
-    </div> */}
-      {/* <div className="pt-5" style={{ marginTop: "7rem" }}>
-      <div className="ml-4 ">
-        {(getParams.search && getParams.search.length) ||
-        !bookingColumns.length ? (
-          renderTable()
-        ) : (
-          <TrainerSlider list={listOfTrainers} />
-        )}
-      </div>
-    </div> */}
-      {/* <Modal isOpen={showTransactionModal} element={renderStripePaymentContent()} /> */}
-      {/* {renderSearchMenu()}
-    <div className="trainer-slider p02">
-      <h2>Available Trainers...</h2>
-      <TrainerSlider list={listOfTrainers} />
-    </div> */}
+    // <div
+    //   className={`form-inline search-form open mb-5`}
+    //   style={{
+    //     width: "92vw",
+    //     height: "4rem",
+    //     marginTop: "60px",
+    //     marginLeft: "6rem",
+    //   }}
+    // >
+    //   <div className="form-group">
+    //     <input
+    //       className="form-control-plaintext"
+    //       type="search"
+    //       value={getParams.search}
+    //       placeholder="Search..."
+    //       onChange={(event) => {
+    //         const { value } = event.target;
+    //         setParams({ search: value });
+    //       }}
+    //     />
+    //   </div>
+    //   <div className="mt-3 ml-1 datePicker">
+    //     <DatePicker
+    //       minDate={moment().toDate()}
+    //       onChange={(date) => {
+    //         setStartDate(date);
+    //         const todaySDate = Utils.getDateInFormat(date.toString());
+    //         const { weekDateFormatted, weekDates } =
+    //           Utils.getCurrentWeekByDate(todaySDate);
+    //         setColumns(weekDateFormatted);
+    //         setTableData(getTraineeSlots, weekDates);
+    //         setColumns(weekDateFormatted);
+    //       }}
+    //       selected={startDate}
+    //       // ref={null}
+    //       customInput={<Input />}
+    //     />
+    //   </div>
+    // </div> */}
+    //   {/* <div className="pt-5" style={{ marginTop: "7rem" }}>
+    //   <div className="ml-4 ">
+    //     {(getParams.search && getParams.search.length) ||
+    //     !bookingColumns.length ? (
+    //       renderTable()
+    //     ) : (
+    //       <TrainerSlider list={listOfTrainers} />
+    //     )}
+    //   </div>
+    // </div> */}
+    //   {/* <Modal isOpen={showTransactionModal} element={renderStripePaymentContent()} /> */}
+    //   {/* {renderSearchMenu()}
+    // <div className="trainer-slider p02">
+    //   <h2>Available Trainers...</h2>
+    //   <TrainerSlider list={listOfTrainers} />
+    // </div> */}
+    //   {trainerInfo && trainerInfo.userInfo ? (
+    //     renderUserDetails()
+    //   ) : (
+    //     <div>
+    //       {renderSearchMenu()}
+    //       <div className="trainer-slider p02">
+    //         <h2>Recommended</h2>
+    //         <TrainerSlider list={listOfTrainers} />
+    //       </div>
+    //     </div>
+    //   )}
+    // </div>
+    <div className="custom-scroll">
       {trainerInfo && trainerInfo.userInfo ? (
         renderUserDetails()
       ) : (
