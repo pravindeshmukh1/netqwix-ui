@@ -163,6 +163,9 @@ export const validationMessage = {
     credentials_and_affiliations: "This field is required ",
     curriculum: "This field is required ",
   },
+  social_media: {
+    field_required: 'This field is required'
+  }
 };
 
 export const trainerReview = {
