@@ -127,11 +127,11 @@ export const SHAPES = {
 };
 
 export const TRAINER_AMOUNT_USD = 10;
-export const TRAINER_MEETING_TIME = '30 minutes'
+export const TRAINER_MEETING_TIME = "30 minutes";
 
 export const Message = {
   notFound: "No data available",
-  noMediaFound:"No media found!",
+  noMediaFound: "No media found!",
   errorMessage: {
     wip: "work in progress",
     timeConflicts: "These slots are already booked.",
@@ -186,4 +186,25 @@ export const mediaData = [
   //   url: "https://youtu.be/mUxzKVrSAjs?si=v6oqi-0-rG7BJ5sk",
   //   type: "video",
   // },
+];
+
+export const trainerFilterOptions = [
+  {
+    id: 1,
+    label: "Offres free 15 miutes trial",
+    value: "Offres free 15 miutes trial",
+    isCheck: false,
+  },
+  {
+    id: 2,
+    label: "Teaches kids",
+    value: "Teaches kids",
+    isCheck: false,
+  },
+  {
+    id: 3,
+    label: "Accepting new students",
+    value: "Accepting new students",
+    isCheck: false,
+  },
 ];

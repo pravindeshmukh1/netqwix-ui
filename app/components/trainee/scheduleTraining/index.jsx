@@ -41,6 +41,7 @@ const ScheduleTraining = () => {
   const [listOfTrainers, setListOfTrainers] = useState([]);
   const [bookingTableData, setBookingTableData] = useState([]);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
+  const [selectedTrainer, setSelectedTrainer] = useState({ id: null });
   const [isOpenInstantScheduleMeeting, setInstantScheduleMeeting] =
     useState(false);
   const [trainerInfo, setTrainerInfo] = useState({
@@ -316,7 +317,10 @@ const ScheduleTraining = () => {
         {bookingTableData && bookingTableData.length ? (
           bookingTableData
             .filter(({ trainer_info }) => {
-              return trainer_info._id === trainerInfo.userInfo.id;
+              return (
+                trainer_info._id === trainerInfo.userInfo.id ||
+                trainer_info._id === selectedTrainer.id
+              );
             })
             .map(
               (
@@ -456,23 +460,31 @@ const ScheduleTraining = () => {
 
   const renderUserDetails = () => {
     return (
-      <TrainerDetails
-        selectOption={trainerInfo}
-        isPopoverOpen={isPopoverOpen}
-        key={`trainerDetails`}
-        trainerInfo={trainerInfo.userInfo}
-        onClose={() => {
-          setTrainerInfo((prev) => ({
-            ...prev,
-            userInfo: null,
-          }));
-          setParams((prev) => ({
-            ...prev,
-            search: null,
-          }));
-        }}
-        element={renderBookingTable()}
-      />
+      <>
+        <TrainerDetails
+          selectOption={trainerInfo}
+          isPopoverOpen={isPopoverOpen}
+          key={`trainerDetails`}
+          trainerInfo={trainerInfo.userInfo}
+          selectTrainer={(_id) => {
+            if (_id) {
+              setSelectedTrainer({ ...selectedTrainer, id: _id });
+            }
+          }}
+          onClose={() => {
+            setTrainerInfo((prev) => ({
+              ...prev,
+              userInfo: null,
+              selected_category: null,
+            }));
+            setParams((prev) => ({
+              ...prev,
+              search: null,
+            }));
+          }}
+          element={renderBookingTable()}
+        />
+      </>
     );
   };
 
