@@ -1,4 +1,4 @@
-const SocialMediaIcons = ({ social_media_links }) => {
+const SocialMediaIcons = ({social_media_links}) => {
   return (
     <div>
       <ul className="integratin d-flex">
@@ -18,16 +18,16 @@ const SocialMediaIcons = ({ social_media_links }) => {
               <div
                 className="profile"
                 style={{
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  display: "block",
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  display: 'block',
                 }}
               >
                 <img
                   className="bg-img"
                   src="/assets/images/contact/1.jpg"
                   alt="Avatar"
-                  style={{ display: "none" }}
+                  style={{display: 'none'}}
                 />
               </div>
             </div>
@@ -49,16 +49,16 @@ const SocialMediaIcons = ({ social_media_links }) => {
               <div
                 className="profile"
                 style={{
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  display: "block",
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  display: 'block',
                 }}
               >
                 <img
                   className="bg-img"
                   src="/assets/images/contact/2.jpg"
                   alt="Avatar"
-                  style={{ display: "none" }}
+                  style={{display: 'none'}}
                 />
               </div>
             </div>
@@ -80,16 +80,16 @@ const SocialMediaIcons = ({ social_media_links }) => {
               <div
                 className="profile"
                 style={{
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  display: "block",
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  display: 'block',
                 }}
               >
                 <img
                   className="bg-img"
                   src="/assets/images/contact/3.jpg"
                   alt="Avatar"
-                  style={{ display: "none" }}
+                  style={{display: 'none'}}
                 />
               </div>
             </div>
@@ -111,16 +111,16 @@ const SocialMediaIcons = ({ social_media_links }) => {
               <div
                 className="profile"
                 style={{
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  display: "block",
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  display: 'block',
                 }}
               >
                 <img
                   className="bg-img"
                   src="/assets/images/contact/2.jpg"
                   alt="Avatar"
-                  style={{ display: "none" }}
+                  style={{display: 'none'}}
                 />
               </div>
             </div>
@@ -129,7 +129,11 @@ const SocialMediaIcons = ({ social_media_links }) => {
         <li>
           <div className="media">
             <div className="media-left">
-              <a className="slc" href="#">
+              <a
+                className="slc"
+                target="_blank"
+                href={social_media_links && social_media_links.slack}
+              >
                 <i className="fa fa-slack mr-1" />
                 <h5>Slack </h5>
               </a>
@@ -139,7 +143,7 @@ const SocialMediaIcons = ({ social_media_links }) => {
                 <a
                   href={social_media_links && social_media_links.slack}
                   target="_blank"
-                ></a>
+                />
               </div>
             </div>
           </div>

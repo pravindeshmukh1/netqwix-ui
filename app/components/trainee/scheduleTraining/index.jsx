@@ -23,7 +23,6 @@ import TrainerSlider from "./trainerSlider";
 import Modal from "../../../common/modal";
 import { X } from "react-feather";
 import StripeCard from "../../../common/stripe";
-import { createPaymentIntent } from "../trainee.api";
 import { toast } from "react-toastify";
 import SearchableDropdown from "../helper/searchableDropdown";
 import { masterState } from "../../master/master.slice";
@@ -175,7 +174,7 @@ const ScheduleTraining = () => {
   const setColumns = (weeks = []) => {
     setBookingColumns([]);
     const initialHeader = {
-      title: "Available Trainers",
+      title: "",
       dataIndex: "trainer_info",
       key: "Available_Trainers",
       width: 70,
@@ -444,12 +443,20 @@ const ScheduleTraining = () => {
         }}
         selectedVal={getParams.search}
         selectedOption={(option) => {
-          // WIP: for category selection
-          setTrainerInfo((prev) => ({
-            ...prev,
-            userInfo: option,
-            selected_category: option.name,
-          }));
+          console.log(`option --- `, option);
+          if(option && option.isCategory) {
+            setTrainerInfo((prev) => ({
+              ...prev,
+              userInfo: option,
+              selected_category: option.name,
+            }));
+          } else {
+            setTrainerInfo((prev) => ({
+              ...prev,
+              userInfo: option,
+              selected_category: null,
+            }));
+          }
         }}
         handleChange={(value) => {
           setParams({ search: value });
