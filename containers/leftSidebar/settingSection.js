@@ -1,20 +1,27 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { Edit, ChevronLeft, X, ChevronRight, PlusCircle } from 'react-feather';
 import { Input, Label } from 'reactstrap';
+
+import { Form, Formik } from "formik";
+
 import CustomizerContext from '../../helpers/customizerContext';
 import config from '../../config/customizerConfig';
-import Link from 'next/link';
+import * as Yup from "yup";
+
 import { useAppDispatch, useAppSelector } from '../../app/store';
 import { authState } from '../../app/components/auth/auth.slice';
-import { AccountType, LOCAL_STORAGE_KEYS } from '../../app/common/constants';
+import { AccountType, LOCAL_STORAGE_KEYS, validationMessage } from '../../app/common/constants';
 import { UpdateSettingProfileForm } from '../../app/components/trainer/settings/form';
 import { updateProfileAsync } from '../../app/components/trainer/trainer.slice';
+import { HandleErrorLabel } from '../../app/common/error';
 
 const SettingSection = props => {
   const dispatch = useAppDispatch();
+  const socialFormRef = useRef(null);
   const { userInfo } = useAppSelector(authState);
   const customizerCtx = useContext(CustomizerContext);
   const addBackgroundWallpaper = customizerCtx.addBackgroundWallpaper;
+  const [isSocialFormOpen, setIsSocialFormOpen] = useState(false);
   const [acctRequestDisable, setDisable] = useState(false);
   const [isCheck, setIsChecked] = useState(false);
   const [deleteAcct, setDeleteDisable] = useState(false);
@@ -34,7 +41,35 @@ const SettingSection = props => {
     deleteAccount: false,
   });
 
+  const initialValues = {
+    fb: '',
+    instagram: "",
+    twitter: "",
+    google: "",
+    slack: "",
+  };
+
+
+  const validationSchema = Yup.object().shape({
+    fb: Yup.string().required(validationMessage.social_media.field_required).nullable(),
+    instagram: Yup.string().required(validationMessage.social_media.field_required).nullable(),
+    twitter: Yup.string().required(validationMessage.social_media.field_required).nullable(),
+    google: Yup.string().required(validationMessage.social_media.field_required).nullable(),
+    slack: Yup.string().required(validationMessage.social_media.field_required).nullable(),
+  });
+
+
   const [accountType, setAccountType] = useState('');
+
+
+  useEffect(() => {
+    if (socialFormRef && socialFormRef.current && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links) {
+        socialFormRef.current.setValues({
+         ...userInfo?.extraInfo.social_media_links
+        })
+    }
+}, [socialFormRef])
+
 
   useEffect(() => {
     setAccountType(localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE));
@@ -104,7 +139,7 @@ const SettingSection = props => {
             <a
               className="icon-btn btn-outline-light btn-sm close-panel"
               href="#"
-              onClick={() => {closeLeftSide(); setSettingTab('')}}
+              onClick={() => { closeLeftSide(); setSettingTab('') }}
             >
               <X />
             </a>
@@ -582,9 +617,8 @@ const SettingSection = props => {
           </div>
           {/* for trainer settings form */}
           <UpdateSettingProfileForm userInfo={userInfo} extraInfo={userInfo?.extraInfo || {}} onFormSubmit={(formValue) => {
-            console.log(`formValue ---- `, formValue);
             dispatch(updateProfileAsync(formValue))
-          }}/>
+          }} />
         </div>
         <div className='media'>
           <div className='media-body'>
@@ -787,14 +821,16 @@ const SettingSection = props => {
           </div>
         </div>
       </div> */}
-      <div className="setting-block">
+      {(accountType === AccountType.TRAINER) ? <>
+        <div className="setting-block">
         <div className={`block ${settingTab === 'integratin' ? 'open' : ''}`}>
           <div className="media">
             <div className="media-body">
-              <h3>Integratin</h3>
+              <h3>Integration</h3>
             </div>
             <div className="media-right">
               {' '}
+
               <a
                 className="icon-btn btn-outline-light btn-sm pull-right previous"
                 href="#"
@@ -802,155 +838,343 @@ const SettingSection = props => {
               >
                 <ChevronLeft />
               </a>
+              <div
+                className="icon-btn btn-outline-light btn-sm pull-right edit-btn pointer"
+                // href="#"
+                onClick={() => {
+                  setIsSocialFormOpen(!isSocialFormOpen);
+                }}
+              >
+                {' '}
+                {isSocialFormOpen ? <X /> : <Edit />}
+              </div>
             </div>
           </div>
-          <ul className="integratin">
-            <li>
-              <div className="media">
-                <div className="media-left">
-                  <a
-                    className="fb"
-                    href="https://www.facebook.com/login"
-                    target="_blank"
-                  >
-                    <i className="fa fa-facebook mr-1" />
-                    <h5>Facebook </h5>
-                  </a>
-                </div>
-                <div className="media-right">
-                  <div
-                    className="profile"
-                    style={{
-                      backgroundImage: `url('assets/images/contact/1.jpg')`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      display: 'block',
-                    }}
-                  >
-                    <img
-                      className="bg-img"
-                      src="/assets/images/contact/1.jpg"
-                      alt="Avatar"
-                      style={{ display: 'none' }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div className="media">
-                <div className="media-left">
-                  <a
-                    className="insta"
-                    href="https://www.instagram.com/accounts/login/?hl=en"
-                    target="_blank"
-                  >
-                    <i className="fa fa-instagram mr-1" />
-                    <h5>instagram</h5>
-                  </a>
-                </div>
-                <div className="media-right">
-                  <div
-                    className="profile"
-                    style={{
-                      backgroundImage: `url('assets/images/contact/2.jpg')`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      display: 'block',
-                    }}
-                  >
-                    <img
-                      className="bg-img"
-                      src="/assets/images/contact/2.jpg"
-                      alt="Avatar"
-                      style={{ display: 'none' }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div className="media">
-                <div className="media-left">
-                  <a
-                    className="twi"
-                    href="https://twitter.com/login"
-                    target="_blank"
-                  >
-                    <i className="fa fa-twitter mr-1" />
-                    <h5>twitter </h5>
-                  </a>
-                </div>
-                <div className="media-right">
-                  <div
-                    className="profile"
-                    style={{
-                      backgroundImage: `url('assets/images/contact/3.jpg')`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      display: 'block',
-                    }}
-                  >
-                    <img
-                      className="bg-img"
-                      src="/assets/images/contact/3.jpg"
-                      alt="Avatar"
-                      style={{ display: 'none' }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div className="media">
-                <div className="media-left">
-                  <a
-                    className="ggl"
-                    href="https://accounts.google.com/signin/v2/identifier?service=mail&amp;passive=true&amp;rm=false&amp;continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&amp;ss=1&amp;scc=1&amp;ltmpl=default&amp;ltmplcache=2&amp;emr=1&amp;osid=1&amp;flowName=GlifWebSignIn&amp;flowEntry=ServiceLogin"
-                    target="_blank"
-                  >
-                    <i className="fa fa-google mr-1" />
-                    <h5>google </h5>
-                  </a>
-                </div>
-                <div className="media-right">
-                  <div
-                    className="profile"
-                    style={{
-                      backgroundImage: `url('assets/images/contact/2.jpg')`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      display: 'block',
-                    }}
-                  >
-                    <img
-                      className="bg-img"
-                      src="/assets/images/contact/2.jpg"
-                      alt="Avatar"
-                      style={{ display: 'none' }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li>
-              <div className="media">
-                <div className="media-left">
-                  <a className="slc" href="#">
-                    <i className="fa fa-slack mr-1" />
-                    <h5>Slack </h5>
-                  </a>
-                </div>
-                <div className="media-right">
-                  <div className="profile">
-                    <a href="https://slack.com/get-started#/" target="_blank">
-                      <PlusCircle />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
+          <Formik
+            innerRef={socialFormRef}
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={(value) => {
+              const payload = {
+                ...userInfo?.extraInfo, social_media_links: value
+              }
+              dispatch(updateProfileAsync(payload));
+              console.log(`value --- `, payload)
+            }}
+          >
+            {({ values,
+              errors,
+              touched,
+              handleSubmit,
+              handleBlur,
+              setValues,
+              isValid, }) => (
+              <Form onSubmit={handleSubmit}>
+                <ul className="integratin">
+                  <li>
+                    <div className="media">
+                      <div className="media-left">
+                        <a
+                          className="fb"
+                          href={values.fb || "https://www.facebook.com/login"}
+                          target="_blank"
+                        >
+                          <i className="fa fa-facebook mr-1" />
+                          <h5>Facebook </h5>
+                        </a>
+                      </div>
+
+                      {/* <div className="media-right">
+                        <div
+                          className="profile"
+                          style={{
+                            backgroundImage: `url('assets/images/contact/1.jpg')`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            display: 'block',
+                          }}
+                        >
+                          <img
+                            className="bg-img"
+                            src="/assets/images/contact/1.jpg"
+                            alt="Avatar"
+                            style={{ display: 'none' }}
+                          />
+                        </div>
+                      </div> */}
+                    </div>
+                    {isSocialFormOpen ? <>
+                      <div className="row">
+                        <div className="col-6">
+                          <div className="form-group">
+                            <input onChange={(event) => {
+                              const { value } = event.target;
+                              setValues({ ...values, fb: value });
+                            }}
+                              value={values.fb}
+                              placeholder="Facebook URL"
+                              type='url'
+                              onBlur={handleBlur} className="form-control mt-1" name="fb" id=""></input>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <HandleErrorLabel
+                          isError={errors.fb}
+                          isTouched={
+                            touched.fb && errors.fb
+                              ? true
+                              : false
+                          }
+                        />
+                      </div>
+                    </> : <>
+                      {values.fb || 'Not available'}</>}
+
+                  </li>
+                  <li>
+                    <div className="media">
+                      <div className="media-left">
+                        <a
+                          className="insta"
+                          href={values.instagram || "https://www.instagram.com/accounts/login/?hl=en"}
+                          target="_blank"
+                        >
+                          <i className="fa fa-instagram mr-1" />
+                          <h5>instagram</h5>
+                        </a>
+                      </div>
+                      {/* <div className="media-right">
+                        <div
+                          className="profile"
+                          style={{
+                            backgroundImage: `url('assets/images/contact/2.jpg')`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            display: 'block',
+                          }}
+                        >
+                          <img
+                            className="bg-img"
+                            src="/assets/images/contact/2.jpg"
+                            alt="Avatar"
+                            style={{ display: 'none' }}
+                          />
+                        </div>
+                      </div> */}
+                    </div>
+                    {isSocialFormOpen ? <>
+                      <div className="row">
+                        <div className="col-6">
+                          <div className="form-group">
+                            <input onChange={(event) => {
+                              const { value } = event.target;
+                              setValues({ ...values, instagram: value });
+                            }}
+                              value={values.instagram}
+                              placeholder="Instagram URL"
+                              type='url'
+                              onBlur={handleBlur} className="form-control mt-1" name="Instagram" id=""></input>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <HandleErrorLabel
+                          isError={errors.instagram}
+                          isTouched={
+                            touched.instagram && errors.instagram
+                              ? true
+                              : false
+                          }
+                        />
+                      </div></> : <>
+                      {values.instagram || 'Not available'}</>}
+
+                  </li>
+                  <li>
+                    <div className="media">
+                      <div className="media-left">
+                        <a
+                          className="twi"
+                          href={values.twitter || "https://twitter.com/login"}
+                          target="_blank"
+                        >
+                          <i className="fa fa-twitter mr-1" />
+                          <h5>twitter </h5>
+                        </a>
+                      </div>
+                      {/* <div className="media-right">
+                        <div
+                          className="profile"
+                          style={{
+                            backgroundImage: `url('assets/images/contact/3.jpg')`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            display: 'block',
+                          }}
+                        >
+                          <img
+                            className="bg-img"
+                            src="/assets/images/contact/3.jpg"
+                            alt="Avatar"
+                            style={{ display: 'none' }}
+                          />
+                        </div>
+                      </div> */}
+                    </div>
+                    {isSocialFormOpen ? <>
+                      <div className="row">
+                        <div className="col-6">
+                          <div className="form-group">
+                            <input onChange={(event) => {
+                              const { value } = event.target;
+                              setValues({ ...values, twitter: value });
+                            }}
+                              value={values.twitter}
+                              placeholder="Twitter URL"
+                              type='url'
+                              onBlur={handleBlur} className="form-control mt-1" name="Twitter" id=""></input>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <HandleErrorLabel
+                          isError={errors.twitter}
+                          isTouched={
+                            touched.twitter && errors.twitter
+                              ? true
+                              : false
+                          }
+                        />
+                      </div></> :
+                      <>
+                        {values.twitter || 'Not available'}</>
+                    }
+
+                  </li>
+                  <li>
+                    <div className="media">
+                      <div className="media-left">
+                        <a
+                          className="ggl"
+                          href={values.google || "https://accounts.google.com/signin/v2/identifier?service=mail&amp;passive=true&amp;rm=false&amp;continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&amp;ss=1&amp;scc=1&amp;ltmpl=default&amp;ltmplcache=2&amp;emr=1&amp;osid=1&amp;flowName=GlifWebSignIn&amp;flowEntry=ServiceLogin"}
+                          target="_blank"
+                        >
+                          <i className="fa fa-google mr-1" />
+                          <h5>google </h5>
+                        </a>
+                      </div>
+                      {/* <div className="media-right">
+                        <div
+                          className="profile"
+                          style={{
+                            backgroundImage: `url('assets/images/contact/2.jpg')`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            display: 'block',
+                          }}
+                        >
+                          <img
+                            className="bg-img"
+                            src="/assets/images/contact/2.jpg"
+                            alt="Avatar"
+                            style={{ display: 'none' }}
+                          />
+                        </div>
+                      </div> */}
+                    </div>
+                    {isSocialFormOpen ? <>
+                      <div className="row">
+                        <div className="col-6">
+                          <div className="form-group">
+                            <input onChange={(event) => {
+                              const { value } = event.target;
+                              setValues({ ...values, google: value });
+                            }}
+                              value={values.google}
+                              placeholder="Google URL"
+                              type='url'
+                              onBlur={handleBlur} className="form-control mt-1" name="Google" id=""></input>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <HandleErrorLabel
+                          isError={errors.google}
+                          isTouched={
+                            touched.google && errors.google
+                              ? true
+                              : false
+                          }
+                        />
+                      </div></> : <>
+                      {values.google || 'Not available'}</>}
+
+                  </li>
+                  <li>
+                    <div className="media">
+                      <div className="media-left">
+                        <a className="slc" href={values.slack || 'https://slack.com/intl/en-in'}>
+                          <i className="fa fa-slack mr-1" />
+                          <h5>Slack </h5>
+                        </a>
+                      </div>
+                      {/* <div className="media-right">
+                        <div className="profile">
+                          <a href="https://slack.com/get-started#/" target="_blank">
+                            <PlusCircle />
+                          </a>
+                        </div>
+                      </div> */}
+                    </div>
+                    {isSocialFormOpen ? <>
+                      <div className="row">
+                        <div className="col-6">
+                          <div className="form-group">
+                            <input onChange={(event) => {
+                              const { value } = event.target;
+                              setValues({ ...values, slack: value });
+                            }}
+                              value={values.slack}
+                              placeholder="Slack URL"
+                              type='url'
+                              onBlur={handleBlur} className="form-control mt-1" name="Slack" id=""></input>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <HandleErrorLabel
+                          isError={errors.slack}
+                          isTouched={
+                            touched.slack && errors.slack
+                              ? true
+                              : false
+                          }
+                        />
+                      </div>
+                    </> :
+                      <>
+                        {values.slack || 'Not available'}</>
+                    }
+                    {isSocialFormOpen ? <>
+                      <div className='my-4'>
+                        <div className="d-flex  mt-4">
+                          <button
+                            type="submit"
+                            className="btn btn-primary"
+                          >
+                            Save details
+                          </button>
+                        </div>
+                      </div></> : <></>}
+
+                  </li>
+                </ul>
+              </Form>
+            )}
+
+          </Formik>
+
         </div>
         <div className="media">
           <div className="media-body">
@@ -970,6 +1194,8 @@ const SettingSection = props => {
           </div>
         </div>
       </div>
+      </> : <></> }
+      
       <div className="setting-block">
         <div className={`block ${settingTab === 'help' ? 'open' : ''}`}>
           <div className="media">

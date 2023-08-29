@@ -23,11 +23,10 @@ import TrainerSlider from "./trainerSlider";
 import Modal from "../../../common/modal";
 import { X } from "react-feather";
 import StripeCard from "../../../common/stripe";
-import { createPaymentIntent } from "../trainee.api";
 import { toast } from "react-toastify";
 import SearchableDropdown from "../helper/searchableDropdown";
 import { masterState } from "../../master/master.slice";
-import TrainerDetails from "../../trainer/trainerDetails";
+import { TrainerDetails } from "../../trainer/trainerDetails";
 
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
@@ -41,10 +40,12 @@ const ScheduleTraining = () => {
   const [listOfTrainers, setListOfTrainers] = useState([]);
   const [bookingTableData, setBookingTableData] = useState([]);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
+  const [selectedTrainer, setSelectedTrainer] = useState({ id: null });
   const [isOpenInstantScheduleMeeting, setInstantScheduleMeeting] =
     useState(false);
   const [trainerInfo, setTrainerInfo] = useState({
     userInfo: null,
+    selected_category: null,
   });
   const [bookSessionPayload, setBookSessionPayload] = useState({});
   const toggle = () => setInstantScheduleMeeting(!isOpenInstantScheduleMeeting);
@@ -173,7 +174,7 @@ const ScheduleTraining = () => {
   const setColumns = (weeks = []) => {
     setBookingColumns([]);
     const initialHeader = {
-      title: "Available Trainers",
+      title: "",
       dataIndex: "trainer_info",
       key: "Available_Trainers",
       width: 70,
@@ -315,7 +316,10 @@ const ScheduleTraining = () => {
         {bookingTableData && bookingTableData.length ? (
           bookingTableData
             .filter(({ trainer_info }) => {
-              return trainer_info._id === trainerInfo.userInfo.id;
+              return (
+                trainer_info._id === trainerInfo.userInfo.id ||
+                trainer_info._id === selectedTrainer.id
+              );
             })
             .map(
               (
@@ -439,14 +443,18 @@ const ScheduleTraining = () => {
         }}
         selectedVal={getParams.search}
         selectedOption={(option) => {
-          // WIP: for category selection
-          if (option.isCategory) {
-            toast.warning(Message.info.categoryWip);
-          } else {
-            // showing trainer info
+          console.log(`option --- `, option);
+          if(option && option.isCategory) {
             setTrainerInfo((prev) => ({
               ...prev,
               userInfo: option,
+              selected_category: option.name,
+            }));
+          } else {
+            setTrainerInfo((prev) => ({
+              ...prev,
+              userInfo: option,
+              selected_category: null,
             }));
           }
         }}
@@ -459,23 +467,36 @@ const ScheduleTraining = () => {
 
   const renderUserDetails = () => {
     return (
-      <TrainerDetails
-        isPopoverOpen={isPopoverOpen}
-        key={`trainerDetails`}
-        trainerInfo={trainerInfo.userInfo}
-        onClose={() => {
-          setTrainerInfo((prev) => ({
-            ...prev,
-            userInfo: null,
-          }));
-          setParams((prev) => ({
-            ...prev,
-            search: null,
-          }));
-        }}
-        element={renderBookingTable()}
-      />
+      <>
+        <TrainerDetails
+          selectOption={trainerInfo}
+          isPopoverOpen={isPopoverOpen}
+          key={`trainerDetails`}
+          trainerInfo={trainerInfo.userInfo}
+          selectTrainer={(_id) => {
+            if (_id) {
+              setSelectedTrainer({ ...selectedTrainer, id: _id });
+            }
+          }}
+          onClose={() => {
+            setTrainerInfo((prev) => ({
+              ...prev,
+              userInfo: null,
+              selected_category: null,
+            }));
+            setParams((prev) => ({
+              ...prev,
+              search: null,
+            }));
+          }}
+          element={renderBookingTable()}
+        />
+      </>
     );
+  };
+
+  const renderCategoryTrainerDetails = () => {
+    return <CategoryTrainerDetails />;
   };
 
   const renderBookingTable = () => (
