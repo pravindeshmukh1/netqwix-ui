@@ -821,7 +821,8 @@ const SettingSection = props => {
           </div>
         </div>
       </div> */}
-      <div className="setting-block">
+      {(accountType === AccountType.TRAINER) ? <>
+        <div className="setting-block">
         <div className={`block ${settingTab === 'integratin' ? 'open' : ''}`}>
           <div className="media">
             <div className="media-body">
@@ -1193,6 +1194,8 @@ const SettingSection = props => {
           </div>
         </div>
       </div>
+      </> : <></> }
+      
       <div className="setting-block">
         <div className={`block ${settingTab === 'help' ? 'open' : ''}`}>
           <div className="media">
