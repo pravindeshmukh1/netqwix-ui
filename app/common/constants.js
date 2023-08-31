@@ -164,8 +164,8 @@ export const validationMessage = {
     curriculum: "This field is required ",
   },
   social_media: {
-    field_required: 'This field is required'
-  }
+    field_required: "This field is required",
+  },
 };
 
 export const trainerReview = {
@@ -208,3 +208,7 @@ export const trainerFilterOptions = [
     isCheck: false,
   },
 ];
+
+export const truncateText = {
+  maxLength: 200,
+};

@@ -170,4 +170,12 @@ export class Utils {
     });
     return availabilityStatus;
   };
+
+  static truncateText(aboutText, maxLength) {
+    if (aboutText && aboutText.length > maxLength) {
+      return aboutText.slice(0, maxLength) + "…";
+    } else {
+      return aboutText;
+    }
+  }
 }
