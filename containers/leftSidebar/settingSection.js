@@ -17,7 +17,9 @@ import {
 } from "../../app/common/constants";
 import { UpdateSettingProfileForm } from "../../app/components/trainer/settings/form";
 import { updateProfileAsync } from "../../app/components/trainer/trainer.slice";
+import { updateTraineeProfileAsync } from "../../app/components/trainee/trainee.slice";
 import { HandleErrorLabel } from "../../app/common/error";
+import { toast } from "react-toastify";
 
 const SettingSection = (props) => {
   const dispatch = useAppDispatch();
@@ -31,7 +33,7 @@ const SettingSection = (props) => {
   const [deleteAcct, setDeleteDisable] = useState(false);
   const [settingTab, setSettingTab] = useState("");
   const [profile, setProfile] = useState({
-    username: "Josephin water",
+    username: "",
     address: "Alabma , USA",
     wallet_amount: 0,
     editStatus: false,
@@ -110,7 +112,26 @@ const SettingSection = (props) => {
 
   const EditProfile = (e) => {
     e.preventDefault();
-    setProfile({ ...profile, editStatus: !profile.editStatus });
+    if(profile.editStatus) {
+      if(profile.username && profile.username.trim().length) {
+        // updating trainee profile
+        if(accountType === AccountType.TRAINEE ) {
+          dispatch(updateTraineeProfileAsync({fullname: profile.username})) ;
+        } else if (accountType === AccountType.TRAINER) {
+          // updating trainer profile
+          dispatch(updateProfileAsync({ fullname: profile.username}));
+        }
+        setProfile({ ...profile, editStatus: !profile.editStatus });
+      } else {
+        toast('please enter required values.')
+      }
+
+      console.log(`save here `, profile)
+    } else {
+      setProfile({ ...profile, editStatus: !profile.editStatus });
+    }
+
+
   };
 
   const closeLeftSide = () => {
@@ -192,6 +213,7 @@ const SettingSection = (props) => {
             <div className="details edit">
               <form className="form-radious form-sm">
                 <div className="form-group mb-2">
+                  <label> Full name </label>
                   <input
                     className="form-control"
                     type="text"
@@ -200,7 +222,7 @@ const SettingSection = (props) => {
                     onChange={(e) => ProfileHandle(e)}
                   />
                 </div>
-                <div className="form-group mb-0">
+                {/* <div className="form-group mb-0">
                   <input
                     className="form-control"
                     type="text"
@@ -208,7 +230,7 @@ const SettingSection = (props) => {
                     defaultValue={profile.address}
                     onChange={(e) => ProfileHandle(e)}
                   />
-                </div>
+                </div> */}
               </form>
             </div>
             <div className="media-body">
