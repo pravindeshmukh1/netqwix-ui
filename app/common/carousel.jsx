@@ -73,7 +73,6 @@ const Carousel = ({ media }) => {
   return (
     <ReactCarousel activeIndex={activeIndex} next={next} previous={previous}>
       <CarouselIndicators
-      
         items={media}
         activeIndex={activeIndex}
         onClickHandler={goToIndex}
@@ -86,7 +85,9 @@ const Carousel = ({ media }) => {
       />
       <CarouselControl
         direction={slides.length ? "next" : null}
-        directionText={slides.length ? <ArrowRight /> : null}
+        directionText={
+          slides.length ? <ArrowRight className="arrowRight" /> : null
+        }
         onClickHandler={next}
       />
     </ReactCarousel>
