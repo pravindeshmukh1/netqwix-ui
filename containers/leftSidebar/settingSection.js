@@ -658,7 +658,8 @@ const SettingSection = (props) => {
               userInfo={userInfo}
               extraInfo={userInfo?.extraInfo || {}}
               onFormSubmit={(formValue) => {
-                dispatch(updateProfileAsync(formValue));
+                // 
+                dispatch(updateProfileAsync({extraInfo: {...userInfo?.extraInfo, ...formValue}}));
               }}
             />
           </div>
@@ -905,8 +906,7 @@ const SettingSection = (props) => {
                     ...userInfo?.extraInfo,
                     social_media_links: value,
                   };
-                  dispatch(updateProfileAsync(payload));
-                  console.log(`value --- `, payload);
+                  dispatch(updateProfileAsync({extraInfo: { ...payload }}));
                 }}
               >
                 {({
@@ -1283,7 +1283,7 @@ const SettingSection = (props) => {
             </div>
             <div className="media">
               <div className="media-body">
-                <h3>Integratin</h3>
+                <h3>Integration</h3>
                 <h4>Sync Your Other Social Account</h4>
               </div>
               <div className="media-right">
