@@ -132,6 +132,7 @@ export const TRAINER_MEETING_TIME = "Hour";
 export const Message = {
   notFound: "No data available",
   noMediaFound: "No media found!",
+  noSlotsAvailable: "No slots available",
   errorMessage: {
     wip: "work in progress",
     timeConflicts: "These slots are already booked.",
@@ -164,8 +165,8 @@ export const validationMessage = {
     curriculum: "This field is required ",
   },
   social_media: {
-    field_required: 'This field is required'
-  }
+    field_required: "This field is required",
+  },
 };
 
 export const trainerReview = {
@@ -208,3 +209,7 @@ export const trainerFilterOptions = [
     isCheck: false,
   },
 ];
+
+export const truncateText = {
+  maxLength: 200,
+};

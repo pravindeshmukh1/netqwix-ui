@@ -1154,6 +1154,10 @@
     }
   }
 }
+.custom-integration {
+  @extend .integratin;
+  margin-top: 0px !important;
+}
 .integratin {
   margin-top: 20px;
   li {

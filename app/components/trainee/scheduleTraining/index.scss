@@ -241,3 +241,8 @@ table.table-bordered > thead > tr > th {
 table.table-bordered > tbody > tr > td {
   border: 1px solid #000;
 }
+
+.custom-trainer-slots-booking-table {
+  @extend .rc-table;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
