@@ -67,19 +67,22 @@ export const TrainerDetails = ({
       id: 3,
       label: "Curriculum",
       value: accordion.curriculum || accordionsData.curriculum,
-      // (getTraineeSlots[0] &&
-      //   getTraineeSlots[0].extraInfo &&
-      //   getTraineeSlots[0].extraInfo.curriculum),
     },
   ];
   return (
     <div className="custom-sidebar-content">
       <div
-        className={`${!trainerDetails.select_trainer && "media-body media-body text-right"
-          }`}
+        className={`${
+          (trainerInfo.isCategory &&
+            !trainerDetails.select_trainer &&
+            "media-body media-body text-right") ||
+          (!trainerInfo.isCategory && "media-body media-body text-right")
+        }`}
       >
         <div className="mr-4 mt-4">
-          {!trainerDetails.select_trainer ? (
+          {!trainerInfo.isCategory ? (
+            <X onClick={onClose} style={{ cursor: "pointer" }} />
+          ) : !trainerDetails.select_trainer ? (
             <X onClick={onClose} style={{ cursor: "pointer" }} />
           ) : (
             <ArrowLeft
@@ -115,25 +118,6 @@ export const TrainerDetails = ({
           selectTrainer={selectTrainer}
         />
       )}
-      {/* {selectOption.userInfo.isCategory ? (
-        <SelectedCategory
-          getTraineeSlots={getTraineeSlots}
-          trainerInfo={trainerInfo}
-          setTrainerDetails={setTrainerDetails}
-          selectTrainer={selectTrainer}
-        />
-      ) : (
-        <TrainerInfo
-          accordionData={accordionData}
-          activeAccordion={activeAccordion}
-          setActiveAccordion={setActiveAccordion}
-          element={element}
-          getTraineeSlots={getTraineeSlots}
-          trainerDetails={trainerDetails}
-          setAccordionsData={setAccordionsData}
-          trainerInfo={trainerInfo}
-        />
-      )} */}
     </div>
   );
 };
@@ -187,10 +171,7 @@ const SelectedCategory = ({
           {!getTraineeSlots.length ? (
             <div
               className="text-center container mw-100 border border-secondary p-30 mb-4"
-              style={{
-                // cursor: "pointer",
-                borderRadius: "20px",
-              }}
+              style={{ borderRadius: "20px" }}
             >
               No trainer found
             </div>
@@ -199,10 +180,7 @@ const SelectedCategory = ({
               return (
                 <div
                   className="container mw-100 border border-secondary p-30 mb-4"
-                  style={{
-                    // cursor: "pointer",
-                    borderRadius: "20px",
-                  }}
+                  style={{ borderRadius: "20px" }}
                 >
                   <div className="row">
                     <div className="col-3">
@@ -219,15 +197,18 @@ const SelectedCategory = ({
                       />
                     </div>
                     <div className="col-6">
-                      <h3 className="ml-4 pointer underline " onClick={() => {
-                        console.log(`data`)
-                        setTrainerDetails((prev) => ({
-                          ...prev,
-                          _id: data && data._id,
-                          select_trainer: true,
-                        }));
-                        selectTrainer(data && data._id);
-                      }}>
+                      <h3
+                        className="ml-4 pointer underline "
+                        onClick={() => {
+                          console.log(`data`);
+                          setTrainerDetails((prev) => ({
+                            ...prev,
+                            _id: data && data._id,
+                            select_trainer: true,
+                          }));
+                          selectTrainer(data && data._id);
+                        }}
+                      >
                         {data ? data.fullname : ""}
                       </h3>
                       <p className="ml-4 mt-2">
@@ -235,8 +216,8 @@ const SelectedCategory = ({
                       </p>
                       <div className="ml-4 mt-2">
                         {data &&
-                          data.extraInfo &&
-                          data.extraInfo.social_media_links ? (
+                        data.extraInfo &&
+                        data.extraInfo.social_media_links ? (
                           <SocialMediaIcons
                             social_media_links={
                               data &&
@@ -311,13 +292,11 @@ const TrainerInfo = ({
     <>
       <div className="row p-30">
         <div className="col-5">
-          <h2>
-            {trainer ? trainer.fullname : null}
-          </h2>
+          <h2>{trainer ? trainer.fullname : null}</h2>
           <div class="d-flex flex-row bd-highlight"></div>
           {trainer &&
-            trainer.extraInfo &&
-            trainer.extraInfo.social_media_links ? (
+          trainer.extraInfo &&
+          trainer.extraInfo.social_media_links ? (
             <SocialMediaIcons
               social_media_links={
                 trainer &&
@@ -341,32 +320,32 @@ const TrainerInfo = ({
           <p>{trainer && trainer.extraInfo ? trainer.extraInfo.about : null}</p>
           {accordionData.length
             ? accordionData.map((data, index) => {
-              return (
-                <Accordion key={`accordion_${index}`} className="mb-5">
-                  <Accordion.Item>
-                    <Accordion.Header
-                      index={index}
-                      activeAccordion={activeAccordion}
-                      onAClick={() => {
-                        if (activeAccordion[index]) {
-                          delete activeAccordion[index];
-                        } else if (!activeAccordion[index]) {
-                          activeAccordion[index] = true;
-                        } else {
-                          activeAccordion[index] = !activeAccordion[index];
-                        }
-                        setActiveAccordion(activeAccordion);
-                      }}
-                    >
-                      {data.label}
-                    </Accordion.Header>
-                    <Accordion.Body>
-                      {!data.value ? Message.notFound : data.value}
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              );
-            })
+                return (
+                  <Accordion key={`accordion_${index}`} className="mb-5">
+                    <Accordion.Item>
+                      <Accordion.Header
+                        index={index}
+                        activeAccordion={activeAccordion}
+                        onAClick={() => {
+                          if (activeAccordion[index]) {
+                            delete activeAccordion[index];
+                          } else if (!activeAccordion[index]) {
+                            activeAccordion[index] = true;
+                          } else {
+                            activeAccordion[index] = !activeAccordion[index];
+                          }
+                          setActiveAccordion(activeAccordion);
+                        }}
+                      >
+                        {data.label}
+                      </Accordion.Header>
+                      <Accordion.Body>
+                        {!data.value ? Message.notFound : data.value}
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  </Accordion>
+                );
+              })
             : "No data found"}
         </div>
         <div className="col-7">

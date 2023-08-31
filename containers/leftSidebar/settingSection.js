@@ -1,21 +1,25 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
-import { Edit, ChevronLeft, X, ChevronRight, PlusCircle } from 'react-feather';
-import { Input, Label } from 'reactstrap';
+import React, { useState, useContext, useEffect, useRef } from "react";
+import { Edit, ChevronLeft, X, ChevronRight, PlusCircle } from "react-feather";
+import { Input, Label } from "reactstrap";
 
 import { Form, Formik } from "formik";
 
-import CustomizerContext from '../../helpers/customizerContext';
-import config from '../../config/customizerConfig';
+import CustomizerContext from "../../helpers/customizerContext";
+import config from "../../config/customizerConfig";
 import * as Yup from "yup";
 
-import { useAppDispatch, useAppSelector } from '../../app/store';
-import { authState } from '../../app/components/auth/auth.slice';
-import { AccountType, LOCAL_STORAGE_KEYS, validationMessage } from '../../app/common/constants';
-import { UpdateSettingProfileForm } from '../../app/components/trainer/settings/form';
-import { updateProfileAsync } from '../../app/components/trainer/trainer.slice';
-import { HandleErrorLabel } from '../../app/common/error';
+import { useAppDispatch, useAppSelector } from "../../app/store";
+import { authState } from "../../app/components/auth/auth.slice";
+import {
+  AccountType,
+  LOCAL_STORAGE_KEYS,
+  validationMessage,
+} from "../../app/common/constants";
+import { UpdateSettingProfileForm } from "../../app/components/trainer/settings/form";
+import { updateProfileAsync } from "../../app/components/trainer/trainer.slice";
+import { HandleErrorLabel } from "../../app/common/error";
 
-const SettingSection = props => {
+const SettingSection = (props) => {
   const dispatch = useAppDispatch();
   const socialFormRef = useRef(null);
   const { userInfo } = useAppSelector(authState);
@@ -25,10 +29,10 @@ const SettingSection = props => {
   const [acctRequestDisable, setDisable] = useState(false);
   const [isCheck, setIsChecked] = useState(false);
   const [deleteAcct, setDeleteDisable] = useState(false);
-  const [settingTab, setSettingTab] = useState('');
+  const [settingTab, setSettingTab] = useState("");
   const [profile, setProfile] = useState({
-    username: 'Josephin water',
-    address: 'Alabma , USA',
+    username: "Josephin water",
+    address: "Alabma , USA",
     wallet_amount: 0,
     editStatus: false,
   });
@@ -42,62 +46,69 @@ const SettingSection = props => {
   });
 
   const initialValues = {
-    fb: '',
+    fb: "",
     instagram: "",
     twitter: "",
     google: "",
     slack: "",
   };
 
-
   const validationSchema = Yup.object().shape({
-    fb: Yup.string().required(validationMessage.social_media.field_required).nullable(),
-    instagram: Yup.string().required(validationMessage.social_media.field_required).nullable(),
-    twitter: Yup.string().required(validationMessage.social_media.field_required).nullable(),
-    google: Yup.string().required(validationMessage.social_media.field_required).nullable(),
-    slack: Yup.string().required(validationMessage.social_media.field_required).nullable(),
+    fb: Yup.string()
+      .required(validationMessage.social_media.field_required)
+      .nullable(),
+    instagram: Yup.string()
+      .required(validationMessage.social_media.field_required)
+      .nullable(),
+    twitter: Yup.string()
+      .required(validationMessage.social_media.field_required)
+      .nullable(),
+    google: Yup.string()
+      .required(validationMessage.social_media.field_required)
+      .nullable(),
+    slack: Yup.string()
+      .required(validationMessage.social_media.field_required)
+      .nullable(),
   });
 
-
-  const [accountType, setAccountType] = useState('');
-
+  const [accountType, setAccountType] = useState("");
 
   useEffect(() => {
-    if (socialFormRef && socialFormRef.current && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links) {
-        socialFormRef.current.setValues({
-         ...userInfo?.extraInfo.social_media_links
-        })
+    if (
+      socialFormRef &&
+      socialFormRef.current &&
+      userInfo?.extraInfo &&
+      userInfo?.extraInfo.social_media_links
+    ) {
+      socialFormRef.current.setValues({
+        ...userInfo?.extraInfo.social_media_links,
+      });
     }
-}, [socialFormRef])
-
+  }, [socialFormRef]);
 
   useEffect(() => {
     setAccountType(localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE));
   }, []);
 
+  useEffect(() => {
+    setProfile({
+      ...profile,
+      username: userInfo.fullname,
+      address: userInfo.email,
+      wallet_amount: userInfo.wallet_amount,
+    });
+  }, [userInfo]);
 
-  useEffect(
-    () => {
-      setProfile({
-        ...profile,
-        username: userInfo.fullname,
-        address: userInfo.email,
-        wallet_amount: userInfo.wallet_amount
-      });
-    },
-    [userInfo]
-  );
-
-  const funcChecked = val => {
+  const funcChecked = (val) => {
     setIsChecked(val);
   };
 
-  const ProfileHandle = e => {
+  const ProfileHandle = (e) => {
     const { name, value } = e.target;
     setProfile({ ...profile, [name]: value });
   };
 
-  const EditProfile = e => {
+  const EditProfile = (e) => {
     e.preventDefault();
     setProfile({ ...profile, editStatus: !profile.editStatus });
   };
@@ -113,7 +124,7 @@ const SettingSection = props => {
     // wallpaper
     if (config.wallpaper) {
       document.querySelector(
-        '.wallpapers'
+        ".wallpapers"
       ).style = `background-image: url(${`/assets/images/wallpaper/${config.wallpaper}.jpg`}) ; background-color: transparent; background-blend-mode: unset`;
     }
   }, []);
@@ -125,7 +136,9 @@ const SettingSection = props => {
 
   return (
     <div
-      className={`settings-tab submenu-width dynemic-sidebar custom-scroll ${props.tab === 'setting' ? 'active' : ''}`}
+      className={`settings-tab submenu-width dynemic-sidebar custom-scroll ${
+        props.tab === "setting" ? "active" : ""
+      }`}
       id="settings"
     >
       <div className="theme-title">
@@ -135,40 +148,46 @@ const SettingSection = props => {
             <h4>Change your app setting.</h4>
           </div>
           <div className="media-body text-right">
-            {' '}
+            {" "}
             <a
               className="icon-btn btn-outline-light btn-sm close-panel"
               href="#"
-              onClick={() => { closeLeftSide(); setSettingTab('') }}
+              onClick={() => {
+                closeLeftSide();
+                setSettingTab("");
+              }}
             >
               <X />
             </a>
           </div>
         </div>
         <div className="profile-box">
-          <div className={`media ${profile.editStatus ? 'open' : ''}`}>
+          <div className={`media ${profile.editStatus ? "open" : ""}`}>
             <div
               className="profile"
               style={{
                 backgroundImage: `url('assets/images/contact/2.jpg')`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                display: 'block',
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                display: "block",
               }}
             >
               <img
                 className="bg-img"
                 src="/assets/images/contact/2.jpg"
                 alt="Avatar"
-                style={{ display: 'none' }}
+                style={{ display: "none" }}
               />
             </div>
             <div className="details">
               <h5>{profile.username}</h5>
               <h6>{profile.address}</h6>
-              {accountType === AccountType.TRAINER &&
-                <h6> Wallet Amount: <b> ${profile.wallet_amount} </b>  </h6>}
-
+              {accountType === AccountType.TRAINER && (
+                <h6>
+                  {" "}
+                  Wallet Amount: <b> ${profile.wallet_amount} </b>{" "}
+                </h6>
+              )}
             </div>
             <div className="details edit">
               <form className="form-radious form-sm">
@@ -178,7 +197,7 @@ const SettingSection = props => {
                     type="text"
                     name="username"
                     defaultValue={profile.username}
-                    onChange={e => ProfileHandle(e)}
+                    onChange={(e) => ProfileHandle(e)}
                   />
                 </div>
                 <div className="form-group mb-0">
@@ -187,7 +206,7 @@ const SettingSection = props => {
                     type="text"
                     name="address"
                     defaultValue={profile.address}
-                    onChange={e => ProfileHandle(e)}
+                    onChange={(e) => ProfileHandle(e)}
                   />
                 </div>
               </form>
@@ -196,9 +215,9 @@ const SettingSection = props => {
               <a
                 className="icon-btn btn-outline-light btn-sm pull-right edit-btn"
                 href="#"
-                onClick={e => EditProfile(e)}
+                onClick={(e) => EditProfile(e)}
               >
-                {' '}
+                {" "}
                 <Edit />
               </a>
             </div>
@@ -206,7 +225,7 @@ const SettingSection = props => {
         </div>
       </div>
       <div className="setting-block">
-        <div className={`block ${settingTab === 'account' ? 'open' : ''}`}>
+        <div className={`block ${settingTab === "account" ? "open" : ""}`}>
           <div className="media">
             <div className="media-body">
               <h3>Account</h3>
@@ -215,9 +234,9 @@ const SettingSection = props => {
               <a
                 className="icon-btn btn-outline-light btn-sm pull-right previous"
                 href="#"
-                onClick={() => setSettingTab('')}
+                onClick={() => setSettingTab("")}
               >
-                {' '}
+                {" "}
                 <ChevronLeft />
               </a>
             </div>
@@ -235,14 +254,16 @@ const SettingSection = props => {
                     accountInfo: false,
                     deleteAccount: false,
                     verfication: false,
-                  })}
+                  })
+                }
               >
                 <a href="#javascript">
-                  Security<i className="fa fa-angle-down" />
+                  Security
+                  <i className="fa fa-angle-down" />
                 </a>
               </div>
               <div
-                className={`collapse ${collapseShow.security ? 'show' : ''}`}
+                className={`collapse ${collapseShow.security ? "show" : ""}`}
                 id="collapseTwo"
                 data-parent="#accordion"
               >
@@ -399,14 +420,16 @@ const SettingSection = props => {
                     deleteAccount: false,
                     privacy: false,
                     security: false,
-                  })}
+                  })
+                }
               >
                 <a href="#javascript">
-                  Two Step verification<i className="fa fa-angle-down" />
+                  Two Step verification
+                  <i className="fa fa-angle-down" />
                 </a>
               </div>
               <div
-                className={`collapse ${collapseShow.verfication ? 'show' : ''}`}
+                className={`collapse ${collapseShow.verfication ? "show" : ""}`}
               >
                 <div className="card-body">
                   <div className="media">
@@ -423,7 +446,7 @@ const SettingSection = props => {
                     </div>
                   </div>
                   <p>
-                    {' '}
+                    {" "}
                     <b>Note : </b>For added security, enable two-step
                     verifiation, which will require a PIN when registering your
                     phone number with Chitchat again.
@@ -443,14 +466,18 @@ const SettingSection = props => {
                     deleteAccount: false,
                     privacy: false,
                     security: false,
-                  })}
+                  })
+                }
               >
                 <a href="#javascript">
-                  Change Number<i className="fa fa-angle-down" />
+                  Change Number
+                  <i className="fa fa-angle-down" />
                 </a>
               </div>
               <div
-                className={`collapse ${collapseShow.changeNumber ? 'show' : ''}`}
+                className={`collapse ${
+                  collapseShow.changeNumber ? "show" : ""
+                }`}
               >
                 <div className="card-body change-number">
                   <h5>Your old country code & phone number</h5>
@@ -490,7 +517,7 @@ const SettingSection = props => {
                     />
                   </div>
                   <div className="text-right">
-                    {' '}
+                    {" "}
                     <a
                       className="btn btn-outline-primary button-effect btn-sm"
                       href="#"
@@ -513,18 +540,22 @@ const SettingSection = props => {
                     deleteAccount: false,
                     verfication: false,
                     security: false,
-                  })}
+                  })
+                }
               >
                 <a href="#javascript">
-                  Request account info<a className="fa fa-angle-down" />
+                  Request account info
+                  <a className="fa fa-angle-down" />
                 </a>
               </div>
               <div
-                className={`collapse ${collapseShow.accountInfo ? 'show' : ''}`}
+                className={`collapse ${collapseShow.accountInfo ? "show" : ""}`}
               >
                 <div className="card-body">
                   <a
-                    className={`p-0 req-info ${acctRequestDisable ? 'disabled' : ''}`}
+                    className={`p-0 req-info ${
+                      acctRequestDisable ? "disabled" : ""
+                    }`}
                     id="demo"
                     href="#"
                     disabled={acctRequestDisable}
@@ -533,7 +564,7 @@ const SettingSection = props => {
                     Request Info
                   </a>
                   <p>
-                    {' '}
+                    {" "}
                     <b>Note : </b>Create a report of your account information
                     and settings, which you can access ot port to another app.
                   </p>
@@ -552,26 +583,32 @@ const SettingSection = props => {
                     privacy: false,
                     verfication: false,
                     security: false,
-                  })}
+                  })
+                }
               >
                 <a href="#javascript">
-                  Delete My account<i className="fa fa-angle-down" />
+                  Delete My account
+                  <i className="fa fa-angle-down" />
                 </a>
               </div>
               <div
-                className={`collapse ${collapseShow.deleteAccount ? 'show' : ''}`}
+                className={`collapse ${
+                  collapseShow.deleteAccount ? "show" : ""
+                }`}
               >
                 <div className="card-body">
                   <a
-                    className={`p-0 req-info font-danger ${deleteAcct ? 'disabled' : ''}`}
+                    className={`p-0 req-info font-danger ${
+                      deleteAcct ? "disabled" : ""
+                    }`}
                     href="#"
                     disabled={deleteAcct}
                     onClick={() => setDeleteDisable(true)}
                   >
-                    Delete Account{' '}
+                    Delete Account{" "}
                   </a>
                   <p>
-                    {' '}
+                    {" "}
                     <b>Note :</b>Deleting your account will delete your account
                     info, profile photo, all groups & chat history.
                   </p>
@@ -586,59 +623,66 @@ const SettingSection = props => {
             <h4>Update Your Account Details</h4>
           </div>
           <div className="media-right">
-            {' '}
+            {" "}
             <a
               className="icon-btn btn-outline-light btn-sm pull-right next"
               href="#"
-              onClick={() => setSettingTab('account')}
+              onClick={() => setSettingTab("account")}
             >
-              {' '}
+              {" "}
               <ChevronRight />
             </a>
           </div>
         </div>
       </div>
-      {(accountType === AccountType.TRAINER) ? <div className='setting-block'>
-        <div className={`block ${settingTab === 'my-profile' ? 'open' : ''}`}>
-          <div className='media'>
-            <div className='media-body'>
-              <h3>My profile</h3>
+      {accountType === AccountType.TRAINER ? (
+        <div className="setting-block">
+          <div className={`block ${settingTab === "my-profile" ? "open" : ""}`}>
+            <div className="media">
+              <div className="media-body">
+                <h3>My profile</h3>
+              </div>
+              <div className="media-right">
+                <a
+                  className="icon-btn btn-outline-light btn-sm pull-right previous"
+                  href="#"
+                  onClick={() => setSettingTab("")}
+                >
+                  {" "}
+                  <ChevronLeft />
+                </a>
+              </div>
             </div>
-            <div className='media-right'>
+            {/* for trainer settings form */}
+            <UpdateSettingProfileForm
+              userInfo={userInfo}
+              extraInfo={userInfo?.extraInfo || {}}
+              onFormSubmit={(formValue) => {
+                dispatch(updateProfileAsync(formValue));
+              }}
+            />
+          </div>
+          <div className="media">
+            <div className="media-body">
+              <h3>My profile</h3>
+              <h4>Update profile settings</h4>
+            </div>
+            <div className="media-right">
+              {" "}
               <a
-                className='icon-btn btn-outline-light btn-sm pull-right previous'
-                href='#'
-                onClick={() => setSettingTab('')}
+                className="icon-btn btn-outline-light btn-sm pull-right next"
+                href="#"
+                onClick={() => setSettingTab("my-profile")}
               >
-                {' '}
-                <ChevronLeft />
+                {" "}
+                <ChevronRight />
               </a>
             </div>
           </div>
-          {/* for trainer settings form */}
-          <UpdateSettingProfileForm userInfo={userInfo} extraInfo={userInfo?.extraInfo || {}} onFormSubmit={(formValue) => {
-            dispatch(updateProfileAsync(formValue))
-          }} />
         </div>
-        <div className='media'>
-          <div className='media-body'>
-            <h3>My profile</h3>
-            <h4>Update profile settings</h4>
-          </div>
-          <div className='media-right'>
-            {' '}
-            <a
-              className='icon-btn btn-outline-light btn-sm pull-right next'
-              href='#'
-              onClick={() => setSettingTab('my-profile')}
-            >
-              {' '}
-              <ChevronRight />
-            </a>
-          </div>
-        </div>
-      </div>
-        : <></>}
+      ) : (
+        <></>
+      )}
       {/* <div className='setting-block'>
         <div className={`block ${settingTab === 'chat' ? 'open' : ''}`}>
           <div className='media'>
@@ -821,70 +865,79 @@ const SettingSection = props => {
           </div>
         </div>
       </div> */}
-      {(accountType === AccountType.TRAINER) ? <>
-        <div className="setting-block">
-        <div className={`block ${settingTab === 'integratin' ? 'open' : ''}`}>
-          <div className="media">
-            <div className="media-body">
-              <h3>Integration</h3>
-            </div>
-            <div className="media-right">
-              {' '}
-
-              <a
-                className="icon-btn btn-outline-light btn-sm pull-right previous"
-                href="#"
-                onClick={() => setSettingTab('')}
-              >
-                <ChevronLeft />
-              </a>
-              <div
-                className="icon-btn btn-outline-light btn-sm pull-right edit-btn pointer"
-                // href="#"
-                onClick={() => {
-                  setIsSocialFormOpen(!isSocialFormOpen);
+      {accountType === AccountType.TRAINER ? (
+        <>
+          <div className="setting-block">
+            <div
+              className={`block ${settingTab === "integratin" ? "open" : ""}`}
+            >
+              <div className="media">
+                <div className="media-body">
+                  <h3>Integration</h3>
+                </div>
+                <div className="media-right">
+                  {" "}
+                  <a
+                    className="icon-btn btn-outline-light btn-sm pull-right previous"
+                    href="#"
+                    onClick={() => setSettingTab("")}
+                  >
+                    <ChevronLeft />
+                  </a>
+                  <div
+                    className="icon-btn btn-outline-light btn-sm pull-right edit-btn pointer"
+                    // href="#"
+                    onClick={() => {
+                      setIsSocialFormOpen(!isSocialFormOpen);
+                    }}
+                  >
+                    {" "}
+                    {isSocialFormOpen ? <X /> : <Edit />}
+                  </div>
+                </div>
+              </div>
+              <Formik
+                innerRef={socialFormRef}
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={(value) => {
+                  const payload = {
+                    ...userInfo?.extraInfo,
+                    social_media_links: value,
+                  };
+                  dispatch(updateProfileAsync(payload));
+                  console.log(`value --- `, payload);
                 }}
               >
-                {' '}
-                {isSocialFormOpen ? <X /> : <Edit />}
-              </div>
-            </div>
-          </div>
-          <Formik
-            innerRef={socialFormRef}
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={(value) => {
-              const payload = {
-                ...userInfo?.extraInfo, social_media_links: value
-              }
-              dispatch(updateProfileAsync(payload));
-              console.log(`value --- `, payload)
-            }}
-          >
-            {({ values,
-              errors,
-              touched,
-              handleSubmit,
-              handleBlur,
-              setValues,
-              isValid, }) => (
-              <Form onSubmit={handleSubmit}>
-                <ul className="integratin">
-                  <li>
-                    <div className="media">
-                      <div className="media-left">
-                        <a
-                          className="fb"
-                          href={values.fb || "https://www.facebook.com/login"}
-                          target="_blank"
-                        >
-                          <i className="fa fa-facebook mr-1" />
-                          <h5>Facebook </h5>
-                        </a>
-                      </div>
+                {({
+                  values,
+                  errors,
+                  touched,
+                  handleSubmit,
+                  handleBlur,
+                  setValues,
+                  isValid,
+                }) => (
+                  <Form onSubmit={handleSubmit}>
+                    <ul className="integratin">
+                      <li>
+                        <div className="media">
+                          <div className="media-left">
+                            <a
+                              className="fb"
+                              // href={
+                              //   values.fb || "https://www.facebook.com/login"
+                              // }
+                              target="_blank"
+                              style={{ cursor: "text" }}
+                              href={null}
+                            >
+                              <i className="fa fa-facebook mr-1" />
+                              <h5>Facebook </h5>
+                            </a>
+                          </div>
 
-                      {/* <div className="media-right">
+                          {/* <div className="media-right">
                         <div
                           className="profile"
                           style={{
@@ -902,49 +955,59 @@ const SettingSection = props => {
                           />
                         </div>
                       </div> */}
-                    </div>
-                    {isSocialFormOpen ? <>
-                      <div className="row">
-                        <div className="col-6">
-                          <div className="form-group">
-                            <input onChange={(event) => {
-                              const { value } = event.target;
-                              setValues({ ...values, fb: value });
-                            }}
-                              value={values.fb}
-                              placeholder="Facebook URL"
-                              type='url'
-                              onBlur={handleBlur} className="form-control mt-1" name="fb" id=""></input>
-                          </div>
                         </div>
-                      </div>
-                      <div>
-                        <HandleErrorLabel
-                          isError={errors.fb}
-                          isTouched={
-                            touched.fb && errors.fb
-                              ? true
-                              : false
-                          }
-                        />
-                      </div>
-                    </> : <>
-                      {values.fb || 'Not available'}</>}
-
-                  </li>
-                  <li>
-                    <div className="media">
-                      <div className="media-left">
-                        <a
-                          className="insta"
-                          href={values.instagram || "https://www.instagram.com/accounts/login/?hl=en"}
-                          target="_blank"
-                        >
-                          <i className="fa fa-instagram mr-1" />
-                          <h5>instagram</h5>
-                        </a>
-                      </div>
-                      {/* <div className="media-right">
+                        {isSocialFormOpen ? (
+                          <>
+                            <div className="row">
+                              <div className="col-6">
+                                <div className="form-group">
+                                  <input
+                                    onChange={(event) => {
+                                      const { value } = event.target;
+                                      setValues({ ...values, fb: value });
+                                    }}
+                                    value={values.fb}
+                                    placeholder="Facebook URL"
+                                    type="url"
+                                    onBlur={handleBlur}
+                                    className="form-control mt-1"
+                                    name="fb"
+                                    id=""
+                                  ></input>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <HandleErrorLabel
+                                isError={errors.fb}
+                                isTouched={
+                                  touched.fb && errors.fb ? true : false
+                                }
+                              />
+                            </div>
+                          </>
+                        ) : (
+                          <>{values.fb || "Not available"}</>
+                        )}
+                      </li>
+                      <li>
+                        <div className="media">
+                          <div className="media-left">
+                            <a
+                              className="insta"
+                              // href={
+                              //   values.instagram ||
+                              //   "https://www.instagram.com/accounts/login/?hl=en"
+                              // }
+                              style={{ cursor: "text" }}
+                              href={null}
+                              target="_blank"
+                            >
+                              <i className="fa fa-instagram mr-1" />
+                              <h5>instagram</h5>
+                            </a>
+                          </div>
+                          {/* <div className="media-right">
                         <div
                           className="profile"
                           style={{
@@ -962,48 +1025,63 @@ const SettingSection = props => {
                           />
                         </div>
                       </div> */}
-                    </div>
-                    {isSocialFormOpen ? <>
-                      <div className="row">
-                        <div className="col-6">
-                          <div className="form-group">
-                            <input onChange={(event) => {
-                              const { value } = event.target;
-                              setValues({ ...values, instagram: value });
-                            }}
-                              value={values.instagram}
-                              placeholder="Instagram URL"
-                              type='url'
-                              onBlur={handleBlur} className="form-control mt-1" name="Instagram" id=""></input>
-                          </div>
                         </div>
-                      </div>
-                      <div>
-                        <HandleErrorLabel
-                          isError={errors.instagram}
-                          isTouched={
-                            touched.instagram && errors.instagram
-                              ? true
-                              : false
-                          }
-                        />
-                      </div></> : <>
-                      {values.instagram || 'Not available'}</>}
-
-                  </li>
-                  <li>
-                    <div className="media">
-                      <div className="media-left">
-                        <a
-                          className="twi"
-                          href={values.twitter || "https://twitter.com/login"}
-                          target="_blank"
-                        >
-                          <i className="fa fa-twitter mr-1" />
-                          <h5>twitter </h5>
-                        </a>
-                      </div>
-                      {/* <div className="media-right">
+                        {isSocialFormOpen ? (
+                          <>
+                            <div className="row">
+                              <div className="col-6">
+                                <div className="form-group">
+                                  <input
+                                    onChange={(event) => {
+                                      const { value } = event.target;
+                                      setValues({
+                                        ...values,
+                                        instagram: value,
+                                      });
+                                    }}
+                                    value={values.instagram}
+                                    placeholder="Instagram URL"
+                                    type="url"
+                                    onBlur={handleBlur}
+                                    className="form-control mt-1"
+                                    name="Instagram"
+                                    id=""
+                                  ></input>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <HandleErrorLabel
+                                isError={errors.instagram}
+                                isTouched={
+                                  touched.instagram && errors.instagram
+                                    ? true
+                                    : false
+                                }
+                              />
+                            </div>
+                          </>
+                        ) : (
+                          <>{values.instagram || "Not available"}</>
+                        )}
+                      </li>
+                      <li>
+                        <div className="media">
+                          <div className="media-left">
+                            <a
+                              className="twi"
+                              // href={
+                              //   values.twitter || "https://twitter.com/login"
+                              // }
+                              style={{ cursor: "text" }}
+                              href={null}
+                              target="_blank"
+                            >
+                              <i className="fa fa-twitter mr-1" />
+                              <h5>twitter </h5>
+                            </a>
+                          </div>
+                          {/* <div className="media-right">
                         <div
                           className="profile"
                           style={{
@@ -1021,50 +1099,61 @@ const SettingSection = props => {
                           />
                         </div>
                       </div> */}
-                    </div>
-                    {isSocialFormOpen ? <>
-                      <div className="row">
-                        <div className="col-6">
-                          <div className="form-group">
-                            <input onChange={(event) => {
-                              const { value } = event.target;
-                              setValues({ ...values, twitter: value });
-                            }}
-                              value={values.twitter}
-                              placeholder="Twitter URL"
-                              type='url'
-                              onBlur={handleBlur} className="form-control mt-1" name="Twitter" id=""></input>
-                          </div>
                         </div>
-                      </div>
-                      <div>
-                        <HandleErrorLabel
-                          isError={errors.twitter}
-                          isTouched={
-                            touched.twitter && errors.twitter
-                              ? true
-                              : false
-                          }
-                        />
-                      </div></> :
-                      <>
-                        {values.twitter || 'Not available'}</>
-                    }
-
-                  </li>
-                  <li>
-                    <div className="media">
-                      <div className="media-left">
-                        <a
-                          className="ggl"
-                          href={values.google || "https://accounts.google.com/signin/v2/identifier?service=mail&amp;passive=true&amp;rm=false&amp;continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&amp;ss=1&amp;scc=1&amp;ltmpl=default&amp;ltmplcache=2&amp;emr=1&amp;osid=1&amp;flowName=GlifWebSignIn&amp;flowEntry=ServiceLogin"}
-                          target="_blank"
-                        >
-                          <i className="fa fa-google mr-1" />
-                          <h5>google </h5>
-                        </a>
-                      </div>
-                      {/* <div className="media-right">
+                        {isSocialFormOpen ? (
+                          <>
+                            <div className="row">
+                              <div className="col-6">
+                                <div className="form-group">
+                                  <input
+                                    onChange={(event) => {
+                                      const { value } = event.target;
+                                      setValues({ ...values, twitter: value });
+                                    }}
+                                    value={values.twitter}
+                                    placeholder="Twitter URL"
+                                    type="url"
+                                    onBlur={handleBlur}
+                                    className="form-control mt-1"
+                                    name="Twitter"
+                                    id=""
+                                  ></input>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <HandleErrorLabel
+                                isError={errors.twitter}
+                                isTouched={
+                                  touched.twitter && errors.twitter
+                                    ? true
+                                    : false
+                                }
+                              />
+                            </div>
+                          </>
+                        ) : (
+                          <>{values.twitter || "Not available"}</>
+                        )}
+                      </li>
+                      <li>
+                        <div className="media">
+                          <div className="media-left">
+                            <a
+                              className="ggl"
+                              style={{ cursor: "text" }}
+                              // href={
+                              //   values.google ||
+                              //   "https://accounts.google.com/signin/v2/identifier?service=mail&amp;passive=true&amp;rm=false&amp;continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&amp;ss=1&amp;scc=1&amp;ltmpl=default&amp;ltmplcache=2&amp;emr=1&amp;osid=1&amp;flowName=GlifWebSignIn&amp;flowEntry=ServiceLogin"
+                              // }
+                              href={null}
+                              target="_blank"
+                            >
+                              <i className="fa fa-linkedin mr-1" />
+                              <h5>Linkedin</h5>
+                            </a>
+                          </div>
+                          {/* <div className="media-right">
                         <div
                           className="profile"
                           style={{
@@ -1082,134 +1171,153 @@ const SettingSection = props => {
                           />
                         </div>
                       </div> */}
-                    </div>
-                    {isSocialFormOpen ? <>
-                      <div className="row">
-                        <div className="col-6">
-                          <div className="form-group">
-                            <input onChange={(event) => {
-                              const { value } = event.target;
-                              setValues({ ...values, google: value });
-                            }}
-                              value={values.google}
-                              placeholder="Google URL"
-                              type='url'
-                              onBlur={handleBlur} className="form-control mt-1" name="Google" id=""></input>
-                          </div>
                         </div>
-                      </div>
-                      <div>
-                        <HandleErrorLabel
-                          isError={errors.google}
-                          isTouched={
-                            touched.google && errors.google
-                              ? true
-                              : false
-                          }
-                        />
-                      </div></> : <>
-                      {values.google || 'Not available'}</>}
-
-                  </li>
-                  <li>
-                    <div className="media">
-                      <div className="media-left">
-                        <a className="slc" href={values.slack || 'https://slack.com/intl/en-in'}>
-                          <i className="fa fa-slack mr-1" />
-                          <h5>Slack </h5>
-                        </a>
-                      </div>
-                      {/* <div className="media-right">
+                        {isSocialFormOpen ? (
+                          <>
+                            <div className="row">
+                              <div className="col-6">
+                                <div className="form-group">
+                                  <input
+                                    onChange={(event) => {
+                                      const { value } = event.target;
+                                      setValues({ ...values, google: value });
+                                    }}
+                                    value={values.google}
+                                    placeholder="Linkedin URL"
+                                    type="url"
+                                    onBlur={handleBlur}
+                                    className="form-control mt-1"
+                                    name="Google"
+                                    id=""
+                                  ></input>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <HandleErrorLabel
+                                isError={errors.google}
+                                isTouched={
+                                  touched.google && errors.google ? true : false
+                                }
+                              />
+                            </div>
+                          </>
+                        ) : (
+                          <>{values.google || "Not available"}</>
+                        )}
+                      </li>
+                      <li>
+                        <div className="media">
+                          <div className="media-left">
+                            <a
+                              className="slc"
+                              style={{ cursor: "text" }}
+                              href={null}
+                            >
+                              <i className="fa fa-globe mr-1" />
+                              <h5>My website</h5>
+                            </a>
+                          </div>
+                          {/* <div className="media-right">
                         <div className="profile">
                           <a href="https://slack.com/get-started#/" target="_blank">
                             <PlusCircle />
                           </a>
                         </div>
                       </div> */}
-                    </div>
-                    {isSocialFormOpen ? <>
-                      <div className="row">
-                        <div className="col-6">
-                          <div className="form-group">
-                            <input onChange={(event) => {
-                              const { value } = event.target;
-                              setValues({ ...values, slack: value });
-                            }}
-                              value={values.slack}
-                              placeholder="Slack URL"
-                              type='url'
-                              onBlur={handleBlur} className="form-control mt-1" name="Slack" id=""></input>
-                          </div>
                         </div>
-                      </div>
-                      <div>
-                        <HandleErrorLabel
-                          isError={errors.slack}
-                          isTouched={
-                            touched.slack && errors.slack
-                              ? true
-                              : false
-                          }
-                        />
-                      </div>
-                    </> :
-                      <>
-                        {values.slack || 'Not available'}</>
-                    }
-                    {isSocialFormOpen ? <>
-                      <div className='my-4'>
-                        <div className="d-flex  mt-4">
-                          <button
-                            type="submit"
-                            className="btn btn-primary"
-                          >
-                            Save details
-                          </button>
-                        </div>
-                      </div></> : <></>}
-
-                  </li>
-                </ul>
-              </Form>
-            )}
-
-          </Formik>
-
-        </div>
-        <div className="media">
-          <div className="media-body">
-            <h3>Integratin</h3>
-            <h4>Sync Your Other Social Account</h4>
+                        {isSocialFormOpen ? (
+                          <>
+                            <div className="row">
+                              <div className="col-6">
+                                <div className="form-group">
+                                  <input
+                                    onChange={(event) => {
+                                      const { value } = event.target;
+                                      setValues({ ...values, slack: value });
+                                    }}
+                                    value={values.slack}
+                                    placeholder="Website URL"
+                                    type="url"
+                                    onBlur={handleBlur}
+                                    className="form-control mt-1"
+                                    name="Slack"
+                                    id=""
+                                  ></input>
+                                </div>
+                              </div>
+                            </div>
+                            <div>
+                              <HandleErrorLabel
+                                isError={errors.slack}
+                                isTouched={
+                                  touched.slack && errors.slack ? true : false
+                                }
+                              />
+                            </div>
+                          </>
+                        ) : (
+                          <>{values.slack || "Not available"}</>
+                        )}
+                        {isSocialFormOpen ? (
+                          <>
+                            <div className="my-4">
+                              <div className="d-flex  mt-4">
+                                <button
+                                  type="submit"
+                                  className="btn btn-primary"
+                                >
+                                  Save details
+                                </button>
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                      </li>
+                    </ul>
+                  </Form>
+                )}
+              </Formik>
+            </div>
+            <div className="media">
+              <div className="media-body">
+                <h3>Integratin</h3>
+                <h4>Sync Your Other Social Account</h4>
+              </div>
+              <div className="media-right">
+                {" "}
+                <a
+                  className="icon-btn btn-outline-light btn-sm pull-right next"
+                  href="#"
+                  onClick={() => setSettingTab("integratin")}
+                >
+                  {" "}
+                  <ChevronRight />
+                </a>
+              </div>
+            </div>
           </div>
-          <div className="media-right">
-            {' '}
-            <a
-              className="icon-btn btn-outline-light btn-sm pull-right next"
-              href="#"
-              onClick={() => setSettingTab('integratin')}
-            >
-              {' '}
-              <ChevronRight />
-            </a>
-          </div>
-        </div>
-      </div>
-      </> : <></> }
-      
+        </>
+      ) : (
+        <></>
+      )}
+
       <div className="setting-block">
-        <div className={`block ${settingTab === 'help' ? 'open' : ''}`}>
+        <div className={`block ${settingTab === "help" ? "open" : ""}`}>
           <div className="media">
             <div className="media-body">
               <h3>Help</h3>
             </div>
             <div className="media-right">
-              {' '}
+              {" "}
               <a
                 className="icon-btn btn-outline-light btn-sm pull-right previous"
                 href="#"
-                onClick={() => setSettingTab('')}
+                onClick={() => setSettingTab("")}
               >
-                {' '}
+                {" "}
                 <ChevronLeft />
               </a>
             </div>
@@ -1217,19 +1325,19 @@ const SettingSection = props => {
           <ul className="help">
             <li>
               <h5>
-                {' '}
+                {" "}
                 <a href="#">FAQ</a>
               </h5>
             </li>
             <li>
               <h5>
-                {' '}
+                {" "}
                 <a href="#"> Contact Us</a>
               </h5>
             </li>
             <li>
               <h5>
-                {' '}
+                {" "}
                 <a href="#">Terms and Privacy Policy</a>
               </h5>
             </li>
@@ -1253,18 +1361,17 @@ const SettingSection = props => {
             <h4>How can we help you?</h4>
           </div>
           <div className="media-right">
-            {' '}
+            {" "}
             <a
               className="icon-btn btn-outline-light btn-sm pull-right next"
               href="#"
-              onClick={() => setSettingTab('help')}
+              onClick={() => setSettingTab("help")}
             >
-              {' '}
+              {" "}
               <ChevronRight />
             </a>
           </div>
         </div>
-
       </div>
     </div>
   );
