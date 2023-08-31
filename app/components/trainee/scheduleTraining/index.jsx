@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import moment from "moment";
-import "../scheduleTraining/index.css";
+import "../scheduleTraining/index.scss";
 import { Popover } from "react-tiny-popover";
 import {
   BookedSession,
@@ -286,7 +286,7 @@ const ScheduleTraining = () => {
             setIsPopoverOpen(`${trainer_info._id}_${index}-${date.toString()}`);
           }}
           key={`slot-${index}-content`}
-          className="rounded-pill bg-primary text-white text-center p-1 mb-1 pointer"
+          className="rounded-pill bg-primary text-white text-center p-1 mb-1 pointer font-weight-bold"
         >
           {Utils.convertToAmPm(content.start_time)} -{" "}
           {Utils.convertToAmPm(content.end_time)}{" "}
@@ -301,14 +301,18 @@ const ScheduleTraining = () => {
         trainerInfo.userInfo ? "table-responsive-width" : "table-responsive"
       }`}
     >
-      <table className="table rc-table ml-30 mr-30">
+      <table className="table custom-trainer-slots-booking-table ml-30 mr-30">
         <thead className="justify-center align-center">
           <tr>
             {bookingColumns.map((columns, index) => {
               return (
-                <th scope="col" key={`booking-col-${index}`}>
-                  {columns.title}
-                </th>
+                <>
+                  {columns.title.length ? (
+                    <th scope="col" key={`booking-col-${index}`}>
+                      {columns.title}
+                    </th>
+                  ) : null}
+                </>
               );
             })}
           </tr>
@@ -329,31 +333,65 @@ const ScheduleTraining = () => {
                 return (
                   <tr key={`table-data-${index}`}>
                     <td key={index}>
-                      <div
-                        className="text-center"
-                        onClick={() => {
-                          // setIsPopoverOpen(trainer_info.fullname)
-                        }}
-                      >
-                        <img
-                          height={100}
-                          width={100}
-                          src={trainer_info.profilePicture}
-                          className="rounded"
-                        />
-                        <p
-                          htmlFor="exampleFormControlInput1"
-                          className="form-label mt-2"
+                      {monday.slot.length ? (
+                        renderSlotsByDay(monday)
+                      ) : (
+                        <div
+                          key={`slot-${index}-content`}
+                          className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
                         >
-                          {trainer_info.fullname}
-                        </p>
-                      </div>
+                          {Message.noSlotsAvailable}
+                        </div>
+                      )}
                     </td>
-                    <td>{renderSlotsByDay(monday)}</td>
-                    <td>{renderSlotsByDay(tuesday)}</td>
-                    <td>{renderSlotsByDay(wednesday)}</td>
-                    <td>{renderSlotsByDay(thursday)}</td>
-                    <td>{renderSlotsByDay(friday)}</td>
+                    <td>
+                      {tuesday.slot.length ? (
+                        renderSlotsByDay(tuesday)
+                      ) : (
+                        <div
+                          key={`slot-${index}-content`}
+                          className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                        >
+                          {Message.noSlotsAvailable}
+                        </div>
+                      )}
+                    </td>
+                    <td>
+                      {wednesday.slot.length ? (
+                        renderSlotsByDay(wednesday)
+                      ) : (
+                        <div
+                          key={`slot-${index}-content`}
+                          className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                        >
+                          {Message.noSlotsAvailable}
+                        </div>
+                      )}
+                    </td>
+                    <td>
+                      {thursday.slot.length ? (
+                        renderSlotsByDay(thursday)
+                      ) : (
+                        <div
+                          key={`slot-${index}-content`}
+                          className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                        >
+                          {Message.noSlotsAvailable}
+                        </div>
+                      )}
+                    </td>
+                    <td>
+                      {friday.slot.length ? (
+                        renderSlotsByDay(friday)
+                      ) : (
+                        <div
+                          key={`slot-${index}-content`}
+                          className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                        >
+                          {Message.noSlotsAvailable}
+                        </div>
+                      )}
+                    </td>
                   </tr>
                 );
               }
@@ -444,7 +482,7 @@ const ScheduleTraining = () => {
         selectedVal={getParams.search}
         selectedOption={(option) => {
           console.log(`option --- `, option);
-          if(option && option.isCategory) {
+          if (option && option.isCategory) {
             setTrainerInfo((prev) => ({
               ...prev,
               userInfo: option,
@@ -502,7 +540,7 @@ const ScheduleTraining = () => {
   const renderBookingTable = () => (
     <div>
       <div class="row">
-        <div class="mt-4 col-3 datePicker">
+        <div class="mt-4 col-1.4 datePicker">
           <DatePicker
             minDate={moment().toDate()}
             onChange={(date) => {

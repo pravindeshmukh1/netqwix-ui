@@ -383,70 +383,86 @@ const TrainerInfo = ({
     }
   }, [trainer]);
   return (
-    <>
-      <div className="row p-30">
-        <div className="col-5">
-          <h2>{trainer ? trainer.fullname : null}</h2>
-          <div className="d-flex flex-row bd-highlight"></div>
-          {trainer &&
-          trainer.extraInfo &&
-          trainer.extraInfo.social_media_links ? (
-            <SocialMediaIcons
-              social_media_links={
-                trainer &&
-                trainer.extraInfo &&
-                trainer.extraInfo.social_media_links
-              }
+    <div className="row p-30">
+      <div className="col-5">
+        <div className="row">
+          <div className="col-3">
+            <img
+              src={"/assets/images/avtar/1.jpg"}
+              width={"136px"}
+              height={"128px"}
+              style={{ borderRadius: "15px" }}
+              alt="profile-picture"
             />
-          ) : null}
-          <div className="mb-3 d-flex">
-            <Star
-              color="#FFC436"
-              size={28}
-              className="star-container star-svg"
-            />
-            <p className="ml-1 mt-1 mr-1 font-weight-light">
-              {trainerReview.review}
-            </p>
-            <p className="mt-1">({trainerReview.totalReviews})</p>
           </div>
-          <h3 className="mb-3"> Hourly Rate: ${TRAINER_AMOUNT_USD} </h3>
-          <p>{trainer && trainer.extraInfo && trainer.extraInfo.about}</p>
-          {accordionData.length
-            ? accordionData.map((data, index) => {
-                return (
-                  <Accordion key={`accordion_${index}`} className="mb-5">
-                    <Accordion.Item>
-                      <Accordion.Header
-                        index={index}
-                        activeAccordion={activeAccordion}
-                        onAClick={() => {
-                          if (activeAccordion[index]) {
-                            delete activeAccordion[index];
-                          } else if (!activeAccordion[index]) {
-                            activeAccordion[index] = true;
-                          } else {
-                            activeAccordion[index] = !activeAccordion[index];
-                          }
-                          setActiveAccordion(activeAccordion);
-                        }}
-                      >
-                        {data.label}
-                      </Accordion.Header>
-                      <Accordion.Body>
-                        {!data.value ? Message.notFound : data.value}
-                      </Accordion.Body>
-                    </Accordion.Item>
-                  </Accordion>
-                );
-              })
-            : "No data found"}
+          <div className="col-8 trainer-details">
+            <h2 className="ml-1 mt-1">{trainer ? trainer.fullname : null}</h2>
+            <h3 className="mb-3 mt-3 ml-1">
+              {" "}
+              Hourly Rate: ${TRAINER_AMOUNT_USD}{" "}
+            </h3>
+            <div className="mb-3 d-flex">
+              <Star
+                color="#FFC436"
+                size={28}
+                className="star-container star-svg"
+              />
+              <p className="ml-1 mt-1 mr-1 font-weight-light">
+                {trainerReview.review}
+              </p>
+              <p className="mt-1">({trainerReview.totalReviews})</p>
+            </div>
+          </div>
         </div>
-        <div className="col-7">
-          <Carousel media={mediaData} />
-          {element}
-        </div>
+        <div className="d-flex flex-row bd-highlight"></div>
+        {trainer &&
+        trainer.extraInfo &&
+        trainer.extraInfo.social_media_links ? (
+          <SocialMediaIcons
+            social_media_links={
+              trainer &&
+              trainer.extraInfo &&
+              trainer.extraInfo.social_media_links
+            }
+          />
+        ) : null}
+        <p className="mt-3">
+          {trainer && trainer.extraInfo && trainer.extraInfo.about}
+        </p>
+        {accordionData.length
+          ? accordionData.map((data, index) => {
+              return (
+                <Accordion key={`accordion_${index}`} className="mb-5">
+                  <Accordion.Item>
+                    <Accordion.Header
+                      index={index}
+                      activeAccordion={activeAccordion}
+                      onAClick={() => {
+                        if (activeAccordion[index]) {
+                          delete activeAccordion[index];
+                        } else if (!activeAccordion[index]) {
+                          activeAccordion[index] = true;
+                        } else {
+                          activeAccordion[index] = !activeAccordion[index];
+                        }
+                        setActiveAccordion(activeAccordion);
+                      }}
+                    >
+                      {data.label}
+                    </Accordion.Header>
+                    <Accordion.Body>
+                      {!data.value ? Message.notFound : data.value}
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
+              );
+            })
+          : "No data found"}
       </div>
-    </>
+      <div className="col-7">
+        <Carousel media={mediaData} />
+        {element}
+      </div>
+    </div>
   );
 };
