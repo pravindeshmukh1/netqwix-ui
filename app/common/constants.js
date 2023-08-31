@@ -132,7 +132,8 @@ export const TRAINER_MEETING_TIME = "Hour";
 export const Message = {
   notFound: "No data available",
   noMediaFound: "No media found!",
-  noSlotsAvailable: "No slots available",
+  noSlotsAvailable: "No slots found",
+  notAvailableDescription: "Description not available",
   errorMessage: {
     wip: "work in progress",
     timeConflicts: "These slots are already booked.",

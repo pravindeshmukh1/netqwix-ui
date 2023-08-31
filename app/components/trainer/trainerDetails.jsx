@@ -83,7 +83,11 @@ export const TrainerDetails = ({
       >
         <div className="mr-4 mt-4">
           {!trainerInfo.isCategory ? (
-            <X onClick={onClose} style={{ cursor: "pointer" }} />
+            <X
+              onClick={onClose}
+              className="close"
+              style={{ cursor: "pointer" }}
+            />
           ) : !trainerDetails.select_trainer ? (
             <X onClick={onClose} style={{ cursor: "pointer" }} />
           ) : (
@@ -181,159 +185,88 @@ const SelectedCategory = ({
             getTraineeSlots.map((data, index) => {
               const textTruncate = false;
               return (
-                // <div className="card mb-4 container mw-100 border border-secondary p-30 mb-4">
-                //   <div className="row">
-                //     <div className="col-1.5">
-                //       <img
-                //         src={
-                //           data.profilePicture
-                //             ? data.profilePicture
-                //             : "/assets/images/avtar/1.jpg"
-                //         }
-                //         width={"136px"}
-                //         height={"128px"}
-                //         style={{ borderRadius: "15px" }}
-                //         alt="profile-picture"
-                //       />
-                //     </div>
-                //     <div className="col-6">
-                //       <h3
-                //         className="ml-4 pointer underline "
-                //         onClick={() => {
-                //           console.log(`data`);
-                //           setTrainerDetails((prev) => ({
-                //             ...prev,
-                //             _id: data && data._id,
-                //             select_trainer: true,
-                //           }));
-                //           selectTrainer(data && data._id);
-                //         }}
-                //       >
-                //         {data ? data.fullname : ""}
-                //       </h3>
-                //       <h3 className="ml-4 mt-2">
-                //         {`$${TRAINER_AMOUNT_USD}.00`}{" "}
-                //         <span>{`/ ${TRAINER_MEETING_TIME}`}</span>
-                //       </h3>
-                //       <p
-                //         className={`${
-                //           textTruncate ? "text-truncate" : "ml-4 mt-2"
-                //         }`}
-                //       >
-                //         {data && data.extraInfo
-                //           ? Utils.truncateText(data.extraInfo.about, 200)
-                //           : data && data.extraInfo && data.extraInfo.about}
-                //       </p>
-                //       <div className="ml-4">
-                //         {data &&
-                //         data.extraInfo &&
-                //         data.extraInfo.social_media_links ? (
-                //           <SocialMediaIcons
-                //             social_media_links={
-                //               data &&
-                //               data.extraInfo &&
-                //               data.extraInfo.social_media_links
-                //             }
-                //           />
-                //         ) : null}
-                //       </div>
-                //     </div>
-                //     <div className="mb-3 d-flex">
-                //       <Star
-                //         color="#FFC436"
-                //         size={28}
-                //         className="star-container star-svg"
-                //       />
-                //       <p className="ml-1 mt-1 mr-1 font-weight-light">
-                //         {trainerReview.review}
-                //       </p>
-                //       <p className="mt-1">({trainerReview.totalReviews})</p>
-                //     </div>
-                //   </div>
-                // </div>
-                <>
-                  <div
-                    className="card custom-card mb-4"
-                    style={{
-                      borderRadius: "20px",
-                      maxHeight: "43%",
-                      height: "43%",
-                    }}
-                  >
-                    <div className="card-body">
-                      <div className="row">
-                        <div className="col-1.3 ml-3">
-                          <img
-                            src={
-                              data.profilePicture
-                                ? data.profilePicture
-                                : "/assets/images/avtar/1.jpg"
-                            }
-                            width={"136px"}
-                            height={"128px"}
-                            style={{ borderRadius: "15px" }}
-                            alt="profile-picture"
-                          />
+                <div
+                  className="card custom-card mb-4"
+                  key={index}
+                  style={{
+                    borderRadius: "20px",
+                    maxHeight: "18vh",
+                    height: "18vh",
+                  }}
+                >
+                  <div className="card-body">
+                    <div className="row">
+                      <div className="col-1.3 ml-3">
+                        <img
+                          src={
+                            data.profilePicture
+                              ? data.profilePicture
+                              : "/assets/images/avtar/1.jpg"
+                          }
+                          width={"136px"}
+                          height={"128px"}
+                          style={{ borderRadius: "15px" }}
+                          alt="profile-picture"
+                        />
+                      </div>
+                      <div className="col-8">
+                        <h3
+                          className="card-title pointer underline"
+                          onClick={() => {
+                            console.log(`data`);
+                            setTrainerDetails((prev) => ({
+                              ...prev,
+                              _id: data && data._id,
+                              select_trainer: true,
+                            }));
+                            selectTrainer(data && data._id);
+                          }}
+                        >
+                          {data ? data.fullname : ""}
+                        </h3>
+                        <p
+                          className="badge badge-pill badge-primary mb-2 p-2"
+                          style={{ fontSize: "15px" }}
+                        >
+                          {`$${TRAINER_AMOUNT_USD}.00`}
+                          {`/ ${TRAINER_MEETING_TIME}`}
+                        </p>
+                        <h4
+                          className={`${textTruncate ? "text-truncate" : ""}`}
+                          style={{ marginBottom: "0px" }}
+                        >
+                          {data && data.extraInfo
+                            ? Utils.truncateText(data.extraInfo.about, 200)
+                            : Message.notAvailableDescription}
+                        </h4>
+                        <div>
+                          {data &&
+                          data.extraInfo &&
+                          data.extraInfo.social_media_links ? (
+                            <SocialMediaIcons
+                              social_media_links={
+                                data &&
+                                data.extraInfo &&
+                                data.extraInfo.social_media_links
+                              }
+                            />
+                          ) : null}
                         </div>
-                        <div className="col-8">
-                          <h3
-                            className="card-title pointer underline"
-                            onClick={() => {
-                              console.log(`data`);
-                              setTrainerDetails((prev) => ({
-                                ...prev,
-                                _id: data && data._id,
-                                select_trainer: true,
-                              }));
-                              selectTrainer(data && data._id);
-                            }}
-                          >
-                            {data ? data.fullname : ""}
-                          </h3>
-                          <p
-                            className="badge badge-pill badge-primary mb-3 p-2"
-                            style={{ fontSize: "15px" }}
-                          >
-                            {`$${TRAINER_AMOUNT_USD}.00`}
-                            {`/ ${TRAINER_MEETING_TIME}`}
-                          </p>
-                          <h4
-                            className={`${textTruncate ? "text-truncate" : ""}`}
-                            style={{ marginBottom: "0px" }}
-                          >
-                            {data && data.extraInfo
-                              ? Utils.truncateText(data.extraInfo.about, 200)
-                              : data && data.extraInfo && data.extraInfo.about}
-                          </h4>
-                          <div>
-                            {data &&
-                            data.extraInfo &&
-                            data.extraInfo.social_media_links ? (
-                              <SocialMediaIcons
-                                social_media_links={
-                                  data &&
-                                  data.extraInfo &&
-                                  data.extraInfo.social_media_links
-                                }
-                              />
-                            ) : null}
-                          </div>
-                        </div>
-                        <div className="col-2 d-flex justify-content-end">
-                          <Star
-                            color="#FFC436"
-                            size={28}
-                            className="star-container star-svg"
-                          />
-                          <p className="ml-1 mt-1 mr-1 font-weight-light">
-                            {trainerReview.review}
-                          </p>
-                          <p className="mt-1">({trainerReview.totalReviews})</p>
-                        </div>
+                      </div>
+                      <div className="col-2 d-flex justify-content-end">
+                        <Star
+                          color="#FFC436"
+                          size={28}
+                          className="star-container star-svg"
+                        />
+                        <p className="ml-1 mt-1 mr-1 font-weight-light">
+                          {trainerReview.review}
+                        </p>
+                        <p className="mt-1">({trainerReview.totalReviews})</p>
                       </div>
                     </div>
                   </div>
-                </>
+                </div>
               );
             })
           )}
