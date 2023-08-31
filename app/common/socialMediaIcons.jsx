@@ -1,7 +1,7 @@
 const SocialMediaIcons = ({ social_media_links }) => {
   return (
     <div>
-      <ul className="integratin d-flex">
+      <ul className="custom-integration d-flex">
         <li>
           <div className="media">
             <div className="media-left">
