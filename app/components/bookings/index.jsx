@@ -24,6 +24,7 @@ import StartMeeting from "./start";
 import { SocketContext } from "../socket";
 import Ratings from "./ratings";
 import Rating from "react-rating";
+import { Star } from "react-feather";
 
 const Bookings = ({ accountType = null }) => {
   const router = useRouter();
@@ -336,6 +337,17 @@ const Bookings = ({ accountType = null }) => {
     }
   };
 
+  const showRatingLabel = (ratingInfo) => {
+
+    return ((ratingInfo && ratingInfo[accountType.toLowerCase()] && ratingInfo[accountType.toLowerCase()].recommendRating) ? (<div className="d-flex items-center"> You rated <b className="pl-2">{ratingInfo[accountType.toLowerCase()].recommendRating}</b>
+      <Star
+        color="#FFC436"
+        size={28}
+        className="star-container star-svg"
+      /> to this {accountType?.toLowerCase()}.
+    </div>) : <></>)
+  }
+
   const renderBookings = () =>
     scheduledMeetingDetails.map((data, index) => {
       const {
@@ -379,15 +391,22 @@ const Bookings = ({ accountType = null }) => {
               </div>
             </div>
           </div>
-          <div className="card-footer px-5 pb-3 d-flex justify-content-end">
-            {handleBookedScheduleTraining(
-              scheduledMeetingDetails,
-              index,
-              data.status,
-              _id,
-              trainee_info,
-              trainer_info
-            )}
+          <div className="card-footer ">
+            <div className="row">
+              <div className="col-6">
+                {showRatingLabel(data.ratings)}
+              </div>
+              <div className="col-6 px-5 pb-3 d-flex justify-content-end">
+                {handleBookedScheduleTraining(
+                  scheduledMeetingDetails,
+                  index,
+                  data.status,
+                  _id,
+                  trainee_info,
+                  trainer_info
+                )}
+              </div>
+            </div>
           </div>
         </div>
       );

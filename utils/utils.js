@@ -178,4 +178,17 @@ export class Utils {
       return aboutText;
     }
   }
+
+  static getRatings = (ratings) => {
+    let availableRatings =  {totalRating: ratings.length, ratingRatio: 0};
+    let totalRatings = 0;
+    ratings.forEach((({ratings}) => {
+      if(ratings && ratings.trainee) {
+        totalRatings += ratings?.trainee?.recommendRating || 0;
+      }
+    }))
+
+    availableRatings.ratingRatio = totalRatings / ratings.length;
+    return availableRatings;
+  }
 }

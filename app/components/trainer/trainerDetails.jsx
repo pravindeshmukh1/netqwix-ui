@@ -74,12 +74,11 @@ export const TrainerDetails = ({
   return (
     <div className="custom-sidebar-content">
       <div
-        className={`${
-          (trainerInfo.isCategory &&
-            !trainerDetails.select_trainer &&
-            "media-body media-body text-right") ||
+        className={`${(trainerInfo.isCategory &&
+          !trainerDetails.select_trainer &&
+          "media-body media-body text-right") ||
           (!trainerInfo.isCategory && "media-body media-body text-right")
-        }`}
+          }`}
       >
         <div className="mr-4 mt-4">
           {!trainerInfo.isCategory ? (
@@ -241,8 +240,8 @@ const SelectedCategory = ({
                         </h4>
                         <div>
                           {data &&
-                          data.extraInfo &&
-                          data.extraInfo.social_media_links ? (
+                            data.extraInfo &&
+                            data.extraInfo.social_media_links ? (
                             <SocialMediaIcons
                               social_media_links={
                                 data &&
@@ -253,17 +252,7 @@ const SelectedCategory = ({
                           ) : null}
                         </div>
                       </div>
-                      <div className="col-2 d-flex justify-content-end">
-                        <Star
-                          color="#FFC436"
-                          size={28}
-                          className="star-container star-svg"
-                        />
-                        <p className="ml-1 mt-1 mr-1 font-weight-light">
-                          {trainerReview.review}
-                        </p>
-                        <p className="mt-1">({trainerReview.totalReviews})</p>
-                      </div>
+                      {showRatings(data.trainer_ratings, "col-2 d-flex justify-content-end")}
                     </div>
                   </div>
                 </div>
@@ -275,6 +264,23 @@ const SelectedCategory = ({
     </div>
   );
 };
+
+
+const showRatings = (ratings, extraClasses = '') => {
+  const { ratingRatio, totalRating } = Utils.getRatings(ratings);
+  return <>
+    <div className={extraClasses}>
+      <Star
+        color="#FFC436"
+        size={28}
+        className="star-container star-svg"
+      />
+      <p className="ml-1 mt-1 mr-1 font-weight-light">
+        {ratingRatio || 0}
+      </p>
+      <p className="mt-1">({totalRating || 0})</p>
+    </div></>
+}
 
 const TrainerInfo = ({
   element,
@@ -329,23 +335,13 @@ const TrainerInfo = ({
               {" "}
               Hourly Rate: ${TRAINER_AMOUNT_USD}{" "}
             </h3>
-            <div className="mb-3 d-flex">
-              <Star
-                color="#FFC436"
-                size={28}
-                className="star-container star-svg"
-              />
-              <p className="ml-1 mt-1 mr-1 font-weight-light">
-                {trainerReview.review}
-              </p>
-              <p className="mt-1">({trainerReview.totalReviews})</p>
-            </div>
+            {showRatings(trainer?.trainer_ratings, 'mb-3 d-flex')}
           </div>
         </div>
         <div className="d-flex flex-row bd-highlight"></div>
         {trainer &&
-        trainer.extraInfo &&
-        trainer.extraInfo.social_media_links ? (
+          trainer.extraInfo &&
+          trainer.extraInfo.social_media_links ? (
           <SocialMediaIcons
             social_media_links={
               trainer &&
@@ -359,32 +355,32 @@ const TrainerInfo = ({
         </p>
         {accordionData.length
           ? accordionData.map((data, index) => {
-              return (
-                <Accordion key={`accordion_${index}`} className="mb-5">
-                  <Accordion.Item>
-                    <Accordion.Header
-                      index={index}
-                      activeAccordion={activeAccordion}
-                      onAClick={() => {
-                        if (activeAccordion[index]) {
-                          delete activeAccordion[index];
-                        } else if (!activeAccordion[index]) {
-                          activeAccordion[index] = true;
-                        } else {
-                          activeAccordion[index] = !activeAccordion[index];
-                        }
-                        setActiveAccordion(activeAccordion);
-                      }}
-                    >
-                      {data.label}
-                    </Accordion.Header>
-                    <Accordion.Body>
-                      {!data.value ? Message.notFound : data.value}
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              );
-            })
+            return (
+              <Accordion key={`accordion_${index}`} className="mb-5">
+                <Accordion.Item>
+                  <Accordion.Header
+                    index={index}
+                    activeAccordion={activeAccordion}
+                    onAClick={() => {
+                      if (activeAccordion[index]) {
+                        delete activeAccordion[index];
+                      } else if (!activeAccordion[index]) {
+                        activeAccordion[index] = true;
+                      } else {
+                        activeAccordion[index] = !activeAccordion[index];
+                      }
+                      setActiveAccordion(activeAccordion);
+                    }}
+                  >
+                    {data.label}
+                  </Accordion.Header>
+                  <Accordion.Body>
+                    {!data.value ? Message.notFound : data.value}
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
+            );
+          })
           : Message.notFound}
       </div>
       <div className="col-7">
