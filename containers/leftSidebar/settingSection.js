@@ -38,7 +38,7 @@ const SettingSection = (props) => {
     address: "Alabma , USA",
     wallet_amount: 0,
     editStatus: false,
-    profilePicture: undefined,
+    profile_picture: undefined,
   });
   const [collapseShow, setCollapseShow] = useState({
     security: false,
@@ -100,6 +100,7 @@ const SettingSection = (props) => {
       username: userInfo.fullname,
       address: userInfo.email,
       wallet_amount: userInfo.wallet_amount,
+      profile_picture: userInfo.profile_picture,
     });
   }, [userInfo]);
 
@@ -115,7 +116,6 @@ const SettingSection = (props) => {
   const EditProfile = (e) => {
     e.preventDefault();
     if (profile.editStatus) {
-      
       if (profile.username && profile.username.trim().length) {
         // updating trainee profile
         if (accountType === AccountType.TRAINEE) {
@@ -161,13 +161,14 @@ const SettingSection = (props) => {
       const { files } = event.target;
       const file = URL.createObjectURL(files[0]);
       const selectedFile = files[0];
-      setProfile({ ...profile, profilePicture: file });
+      setProfile({ ...profile, profile_picture: file });
     }
     event.stopPropagation();
   };
   const handelClearFile = () => {
-    setProfile({ ...profile, profilePicture: undefined });
+    setProfile({ ...profile, profile_picture: undefined });
   };
+
   return (
     <div
       className={`settings-tab submenu-width dynemic-sidebar custom-scroll ${
@@ -197,13 +198,47 @@ const SettingSection = (props) => {
         </div>
         <div className="profile-box">
           <div className={`media ${profile.editStatus ? "open" : ""}`}>
-            <UploadFile
-              onChange={handelSelectFile}
-              values={profile && profile.profilePicture}
-              clearFile={handelClearFile}
-              key={"profilePicture"}
-              isDisable={false}
-            />
+            {profile.profile_picture && profile.editStatus ? (
+              <div className="border border-dark rounded mt-2">
+                <i
+                  className="fa fa-times pointer"
+                  aria-hidden="true"
+                  onClick={handelClearFile}
+                  style={{
+                    position: "absolute",
+                    left: "14%",
+                    top: "42%",
+                  }}
+                />
+                <img
+                  className="bg-img rounded mt-1"
+                  src={profile.profile_picture}
+                  alt="Avatar"
+                  width={44}
+                  height={38}
+                />
+              </div>
+            ) : (
+              <div>
+                {profile.editStatus && !profile.profile_picture ? (
+                  <UploadFile
+                    onChange={handelSelectFile}
+                    values={profile && profile.profile_picture}
+                    clearFile={handelClearFile}
+                    key={"profile_picture"}
+                    name={"profile_picture"}
+                  />
+                ) : (
+                  <img
+                    className="bg-img rounded mt-2"
+                    src={profile.profile_picture}
+                    alt="Avatar"
+                    width={44}
+                    height={40}
+                  />
+                )}
+              </div>
+            )}
             {/* </div> */}
             <div className="details">
               <h5>{profile.username}</h5>
