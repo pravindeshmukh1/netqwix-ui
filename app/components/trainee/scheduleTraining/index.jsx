@@ -302,7 +302,7 @@ const ScheduleTraining = () => {
       }`}
     >
       <table className="table custom-trainer-slots-booking-table ml-30 mr-30">
-        <thead className="justify-center align-center">
+        <thead className="justify-center align-center table-thead">
           <tr>
             {bookingColumns.map((columns, index) =>
               columns.title.length ? (
@@ -314,7 +314,8 @@ const ScheduleTraining = () => {
           </tr>
         </thead>
         {bookingTableData && bookingTableData.length ? (
-          bookingTableData
+          <>
+      {    bookingTableData
             .filter(({ trainer_info }) => {
               return (
                 trainer_info._id === trainerInfo.userInfo.id ||
@@ -391,7 +392,15 @@ const ScheduleTraining = () => {
                   </tr>
                 );
               }
-            )
+            )}
+            <tr key={`table-data-empty`} className="table-last-row">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </>
         ) : (
           <tr key={"no-data"} className="no-data">
             <td colSpan="6">No trainers available.</td>
