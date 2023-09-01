@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { FileFormates } from "./constants";
-const UploadFile = ({ onChange, name, key }) => {
+const UploadFile = ({ onChange, name, key, values }) => {
   const fileInputRef = useRef();
   const handleFileSelect = () => {
     fileInputRef?.current?.click();
@@ -15,6 +15,7 @@ const UploadFile = ({ onChange, name, key }) => {
         type="file"
         ref={fileInputRef}
         name={name}
+        value={values}
         style={{ display: "none" }}
         onChange={onChange}
         accept={FileFormates.image}

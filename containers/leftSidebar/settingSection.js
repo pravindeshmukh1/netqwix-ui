@@ -120,10 +120,20 @@ const SettingSection = (props) => {
       if (profile.username && profile.username.trim().length) {
         // updating trainee profile
         if (accountType === AccountType.TRAINEE) {
-          dispatch(updateTraineeProfileAsync({ fullname: profile.username }));
+          dispatch(
+            updateTraineeProfileAsync({
+              fullname: profile.username,
+              profile_picture: profile.profile_picture,
+            })
+          );
         } else if (accountType === AccountType.TRAINER) {
           // updating trainer profile
-          dispatch(updateProfileAsync({ fullname: profile.username }));
+          dispatch(
+            updateProfileAsync({
+              fullname: profile.username,
+              profile_picture: profile.profile_picture,
+            })
+          );
         }
         setProfile({ ...profile, editStatus: !profile.editStatus });
       } else {
@@ -160,16 +170,18 @@ const SettingSection = (props) => {
   const handelSelectFile = (event) => {
     if (event && event.target && event.target.files && event.target.files[0]) {
       const { files } = event.target;
-      const file = URL.createObjectURL(files[0]);
       const selectedFile = files[0];
-      const payload = {
-        profile_picture: selectedFile,
-      };
-      dispatch(uploadProfilePictureAsync(payload));
-      setProfile({ ...profile, profile_picture: file });
+      if (selectedFile instanceof File) {
+        const file = URL.createObjectURL(selectedFile);
+        dispatch(uploadProfilePictureAsync({ files: selectedFile }));
+        setProfile({ ...profile, profile_picture: file });
+      } else {
+        console.error("Invalid file selected.");
+      }
     }
     event.stopPropagation();
   };
+
   const handelClearFile = () => {
     setProfile({ ...profile, profile_picture: undefined });
   };
@@ -211,12 +223,14 @@ const SettingSection = (props) => {
                   onClick={handelClearFile}
                   style={{
                     position: "absolute",
-                    left: "14%",
+                    left: accountType === AccountType.TRAINEE ? "14%" : "3%",
                     top: "42%",
                   }}
                 />
                 <img
-                  className="bg-img rounded mt-1"
+                  className={`bg-img rounded ${
+                    accountType === !AccountType.TRAINEE && "mt-1"
+                  }`}
                   src={profile.profile_picture}
                   alt="Avatar"
                   width={44}
@@ -229,13 +243,14 @@ const SettingSection = (props) => {
                   <UploadFile
                     onChange={handelSelectFile}
                     values={profile && profile.profile_picture}
-                    clearFile={handelClearFile}
-                    key={"profile_picture"}
-                    name={"profile_picture"}
+                    key={"files"}
+                    name={"files"}
                   />
                 ) : (
                   <img
-                    className="bg-img rounded mt-2"
+                    className={`bg-img rounded ${
+                      accountType === AccountType.TRAINEE ? "mt-2" : "mt-3"
+                    }`}
                     src={profile.profile_picture}
                     alt="Avatar"
                     width={44}
