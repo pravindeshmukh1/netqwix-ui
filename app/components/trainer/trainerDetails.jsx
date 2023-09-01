@@ -187,14 +187,14 @@ const SelectedCategory = ({
               return (
                 <div
                   className="card custom-card mb-4"
-                  key={index}
+                  key={`trainers_${index}`}
                   style={{
                     borderRadius: "20px",
                     maxHeight: "18vh",
                     height: "18vh",
                   }}
                 >
-                  <div className="card-body">
+                  <div className="card-body" key={index}>
                     <div className="row">
                       <div className="col-1.3 ml-3">
                         <img
@@ -284,8 +284,6 @@ const TrainerInfo = ({
   trainerDetails,
   getTraineeSlots,
   setAccordionsData,
-  textTruncate,
-  setTextTruncate,
 }) => {
   const findTrainerDetails = () => {
     const findByTrainerId = getTraineeSlots.find(
@@ -294,9 +292,6 @@ const TrainerInfo = ({
     return findByTrainerId;
   };
   const trainer = findTrainerDetails();
-  const toggleTextTruncate = () => {
-    setTextTruncate(!textTruncate);
-  };
   useEffect(() => {
     if (trainer && trainer.extraInfo) {
       setAccordionsData((prev) => ({
@@ -390,7 +385,7 @@ const TrainerInfo = ({
                 </Accordion>
               );
             })
-          : "No data found"}
+          : Message.notFound}
       </div>
       <div className="col-7">
         <Carousel media={mediaData} />

@@ -304,17 +304,13 @@ const ScheduleTraining = () => {
       <table className="table custom-trainer-slots-booking-table ml-30 mr-30">
         <thead className="justify-center align-center">
           <tr>
-            {bookingColumns.map((columns, index) => {
-              return (
-                <>
-                  {columns.title.length ? (
-                    <th scope="col" key={`booking-col-${index}`}>
-                      {columns.title}
-                    </th>
-                  ) : null}
-                </>
-              );
-            })}
+            {bookingColumns.map((columns, index) =>
+              columns.title.length ? (
+                <th scope="col" key={`booking-col-${index}`}>
+                  {columns.title}
+                </th>
+              ) : null
+            )}
           </tr>
         </thead>
         {bookingTableData && bookingTableData.length ? (
@@ -539,8 +535,8 @@ const ScheduleTraining = () => {
 
   const renderBookingTable = () => (
     <div>
-      <div class="row">
-        <div class="mt-4 col-1.4 datePicker">
+      <div className="row">
+        <div className="mt-4 col-1.4 datePicker">
           <DatePicker
             minDate={moment().toDate()}
             onChange={(date) => {
@@ -558,8 +554,8 @@ const ScheduleTraining = () => {
           />
         </div>
       </div>
-      <div class="row">
-        <div class="col-8 pt-3">
+      <div className="row">
+        <div className="col-8 pt-3">
           {(getParams.search && getParams.search.length) ||
           !bookingColumns.length ? (
             renderTable()
