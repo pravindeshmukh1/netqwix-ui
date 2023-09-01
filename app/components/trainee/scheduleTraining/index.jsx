@@ -57,7 +57,7 @@ const ScheduleTraining = () => {
   useEffect(() => {
     const todaySDate = Utils.getDateInFormat(new Date());
     const { weekDates, weekDateFormatted } =
-      Utils.getCurrentWeekByDate(todaySDate);
+      Utils.getNext7WorkingDays(todaySDate);
     setTableData(getTraineeSlots, weekDates);
     setColumns(weekDateFormatted);
     setListOfTrainers(
@@ -543,7 +543,7 @@ const ScheduleTraining = () => {
               setStartDate(date);
               const todaySDate = Utils.getDateInFormat(date.toString());
               const { weekDateFormatted, weekDates } =
-                Utils.getCurrentWeekByDate(todaySDate);
+                Utils.getNext7WorkingDays(todaySDate);
               setColumns(weekDateFormatted);
               setTableData(getTraineeSlots, weekDates);
               setColumns(weekDateFormatted);
@@ -607,7 +607,7 @@ const ScheduleTraining = () => {
     //         setStartDate(date);
     //         const todaySDate = Utils.getDateInFormat(date.toString());
     //         const { weekDateFormatted, weekDates } =
-    //           Utils.getCurrentWeekByDate(todaySDate);
+    //           Utils.getNext7WorkingDays(todaySDate);
     //         setColumns(weekDateFormatted);
     //         setTableData(getTraineeSlots, weekDates);
     //         setColumns(weekDateFormatted);

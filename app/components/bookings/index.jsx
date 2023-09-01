@@ -339,7 +339,8 @@ const Bookings = ({ accountType = null }) => {
 
   const showRatingLabel = (ratingInfo) => {
 
-    return ((ratingInfo && ratingInfo[accountType.toLowerCase()] && ratingInfo[accountType.toLowerCase()].recommendRating) ? (<div className="d-flex items-center"> You rated <b className="pl-2">{ratingInfo[accountType.toLowerCase()].recommendRating}</b>
+    // for trainee we're showing recommendd 
+    return ((ratingInfo && ratingInfo[accountType.toLowerCase()] && (ratingInfo[accountType.toLowerCase()].sessionRating || ratingInfo[accountType.toLowerCase()].sessionRating)) ? (<div className="d-flex items-center"> You rated <b className="pl-2">{ratingInfo[accountType.toLowerCase()].sessionRating || ratingInfo[accountType.toLowerCase()].sessionRating}</b>
       <Star
         color="#FFC436"
         size={28}
@@ -391,7 +392,7 @@ const Bookings = ({ accountType = null }) => {
               </div>
             </div>
           </div>
-          <div className="card-footer ">
+          <div className="card-footer">
             <div className="row">
               <div className="col-6">
                 {showRatingLabel(data.ratings)}

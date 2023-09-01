@@ -181,7 +181,7 @@ video {
       right: 15px !important;
     }
     .recent-profile {
-      height: 220px !important;
+      min-height: 220px !important;
       width: 100% !important;
       border-radius: $radious20 !important;
       position: relative !important;
@@ -203,7 +203,7 @@ video {
         left: 0 !important;
         top: 0 !important;
         position: absolute !important;
-        height: 22vh !important;
+        min-height: 220px !important;
         width: 100% !important;
         border-radius: 15px !important;
         box-shadow: inset 0px -25px 40px 6px rgba(0, 0, 0, 0.8) !important;

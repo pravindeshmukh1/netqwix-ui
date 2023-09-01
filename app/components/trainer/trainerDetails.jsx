@@ -189,8 +189,6 @@ const SelectedCategory = ({
                   key={`trainers_${index}`}
                   style={{
                     borderRadius: "20px",
-                    maxHeight: "18vh",
-                    height: "18vh",
                   }}
                 >
                   <div className="card-body" key={index}>
@@ -317,7 +315,7 @@ const TrainerInfo = ({
     }
   }, [trainer]);
   return (
-    <div className="row p-30">
+    <div className="row px-20 py-10">
       <div className="col-5">
         <div className="row">
           <div className="col-3">

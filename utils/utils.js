@@ -65,8 +65,47 @@ export class Utils {
       weekDates.push(date);
     }
 
+    const result = this.getNext7WorkingDays(date);
+    console.log(`before --- `, {weekDates, weekDateFormatted})
     return { weekDates, weekDateFormatted };
   }
+
+
+  static  getNext7WorkingDays(date) {
+    console.log(`date --- `, date);
+  const today = new Date(date);
+  const weekDates = [];
+  const weekDateFormatted = [];
+  if(weekDays[today.getDay() - 1]) {
+    weekDateFormatted.push(`${weekDays[today.getDay() - 1]} ${today.getMonth() + 1}/${today.getDate()}`)
+    // weekDates.push(today);
+    const currentDate = new Date(today);
+    currentDate.setDate(today.getDate());
+    weekDates.push(currentDate);
+
+  }
+  while (weekDateFormatted.length < 5) {
+    today.setDate(today.getDate() + 1); // Move to the next day
+
+    const dayOfWeek = weekDays[today.getDay() - 1];
+    
+    if (dayOfWeek) {
+      // Exclude weekends
+      const formattedDate = `${dayOfWeek} ${today.getMonth() + 1}/${today.getDate()}`;
+      weekDateFormatted.push(formattedDate);
+      // weekDates.push(today);
+      const date = new Date(today);
+      date.setDate(today.getDate());
+      weekDates.push(date);
+
+    }
+  }
+  console.log(`after ---- `, weekDates, weekDateFormatted);
+
+  return { weekDates, weekDateFormatted };
+
+  }
+  
 
   static getDateInFormat = (date = "") => {
     const newDate = date && date.length ? date : new Date();
@@ -184,11 +223,11 @@ export class Utils {
     let totalRatings = 0;
     ratings.forEach((({ratings}) => {
       if(ratings && ratings.trainee) {
-        totalRatings += ratings?.trainee?.recommendRating || 0;
+        totalRatings += ratings?.trainee?.sessionRating || 0;
       }
     }))
 
-    availableRatings.ratingRatio = totalRatings / ratings.length;
+    availableRatings.ratingRatio = (totalRatings / ratings.length).toFixed(1);
     return availableRatings;
   }
 }
