@@ -151,6 +151,10 @@ export const meetingRatingTimeout = {
   has24passed: "has24passed",
 };
 
+export const FileFormates = {
+  image: ".jpg, .jpeg, .png",
+};
+
 export const validationMessage = {
   rating: {
     howWasYourSession: "This field is required",

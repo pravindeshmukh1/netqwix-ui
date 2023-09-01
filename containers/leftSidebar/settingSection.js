@@ -20,6 +20,7 @@ import { updateProfileAsync } from "../../app/components/trainer/trainer.slice";
 import { updateTraineeProfileAsync } from "../../app/components/trainee/trainee.slice";
 import { HandleErrorLabel } from "../../app/common/error";
 import { toast } from "react-toastify";
+import UploadFile from "../../app/common/uploadFile";
 
 const SettingSection = (props) => {
   const dispatch = useAppDispatch();
@@ -37,6 +38,7 @@ const SettingSection = (props) => {
     address: "Alabma , USA",
     wallet_amount: 0,
     editStatus: false,
+    profilePicture: undefined,
   });
   const [collapseShow, setCollapseShow] = useState({
     security: false,
@@ -112,26 +114,25 @@ const SettingSection = (props) => {
 
   const EditProfile = (e) => {
     e.preventDefault();
-    if(profile.editStatus) {
-      if(profile.username && profile.username.trim().length) {
+    if (profile.editStatus) {
+      
+      if (profile.username && profile.username.trim().length) {
         // updating trainee profile
-        if(accountType === AccountType.TRAINEE ) {
-          dispatch(updateTraineeProfileAsync({fullname: profile.username})) ;
+        if (accountType === AccountType.TRAINEE) {
+          dispatch(updateTraineeProfileAsync({ fullname: profile.username }));
         } else if (accountType === AccountType.TRAINER) {
           // updating trainer profile
-          dispatch(updateProfileAsync({ fullname: profile.username}));
+          dispatch(updateProfileAsync({ fullname: profile.username }));
         }
         setProfile({ ...profile, editStatus: !profile.editStatus });
       } else {
-        toast('please enter required values.')
+        toast("please enter required values.");
       }
 
-      console.log(`save here `, profile)
+      console.log(`save here `, profile);
     } else {
       setProfile({ ...profile, editStatus: !profile.editStatus });
     }
-
-
   };
 
   const closeLeftSide = () => {
@@ -155,6 +156,18 @@ const SettingSection = (props) => {
     config.wallpaper = wallpaper;
   };
 
+  const handelSelectFile = (event) => {
+    if (event && event.target && event.target.files && event.target.files[0]) {
+      const { files } = event.target;
+      const file = URL.createObjectURL(files[0]);
+      const selectedFile = files[0];
+      setProfile({ ...profile, profilePicture: file });
+    }
+    event.stopPropagation();
+  };
+  const handelClearFile = () => {
+    setProfile({ ...profile, profilePicture: undefined });
+  };
   return (
     <div
       className={`settings-tab submenu-width dynemic-sidebar custom-scroll ${
@@ -184,22 +197,14 @@ const SettingSection = (props) => {
         </div>
         <div className="profile-box">
           <div className={`media ${profile.editStatus ? "open" : ""}`}>
-            <div
-              className="profile"
-              style={{
-                backgroundImage: `url('assets/images/contact/2.jpg')`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                display: "block",
-              }}
-            >
-              <img
-                className="bg-img"
-                src="/assets/images/contact/2.jpg"
-                alt="Avatar"
-                style={{ display: "none" }}
-              />
-            </div>
+            <UploadFile
+              onChange={handelSelectFile}
+              values={profile && profile.profilePicture}
+              clearFile={handelClearFile}
+              key={"profilePicture"}
+              isDisable={false}
+            />
+            {/* </div> */}
             <div className="details">
               <h5>{profile.username}</h5>
               <h6>{profile.address}</h6>
@@ -212,7 +217,7 @@ const SettingSection = (props) => {
             </div>
             <div className="details edit">
               <form className="form-radious form-sm">
-                <div className="form-group mb-2">
+                <div className="form-group mb-2 ml-2">
                   <label> Full name </label>
                   <input
                     className="form-control"
@@ -680,8 +685,12 @@ const SettingSection = (props) => {
               userInfo={userInfo}
               extraInfo={userInfo?.extraInfo || {}}
               onFormSubmit={(formValue) => {
-                // 
-                dispatch(updateProfileAsync({extraInfo: {...userInfo?.extraInfo, ...formValue}}));
+                //
+                dispatch(
+                  updateProfileAsync({
+                    extraInfo: { ...userInfo?.extraInfo, ...formValue },
+                  })
+                );
               }}
             />
           </div>
@@ -928,7 +937,7 @@ const SettingSection = (props) => {
                     ...userInfo?.extraInfo,
                     social_media_links: value,
                   };
-                  dispatch(updateProfileAsync({extraInfo: { ...payload }}));
+                  dispatch(updateProfileAsync({ extraInfo: { ...payload } }));
                 }}
               >
                 {({
