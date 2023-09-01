@@ -3,6 +3,7 @@ import {
   addRating,
   getScheduledMeetingDetails,
   updateBookedSessionScheduledMeeting,
+  uploadProfilePicture,
 } from "./common.api";
 import { toast } from "react-toastify";
 
@@ -47,6 +48,19 @@ export const getScheduledMeetingDetailsAsync = createAsyncThunk(
   async () => {
     try {
       const response = await getScheduledMeetingDetails();
+      return response;
+    } catch (err) {
+      toast.error(err.response.data.error);
+      throw err;
+    }
+  }
+);
+
+export const uploadProfilePictureAsync = createAsyncThunk(
+  "add/profile_picture",
+  async (payload) => {
+    try {
+      const response = await uploadProfilePicture(payload);
       return response;
     } catch (err) {
       toast.error(err.response.data.error);
@@ -106,6 +120,15 @@ export const bookingsSlice = createSlice({
         toast.success(action.payload.message, { type: "success" });
       })
       .addCase(addRatingAsync.rejected, (state, action) => {
+        state.status = "rejected";
+      })
+      .addCase(uploadProfilePictureAsync.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(uploadProfilePictureAsync.fulfilled, (state, action) => {
+        state.status = "fulfilled";
+      })
+      .addCase(uploadProfilePictureAsync.rejected, (state, action) => {
         state.status = "rejected";
       });
   },

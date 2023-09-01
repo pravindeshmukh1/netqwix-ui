@@ -21,6 +21,7 @@ import { updateTraineeProfileAsync } from "../../app/components/trainee/trainee.
 import { HandleErrorLabel } from "../../app/common/error";
 import { toast } from "react-toastify";
 import UploadFile from "../../app/common/uploadFile";
+import { uploadProfilePictureAsync } from "../../app/components/common/common.slice";
 
 const SettingSection = (props) => {
   const dispatch = useAppDispatch();
@@ -161,6 +162,10 @@ const SettingSection = (props) => {
       const { files } = event.target;
       const file = URL.createObjectURL(files[0]);
       const selectedFile = files[0];
+      const payload = {
+        profile_picture: selectedFile,
+      };
+      dispatch(uploadProfilePictureAsync(payload));
       setProfile({ ...profile, profile_picture: file });
     }
     event.stopPropagation();
