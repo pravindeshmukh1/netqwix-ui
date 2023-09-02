@@ -65,6 +65,46 @@ export class Utils {
       weekDates.push(date);
     }
 
+    const result = this.getNext7WorkingDays(date);
+    console.log(`before --- `, { weekDates, weekDateFormatted });
+    return { weekDates, weekDateFormatted };
+  }
+
+  static getNext7WorkingDays(date) {
+    console.log(`date --- `, date);
+    const today = new Date(date);
+    const weekDates = [];
+    const weekDateFormatted = [];
+    if (weekDays[today.getDay() - 1]) {
+      weekDateFormatted.push(
+        `${weekDays[today.getDay() - 1]} ${
+          today.getMonth() + 1
+        }/${today.getDate()}`
+      );
+      // weekDates.push(today);
+      const currentDate = new Date(today);
+      currentDate.setDate(today.getDate());
+      weekDates.push(currentDate);
+    }
+    while (weekDateFormatted.length < 5) {
+      today.setDate(today.getDate() + 1); // Move to the next day
+
+      const dayOfWeek = weekDays[today.getDay() - 1];
+
+      if (dayOfWeek) {
+        // Exclude weekends
+        const formattedDate = `${dayOfWeek} ${
+          today.getMonth() + 1
+        }/${today.getDate()}`;
+        weekDateFormatted.push(formattedDate);
+        // weekDates.push(today);
+        const date = new Date(today);
+        date.setDate(today.getDate());
+        weekDates.push(date);
+      }
+    }
+    console.log(`after ---- `, weekDates, weekDateFormatted);
+
     return { weekDates, weekDateFormatted };
   }
 
@@ -122,6 +162,12 @@ export class Utils {
     return isTimeConflicts;
   };
 
+  static isCurrentDateBefore = (dateToCompare) => {
+    const currentDate = moment();
+    const dateToCompareMoment = moment(dateToCompare);
+    return currentDate.isBefore(dateToCompareMoment);
+  };
+
   static isStartButtonEnabled = (
     bookedDate,
     currentDate,
@@ -168,6 +214,7 @@ export class Utils {
     const currentDate = moment().format(FormateDate.YYYY_MM_DD);
     const currentTime = moment().format(FormateHours.HH_MM);
     const currentFormattedTime = this.convertToAmPm(currentTime);
+    const isCurrentDateBefore = this.isCurrentDateBefore(bookedDate);
     const isStartButtonEnabled = this.isStartButtonEnabled(
       bookedDate,
       currentDate,
@@ -184,6 +231,28 @@ export class Utils {
     return {
       isStartButtonEnabled,
       has24HoursPassedSinceBooking,
+      isCurrentDateBefore,
     };
+  };
+
+  static truncateText(aboutText, maxLength) {
+    if (aboutText && aboutText.length > maxLength) {
+      return aboutText.slice(0, maxLength) + "…";
+    } else {
+      return aboutText;
+    }
+  }
+
+  static getRatings = (ratings) => {
+    let availableRatings = { totalRating: ratings.length, ratingRatio: 0 };
+    let totalRatings = 0;
+    ratings.forEach(({ ratings }) => {
+      if (ratings && ratings.trainee) {
+        totalRatings += ratings?.trainee?.sessionRating || 0;
+      }
+    });
+
+    availableRatings.ratingRatio = (totalRatings / ratings.length).toFixed(1);
+    return availableRatings;
   };
 }

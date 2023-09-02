@@ -181,7 +181,7 @@ video {
       right: 15px !important;
     }
     .recent-profile {
-      height: 220px !important;
+      min-height: 220px !important;
       width: 100% !important;
       border-radius: $radious20 !important;
       position: relative !important;
@@ -203,7 +203,7 @@ video {
         left: 0 !important;
         top: 0 !important;
         position: absolute !important;
-        height: 22vh !important;
+        min-height: 220px !important;
         width: 100% !important;
         border-radius: 15px !important;
         box-shadow: inset 0px -25px 40px 6px rgba(0, 0, 0, 0.8) !important;
@@ -311,7 +311,7 @@ slick-slider .slick-list,
 // booking sections
 .bookings {
   margin: 30px;
-  width: 88%;
+  width: 92%;
   overflow-x: auto;
   height: 93%;
 }
@@ -330,7 +330,42 @@ slick-slider .slick-list,
   width: 60vw;
 }
 
-
-.carousel-control-prev-icon, .carousel-control-next-icon {
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
   display: none;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.custom-card {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  background: #fff;
+  transition: all 0.5s ease;
+  user-select: none;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.custom-card:hover {
+  color: #fff;
+  transform: scale(1.025);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 5px 10px;
+}
+
+@media only screen and (max-width: 1280px) and (min-width: 800px) {
+  .trainer-details {
+    margin-left: 36px;
+  }
+  .close {
+    margin-right: 31px;
+  }
+  .arrowRight {
+    margin-left: 46px;
+  }
 }

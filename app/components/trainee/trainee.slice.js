@@ -1,14 +1,19 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {bookSession, createPaymentIntent, fetchTraineeWithSlots} from './trainee.api';
-import { toast } from "react-toastify";
-
+import {
+  bookSession,
+  createPaymentIntent,
+  fetchTraineeWithSlots,
+  updateProfile,
+} from './trainee.api';
+import {toast} from 'react-toastify';
+import { getMeAsync } from '../auth/auth.slice';
 
 const initialState = {
   status: 'idle',
   getTraineeSlots: [],
   transaction: {
-    intent: null
-  }
+    intent: null,
+  },
 };
 
 export const getTraineeWithSlotsAsync = createAsyncThunk (
@@ -37,6 +42,21 @@ export const bookSessionAsync = createAsyncThunk (
   }
 );
 
+//update Profile
+export const updateTraineeProfileAsync = createAsyncThunk (
+  'trainee/update/profile',
+  async (payload, {dispatch}) => {
+    try {
+      const response = await updateProfile (payload);
+      dispatch (getMeAsync());
+      return response;
+    } catch (err) {
+      toast.error (err.response.data.error);
+      throw err;
+    }
+  }
+);
+
 // TODO: should fall under transaction slice
 export const createPaymentIntentAsync = createAsyncThunk (
   'transaction/create-payment-intent',
@@ -50,7 +70,6 @@ export const createPaymentIntentAsync = createAsyncThunk (
     }
   }
 );
-
 
 export const traineeSlice = createSlice ({
   name: 'trainee',
@@ -77,10 +96,9 @@ export const traineeSlice = createSlice ({
       })
       .addCase (bookSessionAsync.fulfilled, (state, action) => {
         state.status = 'fulfilled';
-        // clearwing payment intent
         state.transaction.intent = {};
-        const { data } = action.payload;
-        toast.success(data.message);
+        const {data} = action.payload;
+        toast.success (data.message);
 
         // state.getTraineeSlots = action.payload.data;
       })
@@ -97,6 +115,16 @@ export const traineeSlice = createSlice ({
       .addCase (createPaymentIntentAsync.rejected, (state, action) => {
         state.status = 'rejected';
       })
+      .addCase (updateTraineeProfileAsync.pending, (state, action) => {
+        state.status = 'pending';
+      })
+      .addCase (updateTraineeProfileAsync.fulfilled, (state, action) => {
+        toast.success (action.payload.data.message);
+        state.status = 'fulfilled';
+      })
+      .addCase (updateTraineeProfileAsync.rejected, (state, action) => {
+        state.status = 'rejected';
+      });
   },
 });
 export default traineeSlice.reducer;

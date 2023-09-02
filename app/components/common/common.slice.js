@@ -3,6 +3,7 @@ import {
   addRating,
   getScheduledMeetingDetails,
   updateBookedSessionScheduledMeeting,
+  uploadProfilePicture,
 } from "./common.api";
 import { toast } from "react-toastify";
 
@@ -10,30 +11,30 @@ const initialState = {
   status: "idle",
   scheduledMeetingDetails: [],
   addRatingModel: { _id: null, isOpen: false },
+  profile_picture: null,
 };
 
 export const addRatingAsync = createAsyncThunk(
   "add/rating",
-  async (payload, {dispatch}) => {
+  async (payload, { dispatch }) => {
     try {
       const res = await addRating(payload);
       dispatch(getScheduledMeetingDetailsAsync());
       return res;
     } catch (err) {
-      console.log(`rre `,err)
+      console.log(`rre `, err);
       toast.error(err.response.data.error);
       throw err;
     }
   }
 );
 
-
 export const updateBookedSessionScheduledMeetingAsync = createAsyncThunk(
   "update/booked/session",
   async (payload, { dispatch }) => {
     try {
-      dispatch(getScheduledMeetingDetailsAsync());
       const response = await updateBookedSessionScheduledMeeting(payload);
+      dispatch(getScheduledMeetingDetailsAsync());
       //TODO:update redux state not calling get api
       return response;
     } catch (err) {
@@ -56,6 +57,18 @@ export const getScheduledMeetingDetailsAsync = createAsyncThunk(
   }
 );
 
+export const uploadProfilePictureAsync = createAsyncThunk(
+  "add/profile_picture",
+  async (payload) => {
+    try {
+      const response = await uploadProfilePicture(payload);
+      return response;
+    } catch (err) {
+      toast.error(err.response.data.error);
+      throw err;
+    }
+  }
+);
 
 export const bookingsSlice = createSlice({
   name: "bookings",
@@ -66,6 +79,9 @@ export const bookingsSlice = createSlice({
     },
     addRating: (state, action) => {
       state.addRatingModel = action.payload;
+    },
+    removeProfilePicture: (state, action) => {
+      state.profile_picture = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -108,6 +124,16 @@ export const bookingsSlice = createSlice({
         toast.success(action.payload.message, { type: "success" });
       })
       .addCase(addRatingAsync.rejected, (state, action) => {
+        state.status = "rejected";
+      })
+      .addCase(uploadProfilePictureAsync.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(uploadProfilePictureAsync.fulfilled, (state, action) => {
+        state.status = "fulfilled";
+        state.profile_picture = action.payload.url;
+      })
+      .addCase(uploadProfilePictureAsync.rejected, (state, action) => {
         state.status = "rejected";
       });
   },

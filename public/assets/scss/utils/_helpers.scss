@@ -19,12 +19,15 @@
 .owl-carousel {
   position: unset;
 }
-
-.container {
+// Sidebar position fixed
+.custom-sidebar {
   @extend .custom-scroll;
   position: fixed;
 }
-.container-content {
+.custom-sidebar-content {
   position: absolute;
+  // $sidebar-width-left + 30
   left: 135px;
+  max-width: 100%;
+  width: 92%;
 }

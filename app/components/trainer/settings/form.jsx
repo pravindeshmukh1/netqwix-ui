@@ -14,7 +14,7 @@ export const UpdateSettingProfileForm = ({ userInfo, onFormSubmit, extraInfo }) 
         teaching_style: "",
         credentials_and_affiliations: "",
         curriculum: "",
-        media: [{ type: '', url: '' }]
+        media: [{ title: '', description: '', type: '', url: '' }]
     };
 
     useEffect(() => {
@@ -43,6 +43,12 @@ export const UpdateSettingProfileForm = ({ userInfo, onFormSubmit, extraInfo }) 
                     .required("type required")
                     .nullable(),
                 url: Yup.string()
+                    .required("Description required")
+                    .nullable(),
+                title: Yup.string()
+                    .required("title required")
+                    .nullable(),
+                description: Yup.string()
                     .required("Description required")
                     .nullable()
             })
@@ -96,15 +102,15 @@ export const UpdateSettingProfileForm = ({ userInfo, onFormSubmit, extraInfo }) 
                             />
                         </div>
                     </>
-                     {/* medials */}
-                     <FieldArray name="media">
+                    {/* medials */}
+                    <FieldArray name="media">
                         {({ remove, push }) => {
                             return (
                                 <>
                                     <div className="col-form-label items-center flex">Add Media  <div className="col-2">
                                         <div className="col-2 pt-2">
                                             <div onClick={() => {
-                                                push({ url: '', type: 'image' })
+                                                push({ url: '', type: 'image', title: '', description: '' })
                                             }}>
                                                 <PlusCircle />
                                             </div>
@@ -114,8 +120,33 @@ export const UpdateSettingProfileForm = ({ userInfo, onFormSubmit, extraInfo }) 
                                         <div className="col-10">
                                             {values.media && values.media.length > 0 &&
                                                 values.media.map((mediaInfo, index) => (
-                                                    <div className="items-center">
-                                                        <div className="row mb-4" key={`media-list-${index}`}>
+                                                    <div className="">
+                                                        <div className="row mb-3">
+                                                            <div className="col-6">
+                                                                <label className="col-form-label">Title</label>
+                                                                <input type="text" onChange={(event) => {
+                                                                    const { value } = event.target;
+                                                                    values.media[index].title = value;
+                                                                    setValues(values);
+                                                                }}
+                                                                    value={values.media[index].title}
+                                                                    placeholder="Media title"
+                                                                    onBlur={handleBlur} className="form-control mt-1" name="" id="" ></input>
+                                                            </div>
+                                                        </div>
+                                                            <div className="mb-3">
+                                                                <label className="col-form-label">Media Description</label>
+                                                                <textarea onChange={(event) => {
+                                                                    const { value } = event.target;
+                                                                    values.media[index].description = value;
+                                                                    setValues(values);
+
+                                                                }}
+                                                                    value={values.media[index].description}
+                                                                    placeholder="Media description"
+                                                                    onBlur={handleBlur} className="form-control mt-1" name="" id="" cols="10" rows="3"></textarea>
+                                                            </div>
+                                                        <div className="row mb-4 items-center" key={`media-list-${index}`}>
                                                             <div className="col-4">
                                                                 <select defaultValue={'image'} name="media_type" className="form-control" id=""
                                                                     onChange={(event) => {
@@ -127,7 +158,7 @@ export const UpdateSettingProfileForm = ({ userInfo, onFormSubmit, extraInfo }) 
                                                                 </select>
                                                             </div>
                                                             <div className="col-6">
-                                                                <input type="text" className="form-control "
+                                                                <input type="url" className="form-control "
                                                                     onChange={(event) => {
                                                                         const { value } = event.target;
                                                                         values.media[index].url = value;
@@ -144,6 +175,8 @@ export const UpdateSettingProfileForm = ({ userInfo, onFormSubmit, extraInfo }) 
                                                                 <MinusCircle />
                                                             </div>
                                                         </div>
+                                                        <hr />
+
                                                     </div>
                                                 ))}
                                         </div>

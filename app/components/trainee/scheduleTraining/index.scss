@@ -13,7 +13,7 @@
   padding: 16px 8px;
   white-space: normal;
   word-break: break-word;
-  border: 1px solid black !important;
+  // border: 1px solid black !important;
   border-top: 0;
   border-left: 0;
   transition: box-shadow 0.3s;
@@ -141,7 +141,7 @@
   font-size: 12px;
   width: 90%;
   margin: auto;
-  border: 1px solid black !important;
+  // border: 1px solid black !important;
   line-height: 1.5;
 }
 .header {
@@ -240,4 +240,26 @@ table.table-bordered > thead > tr > th {
 }
 table.table-bordered > tbody > tr > td {
   border: 1px solid #000;
+}
+
+.custom-trainer-slots-booking-table {
+  border: 1px solid rgb(190, 185, 185);
+  @extend .rc-table;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+@media only screen and (max-width: 1280px) and (min-width: 800px) {
+  .datePicker {
+    margin-left: 2.5rem !important;
+  }
+}
+
+
+.table-thead {
+  border-bottom: 3px solid black;
+}
+
+
+.table-last-row {
+  border-top: 1px solid #dee2e6;
 }
