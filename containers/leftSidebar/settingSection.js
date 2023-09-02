@@ -109,8 +109,7 @@ const SettingSection = (props) => {
       address: userInfo.email,
       wallet_amount: userInfo.wallet_amount,
       profile_picture:
-        userInfo.profile_picture &&
-        Utils.imagePreview(userInfo.profile_picture),
+        userInfo.profile_picture,
     }));
   }, [userInfo]);
 
@@ -129,24 +128,18 @@ const SettingSection = (props) => {
       if (profile.username && profile.username.trim().length) {
         // updating trainee profile
         if (accountType === AccountType.TRAINEE) {
-          const originalUrl = profile.profile_picture
-            ? Utils.removeApiEndpoint(profile.profile_picture)
-            : null;
           dispatch(
             updateTraineeProfileAsync({
               fullname: profile.username,
-              profile_picture: originalUrl,
+              profile_picture: profile.profile_picture,
             })
           );
         } else if (accountType === AccountType.TRAINER) {
           // updating trainer profile
-          const originalUrl = profile.profile_picture
-            ? Utils.removeApiEndpoint(profile.profile_picture)
-            : null;
           dispatch(
             updateTraineeProfileAsync({
               fullname: profile.username,
-              profile_picture: originalUrl,
+              profile_picture: profile.profile_picture,
             })
           );
         }
@@ -274,7 +267,7 @@ const SettingSection = (props) => {
                     src={
                       profile.profile_picture
                         ? profile.profile_picture
-                        : "./assets/images/contact/1.jpg"
+                        : "/assets/images/avtar/user.png"
                     }
                     alt="Avatar"
                     width={44}

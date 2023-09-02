@@ -198,7 +198,7 @@ const SelectedCategory = ({
                         <img
                           src={
                             data.profilePicture
-                              ? Utils.imagePreview(data.profilePicture)
+                              ? data.profilePicture
                               : "/assets/images/avtar/statusMenuIcon.jpeg"
                           }
                           width={"136px"}
@@ -322,7 +322,7 @@ const TrainerInfo = ({
             <img
               src={
                 trainer.profilePicture
-                  ? Utils.imagePreview(trainer.profilePicture)
+                  ? trainer.profilePicture
                   : "/assets/images/avtar/statusMenuIcon.jpeg"
               }
               width={"136px"}

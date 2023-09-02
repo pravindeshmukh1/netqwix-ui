@@ -231,16 +231,4 @@ export class Utils {
     availableRatings.ratingRatio = (totalRatings / ratings.length).toFixed(1);
     return availableRatings;
   };
-
-  static removeApiEndpoint = (url) => {
-    const originalUrl = url.replace(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/`,
-      ""
-    );
-    return originalUrl;
-  };
-
-  static imagePreview = (url) => {
-    return `${process.env.NEXT_PUBLIC_API_BASE_URL}/${url}`;
-  };
 }
