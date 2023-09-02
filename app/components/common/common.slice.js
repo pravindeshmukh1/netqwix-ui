@@ -11,6 +11,7 @@ const initialState = {
   status: "idle",
   scheduledMeetingDetails: [],
   addRatingModel: { _id: null, isOpen: false },
+  profile_picture: null,
 };
 
 export const addRatingAsync = createAsyncThunk(
@@ -79,6 +80,9 @@ export const bookingsSlice = createSlice({
     addRating: (state, action) => {
       state.addRatingModel = action.payload;
     },
+    removeProfilePicture: (state, action) => {
+      state.profile_picture = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -127,6 +131,7 @@ export const bookingsSlice = createSlice({
       })
       .addCase(uploadProfilePictureAsync.fulfilled, (state, action) => {
         state.status = "fulfilled";
+        state.profile_picture = action.payload.url;
       })
       .addCase(uploadProfilePictureAsync.rejected, (state, action) => {
         state.status = "rejected";

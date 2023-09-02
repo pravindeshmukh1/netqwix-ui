@@ -21,11 +21,18 @@ import { updateTraineeProfileAsync } from "../../app/components/trainee/trainee.
 import { HandleErrorLabel } from "../../app/common/error";
 import { toast } from "react-toastify";
 import UploadFile from "../../app/common/uploadFile";
-import { uploadProfilePictureAsync } from "../../app/components/common/common.slice";
+import {
+  bookingsAction,
+  bookingsState,
+  uploadProfilePictureAsync,
+} from "../../app/components/common/common.slice";
+import { Utils } from "../../utils/utils";
 
 const SettingSection = (props) => {
   const dispatch = useAppDispatch();
   const socialFormRef = useRef(null);
+  const { removeProfilePicture } = bookingsAction;
+  const { profile_picture } = useAppSelector(bookingsState);
   const { userInfo } = useAppSelector(authState);
   const customizerCtx = useContext(CustomizerContext);
   const addBackgroundWallpaper = customizerCtx.addBackgroundWallpaper;
@@ -96,13 +103,15 @@ const SettingSection = (props) => {
   }, []);
 
   useEffect(() => {
-    setProfile({
-      ...profile,
+    setProfile((prevProfile) => ({
+      ...prevProfile,
       username: userInfo.fullname,
       address: userInfo.email,
       wallet_amount: userInfo.wallet_amount,
-      profile_picture: userInfo.profile_picture,
-    });
+      profile_picture:
+        userInfo.profile_picture &&
+        Utils.imagePreview(userInfo.profile_picture),
+    }));
   }, [userInfo]);
 
   const funcChecked = (val) => {
@@ -120,18 +129,24 @@ const SettingSection = (props) => {
       if (profile.username && profile.username.trim().length) {
         // updating trainee profile
         if (accountType === AccountType.TRAINEE) {
+          const originalUrl = profile.profile_picture
+            ? Utils.removeApiEndpoint(profile.profile_picture)
+            : null;
           dispatch(
             updateTraineeProfileAsync({
               fullname: profile.username,
-              profile_picture: profile.profile_picture,
+              profile_picture: originalUrl,
             })
           );
         } else if (accountType === AccountType.TRAINER) {
           // updating trainer profile
+          const originalUrl = profile.profile_picture
+            ? Utils.removeApiEndpoint(profile.profile_picture)
+            : null;
           dispatch(
-            updateProfileAsync({
+            updateTraineeProfileAsync({
               fullname: profile.username,
-              profile_picture: profile.profile_picture,
+              profile_picture: originalUrl,
             })
           );
         }
@@ -162,6 +177,12 @@ const SettingSection = (props) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (profile_picture) {
+      setProfile({ ...profile, profile_picture: profile_picture });
+    }
+  }, [profile_picture]);
+
   const setBackgroundWallpaper = (e, wallpaper) => {
     addBackgroundWallpaper(e, wallpaper);
     config.wallpaper = wallpaper;
@@ -172,9 +193,7 @@ const SettingSection = (props) => {
       const { files } = event.target;
       const selectedFile = files[0];
       if (selectedFile instanceof File) {
-        const file = URL.createObjectURL(selectedFile);
         dispatch(uploadProfilePictureAsync({ files: selectedFile }));
-        setProfile({ ...profile, profile_picture: file });
       } else {
         console.error("Invalid file selected.");
       }
@@ -183,7 +202,8 @@ const SettingSection = (props) => {
   };
 
   const handelClearFile = () => {
-    setProfile({ ...profile, profile_picture: undefined });
+    setProfile({ ...profile, profile_picture: null });
+    dispatch(removeProfilePicture(null));
   };
 
   return (
@@ -251,7 +271,11 @@ const SettingSection = (props) => {
                     className={`bg-img rounded ${
                       accountType === AccountType.TRAINEE ? "mt-2" : "mt-3"
                     }`}
-                    src={profile.profile_picture}
+                    src={
+                      profile.profile_picture
+                        ? profile.profile_picture
+                        : "./assets/images/contact/1.jpg"
+                    }
                     alt="Avatar"
                     width={44}
                     height={40}

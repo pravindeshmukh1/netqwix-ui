@@ -66,46 +66,47 @@ export class Utils {
     }
 
     const result = this.getNext7WorkingDays(date);
-    console.log(`before --- `, {weekDates, weekDateFormatted})
+    console.log(`before --- `, { weekDates, weekDateFormatted });
     return { weekDates, weekDateFormatted };
   }
 
-
-  static  getNext7WorkingDays(date) {
+  static getNext7WorkingDays(date) {
     console.log(`date --- `, date);
-  const today = new Date(date);
-  const weekDates = [];
-  const weekDateFormatted = [];
-  if(weekDays[today.getDay() - 1]) {
-    weekDateFormatted.push(`${weekDays[today.getDay() - 1]} ${today.getMonth() + 1}/${today.getDate()}`)
-    // weekDates.push(today);
-    const currentDate = new Date(today);
-    currentDate.setDate(today.getDate());
-    weekDates.push(currentDate);
-
-  }
-  while (weekDateFormatted.length < 5) {
-    today.setDate(today.getDate() + 1); // Move to the next day
-
-    const dayOfWeek = weekDays[today.getDay() - 1];
-    
-    if (dayOfWeek) {
-      // Exclude weekends
-      const formattedDate = `${dayOfWeek} ${today.getMonth() + 1}/${today.getDate()}`;
-      weekDateFormatted.push(formattedDate);
+    const today = new Date(date);
+    const weekDates = [];
+    const weekDateFormatted = [];
+    if (weekDays[today.getDay() - 1]) {
+      weekDateFormatted.push(
+        `${weekDays[today.getDay() - 1]} ${
+          today.getMonth() + 1
+        }/${today.getDate()}`
+      );
       // weekDates.push(today);
-      const date = new Date(today);
-      date.setDate(today.getDate());
-      weekDates.push(date);
-
+      const currentDate = new Date(today);
+      currentDate.setDate(today.getDate());
+      weekDates.push(currentDate);
     }
-  }
-  console.log(`after ---- `, weekDates, weekDateFormatted);
+    while (weekDateFormatted.length < 5) {
+      today.setDate(today.getDate() + 1); // Move to the next day
 
-  return { weekDates, weekDateFormatted };
+      const dayOfWeek = weekDays[today.getDay() - 1];
 
+      if (dayOfWeek) {
+        // Exclude weekends
+        const formattedDate = `${dayOfWeek} ${
+          today.getMonth() + 1
+        }/${today.getDate()}`;
+        weekDateFormatted.push(formattedDate);
+        // weekDates.push(today);
+        const date = new Date(today);
+        date.setDate(today.getDate());
+        weekDates.push(date);
+      }
+    }
+    console.log(`after ---- `, weekDates, weekDateFormatted);
+
+    return { weekDates, weekDateFormatted };
   }
-  
 
   static getDateInFormat = (date = "") => {
     const newDate = date && date.length ? date : new Date();
@@ -219,15 +220,27 @@ export class Utils {
   }
 
   static getRatings = (ratings) => {
-    let availableRatings =  {totalRating: ratings.length, ratingRatio: 0};
+    let availableRatings = { totalRating: ratings.length, ratingRatio: 0 };
     let totalRatings = 0;
-    ratings.forEach((({ratings}) => {
-      if(ratings && ratings.trainee) {
+    ratings.forEach(({ ratings }) => {
+      if (ratings && ratings.trainee) {
         totalRatings += ratings?.trainee?.sessionRating || 0;
       }
-    }))
+    });
 
     availableRatings.ratingRatio = (totalRatings / ratings.length).toFixed(1);
     return availableRatings;
-  }
+  };
+
+  static removeApiEndpoint = (url) => {
+    const originalUrl = url.replace(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/`,
+      ""
+    );
+    return originalUrl;
+  };
+
+  static imagePreview = (url) => {
+    return `${process.env.NEXT_PUBLIC_API_BASE_URL}/${url}`;
+  };
 }
