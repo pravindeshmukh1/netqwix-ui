@@ -190,7 +190,7 @@ export const mediaData = [
     description: "This is the second image in the collection."
   },
   {
-    url: "https://youtu.be/mUxzKVrSAjs?si=v6oqi-0-rG7BJ5sk",
+    url: "https://www.youtube.com/embed/rokGy0huYEA",
     type: "video",
     title: "Video 1",
     description: "This is a video link."
