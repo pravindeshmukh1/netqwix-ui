@@ -179,20 +179,20 @@ export const mediaData = [
   {
     url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3274&q=80",
     type: "image",
-    title: "Image 1",
+    title: "First side label",
     description: "This is the first image in the collection.",
     active: true,
   },
   {
     url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3374&q=80",
     type: "image",
-    title: "Image 2",
+    title: "second side label",
     description: "This is the second image in the collection."
   },
   {
-    url: "https://www.youtube.com/embed/rokGy0huYEA",
+    url: "https://www.youtube.com/watch?v=ixRanV-rdAQ",
     type: "video",
-    title: "Video 1",
+    title: "third side label",
     description: "This is a video link."
   },
 ];

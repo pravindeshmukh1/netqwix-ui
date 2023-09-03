@@ -44,30 +44,31 @@ const Carousel = ({ media }) => {
         className="d-flex justify-content-center ml-4 mt-4"
       >
         {item.url && item.type === "image" ? (
-          <div>
+          <div >
             <img
               key={`image_${index}`}
               src={item.url}
               alt={item.altText}
-              className="d-block img-fluid" // Make images responsive
-              style={{ maxWidth: "100%", height: "auto" }}
+              className="d-block" // Make images responsive
+              style={{ width: "500px", height: "300px" }}
             />
-            <div className="carousel-caption d-none d-md-block">
+            <div className="carousel-caption d-none d-md-block carousel-caption-gray">
               <h3 className="text-white">{item.title}</h3>
               <p className="text-white mt-2">{item.description}</p>
             </div>
           </div>
         ) : item.url && item.type === "video" ? (
           <>
-            <div className="embed-responsive embed-responsive-16by9">
+            <div>
               <iframe
-                className="embed-responsive-item" // Make videos responsive
-                src={`${item.url}`}
+                className="d-block w-90"
+                src={`https://www.youtube.com/embed/rokGy0huYEA`}                
                 allowFullScreen
+                style={{ width: "500px", height: "300px" }} // TODO:Adjust width and height values as needed
                 title="Embedded youtube"
               />
             </div>
-            <div className="carousel-caption d-none d-md-block">
+            <div className="carousel-caption d-none d-md-block carousel-caption-gray">
               <h3 className="text-white">{item.title}</h3>
               <p className="text-white mt-2">{item.description}</p>
             </div>
