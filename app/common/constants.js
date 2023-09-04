@@ -86,6 +86,7 @@ export const BookedSession = {
   booked: "booked",
   canceled: "canceled",
   completed: "completed",
+  start: "start",
 };
 export const BookedSessionMessage = {
   canceled: "This Booked Schedule Training Canceled",

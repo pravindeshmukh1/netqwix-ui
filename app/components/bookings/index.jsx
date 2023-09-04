@@ -201,7 +201,7 @@ const Bookings = ({ accountType = null }) => {
                       });
                     }}
                   >
-                    Start
+                    {BookedSession.start}
                   </button>
                 )}
                 <button
@@ -321,7 +321,7 @@ const Bookings = ({ accountType = null }) => {
                     });
                   }}
                 >
-                  Start
+                  {BookedSession.start}
                 </button>
               )}
               <button
@@ -429,18 +429,25 @@ const Bookings = ({ accountType = null }) => {
               </div>
             </div>
           </div>
-          <div className="card-footer px-5 pb-3 d-flex justify-content-end">
-            {showRatingLabel(bookingInfo.ratings)}
-            {renderBooking(
-              status,
-              booking_index,
-              booked_date,
-              session_start_time,
-              session_end_time,
-              _id,
-              trainee_info,
-              trainer_info
-            )}
+
+          <div className="card-footer">
+            <div className="row">
+              <div className="col-6">
+                {showRatingLabel(bookingInfo.ratings)}
+              </div>
+              <div className="col-6 d-flex justify-content-end">
+                {renderBooking(
+                  status,
+                  booking_index,
+                  booked_date,
+                  session_start_time,
+                  session_end_time,
+                  _id,
+                  trainee_info,
+                  trainer_info
+                )}
+              </div>
+            </div>
           </div>
         </div>
       );
