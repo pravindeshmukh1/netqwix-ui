@@ -386,7 +386,13 @@ const TrainerInfo = ({
           : Message.notFound}
       </div>
       <div className="col-7">
-        <Carousel media={trainer && trainer.extraInfo ? trainer.extraInfo.media : mediaData} />
+        <Carousel
+          media={
+            trainer && trainer.extraInfo && trainer.extraInfo.media
+              ? trainer.extraInfo.media
+              : mediaData
+          }
+        />
         {element}
       </div>
     </div>
