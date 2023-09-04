@@ -57,7 +57,7 @@ const ScheduleTraining = () => {
   useEffect(() => {
     const todaySDate = Utils.getDateInFormat(new Date());
     const { weekDates, weekDateFormatted } =
-      Utils.getCurrentWeekByDate(todaySDate);
+      Utils.getNext7WorkingDays(todaySDate);
     setTableData(getTraineeSlots, weekDates);
     setColumns(weekDateFormatted);
     setListOfTrainers(
@@ -302,23 +302,20 @@ const ScheduleTraining = () => {
       }`}
     >
       <table className="table custom-trainer-slots-booking-table ml-30 mr-30">
-        <thead className="justify-center align-center">
+        <thead className="justify-center align-center table-thead">
           <tr>
-            {bookingColumns.map((columns, index) => {
-              return (
-                <>
-                  {columns.title.length ? (
-                    <th scope="col" key={`booking-col-${index}`}>
-                      {columns.title}
-                    </th>
-                  ) : null}
-                </>
-              );
-            })}
+            {bookingColumns.map((columns, index) =>
+              columns.title.length ? (
+                <th scope="col" key={`booking-col-${index}`}>
+                  {columns.title}
+                </th>
+              ) : null
+            )}
           </tr>
         </thead>
         {bookingTableData && bookingTableData.length ? (
-          bookingTableData
+          <>
+      {    bookingTableData
             .filter(({ trainer_info }) => {
               return (
                 trainer_info._id === trainerInfo.userInfo.id ||
@@ -395,7 +392,15 @@ const ScheduleTraining = () => {
                   </tr>
                 );
               }
-            )
+            )}
+            <tr key={`table-data-empty`} className="table-last-row">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </>
         ) : (
           <tr key={"no-data"} className="no-data">
             <td colSpan="6">No trainers available.</td>
@@ -539,15 +544,15 @@ const ScheduleTraining = () => {
 
   const renderBookingTable = () => (
     <div>
-      <div class="row">
-        <div class="mt-4 col-1.4 datePicker">
+      <div className="row">
+        <div className="mt-4 col-1.4 datePicker">
           <DatePicker
             minDate={moment().toDate()}
             onChange={(date) => {
               setStartDate(date);
               const todaySDate = Utils.getDateInFormat(date.toString());
               const { weekDateFormatted, weekDates } =
-                Utils.getCurrentWeekByDate(todaySDate);
+                Utils.getNext7WorkingDays(todaySDate);
               setColumns(weekDateFormatted);
               setTableData(getTraineeSlots, weekDates);
               setColumns(weekDateFormatted);
@@ -558,8 +563,8 @@ const ScheduleTraining = () => {
           />
         </div>
       </div>
-      <div class="row">
-        <div class="col-8 pt-3">
+      <div className="row">
+        <div className="col-8 pt-3">
           {(getParams.search && getParams.search.length) ||
           !bookingColumns.length ? (
             renderTable()
@@ -611,7 +616,7 @@ const ScheduleTraining = () => {
     //         setStartDate(date);
     //         const todaySDate = Utils.getDateInFormat(date.toString());
     //         const { weekDateFormatted, weekDates } =
-    //           Utils.getCurrentWeekByDate(todaySDate);
+    //           Utils.getNext7WorkingDays(todaySDate);
     //         setColumns(weekDateFormatted);
     //         setTableData(getTraineeSlots, weekDates);
     //         setColumns(weekDateFormatted);

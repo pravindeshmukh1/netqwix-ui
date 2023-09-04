@@ -1882,3 +1882,35 @@ footer {
 		color: $primary-color;
 	}
 }
+
+/* carousel.css */
+.carousel-caption-gray {
+	background-color: gray;
+	padding: 10px; /* Add padding for spacing */
+  }
+
+  .carousel-caption {
+	position: absolute;
+    right: 14%;
+    bottom: 0px;
+    left: 17.5%;
+    z-index: 10;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #ffffff;
+    text-align: center;
+  }
+
+  @media only screen and (max-width: 1180px) and (min-width: 820px) {
+	.carousel-caption {
+		position: absolute;
+		right: 0%;
+		bottom: 0px;
+		left: 0%;
+		z-index: 10;
+		padding-top: 20px;
+		padding-bottom: 20px;
+		color: #ffffff;
+		text-align: center;
+	}
+  }

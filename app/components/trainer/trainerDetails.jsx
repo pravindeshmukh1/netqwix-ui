@@ -187,21 +187,19 @@ const SelectedCategory = ({
               return (
                 <div
                   className="card custom-card mb-4"
-                  key={index}
+                  key={`trainers_${index}`}
                   style={{
                     borderRadius: "20px",
-                    maxHeight: "18vh",
-                    height: "18vh",
                   }}
                 >
-                  <div className="card-body">
+                  <div className="card-body" key={index}>
                     <div className="row">
                       <div className="col-1.3 ml-3">
                         <img
                           src={
                             data.profilePicture
                               ? data.profilePicture
-                              : "/assets/images/avtar/1.jpg"
+                              : "/assets/images/avtar/statusMenuIcon.jpeg"
                           }
                           width={"136px"}
                           height={"128px"}
@@ -253,17 +251,10 @@ const SelectedCategory = ({
                           ) : null}
                         </div>
                       </div>
-                      <div className="col-2 d-flex justify-content-end">
-                        <Star
-                          color="#FFC436"
-                          size={28}
-                          className="star-container star-svg"
-                        />
-                        <p className="ml-1 mt-1 mr-1 font-weight-light">
-                          {trainerReview.review}
-                        </p>
-                        <p className="mt-1">({trainerReview.totalReviews})</p>
-                      </div>
+                      {showRatings(
+                        data.trainer_ratings,
+                        "col-2 d-flex justify-content-end"
+                      )}
                     </div>
                   </div>
                 </div>
@@ -276,6 +267,19 @@ const SelectedCategory = ({
   );
 };
 
+const showRatings = (ratings, extraClasses = "") => {
+  const { ratingRatio, totalRating } = Utils.getRatings(ratings);
+  return (
+    <>
+      <div className={extraClasses}>
+        <Star color="#FFC436" size={28} className="star-container star-svg" />
+        <p className="ml-1 mt-1 mr-1 font-weight-light">{ratingRatio || 0}</p>
+        <p className="mt-1">({totalRating || 0})</p>
+      </div>
+    </>
+  );
+};
+
 const TrainerInfo = ({
   element,
   accordionData,
@@ -284,8 +288,6 @@ const TrainerInfo = ({
   trainerDetails,
   getTraineeSlots,
   setAccordionsData,
-  textTruncate,
-  setTextTruncate,
 }) => {
   const findTrainerDetails = () => {
     const findByTrainerId = getTraineeSlots.find(
@@ -294,9 +296,6 @@ const TrainerInfo = ({
     return findByTrainerId;
   };
   const trainer = findTrainerDetails();
-  const toggleTextTruncate = () => {
-    setTextTruncate(!textTruncate);
-  };
   useEffect(() => {
     if (trainer && trainer.extraInfo) {
       setAccordionsData((prev) => ({
@@ -316,12 +315,16 @@ const TrainerInfo = ({
     }
   }, [trainer]);
   return (
-    <div className="row p-30">
+    <div className="row px-20 py-10">
       <div className="col-5">
         <div className="row">
           <div className="col-3">
             <img
-              src={"/assets/images/avtar/1.jpg"}
+              src={
+                trainer.profilePicture
+                  ? trainer.profilePicture
+                  : "/assets/images/avtar/statusMenuIcon.jpeg"
+              }
               width={"136px"}
               height={"128px"}
               style={{ borderRadius: "15px" }}
@@ -334,17 +337,7 @@ const TrainerInfo = ({
               {" "}
               Hourly Rate: ${TRAINER_AMOUNT_USD}{" "}
             </h3>
-            <div className="mb-3 d-flex">
-              <Star
-                color="#FFC436"
-                size={28}
-                className="star-container star-svg"
-              />
-              <p className="ml-1 mt-1 mr-1 font-weight-light">
-                {trainerReview.review}
-              </p>
-              <p className="mt-1">({trainerReview.totalReviews})</p>
-            </div>
+            {showRatings(trainer?.trainer_ratings, "mb-3 d-flex")}
           </div>
         </div>
         <div className="d-flex flex-row bd-highlight"></div>
@@ -390,10 +383,10 @@ const TrainerInfo = ({
                 </Accordion>
               );
             })
-          : "No data found"}
+          : Message.notFound}
       </div>
       <div className="col-7">
-        <Carousel media={mediaData} />
+        <Carousel media={trainer && trainer.extraInfo ? trainer.extraInfo.media : mediaData} />
         {element}
       </div>
     </div>

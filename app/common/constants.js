@@ -86,6 +86,7 @@ export const BookedSession = {
   booked: "booked",
   canceled: "canceled",
   completed: "completed",
+  start: "start",
 };
 export const BookedSessionMessage = {
   canceled: "This Booked Schedule Training Canceled",
@@ -151,6 +152,10 @@ export const meetingRatingTimeout = {
   has24passed: "has24passed",
 };
 
+export const FileFormates = {
+  image: ".jpg, .jpeg, .png",
+};
+
 export const validationMessage = {
   rating: {
     howWasYourSession: "This field is required",
@@ -179,15 +184,22 @@ export const mediaData = [
   {
     url: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3274&q=80",
     type: "image",
+    title: "First side label",
+    description: "This is the first image in the collection.",
+    active: true,
   },
   {
     url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3374&q=80",
     type: "image",
+    title: "second side label",
+    description: "This is the second image in the collection.",
   },
-  // {
-  //   url: "https://youtu.be/mUxzKVrSAjs?si=v6oqi-0-rG7BJ5sk",
-  //   type: "video",
-  // },
+  {
+    url: "https://www.youtube.com/watch?v=ixRanV-rdAQ",
+    type: "video",
+    title: "third side label",
+    description: "This is a video link.",
+  },
 ];
 
 export const trainerFilterOptions = [
@@ -214,3 +226,10 @@ export const trainerFilterOptions = [
 export const truncateText = {
   maxLength: 200,
 };
+
+export const carouselItem = {
+  image: "image",
+  video: "video",
+};
+
+export const settingMenuFilterSection = ["account", "my-profile"];

@@ -3,6 +3,7 @@ import {
   addRating,
   getScheduledMeetingDetails,
   updateBookedSessionScheduledMeeting,
+  uploadProfilePicture,
 } from "./common.api";
 import { toast } from "react-toastify";
 
@@ -10,6 +11,7 @@ const initialState = {
   status: "idle",
   scheduledMeetingDetails: [],
   addRatingModel: { _id: null, isOpen: false },
+  profile_picture: null,
 };
 
 export const addRatingAsync = createAsyncThunk(
@@ -55,6 +57,19 @@ export const getScheduledMeetingDetailsAsync = createAsyncThunk(
   }
 );
 
+export const uploadProfilePictureAsync = createAsyncThunk(
+  "add/profile_picture",
+  async (payload) => {
+    try {
+      const response = await uploadProfilePicture(payload);
+      return response;
+    } catch (err) {
+      toast.error(err.response.data.error);
+      throw err;
+    }
+  }
+);
+
 export const bookingsSlice = createSlice({
   name: "bookings",
   initialState,
@@ -64,6 +79,9 @@ export const bookingsSlice = createSlice({
     },
     addRating: (state, action) => {
       state.addRatingModel = action.payload;
+    },
+    removeProfilePicture: (state, action) => {
+      state.profile_picture = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -106,6 +124,16 @@ export const bookingsSlice = createSlice({
         toast.success(action.payload.message, { type: "success" });
       })
       .addCase(addRatingAsync.rejected, (state, action) => {
+        state.status = "rejected";
+      })
+      .addCase(uploadProfilePictureAsync.pending, (state, action) => {
+        state.status = "pending";
+      })
+      .addCase(uploadProfilePictureAsync.fulfilled, (state, action) => {
+        state.status = "fulfilled";
+        state.profile_picture = action.payload.url;
+      })
+      .addCase(uploadProfilePictureAsync.rejected, (state, action) => {
         state.status = "rejected";
       });
   },

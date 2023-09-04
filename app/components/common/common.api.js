@@ -58,3 +58,25 @@ export const updateBookedSessionScheduledMeeting = async (payload) => {
     throw err;
   }
 };
+
+export const uploadProfilePicture = async (payload) => {
+  try {
+    const formData = new FormData();
+    formData.append("files", payload.files);
+    const response = await axiosInstance({
+      url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/common/upload`,
+      method: "post",
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${Utils.getToken(
+          LOCAL_STORAGE_KEYS.ACCESS_TOKEN
+        )}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};

@@ -13,6 +13,7 @@ import { authState } from "../../app/components/auth/auth.slice";
 import {
   AccountType,
   LOCAL_STORAGE_KEYS,
+  settingMenuFilterSection,
   validationMessage,
 } from "../../app/common/constants";
 import { UpdateSettingProfileForm } from "../../app/components/trainer/settings/form";
@@ -20,10 +21,19 @@ import { updateProfileAsync } from "../../app/components/trainer/trainer.slice";
 import { updateTraineeProfileAsync } from "../../app/components/trainee/trainee.slice";
 import { HandleErrorLabel } from "../../app/common/error";
 import { toast } from "react-toastify";
+import UploadFile from "../../app/common/uploadFile";
+import {
+  bookingsAction,
+  bookingsState,
+  uploadProfilePictureAsync,
+} from "../../app/components/common/common.slice";
+import { Utils } from "../../utils/utils";
 
 const SettingSection = (props) => {
   const dispatch = useAppDispatch();
   const socialFormRef = useRef(null);
+  const { removeProfilePicture } = bookingsAction;
+  const { profile_picture } = useAppSelector(bookingsState);
   const { userInfo } = useAppSelector(authState);
   const customizerCtx = useContext(CustomizerContext);
   const addBackgroundWallpaper = customizerCtx.addBackgroundWallpaper;
@@ -37,6 +47,7 @@ const SettingSection = (props) => {
     address: "Alabma , USA",
     wallet_amount: 0,
     editStatus: false,
+    profile_picture: undefined,
   });
   const [collapseShow, setCollapseShow] = useState({
     security: false,
@@ -93,12 +104,13 @@ const SettingSection = (props) => {
   }, []);
 
   useEffect(() => {
-    setProfile({
-      ...profile,
+    setProfile((prevProfile) => ({
+      ...prevProfile,
       username: userInfo.fullname,
       address: userInfo.email,
       wallet_amount: userInfo.wallet_amount,
-    });
+      profile_picture: userInfo.profile_picture,
+    }));
   }, [userInfo]);
 
   const funcChecked = (val) => {
@@ -112,26 +124,34 @@ const SettingSection = (props) => {
 
   const EditProfile = (e) => {
     e.preventDefault();
-    if(profile.editStatus) {
-      if(profile.username && profile.username.trim().length) {
+    if (profile.editStatus) {
+      if (profile.username && profile.username.trim().length) {
         // updating trainee profile
-        if(accountType === AccountType.TRAINEE ) {
-          dispatch(updateTraineeProfileAsync({fullname: profile.username})) ;
+        if (accountType === AccountType.TRAINEE) {
+          dispatch(
+            updateTraineeProfileAsync({
+              fullname: profile.username,
+              profile_picture: profile.profile_picture,
+            })
+          );
         } else if (accountType === AccountType.TRAINER) {
           // updating trainer profile
-          dispatch(updateProfileAsync({ fullname: profile.username}));
+          dispatch(
+            updateTraineeProfileAsync({
+              fullname: profile.username,
+              profile_picture: profile.profile_picture,
+            })
+          );
         }
         setProfile({ ...profile, editStatus: !profile.editStatus });
       } else {
-        toast('please enter required values.')
+        toast("please enter required values.");
       }
 
-      console.log(`save here `, profile)
+      console.log(`save here `, profile);
     } else {
       setProfile({ ...profile, editStatus: !profile.editStatus });
     }
-
-
   };
 
   const closeLeftSide = () => {
@@ -150,9 +170,33 @@ const SettingSection = (props) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (profile_picture) {
+      setProfile({ ...profile, profile_picture: profile_picture });
+    }
+  }, [profile_picture]);
+
   const setBackgroundWallpaper = (e, wallpaper) => {
     addBackgroundWallpaper(e, wallpaper);
     config.wallpaper = wallpaper;
+  };
+
+  const handelSelectFile = (event) => {
+    if (event && event.target && event.target.files && event.target.files[0]) {
+      const { files } = event.target;
+      const selectedFile = files[0];
+      if (selectedFile instanceof File) {
+        dispatch(uploadProfilePictureAsync({ files: selectedFile }));
+      } else {
+        console.error("Invalid file selected.");
+      }
+    }
+    event.stopPropagation();
+  };
+
+  const handelClearFile = () => {
+    setProfile({ ...profile, profile_picture: null });
+    dispatch(removeProfilePicture(null));
   };
 
   return (
@@ -184,22 +228,55 @@ const SettingSection = (props) => {
         </div>
         <div className="profile-box">
           <div className={`media ${profile.editStatus ? "open" : ""}`}>
-            <div
-              className="profile"
-              style={{
-                backgroundImage: `url('assets/images/contact/2.jpg')`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                display: "block",
-              }}
-            >
-              <img
-                className="bg-img"
-                src="/assets/images/contact/2.jpg"
-                alt="Avatar"
-                style={{ display: "none" }}
-              />
-            </div>
+            {profile.profile_picture && profile.editStatus ? (
+              <div className="border border-dark rounded mt-2">
+                <i
+                  className="fa fa-times pointer"
+                  aria-hidden="true"
+                  onClick={handelClearFile}
+                  style={{
+                    position: "absolute",
+                    left: accountType === AccountType.TRAINEE ? "14%" : "3%",
+                    top: "42%",
+                  }}
+                />
+                <img
+                  className={`bg-img rounded ${
+                    accountType === !AccountType.TRAINEE && "mt-1"
+                  }`}
+                  src={profile.profile_picture}
+                  alt="Avatar"
+                  width={44}
+                  height={38}
+                />
+              </div>
+            ) : (
+              <div>
+                {profile.editStatus && !profile.profile_picture ? (
+                  <UploadFile
+                    onChange={handelSelectFile}
+                    values={profile && profile.profile_picture}
+                    key={"files"}
+                    name={"files"}
+                  />
+                ) : (
+                  <img
+                    className={`bg-img rounded ${
+                      accountType === AccountType.TRAINEE ? "mt-2" : "mt-3"
+                    }`}
+                    src={
+                      profile.profile_picture
+                        ? profile.profile_picture
+                        : "/assets/images/avtar/user.png"
+                    }
+                    alt="Avatar"
+                    width={44}
+                    height={40}
+                  />
+                )}
+              </div>
+            )}
+            {/* </div> */}
             <div className="details">
               <h5>{profile.username}</h5>
               <h6>{profile.address}</h6>
@@ -212,7 +289,7 @@ const SettingSection = (props) => {
             </div>
             <div className="details edit">
               <form className="form-radious form-sm">
-                <div className="form-group mb-2">
+                <div className="form-group mb-2 ml-2">
                   <label> Full name </label>
                   <input
                     className="form-control"
@@ -247,7 +324,11 @@ const SettingSection = (props) => {
         </div>
       </div>
       <div className="setting-block">
-        <div className={`block ${settingTab === "account" ? "open" : ""}`}>
+        <div
+          className={`block ${
+            settingTab === "account" ? "open custom-block-height" : ""
+          }`}
+        >
           <div className="media">
             <div className="media-body">
               <h3>Account</h3>
@@ -659,7 +740,11 @@ const SettingSection = (props) => {
       </div>
       {accountType === AccountType.TRAINER ? (
         <div className="setting-block">
-          <div className={`block ${settingTab === "my-profile" ? "open" : ""}`}>
+          <div
+            className={`block ${
+              settingTab === "my-profile" ? "open custom-block-height" : ""
+            }`}
+          >
             <div className="media">
               <div className="media-body">
                 <h3>My profile</h3>
@@ -680,8 +765,12 @@ const SettingSection = (props) => {
               userInfo={userInfo}
               extraInfo={userInfo?.extraInfo || {}}
               onFormSubmit={(formValue) => {
-                // 
-                dispatch(updateProfileAsync({extraInfo: {...userInfo?.extraInfo, ...formValue}}));
+                //
+                dispatch(
+                  updateProfileAsync({
+                    extraInfo: { ...userInfo?.extraInfo, ...formValue },
+                  })
+                );
               }}
             />
           </div>
@@ -888,11 +977,14 @@ const SettingSection = (props) => {
           </div>
         </div>
       </div> */}
-      {accountType === AccountType.TRAINER ? (
+      {!settingMenuFilterSection.includes(settingTab) &&
+      accountType === AccountType.TRAINER ? (
         <>
           <div className="setting-block">
             <div
-              className={`block ${settingTab === "integratin" ? "open" : ""}`}
+              className={`block ${
+                settingTab === "integratin" ? "open custom-block-height" : ""
+              }`}
             >
               <div className="media">
                 <div className="media-body">
@@ -928,7 +1020,7 @@ const SettingSection = (props) => {
                     ...userInfo?.extraInfo,
                     social_media_links: value,
                   };
-                  dispatch(updateProfileAsync({extraInfo: { ...payload }}));
+                  dispatch(updateProfileAsync({ extraInfo: { ...payload } }));
                 }}
               >
                 {({
@@ -1325,76 +1417,81 @@ const SettingSection = (props) => {
       ) : (
         <></>
       )}
-
-      <div className="setting-block">
-        <div className={`block ${settingTab === "help" ? "open" : ""}`}>
-          <div className="media">
-            <div className="media-body">
-              <h3>Help</h3>
+      {!settingMenuFilterSection.includes(settingTab) && (
+        <div className="setting-block">
+          <div
+            className={`block ${
+              settingTab === "help" ? "open custom-block-height" : ""
+            }`}
+          >
+            <div className="media">
+              <div className="media-body">
+                <h3>Help</h3>
+              </div>
+              <div className="media-right">
+                {" "}
+                <a
+                  className="icon-btn btn-outline-light btn-sm pull-right previous"
+                  href="#"
+                  onClick={() => setSettingTab("")}
+                >
+                  {" "}
+                  <ChevronLeft />
+                </a>
+              </div>
             </div>
-            <div className="media-right">
-              {" "}
-              <a
-                className="icon-btn btn-outline-light btn-sm pull-right previous"
-                href="#"
-                onClick={() => setSettingTab("")}
-              >
-                {" "}
-                <ChevronLeft />
-              </a>
-            </div>
-          </div>
-          <ul className="help">
-            <li>
-              <h5>
-                {" "}
-                <a href="#">FAQ</a>
-              </h5>
-            </li>
-            <li>
-              <h5>
-                {" "}
-                <a href="#"> Contact Us</a>
-              </h5>
-            </li>
-            <li>
-              <h5>
-                {" "}
-                <a href="#">Terms and Privacy Policy</a>
-              </h5>
-            </li>
-            {/* <li>
+            <ul className="help">
+              <li>
+                <h5>
+                  {" "}
+                  <a href="#">FAQ</a>
+                </h5>
+              </li>
+              <li>
+                <h5>
+                  {" "}
+                  <a href="#"> Contact Us</a>
+                </h5>
+              </li>
+              <li>
+                <h5>
+                  {" "}
+                  <a href="#">Terms and Privacy Policy</a>
+                </h5>
+              </li>
+              {/* <li>
               <h5>
                 {" "}
                 <a href="#">Licenses</a>
               </h5>
             </li> */}
-            {/* <li>
+              {/* <li>
               <h5>
                 {" "}
                 <a href="#">2019 - 20 Powered by Pixelstrap</a>
               </h5>
             </li> */}
-          </ul>
-        </div>
-        <div className="media">
-          <div className="media-body">
-            <h3>Help</h3>
-            <h4>How can we help you?</h4>
+            </ul>
           </div>
-          <div className="media-right">
-            {" "}
-            <a
-              className="icon-btn btn-outline-light btn-sm pull-right next"
-              href="#"
-              onClick={() => setSettingTab("help")}
-            >
+          <div className="media">
+            <div className="media-body">
+              <h3>Help</h3>
+              <h4>How can we help you?</h4>
+            </div>
+            <div className="media-right">
               {" "}
-              <ChevronRight />
-            </a>
+              <a
+                className="icon-btn btn-outline-light btn-sm pull-right next"
+                href="#"
+                onClick={() => setSettingTab("help")}
+              >
+                {" "}
+                <ChevronRight />
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
