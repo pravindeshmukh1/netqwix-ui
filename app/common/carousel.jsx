@@ -89,7 +89,7 @@ const Carousel = ({ media }) => {
           className="d-flex justify-content-center mt-5"
           style={{ minHeight: "20%" }}
         >
-          {Message.notFound}
+          {Message.noMediaFound}
         </h3>
       ) : (
         <ReactCarousel
