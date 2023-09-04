@@ -388,9 +388,10 @@ const TrainerInfo = ({
       <div className="col-7">
         <Carousel
           media={
-            trainer && trainer.extraInfo && trainer.extraInfo.media
-              ? trainer.extraInfo.media
-              : mediaData
+            trainer &&
+            trainer.extraInfo &&
+            trainer.extraInfo.media &&
+            trainer.extraInfo.media
           }
         />
         {element}
