@@ -6,7 +6,7 @@ import {
   CarouselControl,
   CarouselIndicators,
 } from "reactstrap";
-import { Message } from "./constants";
+import { Message, carouselItem } from "./constants";
 
 const Carousel = ({ media }) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -43,8 +43,8 @@ const Carousel = ({ media }) => {
         key={`item_${index}`}
         className="d-flex justify-content-center ml-4 mt-4"
       >
-        {item.url && item.type === "image" ? (
-          <div >
+        {item.url && item.type === carouselItem.image ? (
+          <div>
             <img
               key={`image_${index}`}
               src={item.url}
@@ -57,12 +57,12 @@ const Carousel = ({ media }) => {
               <p className="text-white mt-2">{item.description}</p>
             </div>
           </div>
-        ) : item.url && item.type === "video" ? (
-          <>
+        ) : item.url && item.type === carouselItem.video ? (
+          <div>
             <div>
               <iframe
                 className="d-block w-90"
-                src={`https://www.youtube.com/embed/rokGy0huYEA`}                
+                src={item.url}
                 allowFullScreen
                 style={{ width: "500px", height: "300px" }} // TODO:Adjust width and height values as needed
                 title="Embedded youtube"
@@ -72,9 +72,9 @@ const Carousel = ({ media }) => {
               <h3 className="text-white">{item.title}</h3>
               <p className="text-white mt-2">{item.description}</p>
             </div>
-          </>
+          </div>
         ) : (
-          <>{Message.noMediaFound}</>
+          <div>{Message.noMediaFound}</div>
         )}
       </div>
     </CarouselItem>
