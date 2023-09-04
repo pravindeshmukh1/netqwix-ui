@@ -231,3 +231,5 @@ export const carouselItem = {
   image: "image",
   video: "video",
 };
+
+export const settingMenuFilterSection = ["account", "my-profile"];

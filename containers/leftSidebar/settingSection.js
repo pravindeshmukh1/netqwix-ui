@@ -13,6 +13,7 @@ import { authState } from "../../app/components/auth/auth.slice";
 import {
   AccountType,
   LOCAL_STORAGE_KEYS,
+  settingMenuFilterSection,
   validationMessage,
 } from "../../app/common/constants";
 import { UpdateSettingProfileForm } from "../../app/components/trainer/settings/form";
@@ -108,8 +109,7 @@ const SettingSection = (props) => {
       username: userInfo.fullname,
       address: userInfo.email,
       wallet_amount: userInfo.wallet_amount,
-      profile_picture:
-        userInfo.profile_picture,
+      profile_picture: userInfo.profile_picture,
     }));
   }, [userInfo]);
 
@@ -324,7 +324,11 @@ const SettingSection = (props) => {
         </div>
       </div>
       <div className="setting-block">
-        <div className={`block ${settingTab === "account" ? "open" : ""}`}>
+        <div
+          className={`block ${
+            settingTab === "account" ? "open custom-block-height" : ""
+          }`}
+        >
           <div className="media">
             <div className="media-body">
               <h3>Account</h3>
@@ -736,7 +740,11 @@ const SettingSection = (props) => {
       </div>
       {accountType === AccountType.TRAINER ? (
         <div className="setting-block">
-          <div className={`block ${settingTab === "my-profile" ? "open" : ""}`}>
+          <div
+            className={`block ${
+              settingTab === "my-profile" ? "open custom-block-height" : ""
+            }`}
+          >
             <div className="media">
               <div className="media-body">
                 <h3>My profile</h3>
@@ -969,11 +977,14 @@ const SettingSection = (props) => {
           </div>
         </div>
       </div> */}
-      {accountType === AccountType.TRAINER ? (
+      {!settingMenuFilterSection.includes(settingTab) &&
+      accountType === AccountType.TRAINER ? (
         <>
           <div className="setting-block">
             <div
-              className={`block ${settingTab === "integratin" ? "open" : ""}`}
+              className={`block ${
+                settingTab === "integratin" ? "open custom-block-height" : ""
+              }`}
             >
               <div className="media">
                 <div className="media-body">
@@ -1406,76 +1417,81 @@ const SettingSection = (props) => {
       ) : (
         <></>
       )}
-
-      <div className="setting-block">
-        <div className={`block ${settingTab === "help" ? "open" : ""}`}>
-          <div className="media">
-            <div className="media-body">
-              <h3>Help</h3>
+      {!settingMenuFilterSection.includes(settingTab) && (
+        <div className="setting-block">
+          <div
+            className={`block ${
+              settingTab === "help" ? "open custom-block-height" : ""
+            }`}
+          >
+            <div className="media">
+              <div className="media-body">
+                <h3>Help</h3>
+              </div>
+              <div className="media-right">
+                {" "}
+                <a
+                  className="icon-btn btn-outline-light btn-sm pull-right previous"
+                  href="#"
+                  onClick={() => setSettingTab("")}
+                >
+                  {" "}
+                  <ChevronLeft />
+                </a>
+              </div>
             </div>
-            <div className="media-right">
-              {" "}
-              <a
-                className="icon-btn btn-outline-light btn-sm pull-right previous"
-                href="#"
-                onClick={() => setSettingTab("")}
-              >
-                {" "}
-                <ChevronLeft />
-              </a>
-            </div>
-          </div>
-          <ul className="help">
-            <li>
-              <h5>
-                {" "}
-                <a href="#">FAQ</a>
-              </h5>
-            </li>
-            <li>
-              <h5>
-                {" "}
-                <a href="#"> Contact Us</a>
-              </h5>
-            </li>
-            <li>
-              <h5>
-                {" "}
-                <a href="#">Terms and Privacy Policy</a>
-              </h5>
-            </li>
-            {/* <li>
+            <ul className="help">
+              <li>
+                <h5>
+                  {" "}
+                  <a href="#">FAQ</a>
+                </h5>
+              </li>
+              <li>
+                <h5>
+                  {" "}
+                  <a href="#"> Contact Us</a>
+                </h5>
+              </li>
+              <li>
+                <h5>
+                  {" "}
+                  <a href="#">Terms and Privacy Policy</a>
+                </h5>
+              </li>
+              {/* <li>
               <h5>
                 {" "}
                 <a href="#">Licenses</a>
               </h5>
             </li> */}
-            {/* <li>
+              {/* <li>
               <h5>
                 {" "}
                 <a href="#">2019 - 20 Powered by Pixelstrap</a>
               </h5>
             </li> */}
-          </ul>
-        </div>
-        <div className="media">
-          <div className="media-body">
-            <h3>Help</h3>
-            <h4>How can we help you?</h4>
+            </ul>
           </div>
-          <div className="media-right">
-            {" "}
-            <a
-              className="icon-btn btn-outline-light btn-sm pull-right next"
-              href="#"
-              onClick={() => setSettingTab("help")}
-            >
+          <div className="media">
+            <div className="media-body">
+              <h3>Help</h3>
+              <h4>How can we help you?</h4>
+            </div>
+            <div className="media-right">
               {" "}
-              <ChevronRight />
-            </a>
+              <a
+                className="icon-btn btn-outline-light btn-sm pull-right next"
+                href="#"
+                onClick={() => setSettingTab("help")}
+              >
+                {" "}
+                <ChevronRight />
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

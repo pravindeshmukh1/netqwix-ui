@@ -173,19 +173,23 @@ video {
 
 .recent-slider {
   padding: 20px $sidebar-spacing 0 0;
+
   .recent-box {
     position: relative !important;
+
     .dot-btn {
       position: absolute !important;
       bottom: 25px !important;
       right: 15px !important;
     }
+
     .recent-profile {
       min-height: 220px !important;
       width: 100% !important;
       border-radius: $radious20 !important;
       position: relative !important;
       transition: all 0.3s ease !important;
+
       // img {
       // 	height: 110px !important;
       // 	width: 100% !important;
@@ -198,6 +202,7 @@ video {
         font-weight: 500 !important;
         text-transform: capitalize !important;
       }
+
       &::before {
         content: "" !important;
         left: 0 !important;
@@ -321,6 +326,7 @@ slick-slider .slick-list,
   padding: 5px;
   border-radius: 50%;
 }
+
 .star-svg {
   fill: #ffc436;
 }
@@ -362,10 +368,46 @@ slick-slider .slick-list,
   .trainer-details {
     margin-left: 36px;
   }
+
   .close {
     margin-right: 31px;
   }
+
   .arrowRight {
     margin-left: 46px;
   }
+}
+
+.image-gallery-content .image-gallery-slide .image-gallery-image {
+  max-height: 40vh !important;
+}
+
+.image-gallery-left-nav .image-gallery-svg,
+.image-gallery-right-nav .image-gallery-svg {
+  height: 38px !important;
+  color: black !important;
+  width: 60px !important;
+}
+
+.custom-react-gallery-carousel {
+  position: absolute;
+  z-index: 20;
+  color: black;
+}
+
+.image-gallery-description {
+  width: 60% !important;
+  position: absolute !important;
+  left: 20% !important;
+  top: 69% !important;
+  min-height: 24% !important;
+  text-align: center !important;
+  color: white !important;
+}
+.sidebar-full-width {
+  overflow-x: hidden !important;
+}
+
+.custom-block-height {
+  height: 180vh !important;
 }
