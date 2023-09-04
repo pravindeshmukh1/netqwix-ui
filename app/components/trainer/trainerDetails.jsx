@@ -15,6 +15,7 @@ import { useAppSelector } from "../../store";
 import { traineeState } from "../trainee/trainee.slice";
 import SocialMediaIcons from "../../common/socialMediaIcons";
 import { Utils } from "../../../utils/utils";
+import ImageVideoThumbnailCarousel from "../../common/imageVideoThumbnailCarousel";
 
 export const TrainerDetails = ({
   onClose,
@@ -314,6 +315,16 @@ const TrainerInfo = ({
       }));
     }
   }, [trainer]);
+  const revampedMedia =
+    trainer &&
+    trainer.extraInfo &&
+    trainer.extraInfo.media.map((data, index) => {
+      const { url, description, title, type } = data;
+      return {
+        original: url,
+        thumbnail: url,
+      };
+    });
   return (
     <div className="row px-20 py-10">
       <div className="col-5">
@@ -386,7 +397,12 @@ const TrainerInfo = ({
           : Message.notFound}
       </div>
       <div className="col-7">
-        <Carousel media={trainer && trainer.extraInfo ? trainer.extraInfo.media : mediaData} />
+        <ImageVideoThumbnailCarousel media={revampedMedia} />
+        {/* <Carousel
+          media={
+            trainer && trainer.extraInfo ? trainer.extraInfo.media : mediaData
+          }
+        /> */}
         {element}
       </div>
     </div>

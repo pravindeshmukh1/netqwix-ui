@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
+import "node_modules/react-image-gallery/styles/scss/image-gallery.scss";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import "../public/assets/scss/color.scss";
@@ -8,7 +9,9 @@ import CustomizerContextProvider from "../helpers/customizerContext/customizerCt
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Provider } from "react-redux";
 import store from "../app/store";
-import AuthGuard, { handlePublicRoutes } from "../app/components/auth/AuthGuard";
+import AuthGuard, {
+  handlePublicRoutes,
+} from "../app/components/auth/AuthGuard";
 import { SocketContext, getSocket } from "../app/components/socket";
 import { LOCAL_STORAGE_KEYS, routingPaths } from "../app/common/constants";
 
@@ -35,7 +38,6 @@ export default function MyAppComponent({ Component, pageProps }) {
     // } else {
     //   console.log(`redirecting >>> `);
 
-     
     //   handlePublicRoutes(pathName, path, router);
     // }
     // Page Loader
@@ -52,9 +54,9 @@ export default function MyAppComponent({ Component, pageProps }) {
     <Fragment>
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
         <Head>
-        <meta httpEquiv="content-type" content="text/html; charset=UTF-8" />
+          <meta httpEquiv="content-type" content="text/html; charset=UTF-8" />
 
-        {/* <meta http-equiv="Content-Security-Policy" content="default-src *; img-src * 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src  'self' 'unsafe-inline' *" /> */}
+          {/* <meta http-equiv="Content-Security-Policy" content="default-src *; img-src * 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src  'self' 'unsafe-inline' *" /> */}
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta name="description" content="Netquix" />
           <meta name="keywords" content="Netquix" />
@@ -67,7 +69,7 @@ export default function MyAppComponent({ Component, pageProps }) {
         <Provider store={store}>
           <AuthGuard>
             {/* adding socket as context hook */}
-          {/* <SocketContext.Provider  value={getSocket()}>  */}
+            {/* <SocketContext.Provider  value={getSocket()}>  */}
             {loader && (
               // <div className="chitchat-loader">
               //   <img src="/assets/images/logo/logo_big.png" alt="" />
