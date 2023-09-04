@@ -322,11 +322,7 @@ const TrainerInfo = ({
       const { url, description, title, type } = data;
       return {
         original: url,
-        thumbnail: url,
-        title,
-        type,
-        description,
-        
+        thumbnail: url,        
       };
     });
   return (
