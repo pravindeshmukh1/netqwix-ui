@@ -271,13 +271,13 @@ const SelectedCategory = ({
 const showRatings = (ratings, extraClasses = "") => {
   const { ratingRatio, totalRating } = Utils.getRatings(ratings);
   return (
-    <>
+    <div>
       <div className={extraClasses}>
         <Star color="#FFC436" size={28} className="star-container star-svg" />
         <p className="ml-1 mt-1 mr-1 font-weight-light">{ratingRatio || 0}</p>
         <p className="mt-1">({totalRating || 0})</p>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -323,6 +323,10 @@ const TrainerInfo = ({
       return {
         original: url,
         thumbnail: url,
+        title,
+        type,
+        description,
+        
       };
     });
   return (
@@ -397,12 +401,7 @@ const TrainerInfo = ({
           : Message.notFound}
       </div>
       <div className="col-7">
-        <ImageVideoThumbnailCarousel media={revampedMedia} />
-        {/* <Carousel
-          media={
-            trainer && trainer.extraInfo ? trainer.extraInfo.media : mediaData
-          }
-        /> */}
+        <ImageVideoThumbnailCarousel media={revampedMedia} originalMedia={trainer && trainer.extraInfo && trainer.extraInfo.media} />
         {element}
       </div>
     </div>
