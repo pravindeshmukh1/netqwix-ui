@@ -41,27 +41,37 @@ const Carousel = ({ media }) => {
     <CarouselItem onExiting={onExiting} onExited={onExited} key={`${index}`}>
       <div
         key={`item_${index}`}
-        className=" d-flex justify-content-center ml-4 mt-4"
+        className="d-flex justify-content-center ml-4 mt-4"
       >
-        {/* TODO: get from constance */}
         {item.url && item.type === "image" ? (
-          <img
-            key={`image_${index}`}
-            src={item.url}
-            alt={item.altText}
-            className="d-block"
-            style={{ width: "500px", height: "300px" }} //TODO: Adjust width and height values as needed
-          />
+          <div >
+            <img
+              key={`image_${index}`}
+              src={item.url}
+              alt={item.altText}
+              className="d-block" // Make images responsive
+              style={{ width: "500px", height: "300px" }}
+            />
+            <div className="carousel-caption d-none d-md-block carousel-caption-gray">
+              <h3 className="text-white">{item.title}</h3>
+              <p className="text-white mt-2">{item.description}</p>
+            </div>
+          </div>
         ) : item.url && item.type === "video" ? (
           <>
-            {/* TODO: video */}
-            <iframe
-              className="d-block w-50"
-              src={`https://www.youtube.com/embed/rokGy0huYEA`}
-              allowFullScreen
-              style={{ width: "500px", height: "300px" }} // TODO:Adjust width and height values as needed
-              title="Embedded youtube"
-            />
+            <div>
+              <iframe
+                className="d-block w-90"
+                src={`https://www.youtube.com/embed/rokGy0huYEA`}                
+                allowFullScreen
+                style={{ width: "500px", height: "300px" }} // TODO:Adjust width and height values as needed
+                title="Embedded youtube"
+              />
+            </div>
+            <div className="carousel-caption d-none d-md-block carousel-caption-gray">
+              <h3 className="text-white">{item.title}</h3>
+              <p className="text-white mt-2">{item.description}</p>
+            </div>
           </>
         ) : (
           <>{Message.noMediaFound}</>
@@ -76,6 +86,7 @@ const Carousel = ({ media }) => {
         items={media}
         activeIndex={activeIndex}
         onClickHandler={goToIndex}
+        className="carousel-indicators-white"
       />
       {slides}
       <CarouselControl
