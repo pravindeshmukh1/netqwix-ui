@@ -139,11 +139,13 @@ export const Message = {
     wip: "work in progress",
     timeConflicts: "These slots are already booked.",
     invalidTime: "Please select valid time",
+    invalidFile: "Please select an image file under 2 MB",
   },
   successMessage: {
     rating: "Providing a Rating",
   },
   info: {
+    selectFileType: "Select only image",
     categoryWip: "You selected category which is in progress...",
   },
 };
@@ -233,3 +235,7 @@ export const carouselItem = {
 };
 
 export const settingMenuFilterSection = ["account", "my-profile"];
+
+export const MAX_FILE_SIZE_MB = 2;
+
+export const allowedExtensions = ["image/png", "image/jpeg", "image/jpg"];

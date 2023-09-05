@@ -7,6 +7,8 @@ import {
   FormateDate,
   FormateHours,
   meetingRatingTimeout,
+  MAX_FILE_SIZE_MB,
+  allowedExtensions,
 } from "../app/common/constants";
 import moment from "moment";
 
@@ -254,5 +256,15 @@ export class Utils {
 
     availableRatings.ratingRatio = (totalRatings / ratings.length).toFixed(1);
     return availableRatings;
+  };
+
+  static fileSizeLessthan2Mb = (file) => {
+    const fileSizeInBytes = file.size;
+    const maxSizeInBytes = MAX_FILE_SIZE_MB * 1024 * 1024; // Convert MB to bytes
+    return fileSizeInBytes <= maxSizeInBytes;
+  };
+
+  static isValidSelectedFileType = (file) => {
+    return allowedExtensions.includes(file.type);
   };
 }
