@@ -318,7 +318,7 @@ const TrainerInfo = ({
     trainer &&
     trainer.extraInfo &&
     trainer.extraInfo.media.map((data, index) => {
-      const { url, description, title, type, thumbnail } = data;
+      const { url, description, title, type, thumbnail = '' } = data;
       return {
         original: url,
         thumbnail: thumbnail,
