@@ -239,3 +239,8 @@ export const settingMenuFilterSection = ["account", "my-profile"];
 export const MAX_FILE_SIZE_MB = 2;
 
 export const allowedExtensions = ["image/png", "image/jpeg", "image/jpg"];
+
+
+export const DUMMY_URLS = {
+  YOUTUBE: 'https://img.freepik.com/premium-vector/red-youtube-logo-social-media-logo_197792-1803.jpg?w=2000'
+}
