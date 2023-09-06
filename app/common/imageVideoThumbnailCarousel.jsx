@@ -97,7 +97,6 @@ class ImageVideoThumbnailCarousel extends React.Component {
 
 
   _renderImage(item) {
-    console.log(`image item ----- `, item);
     return (
       <>
         <img
