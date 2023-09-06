@@ -261,18 +261,18 @@ export const FILTER_TIME = [
     id: 2,
     label: 'Morning',
     value: 'Morning',
-    time: { from: '09:00', to: '12:00'}
+    time: { from: '09:00:00', to: '12:00:00'}
   },
   {
     id: 3,
     label: 'Afternoon',
     value: 'Afternoon',
-    time: { from: '12:00', to: '18:00'}
+    time: { from: '12:00:00', to: '18:00:00'}
   },
   {
     id: 4,
     label: 'Evening',
     value: 'Evening',
-    time: { from: '18:00', to: '23:59'}
+    time: { from: '18:00:00', to: '23:59:00'}
   }
 ]
