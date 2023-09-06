@@ -254,8 +254,7 @@ export const FILTER_TIME = [
     id: 1,
     label: 'Anytime',
     value: 'Anytime',
-    time: null
-    // { from: '00:00', to: '23:59'},
+    time: { from: '00:00', to: '23:59'},
   },
   {
     id: 2,

@@ -20,7 +20,7 @@ import ImageVideoThumbnailCarousel
   from '../../common/imageVideoThumbnailCarousel';
 import moment from 'moment';
 import {Input, Label} from 'reactstrap';
-import { useDispatch } from 'react-redux';
+import {useDispatch} from 'react-redux';
 
 export const TrainerDetails = ({
   onClose,
@@ -31,11 +31,11 @@ export const TrainerDetails = ({
   searchQuery,
   categoryList,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch ();
   const {getTraineeSlots} = useAppSelector (traineeState);
   const [accordion, setAccordion] = useState ({});
   const [filterParams, setFilterParams] = useState ({
-    date: new Date (),
+    date: null,
     day: null,
     time: null,
   });
@@ -56,7 +56,6 @@ export const TrainerDetails = ({
         setAccordion (trainerInfo.extraInfo);
       }
 
-      console.log (`trainerInfo ---- `, trainerInfo);
       if (trainerInfo && !trainerInfo.isCategory) {
         setTrainerDetails (prev => ({
           ...prev,
@@ -78,7 +77,7 @@ export const TrainerDetails = ({
           day: filterParams.day,
           search: searchTerm,
         };
-        dispatch(getTraineeWithSlotsAsync(filterPayload));
+        dispatch (getTraineeWithSlotsAsync (filterPayload));
         console.log (`searchQuery --- `, searchTerm, filterParams);
       }
     },
@@ -194,6 +193,7 @@ const SelectedCategory = ({
             <div>
               <div className="mt-2">
                 <DatePicker
+                  placeholderText="Select Day"
                   minDate={moment ().toDate ()}
                   onChange={date => {
                     const day = new Date (date).getDay ();
@@ -326,10 +326,12 @@ const SelectedCategory = ({
                               : null}
                           </div>
                         </div>
+                        <div className='col-1.1'>
                         {showRatings (
                           data.trainer_ratings,
-                          'col-2 d-flex justify-content-end'
+                          'd-flex justify-content-end'
                         )}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -429,7 +431,7 @@ const TrainerInfo = ({
               {' '}
               Hourly Rate: ${TRAINER_AMOUNT_USD}{' '}
             </h3>
-            {/* {showRatings(trainer && trainer.trainer_ratings, "mb-3 d-flex")} */}
+            {showRatings(trainer && trainer.trainer_ratings, "mb-3 d-flex")}
           </div>
         </div>
         <div className="d-flex flex-row bd-highlight" />
