@@ -13,6 +13,7 @@ import { authState } from "../../app/components/auth/auth.slice";
 import {
   AccountType,
   LOCAL_STORAGE_KEYS,
+  Message,
   settingMenuFilterSection,
   validationMessage,
 } from "../../app/common/constants";
@@ -42,6 +43,7 @@ const SettingSection = (props) => {
   const [isCheck, setIsChecked] = useState(false);
   const [deleteAcct, setDeleteDisable] = useState(false);
   const [settingTab, setSettingTab] = useState("");
+  const [isError, setIsError] = useState(false);
   const [profile, setProfile] = useState({
     username: "",
     address: "Alabma , USA",
@@ -134,6 +136,7 @@ const SettingSection = (props) => {
               profile_picture: profile.profile_picture,
             })
           );
+          setIsError(false);
         } else if (accountType === AccountType.TRAINER) {
           // updating trainer profile
           dispatch(
@@ -142,6 +145,7 @@ const SettingSection = (props) => {
               profile_picture: profile.profile_picture,
             })
           );
+          setIsError(false);
         }
         setProfile({ ...profile, editStatus: !profile.editStatus });
       } else {
@@ -186,7 +190,12 @@ const SettingSection = (props) => {
       const { files } = event.target;
       const selectedFile = files[0];
       if (selectedFile instanceof File) {
-        dispatch(uploadProfilePictureAsync({ files: selectedFile }));
+        const fileSizeLessthan2Mb = Utils.fileSizeLessthan2Mb(selectedFile);
+        if (fileSizeLessthan2Mb) {
+          dispatch(uploadProfilePictureAsync({ files: selectedFile }));
+        } else {
+          setIsError(!fileSizeLessthan2Mb);
+        }
       } else {
         console.error("Invalid file selected.");
       }
@@ -253,12 +262,15 @@ const SettingSection = (props) => {
             ) : (
               <div>
                 {profile.editStatus && !profile.profile_picture ? (
-                  <UploadFile
-                    onChange={handelSelectFile}
-                    values={profile && profile.profile_picture}
-                    key={"files"}
-                    name={"files"}
-                  />
+                  <>
+                    <UploadFile
+                      isError={isError}
+                      onChange={handelSelectFile}
+                      values={profile && profile.profile_picture}
+                      key={"files"}
+                      name={"files"}
+                    />
+                  </>
                 ) : (
                   <img
                     className={`bg-img rounded ${
@@ -321,8 +333,18 @@ const SettingSection = (props) => {
               </a>
             </div>
           </div>
+          {!profile_picture && isError ? (
+            <div className="row">
+              <div className="col-12">
+                <p className="text-danger">
+                  {Message.errorMessage.invalidFile}
+                </p>
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
+
       <div className="setting-block">
         <div
           className={`block ${

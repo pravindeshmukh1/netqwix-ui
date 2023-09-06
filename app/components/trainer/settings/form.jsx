@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Form, Formik, FieldArray } from "formik";
 import * as Yup from "yup";
 import { HandleErrorLabel } from "../../../common/error";
-import { validationMessage } from "../../../common/constants";
+import { DUMMY_URLS, validationMessage } from "../../../common/constants";
 import { MinusCircle, PlusCircle } from "react-feather";
 
 
@@ -14,7 +14,7 @@ export const UpdateSettingProfileForm = ({ userInfo, onFormSubmit, extraInfo }) 
         teaching_style: "",
         credentials_and_affiliations: "",
         curriculum: "",
-        media: [{ title: '', description: '', type: '', url: '' }]
+        media: [{ title: '', description: '', type: '', url: '', thumbnail: '' }]
     };
 
     useEffect(() => {
@@ -69,8 +69,10 @@ export const UpdateSettingProfileForm = ({ userInfo, onFormSubmit, extraInfo }) 
             touched,
             handleSubmit,
             handleBlur,
+            setFieldValue,
             setValues,
             isValid,
+            handleChange
         }) => (
 
             <Form onSubmit={handleSubmit}>
@@ -110,7 +112,7 @@ export const UpdateSettingProfileForm = ({ userInfo, onFormSubmit, extraInfo }) 
                                     <div className="col-form-label items-center flex">Add Media  <div className="col-2">
                                         <div className="col-2 pt-2">
                                             <div onClick={() => {
-                                                push({ url: '', type: 'image', title: '', description: '' })
+                                                push({ url: '', type: 'image', title: '', description: '', thumbnail: '' })
                                             }}>
                                                 <PlusCircle />
                                             </div>
@@ -126,8 +128,7 @@ export const UpdateSettingProfileForm = ({ userInfo, onFormSubmit, extraInfo }) 
                                                                 <label className="col-form-label">Title</label>
                                                                 <input type="text" onChange={(event) => {
                                                                     const { value } = event.target;
-                                                                    values.media[index].title = value;
-                                                                    setValues(values);
+                                                                    setFieldValue(`media.${index}.title`, value);
                                                                 }}
                                                                     value={values.media[index].title}
                                                                     placeholder="Media title"
@@ -138,9 +139,7 @@ export const UpdateSettingProfileForm = ({ userInfo, onFormSubmit, extraInfo }) 
                                                                 <label className="col-form-label">Media Description</label>
                                                                 <textarea onChange={(event) => {
                                                                     const { value } = event.target;
-                                                                    values.media[index].description = value;
-                                                                    setValues(values);
-
+                                                                    setFieldValue(`media.${index}.description`, value);
                                                                 }}
                                                                     value={values.media[index].description}
                                                                     placeholder="Media description"
@@ -150,8 +149,14 @@ export const UpdateSettingProfileForm = ({ userInfo, onFormSubmit, extraInfo }) 
                                                             <div className="col-4">
                                                                 <select defaultValue={'image'} name="media_type" className="form-control" id=""
                                                                     onChange={(event) => {
-                                                                        values.media[index].type = event.target.value;
-                                                                        setValues(values);
+                                                                        let thumbnail = '';
+                                                                        if(event.target.value === 'video') {
+                                                                            thumbnail = DUMMY_URLS.YOUTUBE;
+                                                                        } else if(event.target.value === 'image') {
+                                                                            thumbnail = values.media[index].url;
+                                                                        }
+                                                                        setFieldValue(`media.${index}.thumbnail`, thumbnail);
+                                                                        setFieldValue(`media.${index}.type`, event.target.value);
                                                                     }}>
                                                                     <option value="image">Image</option>
                                                                     <option value="video">Video</option>
@@ -161,8 +166,13 @@ export const UpdateSettingProfileForm = ({ userInfo, onFormSubmit, extraInfo }) 
                                                                 <input type="url" className="form-control "
                                                                     onChange={(event) => {
                                                                         const { value } = event.target;
-                                                                        values.media[index].url = value;
-                                                                        setValues(values);
+                                                                        if(values.media[index].type === 'video') {
+                                                                            setFieldValue(`media.${index}.thumbnail`, DUMMY_URLS.YOUTUBE);
+                                                                        } else {
+                                                                            setFieldValue(`media.${index}.thumbnail`, value);
+                                                                        }
+                                                                        setFieldValue(`media.${index}.url`, value);
+
                                                                     }}
                                                                     value={values.media[index].url}
                                                                     placeholder="Link"

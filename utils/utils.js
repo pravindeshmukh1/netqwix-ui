@@ -7,6 +7,8 @@ import {
   FormateDate,
   FormateHours,
   meetingRatingTimeout,
+  MAX_FILE_SIZE_MB,
+  allowedExtensions,
 } from "../app/common/constants";
 import moment from "moment";
 
@@ -66,19 +68,16 @@ export class Utils {
     }
 
     const result = this.getNext7WorkingDays(date);
-    console.log(`before --- `, { weekDates, weekDateFormatted });
     return { weekDates, weekDateFormatted };
   }
 
   static getNext7WorkingDays(date) {
-    console.log(`date --- `, date);
     const today = new Date(date);
     const weekDates = [];
     const weekDateFormatted = [];
     if (weekDays[today.getDay() - 1]) {
       weekDateFormatted.push(
-        `${weekDays[today.getDay() - 1]} ${
-          today.getMonth() + 1
+        `${weekDays[today.getDay() - 1]} ${today.getMonth() + 1
         }/${today.getDate()}`
       );
       // weekDates.push(today);
@@ -93,9 +92,8 @@ export class Utils {
 
       if (dayOfWeek) {
         // Exclude weekends
-        const formattedDate = `${dayOfWeek} ${
-          today.getMonth() + 1
-        }/${today.getDate()}`;
+        const formattedDate = `${dayOfWeek} ${today.getMonth() + 1
+          }/${today.getDate()}`;
         weekDateFormatted.push(formattedDate);
         // weekDates.push(today);
         const date = new Date(today);
@@ -103,7 +101,6 @@ export class Utils {
         weekDates.push(date);
       }
     }
-    console.log(`after ---- `, weekDates, weekDateFormatted);
 
     return { weekDates, weekDateFormatted };
   }
@@ -244,9 +241,10 @@ export class Utils {
   }
 
   static getRatings = (ratings) => {
-    let availableRatings = { totalRating: ratings.length, ratingRatio: 0 };
+    const filteredRating = ratings.filter(({ ratings }) => ratings?.trainee && ratings?.trainee?.sessionRating);
+    let availableRatings = { totalRating: filteredRating.length, ratingRatio: 0 };
     let totalRatings = 0;
-    ratings.forEach(({ ratings }) => {
+    filteredRating.forEach(({ ratings }) => {
       if (ratings && ratings.trainee) {
         totalRatings += ratings?.trainee?.sessionRating || 0;
       }
@@ -254,5 +252,23 @@ export class Utils {
 
     availableRatings.ratingRatio = (totalRatings / ratings.length).toFixed(1);
     return availableRatings;
+  };
+
+  static fileSizeLessthan2Mb = (file) => {
+    const fileSizeInBytes = file.size;
+    const maxSizeInBytes = MAX_FILE_SIZE_MB * 1024 * 1024; // Convert MB to bytes
+    return fileSizeInBytes <= maxSizeInBytes;
+  };
+
+  static isValidSelectedFileType = (file) => {
+    return allowedExtensions.includes(file.type);
+  };
+
+  static disabledWeekendAndPastDates = (current) => {
+    return (
+      current < Date.now() ||
+      (new Date(current).getDay() === 0 ||
+        new Date(current).getDay() === 6)
+    );
   };
 }

@@ -139,11 +139,13 @@ export const Message = {
     wip: "work in progress",
     timeConflicts: "These slots are already booked.",
     invalidTime: "Please select valid time",
+    invalidFile: "Please select an image file under 2 MB",
   },
   successMessage: {
     rating: "Providing a Rating",
   },
   info: {
+    selectFileType: "Select only image",
     categoryWip: "You selected category which is in progress...",
   },
 };
@@ -233,3 +235,43 @@ export const carouselItem = {
 };
 
 export const settingMenuFilterSection = ["account", "my-profile"];
+
+export const MAX_FILE_SIZE_MB = 2;
+
+export const allowedExtensions = ["image/png", "image/jpeg", "image/jpg"];
+
+
+export const DUMMY_URLS = {
+  YOUTUBE: 'https://img.freepik.com/premium-vector/red-youtube-logo-social-media-logo_197792-1803.jpg?w=2000'
+}
+
+
+
+export const FILTER_DEFAULT_CHECKED_ID = 1;
+
+export const FILTER_TIME = [
+  {
+    id: 1,
+    label: 'Anytime',
+    value: 'Anytime',
+    time: { from: '00:00', to: '23:59'},
+  },
+  {
+    id: 2,
+    label: 'Morning',
+    value: 'Morning',
+    time: { from: '09:00:00', to: '12:00:00'}
+  },
+  {
+    id: 3,
+    label: 'Afternoon',
+    value: 'Afternoon',
+    time: { from: '12:00:00', to: '18:00:00'}
+  },
+  {
+    id: 4,
+    label: 'Evening',
+    value: 'Evening',
+    time: { from: '18:00:00', to: '23:59:00'}
+  }
+]

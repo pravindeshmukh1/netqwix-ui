@@ -239,7 +239,7 @@ const ScheduleInventory = () => {
                                           )
                                         }
                                         showSecond={false}
-                                        minuteStep={15}
+                                        minuteStep={5}
                                         use12Hours
                                         onChange={(value) =>
                                           handleStartTimeChange(

@@ -1,13 +1,15 @@
 import { useRef } from "react";
 import { FileFormates } from "./constants";
-const UploadFile = ({ onChange, name, key, values }) => {
+const UploadFile = ({ onChange, name, key, values, isError }) => {
   const fileInputRef = useRef();
   const handleFileSelect = () => {
     fileInputRef?.current?.click();
   };
   return (
     <div
-      className="d-flex border border-dark rounded p-10 mt-2"
+      className={`d-flex border ${
+        isError ? "border-danger" : "border-dark"
+      } rounded p-10 mt-2`}
       onClick={handleFileSelect}
     >
       <input

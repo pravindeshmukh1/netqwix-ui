@@ -142,7 +142,6 @@ export const authSlice = createSlice({
         state.status = "pending";
       })
       .addCase(getMeAsync.fulfilled, (state, action) => {
-        console.log(`action.payload --- `, action.payload);
         state.userInfo = action.payload.userInfo;
         state.status = "fulfilled";
       })

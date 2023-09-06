@@ -41,6 +41,7 @@ const ScheduleTraining = () => {
   const [bookingTableData, setBookingTableData] = useState([]);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState({ id: null });
+  const [query, setQuery] = useState("");
   const [isOpenInstantScheduleMeeting, setInstantScheduleMeeting] =
     useState(false);
   const [trainerInfo, setTrainerInfo] = useState({
@@ -96,6 +97,14 @@ const ScheduleTraining = () => {
     setTrainerInfo((prev) => ({
       ...prev,
       userInfo: null,
+    }));
+  }, []);
+
+  useEffect(() => {
+    setTrainerInfo((prev) => ({
+      ...prev,
+      userInfo: undefined,
+      selected_category: undefined,
     }));
   }, []);
 
@@ -298,7 +307,9 @@ const ScheduleTraining = () => {
   const renderTable = () => (
     <div
       className={`${
-        trainerInfo.userInfo ? "table-responsive-width" : "table-responsive"
+        trainerInfo.userInfo
+          ? "table-responsive-width"
+          : "table-responsive-width"
       }`}
     >
       <table className="table custom-trainer-slots-booking-table ml-30 mr-30">
@@ -315,84 +326,81 @@ const ScheduleTraining = () => {
         </thead>
         {bookingTableData && bookingTableData.length ? (
           <>
-      {    bookingTableData
-            .filter(({ trainer_info }) => {
-              return (
-                trainer_info._id === trainerInfo.userInfo.id ||
-                trainer_info._id === selectedTrainer.id
-              );
-            })
-            .map(
-              (
-                { trainer_info, monday, tuesday, wednesday, thursday, friday },
-                index
-              ) => {
+            {bookingTableData
+              .filter(({ trainer_info }) => {
                 return (
-                  <tr key={`table-data-${index}`}>
-                    <td key={index}>
-                      {monday.slot.length ? (
-                        renderSlotsByDay(monday)
-                      ) : (
-                        <div
-                          key={`slot-${index}-content`}
-                          className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
-                        >
-                          {Message.noSlotsAvailable}
-                        </div>
-                      )}
-                    </td>
-                    <td>
-                      {tuesday.slot.length ? (
-                        renderSlotsByDay(tuesday)
-                      ) : (
-                        <div
-                          key={`slot-${index}-content`}
-                          className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
-                        >
-                          {Message.noSlotsAvailable}
-                        </div>
-                      )}
-                    </td>
-                    <td>
-                      {wednesday.slot.length ? (
-                        renderSlotsByDay(wednesday)
-                      ) : (
-                        <div
-                          key={`slot-${index}-content`}
-                          className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
-                        >
-                          {Message.noSlotsAvailable}
-                        </div>
-                      )}
-                    </td>
-                    <td>
-                      {thursday.slot.length ? (
-                        renderSlotsByDay(thursday)
-                      ) : (
-                        <div
-                          key={`slot-${index}-content`}
-                          className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
-                        >
-                          {Message.noSlotsAvailable}
-                        </div>
-                      )}
-                    </td>
-                    <td>
-                      {friday.slot.length ? (
-                        renderSlotsByDay(friday)
-                      ) : (
-                        <div
-                          key={`slot-${index}-content`}
-                          className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
-                        >
-                          {Message.noSlotsAvailable}
-                        </div>
-                      )}
-                    </td>
-                  </tr>
+                  trainer_info._id === trainerInfo.userInfo?.id ||
+                  trainer_info._id === selectedTrainer.id
                 );
-              }
-            )}
+              })
+              .map(
+                ({ monday, tuesday, wednesday, thursday, friday }, index) => {
+                  return (
+                    <tr key={`table-data-${index}`}>
+                      <td key={index}>
+                        {monday.slot.length ? (
+                          renderSlotsByDay(monday)
+                        ) : (
+                          <div
+                            key={`slot-${index}-content`}
+                            className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                          >
+                            {Message.noSlotsAvailable}
+                          </div>
+                        )}
+                      </td>
+                      <td>
+                        {tuesday.slot.length ? (
+                          renderSlotsByDay(tuesday)
+                        ) : (
+                          <div
+                            key={`slot-${index}-content`}
+                            className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                          >
+                            {Message.noSlotsAvailable}
+                          </div>
+                        )}
+                      </td>
+                      <td>
+                        {wednesday.slot.length ? (
+                          renderSlotsByDay(wednesday)
+                        ) : (
+                          <div
+                            key={`slot-${index}-content`}
+                            className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                          >
+                            {Message.noSlotsAvailable}
+                          </div>
+                        )}
+                      </td>
+                      <td>
+                        {thursday.slot.length ? (
+                          renderSlotsByDay(thursday)
+                        ) : (
+                          <div
+                            key={`slot-${index}-content`}
+                            className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                          >
+                            {Message.noSlotsAvailable}
+                          </div>
+                        )}
+                      </td>
+                      <td>
+                        {friday.slot.length ? (
+                          renderSlotsByDay(friday)
+                        ) : (
+                          <div
+                            key={`slot-${index}-content`}
+                            className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                          >
+                            {Message.noSlotsAvailable}
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                }
+              )}
             <tr key={`table-data-empty`} className="table-last-row">
               <td></td>
               <td></td>
@@ -484,7 +492,17 @@ const ScheduleTraining = () => {
           searchButton: "search-button-trainee",
           dropdown: "custom-dropdown-width",
         }}
-        selectedVal={getParams.search}
+        onSearchClick={(query) => {
+          setTrainerInfo((prev) => ({
+            ...prev,
+            userInfo: null,
+            selected_category: query,
+          }));
+          setQuery(query);
+        }}
+        searchValue={(value) => {
+          setParams({ search: value });
+        }}
         selectedOption={(option) => {
           console.log(`option --- `, option);
           if (option && option.isCategory) {
@@ -510,31 +528,31 @@ const ScheduleTraining = () => {
 
   const renderUserDetails = () => {
     return (
-      <>
-        <TrainerDetails
-          selectOption={trainerInfo}
-          isPopoverOpen={isPopoverOpen}
-          key={`trainerDetails`}
-          trainerInfo={trainerInfo.userInfo}
-          selectTrainer={(_id) => {
-            if (_id) {
-              setSelectedTrainer({ ...selectedTrainer, id: _id });
-            }
-          }}
-          onClose={() => {
-            setTrainerInfo((prev) => ({
-              ...prev,
-              userInfo: null,
-              selected_category: null,
-            }));
-            setParams((prev) => ({
-              ...prev,
-              search: null,
-            }));
-          }}
-          element={renderBookingTable()}
-        />
-      </>
+      <TrainerDetails
+        selectOption={trainerInfo}
+        isPopoverOpen={isPopoverOpen}
+        categoryList={categoryList}
+        key={`trainerDetails`}
+        searchQuery={query}
+        trainerInfo={trainerInfo.userInfo}
+        selectTrainer={(_id) => {
+          if (_id) {
+            setSelectedTrainer({ ...selectedTrainer, id: _id });
+          }
+        }}
+        onClose={() => {
+          setTrainerInfo((prev) => ({
+            ...prev,
+            userInfo: undefined,
+            selected_category: undefined,
+          }));
+          setParams((prev) => ({
+            ...prev,
+            search: null,
+          }));
+        }}
+        element={renderBookingTable()}
+      />
     );
   };
 
@@ -656,7 +674,8 @@ const ScheduleTraining = () => {
     //   )}
     // </div>
     <div className="custom-scroll">
-      {trainerInfo && trainerInfo.userInfo ? (
+      {trainerInfo.userInfo === null ||
+      (trainerInfo && trainerInfo.userInfo) ? (
         renderUserDetails()
       ) : (
         <div>
