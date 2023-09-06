@@ -6,10 +6,6 @@ import {
   Message,
   TRAINER_AMOUNT_USD,
   TRAINER_MEETING_TIME,
-  mediaData,
-  trainerFilterOptions,
-  trainerReview,
-  truncateText,
 } from "../../common/constants";
 import { useAppSelector } from "../../store";
 import { traineeState } from "../trainee/trainee.slice";
@@ -23,6 +19,8 @@ export const TrainerDetails = ({
   trainerInfo,
   selectTrainer,
   selectOption,
+  searchQuery,
+  categoryList,
 }) => {
   const { getTraineeSlots } = useAppSelector(traineeState);
   const [accordion, setAccordion] = useState({});
@@ -74,37 +72,50 @@ export const TrainerDetails = ({
   ];
   return (
     <div className="custom-sidebar-content">
-      <div
-        className={`${(trainerInfo.isCategory &&
-          !trainerDetails.select_trainer &&
-          "media-body media-body text-right") ||
-          (!trainerInfo.isCategory && "media-body media-body text-right")
-          }`}
-      >
-        <div className="mr-4 mt-4">
-          {!trainerInfo.isCategory ? (
+      {trainerInfo === null ? (
+        <div className="media-body media-body text-right">
+          <div className="mr-4 mt-4">
             <X
               onClick={onClose}
               className="close"
               style={{ cursor: "pointer" }}
             />
-          ) : !trainerDetails.select_trainer ? (
-            <X onClick={onClose} style={{ cursor: "pointer" }} />
-          ) : (
-            <ArrowLeft
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                setTrainerDetails((prev) => ({
-                  ...prev,
-                  _id: null,
-                  select_trainer: false,
-                  fullname: null,
-                }));
-              }}
-            />
-          )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div
+          className={`${
+            (trainerInfo.isCategory &&
+              !trainerDetails.select_trainer &&
+              "media-body media-body text-right") ||
+            (!trainerInfo.isCategory && "media-body media-body text-right")
+          }`}
+        >
+          <div className="mr-4 mt-4">
+            {!trainerInfo.isCategory ? (
+              <X
+                onClick={onClose}
+                className="close"
+                style={{ cursor: "pointer" }}
+              />
+            ) : !trainerDetails.select_trainer ? (
+              <X onClick={onClose} style={{ cursor: "pointer" }} />
+            ) : (
+              <ArrowLeft
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setTrainerDetails((prev) => ({
+                    ...prev,
+                    _id: null,
+                    select_trainer: false,
+                    fullname: null,
+                  }));
+                }}
+              />
+            )}
+          </div>
+        </div>
+      )}
       {trainerDetails.select_trainer ? (
         <TrainerInfo
           accordionData={accordionData}
@@ -122,6 +133,7 @@ export const TrainerDetails = ({
           trainerInfo={trainerInfo}
           setTrainerDetails={setTrainerDetails}
           selectTrainer={selectTrainer}
+          searchQuery={searchQuery}
         />
       )}
     </div>
@@ -132,6 +144,7 @@ const SelectedCategory = ({
   trainerInfo,
   setTrainerDetails,
   selectTrainer,
+  searchQuery,
 }) => {
   return (
     <div>
@@ -139,12 +152,12 @@ const SelectedCategory = ({
         <div className="col-2">
           <div className="d-flex justify-content-between">
             <h3>Filters</h3>
-            <div>{/* <h5>Reset filters</h5> */}</div>
+            <div>{/* <h5>Reset filters</h 5> */}</div>
           </div>
           <hr className="hr" />
           <div className="d-flex">
             <h4 className="border border-secondary rounded-pill p-10 d-flex justify-content-center align-items-center mb-4">
-              {trainerInfo.name}
+              {trainerInfo ? trainerInfo.name : searchQuery}
             </h4>
           </div>
           {/* <p>Select as many filters as you would like.</p> */}
@@ -281,12 +294,12 @@ const showRatings = (ratings, extraClasses = "") => {
 };
 
 const TrainerInfo = ({
-  element,
   accordionData,
   activeAccordion,
   setActiveAccordion,
-  trainerDetails,
+  element,
   getTraineeSlots,
+  trainerDetails,
   setAccordionsData,
 }) => {
   const findTrainerDetails = () => {
@@ -332,7 +345,7 @@ const TrainerInfo = ({
           <div className="col-3">
             <img
               src={
-                trainer.profilePicture
+                trainer && trainer.profilePicture
                   ? trainer.profilePicture
                   : "/assets/images/avtar/statusMenuIcon.jpeg"
               }
@@ -343,12 +356,14 @@ const TrainerInfo = ({
             />
           </div>
           <div className="col-8 trainer-details">
-            <h2 className="ml-1 mt-1">{trainer ? trainer.fullname : null}</h2>
+            <h2 className="ml-1 mt-1">
+              {trainer && trainer ? trainer.fullname : null}
+            </h2>
             <h3 className="mb-3 mt-3 ml-1">
               {" "}
               Hourly Rate: ${TRAINER_AMOUNT_USD}{" "}
             </h3>
-            {showRatings(trainer?.trainer_ratings, "mb-3 d-flex")}
+            {/* {showRatings(trainer && trainer.trainer_ratings, "mb-3 d-flex")} */}
           </div>
         </div>
         <div className="d-flex flex-row bd-highlight"></div>
