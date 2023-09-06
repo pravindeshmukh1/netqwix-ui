@@ -267,4 +267,12 @@ export class Utils {
   static isValidSelectedFileType = (file) => {
     return allowedExtensions.includes(file.type);
   };
+
+  static disabledWeekendAndPastDates = (current) => {
+    return (
+        current < Date.now() ||
+        (new Date(current).getDay() === 0 ||
+        new Date(current).getDay() === 6)
+    );
+};
 }
