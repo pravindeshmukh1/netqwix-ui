@@ -33,18 +33,11 @@
 
 
   .video-wrapper {
-    position: relative;
-    padding: 33.35% 0; /* 16:9 */
-    height: 0;
+    margin-left: 130px;
+    width: 500px;
+    height: 300px;  
   }
   
-  .video-wrapper iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
 
 
   .close-video::before {

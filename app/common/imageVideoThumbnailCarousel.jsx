@@ -98,14 +98,14 @@ class ImageVideoThumbnailCarousel extends React.Component {
 
   _renderImage(item) {
     return (
-      <>
+      <div className="image-container">
         <img
           alt="sample video cover"
           className="image-gallery-image"
           src={item.original}
         />
         {this.renderLabels(item)}
-      </>
+      </div>
     )
   }
 
@@ -118,6 +118,7 @@ class ImageVideoThumbnailCarousel extends React.Component {
           showIndex={false}
           showBullets={true}
           infinite={true}
+          fullscreen={true}
           showThumbnails={true}
           showFullscreenButton={false}
           showGalleryFullscreenButton={false}
