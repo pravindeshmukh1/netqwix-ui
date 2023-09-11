@@ -168,7 +168,7 @@ const ScheduleInventory = () => {
   };
 
   return (
-    <div className="m-25 schedule-inventory container-content">
+    <div className="bookings custom-scroll container-content">
       <div id="header" className="header">
         <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
           Schedule Slots

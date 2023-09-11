@@ -317,7 +317,8 @@ slick-slider .slick-list,
   margin: 30px;
   width: 92%;
   overflow-x: auto;
-  height: 93%;
+  overflow-y: auto;
+  height: 93vh;
 }
 
 .star-container {
@@ -409,4 +410,10 @@ slick-slider .slick-list,
 
 .custom-block-height {
   height: 180vh !important;
+}
+
+
+
+.height-max-content {
+  height: max-content !important
 }
