@@ -185,7 +185,7 @@ video {
     }
 
     .recent-profile {
-      min-height: 220px !important;
+      height: 200px !important;
       width: 100% !important;
       border-radius: $radious20 !important;
       position: relative !important;
@@ -209,7 +209,7 @@ video {
         left: 0 !important;
         top: 0 !important;
         position: absolute !important;
-        min-height: 220px !important;
+        height: 200px !important;
         width: 100% !important;
         border-radius: 15px !important;
         box-shadow: inset 0px -25px 40px 6px rgba(0, 0, 0, 0.8) !important;
@@ -319,7 +319,8 @@ slick-slider .slick-list,
   margin: 30px;
   width: 92%;
   overflow-x: auto;
-  height: 93%;
+  overflow-y: auto;
+  height: 93vh;
 }
 
 .star-container {
@@ -411,4 +412,8 @@ slick-slider .slick-list,
 
 .custom-block-height {
   height: 180vh !important;
+}
+
+.height-max-content {
+  height: max-content !important;
 }
