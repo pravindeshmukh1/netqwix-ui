@@ -168,7 +168,7 @@ const Auth_SignUp = (props) => {
                       /> */}
                       <img
                         className="image-fluid"
-                        src="/assets/images/logo/logo.png"
+                        src="/assets/images/logo/netquix-logo.png"
                         alt="images"
                       />
                     </Link>
@@ -181,7 +181,7 @@ const Auth_SignUp = (props) => {
                     <Stepper
                       steps={signUpSteps}
                       activeColor={"#000080"}
-                      completeColor={'primary'}
+                      completeColor={"primary"}
                       activeStep={activeStep}
                     />
                   </div>

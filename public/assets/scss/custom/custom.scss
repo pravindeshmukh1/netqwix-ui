@@ -1,5 +1,5 @@
 @import "./dropdown.scss";
-@import './slider.scss';
+@import "./slider.scss";
 
 $sidebar-width-left: 105px;
 $navbar-height-top: 85px;
@@ -127,9 +127,11 @@ $canvas-z-index: 8;
   object-fit: cover;
 }
 
-@media (min-aspect-ratio: 16/9) {}
+@media (min-aspect-ratio: 16/9) {
+}
 
-@media (max-aspect-ratio: 16/9) {}
+@media (max-aspect-ratio: 16/9) {
+}
 
 video {
   // object-fit: fill;
