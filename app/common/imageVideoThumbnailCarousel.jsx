@@ -55,8 +55,8 @@ class ImageVideoThumbnailCarousel extends React.Component {
             <button className="close-video" onClick={this._toggleShowVideo} />
             <iframe
               title="sample video"
-              // width="500"
-              // height="300"
+              width="500"
+              height="300"
               src={item.embedUrl}
               style={{ border: "none" }}
               allowFullScreen
