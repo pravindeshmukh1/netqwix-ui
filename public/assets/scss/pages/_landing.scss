@@ -1902,7 +1902,14 @@ footer {
   }
 
   .image-container {
-	margin-left: 130px;
+	margin-left: auto;
+	margin-right: auto	;
+	width: 500px;
+	height: 300px;
+  }
+  .video-container {
+	margin-left: auto;
+	margin-right: auto	;
 	width: 500px;
 	height: 300px;
   }

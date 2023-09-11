@@ -74,6 +74,7 @@ class ImageVideoThumbnailCarousel extends React.Component {
           </div>
         ) : (
           <>
+            <div className="video-container">
             <button className="play-button" onClick={this._toggleShowVideo} />
             <img
               alt="sample video cover"
@@ -81,6 +82,7 @@ class ImageVideoThumbnailCarousel extends React.Component {
               src={item.thumbnail}
             />
             {this.renderLabels(item)}
+            </div>
           </>
         )}
       </div>
