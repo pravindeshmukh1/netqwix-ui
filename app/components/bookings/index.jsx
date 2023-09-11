@@ -496,7 +496,7 @@ const Bookings = ({ accountType = null }) => {
   );
   return (
     <>
-      <div id="bookings" className="bookings container-content">
+      <div id="bookings" className="bookings custom-scroll container-content">
         {addRatingModel.isOpen ? renderRating() : null}
         {!scheduledMeetingDetails.length ? (
           <h3 className="d-flex justify-content-center mt-20">

@@ -417,14 +417,14 @@
 		.rate_btn {
 			border-radius: 30px;
 			background-color: transparent;
-			border: 2px solid #1c9dea;
-			color:#1c9dea;
+			border: 2px solid #000080;
+			color:#000080;
 			padding: 11px 50px;
 		}
 
 		.rate_btn {
 			&:hover{
-				background-color: #1c9dea;
+				background-color: #000080;
 				color:#ffffff;
 			}
 		}

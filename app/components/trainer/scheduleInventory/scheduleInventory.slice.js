@@ -100,7 +100,7 @@ export const scheduleInventorySlice = createSlice({
         state.status = "fulfilled";
         toast.success(action.payload.data.message);
       })
-      .addCase(updateScheduleInventoryAsync.rejected, (state) => {
+      .addCase(updateScheduleInventoryAsync.rejected, (state, action) => {
         state.status = "rejected";
         toast.error(action.payload.data.message);
       });

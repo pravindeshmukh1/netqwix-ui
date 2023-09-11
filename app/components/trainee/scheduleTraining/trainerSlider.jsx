@@ -3,7 +3,7 @@ import Slider from "react-slick";
 
 const TrainerSlider = ({ list }) => {
   const  settings = {
-    autoplay: true,
+    // autoplay: true,
     infinite: true,
     speed: 2000,
     slidesToShow: 3,
@@ -66,6 +66,7 @@ const TrainerSlider = ({ list }) => {
             )
           })}
         </Slider>
+        <br/>
           <div/>
     </div>
 );

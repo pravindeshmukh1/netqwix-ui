@@ -1,22 +1,22 @@
-import React, {useState, Children, cloneElement} from 'react';
-import {Card, CardBody, CardHeader, Collapse, Button} from 'reactstrap';
-import PropTypes from 'prop-types';
-import { ArrowDown, ArrowUp } from 'react-feather';
+import React, { useState, Children, cloneElement } from "react";
+import { Card, CardBody, CardHeader, Collapse, Button } from "reactstrap";
+import PropTypes from "prop-types";
+import { ArrowDown, ArrowUp } from "react-feather";
 
-const Accordion = ({open, children}) => {
-  const [currentOpen, setCurrentOpen] = useState (open);
+const Accordion = ({ open, children }) => {
+  const [currentOpen, setCurrentOpen] = useState(open);
 
-  const toggleSection = index => () => {
-    setCurrentOpen (prevOpen => (index === prevOpen ? undefined : index));
+  const toggleSection = (index) => () => {
+    setCurrentOpen((prevOpen) => (index === prevOpen ? undefined : index));
   };
 
   return (
     <div className="accordion">
-      {Children.map (children, (child, index) => {
+      {Children.map(children, (child, index) => {
         if (child.type !== AccordionItem) return null;
-        return cloneElement (child, {
+        return cloneElement(child, {
           isOpen: child.props.open || currentOpen === index,
-          onClick: toggleSection (index),
+          onClick: toggleSection(index),
         });
       })}
     </div>
@@ -27,15 +27,15 @@ Accordion.propTypes = {
   open: PropTypes.number,
 };
 
-const AccordionItem = ({children, isOpen, onClick}) => (
+const AccordionItem = ({ children, isOpen, onClick }) => (
   <Card>
-    {Children.map (children, child => {
+    {Children.map(children, (child) => {
       if (child.type === AccordionHeader) {
-        return cloneElement (child, {onClick});
+        return cloneElement(child, { onClick });
       }
 
       if (child.type === AccordionBody) {
-        return cloneElement (child, {isOpen});
+        return cloneElement(child, { isOpen });
       }
 
       return null;
@@ -56,6 +56,7 @@ const AccordionHeader = ({
         <div className="col-10">
           <Button
             color="link"
+            style={{ color: "#000080" }}
             onClick={() => {
               onAClick();
               onClick();
@@ -72,7 +73,7 @@ const AccordionHeader = ({
   </CardHeader>
 );
 
-const AccordionBody = ({children, isOpen}) => (
+const AccordionBody = ({ children, isOpen }) => (
   <Collapse isOpen={isOpen}>
     <CardBody>{children}</CardBody>
   </Collapse>
