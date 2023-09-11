@@ -178,7 +178,12 @@ const Auth_SignUp = (props) => {
                   <h3>Hello Everyone</h3>
                   <h4>Please register to your account.</h4>
                   <div>
-                    <Stepper steps={signUpSteps} activeStep={activeStep} />
+                    <Stepper
+                      steps={signUpSteps}
+                      activeColor={"#000080"}
+                      completeColor={'primary'}
+                      activeStep={activeStep}
+                    />
                   </div>
                   <form className="form1">
                     <div className="my-4">{signUpStep()}</div>

@@ -227,7 +227,7 @@ const TodoSection = (props) => {
                                   style={{
                                     fontSize: '15px',
                                     fontWeight: '400',
-                                    color: '#1c9dea',
+                                    color: '#000080',
                                   }}
                                 >
                                   {seleted.assignFour
@@ -774,7 +774,7 @@ const TodoSection = (props) => {
                                     style={{
                                       fontSize: '15px',
                                       fontWeight: '400',
-                                      color: '#1c9dea',
+                                      color: '#000080',
                                     }}
                                   >
                                     {seleted.assignFour
