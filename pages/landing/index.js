@@ -21,6 +21,7 @@ import { Container } from "reactstrap";
 import Category from "./category";
 import { divide } from "lodash";
 import Course from "./course";
+import FooterLanding from "./footerLanding";
 
 const Landing = () => {
   const masterRecords = useAppSelector(masterState).master;
@@ -54,10 +55,11 @@ const Landing = () => {
     <>
       <LandingHeader masterRecords={data} />
       <div class="dropdown-divider"></div>
-      <div class="container">
+      {/* <div class="container-fluid"> */}
         <Category masterRecords={data} />
         <Course />
-      </div>
+        <FooterLanding/>
+      {/* </div> */}
     </>
   );
 };

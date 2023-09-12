@@ -4,19 +4,21 @@ import SearchableDropdown from "../../app/components/trainee/helper/searchableDr
 const Category = (masterRecords) => {
   return (
     <>
-      <div className="d-flex flex-wrap justify-content-center align-items-center">
+    <div className="container-fluid">
+
+      <div className="d-flex flex-wrap justify-content-center align-items-center ">
         {masterRecords?.masterRecords?.category?.map((item) => {
           return (
             <span
-              class="badge badge-light lg"
-              style={{
-                margin: "20px",
-                padding: "18px",
+            class="badge badge-light lg"
+            style={{
+              margin: "20px",
+              padding: "18px",
                 alignItems: "center",
                 fontSize: "14px",
                 color: "black",
               }}
-            >
+              >
               {item}
             </span>
           );
@@ -32,7 +34,7 @@ const Category = (masterRecords) => {
             fontWeight: 600,
             textAlign: "left",
           }}
-        >
+          >
           🙌 Hello friends <br />I am Sofia and we want to start a web design
           course together. Do you like it too 😍 ?
           <div>
@@ -56,7 +58,7 @@ const Category = (masterRecords) => {
               style={{
                 maxWidth: "500px",
               }}
-            />
+              />
           </div>
         </div>
       </div>
@@ -71,8 +73,9 @@ const Category = (masterRecords) => {
             dropdown: "custom-dropdown-width",
           }}
           placeholder={"Search Trainer...."}
-        />
+          />
       </div>
+          </div>
     </>
   );
 };
