@@ -19,7 +19,7 @@ export const CanvasMenuBar = ({
   return (
     <div className="canvas-menus custom-scroll">
       <div className="creationBarItem">
-        <div className='CreationBarCustomizable'>
+        <div className="CreationBarCustomizable">
           <span>
             <div>
               {/* {displayColorPicker ?
@@ -76,7 +76,7 @@ export const CanvasMenuBar = ({
           <span>
             <div
               className={`icon-btn m-5 my-3  button-effect btn-sm ${
-                SHAPES.FREE_HAND === activeTab  ? "btn-primary" : "btn-light"
+                SHAPES.FREE_HAND === activeTab ? "btn-primary" : "btn-light"
               }`}
               onClick={() => {
                 drawShapes(SHAPES.FREE_HAND);
@@ -97,7 +97,15 @@ export const CanvasMenuBar = ({
                 setActiveTab(SHAPES.LINE);
               }}
             >
-              <Image src="/icons/line.png" width={20} height={20} alt="line" />
+              {/* <Image src="/icons/line.png" width={20} height={20} alt="line" /> */}
+              <b
+                style={{
+                  color: activeTab === SHAPES.LINE ? "white" : "black",
+                  alignSelf: "baseline",
+                }}  
+              >
+                __
+              </b>
             </div>
           </span>
           {/* circle */}

@@ -160,7 +160,7 @@ const Index = (props) => {
             <img
               src="/assets/images/logo/netquix-logo.png"
               alt="logo"
-              style={{ width: "3vw", height: "5vh" }}
+              className="custom-image"
             />
           </Link>
         </div>
