@@ -68,6 +68,7 @@ export const routingPaths = {
   dashboard: "/dashboard",
   signUp: "/auth/signUp",
   signIn: "/auth/signIn",
+  landing: '/landing',
   forgetPassword: "/auth/forgetPassword",
   verifiedForgetPassword: "/auth/verified-forget-password",
 };

@@ -38,7 +38,7 @@ export const handlePublicRoutes = (pathName, path, router) => {
     router.push(path);
   } else if (pathName === routingPaths.forgetPassword) {
     router.push(path);
-  } else if (pathName === routingPaths.verifiedForgetPassword) {
+  } else if (pathName === routingPaths.verifiedForgetPassword || pathName === routingPaths.landing) {
     router.push(path);
   } else {
     router.push(routingPaths.signIn);
