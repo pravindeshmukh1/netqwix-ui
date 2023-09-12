@@ -4,7 +4,6 @@ import SearchableDropdown from "../../app/components/trainee/helper/searchableDr
 const Category = (masterRecords) => {
   return (
     <>
-      
       <div className="d-flex flex-wrap justify-content-center align-items-center">
         {masterRecords?.masterRecords?.category?.map((item) => {
           return (
@@ -56,7 +55,6 @@ const Category = (masterRecords) => {
               alt="logo"
               style={{
                 maxWidth: "500px",
-                
               }}
             />
           </div>
@@ -64,6 +62,9 @@ const Category = (masterRecords) => {
       </div>
       <div className="d-flex justify-content-center align-items-center my-5">
         <SearchableDropdown
+          options={[]}
+          handleChange={() => {}}
+          searchValue={() => {}}
           customClasses={{
             searchBar: "search-bar-trainee",
             searchButton: "search-button-trainee",
