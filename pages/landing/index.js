@@ -51,16 +51,13 @@ const Landing = () => {
     //   <TapTop />
     //       </div>
 
-
     <>
-    <LandingHeader masterRecords={data} />
-    <div class="dropdown-divider"></div>
-    <div class="container">
-      <Category masterRecords={data}/>
+      <LandingHeader masterRecords={data} />
+      <div class="dropdown-divider"></div>
+      <div class="container">
+        <Category masterRecords={data} />
+      </div>
       <Course />
-</div>
-     
-    
     </>
   );
 };
