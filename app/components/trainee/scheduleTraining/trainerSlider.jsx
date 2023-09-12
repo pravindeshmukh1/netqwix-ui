@@ -66,6 +66,7 @@ const TrainerSlider = ({ list }) => {
             )
           })}
         </Slider>
+        <br/>
           <div/>
     </div>
 );

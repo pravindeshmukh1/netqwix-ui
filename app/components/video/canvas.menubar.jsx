@@ -76,7 +76,9 @@ export const CanvasMenuBar = ({
           <span>
             <div
               className={`icon-btn m-5 my-3  button-effect btn-sm ${
-                SHAPES.FREE_HAND === activeTab ? "btn-primary" : "btn-light"
+                SHAPES.FREE_HAND === activeTab
+                  ? "btn-outline-primary"
+                  : "btn-outline-light"
               }`}
               onClick={() => {
                 drawShapes(SHAPES.FREE_HAND);
@@ -90,29 +92,25 @@ export const CanvasMenuBar = ({
           <span>
             <div
               className={`icon-btn m-5 my-3  button-effect btn-sm ${
-                activeTab === SHAPES.LINE ? "btn-primary" : "btn-light"
+                activeTab === SHAPES.LINE
+                  ? "btn-outline-primary"
+                  : "btn-outline-light"
               }`}
               onClick={() => {
                 drawShapes(SHAPES.LINE);
                 setActiveTab(SHAPES.LINE);
               }}
             >
-              {/* <Image src="/icons/line.png" width={20} height={20} alt="line" /> */}
-              <b
-                style={{
-                  color: activeTab === SHAPES.LINE ? "white" : "black",
-                  alignSelf: "baseline",
-                }}  
-              >
-                __
-              </b>
+              <Image src="/icons/line.png" width={20} height={20} alt="line" />
             </div>
           </span>
           {/* circle */}
           <span>
             <div
               className={`icon-btn m-5 my-3  button-effect btn-sm ${
-                activeTab === SHAPES.CIRCLE ? "btn-primary" : "btn-light"
+                activeTab === SHAPES.CIRCLE
+                  ? "btn-outline-primary"
+                  : "btn-outline-light"
               }`}
               onClick={() => {
                 drawShapes(SHAPES.CIRCLE);
@@ -126,7 +124,9 @@ export const CanvasMenuBar = ({
           <span>
             <div
               className={`icon-btn m-5 my-3  button-effect btn-sm ${
-                activeTab === SHAPES.SQUARE ? "btn-primary" : "btn-light"
+                activeTab === SHAPES.SQUARE
+                  ? "btn-outline-primary"
+                  : "btn-outline-light"
               }`}
               onClick={() => {
                 drawShapes(SHAPES.SQUARE);
@@ -140,7 +140,9 @@ export const CanvasMenuBar = ({
           <span>
             <div
               className={`icon-btn m-5 my-3  button-effect btn-sm ${
-                activeTab === SHAPES.RECTANGLE ? "btn-primary" : "btn-light"
+                activeTab === SHAPES.RECTANGLE
+                  ? "btn-outline-primary"
+                  : "btn-outline-light"
               }`}
               onClick={() => {
                 drawShapes(SHAPES.RECTANGLE);
@@ -159,7 +161,9 @@ export const CanvasMenuBar = ({
           <span>
             <div
               className={`icon-btn m-5 my-3  button-effect btn-sm ${
-                activeTab === SHAPES.OVAL ? "btn-primary" : "btn-light"
+                activeTab === SHAPES.OVAL
+                  ? "btn-outline-primary"
+                  : "btn-outline-light"
               }`}
               onClick={() => {
                 drawShapes(SHAPES.OVAL);
@@ -174,7 +178,9 @@ export const CanvasMenuBar = ({
           <span>
             <div
               className={`icon-btn m-5 my-3  button-effect btn-sm ${
-                activeTab === SHAPES.TRIANGLE ? "btn-primary" : "btn-light"
+                activeTab === SHAPES.TRIANGLE
+                  ? "btn-outline-primary"
+                  : "btn-outline-light"
               }`}
               onClick={() => {
                 drawShapes(SHAPES.TRIANGLE);
@@ -193,7 +199,9 @@ export const CanvasMenuBar = ({
           <span>
             <div
               className={`icon-btn m-5 my-3  button-effect btn-sm ${
-                activeTab === SHAPES.ARROW_RIGHT ? "btn-primary" : "btn-light"
+                activeTab === SHAPES.ARROW_RIGHT
+                  ? "btn-outline-primary"
+                  : "btn-outline-light"
               }`}
               onClick={() => {
                 drawShapes(SHAPES.ARROW_RIGHT);
@@ -207,8 +215,8 @@ export const CanvasMenuBar = ({
             <div
               className={`icon-btn m-5  button-effect btn-sm ${
                 activeTab === SHAPES.TWO_SIDE_ARROW
-                  ? "btn-primary"
-                  : "btn-light"
+                  ? "btn-outline-primary"
+                  : "btn-outline-light"
               }`}
               onClick={() => {
                 drawShapes(SHAPES.TWO_SIDE_ARROW);

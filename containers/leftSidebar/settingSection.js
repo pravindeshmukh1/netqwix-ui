@@ -783,18 +783,20 @@ const SettingSection = (props) => {
               </div>
             </div>
             {/* for trainer settings form */}
-            <UpdateSettingProfileForm
-              userInfo={userInfo}
-              extraInfo={userInfo?.extraInfo || {}}
-              onFormSubmit={(formValue) => {
-                //
-                dispatch(
-                  updateProfileAsync({
-                    extraInfo: { ...userInfo?.extraInfo, ...formValue },
-                  })
-                );
-              }}
-            />
+            {settingTab === "my-profile" && (
+              <UpdateSettingProfileForm
+                userInfo={userInfo}
+                extraInfo={userInfo?.extraInfo || {}}
+                onFormSubmit={(formValue) => {
+                  //
+                  dispatch(
+                    updateProfileAsync({
+                      extraInfo: { ...userInfo?.extraInfo, ...formValue },
+                    })
+                  );
+                }}
+              />
+            )}
           </div>
           <div className="media">
             <div className="media-body">

@@ -47,11 +47,11 @@ class ImageVideoThumbnailCarousel extends React.Component {
 
     if (!showVideo) {
       if (this.state.showPlayButton) {
-        this.setState({ showGalleryPlayButton: true });
+        this.setState({ showGalleryPlayButton: false });
       }
 
       if (this.state.showFullscreenButton) {
-        this.setState({ showGalleryFullscreenButton: false });
+        this.setState({ showGalleryFullscreenButton: false});
       }
     }
   }
@@ -61,7 +61,7 @@ class ImageVideoThumbnailCarousel extends React.Component {
       <div>
         {this?.state?.showVideo ? (
           <div className="video-wrapper">
-            <button className="close-video" onClick={this._toggleShowVideo} style={{ marginRight: "20px" }} />
+            <button className="close-video" onClick={this._toggleShowVideo} style={{ marginRight: "-20px"}} />
             <iframe
               width="500"
               height="300"
