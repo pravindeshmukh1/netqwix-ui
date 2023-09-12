@@ -64,7 +64,8 @@ const Dashboard = () => {
     (
       <Fragment>
         <SocketContext.Provider value={getSocket ()}>
-          <div className={`chitchat-container sidebar-toggle ${accountType === AccountType.TRAINEE?  'height-max-content': ''}`}>
+          {/* height-max-content */}
+          <div className={`chitchat-container sidebar-toggle ${accountType === AccountType.TRAINEE?  '': ''}`}>
             <LeftSide />
             {getActiveTabs ()}
           </div>
