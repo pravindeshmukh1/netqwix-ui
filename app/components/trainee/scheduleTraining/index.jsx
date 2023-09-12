@@ -27,10 +27,13 @@ import { toast } from "react-toastify";
 import SearchableDropdown from "../helper/searchableDropdown";
 import { masterState } from "../../master/master.slice";
 import { TrainerDetails } from "../../trainer/trainerDetails";
+import { bookingsState } from "../../common/common.slice";
 
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
+  const { isLoading } = useAppSelector(bookingsState);
+
   const { master } = useAppSelector(masterState);
   const [startDate, setStartDate] = useState(new Date());
   const [isPopoverOpen, setIsPopoverOpen] = useState(null);
@@ -678,13 +681,13 @@ const ScheduleTraining = () => {
       (trainerInfo && trainerInfo.userInfo) ? (
         renderUserDetails()
       ) : (
-        <div>
+        <React.Fragment>
           {renderSearchMenu()}
-          <div className="trainer-slider p02">
+          <div className={`${!isLoading ? "trainer-slider p02" : null}`}>
             <h2>Recommended</h2>
             <TrainerSlider list={listOfTrainers} />
           </div>
-        </div>
+        </React.Fragment>
       )}
     </div>
   );
