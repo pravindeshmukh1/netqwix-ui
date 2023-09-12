@@ -1,54 +1,113 @@
-import React from "react";
-import { CourseData, CourseDetails } from "../../app/common/constants";
+import React, { useEffect, useState } from "react";
+import { CourseData, CourseItems } from "../../app/common/constants";
+import { ChevronRight, Filter } from "react-feather";
 
 const Course = () => {
+  const [tabletView, setTableView] = useState(false);
+
+  useEffect(() => {
+    const updateTableView = () => {
+      const isTablet =
+        (window.innerWidth === 1280 && window.innerHeight === 800) ||
+        (window.innerWidth === 1024 && window.innerHeight === 600);
+      setTableView(isTablet);
+    };
+
+    // Initial update
+    updateTableView();
+
+    // Listen to window resize events
+    window.addEventListener("resize", updateTableView);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", updateTableView);
+    };
+  }, []);
+
   return (
     <React.Fragment>
-      <div className="row row-cols-4 m-25">
-        {CourseData.map((data) => {
-          const { img, name } = data;
-          return (
-            <div className="col">
-              <div
-                className="card"
+      {/* <nav className="navbar navbar-light">
+        <a
+          className="navbar-brand font-weight-bold text-uppercase ml-4"
+          href="#"
+        >
+          New Courses
+        </a>
+        <div className="d-flex">
+          {CourseItems.map((item, index) => {
+            const { name } = item;
+            return (
+              <span
+                key={index}
+                className="badge badge-light lg mr-4"
                 style={{
-                  minHeight: "35vh",
-                  borderRadius: "14px",
-                  marginBottom: "16px",
-                  width: "42vh",
+                  padding: "18px",
+                  alignItems: "center",
+                  fontSize: "14px",
+                  color: "black",
                 }}
               >
-                <img
-                  className="card-img-top"
-                  style={{
-                    padding: "8px",
-                    height: "20vh",
-                    borderRadius: "15px",
-                  }}
-                  src={img}
-                  width={100}
-                  height={140}
-                  alt="Card image cap"
-                />
-                <div className="card-body">
-                  <h5 className="card-title">
-                    <b>{name}</b>
-                  </h5>
-                  <div className="d-flex"></div>
-                  <div className="row mt-3">
-                    <div className="col-8">
-                      <button className="btn btn-dark btn-sm">
-                        <i className="fa fa-book mr-2"></i>
-                        Start Course
-                      </button>
+                {name}
+              </span>
+            );
+          })}
+        </div>
+      </nav> */}
+      <div className="container">
+        <div className={`row gy-3`}>
+          {CourseData.map((data, index) => {
+            const { img, name, courseDetails } = data;
+            return (
+              <div
+                key={name}
+                className={`col-12 col-md-6 ${
+                  tabletView ? "col-lg-4" : "col-lg-3"
+                }`}
+              >
+                <div className="card mb-4" style={{ borderRadius: "15px" }}>
+                  <img
+                    className="card-img-top"
+                    src={img}
+                    alt="Card image cap"
+                    style={{ padding: "10px", borderRadius: "20px" }}
+                  />
+                  <div className="card-body">
+                    <h5 className="card-title text-truncate">{name}</h5>
+
+                    <div className="row mt-4 mb-4">
+                      {courseDetails.map((data) => (
+                        <div className={`${tabletView ? "col-6" : "col-6"}`}>
+                          <i className={`${data.icon} mr-2`}></i>
+                          <span>
+                            {data.name}{" "}
+                            {data && data.enroll ? `: ${data.enroll}` : null}
+                          </span>
+                        </div>
+                      ))}
                     </div>
-                    <div className="col-4"></div>
+                    <button
+                      className="btn btn-dark btn-sm"
+                      style={{
+                        height: tabletView ? null : "5vh",
+                        width: tabletView ? null : "9vw",
+                      }}
+                    >
+                      Start Course
+                      <ChevronRight
+                        style={{
+                          position: "absolute",
+                          left: tabletView ? "auto" : "61%",
+                          top: tabletView ? "85.7%" : "84.5%",
+                        }}
+                      />
+                    </button>
                   </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </React.Fragment>
   );

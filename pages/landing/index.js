@@ -56,8 +56,8 @@ const Landing = () => {
       <div class="dropdown-divider"></div>
       <div class="container">
         <Category masterRecords={data} />
+        <Course />
       </div>
-      <Course />
     </>
   );
 };
