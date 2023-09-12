@@ -21,7 +21,7 @@ const LandingHeader = (masterRecords) => {
       <Nav
         tabs
         className="border-0 d-flex mt-4 " 
-        style={{marginLeft:'20px',color:"red"}}
+        style={{marginLeft:'8%'}}
         >
         <img
           // className="img-fluid"
@@ -33,7 +33,7 @@ const LandingHeader = (masterRecords) => {
             }}
             />
         <Dropdown nav isOpen={dropdownOpen} toggle={toggle}>
-          <DropdownToggle nav caret style={{ fontSize: "16px",color:"D9D9D9" }}>
+          <DropdownToggle nav caret style={{ fontSize: "16px",color:"grey" }}>
             Categories
           </DropdownToggle>
           <DropdownMenu>
@@ -46,7 +46,7 @@ const LandingHeader = (masterRecords) => {
             return (
                 <>
               <NavItem>
-                <NavLink href="#" style={{ fontSize: "16px" ,color:"D9D9D9"}}>
+                <NavLink href="#" style={{ fontSize: "16px" ,color:"grey"}}>
                   {name}
                 </NavLink>
               </NavItem>

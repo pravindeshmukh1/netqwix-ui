@@ -50,7 +50,7 @@ const Landing = () => {
 
 <>
   <LandingHeader masterRecords={data} />
-  <Category/>
+  <Category masterRecords={data}/>
 </>
   );
 };
