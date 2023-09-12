@@ -157,7 +157,11 @@ const Index = (props) => {
         {/* logo section */}
         <div className="logo-warpper">
           <Link href="/landing">
-            <img src="/assets/images/logo/logo.png" alt="logo" />
+            <img
+              src="/assets/images/logo/netquix-logo.png"
+              alt="logo"
+              style={{ width: "3vw", height: "5vh" }}
+            />
           </Link>
         </div>
 
