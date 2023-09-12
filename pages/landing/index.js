@@ -53,9 +53,14 @@ const Landing = () => {
 
 
     <>
-      <LandingHeader masterRecords={data} />
+    <LandingHeader masterRecords={data} />
+    <div class="dropdown-divider"></div>
+    <div class="container">
       <Category masterRecords={data}/>
       <Course />
+</div>
+     
+    
     </>
   );
 };
