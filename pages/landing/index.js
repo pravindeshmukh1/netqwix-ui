@@ -12,25 +12,28 @@ import Subscribe from "./subscribe";
 import Footer from "../common/footer";
 import TapTop from "../common/tapTop";
 import { useAppDispatch, useAppSelector } from "../../app/store";
-import { getMasterDataAsync, masterState } from "../../app/components/master/master.slice";
+import {
+  getMasterDataAsync,
+  masterState,
+} from "../../app/components/master/master.slice";
 import LandingHeader from "./landingHeader";
 import { Container } from "reactstrap";
 import Category from "./category";
 import { divide } from "lodash";
+import Course from "./course";
 
 const Landing = () => {
   const masterRecords = useAppSelector(masterState).master;
   const dispatch = useAppDispatch();
-  const [data, setData] = useState()
+  const [data, setData] = useState();
 
-    useEffect(() => {
-      dispatch(getMasterDataAsync())
-    }, []);
+  useEffect(() => {
+    dispatch(getMasterDataAsync());
+  }, []);
 
-    useEffect(() => {
-      setData(masterRecords.masterData)
-    }, [masterRecords])
-
+  useEffect(() => {
+    setData(masterRecords.masterData);
+  }, [masterRecords]);
 
   return (
     // <div>
@@ -48,10 +51,12 @@ const Landing = () => {
     //   <TapTop />
     //       </div>
 
-<>
-  <LandingHeader masterRecords={data} />
-  <Category masterRecords={data}/>
-</>
+
+    <>
+      <LandingHeader masterRecords={data} />
+      <Category masterRecords={data}/>
+      <Course />
+    </>
   );
 };
 
