@@ -14,6 +14,7 @@ import AuthGuard, {
 } from "../app/components/auth/AuthGuard";
 import { SocketContext, getSocket } from "../app/components/socket";
 import { LOCAL_STORAGE_KEYS, routingPaths } from "../app/common/constants";
+import { bookingsAction } from "../app/components/common/common.slice";
 
 export default function MyAppComponent({ Component, pageProps }) {
   const router = useRouter();
@@ -22,6 +23,7 @@ export default function MyAppComponent({ Component, pageProps }) {
   const [currentUser, setCurrentUser] = useState(undefined);
   const [loader, setLoader] = useState(true);
   let componentMounted = true;
+  const { handleLoading } = bookingsAction;
 
   useEffect(() => {
     document.body.classList.add("sidebar-active");
@@ -43,6 +45,7 @@ export default function MyAppComponent({ Component, pageProps }) {
     // Page Loader
     setTimeout(() => {
       setLoader(false);
+      store.dispatch(handleLoading(false));
     }, 1500);
     return () => {
       // This code runs when component is unmounted

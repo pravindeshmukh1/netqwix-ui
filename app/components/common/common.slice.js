@@ -12,6 +12,7 @@ const initialState = {
   scheduledMeetingDetails: [],
   addRatingModel: { _id: null, isOpen: false },
   profile_picture: null,
+  isLoading: true,
 };
 
 export const addRatingAsync = createAsyncThunk(
@@ -82,6 +83,9 @@ export const bookingsSlice = createSlice({
     },
     removeProfilePicture: (state, action) => {
       state.profile_picture = action.payload;
+    },
+    handleLoading: (state, action) => {
+      state.isLoading = action.payload;
     },
   },
   extraReducers: (builder) => {
