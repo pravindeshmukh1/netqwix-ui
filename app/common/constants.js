@@ -68,7 +68,7 @@ export const routingPaths = {
   dashboard: "/dashboard",
   signUp: "/auth/signUp",
   signIn: "/auth/signIn",
-  landing: '/landing',
+  landing: "/landing",
   forgetPassword: "/auth/forgetPassword",
   verifiedForgetPassword: "/auth/verified-forget-password",
 };
@@ -241,38 +241,89 @@ export const MAX_FILE_SIZE_MB = 2;
 
 export const allowedExtensions = ["image/png", "image/jpeg", "image/jpg"];
 
-
 export const DUMMY_URLS = {
-  YOUTUBE: 'https://img.freepik.com/premium-vector/red-youtube-logo-social-media-logo_197792-1803.jpg?w=2000'
-}
-
-
+  YOUTUBE:
+    "https://img.freepik.com/premium-vector/red-youtube-logo-social-media-logo_197792-1803.jpg?w=2000",
+};
 
 export const FILTER_DEFAULT_CHECKED_ID = 1;
 
 export const FILTER_TIME = [
   {
     id: 1,
-    label: 'Anytime',
-    value: 'Anytime',
-    time: { from: '00:00', to: '23:59'},
+    label: "Anytime",
+    value: "Anytime",
+    time: { from: "00:00", to: "23:59" },
   },
   {
     id: 2,
-    label: 'Morning',
-    value: 'Morning',
-    time: { from: '09:00:00', to: '12:00:00'}
+    label: "Morning",
+    value: "Morning",
+    time: { from: "09:00:00", to: "12:00:00" },
   },
   {
     id: 3,
-    label: 'Afternoon',
-    value: 'Afternoon',
-    time: { from: '12:00:00', to: '18:00:00'}
+    label: "Afternoon",
+    value: "Afternoon",
+    time: { from: "12:00:00", to: "18:00:00" },
   },
   {
     id: 4,
-    label: 'Evening',
-    value: 'Evening',
-    time: { from: '18:00:00', to: '23:59:00'}
-  }
-]
+    label: "Evening",
+    value: "Evening",
+    time: { from: "18:00:00", to: "23:59:00" },
+  },
+];
+
+export const CourseData = [
+  {
+    img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    name: "Learn Figma - UI/UX Design Essential Training",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1618335829737-2228915674e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    name: "Python for Beginners - Learn Programming from scratch",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1623479322729-28b25c16b011?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    name: "Acoustic Guitar and Electric Guitar Started",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    name: "Mobile App Development with Flutter & Dart (iOS and Android)",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    name: "Ionic React: Mobile Development with Ionic 5 Started",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1618335829737-2228915674e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    name: "Sports Management: The Essentials Course",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1623479322729-28b25c16b011?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    name: "How to Market Yourself as a Consultant",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    name: "Become a Product Manager | Learn the Skills & Get the Job",
+  },
+];
+
+export const CourseDetails = [
+  {
+    icon: "fa fa-book",
+    name: "Lesson",
+    enroll: "21",
+  },
+  {
+    icon: "fa fa-user",
+    name: "Lesson",
+    enroll: "21",
+  },
+  {
+    icon: "fa fa-trophy",
+    name: "Lesson",
+    enroll: "21",
+  },
+];

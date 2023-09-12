@@ -1,18 +1,21 @@
 import React from "react";
+import { CourseData, CourseDetails } from "../../app/common/constants";
 
 const Course = () => {
   return (
     <React.Fragment>
-      <div className="row m-25">
-        {Array.from(Array(4)).map(() => {
+      <div className="row row-cols-4 m-25">
+        {CourseData.map((data) => {
+          const { img, name } = data;
           return (
-            <div className="col-sm">
+            <div className="col">
               <div
                 className="card"
                 style={{
-                  width: "17vw",
-                  minHeight: "34vh",
+                  minHeight: "35vh",
                   borderRadius: "14px",
+                  marginBottom: "16px",
+                  width: "42vh",
                 }}
               >
                 <img
@@ -22,26 +25,24 @@ const Course = () => {
                     height: "20vh",
                     borderRadius: "15px",
                   }}
-                  src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                  src={img}
                   width={100}
                   height={140}
                   alt="Card image cap"
                 />
                 <div className="card-body">
                   <h5 className="card-title">
-                    <b>Learn Figma - UI/UX Design Essential Training</b>
+                    <b>{name}</b>
                   </h5>
                   <div className="d-flex"></div>
                   <div className="row mt-3">
                     <div className="col-8">
-                        <div>
-                            
-                        </div>
-                      <button type="button" className="btn btn-dark btn-sm">
+                      <button className="btn btn-dark btn-sm">
+                        <i className="fa fa-book mr-2"></i>
                         Start Course
                       </button>
                     </div>
-                    <div className="col-4">sljsnk</div>
+                    <div className="col-4"></div>
                   </div>
                 </div>
               </div>
