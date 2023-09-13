@@ -468,3 +468,74 @@ export const CourseItems = [
     link: "",
   },
 ];
+
+
+
+
+export const QUICK_ACCESS = [
+  {
+    id: 1,
+    label: 'What we offer'
+  },
+  {
+    id: 1,
+    label: 'Careers'
+  },
+  {
+    id: 1,
+    label: 'Leadership'
+  },
+  {
+    id: 1,
+    label: 'About'
+  },
+  {
+    id: 1,
+    label: 'Catalog'
+  },
+  {
+    id: 1,
+    label: 'Degrees'
+  },
+  {
+    id: 1,
+    label: 'For Enterprise'
+  },
+  {
+    id: 1,
+    label: 'For Government'
+  },
+  {
+    id: 1,
+    label: 'For Campus'
+  },
+  {
+    id: 1,
+    label: 'Become a partner'
+  },
+  {
+    id: 1,
+    label: 'Terms'
+  },
+  {
+    id: 1,
+    label: 'Accessibility'
+  }
+]
+export const NEW_COMMENTS = [
+  {
+    id: 1,
+    label: 'Alex',
+    comment: 'How nice it does look...'
+  },
+  {
+    id: 1,
+    label: 'John',
+    comment: 'You were stunning today...'
+  },
+  {
+    id: 1,
+    label: 'Martin',
+    comment: 'It was great training session today...'
+  }
+]
