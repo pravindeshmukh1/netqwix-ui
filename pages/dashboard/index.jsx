@@ -63,8 +63,8 @@ const Dashboard = () => {
     // TODO: move socket to root folder
     (
       <Fragment>
-        <SocketContext.Provider value={getSocket ()}>\
-        {/* .height-max-content */}
+        <SocketContext.Provider value={getSocket ()}>
+          {/* height-max-content */}
           <div className={`chitchat-container sidebar-toggle ${accountType === AccountType.TRAINEE?  '': ''}`}>
             <LeftSide />
             {getActiveTabs ()}
