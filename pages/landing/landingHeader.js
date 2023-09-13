@@ -34,8 +34,8 @@ const LandingHeader = (masterRecords) => {
         />
         <Nav
           tabs
-          className="border-0 d-flex mt-4 "
-          style={{ marginLeft: "8%", float: "right" }}
+          className="border-0 d-flex mt-4 mr-4 "
+          style={{ marginLeft: "8%", float: "right", alignItems: 'end' }}
         >
           <Dropdown nav isOpen={dropdownOpen} toggle={toggle}>
             <DropdownToggle
@@ -68,7 +68,7 @@ const LandingHeader = (masterRecords) => {
           <span
             class="badge badge-light lg bg-primary"
             style={{
-              padding: "18px",
+              padding: "13px",
               alignItems: "center",
               fontSize: "14px",
               color: "white",
@@ -81,7 +81,7 @@ const LandingHeader = (masterRecords) => {
           <span
             class="badge badge-light lg bg-primary"
             style={{
-              padding: "18px",
+              padding: "13px",
               marginright: "5px",
               marginLeft: "5px",
               alignItems: "center",
