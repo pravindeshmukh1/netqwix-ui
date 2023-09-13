@@ -15,7 +15,15 @@ $canvas-z-index: 8;
     height: 100vh !important;
   }
 }
+.custom-react-strap-modal-full {
+  height: 97vh !important;
+  max-width: 100% !important;
+  margin-top: 0% !important;
 
+  .modal-content {
+    height: 100vh !important;
+  }
+}
 // call view css
 
 ::placeholder {

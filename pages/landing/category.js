@@ -93,7 +93,7 @@ const Category = (masterRecords) => {
   }, []);
 
   return (
-    <>
+    <React.Fragment>
       <div className="container-fluid">
         <div className="d-flex flex-wrap justify-content-center align-items-center ">
           {masterRecords?.masterRecords?.category?.map((item) => {
@@ -223,9 +223,8 @@ const Category = (masterRecords) => {
             }}
           />
         }
-        allowFullWidth={true}
       />
-    </>
+    </React.Fragment>
   );
 };
 
