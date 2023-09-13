@@ -279,51 +279,192 @@ export const CourseData = [
   {
     img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     name: "Learn Figma - UI/UX Design Essential Training",
+    courseDetails: [
+      {
+        icon: "fa fa-book",
+        name: "Lesson",
+        enroll: "21",
+      },
+      {
+        icon: "fa fa-user",
+        name: "Student",
+        enroll: "21",
+      },
+      {
+        icon: "fa fa-trophy",
+        name: "Beginner",
+        enroll: null,
+      },
+    ],
   },
   {
     img: "https://images.unsplash.com/photo-1618335829737-2228915674e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     name: "Python for Beginners - Learn Programming from scratch",
+    courseDetails: [
+      {
+        icon: "fa fa-book",
+        name: "Lesson",
+        enroll: "21",
+      },
+      {
+        icon: "fa fa-user",
+        name: "Student",
+        enroll: "21",
+      },
+      {
+        icon: "fa fa-trophy",
+        name: "Advanced",
+        enroll: null,
+      },
+    ],
   },
   {
     img: "https://images.unsplash.com/photo-1623479322729-28b25c16b011?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     name: "Acoustic Guitar and Electric Guitar Started",
+    courseDetails: [
+      {
+        icon: "fa fa-book",
+        name: "Lesson",
+        enroll: "21",
+      },
+      {
+        icon: "fa fa-user",
+        name: "Student",
+        enroll: "21",
+      },
+      {
+        icon: "fa fa-trophy",
+        name: "Average",
+        enroll: null,
+      },
+    ],
   },
   {
     img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     name: "Mobile App Development with Flutter & Dart (iOS and Android)",
+    courseDetails: [
+      {
+        icon: "fa fa-book",
+        name: "Lesson",
+        enroll: "21",
+      },
+      {
+        icon: "fa fa-user",
+        name: "Student",
+        enroll: "21",
+      },
+      {
+        icon: "fa fa-trophy",
+        name: "Advanced",
+        enroll: null,
+      },
+    ],
   },
   {
-    img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    img: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     name: "Ionic React: Mobile Development with Ionic 5 Started",
+    courseDetails: [
+      {
+        icon: "fa fa-book",
+        name: "Lesson",
+        enroll: "21",
+      },
+      {
+        icon: "fa fa-user",
+        name: "Student",
+        enroll: "21",
+      },
+      {
+        icon: "fa fa-trophy",
+        name: "Average",
+        enroll: null,
+      },
+    ],
   },
   {
-    img: "https://images.unsplash.com/photo-1618335829737-2228915674e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    img: "https://images.unsplash.com/photo-1517649763962-0c623066013b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     name: "Sports Management: The Essentials Course",
+    courseDetails: [
+      {
+        icon: "fa fa-book",
+        name: "Lesson",
+        enroll: "6",
+      },
+      {
+        icon: "fa fa-user",
+        name: "Student",
+        enroll: "198",
+      },
+      {
+        icon: "fa fa-trophy",
+        name: "Beginner",
+        enroll: null,
+      },
+    ],
   },
   {
-    img: "https://images.unsplash.com/photo-1623479322729-28b25c16b011?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    img: "https://images.unsplash.com/photo-1501523460185-2aa5d2a0f981?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bWFya2V0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
     name: "How to Market Yourself as a Consultant",
+    courseDetails: [
+      {
+        icon: "fa fa-book",
+        name: "Lesson",
+        enroll: "21",
+      },
+      {
+        icon: "fa fa-user",
+        name: "Student",
+        enroll: "99",
+      },
+      {
+        icon: "fa fa-trophy",
+        name: "Average",
+        enroll: null,
+      },
+    ],
   },
   {
-    img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80",
     name: "Become a Product Manager | Learn the Skills & Get the Job",
+    courseDetails: [
+      {
+        icon: "fa fa-book",
+        name: "Lesson",
+        enroll: "21",
+      },
+      {
+        icon: "fa fa-user",
+        name: "Student",
+        enroll: "21",
+      },
+      {
+        icon: "fa fa-trophy",
+        name: "Advanced",
+        enroll: null,
+      },
+    ],
   },
 ];
 
-export const CourseDetails = [
+export const CourseItems = [
   {
-    icon: "fa fa-book",
-    name: "Lesson",
-    enroll: "21",
+    name: "All Course",
+    link: "",
   },
   {
-    icon: "fa fa-user",
-    name: "Lesson",
-    enroll: "21",
+    name: "Design",
+    link: "",
   },
   {
-    icon: "fa fa-trophy",
-    name: "Lesson",
-    enroll: "21",
+    name: "Development",
+    link: "",
+  },
+  {
+    name: "Photography",
+    link: "",
+  },
+  {
+    name: "Music",
+    link: "",
   },
 ];
