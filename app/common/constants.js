@@ -278,13 +278,13 @@ export const FILTER_TIME = [
 
 export const Courses = [
   {
-    img: "https://thispersondoesnotexist.com/",
-    name: "Learn Figma - UI/UX Design Essential Training",
+    img: "/assets/images/Almer.jpeg",
+    name: "Almer",
     courseDetails: [
       {
         icon: "fa fa-star-o",
         name: "Review",
-        enroll: "21",
+        enroll: "2",
       },
       {
         icon: "fa fa-list-alt",
@@ -299,16 +299,16 @@ export const Courses = [
     ],
   },
   {
-    img: "https://thispersondoesnotexist.com/",
-    name: "Python for Beginners - Learn Programming from scratch",
+    img: "/assets/images/Edolie.jpeg",
+    name: "Edolie",
     courseDetails: [
       {
         icon: "fa fa-star-o",
         name: "Review",
-        enroll: "21",
+        enroll: "1",
       },
       {
-        icon: "fa fa-star-o",
+        icon: "fa fa-list-alt",
         name: " Category",
         enroll: "21",
       },
@@ -320,16 +320,16 @@ export const Courses = [
     ],
   },
   {
-    img: "https://thispersondoesnotexist.com/",
-    name: "Acoustic Guitar and Electric Guitar Started",
+    img: "/assets/images/Clovis.jpeg",
+    name: "Clovis",
     courseDetails: [
       {
         icon: "fa fa-star-o",
         name: "Review",
-        enroll: "21",
+        enroll: "11",
       },
       {
-        icon: "fa fa-star-o",
+        icon: "fa fa-list-alt",
         name: " Category",
         enroll: "21",
       },
@@ -341,16 +341,16 @@ export const Courses = [
     ],
   },
   {
-    img: "https://thispersondoesnotexist.com/",
-    name: "Mobile App Development with Flutter & Dart (iOS and Android)",
+    img: "/assets/images/Daralis.jpeg",
+    name: "Daralis",
     courseDetails: [
       {
         icon: "fa fa-star-o",
         name: "Review",
-        enroll: "21",
+        enroll: "100",
       },
       {
-        icon: "fa fa-star-o",
+        icon: "fa fa-list-alt",
         name: " Category",
         enroll: "21",
       },
@@ -362,16 +362,16 @@ export const Courses = [
     ],
   },
   {
-    img: "https://thispersondoesnotexist.com/",
-    name: "Ionic React: Mobile Development with Ionic 5 Started",
+    img: "/assets/images/Ansley.jpeg",
+    name: "Ansley",
     courseDetails: [
       {
         icon: "fa fa-star-o",
         name: "Review",
-        enroll: "21",
+        enroll: "3",
       },
       {
-        icon: "fa fa-star-o",
+        icon: "fa fa-list-alt",
         name: " Category",
         enroll: "21",
       },
@@ -383,8 +383,8 @@ export const Courses = [
     ],
   },
   {
-    img: "https://thispersondoesnotexist.com/",
-    name: "Sports Management: The Essentials Course",
+    img: "/assets/images/Benton.jpeg",
+    name: "Benton",
     courseDetails: [
       {
         icon: "fa fa-star-o",
@@ -392,9 +392,9 @@ export const Courses = [
         enroll: "6",
       },
       {
-        icon: "fa fa-star-o",
+        icon: "fa fa-list-alt",
         name: " Category",
-        enroll: "198",
+        enroll: "198", 
       },
       {
         icon: "fa fa-trophy",
@@ -404,16 +404,16 @@ export const Courses = [
     ],
   },
   {
-    img: "https://thispersondoesnotexist.com/",
-    name: "How to Market Yourself as a Consultant",
+    img: "/assets/images/Dwennon.jpeg",
+    name: "Dwennon",
     courseDetails: [
       {
         icon: "fa fa-star-o",
         name: "Review",
-        enroll: "21",
+        enroll: "9",
       },
       {
-        icon: "fa fa-star-o",
+        icon: "fa fa-list-alt",
         name: " Category",
         enroll: "99",
       },
@@ -425,16 +425,16 @@ export const Courses = [
     ],
   },
   {
-    img: "https://thispersondoesnotexist.com/",
-    name: "Become a Product Manager | Learn the Skills & Get the Job",
+    img: "/assets/images/Edward.jpeg",
+    name: "Edward",
     courseDetails: [
       {
         icon: "fa fa-star-o",
         name: "Review",
-        enroll: "21",
+        enroll: "12",
       },
       {
-        icon: "fa fa-star-o",
+        icon: "fa fa-list-alt",
         name: " Category",
         enroll: "21",
       },

@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Courses, CourseItems } from "../../app/common/constants";
 import { ChevronRight, Filter } from "react-feather";
 
-const Course = () => {
+const Course = (masterRecords) => {
   const [tabletView, setTableView] = useState(false);
 
   useEffect(() => {
     const updateTableView = () => {
-      const isTablet = window.innerWidth ===1180 && window.innerHeight === 820;
+      const isTablet = window.innerWidth === 1180 && window.innerHeight === 820;
       setTableView(isTablet);
     };
 
@@ -153,9 +153,9 @@ const Course = () => {
         </div>
       </div> */}
       <div className="container">
-      <div className="col-11">
-            <h5 className="mt-2 text-uppercase mb-2">. Trainer</h5>
-          </div>
+        <div className="col-11">
+          <h5 className="mt-2 text-uppercase mb-2">. Trainer</h5>
+        </div>
         <div className={`row gy-3`}>
           {Courses.map((data, index) => {
             const { img, name, courseDetails } = data;
@@ -172,13 +172,34 @@ const Course = () => {
                     <div className="card-body">
                       <h5 className="card-title text-truncate">{name}</h5>
                       <div className="row mt-4 mb-4">
-                        {courseDetails.map((data) => (
-                          
+                        {/* {courseDetails?.map((data, index) => {
+                          const category =
+                            masterRecords?.masterRecords?.category[index];
+
+                          return (
+                            <div
+                              className={`${tabletView ? "col-6" : "col-6"}`}
+                              key={index}
+                            >
+                              <i className={`${data.icon} mr-2`}></i>
+                              {data.name}{" "}
+                              <span style={{ display: "flex" }}>
+                                {data && data.enroll
+                                  ? `: ${data.enroll}`
+                                  : `: ${category}`}
+                              </span>
+                            </div>
+                          );
+                        })} */}
+
+                        {courseDetails?.map((data) => (
                           <div className={`${tabletView ? "col-6" : "col-6"}`}>
                             <i className={`${data.icon} mr-2`}></i>
-                            <span>
-                              {data.name}{" "}
-                              {data && data.enroll ? `: ${data.enroll}` : null}
+                            {data.name}{" "}
+                            <span >
+                              {data && data.enroll
+                                ? `: ${data.enroll}`
+                                :null}
                             </span>
                           </div>
                         ))}
