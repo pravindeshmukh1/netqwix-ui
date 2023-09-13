@@ -22,7 +22,7 @@ export const WhyChooseUs = () => {
                     {info.icon}
                   </span>
                   <h6>
-                    {' '}<div style={{fontSize: '20px'}}>
+                  <div style={{fontSize: '20px', textDecoration: 'underline', textUnderlineOffset: '0.4em', textDecorationColor: '#000080' }}>
                       {info.title}
                     </div>{' '}
                   </h6>
