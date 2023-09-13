@@ -26,10 +26,10 @@ const FooterLanding = (masterRecords) => {
             </p>
           </div>
         </div>
-        <div class="container">
+        <div class="container mt-5">
           <div class="row">
-            <div class="col-md-3 col-sm-2 col-lg-3" />
-            <div class="col-md-3 col-sm-2 col-lg-3">
+            {/* <div class="col-md-3 col-sm-2 col-lg-3" /> */}
+            <div class="col-md-4 col-sm-2 col-lg-4">
               <span>CATEGORIES</span>
               {masterRecords?.masterRecords?.category?.map((item, index) => {
                 return (
@@ -39,7 +39,7 @@ const FooterLanding = (masterRecords) => {
                 );
               })}
             </div>
-            <div class="col-md-3 col-sm-2 col-lg-3">
+            <div class="col-md-4 col-sm-2 col-lg-4">
               <div>
                 {" "}
                 <b>Quick access</b>
@@ -50,7 +50,7 @@ const FooterLanding = (masterRecords) => {
                 })}
               </div>
             </div>
-            <div class="col-md-3 col-sm-2 col-lg-3">
+            <div class="col-md-4 col-sm-2 col-lg-4">
               <div>
                 {" "}
                 <b>New Comments</b>

@@ -41,7 +41,7 @@ export const handlePublicRoutes = (pathName, path, router) => {
   } else if (pathName === routingPaths.verifiedForgetPassword || pathName === routingPaths.landing) {
     router.push(path);
   } else {
-    router.push(routingPaths.signIn);
+    router.push(routingPaths.landing);
   }
 };
 

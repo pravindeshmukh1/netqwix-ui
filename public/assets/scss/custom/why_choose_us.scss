@@ -46,19 +46,19 @@ color: inherit;
 .section-head {
 margin-bottom: 60px;
 }
-.section-head h4 {
+.section-head h6 {
 position: relative;
+font-size: 16px;
 padding:0;
 color:#000080;
 line-height: 1;
 letter-spacing:0.3px;
-font-size: 34px;
 font-weight: 700;  
 text-align:center;
 text-transform:none;
 margin-bottom:30px;
 }
-.section-head h4:before {
+.section-head h6:before {
 content: '';
 width: 60px;
 height: 3px;
@@ -69,7 +69,7 @@ bottom: -10px;
 right:0;  
 margin:0 auto;
 }
-.section-head h4 span {
+.section-head h6 span {
 font-weight: 700;
 padding-bottom: 5px;
 color:#2f2f2f
