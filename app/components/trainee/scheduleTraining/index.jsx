@@ -687,6 +687,7 @@ const ScheduleTraining = () => {
           <div className={`${!isLoading ? "trainer-slider p02" : null}`}>
             <h2>Recommended</h2>
             <TrainerSlider list={listOfTrainers} />
+            <div style={{ height: "11vh" }} />
           </div>
         </React.Fragment>
       )}

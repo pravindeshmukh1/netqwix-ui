@@ -8,6 +8,7 @@ import { Popover } from "react-tiny-popover";
 import { useAppDispatch, useAppSelector } from "../../store";
 import DatePicker from "react-datepicker";
 import moment from "moment";
+import StripeCard from "../../common/stripe/index";
 import { Input, Label, Nav, NavItem, NavLink } from "reactstrap";
 import {
   FILTER_DEFAULT_CHECKED_ID,
@@ -139,9 +140,9 @@ const TrainersDetails = ({
   ];
 
   const renderBookingTable = () => (
-    <div>
+    <React.Fragment>
       <div className="row">
-        <div className="mt-4 col-1.4 datePicker">
+        <div className="mt-4 col-1.4  border border-dark p-10 ml-3">
           <DatePicker
             minDate={moment().toDate()}
             onChange={(date) => {
@@ -165,12 +166,12 @@ const TrainersDetails = ({
           element={renderStripePaymentContent()}
         />
       </div>
-    </div>
+    </React.Fragment>
   );
 
   const renderStripePaymentContent = () =>
     transaction && transaction.intent ? (
-      <div>
+      <React.Fragment>
         <div className="d-flex justify-content-end mr-3">
           <h2
             type="button"
@@ -183,9 +184,9 @@ const TrainersDetails = ({
             <X />
           </h2>
         </div>
-        <div>
+        <React.Fragment>
           {/* <h5>To book a slot, please pay {TRAINER_AMOUNT_USD}$.</h5> */}
-          <div>
+          <React.Fragment>
             <StripeCard
               clientSecret={transaction.intent.client_secret}
               handlePaymentSuccess={() => {
@@ -203,16 +204,16 @@ const TrainersDetails = ({
                 )
               }
             />
-          </div>
-        </div>
-      </div>
+          </React.Fragment>
+        </React.Fragment>
+      </React.Fragment>
     ) : (
       <></>
     );
 
   const renderPaymentContent = () => {
     return (
-      <div>
+      <React.Fragment>
         <h3>
           {" "}
           Trainer: {bookSessionPayload.trainer_info.fullname} (Price per hour $
@@ -226,7 +227,7 @@ const TrainersDetails = ({
         <h4 className="mb-3">
           Price: <b>${bookSessionPayload.charging_price}</b>
         </h4>
-      </div>
+      </React.Fragment>
     );
   };
 
@@ -543,7 +544,7 @@ const TrainersDetails = ({
     setBookingTableData(result);
   };
   return (
-    <div>
+    <React.Fragment>
       {trainerInfo === null ? (
         <div className="media-body media-body text-right">
           <div className="mr-2 mt-4">
@@ -588,30 +589,32 @@ const TrainersDetails = ({
           </div>
         </div>
       )}
-      {trainerDetails.select_trainer ? (
-        <TrainerInfo
-          accordionData={accordionData}
-          activeAccordion={activeAccordion}
-          setActiveAccordion={setActiveAccordion}
-          element={renderTable()}
-          datePicker={renderBookingTable()}
-          getTraineeSlots={getTraineeSlots}
-          trainerDetails={trainerDetails}
-          setAccordionsData={setAccordionsData}
-          trainerInfo={trainerInfo}
-        />
-      ) : (
-        <SelectedCategory
-          getTraineeSlots={getTraineeSlots}
-          trainerInfo={trainerInfo}
-          setTrainerDetails={setTrainerDetails}
-          selectTrainer={selectTrainer}
-          searchQuery={searchQuery}
-          setFilterParams={setFilterParams}
-          filterParams={filterParams}
-        />
-      )}
-    </div>
+      <div>
+        {trainerDetails.select_trainer ? (
+          <TrainerInfo
+            accordionData={accordionData}
+            activeAccordion={activeAccordion}
+            setActiveAccordion={setActiveAccordion}
+            element={renderTable()}
+            datePicker={renderBookingTable()}
+            getTraineeSlots={getTraineeSlots}
+            trainerDetails={trainerDetails}
+            setAccordionsData={setAccordionsData}
+            trainerInfo={trainerInfo}
+          />
+        ) : (
+          <SelectedCategory
+            getTraineeSlots={getTraineeSlots}
+            trainerInfo={trainerInfo}
+            setTrainerDetails={setTrainerDetails}
+            selectTrainer={selectTrainer}
+            searchQuery={searchQuery}
+            setFilterParams={setFilterParams}
+            filterParams={filterParams}
+          />
+        )}
+      </div>
+    </React.Fragment>
   );
 };
 
@@ -767,13 +770,13 @@ const TrainerInfo = ({
 const showRatings = (ratings, extraClasses = "") => {
   const { ratingRatio, totalRating } = Utils.getRatings(ratings);
   return (
-    <div>
+    <React.Fragment>
       <div className={extraClasses}>
         <Star color="#FFC436" size={28} className="star-container star-svg" />
         <p className="ml-1 mt-1 mr-1 font-weight-light">{ratingRatio || 0}</p>
         <p className="mt-1">({totalRating || 0})</p>
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 
@@ -861,13 +864,7 @@ const SelectedCategory = ({
           </div>
         </div>
       </div>
-      <div
-        className="col-10 px-5 custom-scroll"
-        style={{
-          height: "92vh",
-          overflowX: "auto",
-        }}
-      >
+      <div className="col-10 px-5">
         {!getTraineeSlots.length ? (
           <div
             className="text-center container mw-100 border border-secondary p-30 mb-4"
@@ -879,81 +876,383 @@ const SelectedCategory = ({
           getTraineeSlots.map((data, index) => {
             const textTruncate = false;
             return (
-              <div
-                className="card custom-card mb-4"
-                key={`trainers_${index}`}
-                style={{
-                  borderRadius: "20px",
-                }}
-              >
-                <div className="card-body" key={index}>
-                  <div className="row">
-                    <div className="col-1.3 ml-3">
-                      <img
-                        src={
-                          data.profilePicture
-                            ? data.profilePicture
-                            : "/assets/images/avtar/statusMenuIcon.jpeg"
-                        }
-                        width={"136px"}
-                        height={"128px"}
-                        style={{ borderRadius: "15px" }}
-                        alt="profile-picture"
-                      />
-                    </div>
-                    <div className="col-8">
-                      <h3
-                        className="card-title pointer underline"
-                        onClick={() => {
-                          console.log(`data`);
-                          setTrainerDetails((prev) => ({
-                            ...prev,
-                            _id: data && data._id,
-                            select_trainer: true,
-                          }));
-                          selectTrainer(data && data._id);
-                        }}
-                      >
-                        {data ? data.fullname : ""}
-                      </h3>
-                      <p
-                        className="badge badge-pill badge-primary mb-2 p-2"
-                        style={{ fontSize: "15px" }}
-                      >
-                        {`$${TRAINER_AMOUNT_USD}.00`}
-                        {`/ ${TRAINER_MEETING_TIME}`}
-                      </p>
-                      <h4
-                        className={`${textTruncate ? "text-truncate" : ""}`}
-                        style={{ marginBottom: "0px" }}
-                      >
-                        {data && data.extraInfo
-                          ? Utils.truncateText(data.extraInfo.about, 200)
-                          : Message.notAvailableDescription}
-                      </h4>
-                      <div>
-                        {data &&
-                        data.extraInfo &&
-                        data.extraInfo.social_media_links ? (
-                          <SocialMediaIcons
-                            social_media_links={
-                              data &&
-                              data.extraInfo &&
-                              data.extraInfo.social_media_links
-                            }
-                          />
-                        ) : null}
+              <>
+                <div
+                  className="card custom-card mb-4"
+                  key={`trainers_${index}`}
+                  style={{
+                    borderRadius: "20px",
+                  }}
+                >
+                  <div className="card-body" key={index}>
+                    <div className="row">
+                      <div className="col-1.3 ml-3">
+                        <img
+                          src={
+                            data.profilePicture
+                              ? data.profilePicture
+                              : "/assets/images/avtar/statusMenuIcon.jpeg"
+                          }
+                          width={"136px"}
+                          height={"128px"}
+                          style={{ borderRadius: "15px" }}
+                          alt="profile-picture"
+                        />
                       </div>
-                    </div>
-                    <div className="col-1.1">
-                      {showRatings(
-                        data.trainer_ratings,
-                        "d-flex justify-content-end"
-                      )}
+                      <div className="col-8">
+                        <h3
+                          className="card-title pointer underline"
+                          onClick={() => {
+                            console.log(`data`);
+                            setTrainerDetails((prev) => ({
+                              ...prev,
+                              _id: data && data._id,
+                              select_trainer: true,
+                            }));
+                            selectTrainer(data && data._id);
+                          }}
+                        >
+                          {data ? data.fullname : ""}
+                        </h3>
+                        <p
+                          className="badge badge-pill badge-primary mb-2 p-2"
+                          style={{ fontSize: "15px" }}
+                        >
+                          {`$${TRAINER_AMOUNT_USD}.00`}
+                          {`/ ${TRAINER_MEETING_TIME}`}
+                        </p>
+                        <h4
+                          className={`${textTruncate ? "text-truncate" : ""}`}
+                          style={{ marginBottom: "0px" }}
+                        >
+                          {data && data.extraInfo
+                            ? Utils.truncateText(data.extraInfo.about, 200)
+                            : Message.notAvailableDescription}
+                        </h4>
+                        <React.Fragment>
+                          {data &&
+                          data.extraInfo &&
+                          data.extraInfo.social_media_links ? (
+                            <SocialMediaIcons
+                              social_media_links={
+                                data &&
+                                data.extraInfo &&
+                                data.extraInfo.social_media_links
+                              }
+                            />
+                          ) : null}
+                        </React.Fragment>
+                      </div>
+                      <div className="col-1.1">
+                        {showRatings(
+                          data.trainer_ratings,
+                          "d-flex justify-content-end"
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+                <div
+                  className="card custom-card mb-4"
+                  key={`trainers_${index}`}
+                  style={{
+                    borderRadius: "20px",
+                  }}
+                >
+                  <div className="card-body" key={index}>
+                    <div className="row">
+                      <div className="col-1.3 ml-3">
+                        <img
+                          src={
+                            data.profilePicture
+                              ? data.profilePicture
+                              : "/assets/images/avtar/statusMenuIcon.jpeg"
+                          }
+                          width={"136px"}
+                          height={"128px"}
+                          style={{ borderRadius: "15px" }}
+                          alt="profile-picture"
+                        />
+                      </div>
+                      <div className="col-8">
+                        <h3
+                          className="card-title pointer underline"
+                          onClick={() => {
+                            console.log(`data`);
+                            setTrainerDetails((prev) => ({
+                              ...prev,
+                              _id: data && data._id,
+                              select_trainer: true,
+                            }));
+                            selectTrainer(data && data._id);
+                          }}
+                        >
+                          {data ? data.fullname : ""}
+                        </h3>
+                        <p
+                          className="badge badge-pill badge-primary mb-2 p-2"
+                          style={{ fontSize: "15px" }}
+                        >
+                          {`$${TRAINER_AMOUNT_USD}.00`}
+                          {`/ ${TRAINER_MEETING_TIME}`}
+                        </p>
+                        <h4
+                          className={`${textTruncate ? "text-truncate" : ""}`}
+                          style={{ marginBottom: "0px" }}
+                        >
+                          {data && data.extraInfo
+                            ? Utils.truncateText(data.extraInfo.about, 200)
+                            : Message.notAvailableDescription}
+                        </h4>
+                        <React.Fragment>
+                          {data &&
+                          data.extraInfo &&
+                          data.extraInfo.social_media_links ? (
+                            <SocialMediaIcons
+                              social_media_links={
+                                data &&
+                                data.extraInfo &&
+                                data.extraInfo.social_media_links
+                              }
+                            />
+                          ) : null}
+                        </React.Fragment>
+                      </div>
+                      <div className="col-1.1">
+                        {showRatings(
+                          data.trainer_ratings,
+                          "d-flex justify-content-end"
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>{" "}
+                <div
+                  className="card custom-card mb-4"
+                  key={`trainers_${index}`}
+                  style={{
+                    borderRadius: "20px",
+                  }}
+                >
+                  <div className="card-body" key={index}>
+                    <div className="row">
+                      <div className="col-1.3 ml-3">
+                        <img
+                          src={
+                            data.profilePicture
+                              ? data.profilePicture
+                              : "/assets/images/avtar/statusMenuIcon.jpeg"
+                          }
+                          width={"136px"}
+                          height={"128px"}
+                          style={{ borderRadius: "15px" }}
+                          alt="profile-picture"
+                        />
+                      </div>
+                      <div className="col-8">
+                        <h3
+                          className="card-title pointer underline"
+                          onClick={() => {
+                            console.log(`data`);
+                            setTrainerDetails((prev) => ({
+                              ...prev,
+                              _id: data && data._id,
+                              select_trainer: true,
+                            }));
+                            selectTrainer(data && data._id);
+                          }}
+                        >
+                          {data ? data.fullname : ""}
+                        </h3>
+                        <p
+                          className="badge badge-pill badge-primary mb-2 p-2"
+                          style={{ fontSize: "15px" }}
+                        >
+                          {`$${TRAINER_AMOUNT_USD}.00`}
+                          {`/ ${TRAINER_MEETING_TIME}`}
+                        </p>
+                        <h4
+                          className={`${textTruncate ? "text-truncate" : ""}`}
+                          style={{ marginBottom: "0px" }}
+                        >
+                          {data && data.extraInfo
+                            ? Utils.truncateText(data.extraInfo.about, 200)
+                            : Message.notAvailableDescription}
+                        </h4>
+                        <React.Fragment>
+                          {data &&
+                          data.extraInfo &&
+                          data.extraInfo.social_media_links ? (
+                            <SocialMediaIcons
+                              social_media_links={
+                                data &&
+                                data.extraInfo &&
+                                data.extraInfo.social_media_links
+                              }
+                            />
+                          ) : null}
+                        </React.Fragment>
+                      </div>
+                      <div className="col-1.1">
+                        {showRatings(
+                          data.trainer_ratings,
+                          "d-flex justify-content-end"
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>{" "}
+                <div
+                  className="card custom-card mb-4"
+                  key={`trainers_${index}`}
+                  style={{
+                    borderRadius: "20px",
+                  }}
+                >
+                  <div className="card-body" key={index}>
+                    <div className="row">
+                      <div className="col-1.3 ml-3">
+                        <img
+                          src={
+                            data.profilePicture
+                              ? data.profilePicture
+                              : "/assets/images/avtar/statusMenuIcon.jpeg"
+                          }
+                          width={"136px"}
+                          height={"128px"}
+                          style={{ borderRadius: "15px" }}
+                          alt="profile-picture"
+                        />
+                      </div>
+                      <div className="col-8">
+                        <h3
+                          className="card-title pointer underline"
+                          onClick={() => {
+                            console.log(`data`);
+                            setTrainerDetails((prev) => ({
+                              ...prev,
+                              _id: data && data._id,
+                              select_trainer: true,
+                            }));
+                            selectTrainer(data && data._id);
+                          }}
+                        >
+                          {data ? data.fullname : ""}
+                        </h3>
+                        <p
+                          className="badge badge-pill badge-primary mb-2 p-2"
+                          style={{ fontSize: "15px" }}
+                        >
+                          {`$${TRAINER_AMOUNT_USD}.00`}
+                          {`/ ${TRAINER_MEETING_TIME}`}
+                        </p>
+                        <h4
+                          className={`${textTruncate ? "text-truncate" : ""}`}
+                          style={{ marginBottom: "0px" }}
+                        >
+                          {data && data.extraInfo
+                            ? Utils.truncateText(data.extraInfo.about, 200)
+                            : Message.notAvailableDescription}
+                        </h4>
+                        <React.Fragment>
+                          {data &&
+                          data.extraInfo &&
+                          data.extraInfo.social_media_links ? (
+                            <SocialMediaIcons
+                              social_media_links={
+                                data &&
+                                data.extraInfo &&
+                                data.extraInfo.social_media_links
+                              }
+                            />
+                          ) : null}
+                        </React.Fragment>
+                      </div>
+                      <div className="col-1.1">
+                        {showRatings(
+                          data.trainer_ratings,
+                          "d-flex justify-content-end"
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>{" "}
+                <div
+                  className="card custom-card mb-4"
+                  key={`trainers_${index}`}
+                  style={{
+                    borderRadius: "20px",
+                  }}
+                >
+                  <div className="card-body" key={index}>
+                    <div className="row">
+                      <div className="col-1.3 ml-3">
+                        <img
+                          src={
+                            data.profilePicture
+                              ? data.profilePicture
+                              : "/assets/images/avtar/statusMenuIcon.jpeg"
+                          }
+                          width={"136px"}
+                          height={"128px"}
+                          style={{ borderRadius: "15px" }}
+                          alt="profile-picture"
+                        />
+                      </div>
+                      <div className="col-8">
+                        <h3
+                          className="card-title pointer underline"
+                          onClick={() => {
+                            console.log(`data`);
+                            setTrainerDetails((prev) => ({
+                              ...prev,
+                              _id: data && data._id,
+                              select_trainer: true,
+                            }));
+                            selectTrainer(data && data._id);
+                          }}
+                        >
+                          {data ? data.fullname : ""}
+                        </h3>
+                        <p
+                          className="badge badge-pill badge-primary mb-2 p-2"
+                          style={{ fontSize: "15px" }}
+                        >
+                          {`$${TRAINER_AMOUNT_USD}.00`}
+                          {`/ ${TRAINER_MEETING_TIME}`}
+                        </p>
+                        <h4
+                          className={`${textTruncate ? "text-truncate" : ""}`}
+                          style={{ marginBottom: "0px" }}
+                        >
+                          {data && data.extraInfo
+                            ? Utils.truncateText(data.extraInfo.about, 200)
+                            : Message.notAvailableDescription}
+                        </h4>
+                        <React.Fragment>
+                          {data &&
+                          data.extraInfo &&
+                          data.extraInfo.social_media_links ? (
+                            <SocialMediaIcons
+                              social_media_links={
+                                data &&
+                                data.extraInfo &&
+                                data.extraInfo.social_media_links
+                              }
+                            />
+                          ) : null}
+                        </React.Fragment>
+                      </div>
+                      <div className="col-1.1">
+                        {showRatings(
+                          data.trainer_ratings,
+                          "d-flex justify-content-end"
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
             );
           })
         )}
