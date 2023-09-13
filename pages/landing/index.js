@@ -24,6 +24,7 @@ import Course from "./course";
 import FooterLanding from "./footerLanding";
 import { WhyChooseUs } from "../../app/components/landing/whyChooseUs";
 import { HowItWorks } from "../../app/components/landing/howItWorks";
+import YourCourses from "./yourCourses";
 
 const Landing = () => {
   const masterRecords = useAppSelector(masterState).master;
@@ -57,13 +58,14 @@ const Landing = () => {
     <>
       <LandingHeader masterRecords={data} />
       <div class="dropdown-divider"></div>
-      <div class="container-fluid" >
-        <Category masterRecords={data} />
-        <Course />
-        <HowItWorks/>
-        <WhyChooseUs/>
-        <FooterLanding masterRecords={data}/>
-      </div>
+      {/* <div class="container-fluid"> */}
+      <Category masterRecords={data} />
+      <Course />
+      <YourCourses />
+      <HowItWorks />
+      <WhyChooseUs />
+      <FooterLanding masterRecords={data} />
+      {/* </div> */}
     </>
   );
 };

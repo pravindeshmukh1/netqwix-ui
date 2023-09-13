@@ -275,7 +275,7 @@ export const FILTER_TIME = [
   },
 ];
 
-export const CourseData = [
+export const Courses = [
   {
     img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
     name: "Learn Figma - UI/UX Design Essential Training",
@@ -610,3 +610,59 @@ export const HOW_IT_WORKS = [
     content: "Connect and Learn: Build a strong connection with your trainer and enhance your skills through personalized guidance and support."
   }
 ]
+export const YOURCOURSES = [
+  {
+    name: "Google Ads Training 2021:Profit with pay",
+    img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80",
+    courseDetails: [
+      {
+        icon: "fa fa-book",
+        name: "Lesson",
+        enroll: "21",
+      },
+      {
+        icon: "fa fa-user",
+        name: "Student",
+        enroll: "21",
+      },
+      {
+        icon: "fa fa-trophy",
+        name: "Advanced",
+        enroll: null,
+      },
+    ],
+    item: [
+      {
+        points: 75 / 100,
+        Days: 56,
+      },
+    ],
+  },
+  {
+    name: "Google Ads Training 2021:Profit with pay",
+    img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80",
+    courseDetails: [
+      {
+        icon: "fa fa-book",
+        name: "Lesson",
+        enroll: "21",
+      },
+      {
+        icon: "fa fa-user",
+        name: "Student",
+        enroll: "21",
+      },
+      {
+        icon: "fa fa-trophy",
+        name: "Advanced",
+        enroll: null,
+      },
+    ],
+    item: [
+      {
+        points: 75 / 100,
+        Days: 56,
+      },
+    ],
+  },
+];
