@@ -22,6 +22,8 @@ import Category from "./category";
 import { divide } from "lodash";
 import Course from "./course";
 import FooterLanding from "./footerLanding";
+import { WhyChooseUs } from "../../app/components/landing/whyChooseUs";
+import { HowItWorks } from "../../app/components/landing/howItWorks";
 
 const Landing = () => {
   const masterRecords = useAppSelector(masterState).master;
@@ -58,6 +60,8 @@ const Landing = () => {
       <div class="container-fluid" >
         <Category masterRecords={data} />
         <Course />
+        <HowItWorks/>
+        <WhyChooseUs/>
         <FooterLanding masterRecords={data}/>
       </div>
     </>
