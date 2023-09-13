@@ -34,7 +34,7 @@ const AuthGuard = ({ children }) => {
 };
 
 export const handlePublicRoutes = (pathName, path, router) => {
-  if (pathName === routingPaths.signUp) {
+  if (pathName === routingPaths.signUp || pathName === routingPaths.signIn ) {
     router.push(path);
   } else if (pathName === routingPaths.forgetPassword) {
     router.push(path);
