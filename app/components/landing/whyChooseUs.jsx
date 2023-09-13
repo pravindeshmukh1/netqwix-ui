@@ -19,7 +19,7 @@ export const WhyChooseUs = () => {
                   <span class="icon feature_box_col_one">
                     <i class="fa fa-globe" />
                   </span>
-                  <h6>Modern Design</h6>
+                  {/* <h6>Modern Design</h6> */}
                   <p>
                     {info.content}
                   </p>
