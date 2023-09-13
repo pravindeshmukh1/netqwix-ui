@@ -13,6 +13,7 @@ const initialState = {
   addRatingModel: { _id: null, isOpen: false },
   profile_picture: null,
   isLoading: true,
+  selectedTrainerId: null,
 };
 
 export const addRatingAsync = createAsyncThunk(
@@ -86,6 +87,9 @@ export const bookingsSlice = createSlice({
     },
     handleLoading: (state, action) => {
       state.isLoading = action.payload;
+    },
+    handleSelectedTrainer: (state, action) => {
+      state.selectedTrainerId = action.payload;
     },
   },
   extraReducers: (builder) => {

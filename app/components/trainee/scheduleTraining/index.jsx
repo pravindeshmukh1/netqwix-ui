@@ -34,6 +34,7 @@ const ScheduleTraining = () => {
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
   const { isLoading } = useAppSelector(bookingsState);
 
+  const { selectedTrainerId } = useAppSelector(bookingsState);
   const { master } = useAppSelector(masterState);
   const [startDate, setStartDate] = useState(new Date());
   const [isPopoverOpen, setIsPopoverOpen] = useState(null);
