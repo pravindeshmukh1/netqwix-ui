@@ -34,8 +34,10 @@ const Category = (masterRecords) => {
               textAlign: "left",
             }}
           >
-            🙌 Hello friends <br />I am Sofia and we want to start a web design
-            course together. Do you like it too 😍 ?
+            🙌 Hello friends,
+            <br />
+            Are you ready to embark on a transformative journey towards your
+            personal and professional development?
             <div>
               <button type="button" class="btn btn-dark mt-5">
                 Start Course Now
@@ -63,7 +65,6 @@ const Category = (masterRecords) => {
               />
             </div>
           </div>
-          
         </div>
         <div className="d-flex justify-content-center align-items-center my-5">
           <SearchableDropdown
