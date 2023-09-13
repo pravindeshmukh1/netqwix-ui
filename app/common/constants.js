@@ -544,32 +544,38 @@ export const WHY_CHOOSE_US = [
   {
     id: 1,
     icon: '🚀',
-    content: 'Seamless Trainer Booking: Discover a diverse community of experienced trainers spanning various fields. Browse profiles, read reviews, and select the perfect trainer to help you achieve your goals.'
+    title: 'Seamless Trainer Booking',
+    content: 'Discover a diverse community of experienced trainers spanning various fields. Browse profiles, read reviews, and select the perfect trainer to help you achieve your goals.'
   },
   {
     id: 2,
     icon: '🎯',
-    content: 'Tailored Learning Plans: Say goodbye to one-size-fits-all approaches. Our trainers create personalized learning plans that cater to your unique needs and aspirations.'
+    title: 'Tailored Learning Plans',
+    content: 'Say goodbye to one-size-fits-all approaches. Our trainers create personalized learning plans that cater to your unique needs and aspirations.'
   },
   {
     id: 3,
     icon: '📅',
-    content: "Flexible Scheduling: Life can be hectic, but learning shouldn't be. Choose session times that fit your schedule, whether it's early morning or late at night."
+    title: 'Flexible Scheduling',
+    content: "Life can be hectic, but learning shouldn't be. Choose session times that fit your schedule, whether it's early morning or late at night."
   },
   {
     id: 4,
     icon: '🖌️',
-    content:" Interactive Learning Tools: Immerse yourself in engaging sessions with our unique interactive features. Draw freehand, create shapes, and annotate live video feeds to enhance your understanding and retention."
+    title: 'Interactive Learning Tools',
+    content:" Immerse yourself in engaging sessions with our unique interactive features. Draw freehand, create shapes, and annotate live video feeds to enhance your understanding and retention."
   },
   {
     id: 5,
     icon: '📹',
-    content: "Clip Share: Capture the moments of your sessions and easily share them with your trainer. Make feedback and progress tracking a breeze."
+    title: 'Clip Share',
+    content: "Capture the moments of your sessions and easily share them with your trainer. Make feedback and progress tracking a breeze."
   },
   {
     id: 6,
     icon: '🌐',
-    content: "Connect from Anywhere: Whether you're at home, in the office, or on the go, LearnConnect's web application allows you to connect with your trainer seamlessly, anytime, anywhere."
+    title: 'Connect from Anywhere',
+    content: "Whether you're at home, in the office, or on the go, LearnConnect's web application allows you to connect with your trainer seamlessly, anytime, anywhere."
   }
 ]
 
@@ -577,37 +583,44 @@ export const HOW_IT_WORKS = [
   {
     id: 1,
     icon: '1',
-    content: 'Sign Up: Create your account in a few simple steps. Tell us about your goals, interests, and preferences, so we can match you with the perfect trainer.'
+    title: 'Sign Up',
+    content: 'Create your account in a few simple steps. Tell us about your goals, interests, and preferences, so we can match you with the perfect trainer.'
   },
   {
     id: 2,
     icon: '2',
-    content: "Browse Trainers: Explore our diverse range of trainers. Filter by category, reviews, and availability to find your ideal mentor."
+    title: 'Browse Trainers',
+    content: "Explore our diverse range of trainers. Filter by category, reviews, and availability to find your ideal mentor."
   },
   {
     id: 3,
     icon: '3',
-    content: "Book a Session: Once you've found your perfect match, book a session at your convenience. Our flexible scheduling ensures you get the training you need, when you need it."
+    title: 'Book a Session',
+    content: "Once you've found your perfect match, book a session at your convenience. Our flexible scheduling ensures you get the training you need, when you need it."
   },
   {
     id: 4,
     icon: '4',
-    content: "Interactive Learning: Engage in interactive sessions like never before. Draw, highlight, and shape your learning experience directly on the live video feed. It's a hands-on approach to learning like you've never seen."
+    title: 'Interactive Learning',
+    content: "Engage in interactive sessions like never before. Draw, highlight, and shape your learning experience directly on the live video feed. It's a hands-on approach to learning like you've never seen."
   },
   {
     id: 5,
     icon: '5',
-    content: 'Clip and Share: Capture important moments during your sessions and share them with your trainer for feedback and improvement.'
+    title: 'Clip and Share',
+    content: 'Capture important moments during your sessions and share them with your trainer for feedback and improvement.'
   },
   {
     id: 6,
     icon: '6',
-    content: "Track Progress: Monitor your progress and watch yourself grow with our progress tracking tools. Achieve your goals faster and more efficiently."
+    title: 'Track Progress',
+    content: "Monitor your progress and watch yourself grow with our progress tracking tools. Achieve your goals faster and more efficiently."
   },
   {
     id: 7,
     icon: '7',
-    content: "Connect and Learn: Build a strong connection with your trainer and enhance your skills through personalized guidance and support."
+    title: 'Connect and Learn',
+    content: "Build a strong connection with your trainer and enhance your skills through personalized guidance and support."
   }
 ]
 export const YOURCOURSES = [

@@ -6,7 +6,7 @@ export const WhyChooseUs = () => {
       <div class="container">
         <div class="row">
           <div class="section-head col-sm-12">
-            <h4><span>Why Choose</span> Us?</h4>
+            <h6>Why Choose Us?</h6>
             <p>
               Are you ready to embark on a transformative journey towards your personal and professional development? We are here to revolutionize the way you learn and connect with expert trainers. Our cutting-edge platform empowers you to take interactive sessions with skilled professionals, enhancing your skills and knowledge like never before.
             </p>
@@ -20,7 +20,11 @@ export const WhyChooseUs = () => {
                     {/* <i class="fa fa-globe" /> */}
                     {info.icon}
                   </span>
-                  {/* <h6>Modern Design</h6> */}
+                  <h6>
+                    {' '}<div style={{fontSize: '20px'}}>
+                      {info.title}
+                    </div>{' '}
+                  </h6>
                   <p>
                     {info.content}
                   </p>
