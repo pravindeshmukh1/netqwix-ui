@@ -1,11 +1,12 @@
 @import "./dropdown.scss";
 @import "./slider.scss";
-@import './why_choose_us.scss';
+@import "./why_choose_us.scss";
 
 $sidebar-width-left: 105px;
 $navbar-height-top: 85px;
 $canvas-z-index: 8;
 
+// modal view css
 .react-strap-modal-full {
   height: 100% !important;
   max-width: 100% !important;
@@ -23,6 +24,18 @@ $canvas-z-index: 8;
   .modal-content {
     height: 100vh !important;
   }
+}
+@media (min-width: 720px) and (max-width: 1280px) {
+  .custom-react-strap-modal-full {
+    height: 100vh !important; /* Cover full viewport height */
+    max-height: 100%; /* Limit to the parent's height, if necessary */
+    overflow-x: hidden; /* Hide horizontal overflow */
+  }
+}
+
+.model-tablet-view {
+  height: 79vh !important;
+  overflow-x: auto;
 }
 // call view css
 
@@ -432,7 +445,6 @@ slick-slider .slick-list,
 .height-max-content {
   height: max-content !important;
 }
-
 
 // .container {
 //   background-color: #9d01ac;

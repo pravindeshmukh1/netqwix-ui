@@ -10,6 +10,8 @@ const Modal = ({
   width,
   allowFullWidth = false,
   height,
+  overflowHidden = false,
+  minHeight = false,
 }) => {
   return (
     <ReactStrapModal
@@ -21,7 +23,13 @@ const Modal = ({
       isOpen={isOpen}
       toggle={toggle}
       key={id}
-      style={{ width, height }}
+      style={{
+        width,
+        height,
+        overflow: overflowHidden ? "hidden" : null,
+        margin: "0px",
+        minHeight: minHeight ? "100vh" : null,
+      }}
     >
       <ModalBody>{element}</ModalBody>
       <ModalFooter>{footer}</ModalFooter>

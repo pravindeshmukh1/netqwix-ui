@@ -65,10 +65,8 @@ const Category = (masterRecords) => {
       userInfo: null,
       selectCategory: null,
     }));
-    setParams((prev) => ({
-      ...prev,
-      search: null,
-    }));
+    setParams("");
+    (params.search = ""), setParams(params);
   };
 
   const [containerStyles, setContainerStyles] = useState({
@@ -207,6 +205,8 @@ const Category = (masterRecords) => {
       </div>
       <Modal
         isOpen={trainerInfo.isOpen}
+        overflowHidden={true}
+        minHeight={true}
         element={
           <TrainersDetails
             onClose={handleClose}
