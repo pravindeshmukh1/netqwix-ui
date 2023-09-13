@@ -27,10 +27,12 @@ import { toast } from "react-toastify";
 import SearchableDropdown from "../helper/searchableDropdown";
 import { masterState } from "../../master/master.slice";
 import { TrainerDetails } from "../../trainer/trainerDetails";
+import { bookingsState } from "../../common/common.slice";
 
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
+  const { selectedTrainerId } = useAppSelector(bookingsState);
   const { master } = useAppSelector(masterState);
   const [startDate, setStartDate] = useState(new Date());
   const [isPopoverOpen, setIsPopoverOpen] = useState(null);

@@ -2,6 +2,7 @@ import {WHY_CHOOSE_US} from '../../common/constants';
 
 export const WhyChooseUs = () => {
   return (
+    <div className='why-choose-us'>
     <div class="feat bg-gray pt-5 pb-5">
       <div class="container">
         <div class="row">
@@ -34,6 +35,7 @@ export const WhyChooseUs = () => {
           })}
         </div>
       </div>
+    </div>
     </div>
   );
 };

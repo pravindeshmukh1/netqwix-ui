@@ -12,6 +12,7 @@ const initialState = {
   scheduledMeetingDetails: [],
   addRatingModel: { _id: null, isOpen: false },
   profile_picture: null,
+  selectedTrainerId: null,
 };
 
 export const addRatingAsync = createAsyncThunk(
@@ -82,6 +83,9 @@ export const bookingsSlice = createSlice({
     },
     removeProfilePicture: (state, action) => {
       state.profile_picture = action.payload;
+    },
+    handleSelectedTrainer: (state, action) => {
+      state.selectedTrainerId = action.payload;
     },
   },
   extraReducers: (builder) => {
