@@ -11,7 +11,7 @@ const YourCourses = () => {
             {/* <h5 className="mt-2 text-uppercase mb-2">. Trending Trainers</h5> */}
           </div>
           <span
-            className="badge badge-light lg d-block text-center bg-gray"
+            className="badge badge-light lg d-block text-center bg-gray mt-4"
             style={{
               padding: "15px",
               fontSize: "14px",
