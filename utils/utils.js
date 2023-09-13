@@ -138,7 +138,7 @@ export class Utils {
     const totalMinutes = (endHour - startHour) * 60 + (endMinute - startMinute);
     const finalPrice = (totalMinutes / 60) * chargingRate;
 
-    return finalPrice;
+    return +finalPrice.toFixed(2);
   };
 
   static checkTimeConflicts = (values) => {
