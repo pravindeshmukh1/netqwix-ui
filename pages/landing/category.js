@@ -55,9 +55,9 @@ const Category = (masterRecords) => {
             borderRadius: "50%",
             alignItems: "center",
           }}
-          className=".col-md"
+          // class="col-md-3 col-sm-2 col-lg-3"
         >
-          <div style={{ width: "50%", alignItems: "center" }} className="my-5">
+          <div style={{ width: "50%", alignItems: "center" }} className="my-5 " >
             <img
               src="/assets/images/1-removebg 1.png"
               alt="logo"
