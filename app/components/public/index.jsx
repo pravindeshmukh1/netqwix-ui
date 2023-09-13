@@ -30,12 +30,10 @@ import { useRouter } from "next/router";
 
 const TrainersDetails = ({
   onClose,
-  element,
   trainerInfo,
   selectTrainer,
   selectOption,
   searchQuery,
-  categoryList,
 }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -140,9 +138,6 @@ const TrainersDetails = ({
     },
   ];
 
-  const redirectToLogin = () => {
-    push({ pathname: routingPaths.signIn });
-  };
   const renderBookingTable = () => (
     <div>
       <div className="row">
@@ -295,7 +290,6 @@ const TrainersDetails = ({
       >
         <div
           onClick={() => {
-            redirectToLogin();
             setIsPopoverOpen(`${trainer_info._id}_${index}-${date.toString()}`);
           }}
           key={`slot-${index}-content`}
@@ -793,93 +787,99 @@ const SelectedCategory = ({
   filterParams,
 }) => {
   return (
-    <div>
-      <div className="row p-10">
-        <div className="col-2">
-          <div className="d-flex justify-content-between">
-            <h3>Filters</h3>
-            <div>{/* <h5>Reset filters</h 5> */}</div>
-          </div>
-          <hr className="hr" />
-          <div className="d-flex">
-            <h4 className="border border-secondary rounded-pill p-10 d-flex justify-content-center align-items-center mb-4">
-              {trainerInfo ? trainerInfo.name : searchQuery}
-            </h4>
-          </div>
-          <p>Select as many filters as you would like.</p>
+    <div className="row">
+      <div className="col-2">
+        <div className="d-flex justify-content-between">
+          <h3>Filters</h3>
+          <div>{/* <h5>Reset filters</h 5> */}</div>
+        </div>
+        <hr className="hr" />
+        <div className="d-flex">
+          <h4 className="border border-secondary rounded-pill p-10 d-flex justify-content-center align-items-center mb-4">
+            {trainerInfo ? trainerInfo.name : searchQuery}
+          </h4>
+        </div>
+        <p>Select as many filters as you would like.</p>
+        <div>
+          <b>Day of the week</b>
           <div>
-            <b>Day of the week</b>
-            <div>
-              <div className="mt-2">
-                <DatePicker
-                  placeholderText="Select Day"
-                  minDate={moment().toDate()}
-                  onChange={(date) => {
-                    const day = new Date(date).getDay();
-                    setFilterParams({
-                      ...filterParams,
-                      date,
-                      day: weekDays[day - 1],
-                    });
-                  }}
-                  selected={filterParams.date}
-                  // ref={null}
-                  customInput={<Input />}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div className="mt-3">
-              <b> Time of Day</b>
-            </div>
-            <div className="mt-3 pl-3">
-              {FILTER_TIME.map((time, index) => {
-                return (
-                  <div className="my-2" key={`time-of-day-${index}-${time.id}`}>
-                    <Label check>
-                      <Input
-                        defaultChecked={time.id === FILTER_DEFAULT_CHECKED_ID}
-                        onChange={(event) => {
-                          console.log(`event --- `, event);
-                          const pickedId = event.target.value;
-                          const selectedLog = FILTER_TIME.find(
-                            (time) => time.id === +pickedId
-                          );
-
-                          if (selectedLog && selectedLog.time) {
-                            setFilterParams({
-                              ...filterParams,
-                              time: selectedLog.time,
-                            });
-                          }
-                        }}
-                        type="radio"
-                        value={time.id}
-                        defaultValue={1}
-                        name="time-of-day"
-                      />
-                      <span>{time.label}</span>
-                    </Label>
-                  </div>
-                );
-              })}
+            <div className="mt-2">
+              <DatePicker
+                placeholderText="Select Day"
+                minDate={moment().toDate()}
+                onChange={(date) => {
+                  const day = new Date(date).getDay();
+                  setFilterParams({
+                    ...filterParams,
+                    date,
+                    day: weekDays[day - 1],
+                  });
+                }}
+                selected={filterParams.date}
+                // ref={null}
+                customInput={<Input />}
+              />
             </div>
           </div>
         </div>
-        <div className="col-10 px-5">
-          {!getTraineeSlots.length ? (
-            <div
-              className="text-center container mw-100 border border-secondary p-30 mb-4"
-              style={{ borderRadius: "20px" }}
-            >
-              No trainer found
-            </div>
-          ) : (
-            getTraineeSlots.map((data, index) => {
-              const textTruncate = false;
+
+        <div>
+          <div className="mt-3">
+            <b> Time of Day</b>
+          </div>
+          <div className="mt-3 pl-3">
+            {FILTER_TIME.map((time, index) => {
               return (
+                <div className="my-2" key={`time-of-day-${index}-${time.id}`}>
+                  <Label check>
+                    <Input
+                      defaultChecked={time.id === FILTER_DEFAULT_CHECKED_ID}
+                      onChange={(event) => {
+                        console.log(`event --- `, event);
+                        const pickedId = event.target.value;
+                        const selectedLog = FILTER_TIME.find(
+                          (time) => time.id === +pickedId
+                        );
+
+                        if (selectedLog && selectedLog.time) {
+                          setFilterParams({
+                            ...filterParams,
+                            time: selectedLog.time,
+                          });
+                        }
+                      }}
+                      type="radio"
+                      value={time.id}
+                      defaultValue={1}
+                      name="time-of-day"
+                    />
+                    <span>{time.label}</span>
+                  </Label>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      <div
+        className="col-10 px-5"
+        style={{
+          height: "92vh",
+          overflowX: "auto",
+        }}
+      >
+        {!getTraineeSlots.length ? (
+          <div
+            className="text-center container mw-100 border border-secondary p-30 mb-4"
+            style={{ borderRadius: "20px" }}
+          >
+            No trainer found
+          </div>
+        ) : (
+          getTraineeSlots.map((data, index) => {
+            const textTruncate = false;
+            return (
+              <>
                 <div
                   className="card custom-card mb-4"
                   key={`trainers_${index}`}
@@ -955,10 +955,385 @@ const SelectedCategory = ({
                     </div>
                   </div>
                 </div>
-              );
-            })
-          )}
-        </div>
+                <div
+                  className="card custom-card mb-4"
+                  key={`trainers_${index}`}
+                  style={{
+                    borderRadius: "20px",
+                  }}
+                >
+                  <div className="card-body" key={index}>
+                    <div className="row">
+                      <div className="col-1.3 ml-3">
+                        <img
+                          src={
+                            data.profilePicture
+                              ? data.profilePicture
+                              : "/assets/images/avtar/statusMenuIcon.jpeg"
+                          }
+                          width={"136px"}
+                          height={"128px"}
+                          style={{ borderRadius: "15px" }}
+                          alt="profile-picture"
+                        />
+                      </div>
+                      <div className="col-8">
+                        <h3
+                          className="card-title pointer underline"
+                          onClick={() => {
+                            console.log(`data`);
+                            setTrainerDetails((prev) => ({
+                              ...prev,
+                              _id: data && data._id,
+                              select_trainer: true,
+                            }));
+                            selectTrainer(data && data._id);
+                          }}
+                        >
+                          {data ? data.fullname : ""}
+                        </h3>
+                        <p
+                          className="badge badge-pill badge-primary mb-2 p-2"
+                          style={{ fontSize: "15px" }}
+                        >
+                          {`$${TRAINER_AMOUNT_USD}.00`}
+                          {`/ ${TRAINER_MEETING_TIME}`}
+                        </p>
+                        <h4
+                          className={`${textTruncate ? "text-truncate" : ""}`}
+                          style={{ marginBottom: "0px" }}
+                        >
+                          {data && data.extraInfo
+                            ? Utils.truncateText(data.extraInfo.about, 200)
+                            : Message.notAvailableDescription}
+                        </h4>
+                        <div>
+                          {data &&
+                          data.extraInfo &&
+                          data.extraInfo.social_media_links ? (
+                            <SocialMediaIcons
+                              social_media_links={
+                                data &&
+                                data.extraInfo &&
+                                data.extraInfo.social_media_links
+                              }
+                            />
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className="col-1.1">
+                        {showRatings(
+                          data.trainer_ratings,
+                          "d-flex justify-content-end"
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="card custom-card mb-4"
+                  key={`trainers_${index}`}
+                  style={{
+                    borderRadius: "20px",
+                  }}
+                >
+                  <div className="card-body" key={index}>
+                    <div className="row">
+                      <div className="col-1.3 ml-3">
+                        <img
+                          src={
+                            data.profilePicture
+                              ? data.profilePicture
+                              : "/assets/images/avtar/statusMenuIcon.jpeg"
+                          }
+                          width={"136px"}
+                          height={"128px"}
+                          style={{ borderRadius: "15px" }}
+                          alt="profile-picture"
+                        />
+                      </div>
+                      <div className="col-8">
+                        <h3
+                          className="card-title pointer underline"
+                          onClick={() => {
+                            console.log(`data`);
+                            setTrainerDetails((prev) => ({
+                              ...prev,
+                              _id: data && data._id,
+                              select_trainer: true,
+                            }));
+                            selectTrainer(data && data._id);
+                          }}
+                        >
+                          {data ? data.fullname : ""}
+                        </h3>
+                        <p
+                          className="badge badge-pill badge-primary mb-2 p-2"
+                          style={{ fontSize: "15px" }}
+                        >
+                          {`$${TRAINER_AMOUNT_USD}.00`}
+                          {`/ ${TRAINER_MEETING_TIME}`}
+                        </p>
+                        <h4
+                          className={`${textTruncate ? "text-truncate" : ""}`}
+                          style={{ marginBottom: "0px" }}
+                        >
+                          {data && data.extraInfo
+                            ? Utils.truncateText(data.extraInfo.about, 200)
+                            : Message.notAvailableDescription}
+                        </h4>
+                        <div>
+                          {data &&
+                          data.extraInfo &&
+                          data.extraInfo.social_media_links ? (
+                            <SocialMediaIcons
+                              social_media_links={
+                                data &&
+                                data.extraInfo &&
+                                data.extraInfo.social_media_links
+                              }
+                            />
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className="col-1.1">
+                        {showRatings(
+                          data.trainer_ratings,
+                          "d-flex justify-content-end"
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className="card custom-card mb-4"
+                  key={`trainers_${index}`}
+                  style={{
+                    borderRadius: "20px",
+                  }}
+                >
+                  <div className="card-body" key={index}>
+                    <div className="row">
+                      <div className="col-1.3 ml-3">
+                        <img
+                          src={
+                            data.profilePicture
+                              ? data.profilePicture
+                              : "/assets/images/avtar/statusMenuIcon.jpeg"
+                          }
+                          width={"136px"}
+                          height={"128px"}
+                          style={{ borderRadius: "15px" }}
+                          alt="profile-picture"
+                        />
+                      </div>
+                      <div className="col-8">
+                        <h3
+                          className="card-title pointer underline"
+                          onClick={() => {
+                            console.log(`data`);
+                            setTrainerDetails((prev) => ({
+                              ...prev,
+                              _id: data && data._id,
+                              select_trainer: true,
+                            }));
+                            selectTrainer(data && data._id);
+                          }}
+                        >
+                          {data ? data.fullname : ""}
+                        </h3>
+                        <p
+                          className="badge badge-pill badge-primary mb-2 p-2"
+                          style={{ fontSize: "15px" }}
+                        >
+                          {`$${TRAINER_AMOUNT_USD}.00`}
+                          {`/ ${TRAINER_MEETING_TIME}`}
+                        </p>
+                        <h4
+                          className={`${textTruncate ? "text-truncate" : ""}`}
+                          style={{ marginBottom: "0px" }}
+                        >
+                          {data && data.extraInfo
+                            ? Utils.truncateText(data.extraInfo.about, 200)
+                            : Message.notAvailableDescription}
+                        </h4>
+                        <div>
+                          {data &&
+                          data.extraInfo &&
+                          data.extraInfo.social_media_links ? (
+                            <SocialMediaIcons
+                              social_media_links={
+                                data &&
+                                data.extraInfo &&
+                                data.extraInfo.social_media_links
+                              }
+                            />
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className="col-1.1">
+                        {showRatings(
+                          data.trainer_ratings,
+                          "d-flex justify-content-end"
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>{" "}
+                <div
+                  className="card custom-card mb-4"
+                  key={`trainers_${index}`}
+                  style={{
+                    borderRadius: "20px",
+                  }}
+                >
+                  <div className="card-body" key={index}>
+                    <div className="row">
+                      <div className="col-1.3 ml-3">
+                        <img
+                          src={
+                            data.profilePicture
+                              ? data.profilePicture
+                              : "/assets/images/avtar/statusMenuIcon.jpeg"
+                          }
+                          width={"136px"}
+                          height={"128px"}
+                          style={{ borderRadius: "15px" }}
+                          alt="profile-picture"
+                        />
+                      </div>
+                      <div className="col-8">
+                        <h3
+                          className="card-title pointer underline"
+                          onClick={() => {
+                            console.log(`data`);
+                            setTrainerDetails((prev) => ({
+                              ...prev,
+                              _id: data && data._id,
+                              select_trainer: true,
+                            }));
+                            selectTrainer(data && data._id);
+                          }}
+                        >
+                          {data ? data.fullname : ""}
+                        </h3>
+                        <p
+                          className="badge badge-pill badge-primary mb-2 p-2"
+                          style={{ fontSize: "15px" }}
+                        >
+                          {`$${TRAINER_AMOUNT_USD}.00`}
+                          {`/ ${TRAINER_MEETING_TIME}`}
+                        </p>
+                        <h4
+                          className={`${textTruncate ? "text-truncate" : ""}`}
+                          style={{ marginBottom: "0px" }}
+                        >
+                          {data && data.extraInfo
+                            ? Utils.truncateText(data.extraInfo.about, 200)
+                            : Message.notAvailableDescription}
+                        </h4>
+                        <div>
+                          {data &&
+                          data.extraInfo &&
+                          data.extraInfo.social_media_links ? (
+                            <SocialMediaIcons
+                              social_media_links={
+                                data &&
+                                data.extraInfo &&
+                                data.extraInfo.social_media_links
+                              }
+                            />
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className="col-1.1">
+                        {showRatings(
+                          data.trainer_ratings,
+                          "d-flex justify-content-end"
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>{" "}
+                <div
+                  className="card custom-card mb-4"
+                  key={`trainers_${index}`}
+                  style={{
+                    borderRadius: "20px",
+                  }}
+                >
+                  <div className="card-body" key={index}>
+                    <div className="row">
+                      <div className="col-1.3 ml-3">
+                        <img
+                          src={
+                            data.profilePicture
+                              ? data.profilePicture
+                              : "/assets/images/avtar/statusMenuIcon.jpeg"
+                          }
+                          width={"136px"}
+                          height={"128px"}
+                          style={{ borderRadius: "15px" }}
+                          alt="profile-picture"
+                        />
+                      </div>
+                      <div className="col-8">
+                        <h3
+                          className="card-title pointer underline"
+                          onClick={() => {
+                            console.log(`data`);
+                            setTrainerDetails((prev) => ({
+                              ...prev,
+                              _id: data && data._id,
+                              select_trainer: true,
+                            }));
+                            selectTrainer(data && data._id);
+                          }}
+                        >
+                          {data ? data.fullname : ""}
+                        </h3>
+                        <p
+                          className="badge badge-pill badge-primary mb-2 p-2"
+                          style={{ fontSize: "15px" }}
+                        >
+                          {`$${TRAINER_AMOUNT_USD}.00`}
+                          {`/ ${TRAINER_MEETING_TIME}`}
+                        </p>
+                        <h4
+                          className={`${textTruncate ? "text-truncate" : ""}`}
+                          style={{ marginBottom: "0px" }}
+                        >
+                          {data && data.extraInfo
+                            ? Utils.truncateText(data.extraInfo.about, 200)
+                            : Message.notAvailableDescription}
+                        </h4>
+                        <div>
+                          {data &&
+                          data.extraInfo &&
+                          data.extraInfo.social_media_links ? (
+                            <SocialMediaIcons
+                              social_media_links={
+                                data &&
+                                data.extraInfo &&
+                                data.extraInfo.social_media_links
+                              }
+                            />
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className="col-1.1">
+                        {showRatings(
+                          data.trainer_ratings,
+                          "d-flex justify-content-end"
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            );
+          })
+        )}
       </div>
     </div>
   );

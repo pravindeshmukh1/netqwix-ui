@@ -69,7 +69,6 @@ const Category = (masterRecords) => {
       ...prev,
       search: null,
     }));
-    setQuery(null);
   };
 
   const [containerStyles, setContainerStyles] = useState({
@@ -162,12 +161,14 @@ const Category = (masterRecords) => {
         </div>
         <div className="d-flex justify-content-center align-items-center my-5">
           <SearchableDropdown
+            placeholder="Search Trainers..."
             options={[...listOfTrainers, ...categoryList]}
-            handleChange={(value) => {
-              setParams({ search: value });
-            }}
-            searchValue={(value) => {
-              setParams({ search: value });
+            label="name"
+            id="id"
+            customClasses={{
+              searchBar: "search-bar-trainee",
+              searchButton: "search-button-trainee",
+              dropdown: "custom-dropdown-width",
             }}
             onSearchClick={(query) => {
               setTrainerInfo((prev) => ({
@@ -178,8 +179,9 @@ const Category = (masterRecords) => {
               }));
               setQuery(query);
             }}
-            label="name"
-            id="id"
+            searchValue={(value) => {
+              setParams({ search: value });
+            }}
             selectedOption={(option) => {
               if (option && option.isCategory) {
                 setTrainerInfo((prev) => ({
@@ -192,17 +194,14 @@ const Category = (masterRecords) => {
                 setTrainerInfo((prev) => ({
                   ...prev,
                   userInfo: option,
-                  isOpen: false,
+                  isOpen: true,
                   selectCategory: null,
                 }));
               }
             }}
-            customClasses={{
-              searchBar: "search-bar-trainee",
-              searchButton: "search-button-trainee",
-              dropdown: "custom-dropdown-width",
+            handleChange={(value) => {
+              setParams({ search: value });
             }}
-            placeholder={"Search Trainer...."}
           />
         </div>
       </div>
