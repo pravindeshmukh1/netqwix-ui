@@ -66,6 +66,8 @@ export default function MyAppComponent({ Component, pageProps }) {
           <meta name="author" content="Netquix" />
           <link rel="icon" href="/favicon.png" />
           <link rel="shortcut icon" href="/favicon.png" />
+          <link rel="stylesheet" href="path/to/custom.css"/>
+
 
           <title>Netquix</title>
         </Head>

@@ -20,7 +20,7 @@ const ForgetPassword = () => {
     dispatch(forgetPasswordAsync(payload));
   };
   const redirectToSignInPage = () => {
-    router.push(routingPaths.signIn);
+    router.push(routingPaths.landing);
   };
   useEffect(() => {
     status === STATUS.fulfilled && redirectToSignInPage();
