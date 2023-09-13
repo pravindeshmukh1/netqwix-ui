@@ -154,7 +154,7 @@ const Course = (masterRecords) => {
       </div> */}
       <div className="container">
         <div className="col-11">
-          <h5 className="mt-2 text-uppercase mb-2">. Trainer</h5>
+          <h5 className="mt-2 text-uppercase mb-2">Trending trainers</h5>
         </div>
         <div className={`row gy-3`}>
           {Courses.map((data, index) => {
