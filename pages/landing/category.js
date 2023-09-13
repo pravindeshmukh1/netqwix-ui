@@ -1,7 +1,30 @@
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import SearchableDropdown from "../../app/components/trainee/helper/searchableDropdown";
+import { ChevronRight } from "react-feather";
 
 const Category = (masterRecords) => {
+  const [containerStyles, setContainerStyles] = useState({
+    backgroundColor: "#9d01ac",
+    borderRadius: "50%",
+    alignItems: "center",
+  });
+
+  useEffect(() => {
+    const smallScreenStyles = {
+      // backgroundImage: 'url(particular_ad_small.png)',
+      innerHeight:"200px",
+      backgroundColor: "black",
+
+    };
+
+    if (window.innerWidth === 820) {
+      setContainerStyles(prevStyles => ({
+        ...prevStyles,
+        ...smallScreenStyles
+      }));
+    }
+  }, []);
   return (
     <>
       <div className="container-fluid">
@@ -23,7 +46,7 @@ const Category = (masterRecords) => {
             );
           })}
         </div>
-        <div class="container" style={{ width: "100%", display: "flex" }}>
+        <div class="container" style={{ width: "100%", display: "flex" }}   >
           <div
             style={{
               width: "50%",
@@ -34,23 +57,28 @@ const Category = (masterRecords) => {
               textAlign: "left",
             }}
           >
-            🙌 Hello friends,
-            <br />
+          
             Are you ready to embark on a transformative journey towards your
             personal and professional development?
             <div>
-              <button type="button" class="btn btn-dark mt-5">
-                Start Course Now
-              </button>
+            
+              <button className="btn btn-primary mt-5 d-flex">
+                          <div>Get Started</div>
+                          <div className="pl-2">
+                            <ChevronRight />
+                          </div>
+                        </button>
             </div>
           </div>
 
           <div
-            style={{
-              backgroundColor: "#9d01ac",
-              borderRadius: "50%",
-              alignItems: "center",
-            }}
+            // style={{
+            //   backgroundColor: "#9d01ac",
+            //   borderRadius: "50%",
+            //   alignItems: "center",
+              
+            // }}
+            style={containerStyles}
           >
             <div
               style={{ width: "50%", alignItems: "center" }}

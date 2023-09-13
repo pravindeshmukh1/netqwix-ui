@@ -1,3 +1,4 @@
+import { Star, X, ArrowLeft } from "react-feather";
 export const signUpSteps = [{ title: "Basic Info" }, { title: "Details" }];
 export const LIST_OF_ACCOUNT_TYPE = [
   {
@@ -277,17 +278,17 @@ export const FILTER_TIME = [
 
 export const Courses = [
   {
-    img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    img: "https://thispersondoesnotexist.com/",
     name: "Learn Figma - UI/UX Design Essential Training",
     courseDetails: [
       {
-        icon: "fa fa-book",
-        name: "Lesson",
+        icon: "fa fa-star-o",
+        name: "Review",
         enroll: "21",
       },
       {
-        icon: "fa fa-user",
-        name: "Student",
+        icon: "fa fa-list-alt",
+        name: " Category",
         enroll: "21",
       },
       {
@@ -298,17 +299,17 @@ export const Courses = [
     ],
   },
   {
-    img: "https://images.unsplash.com/photo-1618335829737-2228915674e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    img: "https://thispersondoesnotexist.com/",
     name: "Python for Beginners - Learn Programming from scratch",
     courseDetails: [
       {
-        icon: "fa fa-book",
-        name: "Lesson",
+        icon: "fa fa-star-o",
+        name: "Review",
         enroll: "21",
       },
       {
-        icon: "fa fa-user",
-        name: "Student",
+        icon: "fa fa-star-o",
+        name: " Category",
         enroll: "21",
       },
       {
@@ -319,17 +320,17 @@ export const Courses = [
     ],
   },
   {
-    img: "https://images.unsplash.com/photo-1623479322729-28b25c16b011?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    img: "https://thispersondoesnotexist.com/",
     name: "Acoustic Guitar and Electric Guitar Started",
     courseDetails: [
       {
-        icon: "fa fa-book",
-        name: "Lesson",
+        icon: "fa fa-star-o",
+        name: "Review",
         enroll: "21",
       },
       {
-        icon: "fa fa-user",
-        name: "Student",
+        icon: "fa fa-star-o",
+        name: " Category",
         enroll: "21",
       },
       {
@@ -340,17 +341,17 @@ export const Courses = [
     ],
   },
   {
-    img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    img: "https://thispersondoesnotexist.com/",
     name: "Mobile App Development with Flutter & Dart (iOS and Android)",
     courseDetails: [
       {
-        icon: "fa fa-book",
-        name: "Lesson",
+        icon: "fa fa-star-o",
+        name: "Review",
         enroll: "21",
       },
       {
-        icon: "fa fa-user",
-        name: "Student",
+        icon: "fa fa-star-o",
+        name: " Category",
         enroll: "21",
       },
       {
@@ -361,17 +362,17 @@ export const Courses = [
     ],
   },
   {
-    img: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    img: "https://thispersondoesnotexist.com/",
     name: "Ionic React: Mobile Development with Ionic 5 Started",
     courseDetails: [
       {
-        icon: "fa fa-book",
-        name: "Lesson",
+        icon: "fa fa-star-o",
+        name: "Review",
         enroll: "21",
       },
       {
-        icon: "fa fa-user",
-        name: "Student",
+        icon: "fa fa-star-o",
+        name: " Category",
         enroll: "21",
       },
       {
@@ -382,17 +383,17 @@ export const Courses = [
     ],
   },
   {
-    img: "https://images.unsplash.com/photo-1517649763962-0c623066013b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    img: "https://thispersondoesnotexist.com/",
     name: "Sports Management: The Essentials Course",
     courseDetails: [
       {
-        icon: "fa fa-book",
-        name: "Lesson",
+        icon: "fa fa-star-o",
+        name: "Review",
         enroll: "6",
       },
       {
-        icon: "fa fa-user",
-        name: "Student",
+        icon: "fa fa-star-o",
+        name: " Category",
         enroll: "198",
       },
       {
@@ -403,17 +404,17 @@ export const Courses = [
     ],
   },
   {
-    img: "https://images.unsplash.com/photo-1501523460185-2aa5d2a0f981?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bWFya2V0fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+    img: "https://thispersondoesnotexist.com/",
     name: "How to Market Yourself as a Consultant",
     courseDetails: [
       {
-        icon: "fa fa-book",
-        name: "Lesson",
+        icon: "fa fa-star-o",
+        name: "Review",
         enroll: "21",
       },
       {
-        icon: "fa fa-user",
-        name: "Student",
+        icon: "fa fa-star-o",
+        name: " Category",
         enroll: "99",
       },
       {
@@ -424,17 +425,17 @@ export const Courses = [
     ],
   },
   {
-    img: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80",
+    img: "https://thispersondoesnotexist.com/",
     name: "Become a Product Manager | Learn the Skills & Get the Job",
     courseDetails: [
       {
-        icon: "fa fa-book",
-        name: "Lesson",
+        icon: "fa fa-star-o",
+        name: "Review",
         enroll: "21",
       },
       {
-        icon: "fa fa-user",
-        name: "Student",
+        icon: "fa fa-star-o",
+        name: " Category",
         enroll: "21",
       },
       {
@@ -621,7 +622,7 @@ export const YOURCOURSES = [
         enroll: "21",
       },
       {
-        icon: "fa fa-user",
+        icon: "fa fa-book",
         name: "Student",
         enroll: "21",
       },
@@ -648,7 +649,7 @@ export const YOURCOURSES = [
         enroll: "21",
       },
       {
-        icon: "fa fa-user",
+        icon: "fa fa-book",
         name: "Student",
         enroll: "21",
       },

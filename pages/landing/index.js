@@ -60,7 +60,7 @@ const Landing = () => {
       <div class="dropdown-divider"></div>
       {/* <div class="container-fluid"> */}
       <Category masterRecords={data} />
-      <Course />
+      <Course masterRecords={data}/>
       <YourCourses />
       <HowItWorks />
       <WhyChooseUs />

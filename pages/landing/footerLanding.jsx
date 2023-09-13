@@ -72,6 +72,11 @@ const FooterLanding = (masterRecords) => {
             </div>
           </div>
         </div>
+        <div style={{color:"white",padding:"15px",marginBottom:"10px"}} className="bg-primary">
+
+<span style={{float:"right",fontSize:"14px"}}>Privacy Policy | Terms & Conditions</span>
+<span style={{fontSize:"14px"}}>All Copyright (c) 2022 Reserved</span>
+        </div>
       </div>
     </>
   );

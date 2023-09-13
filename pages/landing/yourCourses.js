@@ -8,22 +8,24 @@ const YourCourses = () => {
       <div className="container">
         <div className="row">
           <div className="col-11">
-            <h5 className="mt-2 text-uppercase">. your courses</h5>
+            {/* <h5 className="mt-2 text-uppercase mb-2">. Trending Trainers</h5> */}
           </div>
           <span
-            className="badge badge-light lg mb-3"
+            className="badge badge-light lg d-block text-center bg-primary"
             style={{
-              padding: "12px",
-              alignItems: "center",
+              padding: "15px",
               fontSize: "14px",
               color: "black",
+              cursor: "pointer",
+              width: "100%",
+              color:"white"
             }}
           >
             See all
           </span>
         </div>
       </div>
-      <div className="container">
+      {/* <div className="container">
         <div className="row gy-3">
           {YOURCOURSES.map((data, index) => {
             const { item, courseDetails, name, img } = data;
@@ -79,7 +81,7 @@ const YourCourses = () => {
             );
           })}
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

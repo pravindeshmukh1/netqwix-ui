@@ -153,6 +153,9 @@ const Course = () => {
         </div>
       </div> */}
       <div className="container">
+      <div className="col-11">
+            <h5 className="mt-2 text-uppercase mb-2">. Trainer</h5>
+          </div>
         <div className={`row gy-3`}>
           {Courses.map((data, index) => {
             const { img, name, courseDetails } = data;
@@ -170,6 +173,7 @@ const Course = () => {
                       <h5 className="card-title text-truncate">{name}</h5>
                       <div className="row mt-4 mb-4">
                         {courseDetails.map((data) => (
+                          
                           <div className={`${tabletView ? "col-6" : "col-6"}`}>
                             <i className={`${data.icon} mr-2`}></i>
                             <span>
@@ -180,8 +184,8 @@ const Course = () => {
                         ))}
                       </div>
                       <div>
-                        <button className="btn btn-dark btn-sm d-flex">
-                          <div>Start Course</div>
+                        <button className="btn btn-primary btn-sm d-flex">
+                          <div>Know more</div>
                           <div className="pl-2">
                             <ChevronRight />
                           </div>
