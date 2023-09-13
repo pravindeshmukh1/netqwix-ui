@@ -1,6 +1,7 @@
 @import "./dropdown.scss";
 @import "./slider.scss";
 @import './why_choose_us.scss';
+@import './landing.scss';
 
 $sidebar-width-left: 105px;
 $navbar-height-top: 85px;
@@ -426,14 +427,3 @@ slick-slider .slick-list,
 }
 
 
-// .container {
-//   background-color: #9d01ac;
-//   border-radius: 50%;
-//   align-items: center;
-// }
-
-// @media (max-width: 300px) {
-//   .container {
-//     background-image: url('particular_ad_small.png');
-//   }
-// }

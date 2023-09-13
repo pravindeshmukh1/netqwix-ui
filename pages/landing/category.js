@@ -143,7 +143,7 @@ const Category = (masterRecords) => {
             //   alignItems: "center",
 
             // }}
-            style={containerStyles}
+            className='bg-primary imgcon'
           >
             <div
               style={{ width: "50%", alignItems: "center" }}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Courses, CourseItems } from "../../app/common/constants";
-import { ChevronRight, Filter } from "react-feather";
+import { ChevronRight, Filter,Circle } from "react-feather";
 
 const Course = (masterRecords) => {
   const [tabletView, setTableView] = useState(false);
@@ -154,7 +154,7 @@ const Course = (masterRecords) => {
       </div> */}
       <div className="container">
         <div className="col-11">
-          <h5 className="mt-2 text-uppercase mb-2">Trending trainers</h5>
+          <h3 className="mt-2 text-uppercase mb-2"><Circle/>Trending trainers</h3>
         </div>
         <div className={`row gy-3`}>
           {Courses.map((data, index) => {
