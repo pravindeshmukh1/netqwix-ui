@@ -12,13 +12,12 @@ const FooterLanding = (masterRecords) => {
                 src="/assets/images/netquix_logo.png"
                 alt="logo"
                 style={{
-                  maxWidth: "130px",
-                  marginLef: "30px",
+                  maxWidth: "105px",
                 }}
               />
             </div>
           </div>
-          <div style={{ width: "85%", marginTop: "35px" }} class="col-sm-9 ">
+          <div style={{ width: "85%", marginTop: "33px" }} class="col-sm-9 ">
             <p>
               Are you ready to embark on a transformative journey towards your
               personal and professional development? We are here to
