@@ -4,7 +4,7 @@ export const HowItWorks = () => {
   return (
     <div class="feat bg-gray pt-5 pb-5">
       <div class="container">
-        <div class="row">
+        <div class="row" style={{ justifyContent: 'center'}}>
           <div class="section-head col-sm-12">
             <h6>How it Works?</h6>
             <p>
