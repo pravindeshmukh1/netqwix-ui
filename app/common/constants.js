@@ -284,7 +284,7 @@ export const Courses = [
       {
         icon: "fa fa-star-o",
         name: "Review",
-        enroll: "21",
+        enroll: "2",
       },
       {
         icon: "fa fa-list-alt",
@@ -305,10 +305,10 @@ export const Courses = [
       {
         icon: "fa fa-star-o",
         name: "Review",
-        enroll: "21",
+        enroll: "1",
       },
       {
-        icon: "fa fa-star-o",
+        icon: "fa fa-list-alt",
         name: " Category",
         enroll: "21",
       },
@@ -326,10 +326,10 @@ export const Courses = [
       {
         icon: "fa fa-star-o",
         name: "Review",
-        enroll: "21",
+        enroll: "11",
       },
       {
-        icon: "fa fa-star-o",
+        icon: "fa fa-list-alt",
         name: " Category",
         enroll: "21",
       },
@@ -347,10 +347,10 @@ export const Courses = [
       {
         icon: "fa fa-star-o",
         name: "Review",
-        enroll: "21",
+        enroll: "100",
       },
       {
-        icon: "fa fa-star-o",
+        icon: "fa fa-list-alt",
         name: " Category",
         enroll: "21",
       },
@@ -368,10 +368,10 @@ export const Courses = [
       {
         icon: "fa fa-star-o",
         name: "Review",
-        enroll: "21",
+        enroll: "3",
       },
       {
-        icon: "fa fa-star-o",
+        icon: "fa fa-list-alt",
         name: " Category",
         enroll: "21",
       },
@@ -392,9 +392,9 @@ export const Courses = [
         enroll: "6",
       },
       {
-        icon: "fa fa-star-o",
+        icon: "fa fa-list-alt",
         name: " Category",
-        enroll: "198",
+        enroll: "198", 
       },
       {
         icon: "fa fa-trophy",
@@ -410,10 +410,10 @@ export const Courses = [
       {
         icon: "fa fa-star-o",
         name: "Review",
-        enroll: "21",
+        enroll: "9",
       },
       {
-        icon: "fa fa-star-o",
+        icon: "fa fa-list-alt",
         name: " Category",
         enroll: "99",
       },
@@ -431,10 +431,10 @@ export const Courses = [
       {
         icon: "fa fa-star-o",
         name: "Review",
-        enroll: "21",
+        enroll: "12",
       },
       {
-        icon: "fa fa-star-o",
+        icon: "fa fa-list-alt",
         name: " Category",
         enroll: "21",
       },
