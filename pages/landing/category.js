@@ -44,12 +44,18 @@ const Category = (masterRecords) => {
           </div>
         </div>
 
+
+        {/* background-color: #9d01ac;
+    border-radius: 50%;
+    height: 457px;
+    margin-top: 24%; */}
         <div
           style={{
             backgroundColor: "#9d01ac",
             borderRadius: "50%",
             alignItems: "center",
           }}
+          className=".col-md"
         >
           <div style={{ width: "50%", alignItems: "center" }} className="my-5">
             <img

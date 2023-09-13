@@ -6,7 +6,7 @@ const FooterLanding = (masterRecords) => {
     <>
       <div className="container-fluid">
         <div style={{ width: "100%", display: "flex" }}>
-          <div style={{ width: "15%" }}>
+          <div style={{ width: "15%",margin:"3%" }}>
             {/* <div style={{marginLeft:"20%"}}>  */}
 
             <img
