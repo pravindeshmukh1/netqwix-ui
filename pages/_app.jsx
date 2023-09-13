@@ -69,7 +69,7 @@ export default function MyAppComponent({ Component, pageProps }) {
           <link rel="stylesheet" href="path/to/custom.css"/>
 
 
-          <title>Netquix</title>
+          <title>netqwix</title>
         </Head>
         <Provider store={store}>
           <AuthGuard>

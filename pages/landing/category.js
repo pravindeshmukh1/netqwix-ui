@@ -65,10 +65,8 @@ const Category = (masterRecords) => {
       userInfo: null,
       selectCategory: null,
     }));
-    setParams((prev) => ({
-      ...prev,
-      search: null,
-    }));
+    setParams("");
+    (params.search = ""), setParams(params);
   };
 
   const [containerStyles, setContainerStyles] = useState({
@@ -93,7 +91,7 @@ const Category = (masterRecords) => {
   }, []);
 
   return (
-    <>
+    <React.Fragment>
       <div className="container-fluid">
         <div className="d-flex flex-wrap justify-content-center align-items-center ">
           {masterRecords?.masterRecords?.category?.map((item) => {
@@ -113,7 +111,63 @@ const Category = (masterRecords) => {
             );
           })}
         </div>
-        <div class="container" style={{ width: "100%", display: "flex" }}>
+        <div className="container">
+          <div class="row mt-5">
+            <div class="col-lg-6">
+              <div
+                className="mt-4"
+                style={{
+                  fontSize: "35px",
+                  color: "black",
+                  fontWeight: 600,
+                  textAlign: "left",
+                }}
+              >
+                Are you ready to embark on a transformative journey towards your
+                personal and professional development?
+              </div>
+              <div class="col-lg-6">
+                <button className="btn btn-primary d-flex mb-4 mt-5">
+                  <div>Get Started</div>
+                  <div className="pl-2">
+                    <ChevronRight />
+                  </div>
+                </button>
+              </div>
+            </div>
+            <div class="col-lg-6  bg-primary" style={{ borderRadius: "50%" }}>
+              <img
+                src="/assets/images/1-removebg 1.png"
+                alt="logo"
+                style={{
+                  // maxWidth: "500px",
+                  maxWidth: "100%",
+                  height: "auto",
+                }}
+                className="img-fluid"
+              />
+            </div>
+          </div>
+        </div>
+        {/* <div className="container">
+          <div className="row">
+            <div className="col-md-3 col-sm-2 col-lg-3">
+              <div className="d-flex">
+                <p>
+                  Are you ready to embark on a transformative journey towards
+                  your personal and professional development?
+                </p>
+                <button className="btn btn-primary mt-5 d-flex">
+                  <div>Get Started</div>
+                  <div className="pl-2">
+                    <ChevronRight />
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div> */}
+        {/* <div class="container" style={{ width: "100%", display: "flex" }}>
           <div
             style={{
               width: "50%",
@@ -143,7 +197,7 @@ const Category = (masterRecords) => {
             //   alignItems: "center",
 
             // }}
-            className='bg-primary imgcon'
+            style={containerStyles}
           >
             <div
               style={{ width: "50%", alignItems: "center" }}
@@ -158,7 +212,7 @@ const Category = (masterRecords) => {
               />
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="d-flex justify-content-center align-items-center my-5">
           <SearchableDropdown
             placeholder="Search Trainers..."
@@ -207,6 +261,8 @@ const Category = (masterRecords) => {
       </div>
       <Modal
         isOpen={trainerInfo.isOpen}
+        overflowHidden={true}
+        minHeight={true}
         element={
           <TrainersDetails
             onClose={handleClose}
@@ -223,9 +279,8 @@ const Category = (masterRecords) => {
             }}
           />
         }
-        allowFullWidth={true}
       />
-    </>
+    </React.Fragment>
   );
 };
 

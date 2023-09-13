@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NEW_COMMENTS, QUICK_ACCESS } from "../../app/common/constants";
 
 const FooterLanding = (masterRecords) => {
+  const [tabletView, setTableView] = useState(false);
+
+  useEffect(() => {
+    const checkScreenWidth = () => {
+      setTableView(window.innerWidth >= 720 && window.innerWidth <= 1280);
+    };
+    window.addEventListener("resize", checkScreenWidth);
+    checkScreenWidth();
+    return () => {
+      window.removeEventListener("resize", checkScreenWidth);
+    };
+  }, []);
   return (
     <>
       <div className="container">
@@ -14,7 +26,7 @@ const FooterLanding = (masterRecords) => {
             borderRadius: "5px",
           }}
         >
-          <div style={{ width: "15%" }} class="col-sm-3 ">
+          {/* <div style={{ width: "15%" }} class="col-sm-3 ">
             <div style={{ marginLeft: "25px" }}>
               <img
                 src="/assets/images/netquix_logo.png"
@@ -32,6 +44,29 @@ const FooterLanding = (masterRecords) => {
               revolutionize the way you learn and connect with expert trainers.
               Our cutting-edge platform.
             </p>
+          </div> */}
+          <div class="row">
+            <div class="col-md-6 col-sm-2 col-lg-1">
+              <img
+                src="/assets/images/netquix_logo.png"
+                alt="logo"
+                className={`${tabletView ? "ml-5" : "ml-3"}`}
+                style={{
+                  maxWidth: "105px",
+                }}
+              />
+            </div>
+            <div
+              class={`col-8 ${tabletView ? "ml-5" : "ml-5"} mb-2`}
+              style={{ marginTop: "33px" }}
+            >
+              <p>
+                Are you ready to embark on a transformative journey towards your
+                personal and professional development? We are here to
+                revolutionize the way you learn and connect with expert
+                trainers. Our cutting-edge platform.
+              </p>
+            </div>
           </div>
         </div>
         <div class="container mt-5">
@@ -80,6 +115,7 @@ const FooterLanding = (masterRecords) => {
             </div>
           </div>
         </div>
+        
         <div
           style={{ color: "white", padding: "15px", marginTop: "5%" }}
           className="bg-primary mb-2"
