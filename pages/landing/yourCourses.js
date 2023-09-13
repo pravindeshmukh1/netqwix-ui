@@ -11,14 +11,13 @@ const YourCourses = () => {
             {/* <h5 className="mt-2 text-uppercase mb-2">. Trending Trainers</h5> */}
           </div>
           <span
-            className="badge badge-light lg d-block text-center bg-primary"
+            className="badge badge-light lg d-block text-center bg-gray"
             style={{
               padding: "15px",
               fontSize: "14px",
               color: "black",
               cursor: "pointer",
               width: "100%",
-              color:"white"
             }}
           >
             See all
