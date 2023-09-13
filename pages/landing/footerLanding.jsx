@@ -5,7 +5,15 @@ const FooterLanding = (masterRecords) => {
   return (
     <>
       <div className="container">
-        <div style={{ width: "100%", display: "flex" ,border: "1px solid mistyrose",marginBottom:"5px",borderRadius:"5px"}}>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            border: "1px solid mistyrose",
+            marginBottom: "5px",
+            borderRadius: "5px",
+          }}
+        >
           <div style={{ width: "15%" }} class="col-sm-3 ">
             <div style={{ marginLeft: "25px" }}>
               <img
@@ -72,10 +80,16 @@ const FooterLanding = (masterRecords) => {
             </div>
           </div>
         </div>
-        <div style={{color:"white",padding:"15px",marginTop:"5%"}} className="bg-primary mb-2">
-
-<span style={{fontSize:"14px" ,color:"white"}}>Privacy Policy | Terms & Conditions</span>
-<span style={{float:"right",fontSize:"14px",color:"white"}}>All Copyright (c) 2023 Reserved</span>
+        <div
+          style={{ color: "white", padding: "15px", marginTop: "5%" }}
+          className="bg-primary mb-2"
+        >
+          <span style={{ fontSize: "14px", color: "white" }}>
+            Privacy Policy | Terms & Conditions
+          </span>
+          <span style={{ float: "right", fontSize: "14px", color: "white" }}>
+            All Copyright (c) 2023 Reserved
+          </span>
         </div>
       </div>
     </>
