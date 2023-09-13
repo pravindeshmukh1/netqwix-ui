@@ -543,26 +543,32 @@ export const NEW_COMMENTS = [
 export const WHY_CHOOSE_US = [
   {
     id: 1,
-    content: '🚀 Seamless Trainer Booking: Discover a diverse community of experienced trainers spanning various fields. Browse profiles, read reviews, and select the perfect trainer to help you achieve your goals.'
+    icon: '🚀',
+    content: 'Seamless Trainer Booking: Discover a diverse community of experienced trainers spanning various fields. Browse profiles, read reviews, and select the perfect trainer to help you achieve your goals.'
   },
   {
     id: 2,
-    content: '🎯 Tailored Learning Plans: Say goodbye to one-size-fits-all approaches. Our trainers create personalized learning plans that cater to your unique needs and aspirations.'
+    icon: '🎯',
+    content: 'Tailored Learning Plans: Say goodbye to one-size-fits-all approaches. Our trainers create personalized learning plans that cater to your unique needs and aspirations.'
   },
   {
     id: 3,
-    content: "📅 Flexible Scheduling: Life can be hectic, but learning shouldn't be. Choose session times that fit your schedule, whether it's early morning or late at night."
+    icon: '📅',
+    content: "Flexible Scheduling: Life can be hectic, but learning shouldn't be. Choose session times that fit your schedule, whether it's early morning or late at night."
   },
   {
     id: 4,
-    content:"🖌️ Interactive Learning Tools: Immerse yourself in engaging sessions with our unique interactive features. Draw freehand, create shapes, and annotate live video feeds to enhance your understanding and retention."
+    icon: '🖌️',
+    content:" Interactive Learning Tools: Immerse yourself in engaging sessions with our unique interactive features. Draw freehand, create shapes, and annotate live video feeds to enhance your understanding and retention."
   },
   {
     id: 5,
-    content: "📹 Clip Share: Capture the moments of your sessions and easily share them with your trainer. Make feedback and progress tracking a breeze."
+    icon: '📹',
+    content: "Clip Share: Capture the moments of your sessions and easily share them with your trainer. Make feedback and progress tracking a breeze."
   },
   {
     id: 6,
-    content: "🌐 Connect from Anywhere: Whether you're at home, in the office, or on the go, LearnConnect's web application allows you to connect with your trainer seamlessly, anytime, anywhere."
+    icon: '🌐',
+    content: "Connect from Anywhere: Whether you're at home, in the office, or on the go, LearnConnect's web application allows you to connect with your trainer seamlessly, anytime, anywhere."
   }
 ]

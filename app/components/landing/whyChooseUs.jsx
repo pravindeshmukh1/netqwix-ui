@@ -17,7 +17,8 @@ export const WhyChooseUs = () => {
                 <div class="item">
                   {' '}
                   <span class="icon feature_box_col_one">
-                    <i class="fa fa-globe" />
+                    {/* <i class="fa fa-globe" /> */}
+                    {info.icon}
                   </span>
                   {/* <h6>Modern Design</h6> */}
                   <p>
