@@ -58,7 +58,7 @@ const Landing = () => {
       {/* <div class="container-fluid"> */}
         <Category masterRecords={data} />
         <Course />
-        <FooterLanding/>
+        <FooterLanding masterRecords={data}/>
       {/* </div> */}
     </>
   );

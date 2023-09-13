@@ -31,7 +31,7 @@ const LandingHeader = (masterRecords) => {
     alt="logo"
     style={{
         maxWidth: "120px",
-        margin: "2px",
+        marginLeft: "5px",
 
       }}
       />
