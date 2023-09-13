@@ -16,13 +16,12 @@ export const HowItWorks = () => {
               return (
                 <div class="col-lg-4 col-sm-6" key={`why-us-${index}`}>
                   <div class="item">
-                    {' '}
                     <span class="icon feature_box_col_one">
                       {/* <i class="fa fa-globe" /> */}
                       {info.icon}
                     </span>
                     <h6>
-                      {' '}<div style={{fontSize: '20px'}}>
+                      <div style={{fontSize: '20px', textDecoration: 'underline', textUnderlineOffset: '0.4em', textDecorationColor: '#000080' }}>
                         {info.title}
                       </div>{' '}
                     </h6>

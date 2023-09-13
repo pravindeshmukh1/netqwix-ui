@@ -206,10 +206,7 @@ const Course = (masterRecords) => {
                       </div>
                       <div>
                         <button className="btn btn-primary btn-sm d-flex">
-                          <div>Know more</div>
-                          <div className="pl-2">
-                            <ChevronRight />
-                          </div>
+                          <div>Book session</div>
                         </button>
                       </div>
                     </div>
