@@ -77,7 +77,8 @@ export class Utils {
     const weekDateFormatted = [];
     if (weekDays[today.getDay() - 1]) {
       weekDateFormatted.push(
-        `${weekDays[today.getDay() - 1]} ${today.getMonth() + 1
+        `${weekDays[today.getDay() - 1]} ${
+          today.getMonth() + 1
         }/${today.getDate()}`
       );
       // weekDates.push(today);
@@ -92,8 +93,9 @@ export class Utils {
 
       if (dayOfWeek) {
         // Exclude weekends
-        const formattedDate = `${dayOfWeek} ${today.getMonth() + 1
-          }/${today.getDate()}`;
+        const formattedDate = `${dayOfWeek} ${
+          today.getMonth() + 1
+        }/${today.getDate()}`;
         weekDateFormatted.push(formattedDate);
         // weekDates.push(today);
         const date = new Date(today);
@@ -138,7 +140,7 @@ export class Utils {
     const totalMinutes = (endHour - startHour) * 60 + (endMinute - startMinute);
     const finalPrice = (totalMinutes / 60) * chargingRate;
 
-    return finalPrice;
+    return +finalPrice.toFixed(2);
   };
 
   static checkTimeConflicts = (values) => {
@@ -241,8 +243,13 @@ export class Utils {
   }
 
   static getRatings = (ratings) => {
-    const filteredRating = ratings.filter(({ ratings }) => ratings?.trainee && ratings?.trainee?.sessionRating);
-    let availableRatings = { totalRating: filteredRating.length, ratingRatio: 0 };
+    const filteredRating = ratings.filter(
+      ({ ratings }) => ratings?.trainee && ratings?.trainee?.sessionRating
+    );
+    let availableRatings = {
+      totalRating: filteredRating.length,
+      ratingRatio: 0,
+    };
     let totalRatings = 0;
     filteredRating.forEach(({ ratings }) => {
       if (ratings && ratings.trainee) {
@@ -267,8 +274,8 @@ export class Utils {
   static disabledWeekendAndPastDates = (current) => {
     return (
       current < Date.now() ||
-      (new Date(current).getDay() === 0 ||
-        new Date(current).getDay() === 6)
+      new Date(current).getDay() === 0 ||
+      new Date(current).getDay() === 6
     );
   };
 }

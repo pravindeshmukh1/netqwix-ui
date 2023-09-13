@@ -262,7 +262,7 @@ const TrainersDetails = ({
                       );
                       if (amountPayable > 0) {
                         const payload = {
-                          charging_price: amountPayable,
+                          charging_price: +amountPayable.toFixed(2),
                           trainer_id: trainer_info.trainer_id,
                           trainer_info,
                           status: BookedSession.booked,
@@ -271,9 +271,10 @@ const TrainersDetails = ({
                           session_end_time: content.end_time,
                         };
                         setBookSessionPayload(payload);
+                        alert("h");
                         dispatch(
                           createPaymentIntentAsync({
-                            amount: amountPayable,
+                            amount: +amountPayable.toFixed(2),
                           })
                         );
                       } else {

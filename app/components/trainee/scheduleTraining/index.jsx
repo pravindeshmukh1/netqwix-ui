@@ -279,7 +279,9 @@ const ScheduleTraining = () => {
                         };
                         setBookSessionPayload(payload);
                         dispatch(
-                          createPaymentIntentAsync({ amount: amountPayable })
+                          createPaymentIntentAsync({
+                            amount: +amountPayable.toFixed(2),
+                          })
                         );
                       } else {
                         toast.error("Invalid slot timing...");
