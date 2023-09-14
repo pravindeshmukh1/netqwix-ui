@@ -115,17 +115,18 @@ const FooterLanding = (masterRecords) => {
             </div>
           </div>
         </div>
-        
-        <div
-          style={{ color: "white", padding: "15px", marginTop: "5%" }}
-          className="bg-primary mb-2"
-        >
-          <span style={{ fontSize: "14px", color: "white" }}>
-            Privacy Policy | Terms & Conditions
-          </span>
-          <span style={{ float: "right", fontSize: "14px", color: "white" }}>
-            All Copyright (c) 2023 Reserved
-          </span>
+
+        <div class="row bg-primary p-3 m-2">
+          <div class="col-6">
+            <span style={{ fontSize: "14px", color: "white" }}>
+              Privacy Policy | Terms & Conditions
+            </span>
+          </div>
+          <div class="col-6">
+            <span style={{ float: "right", fontSize: "14px", color: "white" }}>
+              All Copyright (c) 2023 Reserved
+            </span>
+          </div>
         </div>
       </div>
     </>

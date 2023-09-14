@@ -164,7 +164,7 @@ const Course = (masterRecords) => {
             const { img, name, courseDetails } = data;
             return (
               <>
-                <div className="col-md-6 col-sm-2 col-lg-3">
+                <div className="col-lg-4 col-sm-12">
                   <div className="card m-2">
                     <img
                       className="card-img-top"
@@ -196,7 +196,8 @@ const Course = (masterRecords) => {
                         })} */}
 
                         {courseDetails?.map((data) => (
-                          <div className={`${tabletView ? "col-6" : "col-6"}`}>
+                          // <div className={`${tabletView ? "col-6" : "col-6"}`}>
+                          <div class="col-lg-6 col-sm-12">
                             <i className={`${data.icon} mr-2`}></i>
                             {data.name}{" "}
                             <span>

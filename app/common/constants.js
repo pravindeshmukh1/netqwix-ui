@@ -65,11 +65,10 @@ export const weekDays = [
   "friday",
 ];
 export const routingPaths = {
-  landing: "/landing",
+  landing: "/",
   dashboard: "/dashboard",
   signUp: "/auth/signUp",
   signIn: "/auth/signIn",
-  landing: "/landing",
   forgetPassword: "/auth/forgetPassword",
   verifiedForgetPassword: "/auth/verified-forget-password",
 };
