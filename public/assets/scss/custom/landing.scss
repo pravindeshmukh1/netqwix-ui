@@ -14,6 +14,11 @@
     float: "right";
      align-items: 'end'
 }
+
+.dot-btn:before{
+  width: 12px;
+  height: 12px;
+}
 @media (min-width: 820px) {
   .imgcon {
     //   background-image: url('/assets/images/1-removebg 1.png');

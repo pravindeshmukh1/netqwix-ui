@@ -153,10 +153,10 @@ const Course = (masterRecords) => {
         </div>
       </div> */}
       <div className="container">
-        <div className="col-11 ">
-          <div className="dot-btn dot-success  ">
-            <h3 className="mr-3  text-uppercase "> Trending trainers </h3>
+        <div className="col-11 ml-2">
+          <div className="dot-btn dot-success mt-4" >
           </div>
+            <h3 className="ml-1  text-uppercase mb-1 "> Active Trainers </h3>
         </div>
 
         <div className={`row gy-3`}>
