@@ -66,14 +66,30 @@ const SettingSection = (props) => {
   });
 
   const initialValues = {
-    fb: userInfo ? userInfo.extraInfo.social_media_links.fb : "",
-    instagram: userInfo ? userInfo.extraInfo.social_media_links.instagram : "",
-    twitter: userInfo ? userInfo.extraInfo.social_media_links.twitter : "",
-    google: userInfo ? userInfo.extraInfo.social_media_links.google : "",
-    slack: userInfo ? userInfo.extraInfo.social_media_links.slack : "",
-    profile_image_url: userInfo
-      ? userInfo.extraInfo.social_media_links.profile_image_url
-      : "",
+    fb:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.fb
+        : "",
+    instagram:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.instagram
+        : "",
+    twitter:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.twitter
+        : "",
+    google:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.google
+        : "",
+    slack:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.slack
+        : "",
+    profile_image_url:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.profile_image_url
+        : "",
   };
 
   const validationSchema = Yup.object().shape({
