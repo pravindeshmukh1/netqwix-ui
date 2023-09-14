@@ -160,19 +160,21 @@ const Course = (masterRecords) => {
           {Courses.map((data, index) => {
             const { img, name, courseDetails } = data;
             return (
-              <>
-                <div className="col-md-6 col-sm-2 col-lg-3">
-                  <div className="card m-2">
-                    <img
-                      className="card-img-top"
-                      src={img}
-                      alt="Card image cap"
-                      style={{ padding: "10px", borderRadius: "20px" }}
-                    />
-                    <div className="card-body">
-                      <h5 className="card-title text-truncate">{name}</h5>
-                      <div className="row mt-4 mb-4">
-                        {/* {courseDetails?.map((data, index) => {
+              <div
+                key={`course_list${index}`}
+                className="col-md-6 col-sm-2 col-lg-3"
+              >
+                <div className="card m-2">
+                  <img
+                    className="card-img-top"
+                    src={img}
+                    alt="Card image cap"
+                    style={{ padding: "10px", borderRadius: "20px" }}
+                  />
+                  <div className="card-body">
+                    <h5 className="card-title text-truncate">{name}</h5>
+                    <div className="row mt-4 mb-4">
+                      {/* {courseDetails?.map((data, index) => {
                           const category =
                             masterRecords?.masterRecords?.category[index];
 
@@ -192,27 +194,24 @@ const Course = (masterRecords) => {
                           );
                         })} */}
 
-                        {courseDetails?.map((data) => (
-                          <div className={`${tabletView ? "col-6" : "col-6"}`}>
-                            <i className={`${data.icon} mr-2`}></i>
-                            {data.name}{" "}
-                            <span >
-                              {data && data.enroll
-                                ? `: ${data.enroll}`
-                                :null}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                      <div>
-                        <button className="btn btn-primary btn-sm d-flex">
-                          <div>Book session</div>
-                        </button>
-                      </div>
+                      {courseDetails?.map((data) => (
+                        <div className={`${tabletView ? "col-6" : "col-6"}`}>
+                          <i className={`${data.icon} mr-2`}></i>
+                          {data.name}{" "}
+                          <span>
+                            {data && data.enroll ? `: ${data.enroll}` : null}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <div>
+                      <button className="btn btn-primary btn-sm d-flex">
+                        <div>Book session</div>
+                      </button>
                     </div>
                   </div>
                 </div>
-              </>
+              </div>
             );
           })}
         </div>

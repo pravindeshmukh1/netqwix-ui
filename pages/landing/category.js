@@ -94,10 +94,11 @@ const Category = (masterRecords) => {
     <React.Fragment>
       <div className="container-fluid">
         <div className="d-flex flex-wrap justify-content-center align-items-center ">
-          {masterRecords?.masterRecords?.category?.map((item) => {
+          {masterRecords?.masterRecords?.category?.map((item, index) => {
             return (
               <span
-                class="badge badge-light lg"
+                key={`category_item${index}`}
+                className="badge badge-light lg"
                 style={{
                   margin: "20px",
                   padding: "18px",
@@ -111,7 +112,7 @@ const Category = (masterRecords) => {
             );
           })}
         </div>
-        <div class="container" style={{ width: "100%", display: "flex" }}>
+        <div className="container" style={{ width: "100%", display: "flex" }}>
           <div
             style={{
               width: "50%",

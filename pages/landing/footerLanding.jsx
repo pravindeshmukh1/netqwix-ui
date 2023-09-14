@@ -3,7 +3,7 @@ import { NEW_COMMENTS, QUICK_ACCESS } from "../../app/common/constants";
 
 const FooterLanding = (masterRecords) => {
   return (
-    <>
+    <React.Fragment>
       <div className="container">
         <div
           style={{
@@ -14,7 +14,7 @@ const FooterLanding = (masterRecords) => {
             borderRadius: "5px",
           }}
         >
-          <div style={{ width: "15%" }} class="col-sm-3 ">
+          <div style={{ width: "15%" }} className="col-sm-3 ">
             <div style={{ marginLeft: "25px" }}>
               <img
                 src="/assets/images/netquix_logo.png"
@@ -25,7 +25,7 @@ const FooterLanding = (masterRecords) => {
               />
             </div>
           </div>
-          <div style={{ width: "85%", marginTop: "33px" }} class="col-sm-9 ">
+          <div style={{ width: "85%", marginTop: "33px" }} className="col-sm-9 ">
             <p>
               Are you ready to embark on a transformative journey towards your
               personal and professional development? We are here to
@@ -34,10 +34,10 @@ const FooterLanding = (masterRecords) => {
             </p>
           </div>
         </div>
-        <div class="container mt-5">
-          <div class="row">
-            {/* <div class="col-md-3 col-sm-2 col-lg-3" /> */}
-            <div class="col-md-4 col-sm-2 col-lg-4">
+        <div className="container mt-5">
+          <div className="row">
+            {/* <div className="col-md-3 col-sm-2 col-lg-3" /> */}
+            <div className="col-md-4 col-sm-2 col-lg-4">
               <span>CATEGORIES</span>
               {masterRecords?.masterRecords?.category?.map((item, index) => {
                 return (
@@ -47,7 +47,7 @@ const FooterLanding = (masterRecords) => {
                 );
               })}
             </div>
-            <div class="col-md-4 col-sm-2 col-lg-4">
+            <div className="col-md-4 col-sm-2 col-lg-4">
               <div>
                 {" "}
                 <b>Quick access</b>
@@ -58,7 +58,7 @@ const FooterLanding = (masterRecords) => {
                 })}
               </div>
             </div>
-            <div class="col-md-4 col-sm-2 col-lg-4">
+            <div className="col-md-4 col-sm-2 col-lg-4">
               <div>
                 {" "}
                 <b>New Comments</b>
@@ -92,7 +92,7 @@ const FooterLanding = (masterRecords) => {
           </span>
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 };
 

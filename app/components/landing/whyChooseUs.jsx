@@ -3,10 +3,10 @@ import { WHY_CHOOSE_US } from "../../common/constants";
 export const WhyChooseUs = () => {
   return (
     <div className="why-choose-us">
-      <div class="feat bg-gray pt-5 pb-5">
-        <div class="container">
-          <div class="row">
-            <div class="section-head col-sm-12">
+      <div className="feat bg-gray pt-5 pb-5">
+        <div className="container">
+          <div className="row">
+            <div className="section-head col-sm-12">
               <h6>Why Choose Us?</h6>
               <p>
                 Are you ready to embark on a transformative journey towards your
@@ -19,11 +19,11 @@ export const WhyChooseUs = () => {
             </div>
             {WHY_CHOOSE_US.map((info, index) => {
               return (
-                <div class="col-lg-4 col-sm-6" key={`why-us-${index}`}>
-                  <div class="item">
+                <div className="col-lg-4 col-sm-6" key={`why-us-${index}`}>
+                  <div className="item">
                     {" "}
-                    <span class="icon feature_box_col_one">
-                      {/* <i class="fa fa-globe" /> */}
+                    <span className="icon feature_box_col_one">
+                      {/* <i className="fa fa-globe" /> */}
                       {info.icon}
                     </span>
                     <h6>
