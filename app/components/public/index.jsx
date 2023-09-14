@@ -8,6 +8,7 @@ import { Popover } from "react-tiny-popover";
 import { useAppDispatch, useAppSelector } from "../../store";
 import DatePicker from "react-datepicker";
 import moment from "moment";
+import StripeCard from "../../common/stripe/index";
 import { Input, Label, Nav, NavItem, NavLink } from "reactstrap";
 import {
   FILTER_DEFAULT_CHECKED_ID,
@@ -139,9 +140,9 @@ const TrainersDetails = ({
   ];
 
   const renderBookingTable = () => (
-    <div>
+    <React.Fragment>
       <div className="row">
-        <div className="mt-4 col-1.4 datePicker">
+        <div className="mt-4 col-1.4  border border-dark p-10 ml-3">
           <DatePicker
             minDate={moment().toDate()}
             onChange={(date) => {
@@ -165,12 +166,12 @@ const TrainersDetails = ({
           element={renderStripePaymentContent()}
         />
       </div>
-    </div>
+    </React.Fragment>
   );
 
   const renderStripePaymentContent = () =>
     transaction && transaction.intent ? (
-      <div>
+      <React.Fragment>
         <div className="d-flex justify-content-end mr-3">
           <h2
             type="button"
@@ -183,9 +184,9 @@ const TrainersDetails = ({
             <X />
           </h2>
         </div>
-        <div>
+        <React.Fragment>
           {/* <h5>To book a slot, please pay {TRAINER_AMOUNT_USD}$.</h5> */}
-          <div>
+          <React.Fragment>
             <StripeCard
               clientSecret={transaction.intent.client_secret}
               handlePaymentSuccess={() => {
@@ -203,16 +204,16 @@ const TrainersDetails = ({
                 )
               }
             />
-          </div>
-        </div>
-      </div>
+          </React.Fragment>
+        </React.Fragment>
+      </React.Fragment>
     ) : (
       <></>
     );
 
   const renderPaymentContent = () => {
     return (
-      <div>
+      <React.Fragment>
         <h3>
           {" "}
           Trainer: {bookSessionPayload.trainer_info.fullname} (Price per hour $
@@ -226,11 +227,14 @@ const TrainersDetails = ({
         <h4 className="mb-3">
           Price: <b>${bookSessionPayload.charging_price}</b>
         </h4>
-      </div>
+      </React.Fragment>
     );
   };
 
   const renderSlotsByDay = ({ slot, date, trainer_info }) => {
+    const handleSignInRedirect = () => {
+      push({ pathname: routingPaths.signIn });
+    };
     return slot.map((content, index) => (
       <Popover
         key={`popover${index}`}
@@ -255,30 +259,31 @@ const TrainersDetails = ({
                   <NavLink
                     style={{ background: "white" }}
                     onClick={() => {
-                      const amountPayable = Utils.getMinutesFromHourMM(
-                        content.start_time,
-                        content.end_time
-                      );
-                      if (amountPayable > 0) {
-                        const payload = {
-                          charging_price:+amountPayable.toFixed(2),
-                          trainer_id: trainer_info.trainer_id,
-                          trainer_info,
-                          status: BookedSession.booked,
-                          booked_date: date,
-                          session_start_time: content.start_time,
-                          session_end_time: content.end_time,
-                        };
-                        setBookSessionPayload(payload);
-                        alert('h')
-                        dispatch(
-                          createPaymentIntentAsync({
-                            amount: +amountPayable.toFixed(2),
-                          })
-                        );
-                      } else {
-                        toast.error("Invalid slot timing...");
-                      }
+                      // const amountPayable = Utils.getMinutesFromHourMM(
+                      //   content.start_time,
+                      //   content.end_time
+                      // );
+                      // if (amountPayable > 0) {
+                      //   const payload = {
+                      //     charging_price: +amountPayable.toFixed(2),
+                      //     trainer_id: trainer_info.trainer_id,
+                      //     trainer_info,
+                      //     status: BookedSession.booked,
+                      //     booked_date: date,
+                      //     session_start_time: content.start_time,
+                      //     session_end_time: content.end_time,
+                      //   };
+                      //   setBookSessionPayload(payload);
+                      //   alert("h");
+                      //   dispatch(
+                      //     createPaymentIntentAsync({
+                      //       amount: +amountPayable.toFixed(2),
+                      //     })
+                      //   );
+                      // } else {
+                      //   toast.error("Invalid slot timing...");
+                      // }
+                      handleSignInRedirect();
                     }}
                   >
                     Book slot now
@@ -308,7 +313,7 @@ const TrainersDetails = ({
       className={`${
         trainerInfo && trainerInfo.userInfo
           ? "table-responsive-width"
-          : "table-responsive-width"
+          : "table-responsive-width border border-dark"
       }`}
     >
       <table className="table custom-trainer-slots-booking-table ml-30 mr-30">
@@ -544,7 +549,7 @@ const TrainersDetails = ({
     setBookingTableData(result);
   };
   return (
-    <div>
+    <React.Fragment>
       {trainerInfo === null ? (
         <div className="media-body media-body text-right">
           <div className="mr-2 mt-4">
@@ -589,30 +594,32 @@ const TrainersDetails = ({
           </div>
         </div>
       )}
-      {trainerDetails.select_trainer ? (
-        <TrainerInfo
-          accordionData={accordionData}
-          activeAccordion={activeAccordion}
-          setActiveAccordion={setActiveAccordion}
-          element={renderTable()}
-          datePicker={renderBookingTable()}
-          getTraineeSlots={getTraineeSlots}
-          trainerDetails={trainerDetails}
-          setAccordionsData={setAccordionsData}
-          trainerInfo={trainerInfo}
-        />
-      ) : (
-        <SelectedCategory
-          getTraineeSlots={getTraineeSlots}
-          trainerInfo={trainerInfo}
-          setTrainerDetails={setTrainerDetails}
-          selectTrainer={selectTrainer}
-          searchQuery={searchQuery}
-          setFilterParams={setFilterParams}
-          filterParams={filterParams}
-        />
-      )}
-    </div>
+      <div>
+        {trainerDetails.select_trainer ? (
+          <TrainerInfo
+            accordionData={accordionData}
+            activeAccordion={activeAccordion}
+            setActiveAccordion={setActiveAccordion}
+            element={renderTable()}
+            datePicker={renderBookingTable()}
+            getTraineeSlots={getTraineeSlots}
+            trainerDetails={trainerDetails}
+            setAccordionsData={setAccordionsData}
+            trainerInfo={trainerInfo}
+          />
+        ) : (
+          <SelectedCategory
+            getTraineeSlots={getTraineeSlots}
+            trainerInfo={trainerInfo}
+            setTrainerDetails={setTrainerDetails}
+            selectTrainer={selectTrainer}
+            searchQuery={searchQuery}
+            setFilterParams={setFilterParams}
+            filterParams={filterParams}
+          />
+        )}
+      </div>
+    </React.Fragment>
   );
 };
 
@@ -628,6 +635,7 @@ const TrainerInfo = ({
   setAccordionsData,
   datePicker,
 }) => {
+  const [isTablet, setIsTablet] = useState(false);
   const findTrainerDetails = () => {
     const findByTrainerId = getTraineeSlots.find(
       (trainer) => trainer && trainer._id === trainerDetails._id
@@ -666,8 +674,24 @@ const TrainerInfo = ({
         type,
       };
     });
+
+  useEffect(() => {
+    const checkScreenWidth = () => {
+      setIsTablet(window.innerWidth >= 720 && window.innerWidth <= 1280);
+    };
+    window.addEventListener("resize", checkScreenWidth);
+    checkScreenWidth();
+    return () => {
+      window.removeEventListener("resize", checkScreenWidth);
+    };
+  }, []);
+
   return (
-    <div className="row px-20 py-10 m-25">
+    <div
+      className={`row px-20 py-10 m-25 ${
+        isTablet ? "model-tablet-view" : "custom-trainer-details-scroll"
+      }`}
+    >
       <div className="col-5">
         <div className="row">
           <div className="col-3">
@@ -699,11 +723,18 @@ const TrainerInfo = ({
         trainer.extraInfo &&
         trainer.extraInfo.social_media_links ? (
           <SocialMediaIcons
+            profileImageURL={
+              trainer &&
+              trainer.extraInfo &&
+              trainer.extraInfo.social_media_links &&
+              trainer.extraInfo.social_media_links.profile_image_url
+            }
             social_media_links={
               trainer &&
               trainer.extraInfo &&
               trainer.extraInfo.social_media_links
             }
+            isvisible={false}
           />
         ) : null}
         <p className="mt-3">
@@ -748,6 +779,7 @@ const TrainerInfo = ({
             trainer.extraInfo.media
           }
         /> */}
+        <h2 className="mb-4">Featured content</h2>
         {revampedMedia && revampedMedia.length ? (
           <ImageVideoThumbnailCarousel
             media={revampedMedia}
@@ -758,6 +790,7 @@ const TrainerInfo = ({
         ) : (
           <div className="no-media-found">{Message.noMediaFound}</div>
         )}
+        <h2>My Schedule</h2>
         {datePicker}
         <div className="mt-3">{element}</div>
       </div>
@@ -768,13 +801,13 @@ const TrainerInfo = ({
 const showRatings = (ratings, extraClasses = "") => {
   const { ratingRatio, totalRating } = Utils.getRatings(ratings);
   return (
-    <div>
+    <React.Fragment>
       <div className={extraClasses}>
         <Star color="#FFC436" size={28} className="star-container star-svg" />
         <p className="ml-1 mt-1 mr-1 font-weight-light">{ratingRatio || 0}</p>
         <p className="mt-1">({totalRating || 0})</p>
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 
@@ -788,7 +821,7 @@ const SelectedCategory = ({
   filterParams,
 }) => {
   return (
-    <div className="row">
+    <div className="row m-0">
       <div className="col-2">
         <div className="d-flex justify-content-between">
           <h3>Filters</h3>
@@ -863,11 +896,8 @@ const SelectedCategory = ({
         </div>
       </div>
       <div
-        className="col-10 px-5 custom-scroll"
-        style={{
-          height: "92vh",
-          overflowX: "auto",
-        }}
+        className="col-10 px-5"
+        style={{ height: "89vh", overflowX: "auto" }}
       >
         {!getTraineeSlots.length ? (
           <div
@@ -932,11 +962,18 @@ const SelectedCategory = ({
                           ? Utils.truncateText(data.extraInfo.about, 200)
                           : Message.notAvailableDescription}
                       </h4>
-                      <div>
+                      <React.Fragment>
                         {data &&
                         data.extraInfo &&
                         data.extraInfo.social_media_links ? (
                           <SocialMediaIcons
+                            profileImageURL={
+                              data &&
+                              data.extraInfo &&
+                              data.extraInfo.social_media_links &&
+                              data.extraInfo.social_media_links
+                                .profile_image_url
+                            }
                             social_media_links={
                               data &&
                               data.extraInfo &&
@@ -944,7 +981,7 @@ const SelectedCategory = ({
                             }
                           />
                         ) : null}
-                      </div>
+                      </React.Fragment>
                     </div>
                     <div className="col-1.1">
                       {showRatings(

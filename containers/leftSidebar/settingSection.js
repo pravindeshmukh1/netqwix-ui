@@ -14,11 +14,16 @@ import {
   AccountType,
   LOCAL_STORAGE_KEYS,
   Message,
+  STATUS,
+  allowedPNGExtensions,
   settingMenuFilterSection,
   validationMessage,
 } from "../../app/common/constants";
 import { UpdateSettingProfileForm } from "../../app/components/trainer/settings/form";
-import { updateProfileAsync } from "../../app/components/trainer/trainer.slice";
+import {
+  trainerState,
+  updateProfileAsync,
+} from "../../app/components/trainer/trainer.slice";
 import { updateTraineeProfileAsync } from "../../app/components/trainee/trainee.slice";
 import { HandleErrorLabel } from "../../app/common/error";
 import { toast } from "react-toastify";
@@ -33,8 +38,8 @@ import { Utils } from "../../utils/utils";
 const SettingSection = (props) => {
   const dispatch = useAppDispatch();
   const socialFormRef = useRef(null);
-  const { removeProfilePicture } = bookingsAction;
-  const { profile_picture } = useAppSelector(bookingsState);
+  const { removeProfilePicture, removeProfileImageUrl } = bookingsAction;
+  const { profile_picture, profile_image_url } = useAppSelector(bookingsState);
   const { userInfo } = useAppSelector(authState);
   const customizerCtx = useContext(CustomizerContext);
   const addBackgroundWallpaper = customizerCtx.addBackgroundWallpaper;
@@ -61,11 +66,30 @@ const SettingSection = (props) => {
   });
 
   const initialValues = {
-    fb: "",
-    instagram: "",
-    twitter: "",
-    google: "",
-    slack: "",
+    fb:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.fb
+        : "",
+    instagram:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.instagram
+        : "",
+    twitter:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.twitter
+        : "",
+    google:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.google
+        : "",
+    slack:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.slack
+        : "",
+    profile_image_url:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.profile_image_url
+        : "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -84,10 +108,16 @@ const SettingSection = (props) => {
     slack: Yup.string()
       .required(validationMessage.social_media.field_required)
       .nullable(),
+    profile_image_url: Yup.string().test(
+      "imageValidation",
+      Message.errorMessage.invalidPNG,
+      (value) => {
+        return /\.(png|PNG)$/.test(value);
+      }
+    ),
   });
 
   const [accountType, setAccountType] = useState("");
-
   useEffect(() => {
     if (
       socialFormRef &&
@@ -99,7 +129,7 @@ const SettingSection = (props) => {
         ...userInfo?.extraInfo.social_media_links,
       });
     }
-  }, [socialFormRef]);
+  }, [socialFormRef, userInfo]);
 
   useEffect(() => {
     setAccountType(localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE));
@@ -114,6 +144,8 @@ const SettingSection = (props) => {
       profile_picture: userInfo.profile_picture,
     }));
   }, [userInfo]);
+
+  // useEffect(())
 
   const funcChecked = (val) => {
     setIsChecked(val);
@@ -180,6 +212,17 @@ const SettingSection = (props) => {
     }
   }, [profile_picture]);
 
+  useEffect(() => {
+    if (socialFormRef && socialFormRef.current) {
+      if (profile_image_url) {
+        socialFormRef.current.setFieldValue(
+          "profile_image_url",
+          profile_image_url
+        );
+      }
+    }
+  }, [profile_image_url]);
+
   const setBackgroundWallpaper = (e, wallpaper) => {
     addBackgroundWallpaper(e, wallpaper);
     config.wallpaper = wallpaper;
@@ -229,6 +272,10 @@ const SettingSection = (props) => {
               onClick={() => {
                 closeLeftSide();
                 setSettingTab("");
+                setProfile({
+                  ...profile,
+                  editStatus: false,
+                });
               }}
             >
               <X />
@@ -1352,10 +1399,103 @@ const SettingSection = (props) => {
                               style={{ cursor: "text" }}
                               href={null}
                             >
-                              <i className="fa fa-globe mr-1" />
+                              {values.profile_image_url ? (
+                                <img
+                                  style={{ width: "19px" }}
+                                  src={
+                                    profile_image_url ||
+                                    values.profile_image_url
+                                  }
+                                  className="mr-1"
+                                  alt="profile_image_url"
+                                />
+                              ) : (
+                                <i className="fa fa-globe mr-1" />
+                              )}
                               <h5>My website</h5>
                             </a>
                           </div>
+                          {values.profile_image_url && isSocialFormOpen ? (
+                            <div
+                              style={{
+                                position: "absolute",
+                                left: "51%",
+                                top: "15%",
+                              }}
+                            >
+                              <i
+                                className="fa fa-times pointer"
+                                aria-hidden="true"
+                                onClick={() => {
+                                  setValues({
+                                    ...values,
+                                    profile_image_url: undefined,
+                                  });
+                                  dispatch(removeProfileImageUrl(undefined));
+                                }}
+                                style={{
+                                  position: "absolute",
+                                  left: "100%",
+                                  bottom: "80%",
+                                }}
+                              />
+                              <img
+                                style={{ width: "34px", marginTop: "12px" }}
+                                src={
+                                  profile_image_url || values.profile_image_url
+                                }
+                                alt="profile_image_url"
+                              />
+                            </div>
+                          ) : (
+                            <div
+                              style={{
+                                position: "absolute",
+                                left: "51%",
+                                top: "15%",
+                              }}
+                            >
+                              {isSocialFormOpen && !values.profile_image_url ? (
+                                <UploadFile
+                                  name="profile_image_url"
+                                  values={null}
+                                  onChange={(event) => {
+                                    if (
+                                      event &&
+                                      event.target &&
+                                      event.target.files &&
+                                      event.target.files[0]
+                                    ) {
+                                      const isValidSelectedPNG =
+                                        Utils.isValidSelectedPNG(
+                                          event.target.files[0]
+                                        );
+                                      const fileSizeLessthan2Mb =
+                                        Utils.fileSizeLessthan2Mb(
+                                          event.target.files[0]
+                                        );
+                                      if (
+                                        isValidSelectedPNG &&
+                                        fileSizeLessthan2Mb
+                                      ) {
+                                        dispatch(
+                                          uploadProfilePictureAsync({
+                                            files: event.target.files[0],
+                                          })
+                                        );
+                                      }
+                                    }
+                                  }}
+                                  isError={
+                                    touched.profile_image_url &&
+                                    errors.profile_image_url
+                                      ? true
+                                      : false
+                                  }
+                                />
+                              ) : null}
+                            </div>
+                          )}
                           {/* <div className="media-right">
                         <div className="profile">
                           <a href="https://slack.com/get-started#/" target="_blank">
@@ -1381,17 +1521,34 @@ const SettingSection = (props) => {
                                     className="form-control mt-1"
                                     name="Slack"
                                     id=""
-                                  ></input>
+                                  />
                                 </div>
                               </div>
                             </div>
                             <div>
-                              <HandleErrorLabel
-                                isError={errors.slack}
-                                isTouched={
-                                  touched.slack && errors.slack ? true : false
-                                }
-                              />
+                              <div className="row">
+                                <div className="col-6">
+                                  <HandleErrorLabel
+                                    isError={errors.slack}
+                                    isTouched={
+                                      touched.slack && errors.slack
+                                        ? true
+                                        : false
+                                    }
+                                  />
+                                </div>
+                                <div className="col-6">
+                                  <HandleErrorLabel
+                                    isError={errors.profile_image_url}
+                                    isTouched={
+                                      touched.profile_image_url &&
+                                      errors.profile_image_url
+                                        ? true
+                                        : false
+                                    }
+                                  />
+                                </div>
+                              </div>
                             </div>
                           </>
                         ) : (

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Courses, CourseItems } from "../../app/common/constants";
-import { ChevronRight, Filter } from "react-feather";
+import { ChevronRight, Filter, Circle } from "react-feather";
 
 const Course = (masterRecords) => {
   const [tabletView, setTableView] = useState(false);
@@ -153,26 +153,28 @@ const Course = (masterRecords) => {
         </div>
       </div> */}
       <div className="container">
-        <div className="col-11">
-          <h5 className="mt-2 text-uppercase mb-2">Trending trainers</h5>
+        <div className="col-11 ml-2">
+          <div className="dot-btn dot-success mt-4" >
+          </div>
+            <h3 className="ml-1  text-uppercase mb-1 "> Active Trainers </h3>
         </div>
+
         <div className={`row gy-3`}>
           {Courses.map((data, index) => {
             const { img, name, courseDetails } = data;
             return (
-              <>
-                <div className="col-md-6 col-sm-2 col-lg-3">
-                  <div className="card m-2">
-                    <img
-                      className="card-img-top"
-                      src={img}
-                      alt="Card image cap"
-                      style={{ padding: "10px", borderRadius: "20px" }}
-                    />
-                    <div className="card-body">
-                      <h5 className="card-title text-truncate">{name}</h5>
-                      <div className="row mt-4 mb-4">
-                        {/* {courseDetails?.map((data, index) => {
+              <div key={`courses_list${index}`} className="col-lg-4 col-sm-12">
+                <div className="card m-2">
+                  <img
+                    className="card-img-top"
+                    src={img}
+                    alt="Card image cap"
+                    style={{ padding: "10px", borderRadius: "20px" }}
+                  />
+                  <div className="card-body">
+                    <h5 className="card-title text-truncate">{name}</h5>
+                    <div className="row mt-4 mb-4">
+                      {/* {courseDetails?.map((data, index) => {
                           const category =
                             masterRecords?.masterRecords?.category[index];
 
@@ -192,27 +194,28 @@ const Course = (masterRecords) => {
                           );
                         })} */}
 
-                        {courseDetails?.map((data) => (
-                          <div className={`${tabletView ? "col-6" : "col-6"}`}>
-                            <i className={`${data.icon} mr-2`}></i>
-                            {data.name}{" "}
-                            <span >
-                              {data && data.enroll
-                                ? `: ${data.enroll}`
-                                :null}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                      <div>
-                        <button className="btn btn-primary btn-sm d-flex">
-                          <div>Book session</div>
-                        </button>
-                      </div>
+                      {courseDetails?.map((data, index) => (
+                        // <div className={`${tabletView ? "col-6" : "col-6"}`}>
+                        <div
+                          key={`courses-details${index}`}
+                          className="col-lg-6 col-sm-12"
+                        >
+                          <i className={`${data.icon} mr-2`}></i>
+                          {data.name}{" "}
+                          <span>
+                            {data && data.enroll ? `: ${data.enroll}` : null}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <div>
+                      <button className="btn btn-primary btn-sm d-flex">
+                        <div>Book session</div>
+                      </button>
                     </div>
                   </div>
                 </div>
-              </>
+              </div>
             );
           })}
         </div>

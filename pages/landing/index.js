@@ -55,18 +55,18 @@ const Landing = () => {
     //   <TapTop />
     //       </div>
 
-    <>
+    <React.Fragment>
       <LandingHeader masterRecords={data} />
-      <div class="dropdown-divider"></div>
-      {/* <div class="container-fluid"> */}
+      <div className="dropdown-divider"></div>
+      {/* <div className="container-fluid"> */}
       <Category masterRecords={data} />
-      <Course masterRecords={data}/>
+      <Course masterRecords={data} />
       <YourCourses />
       <HowItWorks />
       <WhyChooseUs />
       <FooterLanding masterRecords={data} />
       {/* </div> */}
-    </>
+    </React.Fragment>
   );
 };
 

@@ -14,6 +14,7 @@ const initialState = {
   profile_picture: null,
   isLoading: true,
   selectedTrainerId: null,
+  profile_image_url: null,
 };
 
 export const addRatingAsync = createAsyncThunk(
@@ -91,6 +92,9 @@ export const bookingsSlice = createSlice({
     handleSelectedTrainer: (state, action) => {
       state.selectedTrainerId = action.payload;
     },
+    removeProfileImageUrl: (state, action) => {
+      state.profile_image_url = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -140,6 +144,7 @@ export const bookingsSlice = createSlice({
       .addCase(uploadProfilePictureAsync.fulfilled, (state, action) => {
         state.status = "fulfilled";
         state.profile_picture = action.payload.url;
+        state.profile_image_url = action.payload.url;
       })
       .addCase(uploadProfilePictureAsync.rejected, (state, action) => {
         state.status = "rejected";

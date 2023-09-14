@@ -1,11 +1,13 @@
 @import "./dropdown.scss";
 @import "./slider.scss";
 @import './why_choose_us.scss';
+@import './landing.scss';
 
 $sidebar-width-left: 105px;
 $navbar-height-top: 85px;
 $canvas-z-index: 8;
 
+// modal view css
 .react-strap-modal-full {
   height: 100% !important;
   max-width: 100% !important;
@@ -15,7 +17,33 @@ $canvas-z-index: 8;
     height: 100vh !important;
   }
 }
+.custom-react-strap-modal-full {
+  height: 97vh !important;
+  max-width: 100% !important;
+  margin-top: 0% !important;
 
+  .modal-content {
+    height: 100vh !important;
+  }
+}
+@media (min-width: 720px) and (max-width: 1280px) {
+  .custom-react-strap-modal-full {
+    height: 100vh !important; /* Cover full viewport height */
+    max-height: 100%; /* Limit to the parent's height, if necessary */
+    overflow-x: hidden; /* Hide horizontal overflow */
+  }
+}
+
+.custom-trainer-details-scroll {
+  height: 90vh !important;
+  min-height: 90vh !important;
+  overflow-x: auto;
+}
+
+.model-tablet-view {
+  height: 84vh !important;
+  overflow-x: auto;
+}
 // call view css
 
 ::placeholder {
@@ -278,7 +306,7 @@ slick-slider .slick-list,
 // }
 
 .react-tiny-popover-container {
-  z-index: $canvas-z-index + 20 !important;
+  z-index: $canvas-z-index + 99999 !important;
 }
 
 .rotate-90 {
@@ -425,15 +453,6 @@ slick-slider .slick-list,
   height: max-content !important;
 }
 
-
-// .container {
-//   background-color: #9d01ac;
-//   border-radius: 50%;
-//   align-items: center;
-// }
-
-// @media (max-width: 300px) {
-//   .container {
-//     background-image: url('particular_ad_small.png');
-//   }
+// body.modal-open > div[tabindex="-1"] {
+//   z-index: 4999 !important;
 // }

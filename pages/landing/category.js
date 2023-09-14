@@ -65,10 +65,8 @@ const Category = (masterRecords) => {
       userInfo: null,
       selectCategory: null,
     }));
-    setParams((prev) => ({
-      ...prev,
-      search: null,
-    }));
+    setParams("");
+    (params.search = ""), setParams(params);
   };
 
   const [containerStyles, setContainerStyles] = useState({
@@ -93,13 +91,14 @@ const Category = (masterRecords) => {
   }, []);
 
   return (
-    <>
+    <React.Fragment>
       <div className="container-fluid">
         <div className="d-flex flex-wrap justify-content-center align-items-center ">
-          {masterRecords?.masterRecords?.category?.map((item) => {
+          {masterRecords?.masterRecords?.category?.map((item, index) => {
             return (
               <span
-                class="badge badge-light lg"
+                key={`category_item${index}`}
+                className="badge badge-light lg"
                 style={{
                   margin: "20px",
                   padding: "18px",
@@ -113,52 +112,45 @@ const Category = (masterRecords) => {
             );
           })}
         </div>
-        <div class="container" style={{ width: "100%", display: "flex" }}>
-          <div
-            style={{
-              width: "50%",
-              margin: "40px",
-              fontSize: "35px",
-              color: "black",
-              fontWeight: 600,
-              textAlign: "left",
-            }}
-          >
-            Are you ready to embark on a transformative journey towards your
-            personal and professional development?
-            <div>
-              <button className="btn btn-primary mt-5 d-flex">
-                <div>Get Started</div>
-                <div className="pl-2">
-                  <ChevronRight />
-                </div>
-              </button>
+        <div className="container">
+          <div className="row mt-5">
+            <div className="col-lg-6">
+              <div
+                className="mt-4"
+                style={{
+                  fontSize: "35px",
+                  color: "black",
+                  fontWeight: 600,
+                  textAlign: "left",
+                }}
+              >
+                Are you ready to embark on a transformative journey towards your
+                personal and professional development?
+              </div>
+              <div className="col-lg-6">
+                <button className="btn btn-primary d-flex mb-4 mt-5">
+                  <div>Get Started</div>
+                  <div className="pl-2">
+                    <ChevronRight />
+                  </div>
+                </button>
+              </div>
             </div>
-          </div>
-
-          <div
-            // style={{
-            //   backgroundColor: "#9d01ac",
-            //   borderRadius: "50%",
-            //   alignItems: "center",
-
-            // }}
-            style={containerStyles}
-          >
-            <div
-              style={{ width: "50%", alignItems: "center" }}
-              className="my-5 "
-            >
+            <div className="col-lg-6  bg-primary" style={{ borderRadius: "50%" }}>
               <img
                 src="/assets/images/1-removebg 1.png"
                 alt="logo"
                 style={{
-                  maxWidth: "500px",
+                  // maxWidth: "500px",
+                  maxWidth: "100%",
+                  height: "auto",
                 }}
+                className="img-fluid"
               />
             </div>
           </div>
         </div>
+        
         <div className="d-flex justify-content-center align-items-center my-5">
           <SearchableDropdown
             placeholder="Search Trainers..."
@@ -207,6 +199,8 @@ const Category = (masterRecords) => {
       </div>
       <Modal
         isOpen={trainerInfo.isOpen}
+        overflowHidden={true}
+        minHeight={true}
         element={
           <TrainersDetails
             onClose={handleClose}
@@ -223,9 +217,8 @@ const Category = (masterRecords) => {
             }}
           />
         }
-        allowFullWidth={true}
       />
-    </>
+    </React.Fragment>
   );
 };
 

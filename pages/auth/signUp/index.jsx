@@ -167,9 +167,9 @@ const Auth_SignUp = (props) => {
                         alt="images"
                       /> */}
                       <img
-                        className="image-fluid"
-                        src="/assets/images/logo/netquix-logo.png"
-                        alt="images"
+                         src="/assets/images/netquix_logo.png"
+                         alt="images"
+                         style={{ width: "150px", height: "100px" }}
                       />
                     </Link>
                   </div>
