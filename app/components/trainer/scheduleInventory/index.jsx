@@ -279,7 +279,7 @@ const ScheduleInventory = () => {
                                           "border border-danger"
                                         }`}
                                         showSecond={false}
-                                        minuteStep={15}
+                                        minuteStep={5}
                                         use12Hours
                                         onChange={(value) =>
                                           handleEndTimeChange(
