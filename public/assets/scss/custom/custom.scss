@@ -1,6 +1,7 @@
 @import "./dropdown.scss";
 @import "./slider.scss";
-@import "./why_choose_us.scss";
+@import './why_choose_us.scss';
+@import './landing.scss';
 
 $sidebar-width-left: 105px;
 $navbar-height-top: 85px;
@@ -452,18 +453,6 @@ slick-slider .slick-list,
   height: max-content !important;
 }
 
-// .container {
-//   background-color: #9d01ac;
-//   border-radius: 50%;
-//   align-items: center;
+// body.modal-open > div[tabindex="-1"] {
+//   z-index: 4999 !important;
 // }
-
-// @media (max-width: 300px) {
-//   .container {
-//     background-image: url('particular_ad_small.png');
-//   }
-// }
-
-body.modal-open > div[tabindex="-1"] {
-  z-index: 4999 !important;
-}

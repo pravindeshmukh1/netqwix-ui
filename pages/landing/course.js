@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Courses, CourseItems } from "../../app/common/constants";
-import { ChevronRight, Filter } from "react-feather";
+import { ChevronRight, Filter, Circle } from "react-feather";
 
 const Course = (masterRecords) => {
   const [tabletView, setTableView] = useState(false);
@@ -153,17 +153,17 @@ const Course = (masterRecords) => {
         </div>
       </div> */}
       <div className="container">
-        <div className="col-11">
-          <h5 className="mt-2 text-uppercase mb-2">Trending trainers</h5>
+        <div className="col-11 ">
+          <div className="dot-btn dot-success  ">
+            <h3 className="mr-3  text-uppercase "> Trending trainers </h3>
+          </div>
         </div>
+
         <div className={`row gy-3`}>
           {Courses.map((data, index) => {
             const { img, name, courseDetails } = data;
             return (
-              <div
-                key={`course_list${index}`}
-                className="col-md-6 col-sm-2 col-lg-3"
-              >
+              <div key={`courses_list${index}`} className="col-lg-4 col-sm-12">
                 <div className="card m-2">
                   <img
                     className="card-img-top"
@@ -194,8 +194,12 @@ const Course = (masterRecords) => {
                           );
                         })} */}
 
-                      {courseDetails?.map((data) => (
-                        <div className={`${tabletView ? "col-6" : "col-6"}`}>
+                      {courseDetails?.map((data, index) => (
+                        // <div className={`${tabletView ? "col-6" : "col-6"}`}>
+                        <div
+                          key={`courses-details${index}`}
+                          className="col-lg-6 col-sm-12"
+                        >
                           <i className={`${data.icon} mr-2`}></i>
                           {data.name}{" "}
                           <span>
