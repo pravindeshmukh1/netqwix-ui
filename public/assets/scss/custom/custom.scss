@@ -457,3 +457,8 @@ slick-slider .slick-list,
 //     background-image: url('particular_ad_small.png');
 //   }
 // }
+
+
+body.modal-open > div[tabindex="-1"] {
+  z-index: 26 !important;
+}
