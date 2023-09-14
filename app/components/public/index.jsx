@@ -728,6 +728,7 @@ const TrainerInfo = ({
               trainer.extraInfo &&
               trainer.extraInfo.social_media_links
             }
+            isvisible={true}
           />
         ) : null}
         <p className="mt-3">
@@ -772,6 +773,7 @@ const TrainerInfo = ({
             trainer.extraInfo.media
           }
         /> */}
+        <h2>Featured content</h2>
         {revampedMedia && revampedMedia.length ? (
           <ImageVideoThumbnailCarousel
             media={revampedMedia}
@@ -782,6 +784,7 @@ const TrainerInfo = ({
         ) : (
           <div className="no-media-found">{Message.noMediaFound}</div>
         )}
+        <h2>My Schedule</h2>
         {datePicker}
         <div className="mt-3">{element}</div>
       </div>
