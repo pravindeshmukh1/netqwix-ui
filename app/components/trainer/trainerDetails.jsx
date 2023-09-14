@@ -496,7 +496,7 @@ const TrainerInfo = ({
             trainer.extraInfo.media
           }
         /> */}
-        <h2>Featured content</h2>
+        <h2 class="mb-4">Featured content</h2>
         {revampedMedia && revampedMedia.length ? (
           <ImageVideoThumbnailCarousel
             media={revampedMedia}
