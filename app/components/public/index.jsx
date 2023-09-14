@@ -664,6 +664,7 @@ const TrainerInfo = ({
   const revampedMedia =
     trainer &&
     trainer.extraInfo &&
+    trainer.extraInfo.media&&
     trainer.extraInfo.media.map((data, index) => {
       const { url, description, title, type, thumbnail = "" } = data;
       return {
