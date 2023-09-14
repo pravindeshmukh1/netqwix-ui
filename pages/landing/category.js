@@ -113,8 +113,8 @@ const Category = (masterRecords) => {
           })}
         </div>
         <div className="container">
-          <div class="row mt-5">
-            <div class="col-lg-6">
+          <div className="row mt-5">
+            <div className="col-lg-6">
               <div
                 className="mt-4"
                 style={{
@@ -127,7 +127,7 @@ const Category = (masterRecords) => {
                 Are you ready to embark on a transformative journey towards your
                 personal and professional development?
               </div>
-              <div class="col-lg-6">
+              <div className="col-lg-6">
                 <button className="btn btn-primary d-flex mb-4 mt-5">
                   <div>Get Started</div>
                   <div className="pl-2">
@@ -136,7 +136,7 @@ const Category = (masterRecords) => {
                 </button>
               </div>
             </div>
-            <div class="col-lg-6  bg-primary" style={{ borderRadius: "50%" }}>
+            <div className="col-lg-6  bg-primary" style={{ borderRadius: "50%" }}>
               <img
                 src="/assets/images/1-removebg 1.png"
                 alt="logo"
@@ -150,70 +150,7 @@ const Category = (masterRecords) => {
             </div>
           </div>
         </div>
-        {/* <div className="container">
-          <div className="row">
-            <div className="col-md-3 col-sm-2 col-lg-3">
-              <div className="d-flex">
-                <p>
-                  Are you ready to embark on a transformative journey towards
-                  your personal and professional development?
-                </p>
-                <button className="btn btn-primary mt-5 d-flex">
-                  <div>Get Started</div>
-                  <div className="pl-2">
-                    <ChevronRight />
-                  </div>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div> */}
-        {/* <div class="container" style={{ width: "100%", display: "flex" }}>
-          <div
-            style={{
-              width: "50%",
-              margin: "40px",
-              fontSize: "35px",
-              color: "black",
-              fontWeight: 600,
-              textAlign: "left",
-            }}
-          >
-            Are you ready to embark on a transformative journey towards your
-            personal and professional development?
-            <div>
-              <button className="btn btn-primary mt-5 d-flex">
-                <div>Get Started</div>
-                <div className="pl-2">
-                  <ChevronRight />
-                </div>
-              </button>
-            </div>
-          </div>
-
-          <div
-            // style={{
-            //   backgroundColor: "#9d01ac",
-            //   borderRadius: "50%",
-            //   alignItems: "center",
-
-            // }}
-            style={containerStyles}
-          >
-            <div
-              style={{ width: "50%", alignItems: "center" }}
-              className="my-5 "
-            >
-              <img
-                src="/assets/images/1-removebg 1.png"
-                alt="logo"
-                style={{
-                  maxWidth: "500px",
-                }}
-              />
-            </div>
-          </div>
-        </div> */}
+        
         <div className="d-flex justify-content-center align-items-center my-5">
           <SearchableDropdown
             placeholder="Search Trainers..."

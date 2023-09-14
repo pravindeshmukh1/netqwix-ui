@@ -298,7 +298,7 @@ const ScheduleInventory = () => {
                                         </p>
                                       )}
                                     </div>
-                                    <div class="d-flex justify-content-around">
+                                    <div className="d-flex justify-content-around">
                                       {slotIndex === 0 && (
                                         <button
                                           className="btn btn-circle bg-primary text-white"

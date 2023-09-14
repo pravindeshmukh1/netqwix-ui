@@ -26,27 +26,9 @@ const FooterLanding = (masterRecords) => {
             borderRadius: "5px",
           }}
         >
-          {/* <div style={{ width: "15%" }} class="col-sm-3 ">
-            <div style={{ marginLeft: "25px" }}>
-              <img
-                src="/assets/images/netquix_logo.png"
-                alt="logo"
-                style={{
-                  maxWidth: "105px",
-                }}
-              />
-            </div>
-          </div>
-          <div style={{ width: "85%", marginTop: "33px" }} class="col-sm-9 ">
-            <p>
-              Are you ready to embark on a transformative journey towards your
-              personal and professional development? We are here to
-              revolutionize the way you learn and connect with expert trainers.
-              Our cutting-edge platform.
-            </p>
-          </div> */}
-          <div class="row">
-            <div class="col-md-6 col-sm-2 col-lg-1">
+         
+          <div className="row">
+            <div className="col-md-6 col-sm-2 col-lg-1">
               <img
                 src="/assets/images/netquix_logo.png"
                 alt="logo"
@@ -57,7 +39,7 @@ const FooterLanding = (masterRecords) => {
               />
             </div>
             <div
-              class={`col-8 ${tabletView ? "ml-5" : "ml-5"} mb-2`}
+              className={`col-8 ${tabletView ? "ml-5" : "ml-5"} mb-2`}
               style={{ marginTop: "33px" }}
             >
               <p>
@@ -69,10 +51,9 @@ const FooterLanding = (masterRecords) => {
             </div>
           </div>
         </div>
-        <div class="container mt-5">
-          <div class="row">
-            {/* <div class="col-md-3 col-sm-2 col-lg-3" /> */}
-            <div class="col-md-4 col-sm-2 col-lg-4">
+        <div className="container mt-5">
+          <div className="row">
+            <div className="col-md-4 col-sm-2 col-lg-4">
               <span>CATEGORIES</span>
               {masterRecords?.masterRecords?.category?.map((item, index) => {
                 return (
@@ -82,7 +63,7 @@ const FooterLanding = (masterRecords) => {
                 );
               })}
             </div>
-            <div class="col-md-4 col-sm-2 col-lg-4">
+            <div className="col-md-4 col-sm-2 col-lg-4">
               <div>
                 {" "}
                 <b>Quick access</b>
@@ -93,7 +74,7 @@ const FooterLanding = (masterRecords) => {
                 })}
               </div>
             </div>
-            <div class="col-md-4 col-sm-2 col-lg-4">
+            <div className="col-md-4 col-sm-2 col-lg-4">
               <div>
                 {" "}
                 <b>New Comments</b>
@@ -116,13 +97,13 @@ const FooterLanding = (masterRecords) => {
           </div>
         </div>
 
-        <div class="row bg-primary p-3 m-2">
-          <div class="col-6">
+        <div className="row bg-primary p-3 m-2">
+          <div className="col-6">
             <span style={{ fontSize: "14px", color: "white" }}>
               Privacy Policy | Terms & Conditions
             </span>
           </div>
-          <div class="col-6">
+          <div className="col-6">
             <span style={{ float: "right", fontSize: "14px", color: "white" }}>
               All Copyright (c) 2023 Reserved
             </span>
