@@ -116,13 +116,14 @@ export class Utils {
 
     const period = formattedHours >= 12 ? 'PM' : 'AM';
 
+
     if (formattedHours > 12) {
       formattedHours -= 12;
     }
 
-    return `${formattedHours
+      return `${formattedHours
       .toString ()
-      .padStart (2, '0')}:${minutes} ${period}`;
+      .padStart (1, '0')}:${minutes} ${period}`;
   };
 
   static capitalizeFirstLetter = text => {
