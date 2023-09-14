@@ -1,4 +1,8 @@
-const SocialMediaIcons = ({ social_media_links, isvisible }) => {
+const SocialMediaIcons = ({
+  social_media_links,
+  isvisible,
+  profileImageURL = null,
+}) => {
   return (
     <div>
       <ul className="custom-integration d-flex">
@@ -42,7 +46,7 @@ const SocialMediaIcons = ({ social_media_links, isvisible }) => {
                 target="_blank"
               >
                 <i className="fa fa-instagram mr-1 fa-lg" />
-                {isvisible&&<h5>instagram</h5>}
+                {isvisible && <h5>instagram</h5>}
               </a>
             </div>
             <div className="media-right">
@@ -73,7 +77,7 @@ const SocialMediaIcons = ({ social_media_links, isvisible }) => {
                 target="_blank"
               >
                 <i className="fa fa-twitter mr-1 fa-lg" />
-                {isvisible&&<h5>twitter </h5>}
+                {isvisible && <h5>twitter </h5>}
               </a>
             </div>
             <div className="media-right">
@@ -104,7 +108,7 @@ const SocialMediaIcons = ({ social_media_links, isvisible }) => {
                 target="_blank"
               >
                 <i className="fa fa-linkedin mr-1 fa-lg" />
-                {isvisible&&<h5>Linkedin</h5>}
+                {isvisible && <h5>Linkedin</h5>}
               </a>
             </div>
             <div className="media-right">
@@ -134,8 +138,12 @@ const SocialMediaIcons = ({ social_media_links, isvisible }) => {
                 target="_blank"
                 href={social_media_links && social_media_links.slack}
               >
-                <i className="fa fa-globe mr-1 fa-lg" />
-                {isvisible&&<h5>My website </h5>}
+                {profileImageURL ? (
+                  <img src={profileImageURL} width={20} alt="profileImageURL" />
+                ) : (
+                  <i className="fa fa-globe mr-1 fa-lg" />
+                )}
+                {isvisible && <h5>My website </h5>}
               </a>
             </div>
             <div className="media-right">
