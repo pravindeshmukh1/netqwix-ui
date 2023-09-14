@@ -243,22 +243,6 @@ export class Utils {
   }
 
   static getRatings = ratings => {
-    // const filteredRating = ratings.filter(
-    //   ({ ratings }) => ratings?.trainee && ratings?.trainee?.sessionRating
-    // );
-    // let availableRatings = {
-    //   totalRating: filteredRating.length,
-    //   ratingRatio: 0,
-    // };
-    // let totalRatings = 0;
-    // filteredRating.forEach(({ ratings }) => {
-    //   if (ratings && ratings.trainee) {
-    //     totalRatings += ratings?.trainee?.sessionRating || 0;
-    //   }
-    // });
-
-    // availableRatings.ratingRatio = (totalRatings / ratings.length).toFixed(1);
-    // return availableRatings;
     const validRatings = ratings.filter (
       rating =>
         rating &&
@@ -266,17 +250,25 @@ export class Utils {
         rating.ratings.trainee &&
         rating.ratings.trainee.recommendRating
     );
-    console.log (`validRatings`, validRatings);
-    let avgRatingNumber = 0;
-    const ratingCount = validRatings.length || 0;
 
-    validRatings.forEach (rating => {
-      avgRatingNumber += rating.ratings.trainee.recommendRating;
-    });
-    return {
-      ratingRatio: (avgRatingNumber / ratingCount).toFixed (2),
-      totalRating: ratingCount,
-    };
+    if (validRatings && validRatings.length) {
+      console.log (`validRatings`, validRatings);
+      let avgRatingNumber = 0;
+      const ratingCount = validRatings.length || 0;
+
+      validRatings.forEach (rating => {
+        avgRatingNumber += rating.ratings.trainee.recommendRating;
+      });
+      return {
+        ratingRatio: (avgRatingNumber / ratingCount).toFixed (2) || 0,
+        totalRating: ratingCount,
+      };
+    } else {
+      return {
+        ratingRatio: 0,
+        totalRating: 0,
+      };
+    }
   };
 
   static fileSizeLessthan2Mb = file => {
