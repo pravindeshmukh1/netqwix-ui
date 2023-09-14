@@ -728,7 +728,7 @@ const TrainerInfo = ({
               trainer.extraInfo &&
               trainer.extraInfo.social_media_links
             }
-            isvisible={true}
+            isvisible={false}
           />
         ) : null}
         <p className="mt-3">
