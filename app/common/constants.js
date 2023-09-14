@@ -141,6 +141,7 @@ export const Message = {
     timeConflicts: "These slots are already booked.",
     invalidTime: "Please select valid time",
     invalidFile: "Please select an image file under 2 MB",
+    invalidPNG: "Please select an image file type is png",
   },
   successMessage: {
     rating: "Providing a Rating",
@@ -240,6 +241,7 @@ export const settingMenuFilterSection = ["account", "my-profile"];
 export const MAX_FILE_SIZE_MB = 2;
 
 export const allowedExtensions = ["image/png", "image/jpeg", "image/jpg"];
+export const allowedPNGExtensions = ["image/png"];
 
 export const DUMMY_URLS = {
   YOUTUBE:
@@ -393,7 +395,7 @@ export const Courses = [
       {
         icon: "fa fa-list-alt",
         name: " Category",
-        enroll: "198", 
+        enroll: "198",
       },
       {
         icon: "fa fa-trophy",
@@ -469,160 +471,170 @@ export const CourseItems = [
   },
 ];
 
-
-
-
 export const QUICK_ACCESS = [
   {
     id: 1,
-    label: 'What we offer'
+    label: "What we offer",
   },
   {
     id: 1,
-    label: 'Careers'
+    label: "Careers",
   },
   {
     id: 1,
-    label: 'Leadership'
+    label: "Leadership",
   },
   {
     id: 1,
-    label: 'About'
+    label: "About",
   },
   {
     id: 1,
-    label: 'Catalog'
+    label: "Catalog",
   },
   {
     id: 1,
-    label: 'Degrees'
+    label: "Degrees",
   },
   {
     id: 1,
-    label: 'For Enterprise'
+    label: "For Enterprise",
   },
   {
     id: 1,
-    label: 'For Government'
+    label: "For Government",
   },
   {
     id: 1,
-    label: 'For Campus'
+    label: "For Campus",
   },
   {
     id: 1,
-    label: 'Become a partner'
+    label: "Become a partner",
   },
   {
     id: 1,
-    label: 'Terms'
+    label: "Terms",
   },
   {
     id: 1,
-    label: 'Accessibility'
-  }
-]
+    label: "Accessibility",
+  },
+];
 export const NEW_COMMENTS = [
   {
     id: 1,
-    label: 'Alex',
-    comment: 'How nice it does look...'
+    label: "Alex",
+    comment: "How nice it does look...",
   },
   {
     id: 1,
-    label: 'John',
-    comment: 'You were stunning today...'
+    label: "John",
+    comment: "You were stunning today...",
   },
   {
     id: 1,
-    label: 'Martin',
-    comment: 'It was great training session today...'
-  }
-]
+    label: "Martin",
+    comment: "It was great training session today...",
+  },
+];
 
 export const WHY_CHOOSE_US = [
   {
     id: 1,
-    icon: '🚀',
-    title: 'Seamless Trainer Booking',
-    content: 'Discover a diverse community of experienced trainers spanning various fields. Browse profiles, read reviews, and select the perfect trainer to help you achieve your goals.'
+    icon: "🚀",
+    title: "Seamless Trainer Booking",
+    content:
+      "Discover a diverse community of experienced trainers spanning various fields. Browse profiles, read reviews, and select the perfect trainer to help you achieve your goals.",
   },
   {
     id: 2,
-    icon: '🎯',
-    title: 'Tailored Learning Plans',
-    content: 'Say goodbye to one-size-fits-all approaches. Our trainers create personalized learning plans that cater to your unique needs and aspirations.'
+    icon: "🎯",
+    title: "Tailored Learning Plans",
+    content:
+      "Say goodbye to one-size-fits-all approaches. Our trainers create personalized learning plans that cater to your unique needs and aspirations.",
   },
   {
     id: 3,
-    icon: '📅',
-    title: 'Flexible Scheduling',
-    content: "Life can be hectic, but learning shouldn't be. Choose session times that fit your schedule, whether it's early morning or late at night."
+    icon: "📅",
+    title: "Flexible Scheduling",
+    content:
+      "Life can be hectic, but learning shouldn't be. Choose session times that fit your schedule, whether it's early morning or late at night.",
   },
   {
     id: 4,
-    icon: '🖌️',
-    title: 'Interactive Learning Tools',
-    content:" Immerse yourself in engaging sessions with our unique interactive features. Draw freehand, create shapes, and annotate live video feeds to enhance your understanding and retention."
+    icon: "🖌️",
+    title: "Interactive Learning Tools",
+    content:
+      " Immerse yourself in engaging sessions with our unique interactive features. Draw freehand, create shapes, and annotate live video feeds to enhance your understanding and retention.",
   },
   {
     id: 5,
-    icon: '📹',
-    title: 'Clip Share',
-    content: "Capture the moments of your sessions and easily share them with your trainer. Make feedback and progress tracking a breeze."
+    icon: "📹",
+    title: "Clip Share",
+    content:
+      "Capture the moments of your sessions and easily share them with your trainer. Make feedback and progress tracking a breeze.",
   },
   {
     id: 6,
-    icon: '🌐',
-    title: 'Connect from Anywhere',
-    content: "Whether you're at home, in the office, or on the go, LearnConnect's web application allows you to connect with your trainer seamlessly, anytime, anywhere."
-  }
-]
+    icon: "🌐",
+    title: "Connect from Anywhere",
+    content:
+      "Whether you're at home, in the office, or on the go, LearnConnect's web application allows you to connect with your trainer seamlessly, anytime, anywhere.",
+  },
+];
 
 export const HOW_IT_WORKS = [
   {
     id: 1,
-    icon: '1',
-    title: 'Sign Up',
-    content: 'Create your account in a few simple steps. Tell us about your goals, interests, and preferences, so we can match you with the perfect trainer.'
+    icon: "1",
+    title: "Sign Up",
+    content:
+      "Create your account in a few simple steps. Tell us about your goals, interests, and preferences, so we can match you with the perfect trainer.",
   },
   {
     id: 2,
-    icon: '2',
-    title: 'Browse Trainers',
-    content: "Explore our diverse range of trainers. Filter by category, reviews, and availability to find your ideal mentor."
+    icon: "2",
+    title: "Browse Trainers",
+    content:
+      "Explore our diverse range of trainers. Filter by category, reviews, and availability to find your ideal mentor.",
   },
   {
     id: 3,
-    icon: '3',
-    title: 'Book a Session',
-    content: "Once you've found your perfect match, book a session at your convenience. Our flexible scheduling ensures you get the training you need, when you need it."
+    icon: "3",
+    title: "Book a Session",
+    content:
+      "Once you've found your perfect match, book a session at your convenience. Our flexible scheduling ensures you get the training you need, when you need it.",
   },
   {
     id: 4,
-    icon: '4',
-    title: 'Interactive Learning',
-    content: "Engage in interactive sessions like never before. Draw, highlight, and shape your learning experience directly on the live video feed. It's a hands-on approach to learning like you've never seen."
+    icon: "4",
+    title: "Interactive Learning",
+    content:
+      "Engage in interactive sessions like never before. Draw, highlight, and shape your learning experience directly on the live video feed. It's a hands-on approach to learning like you've never seen.",
   },
   {
     id: 5,
-    icon: '5',
-    title: 'Clip and Share',
-    content: 'Capture important moments during your sessions and share them with your trainer for feedback and improvement.'
+    icon: "5",
+    title: "Clip and Share",
+    content:
+      "Capture important moments during your sessions and share them with your trainer for feedback and improvement.",
   },
   {
     id: 6,
-    icon: '6',
-    title: 'Track Progress',
-    content: "Monitor your progress and watch yourself grow with our progress tracking tools. Achieve your goals faster and more efficiently."
+    icon: "6",
+    title: "Track Progress",
+    content:
+      "Monitor your progress and watch yourself grow with our progress tracking tools. Achieve your goals faster and more efficiently.",
   },
   {
     id: 7,
-    icon: '7',
-    title: 'Connect and Learn',
-    content: "Build a strong connection with your trainer and enhance your skills through personalized guidance and support."
-  }
-]
+    icon: "7",
+    title: "Connect and Learn",
+    content:
+      "Build a strong connection with your trainer and enhance your skills through personalized guidance and support.",
+  },
+];
 export const YOURCOURSES = [
   {
     name: "Google Ads Training 2021:Profit with pay",

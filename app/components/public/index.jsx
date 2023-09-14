@@ -724,6 +724,12 @@ const TrainerInfo = ({
         trainer.extraInfo &&
         trainer.extraInfo.social_media_links ? (
           <SocialMediaIcons
+            profileImageURL={
+              trainer &&
+              trainer.extraInfo &&
+              trainer.extraInfo.social_media_links &&
+              trainer.extraInfo.social_media_links.profile_image_url
+            }
             social_media_links={
               trainer &&
               trainer.extraInfo &&
@@ -962,6 +968,13 @@ const SelectedCategory = ({
                         data.extraInfo &&
                         data.extraInfo.social_media_links ? (
                           <SocialMediaIcons
+                            profileImageURL={
+                              data &&
+                              data.extraInfo &&
+                              data.extraInfo.social_media_links &&
+                              data.extraInfo.social_media_links
+                                .profile_image_url
+                            }
                             social_media_links={
                               data &&
                               data.extraInfo &&
