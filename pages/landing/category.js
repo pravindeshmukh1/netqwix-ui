@@ -188,12 +188,14 @@ const Category = (masterRecords) => {
               dropdown: "custom-dropdown-width",
             }}
             onSearchClick={(query) => {
-              setTrainerInfo((prev) => ({
-                ...prev,
-                userInfo: null,
-                isOpen: true,
-                selectCategory: query,
-              }));
+              if (query) {
+                setTrainerInfo((prev) => ({
+                  ...prev,
+                  userInfo: null,
+                  isOpen: true,
+                  selectCategory: query,
+                }));
+              }
               setQuery(query);
             }}
             searchValue={(value) => {

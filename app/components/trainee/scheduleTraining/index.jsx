@@ -499,11 +499,13 @@ const ScheduleTraining = () => {
           dropdown: "custom-dropdown-width",
         }}
         onSearchClick={(query) => {
-          setTrainerInfo((prev) => ({
-            ...prev,
-            userInfo: null,
-            selected_category: query,
-          }));
+          if (query) {
+            setTrainerInfo((prev) => ({
+              ...prev,
+              userInfo: null,
+              selected_category: query,
+            }));
+          }
           setQuery(query);
         }}
         searchValue={(value) => {
