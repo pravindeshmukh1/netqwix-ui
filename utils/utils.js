@@ -113,8 +113,8 @@ export class Utils {
     return moment(newDate).format("YYYY-MM-DD");
   };
 
-  static convertToAmPm = timeString => {
-    const [hours, minutes] = timeString.split(':');
+  static convertToAmPm = (timeString) => {
+    const [hours, minutes] = timeString.split(":");
     let formattedHours = parseInt(hours, 10);
     let period = "AM";
 
