@@ -721,6 +721,7 @@ const TrainerInfo = ({
         <div className="d-flex flex-row bd-highlight" />
         {trainer &&
         trainer.extraInfo &&
+        trainer.extraInfo.media &&
         trainer.extraInfo.social_media_links ? (
           <SocialMediaIcons
             profileImageURL={
