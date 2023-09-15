@@ -263,7 +263,10 @@ const Index = (props) => {
                 </NavLink>
               </Tooltip>
             </li> */}
-            <li>
+
+
+            {/* some menu hide feedback changes */}
+            {/* <li>
               <Tooltip title="Todo" position="top" trigger="mouseenter">
                 <NavLink
                   className={`icon-btn btn-light button-effect ${
@@ -310,7 +313,12 @@ const Index = (props) => {
                   <i className="fa fa-star" />
                 </NavLink>
               </Tooltip>
-            </li>
+            </li> */}
+
+
+
+
+
             {/* <li>
               <Tooltip title="Document" position="top" trigger="mouseenter">
                 <NavLink
