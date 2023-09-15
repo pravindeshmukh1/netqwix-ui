@@ -93,7 +93,7 @@ const Category = (masterRecords) => {
   return (
     <React.Fragment>
       <div className="container-fluid">
-        <div className="d-flex flex-wrap justify-content-center align-items-center ">
+        <div className="d-none d-sm-flex flex-wrap justify-content-center align-items-center">
           {masterRecords?.masterRecords?.category?.map((item, index) => {
             return (
               <span
@@ -112,6 +112,26 @@ const Category = (masterRecords) => {
             );
           })}
         </div>
+
+        {/* <div className="d-flex flex-wrap justify-content-center align-items-center ">
+          {masterRecords?.masterRecords?.category?.map((item, index) => {
+            return (
+              <span
+                key={`category_item${index}`}
+                className="badge badge-light lg"
+                style={{
+                  margin: "20px",
+                  padding: "18px",
+                  alignItems: "center",
+                  fontSize: "14px",
+                  color: "black",
+                }}
+              >
+                {item}
+              </span>
+            );
+          })}
+        </div> */}
         <div className="container">
           <div className="row mt-5">
             <div className="col-lg-6">
@@ -136,7 +156,10 @@ const Category = (masterRecords) => {
                 </button>
               </div>
             </div>
-            <div className="col-lg-6  bg-primary" style={{ borderRadius: "50%" }}>
+            <div
+              className="col-lg-6  bg-primary"
+              style={{ borderRadius: "50%" }}
+            >
               <img
                 src="/assets/images/1-removebg 1.png"
                 alt="logo"
@@ -150,7 +173,7 @@ const Category = (masterRecords) => {
             </div>
           </div>
         </div>
-        
+
         <div className="d-flex justify-content-center align-items-center my-5">
           <SearchableDropdown
             placeholder="Search Trainers..."
