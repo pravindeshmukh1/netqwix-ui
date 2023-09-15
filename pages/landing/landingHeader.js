@@ -54,6 +54,7 @@ const LandingHeader = (masterRecords) => {
           top: 0,
           zIndex: 1000,
           backgroundColor: "white",
+          margin: 0,
         }}
       >
         <div className={`col-1 col-sm-2 col-md-1 col-lg-4`}>
