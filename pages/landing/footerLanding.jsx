@@ -19,7 +19,7 @@ const FooterLanding = (masterRecords) => {
       <div className="container">
 
 
-        <div className="row border border-#ffecf2 m-2">
+        <div className="row border border-#ffecf2 m-2 rounded">
           <div className="col-lg-2 col-sm-3 mb-2">
             <img
               src="/assets/images/netquix_logo.png"
