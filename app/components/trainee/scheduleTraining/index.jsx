@@ -569,8 +569,37 @@ const ScheduleTraining = () => {
   };
 
   const renderBookingTable = () => (
-    <div>
-      <div className="row">
+    <React.Fragment>
+      <div className="container">
+        <div className="row">
+          <div className="col-2 col-xs-2 col-sm-2 col-md-2 col-xs-2 datePicker mb-3">
+            <DatePicker
+              className="border border-dark"
+              minDate={moment().toDate()}
+              onChange={(date) => {
+                setStartDate(date);
+                const todaySDate = Utils.getDateInFormat(date.toString());
+                const { weekDateFormatted, weekDates } =
+                  Utils.getNext7WorkingDays(todaySDate);
+                setColumns(weekDateFormatted);
+                setTableData(getTraineeSlots, weekDates);
+                setColumns(weekDateFormatted);
+              }}
+              selected={startDate}
+              customInput={<Input />}
+            />
+          </div>
+          <div className="col-12">
+            {(getParams.search && getParams.search.length) ||
+            !bookingColumns.length ? (
+              renderTable()
+            ) : (
+              <TrainerSlider list={listOfTrainers} />
+            )}
+          </div>
+        </div>
+      </div>
+      {/* <div className="row">
         <div className="mt-4 col-1.4 datePicker">
           <DatePicker
             minDate={moment().toDate()}
@@ -602,8 +631,8 @@ const ScheduleTraining = () => {
           isOpen={showTransactionModal}
           element={renderStripePaymentContent()}
         />
-      </div>
-    </div>
+      </div> */}
+    </React.Fragment>
   );
 
   return (

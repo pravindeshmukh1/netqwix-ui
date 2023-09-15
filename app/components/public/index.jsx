@@ -313,10 +313,10 @@ const TrainersDetails = ({
       className={`${
         trainerInfo && trainerInfo.userInfo
           ? "table-responsive-width"
-          : "table-responsive-width border border-dark"
+          : "table-responsive-width"
       }`}
     >
-      <table className="table custom-trainer-slots-booking-table ml-30 mr-30">
+      <table className="table custom-trainer-slots-booking-table ml-30 mr-30 border border-dark">
         <thead className="justify-center align-center table-thead">
           <tr>
             {bookingColumns.map((columns, index) =>
