@@ -66,12 +66,30 @@ const SettingSection = (props) => {
   });
 
   const initialValues = {
-    fb: "",
-    instagram: "",
-    twitter: "",
-    google: "",
-    slack: "",
-    profile_image_url: "",
+    fb:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.fb
+        : "",
+    instagram:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.instagram
+        : "",
+    twitter:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.twitter
+        : "",
+    google:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.google
+        : "",
+    slack:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.slack
+        : "",
+    profile_image_url:
+      userInfo && userInfo?.extraInfo && userInfo?.extraInfo.social_media_links
+        ? userInfo.extraInfo.social_media_links.profile_image_url
+        : "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -111,8 +129,8 @@ const SettingSection = (props) => {
         ...userInfo?.extraInfo.social_media_links,
       });
     }
-  }, [socialFormRef]);
-  
+  }, [socialFormRef, userInfo]);
+
   useEffect(() => {
     setAccountType(localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE));
   }, []);
@@ -1384,7 +1402,10 @@ const SettingSection = (props) => {
                               {values.profile_image_url ? (
                                 <img
                                   style={{ width: "19px" }}
-                                  src={profile_image_url}
+                                  src={
+                                    profile_image_url ||
+                                    values.profile_image_url
+                                  }
                                   className="mr-1"
                                   alt="profile_image_url"
                                 />
@@ -1420,7 +1441,9 @@ const SettingSection = (props) => {
                               />
                               <img
                                 style={{ width: "34px", marginTop: "12px" }}
-                                src={profile_image_url}
+                                src={
+                                  profile_image_url || values.profile_image_url
+                                }
                                 alt="profile_image_url"
                               />
                             </div>
