@@ -26,8 +26,9 @@ const FooterLanding = (masterRecords) => {
             borderRadius: "5px",
           }}
         >
-         
           <div className="row">
+
+          
             <div className="col-md-6 col-sm-2 col-lg-1">
               <img
                 src="/assets/images/netquix_logo.png"
@@ -53,7 +54,7 @@ const FooterLanding = (masterRecords) => {
         </div>
         <div className="container mt-5">
           <div className="row">
-            <div className="col-md-4 col-sm-2 col-lg-4">
+            <div className="col-md-4 col-sm-2 col-lg-4 mb-4">
               <span>CATEGORIES</span>
               {masterRecords?.masterRecords?.category?.map((item, index) => {
                 return (
@@ -63,7 +64,7 @@ const FooterLanding = (masterRecords) => {
                 );
               })}
             </div>
-            <div className="col-md-4 col-sm-2 col-lg-4">
+            <div className="col-md-4 col-sm-2 col-lg-4 mb-4">
               <div>
                 {" "}
                 <b>Quick access</b>
@@ -98,18 +99,13 @@ const FooterLanding = (masterRecords) => {
         </div>
 
         <div className="row bg-primary p-3 m-2">
-          <div className="col-6">
-            <span style={{ fontSize: "14px", color: "white" }}>
-              Privacy Policy | Terms & Conditions
-            </span>
-          </div>
+          <div className="col-6"></div>
           <div className="col-6">
             <span style={{ float: "right", fontSize: "14px", color: "white" }}>
               All Copyright (c) 2023 Reserved
             </span>
           </div>
         </div>
-       
       </div>
     </>
   );

@@ -520,6 +520,15 @@ export const QUICK_ACCESS = [
     id: 1,
     label: "Accessibility",
   },
+  {
+    id: 1,
+    label: "Privacy Policy",
+  },
+  {
+    id: 1,
+    label: "Terms & Conditions",
+  },
+  
 ];
 export const NEW_COMMENTS = [
   {

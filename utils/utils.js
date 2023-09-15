@@ -116,18 +116,18 @@ export class Utils {
   static convertToAmPm = timeString => {
     const [hours, minutes] = timeString.split(':');
     let formattedHours = parseInt(hours, 10);
-    let period = 'AM';
-  
+    let period = "AM";
+
     if (formattedHours === 0) {
       formattedHours = 12; // Set to 12 for midnight
     } else if (formattedHours >= 12) {
-      period = 'PM';
+      period = "PM";
       if (formattedHours > 12) {
         formattedHours -= 12;
       }
     }
-  
-    return `${formattedHours.toString().padStart(1, '0')}:${minutes} ${period}`;
+
+    return `${formattedHours.toString().padStart(1, "0")}:${minutes} ${period}`;
   };
 
   static capitalizeFirstLetter = (text) => {
@@ -248,22 +248,6 @@ export class Utils {
   }
 
   static getRatings = (ratings) => {
-    // const filteredRating = ratings.filter(
-    //   ({ ratings }) => ratings?.trainee && ratings?.trainee?.sessionRating
-    // );
-    // let availableRatings = {
-    //   totalRating: filteredRating.length,
-    //   ratingRatio: 0,
-    // };
-    // let totalRatings = 0;
-    // filteredRating.forEach(({ ratings }) => {
-    //   if (ratings && ratings.trainee) {
-    //     totalRatings += ratings?.trainee?.sessionRating || 0;
-    //   }
-    // });
-
-    // availableRatings.ratingRatio = (totalRatings / ratings.length).toFixed(1);
-    // return availableRatings;
     const validRatings = ratings.filter(
       (rating) =>
         rating &&
@@ -271,17 +255,25 @@ export class Utils {
         rating.ratings.trainee &&
         rating.ratings.trainee.recommendRating
     );
-    console.log(`validRatings`, validRatings);
-    let avgRatingNumber = 0;
-    const ratingCount = validRatings.length || 0;
 
-    validRatings.forEach((rating) => {
-      avgRatingNumber += rating.ratings.trainee.recommendRating;
-    });
-    return {
-      ratingRatio: (avgRatingNumber / ratingCount).toFixed(2),
-      totalRating: ratingCount,
-    };
+    if (validRatings && validRatings.length) {
+      console.log(`validRatings`, validRatings);
+      let avgRatingNumber = 0;
+      const ratingCount = validRatings.length || 0;
+
+      validRatings.forEach((rating) => {
+        avgRatingNumber += rating.ratings.trainee.recommendRating;
+      });
+      return {
+        ratingRatio: (avgRatingNumber / ratingCount).toFixed(2) || 0,
+        totalRating: ratingCount,
+      };
+    } else {
+      return {
+        ratingRatio: 0,
+        totalRating: 0,
+      };
+    }
   };
 
   static fileSizeLessthan2Mb = (file) => {
