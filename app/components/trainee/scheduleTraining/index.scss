@@ -154,10 +154,10 @@
   width: 91vw !important;
 }
 .table-responsive-width {
-  max-width: 64vw;
-  width: 51vw;
-  position: absolute;
-  left: 8px;
+  width: 98vw !important;
+  height: 46vh !important;
+  overflow: auto !important;
+  overflow-y: auto !important;
 }
 
 @media only screen and (min-width: 1024px) and (max-width: 1280px) {
@@ -254,11 +254,9 @@ table.table-bordered > tbody > tr > td {
   }
 }
 
-
 .table-thead {
   border-bottom: 3px solid black;
 }
-
 
 .table-last-row {
   border-top: 1px solid #dee2e6;

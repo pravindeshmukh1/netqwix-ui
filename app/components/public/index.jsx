@@ -664,7 +664,7 @@ const TrainerInfo = ({
   const revampedMedia =
     trainer &&
     trainer.extraInfo &&
-    trainer.extraInfo.media&&
+    trainer.extraInfo.media &&
     trainer.extraInfo.media.map((data, index) => {
       const { url, description, title, type, thumbnail = "" } = data;
       return {
@@ -688,57 +688,171 @@ const TrainerInfo = ({
   }, []);
 
   return (
+    // <div
+    //   className={`row px-20 py-10 m-25 ${
+    //     isTablet ? "model-tablet-view" : "custom-trainer-details-scroll"
+    //   }`}
+    // >
+    //   <div className="col-5">
+    //     <div className="row">
+    //       <div className="col-3">
+    //         <img
+    //           src={
+    //             trainer && trainer.profilePicture
+    //               ? trainer.profilePicture
+    //               : "/assets/images/avtar/statusMenuIcon.jpeg"
+    //           }
+    //           width={"136px"}
+    //           height={"128px"}
+    //           style={{ borderRadius: "15px" }}
+    //           alt="profile-picture"
+    //         />
+    //       </div>
+    //       <div className="col-8 trainer-details">
+    //         <h2 className="ml-1 mt-1">
+    //           {trainer && trainer ? trainer.fullname : null}
+    //         </h2>
+    //         <h3 className="mb-3 mt-3 ml-1">
+    //           {" "}
+    //           Hourly Rate: ${TRAINER_AMOUNT_USD}{" "}
+    //         </h3>
+    //         {showRatings(trainer && trainer.trainer_ratings, "mb-3 d-flex")}
+    //       </div>
+    //     </div>
+    //     <div className="d-flex flex-row bd-highlight" />
+    //     {trainer &&
+    //     trainer.extraInfo &&
+    //     trainer.extraInfo.media &&
+    //     trainer.extraInfo.social_media_links ? (
+    //       <SocialMediaIcons
+    //         profileImageURL={
+    //           trainer &&
+    //           trainer.extraInfo &&
+    //           trainer.extraInfo.social_media_links &&
+    //           trainer.extraInfo.social_media_links.profile_image_url
+    //         }
+    //         social_media_links={
+    //           trainer &&
+    //           trainer.extraInfo &&
+    //           trainer.extraInfo.social_media_links
+    //         }
+    //         isvisible={false}
+    //       />
+    //     ) : null}
+    //     <p className="mt-3">
+    //       {trainer && trainer.extraInfo && trainer.extraInfo.about}
+    //     </p>
+    //     {accordionData.length
+    //       ? accordionData.map((data, index) => {
+    //           return (
+    //             <Accordion key={`accordion_${index}`} className="mb-5">
+    //               <Accordion.Item>
+    //                 <Accordion.Header
+    //                   index={index}
+    //                   activeAccordion={activeAccordion}
+    //                   onAClick={() => {
+    //                     if (activeAccordion[index]) {
+    //                       delete activeAccordion[index];
+    //                     } else if (!activeAccordion[index]) {
+    //                       activeAccordion[index] = true;
+    //                     } else {
+    //                       activeAccordion[index] = !activeAccordion[index];
+    //                     }
+    //                     setActiveAccordion(activeAccordion);
+    //                   }}
+    //                 >
+    //                   {data.label}
+    //                 </Accordion.Header>
+    //                 <Accordion.Body>
+    //                   {!data.value ? Message.notFound : data.value}
+    //                 </Accordion.Body>
+    //               </Accordion.Item>
+    //             </Accordion>
+    //           );
+    //         })
+    //       : Message.notFound}
+    //   </div>
+    //   <div className="col-7">
+    //     {/* <Carousel
+    //       media={
+    //         trainer &&
+    //         trainer.extraInfo &&
+    //         trainer.extraInfo.media &&
+    //         trainer.extraInfo.media
+    //       }
+    //     /> */}
+    //     <h2 className="mb-4">Featured content</h2>
+    //     {revampedMedia && revampedMedia.length ? (
+    //       <ImageVideoThumbnailCarousel
+    //         media={revampedMedia}
+    //         originalMedia={
+    //           trainer && trainer.extraInfo && trainer.extraInfo.media
+    //         }
+    //       />
+    //     ) : (
+    //       <div className="no-media-found">{Message.noMediaFound}</div>
+    //     )}
+    //     <h2>My Schedule</h2>
+    //     {datePicker}
+    //     <div className="mt-3">{element}</div>
+    //   </div>
+    // </div>
     <div
-      className={`row px-20 py-10 m-25 ${
-        isTablet ? "model-tablet-view" : "custom-trainer-details-scroll"
-      }`}
+      className="row"
+      style={{
+        margin: 0,
+        height: "92vh",
+        overflowX: "auto",
+      }}
     >
-      <div className="col-5">
+      <div className="col-md-6">
         <div className="row">
-          <div className="col-3">
+          <div className="col-4 col-md-3 col-lg-2">
             <img
               src={
                 trainer && trainer.profilePicture
                   ? trainer.profilePicture
                   : "/assets/images/avtar/statusMenuIcon.jpeg"
               }
-              width={"136px"}
-              height={"128px"}
-              style={{ borderRadius: "15px" }}
+              width={100}
+              style={{
+                minHeight: "120px",
+                minWidth: "80px",
+              }}
+              className="img-fluid rounded"
               alt="profile-picture"
             />
           </div>
-          <div className="col-8 trainer-details">
-            <h2 className="ml-1 mt-1">
+          <div className="col-8 col-md-8 col-lg-8">
+            <h2 className="mt-3">
               {trainer && trainer ? trainer.fullname : null}
             </h2>
-            <h3 className="mb-3 mt-3 ml-1">
-              {" "}
-              Hourly Rate: ${TRAINER_AMOUNT_USD}{" "}
-            </h3>
-            {showRatings(trainer && trainer.trainer_ratings, "mb-3 d-flex")}
+            <h3 className="mt-3">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
+            {showRatings(
+              trainer && trainer.trainer_ratings,
+              "mt-3 mb-3 d-flex"
+            )}
+            {trainer &&
+            trainer.extraInfo &&
+            trainer.extraInfo.media &&
+            trainer.extraInfo.social_media_links ? (
+              <SocialMediaIcons
+                profileImageURL={
+                  trainer &&
+                  trainer.extraInfo &&
+                  trainer.extraInfo.social_media_links &&
+                  trainer.extraInfo.social_media_links.profile_image_url
+                }
+                social_media_links={
+                  trainer &&
+                  trainer.extraInfo &&
+                  trainer.extraInfo.social_media_links
+                }
+                isvisible={false}
+              />
+            ) : null}
           </div>
         </div>
-        <div className="d-flex flex-row bd-highlight" />
-        {trainer &&
-        trainer.extraInfo &&
-        trainer.extraInfo.media &&
-        trainer.extraInfo.social_media_links ? (
-          <SocialMediaIcons
-            profileImageURL={
-              trainer &&
-              trainer.extraInfo &&
-              trainer.extraInfo.social_media_links &&
-              trainer.extraInfo.social_media_links.profile_image_url
-            }
-            social_media_links={
-              trainer &&
-              trainer.extraInfo &&
-              trainer.extraInfo.social_media_links
-            }
-            isvisible={false}
-          />
-        ) : null}
         <p className="mt-3">
           {trainer && trainer.extraInfo && trainer.extraInfo.about}
         </p>
@@ -772,15 +886,7 @@ const TrainerInfo = ({
             })
           : Message.notFound}
       </div>
-      <div className="col-7">
-        {/* <Carousel
-          media={
-            trainer &&
-            trainer.extraInfo &&
-            trainer.extraInfo.media &&
-            trainer.extraInfo.media
-          }
-        /> */}
+      <div className="col-md-6">
         <h2 className="mb-4">Featured content</h2>
         {revampedMedia && revampedMedia.length ? (
           <ImageVideoThumbnailCarousel
