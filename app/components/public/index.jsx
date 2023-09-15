@@ -139,6 +139,20 @@ const TrainersDetails = ({
     },
   ];
 
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const renderBookingTable = () => (
     <React.Fragment>
       <div className="row">
@@ -316,8 +330,17 @@ const TrainersDetails = ({
           : "table-responsive-width"
       }`}
     >
-      <table className="table custom-trainer-slots-booking-table ml-30 mr-30 border border-dark">
-        <thead className="justify-center align-center table-thead">
+      <table
+        className={`${
+          screenWidth <= 767 ? "table-responsive overflow-x-auto" : "table"
+        } custom-table-scroll-width ml-30 mr-30 border border-dark`}
+      >
+        <thead
+          className="justify-center align-center table-thead"
+          style={{
+            borderBottom: screenWidth <= 767 ? "1px solid" : null,
+          }}
+        >
           <tr>
             {bookingColumns.map((columns, index) =>
               columns.title.length ? (
@@ -344,11 +367,20 @@ const TrainersDetails = ({
                     <tr key={`table-data-${index}`}>
                       <td key={index}>
                         {monday.slot.length ? (
-                          renderSlotsByDay(monday)
+                          <div
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
+                          >
+                            {renderSlotsByDay(monday)}
+                          </div>
                         ) : (
                           <div
                             key={`slot-${index}-content`}
                             className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
                           >
                             {Message.noSlotsAvailable}
                           </div>
@@ -356,11 +388,20 @@ const TrainersDetails = ({
                       </td>
                       <td>
                         {tuesday.slot.length ? (
-                          renderSlotsByDay(tuesday)
+                          <div
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
+                          >
+                            {renderSlotsByDay(tuesday)}
+                          </div>
                         ) : (
                           <div
                             key={`slot-${index}-content`}
                             className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
                           >
                             {Message.noSlotsAvailable}
                           </div>
@@ -368,11 +409,20 @@ const TrainersDetails = ({
                       </td>
                       <td>
                         {wednesday.slot.length ? (
-                          renderSlotsByDay(wednesday)
+                          <div
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
+                          >
+                            {renderSlotsByDay(wednesday)}
+                          </div>
                         ) : (
                           <div
                             key={`slot-${index}-content`}
                             className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
                           >
                             {Message.noSlotsAvailable}
                           </div>
@@ -380,11 +430,20 @@ const TrainersDetails = ({
                       </td>
                       <td>
                         {thursday.slot.length ? (
-                          renderSlotsByDay(thursday)
+                          <div
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
+                          >
+                            {renderSlotsByDay(thursday)}
+                          </div>
                         ) : (
                           <div
                             key={`slot-${index}-content`}
                             className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
                           >
                             {Message.noSlotsAvailable}
                           </div>
@@ -392,11 +451,20 @@ const TrainersDetails = ({
                       </td>
                       <td>
                         {friday.slot.length ? (
-                          renderSlotsByDay(friday)
+                          <div
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
+                          >
+                            {renderSlotsByDay(friday)}
+                          </div>
                         ) : (
                           <div
                             key={`slot-${index}-content`}
                             className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
                           >
                             {Message.noSlotsAvailable}
                           </div>
@@ -800,9 +868,9 @@ const TrainerInfo = ({
     <div
       className="row"
       style={{
-        margin: 0,
         height: "92vh",
-        overflowX: "auto",
+        overflowY: "auto",
+        overflowX: "hidden",
       }}
     >
       <div className="col-md-6">
