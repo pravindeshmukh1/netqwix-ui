@@ -92,25 +92,27 @@ const Category = (masterRecords) => {
 
   return (
     <React.Fragment>
-      <div className="container-fluid">
-        <div className="d-none d-sm-flex flex-wrap justify-content-center align-items-center">
-          {masterRecords?.masterRecords?.category?.map((item, index) => {
-            return (
-              <span
-                key={`category_item${index}`}
-                className="badge badge-light lg"
-                style={{
-                  margin: "20px",
-                  padding: "18px",
-                  alignItems: "center",
-                  fontSize: "14px",
-                  color: "black",
-                }}
-              >
-                {item}
-              </span>
-            );
-          })}
+      <div className="container">
+        <div class="row">
+          <div class="col d-none d-sm-block">
+            {masterRecords?.masterRecords?.category?.map((item, index) => {
+              return (
+                <span
+                  key={`category_item${index}`}
+                  className="badge badge-light lg"
+                  style={{
+                    margin: "12px",
+                    padding: "18px",
+                    alignItems: "center",
+                    fontSize: "14px",
+                    color: "black",
+                  }}
+                >
+                  {item}
+                </span>
+              );
+            })}
+          </div>
         </div>
 
         {/* <div className="d-flex flex-wrap justify-content-center align-items-center ">
