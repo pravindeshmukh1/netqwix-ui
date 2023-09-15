@@ -9,7 +9,6 @@ import {
   meetingRatingTimeout,
   MAX_FILE_SIZE_MB,
   allowedExtensions,
-  allowedPNGExtensions,
 } from "../app/common/constants";
 import moment from "moment";
 
@@ -287,7 +286,7 @@ export class Utils {
   };
 
   static isValidSelectedPNG = (file) => {
-    return allowedPNGExtensions.includes(file.type);
+    return allowedExtensions.includes(file.type);
   };
 
   static disabledWeekendAndPastDates = (current) => {

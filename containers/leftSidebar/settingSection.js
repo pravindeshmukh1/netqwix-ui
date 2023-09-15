@@ -112,7 +112,7 @@ const SettingSection = (props) => {
       "imageValidation",
       Message.errorMessage.invalidPNG,
       (value) => {
-        return /\.(png|PNG)$/.test(value);
+        return /\.(jpg|jpeg|png)$/i.test(value);
       }
     ),
   });
