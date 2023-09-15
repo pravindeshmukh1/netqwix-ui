@@ -48,7 +48,7 @@ const ScheduleInstantMeeting = ({ isClose }) => {
                   <td>
                     <button
                       type="button"
-                      class="btn btn-sm btn-primary"
+                      className="btn btn-sm btn-primary"
                       onClick={() =>
                         setInstantMeeting({ ...instantMeeting, email })
                       }

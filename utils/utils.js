@@ -113,18 +113,21 @@ export class Utils {
     return moment(newDate).format("YYYY-MM-DD");
   };
 
-  static convertToAmPm = (timeString) => {
-    const [hours, minutes] = timeString.split(":");
+  static convertToAmPm = timeString => {
+    const [hours, minutes] = timeString.split(':');
     let formattedHours = parseInt(hours, 10);
-
-    const period = formattedHours >= 12 ? "PM" : "AM";
-
-    //     return `${formattedHours
-    //     .toString ()
-    //     .padStart (1, '0')}:${minutes} ${period}`;
-    // };
-
-    return `${formattedHours.toString().padStart(1, "0")}:${minutes} ${period}`;
+    let period = 'AM';
+  
+    if (formattedHours === 0) {
+      formattedHours = 12; // Set to 12 for midnight
+    } else if (formattedHours >= 12) {
+      period = 'PM';
+      if (formattedHours > 12) {
+        formattedHours -= 12;
+      }
+    }
+  
+    return `${formattedHours.toString().padStart(1, '0')}:${minutes} ${period}`;
   };
 
   static capitalizeFirstLetter = (text) => {
