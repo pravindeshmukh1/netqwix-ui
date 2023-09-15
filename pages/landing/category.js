@@ -15,6 +15,7 @@ import { ChevronRight } from "react-feather";
 const Category = (masterRecords) => {
   const dispatch = useAppDispatch();
   const { handleSelectedTrainer } = bookingsAction;
+  const [isMobileScreen, setIsMobileScreen] = useState(false);
   const [query, setQuery] = useState("");
   const { getTraineeSlots } = useAppSelector(traineeState);
   const [getParams, setParams] = useState(params);
@@ -88,6 +89,18 @@ const Category = (masterRecords) => {
         ...smallScreenStyles,
       }));
     }
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobileScreen = window.innerWidth < 390;
+      setIsMobileScreen(isMobileScreen);
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   return (
@@ -175,11 +188,73 @@ const Category = (masterRecords) => {
             </div>
           </div>
         </div>
-
-        <div className="d-flex justify-content-center align-items-center my-5">
+        <div
+          className={`container ${
+            isMobileScreen
+              ? "d-flex justify-content-start"
+              : "d-flex justify-content-center"
+          } `}
+        >
+          <div className="row  my-5">
+            <div
+              className={`col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 `}
+              style={{
+                margin: 0,
+                marginLeft: isMobileScreen ? "33px" : null,
+              }}
+            >
+              <SearchableDropdown
+                placeholder="Search Trainers..."
+                options={[...listOfTrainers, ...categoryList]}
+                label="name"
+                id="id"
+                customClasses={{
+                  searchBar: "search-bar-trainee",
+                  searchButton: "search-button-trainee",
+                  dropdown: "custom-dropdown-width",
+                }}
+                onSearchClick={(query) => {
+                  if (query) {
+                    setTrainerInfo((prev) => ({
+                      ...prev,
+                      userInfo: null,
+                      isOpen: true,
+                      selectCategory: query,
+                    }));
+                  }
+                  setQuery(query);
+                }}
+                searchValue={(value) => {
+                  setParams({ search: value });
+                }}
+                selectedOption={(option) => {
+                  if (option && option.isCategory) {
+                    setTrainerInfo((prev) => ({
+                      ...prev,
+                      userInfo: option,
+                      isOpen: true,
+                      selectCategory: option.name,
+                    }));
+                  } else {
+                    setTrainerInfo((prev) => ({
+                      ...prev,
+                      userInfo: option,
+                      isOpen: true,
+                      selectCategory: null,
+                    }));
+                  }
+                }}
+                handleChange={(value) => {
+                  setParams({ search: value });
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        {/* <div className="d-flex justify-content-center align-items-center my-5">
           <SearchableDropdown
-            placeholder="Search Trainers..."
-            options={[...listOfTrainers, ...categoryList]}
+          placeholder="Search Trainers..."
+          options={[...listOfTrainers, ...categoryList]}
             label="name"
             id="id"
             customClasses={{
@@ -222,7 +297,7 @@ const Category = (masterRecords) => {
               setParams({ search: value });
             }}
           />
-        </div>
+        </div> */}
       </div>
       <Modal
         isOpen={trainerInfo.isOpen}
