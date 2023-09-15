@@ -251,53 +251,6 @@ const Category = (masterRecords) => {
             </div>
           </div>
         </div>
-        {/* <div className="d-flex justify-content-center align-items-center my-5">
-          <SearchableDropdown
-          placeholder="Search Trainers..."
-          options={[...listOfTrainers, ...categoryList]}
-            label="name"
-            id="id"
-            customClasses={{
-              searchBar: "search-bar-trainee",
-              searchButton: "search-button-trainee",
-              dropdown: "custom-dropdown-width",
-            }}
-            onSearchClick={(query) => {
-              if (query) {
-                setTrainerInfo((prev) => ({
-                  ...prev,
-                  userInfo: null,
-                  isOpen: true,
-                  selectCategory: query,
-                }));
-              }
-              setQuery(query);
-            }}
-            searchValue={(value) => {
-              setParams({ search: value });
-            }}
-            selectedOption={(option) => {
-              if (option && option.isCategory) {
-                setTrainerInfo((prev) => ({
-                  ...prev,
-                  userInfo: option,
-                  isOpen: true,
-                  selectCategory: option.name,
-                }));
-              } else {
-                setTrainerInfo((prev) => ({
-                  ...prev,
-                  userInfo: option,
-                  isOpen: true,
-                  selectCategory: null,
-                }));
-              }
-            }}
-            handleChange={(value) => {
-              setParams({ search: value });
-            }}
-          />
-        </div> */}
       </div>
       <Modal
         isOpen={trainerInfo.isOpen}
