@@ -17,7 +17,28 @@ const FooterLanding = (masterRecords) => {
   return (
     <>
       <div className="container">
-        <div
+
+
+        <div className="row border border-#ffecf2 m-2">
+          <div className="col-lg-2 col-sm-3 mb-2">
+            <img
+              src="/assets/images/netquix_logo.png"
+              alt="logo"
+              style={{
+                maxWidth: "105px",
+              }}
+            />
+          </div>
+          <div className="col-sm-9 col-lg-10 ">
+            <p className="mt-4">
+              Are you ready to embark on a transformative journey towards your
+              personal and professional development? We are here to
+              revolutionize the way you learn and connect with expert trainers.
+              Our cutting-edge platform.
+            </p>
+          </div>
+        </div>
+        {/* <div
           style={{
             width: "100%",
             display: "flex",
@@ -51,7 +72,7 @@ const FooterLanding = (masterRecords) => {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="container mt-5">
           <div className="row">
             <div className="col-md-4 col-sm-2 col-lg-4 mb-4">
