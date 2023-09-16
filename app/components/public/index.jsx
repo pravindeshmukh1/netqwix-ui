@@ -871,6 +871,7 @@ const TrainerInfo = ({
         height: "92vh",
         overflowY: "auto",
         overflowX: "hidden",
+        width: '100vw'
       }}
     >
       <div className="col-md-6">
