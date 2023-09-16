@@ -112,6 +112,20 @@ const ScheduleTraining = () => {
     }));
   }, []);
 
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const setTableData = (data = [], selectedDate) => {
     const result = data.map(
       ({
@@ -310,119 +324,175 @@ const ScheduleTraining = () => {
     ));
   };
 
-  const renderTable = () => (
-    <div
-      className={`${
-        trainerInfo.userInfo
-          ? "table-responsive-width"
-          : "table-responsive-width"
-      }`}
-    >
-      <table className="table custom-trainer-slots-booking-table ml-30 mr-30">
-        <thead className="justify-center align-center table-thead">
-          <tr>
-            {bookingColumns.map((columns, index) =>
-              columns.title.length ? (
-                <th scope="col" key={`booking-col-${index}`}>
-                  {columns.title}
-                </th>
-              ) : null
-            )}
-          </tr>
-        </thead>
-        {bookingTableData && bookingTableData.length ? (
-          <>
-            {bookingTableData
-              .filter(({ trainer_info }) => {
-                return (
-                  trainer_info._id === trainerInfo.userInfo?.id ||
-                  trainer_info._id === selectedTrainer.id
-                );
-              })
-              .map(
-                ({ monday, tuesday, wednesday, thursday, friday }, index) => {
-                  return (
-                    <tr key={`table-data-${index}`}>
-                      <td key={index}>
-                        {monday.slot.length ? (
-                          renderSlotsByDay(monday)
-                        ) : (
-                          <div
-                            key={`slot-${index}-content`}
-                            className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
-                          >
-                            {Message.noSlotsAvailable}
-                          </div>
-                        )}
-                      </td>
-                      <td>
-                        {tuesday.slot.length ? (
-                          renderSlotsByDay(tuesday)
-                        ) : (
-                          <div
-                            key={`slot-${index}-content`}
-                            className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
-                          >
-                            {Message.noSlotsAvailable}
-                          </div>
-                        )}
-                      </td>
-                      <td>
-                        {wednesday.slot.length ? (
-                          renderSlotsByDay(wednesday)
-                        ) : (
-                          <div
-                            key={`slot-${index}-content`}
-                            className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
-                          >
-                            {Message.noSlotsAvailable}
-                          </div>
-                        )}
-                      </td>
-                      <td>
-                        {thursday.slot.length ? (
-                          renderSlotsByDay(thursday)
-                        ) : (
-                          <div
-                            key={`slot-${index}-content`}
-                            className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
-                          >
-                            {Message.noSlotsAvailable}
-                          </div>
-                        )}
-                      </td>
-                      <td>
-                        {friday.slot.length ? (
-                          renderSlotsByDay(friday)
-                        ) : (
-                          <div
-                            key={`slot-${index}-content`}
-                            className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
-                          >
-                            {Message.noSlotsAvailable}
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                }
+  const renderTable = () => {
+    return (
+      <div
+        className={`${
+          trainerInfo.userInfo
+            ? "table-responsive-width"
+            : "table-responsive-width"
+        }`}
+      >
+        <table
+          className={`${
+            screenWidth <= 767 ? "table-responsive overflow-x-auto" : "table"
+          } custom-trainer-slots-booking-table ml-30 mr-30`}
+        >
+          <thead
+            className="justify-center align-center table-thead"
+            style={{
+              borderBottom: screenWidth <= 767 ? "1px solid" : null,
+            }}
+          >
+            <tr>
+              {bookingColumns.map((columns, index) =>
+                columns.title.length ? (
+                  <th scope="col" key={`booking-col-${index}`}>
+                    {columns.title}
+                  </th>
+                ) : null
               )}
-            <tr key={`table-data-empty`} className="table-last-row">
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
-          </>
-        ) : (
-          <tr key={"no-data"} className="no-data">
-            <td colSpan="6">No trainers available.</td>
-          </tr>
-        )}
-      </table>
-    </div>
-  );
+          </thead>
+          {bookingTableData && bookingTableData.length ? (
+            <>
+              {bookingTableData
+                .filter(({ trainer_info }) => {
+                  return (
+                    trainer_info._id === trainerInfo.userInfo?.id ||
+                    trainer_info._id === selectedTrainer.id
+                  );
+                })
+                .map(
+                  ({ monday, tuesday, wednesday, thursday, friday }, index) => {
+                    return (
+                      <tr key={`table-data-${index}`}>
+                        <td key={index}>
+                          {monday.slot.length ? (
+                            <div
+                              style={{
+                                width: screenWidth <= 767 ? "50vw" : null,
+                              }}
+                            >
+                              {renderSlotsByDay(monday)}
+                            </div>
+                          ) : (
+                            <div
+                              key={`slot-${index}-content`}
+                              style={{
+                                width: screenWidth <= 767 ? "50vw" : null,
+                              }}
+                              className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                            >
+                              {Message.noSlotsAvailable}
+                            </div>
+                          )}
+                        </td>
+                        <td>
+                          {tuesday.slot.length ? (
+                            <div
+                              style={{
+                                width: screenWidth <= 767 ? "50vw" : null,
+                              }}
+                            >
+                              {renderSlotsByDay(tuesday)}
+                            </div>
+                          ) : (
+                            <div
+                              key={`slot-${index}-content`}
+                              className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                              style={{
+                                width: screenWidth <= 767 ? "50vw" : null,
+                              }}
+                            >
+                              {Message.noSlotsAvailable}
+                            </div>
+                          )}
+                        </td>
+                        <td>
+                          {wednesday.slot.length ? (
+                            <div
+                              style={{
+                                width: screenWidth <= 767 ? "50vw" : null,
+                              }}
+                            >
+                              {renderSlotsByDay(wednesday)}
+                            </div>
+                          ) : (
+                            <div
+                              key={`slot-${index}-content`}
+                              className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                              style={{
+                                width: screenWidth <= 767 ? "50vw" : null,
+                              }}
+                            >
+                              {Message.noSlotsAvailable}
+                            </div>
+                          )}
+                        </td>
+                        <td>
+                          {thursday.slot.length ? (
+                            <div
+                              style={{
+                                width: screenWidth <= 767 ? "50vw" : null,
+                              }}
+                            >
+                              {renderSlotsByDay(thursday)}
+                            </div>
+                          ) : (
+                            <div
+                              key={`slot-${index}-content`}
+                              className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                              style={{
+                                width: screenWidth <= 767 ? "50vw" : null,
+                              }}
+                            >
+                              {Message.noSlotsAvailable}
+                            </div>
+                          )}
+                        </td>
+                        <td>
+                          {friday.slot.length ? (
+                            <div
+                              style={{
+                                width: screenWidth <= 767 ? "50vw" : null,
+                              }}
+                            >
+                              {renderSlotsByDay(friday)}
+                            </div>
+                          ) : (
+                            <div
+                              key={`slot-${index}-content`}
+                              className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                              style={{
+                                width: screenWidth <= 767 ? "50vw" : null,
+                              }}
+                            >
+                              {Message.noSlotsAvailable}
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  }
+                )}
+              <tr key={`table-data-empty`} className="table-last-row">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </>
+          ) : (
+            <tr key={"no-data"} className="no-data">
+              <td colSpan="6">No trainers available.</td>
+            </tr>
+          )}
+        </table>
+      </div>
+    );
+  };
 
   const renderPaymentContent = () => {
     return (
@@ -569,8 +639,37 @@ const ScheduleTraining = () => {
   };
 
   const renderBookingTable = () => (
-    <div>
-      <div className="row">
+    <React.Fragment>
+      <div className="container">
+        <div className="row">
+          <div className="col-2 col-xs-2 col-sm-2 col-md-2 col-xs-2 datePicker mb-3">
+            <DatePicker
+              className="border border-dark"
+              minDate={moment().toDate()}
+              onChange={(date) => {
+                setStartDate(date);
+                const todaySDate = Utils.getDateInFormat(date.toString());
+                const { weekDateFormatted, weekDates } =
+                  Utils.getNext7WorkingDays(todaySDate);
+                setColumns(weekDateFormatted);
+                setTableData(getTraineeSlots, weekDates);
+                setColumns(weekDateFormatted);
+              }}
+              selected={startDate}
+              customInput={<Input />}
+            />
+          </div>
+          <div className="col-12">
+            {(getParams.search && getParams.search.length) ||
+            !bookingColumns.length ? (
+              renderTable()
+            ) : (
+              <TrainerSlider list={listOfTrainers} />
+            )}
+          </div>
+        </div>
+      </div>
+      {/* <div className="row">
         <div className="mt-4 col-1.4 datePicker">
           <DatePicker
             minDate={moment().toDate()}
@@ -602,8 +701,8 @@ const ScheduleTraining = () => {
           isOpen={showTransactionModal}
           element={renderStripePaymentContent()}
         />
-      </div>
-    </div>
+      </div> */}
+    </React.Fragment>
   );
 
   return (

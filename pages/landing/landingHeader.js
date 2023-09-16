@@ -36,7 +36,6 @@ const LandingHeader = (masterRecords) => {
     const handleResize = () => {
       const isMobileScreen = window.innerWidth < 390;
       setIsMobileScreen(isMobileScreen);
-      setIsMenuOpen(isMobileScreen);
     };
     window.addEventListener("resize", handleResize);
     handleResize();
@@ -79,7 +78,6 @@ const LandingHeader = (masterRecords) => {
             onClick={toggleMenu}
             style={{
               float: "right",
-              // marginRight: "10px",
             }}
           >
             <i

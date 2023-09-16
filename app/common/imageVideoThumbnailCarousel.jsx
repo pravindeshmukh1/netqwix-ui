@@ -64,6 +64,7 @@ class ImageVideoThumbnailCarousel extends React.Component {
             <button className="close-video" onClick={this._toggleShowVideo} style={{ marginRight: "-20px"}} />
             <iframe
               width="500"
+              className="slider-iframe"
               height="300"
               src={item.embedUrl}
               title="YouTube video player"

@@ -159,6 +159,20 @@
   position: absolute;
   left: 8px;
 }
+// mobile device
+.table {
+  border: 1px solid rgb(190, 185, 185) !important;
+  @extend .rc-table;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px !important;
+}
+
+.custom-table-scroll-width {
+  min-width: 230px !important;
+  overflow-x: auto !important;
+  overflow-y: auto;
+  height: 308px !important;
+  min-height: 100px !important;
+}
 
 @media only screen and (min-width: 1024px) and (max-width: 1280px) {
   .header {
@@ -246,6 +260,17 @@ table.table-bordered > tbody > tr > td {
   border: 1px solid rgb(190, 185, 185);
   @extend .rc-table;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  min-width: 407px !important;
+  overflow-x: auto;
+  overflow-y: auto;
+  height: 308px !important;
+  min-height: 100px !important;
+}
+
+.custom-booking-table {
+  width: 82vw !important;
+  height: 45vh !important;
+  overflow-x: auto;
 }
 
 @media only screen and (max-width: 1280px) and (min-width: 800px) {
@@ -254,12 +279,17 @@ table.table-bordered > tbody > tr > td {
   }
 }
 
-
 .table-thead {
   border-bottom: 3px solid black;
 }
 
-
 .table-last-row {
   border-top: 1px solid #dee2e6;
+}
+
+.custom-table-scroll {
+  width: 42vw !important;
+  height: 27vh;
+  overflow-x: auto;
+  overflow-y: auto;
 }
