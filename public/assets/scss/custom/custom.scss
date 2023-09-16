@@ -1,7 +1,7 @@
 @import "./dropdown.scss";
 @import "./slider.scss";
-@import './why_choose_us.scss';
-@import './landing.scss';
+@import "./why_choose_us.scss";
+@import "./landing.scss";
 
 $sidebar-width-left: 105px;
 $navbar-height-top: 85px;
@@ -17,6 +17,55 @@ $canvas-z-index: 8;
     height: 100vh !important;
   }
 }
+
+//grid view css
+.cardimg {
+  width: 136px;
+  height: 128px;
+  border-radius: 15px;
+}
+.rating {
+  justify-content: flex-end !important;
+}
+@media (min-width: 576px) {
+  //   .cardimg {
+  //     width: 90% !important; /* Cover full viewport height */
+
+  //   }
+  //   .rating{
+  //     justify-content: start !important;
+  //   }
+  .col-sm-6 {
+    padding-left: 40px !important;
+  }
+}
+@media (min-width: 768px) {
+  .cardimg {
+    width: 100% !important;
+  }
+  .rating {
+    justify-content: flex-end !important;
+  }
+}
+
+@media (max-width: 992px) {
+  .rating {
+    justify-content: end !important;
+  }
+}
+
+@media (max-width: 1392px) {
+  .col-xl-2 {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+  }
+}
+
+.custom-card {
+  // min-width: 99% !important;
+  // width: 89vw !important;
+  margin-top: 18px !important;
+}
 .custom-react-strap-modal-full {
   height: 97vh !important;
   max-width: 100% !important;
@@ -24,6 +73,7 @@ $canvas-z-index: 8;
 
   .modal-content {
     height: 100vh !important;
+    overflow-x: auto !important;
   }
 }
 @media (min-width: 720px) and (max-width: 1280px) {

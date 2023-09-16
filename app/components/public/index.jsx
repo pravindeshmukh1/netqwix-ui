@@ -664,7 +664,7 @@ const TrainerInfo = ({
   const revampedMedia =
     trainer &&
     trainer.extraInfo &&
-    trainer.extraInfo.media&&
+    trainer.extraInfo.media &&
     trainer.extraInfo.media.map((data, index) => {
       const { url, description, title, type, thumbnail = "" } = data;
       return {
@@ -823,8 +823,9 @@ const SelectedCategory = ({
   filterParams,
 }) => {
   return (
-    <div className="row m-0">
-      <div className="col-2">
+    <div className="row m-0 overflowX-auto">
+      <div className="col-12 col-lg-2 col-md-3 col-sm-3">
+        {/* <div className="col-12 col-lg-2 col-md-12 col-sm-6"> */}
         <div className="d-flex justify-content-between">
           <h3>Filters</h3>
           <div>{/* <h5>Reset filters</h 5> */}</div>
@@ -898,8 +899,8 @@ const SelectedCategory = ({
         </div>
       </div>
       <div
-        className="col-10 px-5"
-        style={{ height: "89vh", overflowX: "auto" }}
+        className="col-12 col-lg-px-5 col-lg-10 col-md-9 col-sm-9"
+        style={{ height: "89vh" }}
       >
         {!getTraineeSlots.length ? (
           <div
@@ -919,22 +920,23 @@ const SelectedCategory = ({
                   borderRadius: "20px",
                 }}
               >
-                <div className="card-body" key={index}>
+                <div className="card-body " key={index}>
                   <div className="row">
-                    <div className="col-1.3 ml-3">
+                    <div className="col-sm-3 col-md-3 col-lg-2 col-xl-2">
                       <img
                         src={
                           data.profilePicture
                             ? data.profilePicture
                             : "/assets/images/avtar/statusMenuIcon.jpeg"
                         }
-                        width={"136px"}
-                        height={"128px"}
+                        // width={"136px"}
+                        // height={"128px"}
+                        className="cardimg"
                         style={{ borderRadius: "15px" }}
                         alt="profile-picture"
                       />
                     </div>
-                    <div className="col-8">
+                    <div className="col-sm-6 col-md-6 co-lg-8 col-xl-8  ">
                       <h3
                         className="card-title pointer underline"
                         onClick={() => {
@@ -964,7 +966,7 @@ const SelectedCategory = ({
                           ? Utils.truncateText(data.extraInfo.about, 200)
                           : Message.notAvailableDescription}
                       </h4>
-                      <React.Fragment>
+                      <div>
                         {data &&
                         data.extraInfo &&
                         data.extraInfo.social_media_links ? (
@@ -983,15 +985,87 @@ const SelectedCategory = ({
                             }
                           />
                         ) : null}
-                      </React.Fragment>
+                      </div>
                     </div>
-                    <div className="col-1.1">
-                      {showRatings(
-                        data.trainer_ratings,
-                        "d-flex justify-content-end"
-                      )}
+                    <div className="col-sm-3 col-md-3 col-lg-2 col-xl-2  rating">
+                      {showRatings(data.trainer_ratings, "d-flex")}
                     </div>
                   </div>
+
+                  {/* <div className="card-body" key={index}>
+                    <div className="row">
+                      <div className="col-1.3 ml-3">
+                        <img
+                          src={
+                            data.profilePicture
+                              ? data.profilePicture
+                              : "/assets/images/avtar/statusMenuIcon.jpeg"
+                          }
+                          width={"136px"}
+                          height={"128px"}
+                          style={{ borderRadius: "15px" }}
+                          alt="profile-picture"
+                        />
+                      </div>
+                      <div className="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-10">
+                        <h3
+                          className="card-title pointer underline"
+                          onClick={() => {
+                            console.log(`data`);
+                            setTrainerDetails((prev) => ({
+                              ...prev,
+                              _id: data && data._id,
+                              select_trainer: true,
+                            }));
+                            selectTrainer(data && data._id);
+                          }}
+                        >
+                          {data ? data.fullname : ""}
+                        </h3>
+                        <p
+                          className="badge badge-pill badge-primary mb-2 p-2"
+                          style={{ fontSize: "15px" }}
+                        >
+                          {`$${TRAINER_AMOUNT_USD}.00`}
+                          {`/ ${TRAINER_MEETING_TIME}`}
+                        </p>
+                        <h4
+                          className={`${textTruncate ? "text-truncate" : ""}`}
+                          style={{ marginBottom: "0px" }}
+                        >
+                          {data && data.extraInfo
+                            ? Utils.truncateText(data.extraInfo.about, 200)
+                            : Message.notAvailableDescription}
+                        </h4>
+                        <div>
+                          {data &&
+                          data.extraInfo &&
+                          data.extraInfo.social_media_links ? (
+                            <SocialMediaIcons
+                              profileImageURL={
+                                data &&
+                                data.extraInfo &&
+                                data.extraInfo.social_media_links &&
+                                data.extraInfo.social_media_links
+                                  .profile_image_url
+                              }
+                              social_media_links={
+                                data &&
+                                data.extraInfo &&
+                                data.extraInfo.social_media_links
+                              }
+                            />
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className="col-1.1 top-0 end-0">
+                        {showRatings(
+                          data.trainer_ratings,
+                          "d-flex justify-content-end"
+                        )}
+                      </div>
+                    </div>
+                  </div> */}
                 </div>
               </div>
             );

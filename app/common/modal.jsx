@@ -29,7 +29,7 @@ const Modal = ({
         overflow: overflowHidden ? "hidden" : null,
         margin: "0px",
         minHeight: minHeight ? "100vh" : null,
-      }}
+  }}
     >
       <ModalBody>{element}</ModalBody>
       <ModalFooter>{footer}</ModalFooter>
