@@ -636,6 +636,7 @@ const TrainerInfo = ({
         margin: "0px",
         height: !AccountType.TRAINEE || (!AccountType.TRAINER && "92vh"),
         overflowX: !AccountType.TRAINEE || (!AccountType.TRAINER && "auto"),
+        width: '100vw'
       }}
     >
       <div className="col-md-5">
