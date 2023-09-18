@@ -102,7 +102,7 @@ export const TrainerDetails = ({
   ];
 
   return (
-    <div className={`custom-sidebar-content || custom-trainer-scroll`}>
+    <div className={`custom-trainer-scroll`}>
       {trainerInfo === null ? (
         <div className="media-body media-body text-right">
           <div className="mr-4 mt-4">
@@ -183,12 +183,11 @@ const SelectedCategory = ({
   filterParams,
 }) => {
   return (
-    <div>
-      <div className="row p-10">
+    <>
+      {/* <div className="row p-10">
         <div className="col-2">
           <div className="d-flex justify-content-between">
-            <h3>Filters</h3>
-            <div>{/* <h5>Reset filters</h 5> */}</div>
+            <h3>Filters </h3>
           </div>
           <hr className="hr" />
           <div className="d-flex">
@@ -352,12 +351,184 @@ const SelectedCategory = ({
                     </div>
                   </div>
                 </div>
+                
+              );
+            })
+          )}
+        </div>
+      </div> */}
+      <div className="row m-0 overflowX-auto">
+        <div className="col-12 col-lg-2 col-md-3 col-sm-3">
+          <div className="d-flex justify-content-between">
+            <h3>Filters </h3>
+          </div>
+          <hr className="hr" />
+          <div className="d-flex">
+            <h4 className="border border-secondary rounded-pill p-10 d-flex justify-content-center align-items-center mb-4">
+              {trainerInfo ? trainerInfo.name : searchQuery}
+            </h4>
+          </div>
+          <p>Select as many filters as you would like.</p>
+          <div>
+            <b>Day of the week</b>
+            <div>
+              <div className="mt-2">
+                <DatePicker
+                  placeholderText="Select Day"
+                  minDate={moment().toDate()}
+                  onChange={(date) => {
+                    const day = new Date(date).getDay();
+                    setFilterParams({
+                      ...filterParams,
+                      date,
+                      day: weekDays[day - 1],
+                    });
+                  }}
+                  selected={filterParams.date}
+                  // ref={null}
+                  customInput={<Input />}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="mt-3">
+              <b> Time of Day</b>
+            </div>
+            <div className="mt-3 pl-3">
+              {FILTER_TIME.map((time, index) => {
+                return (
+                  <div className="my-2" key={`time-of-day-${index}-${time.id}`}>
+                    <Label check>
+                      <Input
+                        defaultChecked={time.id === FILTER_DEFAULT_CHECKED_ID}
+                        onChange={(event) => {
+                          console.log(`event --- `, event);
+                          const pickedId = event.target.value;
+                          const selectedLog = FILTER_TIME.find(
+                            (time) => time.id === +pickedId
+                          );
+
+                          if (selectedLog && selectedLog.time) {
+                            setFilterParams({
+                              ...filterParams,
+                              time: selectedLog.time,
+                            });
+                          }
+                        }}
+                        type="radio"
+                        value={time.id}
+                        defaultValue={1}
+                        name="time-of-day"
+                      />
+                      <span>{time.label}</span>
+                    </Label>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+        <div
+          className="col-12 col-lg-px-5 col-lg-10 col-md-9 col-sm-9"
+          style={{ height: "89vh" }}
+        >
+          {!getTraineeSlots.length ? (
+            <div
+              className="text-center container mw-100 border border-secondary p-30 mb-4"
+              style={{ borderRadius: "20px" }}
+            >
+              No trainer found
+            </div>
+          ) : (
+            getTraineeSlots.map((data, index) => {
+              const textTruncate = false;
+              return (
+                <div
+                  className="card custom-card mb-4"
+                  key={`trainers_${index}`}
+                  style={{
+                    borderRadius: "20px",
+                  }}
+                >
+                  <div className="card-body" key={index}>
+                    <div className="row">
+                      <div className="col-sm-3 col-md-3 col-lg-2 col-xl-2">
+                        <img
+                          src={
+                            data.profilePicture
+                              ? data.profilePicture
+                              : "/assets/images/avtar/statusMenuIcon.jpeg"
+                          }
+                          className="cardimg"
+                          style={{ borderRadius: "15px" }}
+                          alt="profile-picture"
+                        />
+                      </div>
+                      <div className="col-sm-6 col-md-6 co-lg-8 col-xl-8  ">
+                        <h3
+                          className="card-title pointer underline"
+                          onClick={() => {
+                            console.log(`data`);
+                            setTrainerDetails((prev) => ({
+                              ...prev,
+                              _id: data && data._id,
+                              select_trainer: true,
+                            }));
+                            selectTrainer(data && data._id);
+                          }}
+                        >
+                          {data ? data.fullname : ""}
+                        </h3>
+                        <p
+                          className="badge badge-pill badge-primary mb-2 p-2"
+                          style={{ fontSize: "15px" }}
+                        >
+                          {`$${TRAINER_AMOUNT_USD}.00`}
+                          {`/ ${TRAINER_MEETING_TIME}`}
+                        </p>
+                        <h4
+                          className={`${textTruncate ? "text-truncate" : ""}`}
+                          style={{ marginBottom: "0px" }}
+                        >
+                          {data && data.extraInfo
+                            ? Utils.truncateText(data.extraInfo.about, 200)
+                            : Message.notAvailableDescription}
+                        </h4>
+                        <div>
+                          {data &&
+                          data.extraInfo &&
+                          data.extraInfo.social_media_links ? (
+                            <SocialMediaIcons
+                              profileImageURL={
+                                data &&
+                                data.extraInfo &&
+                                data.extraInfo.social_media_links &&
+                                data.extraInfo.social_media_links
+                                  .profile_image_url
+                              }
+                              social_media_links={
+                                data &&
+                                data.extraInfo &&
+                                data.extraInfo.social_media_links
+                              }
+                            />
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className="col-sm-3 col-md-3 col-lg-2 col-xl-2  rating">
+                        {showRatings(data.trainer_ratings, "d-flex ")}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               );
             })
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -636,7 +807,7 @@ const TrainerInfo = ({
         margin: "0px",
         height: !AccountType.TRAINEE || (!AccountType.TRAINER && "92vh"),
         overflowX: !AccountType.TRAINEE || (!AccountType.TRAINER && "auto"),
-        width: '100vw'
+        width: "100vw",
       }}
     >
       <div className="col-md-5">
@@ -721,7 +892,7 @@ const TrainerInfo = ({
           : Message.notFound}
       </div>
       <div className="col-md-6">
-        <h2 className="mb-4">Featured content</h2>
+        <h2 className="mb-4">Featured content </h2>
         {revampedMedia && revampedMedia.length ? (
           <ImageVideoThumbnailCarousel
             media={revampedMedia}

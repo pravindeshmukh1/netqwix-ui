@@ -195,7 +195,7 @@ const Category = (masterRecords) => {
               : "d-flex justify-content-center"
           } `}
         >
-          <div className="row  my-5">
+          <div className="row my-5">
             <div
               className={`col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 `}
               style={{
@@ -252,6 +252,8 @@ const Category = (masterRecords) => {
           </div>
         </div>
       </div>
+
+      
       <Modal
         isOpen={trainerInfo.isOpen}
         overflowHidden={true}

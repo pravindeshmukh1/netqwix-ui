@@ -23,6 +23,7 @@ const ScheduleInventory = () => {
   const { status, scheduleInventoryData } = useAppSelector(
     scheduleInventoryState
   );
+  
   const dispatch = useAppDispatch();
   const [timePickerDiv, setTimePickerDiv] = useState(scheduleInventoryData);
   const [isError, setIsError] = useState(false);
@@ -174,7 +175,7 @@ const ScheduleInventory = () => {
           Schedule Slots
         </h3>
       </div>
-      <div id="slots" className="px-5 pt-3 m-25">
+      <div id="slots" className="px-5 pt-3 m-25 pr-4">
         <Formik
           initialValues={scheduleInventoryData}
           enableReinitialize
@@ -203,9 +204,10 @@ const ScheduleInventory = () => {
         >
           {({ errors, touched, values, setValues }) => (
             <Form>
+              {/* {JSON.stringify(scheduleInventoryData)} */}
               {values.map(({ day, slots }, parentIndex) => {
-                return (
-                  <div key={`schedule-inventory-${parentIndex}`}>
+                return (<>
+                  {/* <div key={`schedule-inventory-${parentIndex}`}>
                     <div key={parentIndex} className="row my-4">
                       <div className="col-2" />
                       <div className="col-2 text-capitalize">
@@ -346,7 +348,124 @@ const ScheduleInventory = () => {
                       </FieldArray>
                     </div>
                     <hr className="divider" />
+                  </div> */}
+                  <div key={`schedule-inventory-${parentIndex}`}>
+  <div key={parentIndex} className="row my-4 align-items-center">
+    <div className="col-12 col-md-2 text-capitalize mb-3 mb-md-0">
+      <h3>{day}</h3>
+    </div>
+    <FieldArray name="slots">
+      {({ remove, push }) => {
+        return (
+          <div className="col-12 col-md-10">
+            {slots.map((time, slotIndex) => {
+              return (
+                <div key={`${slotIndex}-key`} className="row mb-3">
+                  <div className="col-12 col-sm-6 col-md-4 mb-2 mb-md-0">
+                  <TimePicker
+                                        name="startTime"
+                                        className={`${
+                                          (values[parentIndex].slots[slotIndex]
+                                            .error ||
+                                            values[parentIndex].slots[slotIndex]
+                                              .timeConflict) === true &&
+                                          "border border-danger"
+                                        }`}
+                                        placeholder="Select time"
+                                        defaultValue={
+                                          time.start_time &&
+                                          Utils.getFormattedTime(
+                                            time.start_time
+                                          )
+                                        }
+                                        showSecond={false}
+                                        minuteStep={5}
+                                        use12Hours
+                                        onChange={(value) =>
+                                          handleStartTimeChange(
+                                            value,
+                                            values,
+                                            parentIndex,
+                                            slotIndex,
+                                            setValues
+                                          )
+                                        }
+                                      />
                   </div>
+                  <div className="col-12 col-sm-6 col-md-4 mb-2 mb-md-0">
+                  <TimePicker
+                                        placeholder="Select time"
+                                        defaultValue={
+                                          time.end_time &&
+                                          Utils.getFormattedTime(time.end_time)
+                                        }
+                                        className={`${
+                                          values[parentIndex].slots[slotIndex]
+                                            .error === true &&
+                                          "border border-danger"
+                                        }`}
+                                        showSecond={false}
+                                        minuteStep={5}
+                                        use12Hours
+                                        onChange={(value) =>
+                                          handleEndTimeChange(
+                                            value,
+                                            values,
+                                            parentIndex,
+                                            slotIndex,
+                                            setValues
+                                          )
+                                        }
+                                      />
+                  </div>
+                  <div className="col-12 col-sm-12 col-md-4 d-flex justify-content-center justify-content-md-start justify-content-sm-center">
+                    {slotIndex === 0 && (
+                      <button
+                        className="btn btn-circle bg-primary text-white me-2"
+                        type="button"
+                        disabled={
+                          values[parentIndex].slots[slotIndex].timeConflict ||
+                          values[parentIndex].slots[slotIndex].error
+                        }
+                        onClick={() =>
+                          handleAddSlotToDaySlots(
+                            parentIndex,
+                            values,
+                            setValues
+                          )
+                        }
+                      >
+                        <i className="fa fa-plus"></i>
+                      </button>
+                    )}
+                    {slotIndex !== 0 && (
+                      <button
+                        className="btn btn-circle bg-danger text-white"
+                        type="button"
+                        onClick={() =>
+                          handleRemoveDaySlots(
+                            parentIndex,
+                            slotIndex,
+                            values,
+                            setValues
+                          )
+                        }
+                      >
+                        <i className="fa fa-minus"></i>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        );
+      }}
+    </FieldArray>
+  </div>
+  <hr className="divider w-70 " />
+</div></>
+
                 );
               })}
               {scheduleInventoryData.length && (

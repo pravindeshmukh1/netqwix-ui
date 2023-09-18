@@ -63,6 +63,8 @@ export const weekDays = [
   "wednesday",
   "thursday",
   "friday",
+  "saturday",
+  "sunday"
 ];
 export const routingPaths = {
   landing: "/",
@@ -527,7 +529,6 @@ export const QUICK_ACCESS = [
     id: 1,
     label: "Terms & Conditions",
   },
-  
 ];
 export const NEW_COMMENTS = [
   {
@@ -699,3 +700,13 @@ export const YOURCOURSES = [
     ],
   },
 ];
+
+export const POSITION_FIXED_SIDEBAR_MENU = [
+  "home",
+  "notification",
+  "file",
+  "setting",
+];
+
+
+export const FIXED_ITEM = ["notification", "file", "setting"];

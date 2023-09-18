@@ -7,6 +7,12 @@ $sidebar-width-left: 105px;
 $navbar-height-top: 85px;
 $canvas-z-index: 8;
 
+.parent-container {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
 // modal view css
 .react-strap-modal-full {
   height: 100% !important;
@@ -396,7 +402,7 @@ slick-slider .slick-list,
 // booking sections
 .bookings {
   margin: 30px;
-  width: 92%;
+  width: 92vw;
   overflow-x: auto;
   overflow-y: auto;
   height: 93vh;
@@ -506,3 +512,29 @@ slick-slider .slick-list,
 // body.modal-open > div[tabindex="-1"] {
 //   z-index: 4999 !important;
 // }
+
+// button margin
+@media (max-width: 576px) {
+  .btn.ml-4 {
+    margin-top: 2px !important;
+  }
+}
+
+// alignment search
+@media (max-width: 576px) {
+  .custom-slider-search-align {
+    position: absolute !important;
+    left: 0px !important;
+    overflow-x: hidden !important;
+  }
+  .trainer-recommended {
+    margin-left: 71px !important;
+  }
+  .custom-silder-margin {
+    margin-left: 72px !important;
+  }
+  .slick-slider .slick-track,
+  .slick-slider .slick-list {
+    height: 18vh !important;
+  }
+}

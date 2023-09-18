@@ -125,7 +125,7 @@ class ImageVideoThumbnailCarousel extends React.Component {
         <div>
           <ImageGallery
             showIndex={false}
-            showBullets={true}
+            showBullets={false}
             infinite={true}
             fullscreen={true}
             showThumbnails={true}
@@ -136,7 +136,7 @@ class ImageVideoThumbnailCarousel extends React.Component {
               false
               // this.state.showPlayButton && this.state.showGalleryPlayButton
             }
-            showNav={true}
+            showNav={false}
             isRTL={false}
             slideDuration={1200}
             slideInterval={5000}
@@ -144,6 +144,7 @@ class ImageVideoThumbnailCarousel extends React.Component {
             thumbnailPosition={"bottom"}
             useWindowKeyDown={true}
             items={this.images}
+            disableThumbnailSwipe={false}
           />
         </div>
       </>

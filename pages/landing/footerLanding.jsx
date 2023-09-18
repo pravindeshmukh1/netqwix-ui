@@ -17,15 +17,14 @@ const FooterLanding = (masterRecords) => {
   return (
     <>
       <div className="container">
-
-
         <div className="row border border-#ffecf2 m-2 rounded">
           <div className="col-lg-2 col-sm-3 mb-2">
             <img
               src="/assets/images/netquix_logo.png"
               alt="logo"
+              className="mt-2"
               style={{
-                maxWidth: "105px",
+                maxWidth: "150px",
               }}
             />
           </div>
@@ -119,13 +118,10 @@ const FooterLanding = (masterRecords) => {
           </div>
         </div>
 
-        <div className="row bg-primary p-3 m-2">
-          <div className="col-6"></div>
-          <div className="col-6">
-            <span style={{ float: "right", fontSize: "14px", color: "white" }}>
-              All Copyright (c) 2023 Reserved
-            </span>
-          </div>
+        <div className="row bg-primary p-3 m-2 justify-content-center">
+          <span style={{ fontSize: "14px", color: "white" }}>
+            All Copyright (c) 2023 Reserved
+          </span>
         </div>
       </div>
     </>
