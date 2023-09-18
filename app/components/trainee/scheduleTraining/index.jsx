@@ -608,20 +608,18 @@ const ScheduleTraining = () => {
           }}
         />
       </div>
-
-      <div>
-        <h2
-          style={{
-            display: "flex",
-            justifyContent: "start",
-            marginLeft: "14%",
-          }}
-        >
-          Recommended
-        </h2>
-        <TrainerSlider list={listOfTrainers} />
-        <div style={{ height: "11vh" }} />
-      </div>
+      <h2
+        style={{
+          display: "flex",
+          justifyContent: "start",
+          marginLeft: "14%",
+        }}
+        className="trainer-recommended"
+      >
+        Recommended
+      </h2>
+      <TrainerSlider list={listOfTrainers} />
+      <div style={{ height: "11vh" }} />
     </div>
   );
 

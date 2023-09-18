@@ -524,7 +524,11 @@ slick-slider .slick-list,
 @media (max-width: 576px) {
   .custom-slider-search-align {
     position: absolute !important;
-    left: 10% !important;
+    left: 0px !important;
+    overflow-x: hidden !important;
+  }
+  .trainer-recommended {
+    margin-left: 71px !important;
   }
   .custom-silder-margin {
     margin-left: 72px !important;
