@@ -102,10 +102,7 @@ export const TrainerDetails = ({
   ];
 
   return (
-    <div className={`custom-sidebar-content || custom-trainer-scroll`} style={{margin: "2px",
-      left: "90px ",
-      width: "92% ",
-      }}>
+    <div className={`custom-trainer-scroll`}>
       {trainerInfo === null ? (
         <div className="media-body media-body text-right">
           <div className="mr-4 mt-4">
@@ -354,14 +351,15 @@ const SelectedCategory = ({
                     </div>
                   </div>
                 </div>
+                
               );
             })
           )}
         </div>
       </div> */}
       <div className="row m-0 overflowX-auto">
-      <div className="col-12 col-lg-2 col-md-3 col-sm-3">
-        <div className="d-flex justify-content-between">
+        <div className="col-12 col-lg-2 col-md-3 col-sm-3">
+          <div className="d-flex justify-content-between">
             <h3>Filters </h3>
           </div>
           <hr className="hr" />
@@ -432,8 +430,10 @@ const SelectedCategory = ({
             </div>
           </div>
         </div>
-        <div className="col-12 col-lg-px-5 col-lg-10 col-md-9 col-sm-9"
-        style={{ height: "89vh" }}>
+        <div
+          className="col-12 col-lg-px-5 col-lg-10 col-md-9 col-sm-9"
+          style={{ height: "89vh" }}
+        >
           {!getTraineeSlots.length ? (
             <div
               className="text-center container mw-100 border border-secondary p-30 mb-4"
@@ -518,10 +518,7 @@ const SelectedCategory = ({
                         </div>
                       </div>
                       <div className="col-sm-3 col-md-3 col-lg-2 col-xl-2  rating">
-                        {showRatings(
-                          data.trainer_ratings,
-                          "d-flex "
-                        )}
+                        {showRatings(data.trainer_ratings, "d-flex ")}
                       </div>
                     </div>
                   </div>
@@ -530,7 +527,7 @@ const SelectedCategory = ({
             })
           )}
         </div>
-      </div> 
+      </div>
     </>
   );
 };
@@ -810,7 +807,7 @@ const TrainerInfo = ({
         margin: "0px",
         height: !AccountType.TRAINEE || (!AccountType.TRAINER && "92vh"),
         overflowX: !AccountType.TRAINEE || (!AccountType.TRAINER && "auto"),
-        width: '100vw'
+        width: "100vw",
       }}
     >
       <div className="col-md-5">

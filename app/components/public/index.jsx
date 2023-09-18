@@ -617,7 +617,7 @@ const TrainersDetails = ({
     setBookingTableData(result);
   };
   return (
-    <React.Fragment>
+    <div className="custom-landing-page-trainer-details">
       {trainerInfo === null ? (
         <div className="media-body media-body text-right">
           <div className="mr-2 mt-4">
@@ -687,7 +687,7 @@ const TrainersDetails = ({
           />
         )}
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 

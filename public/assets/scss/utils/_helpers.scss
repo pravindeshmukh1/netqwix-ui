@@ -34,11 +34,27 @@
 .custom-sidebar-content-booking {
   position: absolute;
   padding: 10px;
-  left: $sidebar-spacing + 40px;
   max-width: 100%;
   width: 90%;
+  margin: 0px !important;
+  left: 103px !important;
+  margin: 0;
 }
 .custom-trainer-scroll {
   height: 97vh !important;
-  overflow-x: auto;
+  overflow-x: hidden !important;
+  position: absolute;
+  padding: 10px;
+  left: $sidebar-spacing + 70px;
+  max-width: 93%;
+  width: 93%;
+}
+
+.custom-landing-page-trainer-details {
+  height: 97vh !important;
+  overflow-x: hidden !important;
+  position: absolute;
+  padding: 10px;
+  max-width: 100% !important;
+  width: 96% !important;
 }
