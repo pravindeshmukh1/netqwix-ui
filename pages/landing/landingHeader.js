@@ -100,10 +100,10 @@ const LandingHeader = (masterRecords) => {
                 isMenuOpen ? "d-none" : "" // Hide the Nav when the menu is open
               }`}
               style={{
-                marginLeft: "8%",
+                // marginLeft: "8%",
                 marginTop: isMobileScreen ? "25%" : "38px",
-                float: "right",
-                alignItems: "end",
+                float: "left",
+                // alignItems: "end",
               }}
             >
               <Dropdown nav isOpen={dropdownOpen} toggle={toggle}>
