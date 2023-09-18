@@ -17,6 +17,7 @@ import { authAction, authState } from "../../app/components/auth/auth.slice";
 import {
   AccountType,
   LOCAL_STORAGE_KEYS,
+  POSITION_FIXED_SIDEBAR_MENU,
   leftSideBarOptions,
 } from "../../app/common/constants";
 import { SocketContext } from "../../app/components/socket";
@@ -150,7 +151,7 @@ const Index = (props) => {
       <nav
         className={`main-nav on custom-scroll ${
           accountType === AccountType.TRAINEE &&
-          activeTab === "home" &&
+          POSITION_FIXED_SIDEBAR_MENU.includes(activeTab) &&
           "custom-sidebar"
         }`}
       >
@@ -264,7 +265,6 @@ const Index = (props) => {
               </Tooltip>
             </li> */}
 
-
             {/* some menu hide feedback changes */}
             {/* <li>
               <Tooltip title="Todo" position="top" trigger="mouseenter">
@@ -314,10 +314,6 @@ const Index = (props) => {
                 </NavLink>
               </Tooltip>
             </li> */}
-
-
-
-
 
             {/* <li>
               <Tooltip title="Document" position="top" trigger="mouseenter">
