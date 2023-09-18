@@ -557,50 +557,73 @@ const ScheduleTraining = () => {
     );
 
   const renderSearchMenu = () => (
-    <div className="custom-search-menu">
-      <SearchableDropdown
-        placeholder="Search Trainers..."
-        options={[...listOfTrainers, ...categoryList]}
-        label="name"
-        id="id"
-        customClasses={{
-          searchBar: "search-bar-trainee",
-          searchButton: "search-button-trainee",
-          dropdown: "custom-dropdown-width",
+    <div className="bookings custom-scroll custom-sidebar-content custom-slider-search-align">
+      <div
+        className="d-flex justify-content-center"
+        style={{
+          marginTop: "10%",
         }}
-        onSearchClick={(query) => {
-          if (query) {
-            setTrainerInfo((prev) => ({
-              ...prev,
-              userInfo: null,
-              selected_category: query,
-            }));
-          }
-          setQuery(query);
+      >
+        <SearchableDropdown
+          placeholder="Search Trainers..."
+          options={[...listOfTrainers, ...categoryList]}
+          label="name"
+          id="id"
+          customClasses={{
+            searchBar: "search-bar-trainee",
+            searchButton: "search-button-trainee",
+            dropdown: "custom-dropdown-width",
+          }}
+          onSearchClick={(query) => {
+            if (query) {
+              setTrainerInfo((prev) => ({
+                ...prev,
+                userInfo: null,
+                selected_category: query,
+              }));
+            }
+            setQuery(query);
+          }}
+          searchValue={(value) => {
+            setParams({ search: value });
+          }}
+          selectedOption={(option) => {
+            console.log(`option --- `, option);
+            if (option && option.isCategory) {
+              setTrainerInfo((prev) => ({
+                ...prev,
+                userInfo: option,
+                selected_category: option.name,
+              }));
+            } else {
+              setTrainerInfo((prev) => ({
+                ...prev,
+                userInfo: option,
+                selected_category: null,
+              }));
+            }
+          }}
+          handleChange={(value) => {
+            setParams({ search: value });
+          }}
+        />
+      </div>
+      <div
+        style={{
+          marginTop: "15%",
         }}
-        searchValue={(value) => {
-          setParams({ search: value });
-        }}
-        selectedOption={(option) => {
-          console.log(`option --- `, option);
-          if (option && option.isCategory) {
-            setTrainerInfo((prev) => ({
-              ...prev,
-              userInfo: option,
-              selected_category: option.name,
-            }));
-          } else {
-            setTrainerInfo((prev) => ({
-              ...prev,
-              userInfo: option,
-              selected_category: null,
-            }));
-          }
-        }}
-        handleChange={(value) => {
-          setParams({ search: value });
-        }}
-      />
+      >
+        <h2
+          style={{
+            display: "flex",
+            justifyContent: "start",
+            marginLeft: "14%",
+          }}
+        >
+          Recommended
+        </h2>
+        <TrainerSlider list={listOfTrainers} />
+      </div>
     </div>
   );
 
@@ -785,14 +808,7 @@ const ScheduleTraining = () => {
       (trainerInfo && trainerInfo.userInfo) ? (
         renderUserDetails()
       ) : (
-        <React.Fragment>
-          {renderSearchMenu()}
-          <div className={`${!isLoading ? "trainer-slider p02" : null}`}>
-            <h2>Recommended</h2>
-            <TrainerSlider list={listOfTrainers} />
-            <div style={{ height: "11vh" }} />
-          </div>
-        </React.Fragment>
+        <React.Fragment>{renderSearchMenu()}</React.Fragment>
       )}
     </div>
   );
