@@ -24,8 +24,9 @@ const FooterLanding = (masterRecords) => {
             <img
               src="/assets/images/netquix_logo.png"
               alt="logo"
+              className="mt-2"
               style={{
-                maxWidth: "105px",
+                maxWidth: "150px",
               }}
             />
           </div>

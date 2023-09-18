@@ -9,7 +9,7 @@ $canvas-z-index: 8;
 
 .parent-container {
   display: flex !important;
-  justify-content: center !important; 
+  justify-content: center !important;
   align-items: center !important;
 }
 
@@ -517,5 +517,12 @@ slick-slider .slick-list,
 @media (max-width: 576px) {
   .btn.ml-4 {
     margin-top: 2px !important;
+  }
+}
+
+// alignment search
+@media (max-width: 576px) {
+  .custom-slider-search-align {
+    display: contents !important;
   }
 }

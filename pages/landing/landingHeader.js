@@ -60,8 +60,9 @@ const LandingHeader = (masterRecords) => {
           <img
             src="/assets/images/netquix_logo.png"
             alt="logo"
+            className="mt-2"
             style={{
-              maxWidth: "120px",
+              maxWidth: "200px",
               marginLeft: "25px",
             }}
           />
