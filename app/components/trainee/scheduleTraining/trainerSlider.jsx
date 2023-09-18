@@ -46,7 +46,7 @@ const TrainerSlider = ({ list }) => {
   };
 
   return (
-    <div className="recent-slider slider-container recent-chat">
+    <div className="recent-slider slider-container recent-chat custom-silder-margin">
       <Slider {...settings}>
         {list.map((contentInfo, index) => {
           return (

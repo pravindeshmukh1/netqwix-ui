@@ -559,9 +559,9 @@ const ScheduleTraining = () => {
   const renderSearchMenu = () => (
     <div className="bookings custom-scroll custom-sidebar-content custom-slider-search-align">
       <div
-        className="d-flex justify-content-center"
+        className="d-flex justify-content-center align-middle align-items-center"
         style={{
-          marginTop: "10%",
+          height: "94%",
         }}
       >
         <SearchableDropdown
@@ -608,11 +608,8 @@ const ScheduleTraining = () => {
           }}
         />
       </div>
-      <div
-        style={{
-          marginTop: "15%",
-        }}
-      >
+
+      <div>
         <h2
           style={{
             display: "flex",
@@ -623,6 +620,7 @@ const ScheduleTraining = () => {
           Recommended
         </h2>
         <TrainerSlider list={listOfTrainers} />
+        <div style={{ height: "11vh" }} />
       </div>
     </div>
   );

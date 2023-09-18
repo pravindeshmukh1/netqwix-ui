@@ -402,7 +402,7 @@ slick-slider .slick-list,
 // booking sections
 .bookings {
   margin: 30px;
-  width: 92%;
+  width: 92vw;
   overflow-x: auto;
   overflow-y: auto;
   height: 93vh;
@@ -523,6 +523,14 @@ slick-slider .slick-list,
 // alignment search
 @media (max-width: 576px) {
   .custom-slider-search-align {
-    display: contents !important;
+    position: absolute !important;
+    left: 10% !important;
+  }
+  .custom-silder-margin {
+    margin-left: 72px !important;
+  }
+  .slick-slider .slick-track,
+  .slick-slider .slick-list {
+    height: 18vh !important;
   }
 }
