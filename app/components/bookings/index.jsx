@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import ReactStrapModal from "../../common/modal";
@@ -25,10 +25,10 @@ import { SocketContext } from "../socket";
 import Ratings from "./ratings";
 import Rating from "react-rating";
 import { Star } from "react-feather";
-import { authState } from "../auth/auth.slice";
 
 const Bookings = ({ accountType = null }) => {
   const router = useRouter();
+
   const [bookedSession, setBookedSession] = useState({
     id: "",
     booked_status: "",
@@ -158,9 +158,9 @@ const Bookings = ({ accountType = null }) => {
             Rating
           </button>
         ) : (
-          <div>
+          <div className="d-flex">
             {!isMeetingDone && (
-              <div>
+              <>
                 {status !== BookedSession.canceled && (
                   <button
                     className={`btn btn-primary button-effect btn-sm`}
@@ -183,6 +183,7 @@ const Bookings = ({ accountType = null }) => {
                       : BookedSession.confirm}
                   </button>
                 )}
+
                 {status === BookedSession.confirmed && (
                   <button
                     className={`btn btn-primary button-effect btn-sm ml-4`}
@@ -204,6 +205,7 @@ const Bookings = ({ accountType = null }) => {
                     {BookedSession.start}
                   </button>
                 )}
+
                 <button
                   className="btn btn-danger button-effect btn-sm ml-4"
                   type="button"
@@ -234,7 +236,7 @@ const Bookings = ({ accountType = null }) => {
                     ? BookedSession.canceled
                     : "Cancel"}
                 </button>
-              </div>
+              </>
             )}
           </div>
         )}
@@ -435,7 +437,8 @@ const Bookings = ({ accountType = null }) => {
               <div className="col-6">
                 {showRatingLabel(bookingInfo.ratings)}
               </div>
-              <div className="col-6 d-flex justify-content-end">
+              {/* <div className="col-6 d-flex justify-content-end"> */}
+              <div className="col-12 d-flex justify-content-end  ">
                 {renderBooking(
                   status,
                   booking_index,
@@ -495,26 +498,53 @@ const Bookings = ({ accountType = null }) => {
     />
   );
   return (
-    <div
-      id="bookings"
-      className={`bookings custom-scroll custom-sidebar-content-booking`}
-    >
-      {addRatingModel.isOpen ? renderRating() : null}
-      {!scheduledMeetingDetails.length ? (
-        <h3 className="d-flex justify-content-center mt-20">
-          No bookings available
-        </h3>
-      ) : startMeeting.isOpenModal ? (
-        renderVideoCall()
-      ) : (
-        <div>
-          <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
-            Bookings
+    <>
+      <div
+        id="bookings"
+        className={`bookings custom-scroll custom-sidebar-content-booking`}
+      >
+        {addRatingModel.isOpen ? renderRating() : null}
+        {!scheduledMeetingDetails.length ? (
+          <h3 className="d-flex justify-content-center mt-20">
+            No bookings available
           </h3>
-          {Bookings()}
-        </div>
-      )}
-    </div>
+        ) : startMeeting.isOpenModal ? (
+          renderVideoCall()
+        ) : (
+          <div>
+            <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
+              Bookings
+            </h3>
+            {Bookings()}
+          </div>
+        )}
+      </div>
+
+      {/* calling popup */}
+      {/* <Modal
+        key={"startMeeting"}
+        toggle={toggle}
+        allowFullWidth={true}
+        isOpen={startMeeting.isOpenModal}
+        // height="100vh"
+        element={
+          <StartMeeting
+            accountType={accountType}
+            traineeInfo={startMeeting.traineeInfo}
+            trainerInfo={startMeeting.trainerInfo}
+            isClose={() => {
+              setStartMeeting({
+                ...startMeeting,
+                id: null,
+                isOpenModal: false,
+                traineeInfo: null,
+                trainerInfo: null,
+              });
+            }}
+          />
+        }
+      /> */}
+    </>
   );
 };
 export default Bookings;
