@@ -612,7 +612,7 @@ const ScheduleTraining = () => {
         style={{
           display: "flex",
           justifyContent: "start",
-          marginLeft: "14%",
+          marginLeft: "8%",
         }}
         className="trainer-recommended"
       >
