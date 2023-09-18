@@ -507,3 +507,19 @@ min-height: 400px;
     text-align: center;
     justify-content: center;   
 }
+
+@media(max-width: $ig-xsmall-screen) {
+  .image-gallery-slide img {
+    width: 100% !important;
+    height: 65vh !important;
+  }
+
+  .video-container {
+    width: 100% !important;
+  }
+
+  .slider-iframe {
+    width: 100% !important;
+  }
+}
+

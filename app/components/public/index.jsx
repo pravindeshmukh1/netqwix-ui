@@ -139,6 +139,20 @@ const TrainersDetails = ({
     },
   ];
 
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const renderBookingTable = () => (
     <React.Fragment>
       <div className="row">
@@ -313,11 +327,20 @@ const TrainersDetails = ({
       className={`${
         trainerInfo && trainerInfo.userInfo
           ? "table-responsive-width"
-          : "table-responsive-width border border-dark"
+          : "table-responsive-width"
       }`}
     >
-      <table className="table custom-trainer-slots-booking-table ml-30 mr-30">
-        <thead className="justify-center align-center table-thead">
+      <table
+        className={`${
+          screenWidth <= 767 ? "table-responsive overflow-x-auto" : "table"
+        } custom-table-scroll-width ml-30 mr-30 border border-dark`}
+      >
+        <thead
+          className="justify-center align-center table-thead"
+          style={{
+            borderBottom: screenWidth <= 767 ? "1px solid" : null,
+          }}
+        >
           <tr>
             {bookingColumns.map((columns, index) =>
               columns.title.length ? (
@@ -344,11 +367,20 @@ const TrainersDetails = ({
                     <tr key={`table-data-${index}`}>
                       <td key={index}>
                         {monday.slot.length ? (
-                          renderSlotsByDay(monday)
+                          <div
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
+                          >
+                            {renderSlotsByDay(monday)}
+                          </div>
                         ) : (
                           <div
                             key={`slot-${index}-content`}
                             className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
                           >
                             {Message.noSlotsAvailable}
                           </div>
@@ -356,11 +388,20 @@ const TrainersDetails = ({
                       </td>
                       <td>
                         {tuesday.slot.length ? (
-                          renderSlotsByDay(tuesday)
+                          <div
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
+                          >
+                            {renderSlotsByDay(tuesday)}
+                          </div>
                         ) : (
                           <div
                             key={`slot-${index}-content`}
                             className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
                           >
                             {Message.noSlotsAvailable}
                           </div>
@@ -368,11 +409,20 @@ const TrainersDetails = ({
                       </td>
                       <td>
                         {wednesday.slot.length ? (
-                          renderSlotsByDay(wednesday)
+                          <div
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
+                          >
+                            {renderSlotsByDay(wednesday)}
+                          </div>
                         ) : (
                           <div
                             key={`slot-${index}-content`}
                             className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
                           >
                             {Message.noSlotsAvailable}
                           </div>
@@ -380,11 +430,20 @@ const TrainersDetails = ({
                       </td>
                       <td>
                         {thursday.slot.length ? (
-                          renderSlotsByDay(thursday)
+                          <div
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
+                          >
+                            {renderSlotsByDay(thursday)}
+                          </div>
                         ) : (
                           <div
                             key={`slot-${index}-content`}
                             className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
                           >
                             {Message.noSlotsAvailable}
                           </div>
@@ -392,11 +451,20 @@ const TrainersDetails = ({
                       </td>
                       <td>
                         {friday.slot.length ? (
-                          renderSlotsByDay(friday)
+                          <div
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
+                          >
+                            {renderSlotsByDay(friday)}
+                          </div>
                         ) : (
                           <div
                             key={`slot-${index}-content`}
                             className="rounded-pill border border-dark text-dark text-center p-1 mb-1 font-weight-bold"
+                            style={{
+                              width: screenWidth <= 767 ? "50vw" : null,
+                            }}
                           >
                             {Message.noSlotsAvailable}
                           </div>
@@ -664,6 +732,7 @@ const TrainerInfo = ({
   const revampedMedia =
     trainer &&
     trainer.extraInfo &&
+    trainer.extraInfo.media &&
     trainer.extraInfo.media.map((data, index) => {
       const { url, description, title, type, thumbnail = "" } = data;
       return {
@@ -687,57 +756,172 @@ const TrainerInfo = ({
   }, []);
 
   return (
+    // <div
+    //   className={`row px-20 py-10 m-25 ${
+    //     isTablet ? "model-tablet-view" : "custom-trainer-details-scroll"
+    //   }`}
+    // >
+    //   <div className="col-5">
+    //     <div className="row">
+    //       <div className="col-3">
+    //         <img
+    //           src={
+    //             trainer && trainer.profilePicture
+    //               ? trainer.profilePicture
+    //               : "/assets/images/avtar/statusMenuIcon.jpeg"
+    //           }
+    //           width={"136px"}
+    //           height={"128px"}
+    //           style={{ borderRadius: "15px" }}
+    //           alt="profile-picture"
+    //         />
+    //       </div>
+    //       <div className="col-8 trainer-details">
+    //         <h2 className="ml-1 mt-1">
+    //           {trainer && trainer ? trainer.fullname : null}
+    //         </h2>
+    //         <h3 className="mb-3 mt-3 ml-1">
+    //           {" "}
+    //           Hourly Rate: ${TRAINER_AMOUNT_USD}{" "}
+    //         </h3>
+    //         {showRatings(trainer && trainer.trainer_ratings, "mb-3 d-flex")}
+    //       </div>
+    //     </div>
+    //     <div className="d-flex flex-row bd-highlight" />
+    //     {trainer &&
+    //     trainer.extraInfo &&
+    //     trainer.extraInfo.media &&
+    //     trainer.extraInfo.social_media_links ? (
+    //       <SocialMediaIcons
+    //         profileImageURL={
+    //           trainer &&
+    //           trainer.extraInfo &&
+    //           trainer.extraInfo.social_media_links &&
+    //           trainer.extraInfo.social_media_links.profile_image_url
+    //         }
+    //         social_media_links={
+    //           trainer &&
+    //           trainer.extraInfo &&
+    //           trainer.extraInfo.social_media_links
+    //         }
+    //         isvisible={false}
+    //       />
+    //     ) : null}
+    //     <p className="mt-3">
+    //       {trainer && trainer.extraInfo && trainer.extraInfo.about}
+    //     </p>
+    //     {accordionData.length
+    //       ? accordionData.map((data, index) => {
+    //           return (
+    //             <Accordion key={`accordion_${index}`} className="mb-5">
+    //               <Accordion.Item>
+    //                 <Accordion.Header
+    //                   index={index}
+    //                   activeAccordion={activeAccordion}
+    //                   onAClick={() => {
+    //                     if (activeAccordion[index]) {
+    //                       delete activeAccordion[index];
+    //                     } else if (!activeAccordion[index]) {
+    //                       activeAccordion[index] = true;
+    //                     } else {
+    //                       activeAccordion[index] = !activeAccordion[index];
+    //                     }
+    //                     setActiveAccordion(activeAccordion);
+    //                   }}
+    //                 >
+    //                   {data.label}
+    //                 </Accordion.Header>
+    //                 <Accordion.Body>
+    //                   {!data.value ? Message.notFound : data.value}
+    //                 </Accordion.Body>
+    //               </Accordion.Item>
+    //             </Accordion>
+    //           );
+    //         })
+    //       : Message.notFound}
+    //   </div>
+    //   <div className="col-7">
+    //     {/* <Carousel
+    //       media={
+    //         trainer &&
+    //         trainer.extraInfo &&
+    //         trainer.extraInfo.media &&
+    //         trainer.extraInfo.media
+    //       }
+    //     /> */}
+    //     <h2 className="mb-4">Featured content</h2>
+    //     {revampedMedia && revampedMedia.length ? (
+    //       <ImageVideoThumbnailCarousel
+    //         media={revampedMedia}
+    //         originalMedia={
+    //           trainer && trainer.extraInfo && trainer.extraInfo.media
+    //         }
+    //       />
+    //     ) : (
+    //       <div className="no-media-found">{Message.noMediaFound}</div>
+    //     )}
+    //     <h2>My Schedule</h2>
+    //     {datePicker}
+    //     <div className="mt-3">{element}</div>
+    //   </div>
+    // </div>
     <div
-      className={`row px-20 py-10 m-25 ${
-        isTablet ? "model-tablet-view" : "custom-trainer-details-scroll"
-      }`}
+      className="row"
+      style={{
+        height: "92vh",
+        overflowY: "auto",
+        overflowX: "hidden",
+        width: '100vw'
+      }}
     >
-      <div className="col-5">
+      <div className="col-md-6">
         <div className="row">
-          <div className="col-3">
+          <div className="col-4 col-md-3 col-lg-2">
             <img
               src={
                 trainer && trainer.profilePicture
                   ? trainer.profilePicture
                   : "/assets/images/avtar/statusMenuIcon.jpeg"
               }
-              width={"136px"}
-              height={"128px"}
-              style={{ borderRadius: "15px" }}
+              width={100}
+              style={{
+                minHeight: "120px",
+                minWidth: "80px",
+              }}
+              className="img-fluid rounded"
               alt="profile-picture"
             />
           </div>
-          <div className="col-8 trainer-details">
-            <h2 className="ml-1 mt-1">
+          <div className="col-8 col-md-8 col-lg-8">
+            <h2 className="mt-3">
               {trainer && trainer ? trainer.fullname : null}
             </h2>
-            <h3 className="mb-3 mt-3 ml-1">
-              {" "}
-              Hourly Rate: ${TRAINER_AMOUNT_USD}{" "}
-            </h3>
-            {showRatings(trainer && trainer.trainer_ratings, "mb-3 d-flex")}
+            <h3 className="mt-3">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
+            {showRatings(
+              trainer && trainer.trainer_ratings,
+              "mt-3 mb-3 d-flex"
+            )}
+            {trainer &&
+            trainer.extraInfo &&
+            trainer.extraInfo.media &&
+            trainer.extraInfo.social_media_links ? (
+              <SocialMediaIcons
+                profileImageURL={
+                  trainer &&
+                  trainer.extraInfo &&
+                  trainer.extraInfo.social_media_links &&
+                  trainer.extraInfo.social_media_links.profile_image_url
+                }
+                social_media_links={
+                  trainer &&
+                  trainer.extraInfo &&
+                  trainer.extraInfo.social_media_links
+                }
+                isvisible={false}
+              />
+            ) : null}
           </div>
         </div>
-        <div className="d-flex flex-row bd-highlight" />
-        {trainer &&
-        trainer.extraInfo &&
-        trainer.extraInfo.media &&
-        trainer.extraInfo.social_media_links ? (
-          <SocialMediaIcons
-            profileImageURL={
-              trainer &&
-              trainer.extraInfo &&
-              trainer.extraInfo.social_media_links &&
-              trainer.extraInfo.social_media_links.profile_image_url
-            }
-            social_media_links={
-              trainer &&
-              trainer.extraInfo &&
-              trainer.extraInfo.social_media_links
-            }
-            isvisible={false}
-          />
-        ) : null}
         <p className="mt-3">
           {trainer && trainer.extraInfo && trainer.extraInfo.about}
         </p>
@@ -771,15 +955,7 @@ const TrainerInfo = ({
             })
           : Message.notFound}
       </div>
-      <div className="col-7">
-        {/* <Carousel
-          media={
-            trainer &&
-            trainer.extraInfo &&
-            trainer.extraInfo.media &&
-            trainer.extraInfo.media
-          }
-        /> */}
+      <div className="col-md-6">
         <h2 className="mb-4">Featured content</h2>
         {revampedMedia && revampedMedia.length ? (
           <ImageVideoThumbnailCarousel
@@ -822,8 +998,9 @@ const SelectedCategory = ({
   filterParams,
 }) => {
   return (
-    <div className="row m-0">
-      <div className="col-2">
+    <div className="row m-0 overflowX-auto">
+      <div className="col-12 col-lg-2 col-md-3 col-sm-3">
+        {/* <div className="col-12 col-lg-2 col-md-12 col-sm-6"> */}
         <div className="d-flex justify-content-between">
           <h3>Filters</h3>
           <div>{/* <h5>Reset filters</h 5> */}</div>
@@ -897,8 +1074,8 @@ const SelectedCategory = ({
         </div>
       </div>
       <div
-        className="col-10 px-5"
-        style={{ height: "89vh", overflowX: "auto" }}
+        className="col-12 col-lg-px-5 col-lg-10 col-md-9 col-sm-9"
+        style={{ height: "89vh" }}
       >
         {!getTraineeSlots.length ? (
           <div
@@ -918,22 +1095,23 @@ const SelectedCategory = ({
                   borderRadius: "20px",
                 }}
               >
-                <div className="card-body" key={index}>
+                <div className="card-body " key={index}>
                   <div className="row">
-                    <div className="col-1.3 ml-3">
+                    <div className="col-sm-3 col-md-3 col-lg-2 col-xl-2">
                       <img
                         src={
                           data.profilePicture
                             ? data.profilePicture
                             : "/assets/images/avtar/statusMenuIcon.jpeg"
                         }
-                        width={"136px"}
-                        height={"128px"}
+                        // width={"136px"}
+                        // height={"128px"}
+                        className="cardimg"
                         style={{ borderRadius: "15px" }}
                         alt="profile-picture"
                       />
                     </div>
-                    <div className="col-8">
+                    <div className="col-sm-6 col-md-6 co-lg-8 col-xl-8  ">
                       <h3
                         className="card-title pointer underline"
                         onClick={() => {
@@ -963,7 +1141,7 @@ const SelectedCategory = ({
                           ? Utils.truncateText(data.extraInfo.about, 200)
                           : Message.notAvailableDescription}
                       </h4>
-                      <React.Fragment>
+                      <div>
                         {data &&
                         data.extraInfo &&
                         data.extraInfo.social_media_links ? (
@@ -982,15 +1160,87 @@ const SelectedCategory = ({
                             }
                           />
                         ) : null}
-                      </React.Fragment>
+                      </div>
                     </div>
-                    <div className="col-1.1">
-                      {showRatings(
-                        data.trainer_ratings,
-                        "d-flex justify-content-end"
-                      )}
+                    <div className="col-sm-3 col-md-3 col-lg-2 col-xl-2  rating">
+                      {showRatings(data.trainer_ratings, "d-flex")}
                     </div>
                   </div>
+
+                  {/* <div className="card-body" key={index}>
+                    <div className="row">
+                      <div className="col-1.3 ml-3">
+                        <img
+                          src={
+                            data.profilePicture
+                              ? data.profilePicture
+                              : "/assets/images/avtar/statusMenuIcon.jpeg"
+                          }
+                          width={"136px"}
+                          height={"128px"}
+                          style={{ borderRadius: "15px" }}
+                          alt="profile-picture"
+                        />
+                      </div>
+                      <div className="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-10">
+                        <h3
+                          className="card-title pointer underline"
+                          onClick={() => {
+                            console.log(`data`);
+                            setTrainerDetails((prev) => ({
+                              ...prev,
+                              _id: data && data._id,
+                              select_trainer: true,
+                            }));
+                            selectTrainer(data && data._id);
+                          }}
+                        >
+                          {data ? data.fullname : ""}
+                        </h3>
+                        <p
+                          className="badge badge-pill badge-primary mb-2 p-2"
+                          style={{ fontSize: "15px" }}
+                        >
+                          {`$${TRAINER_AMOUNT_USD}.00`}
+                          {`/ ${TRAINER_MEETING_TIME}`}
+                        </p>
+                        <h4
+                          className={`${textTruncate ? "text-truncate" : ""}`}
+                          style={{ marginBottom: "0px" }}
+                        >
+                          {data && data.extraInfo
+                            ? Utils.truncateText(data.extraInfo.about, 200)
+                            : Message.notAvailableDescription}
+                        </h4>
+                        <div>
+                          {data &&
+                          data.extraInfo &&
+                          data.extraInfo.social_media_links ? (
+                            <SocialMediaIcons
+                              profileImageURL={
+                                data &&
+                                data.extraInfo &&
+                                data.extraInfo.social_media_links &&
+                                data.extraInfo.social_media_links
+                                  .profile_image_url
+                              }
+                              social_media_links={
+                                data &&
+                                data.extraInfo &&
+                                data.extraInfo.social_media_links
+                              }
+                            />
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className="col-1.1 top-0 end-0">
+                        {showRatings(
+                          data.trainer_ratings,
+                          "d-flex justify-content-end"
+                        )}
+                      </div>
+                    </div>
+                  </div> */}
                 </div>
               </div>
             );

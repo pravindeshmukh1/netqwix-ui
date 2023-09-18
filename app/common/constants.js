@@ -141,7 +141,7 @@ export const Message = {
     timeConflicts: "These slots are already booked.",
     invalidTime: "Please select valid time",
     invalidFile: "Please select an image file under 2 MB",
-    invalidPNG: "Please select an image file type is png",
+    invalidPNG: "Please select an image",
   },
   successMessage: {
     rating: "Providing a Rating",
@@ -241,7 +241,6 @@ export const settingMenuFilterSection = ["account", "my-profile"];
 export const MAX_FILE_SIZE_MB = 2;
 
 export const allowedExtensions = ["image/png", "image/jpeg", "image/jpg"];
-export const allowedPNGExtensions = ["image/png"];
 
 export const DUMMY_URLS = {
   YOUTUBE:
@@ -520,6 +519,15 @@ export const QUICK_ACCESS = [
     id: 1,
     label: "Accessibility",
   },
+  {
+    id: 1,
+    label: "Privacy Policy",
+  },
+  {
+    id: 1,
+    label: "Terms & Conditions",
+  },
+  
 ];
 export const NEW_COMMENTS = [
   {

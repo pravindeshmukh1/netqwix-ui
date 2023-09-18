@@ -15,6 +15,7 @@ import { ChevronRight } from "react-feather";
 const Category = (masterRecords) => {
   const dispatch = useAppDispatch();
   const { handleSelectedTrainer } = bookingsAction;
+  const [isMobileScreen, setIsMobileScreen] = useState(false);
   const [query, setQuery] = useState("");
   const { getTraineeSlots } = useAppSelector(traineeState);
   const [getParams, setParams] = useState(params);
@@ -90,10 +91,44 @@ const Category = (masterRecords) => {
     }
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobileScreen = window.innerWidth < 390;
+      setIsMobileScreen(isMobileScreen);
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <React.Fragment>
-      <div className="container-fluid">
-        <div className="d-flex flex-wrap justify-content-center align-items-center ">
+      <div className="container">
+        <div class="row">
+          <div class="col d-none d-sm-block">
+            {masterRecords?.masterRecords?.category?.map((item, index) => {
+              return (
+                <span
+                  key={`category_item${index}`}
+                  className="badge badge-light lg"
+                  style={{
+                    margin: "12px",
+                    padding: "18px",
+                    alignItems: "center",
+                    fontSize: "14px",
+                    color: "black",
+                  }}
+                >
+                  {item}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* <div className="d-flex flex-wrap justify-content-center align-items-center ">
           {masterRecords?.masterRecords?.category?.map((item, index) => {
             return (
               <span
@@ -111,7 +146,7 @@ const Category = (masterRecords) => {
               </span>
             );
           })}
-        </div>
+        </div> */}
         <div className="container">
           <div className="row mt-5">
             <div className="col-lg-6">
@@ -136,7 +171,10 @@ const Category = (masterRecords) => {
                 </button>
               </div>
             </div>
-            <div className="col-lg-6  bg-primary" style={{ borderRadius: "50%" }}>
+            <div
+              className="col-lg-6  bg-primary"
+              style={{ borderRadius: "50%" }}
+            >
               <img
                 src="/assets/images/1-removebg 1.png"
                 alt="logo"
@@ -150,51 +188,68 @@ const Category = (masterRecords) => {
             </div>
           </div>
         </div>
-        
-        <div className="d-flex justify-content-center align-items-center my-5">
-          <SearchableDropdown
-            placeholder="Search Trainers..."
-            options={[...listOfTrainers, ...categoryList]}
-            label="name"
-            id="id"
-            customClasses={{
-              searchBar: "search-bar-trainee",
-              searchButton: "search-button-trainee",
-              dropdown: "custom-dropdown-width",
-            }}
-            onSearchClick={(query) => {
-              setTrainerInfo((prev) => ({
-                ...prev,
-                userInfo: null,
-                isOpen: true,
-                selectCategory: query,
-              }));
-              setQuery(query);
-            }}
-            searchValue={(value) => {
-              setParams({ search: value });
-            }}
-            selectedOption={(option) => {
-              if (option && option.isCategory) {
-                setTrainerInfo((prev) => ({
-                  ...prev,
-                  userInfo: option,
-                  isOpen: true,
-                  selectCategory: option.name,
-                }));
-              } else {
-                setTrainerInfo((prev) => ({
-                  ...prev,
-                  userInfo: option,
-                  isOpen: true,
-                  selectCategory: null,
-                }));
-              }
-            }}
-            handleChange={(value) => {
-              setParams({ search: value });
-            }}
-          />
+        <div
+          className={`container ${
+            isMobileScreen
+              ? "d-flex justify-content-start"
+              : "d-flex justify-content-center"
+          } `}
+        >
+          <div className="row  my-5">
+            <div
+              className={`col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 `}
+              style={{
+                margin: 0,
+                marginLeft: isMobileScreen ? "33px" : null,
+              }}
+            >
+              <SearchableDropdown
+                placeholder="Search Trainers..."
+                options={[...listOfTrainers, ...categoryList]}
+                label="name"
+                id="id"
+                customClasses={{
+                  searchBar: "search-bar-trainee",
+                  searchButton: "search-button-trainee",
+                  dropdown: "custom-dropdown-width",
+                }}
+                onSearchClick={(query) => {
+                  if (query) {
+                    setTrainerInfo((prev) => ({
+                      ...prev,
+                      userInfo: null,
+                      isOpen: true,
+                      selectCategory: query,
+                    }));
+                  }
+                  setQuery(query);
+                }}
+                searchValue={(value) => {
+                  setParams({ search: value });
+                }}
+                selectedOption={(option) => {
+                  if (option && option.isCategory) {
+                    setTrainerInfo((prev) => ({
+                      ...prev,
+                      userInfo: option,
+                      isOpen: true,
+                      selectCategory: option.name,
+                    }));
+                  } else {
+                    setTrainerInfo((prev) => ({
+                      ...prev,
+                      userInfo: option,
+                      isOpen: true,
+                      selectCategory: null,
+                    }));
+                  }
+                }}
+                handleChange={(value) => {
+                  setParams({ search: value });
+                }}
+              />
+            </div>
+          </div>
         </div>
       </div>
       <Modal
