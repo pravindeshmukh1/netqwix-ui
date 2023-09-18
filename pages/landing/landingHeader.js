@@ -100,10 +100,10 @@ const LandingHeader = (masterRecords) => {
                 isMenuOpen ? "d-none" : "" // Hide the Nav when the menu is open
               }`}
               style={{
-                // marginLeft: "8%",
+                marginLeft: isMobileScreen?"0%":"8%",
                 marginTop: isMobileScreen ? "25%" : "38px",
-                float: "left",
-                // alignItems: "end",
+                float: isMobileScreen?"left":"right",
+                alignItems:isMobileScreen?"": "end",
               }}
             >
               <Dropdown nav isOpen={dropdownOpen} toggle={toggle}>
@@ -145,7 +145,7 @@ const LandingHeader = (masterRecords) => {
                 );
               })}
               <span
-                className="badge badge-light lg bg-primary"
+                className="badge badge-light lg bg-primary " 
                 style={{
                   padding: "13px",
                   alignItems: "center",
@@ -155,6 +155,7 @@ const LandingHeader = (masterRecords) => {
                 }}
                 onClick={() => router.push("/auth/signUp")}
               >
+
                 SignUp
               </span>
               <span
