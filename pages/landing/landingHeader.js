@@ -144,7 +144,7 @@ const LandingHeader = (masterRecords) => {
                   </NavItem>
                 );
               })}
-              <span
+              {/* <span
                 className="badge badge-light lg bg-primary " 
                 style={{
                   padding: "13px",
@@ -157,8 +157,13 @@ const LandingHeader = (masterRecords) => {
               >
 
                 SignUp
-              </span>
-              <span
+              </span> */}
+              <button type="button" class="btn btn-primary btn-sm" onClick={() => router.push("/auth/signUp")}>SignUp</button>
+              <button type="button" class="btn btn-primary btn-sm " onClick={() => router.push("/auth/signIn")} style={{
+                marginTop: isMobileScreen ? "10px" : null,
+                marginLeft:isMobileScreen ? "0px" : "15px"
+              }}>Login</button>
+              {/* <span
                 className="mt-xs-5 badge badge-light lg bg-primary"
                 style={{
                   padding: "13px",
@@ -173,7 +178,7 @@ const LandingHeader = (masterRecords) => {
                 onClick={() => router.push("/auth/signIn")}
               >
                 Login
-              </span>
+              </span> */}
             </Nav>
           </Collapse>
         </div>
