@@ -15,7 +15,7 @@ import {
 } from "reactstrap";
 import { useRouter } from "next/router";
 import Link from "next/link";
-
+import { routingPaths } from "../../app/common/constants";
 const headerArr = [
   { path: "/auth/signUp", name: "Join as an Expert" },
   { path: "", name: "Contact Us" },
@@ -82,7 +82,7 @@ const LandingHeader = (masterRecords) => {
             }}
           >
             <i
-              class="fa fa-bars"
+              className="fa fa-bars"
               style={{
                 marginTop: "40px",
                 cursor: "pointer",
@@ -100,10 +100,10 @@ const LandingHeader = (masterRecords) => {
                 isMenuOpen ? "d-none" : "" // Hide the Nav when the menu is open
               }`}
               style={{
-                marginLeft: isMobileScreen?"0%":"8%",
+                marginLeft: isMobileScreen ? "0%" : "8%",
                 marginTop: isMobileScreen ? "25%" : "38px",
-                float: isMobileScreen?"left":"right",
-                alignItems:isMobileScreen?"": "end",
+                float: isMobileScreen ? "left" : "right",
+                alignItems: isMobileScreen ? "" : "end",
               }}
             >
               <Dropdown nav isOpen={dropdownOpen} toggle={toggle}>
@@ -144,41 +144,39 @@ const LandingHeader = (masterRecords) => {
                   </NavItem>
                 );
               })}
-              {/* <span
-                className="badge badge-light lg bg-primary " 
+              <button
+                type="button"
+                className="btn btn-primary btn-sm"
                 style={{
-                  padding: "13px",
+                  width: "82px",
+                  padding: "11px",
                   alignItems: "center",
                   fontSize: "14px",
                   color: "white",
                   cursor: "pointer",
                 }}
-                onClick={() => router.push("/auth/signUp")}
+                onClick={() => router.push(routingPaths.signUp)}
               >
-
                 SignUp
-              </span> */}
-              <button type="button" class="btn btn-primary btn-sm" onClick={() => router.push("/auth/signUp")}>SignUp</button>
-              <button type="button" class="btn btn-primary btn-sm " onClick={() => router.push("/auth/signIn")} style={{
-                marginTop: isMobileScreen ? "10px" : null,
-                marginLeft:isMobileScreen ? "0px" : "15px"
-              }}>Login</button>
-              {/* <span
-                className="mt-xs-5 badge badge-light lg bg-primary"
+              </button>
+              <button
+                type="button"
+                className="mt-xs-5 btn btn-primary btn-sm"
                 style={{
-                  padding: "13px",
+                  width: "82px",
+                  padding: "11px",
                   marginright: "5px",
-                  marginLeft: "5px",
+                  marginLeft: isMobileScreen ? "1px" : "5px",
                   marginTop: isMobileScreen ? "10px" : null,
                   alignItems: "center",
                   fontSize: "14px",
                   color: "white",
                   cursor: "pointer",
                 }}
-                onClick={() => router.push("/auth/signIn")}
+                onClick={() => router.push(routingPaths.signIn)}
               >
                 Login
-              </span> */}
+              </button>
             </Nav>
           </Collapse>
         </div>
@@ -207,7 +205,7 @@ const LandingHeader = (masterRecords) => {
           }}
         >
           <i
-            class="fa fa-bars"
+            className="fa fa-bars"
             style={{
               marginTop: "40px",
               cursor: "pointer",

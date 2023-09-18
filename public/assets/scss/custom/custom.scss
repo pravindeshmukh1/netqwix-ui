@@ -515,8 +515,19 @@ slick-slider .slick-list,
 
 // button margin
 @media (max-width: 576px) {
-  .btn.ml-4 {
-    margin-top: 2px !important;
+  // .btn.ml-4 {
+    .btnbook{
+    margin-top: 10px !important;
+    margin-right: 15% !important;
+    margin-left: 0px !important;
+  }
+}
+
+// booking slot
+@media (max-width: 576px) {
+  // .btn.ml-4 {
+    .slot{
+    justify-content: end !important;
   }
 }
 

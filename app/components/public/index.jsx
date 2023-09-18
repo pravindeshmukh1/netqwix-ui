@@ -334,6 +334,9 @@ const TrainersDetails = ({
         className={`${
           screenWidth <= 767 ? "table-responsive overflow-x-auto" : "table"
         } custom-table-scroll-width ml-30 mr-30 border border-dark`}
+        style={{
+          width: "91.5%",
+        }}
       >
         <thead
           className="justify-center align-center table-thead"
@@ -871,7 +874,7 @@ const TrainerInfo = ({
         height: "92vh",
         overflowY: "auto",
         overflowX: "hidden",
-        width: '100vw'
+        width: "100vw",
       }}
     >
       <div className="col-md-6">

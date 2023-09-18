@@ -418,7 +418,7 @@ const ScheduleInventory = () => {
                                         }
                                       />
                   </div>
-                  <div className="col-12 col-sm-12 col-md-4 d-flex justify-content-center justify-content-md-start justify-content-sm-center">
+                  <div className="col-12 col-sm-12 col-md-4 d-flex justify-content-center justify-content-md-start justify-content-sm-end slot">
                     {slotIndex === 0 && (
                       <button
                         className="btn btn-circle bg-primary text-white me-2"

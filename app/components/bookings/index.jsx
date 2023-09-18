@@ -327,7 +327,7 @@ const Bookings = ({ accountType = null }) => {
                 </button>
               )}
               <button
-                className="btn btn-danger button-effect btn-sm ml-4"
+                className="btn btn-danger button-effect btn-sm ml-4 btnbook"
                 type="button"
                 style={{
                   cursor:
