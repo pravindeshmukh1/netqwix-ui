@@ -158,85 +158,85 @@ const Bookings = ({ accountType = null }) => {
             Rating
           </button>
         ) : (
-          <div>
-            {!isMeetingDone && (
-              <div>
-                {status !== BookedSession.canceled && (
-                  <button
-                    className={`btn btn-primary button-effect btn-sm`}
-                    type="button"
-                    style={{
-                      cursor:
-                        status === BookedSession.confirmed && "not-allowed",
-                    }}
-                    disabled={status === BookedSession.confirmed}
-                    onClick={() =>
-                      setBookedSession({
-                        ...bookedSession,
-                        id: _id,
-                        booked_status: BookedSession.confirmed,
-                      })
-                    }
-                  >
-                    {status === BookedSession.confirmed
-                      ? BookedSession.confirmed
-                      : BookedSession.confirm}
-                  </button>
-                )}
-                {status === BookedSession.confirmed && (
-                  <button
-                    className={`btn btn-primary button-effect btn-sm ml-4`}
-                    type="button"
-                    disabled={!isStartButtonEnabled}
-                    style={{
-                      cursor: !isStartButtonEnabled ? "not-allowed" : "pointer",
-                    }}
-                    onClick={() => {
-                      setStartMeeting({
-                        ...startMeeting,
-                        id: _id,
-                        isOpenModal: true,
-                        traineeInfo: trainee_info,
-                        trainerInfo: trainer_info,
-                      });
-                    }}
-                  >
-                    {BookedSession.start}
-                  </button>
-                )}
-                <button
-                  className="btn btn-danger button-effect btn-sm ml-4"
-                  type="button"
-                  style={{
-                    cursor:
-                      status === BookedSession.canceled || isStartButtonEnabled
-                        ? "not-allowed"
-                        : "pointer",
-                  }}
-                  disabled={
-                    status === BookedSession.canceled || isStartButtonEnabled
-                  }
-                  onClick={() => {
-                    if (
-                      !isStartButtonEnabled &&
-                      (status === BookedSession.booked ||
-                        status === BookedSession.confirmed)
-                    ) {
-                      setBookedSession({
-                        ...bookedSession,
-                        id: _id,
-                        booked_status: BookedSession.canceled,
-                      });
-                    }
-                  }}
-                >
-                  {status === BookedSession.canceled
-                    ? BookedSession.canceled
-                    : "Cancel"}
-                </button>
-              </div>
-            )}
-          </div>
+          <div className="d-flex">
+  {!isMeetingDone && (
+    <>
+      {status !== BookedSession.canceled && (
+        <button
+          className={`btn btn-primary button-effect btn-sm`}
+          type="button"
+          style={{
+            cursor: status === BookedSession.confirmed && "not-allowed",
+          }}
+          disabled={status === BookedSession.confirmed}
+          onClick={() =>
+            setBookedSession({
+              ...bookedSession,
+              id: _id,
+              booked_status: BookedSession.confirmed,
+            })
+          }
+        >
+          {status === BookedSession.confirmed
+            ? BookedSession.confirmed
+            : BookedSession.confirm}
+        </button>
+      )}
+
+      {status === BookedSession.confirmed && (
+        <button
+          className={`btn btn-primary button-effect btn-sm ml-4`}
+          type="button"
+          disabled={!isStartButtonEnabled}
+          style={{
+            cursor: !isStartButtonEnabled ? "not-allowed" : "pointer",
+          }}
+          onClick={() => {
+            setStartMeeting({
+              ...startMeeting,
+              id: _id,
+              isOpenModal: true,
+              traineeInfo: trainee_info,
+              trainerInfo: trainer_info,
+            });
+          }}
+        >
+          {BookedSession.start}
+        </button>
+      )}
+
+      <button
+        className="btn btn-danger button-effect btn-sm ml-4"
+        type="button"
+        style={{
+          cursor:
+            status === BookedSession.canceled || isStartButtonEnabled
+              ? "not-allowed"
+              : "pointer",
+        }}
+        disabled={status === BookedSession.canceled || isStartButtonEnabled}
+        onClick={() => {
+          if (
+            !isStartButtonEnabled &&
+            (status === BookedSession.booked ||
+              status === BookedSession.confirmed)
+          ) {
+            setBookedSession({
+              ...bookedSession,
+              id: _id,
+              booked_status: BookedSession.canceled,
+            });
+          }
+        }}
+      >
+        {status === BookedSession.canceled
+          ? BookedSession.canceled
+          : "Cancel"}
+      </button>
+    </>
+  )}
+</div>
+
         )}
       </div>
     );
@@ -435,7 +435,8 @@ const Bookings = ({ accountType = null }) => {
               <div className="col-6">
                 {showRatingLabel(bookingInfo.ratings)}
               </div>
-              <div className="col-6 d-flex justify-content-end">
+               {/* <div className="col-6 d-flex justify-content-end"> */}
+               <div className="col-12 d-flex justify-content-end  ">
                 {renderBooking(
                   status,
                   booking_index,
@@ -446,7 +447,7 @@ const Bookings = ({ accountType = null }) => {
                   trainee_info,
                   trainer_info
                 )}
-              </div>
+              </div> 
             </div>
           </div>
         </div>
