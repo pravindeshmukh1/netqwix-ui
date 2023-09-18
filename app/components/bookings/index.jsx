@@ -497,11 +497,7 @@ const Bookings = ({ accountType = null }) => {
   return (
     <div
       id="bookings"
-      className={`bookings custom-scroll ${
-        accountType === AccountType.TRAINEE
-          ? "custom-sidebar-content-booking"
-          : "container-content"
-      }`}
+      className={`bookings custom-scroll custom-sidebar-content-booking`}
     >
       {addRatingModel.isOpen ? renderRating() : null}
       {!scheduledMeetingDetails.length ? (
