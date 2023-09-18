@@ -63,6 +63,8 @@ export const weekDays = [
   "wednesday",
   "thursday",
   "friday",
+  "saturday",
+  "sunday"
 ];
 export const routingPaths = {
   landing: "/",

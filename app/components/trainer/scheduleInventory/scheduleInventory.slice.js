@@ -26,7 +26,9 @@ const scheduleInventoryData = [
     day: "friday",
     slots: [{ start_time: "", end_time: "" }],
   },
+ 
 ];
+
 
 const initialState = {
   status: "pending",
