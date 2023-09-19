@@ -34,6 +34,7 @@ import {
   uploadProfilePictureAsync,
 } from "../../app/components/common/common.slice";
 import { Utils } from "../../utils/utils";
+import { UpdateHourlyRateForm } from "../../app/components/trainer/settings/hourly_rate";
 
 const SettingSection = (props) => {
   const dispatch = useAppDispatch();
@@ -53,6 +54,7 @@ const SettingSection = (props) => {
     username: "",
     address: "Alabma , USA",
     wallet_amount: 0,
+    hourly_rate: 0,
     editStatus: false,
     profile_picture: undefined,
   });
@@ -63,6 +65,8 @@ const SettingSection = (props) => {
     changeNumber: false,
     accountInfo: false,
     deleteAccount: false,
+    hourlyRate: false,
+    workingHours: false
   });
 
   const initialValues = {
@@ -253,9 +257,8 @@ const SettingSection = (props) => {
 
   return (
     <div
-      className={`settings-tab submenu-width dynemic-sidebar custom-scroll ${
-        props.tab === "setting" ? "active" : ""
-      }`}
+      className={`settings-tab submenu-width dynemic-sidebar custom-scroll ${props.tab === "setting" ? "active" : ""
+        }`}
       id="settings"
     >
       <div className="theme-title">
@@ -297,9 +300,8 @@ const SettingSection = (props) => {
                   }}
                 />
                 <img
-                  className={`bg-img rounded ${
-                    accountType === !AccountType.TRAINEE && "mt-1"
-                  }`}
+                  className={`bg-img rounded ${accountType === !AccountType.TRAINEE && "mt-1"
+                    }`}
                   src={profile.profile_picture}
                   alt="Avatar"
                   width={44}
@@ -320,9 +322,8 @@ const SettingSection = (props) => {
                   </>
                 ) : (
                   <img
-                    className={`bg-img rounded ${
-                      accountType === AccountType.TRAINEE ? "mt-2" : "mt-3"
-                    }`}
+                    className={`bg-img rounded ${accountType === AccountType.TRAINEE ? "mt-2" : "mt-3"
+                      }`}
                     src={
                       profile.profile_picture
                         ? profile.profile_picture
@@ -394,9 +395,8 @@ const SettingSection = (props) => {
 
       <div className="setting-block">
         <div
-          className={`block ${
-            settingTab === "account" ? "open custom-block-height" : ""
-          }`}
+          className={`block ${settingTab === "account" ? "open custom-block-height" : ""
+            }`}
         >
           <div className="media">
             <div className="media-body">
@@ -647,9 +647,8 @@ const SettingSection = (props) => {
                 </a>
               </div>
               <div
-                className={`collapse ${
-                  collapseShow.changeNumber ? "show" : ""
-                }`}
+                className={`collapse ${collapseShow.changeNumber ? "show" : ""
+                  }`}
               >
                 <div className="card-body change-number">
                   <h5>Your old country code & phone number</h5>
@@ -700,93 +699,121 @@ const SettingSection = (props) => {
                 </div>
               </div>
             </div>
+
+            {/*  */}
+
             <div className="card">
               <div
                 className="card-header"
                 onClick={() =>
                   setCollapseShow({
                     ...collapseShow,
-                    accountInfo: !collapseShow.accountInfo,
                     changeNumber: false,
-                    privacy: false,
-                    deleteAccount: false,
+                    hourlyRate: !collapseShow.hourlyRate,
+                    workingHours: false,
                     verfication: false,
-                    security: false,
-                  })
-                }
-              >
-                <a href="#javascript">
-                  Request account info
-                  <a className="fa fa-angle-down" />
-                </a>
-              </div>
-              <div
-                className={`collapse ${collapseShow.accountInfo ? "show" : ""}`}
-              >
-                <div className="card-body">
-                  <a
-                    className={`p-0 req-info ${
-                      acctRequestDisable ? "disabled" : ""
-                    }`}
-                    id="demo"
-                    href="#"
-                    disabled={acctRequestDisable}
-                    onClick={() => setDisable(true)}
-                  >
-                    Request Info
-                  </a>
-                  <p>
-                    {" "}
-                    <b>Note : </b>Create a report of your account information
-                    and settings, which you can access ot port to another app.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="card">
-              <div
-                className="card-header"
-                onClick={() =>
-                  setCollapseShow({
-                    ...collapseShow,
-                    deleteAccount: !collapseShow.deleteAccount,
-                    changeNumber: false,
                     accountInfo: false,
+                    deleteAccount: false,
                     privacy: false,
-                    verfication: false,
                     security: false,
                   })
                 }
               >
                 <a href="#javascript">
-                  Delete My account
+                  Update Hourly Rate
                   <i className="fa fa-angle-down" />
                 </a>
               </div>
               <div
-                className={`collapse ${
-                  collapseShow.deleteAccount ? "show" : ""
-                }`}
+                className={`collapse ${collapseShow.hourlyRate ? "show" : ""
+                  }`}
               >
-                <div className="card-body">
-                  <a
-                    className={`p-0 req-info font-danger ${
-                      deleteAcct ? "disabled" : ""
-                    }`}
-                    href="#"
-                    disabled={deleteAcct}
-                    onClick={() => setDeleteDisable(true)}
-                  >
-                    Delete Account{" "}
-                  </a>
-                  <p>
-                    {" "}
-                    <b>Note :</b>Deleting your account will delete your account
-                    info, profile photo, all groups & chat history.
-                  </p>
+                <div className="card-body change-number">
+                   <UpdateHourlyRateForm
+                   userInfo={userInfo}
+                   extraInfo={userInfo?.extraInfo || {}}
+                   onFormSubmit={(formValue) => {
+                    //
+                    dispatch(
+                      updateProfileAsync({
+                        extraInfo: { ...userInfo?.extraInfo, ...formValue },
+                      })
+                    );
+                  }}
+                   />
                 </div>
               </div>
             </div>
+
+            {/*  */}
+            <div className="card">
+              <div
+                className="card-header"
+                onClick={() =>
+                  setCollapseShow({
+                    ...collapseShow,
+                    changeNumber: false,
+                    hourlyRate: false,
+                    workingHours: !collapseShow.workingHours,
+                    verfication: false,
+                    accountInfo: false,
+                    deleteAccount: false,
+                    privacy: false,
+                    security: false,
+                  })
+                }
+              >
+                <a href="#javascript">
+                  Working hours
+                  <i className="fa fa-angle-down" />
+                </a>
+              </div>
+              <div
+                className={`collapse ${collapseShow.workingHours ? "show" : ""
+                  }`}
+              >
+                <div className="card-body change-number">
+                  <h5>Add your working hours...</h5>
+                  <div className="input-group">
+                    
+                    <input
+                      className="form-control"
+                      type="number"
+                      placeholder="9:00 AM"
+                    />
+                    <div className="input-group-prepend">
+                      <span className="input-group-text form-control m-0">
+                        AM
+                      </span>
+                    </div>
+                  </div>
+                  <h5>End time</h5>
+                  <div className="input-group">
+                    
+                    <input
+                      className="form-control"
+                      type="number"
+                      placeholder="7:00 PM"
+                    />
+                     <div className="input-group-prepend">
+                      <span className="input-group-text form-control m-0">
+                        PM
+                      </span>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    {" "}
+                    <a
+                      className="btn btn-outline-primary button-effect btn-sm"
+                      href="#"
+                    >
+                      Save
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
         <div className="media">
@@ -810,9 +837,8 @@ const SettingSection = (props) => {
       {accountType === AccountType.TRAINER ? (
         <div className="setting-block">
           <div
-            className={`block ${
-              settingTab === "my-profile" ? "open custom-block-height" : ""
-            }`}
+            className={`block ${settingTab === "my-profile" ? "open custom-block-height" : ""
+              }`}
           >
             <div className="media">
               <div className="media-body">
@@ -1049,13 +1075,12 @@ const SettingSection = (props) => {
         </div>
       </div> */}
       {!settingMenuFilterSection.includes(settingTab) &&
-      accountType === AccountType.TRAINER ? (
+        accountType === AccountType.TRAINER ? (
         <>
           <div className="setting-block">
             <div
-              className={`block ${
-                settingTab === "integratin" ? "open custom-block-height" : ""
-              }`}
+              className={`block ${settingTab === "integratin" ? "open custom-block-height" : ""
+                }`}
             >
               <div className="media">
                 <div className="media-body">
@@ -1488,7 +1513,7 @@ const SettingSection = (props) => {
                                   }}
                                   isError={
                                     touched.profile_image_url &&
-                                    errors.profile_image_url
+                                      errors.profile_image_url
                                       ? true
                                       : false
                                   }
@@ -1542,7 +1567,7 @@ const SettingSection = (props) => {
                                     isError={errors.profile_image_url}
                                     isTouched={
                                       touched.profile_image_url &&
-                                      errors.profile_image_url
+                                        errors.profile_image_url
                                         ? true
                                         : false
                                     }
@@ -1601,9 +1626,8 @@ const SettingSection = (props) => {
       {!settingMenuFilterSection.includes(settingTab) && (
         <div className="setting-block">
           <div
-            className={`block ${
-              settingTab === "help" ? "open custom-block-height" : ""
-            }`}
+            className={`block ${settingTab === "help" ? "open custom-block-height" : ""
+              }`}
           >
             <div className="media">
               <div className="media-body">

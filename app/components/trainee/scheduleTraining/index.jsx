@@ -135,6 +135,7 @@ const ScheduleTraining = () => {
         fullname,
         profilePicture,
         trainer_id,
+        extraInfo,
         _id,
       }) => {
         const trainer_info = {
@@ -143,6 +144,7 @@ const ScheduleTraining = () => {
           fullname,
           profilePicture,
           trainer_id,
+          extraInfo,
           _id,
         };
         return {
@@ -253,6 +255,7 @@ const ScheduleTraining = () => {
   );
 
   const renderSlotsByDay = ({ slot, date, trainer_info }) => {
+    console.log(`trainer_info --- `, trainer_info);
     return slot.map((content, index) => (
       <Popover
         key={`popover${index}`}
@@ -279,7 +282,8 @@ const ScheduleTraining = () => {
                     onClick={() => {
                       const amountPayable = Utils.getMinutesFromHourMM(
                         content.start_time,
-                        content.end_time
+                        content.end_time,
+                        trainer_info?.extraInfo?.hourly_rate
                       );
                       if (amountPayable > 0) {
                         const payload = {
@@ -500,7 +504,7 @@ const ScheduleTraining = () => {
         <h3>
           {" "}
           Trainer: {bookSessionPayload.trainer_info.fullname} (Price per hour $
-          {TRAINER_AMOUNT_USD}){" "}
+          {bookSessionPayload?.trainer_info?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD}){" "}
         </h3>
         <h4 className="mt-3 mb-3">
           Booking time: {moment(bookSessionPayload.booked_date).format("ll")} |
@@ -614,7 +618,7 @@ const ScheduleTraining = () => {
           justifyContent: "start",
           marginLeft: "8%",
         }}
-        className="trainer-recommended"
+        className="trainer-recommende"
       >
         Recommended
       </h2>
@@ -716,11 +720,11 @@ const ScheduleTraining = () => {
             <TrainerSlider list={listOfTrainers} />
           )}
         </div>
-        <Modal
-          isOpen={showTransactionModal}
-          element={renderStripePaymentContent()}
-        />
       </div> */}
+      <Modal
+        isOpen={showTransactionModal}
+        element={renderStripePaymentContent()}
+      />
     </React.Fragment>
   );
 

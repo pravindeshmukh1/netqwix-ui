@@ -485,7 +485,7 @@ const SelectedCategory = ({
                           className="badge badge-pill badge-primary mb-2 p-2"
                           style={{ fontSize: "15px" }}
                         >
-                          {`$${TRAINER_AMOUNT_USD}.00`}
+                          {`$${data?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD}.00`}
                           {`/ ${TRAINER_MEETING_TIME}`}
                         </p>
                         <h4
@@ -832,7 +832,7 @@ const TrainerInfo = ({
             <h2 className="mt-3">
               {trainer && trainer ? trainer.fullname : null}
             </h2>
-            <h3 className="mt-3">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
+            <h3 className="mt-3">Hourly Rate: ${trainer?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD}</h3>
             {showRatings(
               trainer && trainer.trainer_ratings,
               "mt-3 mb-3 d-flex"
