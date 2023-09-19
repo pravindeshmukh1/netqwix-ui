@@ -70,7 +70,7 @@ const Auth_SignIn = () => {
                   </div>
                   {/* <h3>Hello Everyone , We are Chitchat</h3>
                   <h4>Welcome to chitchat please login to your account.</h4> */}
-                  <h3>Hello Everyone</h3>
+                  <h3 className="header-text">Welcome</h3>
                   <h4>Please login to your account.</h4>
                   <form className="form1">
                     <div className="form-group">

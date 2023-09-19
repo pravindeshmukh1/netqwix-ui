@@ -572,7 +572,19 @@ slick-slider .slick-list,
   }
 }
 
-
+// auth header-text
+.header-text {
+  @media (min-width: 768px) {
+    font-size: 44px !important; /* Adjust the width for tablets and larger screens */
+  }
+  @media (min-width: 992px) {
+    font-size: 44px !important; /* Adjust the width for desktop screens */
+  }
+  /* Media query for mobile screens */
+  @media (max-width: 575px) {
+    font-size: 35px !important;
+  }
+}
 .sidebar-toggle {
   z-index: 999999;
   // position: absolute;

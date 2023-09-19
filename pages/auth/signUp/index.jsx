@@ -175,7 +175,7 @@ const Auth_SignUp = (props) => {
                   </div>
                   {/* <h3>Hello Everyone , We are Chitchat</h3>
                   <h4>Welcome to chitchat please Register to your account.</h4> */}
-                  <h3>Hello Everyone</h3>
+                  <h3 className="header-text">Welcome</h3>
                   <h4>Please register to your account.</h4>
                   <div>
                     <Stepper
