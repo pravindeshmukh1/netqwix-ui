@@ -24,12 +24,6 @@
   @extend .custom-scroll;
   position: fixed;
 }
-.custom-sidebar-content {
-  position: absolute;
-  left: $sidebar-spacing + 28px;
-  max-width: 100%;
-  width: 92%;
-}
 
 .custom-sidebar-content-booking {
   position: absolute;
@@ -39,6 +33,10 @@
   margin: 0px !important;
   left: 103px !important;
   margin: 0;
+  @media (max-width: 576px) {
+    left: 10px !important;
+    margin-top: 50px !important;
+  }
 }
 .custom-trainer-scroll {
   height: 97vh !important;

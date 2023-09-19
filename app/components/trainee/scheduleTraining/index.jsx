@@ -34,7 +34,7 @@ const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
-  const { isLoading, configs  } = useAppSelector(bookingsState);
+  const { isLoading, configs } = useAppSelector(bookingsState);
 
   const { selectedTrainerId } = useAppSelector(bookingsState);
   const { master } = useAppSelector(masterState);
@@ -506,7 +506,9 @@ const ScheduleTraining = () => {
         <h3>
           {" "}
           Trainer: {bookSessionPayload.trainer_info.fullname} (Price per hour $
-          {bookSessionPayload?.trainer_info?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD}){" "}
+          {bookSessionPayload?.trainer_info?.extraInfo?.hourly_rate ||
+            TRAINER_AMOUNT_USD}
+          ){" "}
         </h3>
         <h4 className="mt-3 mb-3">
           Booking time: {moment(bookSessionPayload.booked_date).format("ll")} |
@@ -563,17 +565,18 @@ const ScheduleTraining = () => {
     );
 
   const renderSearchMenu = () => (
-    <div  onScroll={() => {
-      if(configs.sidebar.isMobileMode) {
-        dispatch(isSidebarToggleEnabled(true))
-      }
-      return;
-    }}
-
-    className="bookings custom-scroll custom-sidebar-content custom-slider-search-align">
+    <div
+      onScroll={() => {
+        if (configs.sidebar.isMobileMode) {
+          dispatch(isSidebarToggleEnabled(true));
+        }
+        return;
+      }}
+      className="bookings custom-scroll custom-trainee-dashboard"
+    >
       <div
-      id = 'dashboard' 
-        className="d-flex justify-content-center align-middle align-items-center"
+        id="dashboard"
+        className="d-flex justify-content-center align-items-center dashboard-search-trainer"
         style={{
           height: "94%",
         }}
@@ -622,17 +625,10 @@ const ScheduleTraining = () => {
           }}
         />
       </div>
-      <h2
-        style={{
-          display: "flex",
-          justifyContent: "start",
-          marginLeft: "8%",
-        }}
-        className="trainer-recommende"
-      >
-        Recommended
-      </h2>
-      <TrainerSlider list={listOfTrainers} />
+      <div className="trainer-recommended">
+        <h2>Recommended</h2>
+        <TrainerSlider list={listOfTrainers} />
+      </div>
       <div style={{ height: "11vh" }} />
     </div>
   );
@@ -813,7 +809,7 @@ const ScheduleTraining = () => {
     //     </div>
     //   )}
     // </div>
-    <div className="custom-scroll" >
+    <div className="custom-scroll trainee-dashboard">
       {trainerInfo.userInfo === null ||
       (trainerInfo && trainerInfo.userInfo) ? (
         renderUserDetails()

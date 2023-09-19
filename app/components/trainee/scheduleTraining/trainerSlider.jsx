@@ -46,9 +46,7 @@ const TrainerSlider = ({ list }) => {
   };
 
   return (
-    <div style={{
-      marginLeft: "8%",
-    }} className="recent-slider slider-container recent-chat custom-silder-margin">
+    <div className="recent-slider slider-container recent-chat">
       <Slider {...settings}>
         {list.map((contentInfo, index) => {
           return (

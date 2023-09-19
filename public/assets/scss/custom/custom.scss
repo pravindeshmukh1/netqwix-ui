@@ -538,15 +538,40 @@ slick-slider .slick-list,
     left: 0px !important;
     overflow-x: hidden !important;
   }
-  .trainer-recommended {
-    margin-left: 71px !important;
-  }
-  .custom-silder-margin {
-    margin-left: 72px !important;
-  }
   .slick-slider .slick-track,
   .slick-slider .slick-list {
-    height: 18vh !important;
+    height: 31vh !important;
+  }
+}
+
+// trainer-recommended
+.trainer-recommended {
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .trainer-recommended {
+    margin-left: 200px;
+  }
+}
+
+// trainee-dashboard
+.custom-trainee-dashboard {
+  width: 96vw !important;
+  max-width: 100% !important;
+}
+
+// trainee dashboard
+.trainer-dashboard {
+  margin-left: 0;
+}
+@media (max-width: 576px) {
+  .trainee-dashboard {
+    position: absolute !important;
+    left: 0px !important;
+  }
+  .trainer-recommended {
+    margin-left: 15px !important;
   }
 }
 
