@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import ReactStrapModal from "../../common/modal";
@@ -31,7 +31,7 @@ const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 const Bookings = ({ accountType = null }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { isLoading, configs  } = useAppSelector(bookingsState);
+  const { isLoading, configs } = useAppSelector(bookingsState);
   const [bookedSession, setBookedSession] = useState({
     id: "",
     booked_status: "",
@@ -45,7 +45,7 @@ const Bookings = ({ accountType = null }) => {
   });
   const socket = useContext(SocketContext);
 
-
+  const { activeTab } = useAppSelector(bookingsState);
   const { scheduledMeetingDetails, addRatingModel } =
     useAppSelector(bookingsState);
   const { addRating } = bookingsAction;
@@ -63,6 +63,12 @@ const Bookings = ({ accountType = null }) => {
       dispatch(updateBookedSessionScheduledMeetingAsync(updatePayload));
     }
   }, [bookedSession]);
+
+  useEffect(() => {
+    if (activeTab) {
+
+    }
+  }, [activeTab]);
 
   const toggle = () => setStartMeeting(!startMeeting);
 
@@ -501,16 +507,26 @@ const Bookings = ({ accountType = null }) => {
     />
   );
   return (
-    <>
+    <React.Fragment>
       <div
         id="bookings"
         onScroll={() => {
-          if(configs.sidebar.isMobileMode) {
-            dispatch(isSidebarToggleEnabled(true))
+          if (configs.sidebar.isMobileMode) {
+            dispatch(isSidebarToggleEnabled(true));
           }
           return;
         }}
-        className={`bookings custom-scroll custom-sidebar-content-booking`}
+        // className={`bookings custom-scroll custom-sidebar-content-booking ${
+        //   configs.sidebar.isMobileMode && configs.sidebar.isToggleEnable
+        //     ? `dynemic-sidebar submenu-width dynemic-sidebar ${
+        //         activeTab === "home" ? "active" : ""
+        //       } `
+        //     : ""
+        // }`}
+
+        className={`submenu-width dynemic-sidebar custom-scroll ${
+          activeTab === "home" ? "active" : ""
+        }`}
       >
         {addRatingModel.isOpen ? renderRating() : null}
         {!scheduledMeetingDetails.length ? (
@@ -528,32 +544,7 @@ const Bookings = ({ accountType = null }) => {
           </div>
         )}
       </div>
-
-      {/* calling popup */}
-      {/* <Modal
-        key={"startMeeting"}
-        toggle={toggle}
-        allowFullWidth={true}
-        isOpen={startMeeting.isOpenModal}
-        // height="100vh"
-        element={
-          <StartMeeting
-            accountType={accountType}
-            traineeInfo={startMeeting.traineeInfo}
-            trainerInfo={startMeeting.trainerInfo}
-            isClose={() => {
-              setStartMeeting({
-                ...startMeeting,
-                id: null,
-                isOpenModal: false,
-                traineeInfo: null,
-                trainerInfo: null,
-              });
-            }}
-          />
-        }
-      /> */}
-    </>
+    </React.Fragment>
   );
 };
 export default Bookings;

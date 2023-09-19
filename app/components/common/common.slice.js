@@ -7,7 +7,6 @@ import {
 } from "./common.api";
 import { toast } from "react-toastify";
 
-
 const initialState = {
   status: "idle",
   scheduledMeetingDetails: [],
@@ -16,12 +15,13 @@ const initialState = {
   isLoading: true,
   selectedTrainerId: null,
   profile_image_url: null,
-  configs : {
+  configs: {
     sidebar: {
       isToggleEnable: false,
-      isMobileMode: false
-    }
-  }
+      isMobileMode: false,
+    },
+  },
+  activeTab: "",
 };
 
 export const addRatingAsync = createAsyncThunk(
@@ -102,12 +102,21 @@ export const bookingsSlice = createSlice({
     removeProfileImageUrl: (state, action) => {
       state.profile_image_url = action.payload;
     },
-    isMobileFriendly : (state, action) => {
-      state.configs.sidebar = {...state.configs.sidebar, isMobileMode: action.payload};
+    isMobileFriendly: (state, action) => {
+      state.configs.sidebar = {
+        ...state.configs.sidebar,
+        isMobileMode: action.payload,
+      };
     },
     isSidebarToggleEnabled: (state, action) => {
-      state.configs.sidebar = {...state.configs.sidebar, isToggleEnable: action.payload};
-    }
+      state.configs.sidebar = {
+        ...state.configs.sidebar,
+        isToggleEnable: action.payload,
+      };
+    },
+    handleActiveTab: (state, action) => {
+      state.activeTab = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder

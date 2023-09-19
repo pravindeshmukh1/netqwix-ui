@@ -66,7 +66,7 @@ const SettingSection = (props) => {
     accountInfo: false,
     deleteAccount: false,
     hourlyRate: false,
-    workingHours: false
+    workingHours: false,
   });
 
   const initialValues = {
@@ -257,8 +257,9 @@ const SettingSection = (props) => {
 
   return (
     <div
-      className={`settings-tab submenu-width dynemic-sidebar custom-scroll ${props.tab === "setting" ? "active" : ""
-        }`}
+      className={`settings-tab submenu-width dynemic-sidebar custom-scroll ${
+        props.tab === "setting" ? "active" : ""
+      }`}
       id="settings"
     >
       <div className="theme-title">
@@ -300,8 +301,9 @@ const SettingSection = (props) => {
                   }}
                 />
                 <img
-                  className={`bg-img rounded ${accountType === !AccountType.TRAINEE && "mt-1"
-                    }`}
+                  className={`bg-img rounded ${
+                    accountType === !AccountType.TRAINEE && "mt-1"
+                  }`}
                   src={profile.profile_picture}
                   alt="Avatar"
                   width={44}
@@ -322,8 +324,9 @@ const SettingSection = (props) => {
                   </>
                 ) : (
                   <img
-                    className={`bg-img rounded ${accountType === AccountType.TRAINEE ? "mt-2" : "mt-3"
-                      }`}
+                    className={`bg-img rounded ${
+                      accountType === AccountType.TRAINEE ? "mt-2" : "mt-3"
+                    }`}
                     src={
                       profile.profile_picture
                         ? profile.profile_picture
@@ -395,8 +398,9 @@ const SettingSection = (props) => {
 
       <div className="setting-block">
         <div
-          className={`block ${settingTab === "account" ? "open custom-block-height" : ""
-            }`}
+          className={`block ${
+            settingTab === "account" ? "open custom-block-height" : ""
+          }`}
         >
           <div className="media">
             <div className="media-body">
@@ -647,8 +651,9 @@ const SettingSection = (props) => {
                 </a>
               </div>
               <div
-                className={`collapse ${collapseShow.changeNumber ? "show" : ""
-                  }`}
+                className={`collapse ${
+                  collapseShow.changeNumber ? "show" : ""
+                }`}
               >
                 <div className="card-body change-number">
                   <h5>Your old country code & phone number</h5>
@@ -725,22 +730,21 @@ const SettingSection = (props) => {
                 </a>
               </div>
               <div
-                className={`collapse ${collapseShow.hourlyRate ? "show" : ""
-                  }`}
+                className={`collapse ${collapseShow.hourlyRate ? "show" : ""}`}
               >
                 <div className="card-body change-number">
-                   <UpdateHourlyRateForm
-                   userInfo={userInfo}
-                   extraInfo={userInfo?.extraInfo || {}}
-                   onFormSubmit={(formValue) => {
-                    //
-                    dispatch(
-                      updateProfileAsync({
-                        extraInfo: { ...userInfo?.extraInfo, ...formValue },
-                      })
-                    );
-                  }}
-                   />
+                  <UpdateHourlyRateForm
+                    userInfo={userInfo}
+                    extraInfo={userInfo?.extraInfo || {}}
+                    onFormSubmit={(formValue) => {
+                      //
+                      dispatch(
+                        updateProfileAsync({
+                          extraInfo: { ...userInfo?.extraInfo, ...formValue },
+                        })
+                      );
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -769,13 +773,13 @@ const SettingSection = (props) => {
                 </a>
               </div>
               <div
-                className={`collapse ${collapseShow.workingHours ? "show" : ""
-                  }`}
+                className={`collapse ${
+                  collapseShow.workingHours ? "show" : ""
+                }`}
               >
                 <div className="card-body change-number">
                   <h5>Add your working hours...</h5>
                   <div className="input-group">
-                    
                     <input
                       className="form-control"
                       type="number"
@@ -789,13 +793,12 @@ const SettingSection = (props) => {
                   </div>
                   <h5>End time</h5>
                   <div className="input-group">
-                    
                     <input
                       className="form-control"
                       type="number"
                       placeholder="7:00 PM"
                     />
-                     <div className="input-group-prepend">
+                    <div className="input-group-prepend">
                       <span className="input-group-text form-control m-0">
                         PM
                       </span>
@@ -813,7 +816,6 @@ const SettingSection = (props) => {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
         <div className="media">
@@ -837,8 +839,9 @@ const SettingSection = (props) => {
       {accountType === AccountType.TRAINER ? (
         <div className="setting-block">
           <div
-            className={`block ${settingTab === "my-profile" ? "open custom-block-height" : ""
-              }`}
+            className={`block ${
+              settingTab === "my-profile" ? "open custom-block-height" : ""
+            }`}
           >
             <div className="media">
               <div className="media-body">
@@ -1075,12 +1078,13 @@ const SettingSection = (props) => {
         </div>
       </div> */}
       {!settingMenuFilterSection.includes(settingTab) &&
-        accountType === AccountType.TRAINER ? (
+      accountType === AccountType.TRAINER ? (
         <>
           <div className="setting-block">
             <div
-              className={`block ${settingTab === "integratin" ? "open custom-block-height" : ""
-                }`}
+              className={`block ${
+                settingTab === "integratin" ? "open custom-block-height" : ""
+              }`}
             >
               <div className="media">
                 <div className="media-body">
@@ -1513,7 +1517,7 @@ const SettingSection = (props) => {
                                   }}
                                   isError={
                                     touched.profile_image_url &&
-                                      errors.profile_image_url
+                                    errors.profile_image_url
                                       ? true
                                       : false
                                   }
@@ -1567,7 +1571,7 @@ const SettingSection = (props) => {
                                     isError={errors.profile_image_url}
                                     isTouched={
                                       touched.profile_image_url &&
-                                        errors.profile_image_url
+                                      errors.profile_image_url
                                         ? true
                                         : false
                                     }
@@ -1626,8 +1630,9 @@ const SettingSection = (props) => {
       {!settingMenuFilterSection.includes(settingTab) && (
         <div className="setting-block">
           <div
-            className={`block ${settingTab === "help" ? "open custom-block-height" : ""
-              }`}
+            className={`block ${
+              settingTab === "help" ? "open custom-block-height" : ""
+            }`}
           >
             <div className="media">
               <div className="media-body">
