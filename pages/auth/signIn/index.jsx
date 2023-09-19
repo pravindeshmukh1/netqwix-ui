@@ -62,10 +62,9 @@ const Auth_SignIn = () => {
                         alt="images"
                       /> */}
                       <img
-                        // className="image-fluid"
                         src="/assets/images/netquix_logo.png"
                         alt="images"
-                        style={{ width: "240px", height: "100px" }}
+                        className="image-fluid header-image-logo"
                       />
                     </Link>
                   </div>

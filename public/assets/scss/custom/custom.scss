@@ -516,7 +516,7 @@ slick-slider .slick-list,
 // button margin
 @media (max-width: 576px) {
   // .btn.ml-4 {
-    .btnbook{
+  .btnbook {
     margin-top: 10px !important;
     margin-right: 15% !important;
     margin-left: 0px !important;
@@ -526,7 +526,7 @@ slick-slider .slick-list,
 // booking slot
 @media (max-width: 576px) {
   // .btn.ml-4 {
-    .slot{
+  .slot {
     justify-content: end !important;
   }
 }
@@ -547,5 +547,27 @@ slick-slider .slick-list,
   .slick-slider .slick-track,
   .slick-slider .slick-list {
     height: 18vh !important;
+  }
+}
+
+// header image logo
+.header-image-logo {
+  max-width: 100% !important;
+  min-width: 160px !important;
+  height: auto !important;
+  /* Media queries for larger screens */
+  @media (min-width: 768px) {
+    width: 160px !important; /* Adjust the width for tablets and larger screens */
+  }
+
+  @media (min-width: 992px) {
+    width: 200px !important; /* Adjust the width for desktop screens */
+    height: 66px !important;
+  }
+
+  /* Media query for mobile screens */
+  @media (max-width: 575px) {
+    width: 160px !important;
+    height: auto !important;
   }
 }

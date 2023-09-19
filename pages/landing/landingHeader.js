@@ -54,15 +54,15 @@ const LandingHeader = (masterRecords) => {
           zIndex: 1000,
           backgroundColor: "white",
           margin: 0,
+          paddingBottom: "20px",
         }}
       >
         <div className={`col-1 col-sm-2 col-md-1 col-lg-4`}>
           <img
             src="/assets/images/netquix_logo.png"
             alt="logo"
-            className="mt-2"
+            className="mt-3 header-image-logo"
             style={{
-              maxWidth: "200px",
               marginLeft: "25px",
             }}
           />
@@ -101,7 +101,7 @@ const LandingHeader = (masterRecords) => {
               }`}
               style={{
                 marginLeft: isMobileScreen ? "0%" : "8%",
-                marginTop: isMobileScreen ? "25%" : "38px",
+                marginTop: isMobileScreen ? "25%" : "40px",
                 float: isMobileScreen ? "left" : "right",
                 alignItems: isMobileScreen ? "" : "end",
               }}
@@ -180,122 +180,6 @@ const LandingHeader = (masterRecords) => {
             </Nav>
           </Collapse>
         </div>
-        {/* <div className="col-xs-12 col-md-12 col-lg-12">
-          <img
-            src="/assets/images/netquix_logo.png"
-            alt="logo"
-            style={{
-              maxWidth: "120px",
-              marginLeft: "25px",
-            }}
-          />
-        </div>
-        <button
-          className="navbar-toggler d-xl-none"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded={isMenuOpen ? "true" : "false"}
-          aria-label="Toggle navigation"
-          onClick={toggleMenu}
-          style={{
-            float: "right",
-            marginRight: "10px",
-          }}
-        >
-          <i
-            className="fa fa-bars"
-            style={{
-              marginTop: "40px",
-              cursor: "pointer",
-            }}
-            aria-hidden="true"
-          ></i>
-        </button>
-        <Collapse
-          className={`navbar-collapse d-xl-block ${isMenuOpen ? "show" : ""}`}
-          id="navbarNav"
-        >
-          <Nav
-            tabs
-            className={`border-0 d-flex mr-4 navbaritem ${
-              isMenuOpen ? "d-none" : "" // Hide the Nav when the menu is open
-            }`}
-            style={{
-              marginLeft: "8%",
-              float: "right",
-              alignItems: "end",
-            }}
-          >
-            <Dropdown nav isOpen={dropdownOpen} toggle={toggle}>
-              <DropdownToggle
-                nav
-                caret
-                style={{ fontSize: "16px", color: "grey" }}
-              >
-                Categories
-              </DropdownToggle>
-              <DropdownMenu>
-                {masterRecords?.masterRecords?.category?.map((cat, index) => {
-                  return (
-                    <DropdownItem
-                      key={`master_data${index}`}
-                      style={{
-                        textDecoration: "underline",
-                        textUnderlineOffset: "0.4em",
-                        textDecorationColor: "#000080",
-                        fontWeight: 500,
-                      }}
-                    >
-                      {cat}
-                    </DropdownItem>
-                  );
-                })}
-              </DropdownMenu>
-            </Dropdown>
-            {headerArr.map((name, index) => {
-              return (
-                <NavItem key={`headers-${index}`}>
-                  <NavLink
-                    href={name.path}
-                    style={{ fontSize: "16px", color: "grey" }}
-                  >
-                    {name.name}
-                  </NavLink>
-                </NavItem>
-              );
-            })}
-            <span
-              className="badge badge-light lg bg-primary"
-              style={{
-                padding: "13px",
-                alignItems: "center",
-                fontSize: "14px",
-                color: "white",
-                cursor: "pointer",
-              }}
-              onClick={() => router.push("/auth/signUp")}
-            >
-              SignUp
-            </span>
-            <span
-              className="badge badge-light lg bg-primary"
-              style={{
-                padding: "13px",
-                marginright: "5px",
-                marginLeft: "5px",
-                alignItems: "center",
-                fontSize: "14px",
-                color: "white",
-                cursor: "pointer",
-              }}
-              onClick={() => router.push("/auth/signIn")}
-            >
-              Login
-            </span>
-          </Nav>
-        </Collapse> */}
       </div>
     </React.Fragment>
   );
