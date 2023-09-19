@@ -621,49 +621,49 @@ const TrainersDetails = ({
   };
   return (
     <React.Fragment>
-      {trainerInfo === null ? (
-        <div className="media-body media-body text-right">
-          <X
-            onClick={onClose}
-            className="close"
-            style={{ cursor: "pointer" }}
-          />
-        </div>
-      ) : (
-        <div
-          className={`${
-            (trainerInfo.isCategory &&
-              !trainerDetails.select_trainer &&
-              "media-body media-body text-right") ||
-            (!trainerInfo.isCategory && "media-body media-body text-right")
-          }`}
-        >
-          <div>
-            {!trainerInfo.isCategory ? (
-              <X
-                onClick={onClose}
-                className="close"
-                style={{ cursor: "pointer" }}
-              />
-            ) : !trainerDetails.select_trainer ? (
-              <X onClick={onClose} style={{ cursor: "pointer" }} />
-            ) : (
-              <ArrowLeft
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  setTrainerDetails((prev) => ({
-                    ...prev,
-                    _id: null,
-                    select_trainer: false,
-                    fullname: null,
-                  }));
-                }}
-              />
-            )}
-          </div>
-        </div>
-      )}
       <div className="custom-landing-page-trainer-details">
+        {trainerInfo === null ? (
+          <div className="media-body media-body text-right">
+            <X
+              onClick={onClose}
+              className="close"
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+        ) : (
+          <div
+            className={`${
+              (trainerInfo.isCategory &&
+                !trainerDetails.select_trainer &&
+                "media-body media-body text-right") ||
+              (!trainerInfo.isCategory && "media-body media-body text-right")
+            }`}
+          >
+            <div>
+              {!trainerInfo.isCategory ? (
+                <X
+                  onClick={onClose}
+                  className="close"
+                  style={{ cursor: "pointer" }}
+                />
+              ) : !trainerDetails.select_trainer ? (
+                <X onClick={onClose} style={{ cursor: "pointer" }} />
+              ) : (
+                <ArrowLeft
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setTrainerDetails((prev) => ({
+                      ...prev,
+                      _id: null,
+                      select_trainer: false,
+                      fullname: null,
+                    }));
+                  }}
+                />
+              )}
+            </div>
+          </div>
+        )}
         {trainerDetails.select_trainer ? (
           <TrainerInfo
             accordionData={accordionData}
@@ -764,6 +764,7 @@ const TrainerInfo = ({
         height: "92vh",
         overflowY: "auto",
         overflowX: "hidden",
+        width: "100vw",
       }}
     >
       <div className="col-md-6">
@@ -818,10 +819,19 @@ const TrainerInfo = ({
             ) : null}
           </div>
         </div>
-        <p className="mt-3">
+        <p
+          className="mt-3"
+          style={{
+            marginRight: "10px",
+          }}
+        >
           {trainer && trainer.extraInfo && trainer.extraInfo.about}
         </p>
-        <div className="mr-3">
+        <div
+          style={{
+            marginRight: "15px",
+          }}
+        >
           {accordionData.length
             ? accordionData.map((data, index) => {
                 return (
@@ -855,7 +865,11 @@ const TrainerInfo = ({
       </div>
       <div className="col-md-6">
         <h2 className="mb-4">Featured content</h2>
-        <div className="mr-3">
+        <div
+          style={{
+            marginRight: "15px",
+          }}
+        >
           {revampedMedia && revampedMedia.length ? (
             <ImageVideoThumbnailCarousel
               media={revampedMedia}
