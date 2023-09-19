@@ -26,9 +26,12 @@ import Ratings from "./ratings";
 import Rating from "react-rating";
 import { Star } from "react-feather";
 
+const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
+
 const Bookings = ({ accountType = null }) => {
   const router = useRouter();
-
+  const dispatch = useAppDispatch();
+  const { isLoading, configs  } = useAppSelector(bookingsState);
   const [bookedSession, setBookedSession] = useState({
     id: "",
     booked_status: "",
@@ -42,7 +45,7 @@ const Bookings = ({ accountType = null }) => {
   });
   const socket = useContext(SocketContext);
 
-  const dispatch = useAppDispatch();
+
   const { scheduledMeetingDetails, addRatingModel } =
     useAppSelector(bookingsState);
   const { addRating } = bookingsAction;
@@ -501,6 +504,12 @@ const Bookings = ({ accountType = null }) => {
     <>
       <div
         id="bookings"
+        onScroll={() => {
+          if(configs.sidebar.isMobileMode) {
+            dispatch(isSidebarToggleEnabled(true))
+          }
+          return;
+        }}
         className={`bookings custom-scroll custom-sidebar-content-booking`}
       >
         {addRatingModel.isOpen ? renderRating() : null}

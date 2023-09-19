@@ -6,7 +6,6 @@ import NotificationSection from './notificationSection';
 import SettingSection from './settingSection';
 import StatusSection from './statusSection';
 import RecentSection from './recentSection';
-import ChatSection from './chatSection';
 import { Fragment, useState } from 'react';
 import { NavLink, TabContent, TabPane } from 'reactstrap';
 import { useRouter } from 'next/router';
@@ -73,6 +72,7 @@ const Index = props => {
   }, []);
 
   useEffect(() => {
+    console.log(`window.innerWidth --- `, window.innerWidth)
     function updateSize() {
       setSize(window.innerWidth);
       setWidth(window.innerWidth);
@@ -157,6 +157,7 @@ const Index = props => {
           CloseAppSidebar={CloseAppSidebar}
           ToggleTab={ToggleTab}
         /> */}
+        
       <nav
         className={`main-nav on custom-scroll ${accountType === AccountType.TRAINEE && POSITION_FIXED_SIDEBAR_MENU.includes(activeTab) && 'custom-sidebar'}`}
       >
@@ -509,7 +510,7 @@ const Index = props => {
             </div>
           </div>
         </aside>}
-      {/* {configs?.sidebar?.isMobileMode && <RecentSection />} */}
+      {(configs?.sidebar?.isMobileMode) && <RecentSection />}
 
     </Fragment>
   );

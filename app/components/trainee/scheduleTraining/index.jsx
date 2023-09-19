@@ -27,12 +27,14 @@ import { toast } from "react-toastify";
 import SearchableDropdown from "../helper/searchableDropdown";
 import { masterState } from "../../master/master.slice";
 import { TrainerDetails } from "../../trainer/trainerDetails";
-import { bookingsState } from "../../common/common.slice";
+import { bookingsAction, bookingsState } from "../../common/common.slice";
+
+const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
-  const { isLoading } = useAppSelector(bookingsState);
+  const { isLoading, configs  } = useAppSelector(bookingsState);
 
   const { selectedTrainerId } = useAppSelector(bookingsState);
   const { master } = useAppSelector(masterState);
@@ -561,8 +563,16 @@ const ScheduleTraining = () => {
     );
 
   const renderSearchMenu = () => (
-    <div className="bookings custom-scroll custom-sidebar-content custom-slider-search-align">
+    <div  onScroll={() => {
+      if(configs.sidebar.isMobileMode) {
+        dispatch(isSidebarToggleEnabled(true))
+      }
+      return;
+    }}
+
+    className="bookings custom-scroll custom-sidebar-content custom-slider-search-align">
       <div
+      id = 'dashboard' 
         className="d-flex justify-content-center align-middle align-items-center"
         style={{
           height: "94%",
@@ -803,7 +813,7 @@ const ScheduleTraining = () => {
     //     </div>
     //   )}
     // </div>
-    <div className="custom-scroll">
+    <div className="custom-scroll" >
       {trainerInfo.userInfo === null ||
       (trainerInfo && trainerInfo.userInfo) ? (
         renderUserDetails()
