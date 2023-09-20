@@ -619,6 +619,15 @@ slick-slider .slick-list,
   // position: absolute;
 }
 
+
+.custom-close-icon {
+  position: absolute !important;
+  right: 1%;
+}
+
+
+
+// for mobile
 @media (max-width: 575px) {
   .custom-mobile-menu {
     position: absolute;
@@ -635,12 +644,14 @@ slick-slider .slick-list,
     top: 55px;
     left: 7% !important;
   }
+
+  .custom-close-icon {
+    right: 3% !important;
+  }
+  
 }
 
-.custom-close-icon {
-  position: absolute !important;
-  right: 1% !important;
-}
+
 .custom-arrow-icon {
   position: absolute !important;
   left: 7.5% !important;
