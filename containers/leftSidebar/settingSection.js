@@ -35,6 +35,7 @@ import {
 } from "../../app/components/common/common.slice";
 import { Utils } from "../../utils/utils";
 import { UpdateHourlyRateForm } from "../../app/components/trainer/settings/hourly_rate";
+import TimePicker from "rc-time-picker";
 
 const SettingSection = (props) => {
   const dispatch = useAppDispatch();
@@ -50,6 +51,7 @@ const SettingSection = (props) => {
   const [deleteAcct, setDeleteDisable] = useState(false);
   const [settingTab, setSettingTab] = useState("");
   const [isError, setIsError] = useState(false);
+  const [workingHours, setWorkingHours] = useState({ from: "", to: "" });
   const [profile, setProfile] = useState({
     username: "",
     address: "Alabma , USA",
@@ -704,118 +706,179 @@ const SettingSection = (props) => {
                 </div>
               </div>
             </div>
-
-            {/*  */}
-
-            <div className="card">
-              <div
-                className="card-header"
-                onClick={() =>
-                  setCollapseShow({
-                    ...collapseShow,
-                    changeNumber: false,
-                    hourlyRate: !collapseShow.hourlyRate,
-                    workingHours: false,
-                    verfication: false,
-                    accountInfo: false,
-                    deleteAccount: false,
-                    privacy: false,
-                    security: false,
-                  })
-                }
-              >
-                <a href="#javascript">
-                  Update Hourly Rate
-                  <i className="fa fa-angle-down" />
-                </a>
-              </div>
-              <div
-                className={`collapse ${collapseShow.hourlyRate ? "show" : ""}`}
-              >
-                <div className="card-body change-number">
-                  <UpdateHourlyRateForm
-                    userInfo={userInfo}
-                    extraInfo={userInfo?.extraInfo || {}}
-                    onFormSubmit={(formValue) => {
-                      //
-                      dispatch(
-                        updateProfileAsync({
-                          extraInfo: { ...userInfo?.extraInfo, ...formValue },
-                        })
-                      );
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/*  */}
-            <div className="card">
-              <div
-                className="card-header"
-                onClick={() =>
-                  setCollapseShow({
-                    ...collapseShow,
-                    changeNumber: false,
-                    hourlyRate: false,
-                    workingHours: !collapseShow.workingHours,
-                    verfication: false,
-                    accountInfo: false,
-                    deleteAccount: false,
-                    privacy: false,
-                    security: false,
-                  })
-                }
-              >
-                <a href="#javascript">
-                  Working hours
-                  <i className="fa fa-angle-down" />
-                </a>
-              </div>
-              <div
-                className={`collapse ${
-                  collapseShow.workingHours ? "show" : ""
-                }`}
-              >
-                <div className="card-body change-number">
-                  <h5>Add your working hours...</h5>
-                  <div className="input-group">
-                    <input
-                      className="form-control"
-                      type="number"
-                      placeholder="9:00 AM"
-                    />
-                    <div className="input-group-prepend">
-                      <span className="input-group-text form-control m-0">
-                        AM
-                      </span>
-                    </div>
-                  </div>
-                  <h5>End time</h5>
-                  <div className="input-group">
-                    <input
-                      className="form-control"
-                      type="number"
-                      placeholder="7:00 PM"
-                    />
-                    <div className="input-group-prepend">
-                      <span className="input-group-text form-control m-0">
-                        PM
-                      </span>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    {" "}
-                    <a
-                      className="btn btn-outline-primary button-effect btn-sm"
-                      href="#"
-                    >
-                      Save
+            {accountType === AccountType.TRAINER ? (
+              <React.Fragment>
+                <div className="card">
+                  <div
+                    className="card-header"
+                    onClick={() =>
+                      setCollapseShow({
+                        ...collapseShow,
+                        changeNumber: false,
+                        hourlyRate: !collapseShow.hourlyRate,
+                        workingHours: false,
+                        verfication: false,
+                        accountInfo: false,
+                        deleteAccount: false,
+                        privacy: false,
+                        security: false,
+                      })
+                    }
+                  >
+                    <a href="#javascript">
+                      Update Hourly Rate
+                      <i className="fa fa-angle-down" />
                     </a>
                   </div>
+                  <div
+                    className={`collapse ${
+                      collapseShow.hourlyRate ? "show" : ""
+                    }`}
+                  >
+                    <div className="card-body change-number">
+                      <UpdateHourlyRateForm
+                        userInfo={userInfo}
+                        extraInfo={userInfo?.extraInfo || {}}
+                        onFormSubmit={(formValue) => {
+                          //
+                          dispatch(
+                            updateProfileAsync({
+                              extraInfo: {
+                                ...userInfo?.extraInfo,
+                                ...formValue,
+                              },
+                            })
+                          );
+                        }}
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+                <div className="card">
+                  <div
+                    className="card-header"
+                    onClick={() =>
+                      setCollapseShow({
+                        ...collapseShow,
+                        changeNumber: false,
+                        hourlyRate: false,
+                        workingHours: !collapseShow.workingHours,
+                        verfication: false,
+                        accountInfo: false,
+                        deleteAccount: false,
+                        privacy: false,
+                        security: false,
+                      })
+                    }
+                  >
+                    <a href="#javascript">
+                      Working hours
+                      <i className="fa fa-angle-down" />
+                    </a>
+                  </div>
+                  <div
+                    className={`collapse ${
+                      collapseShow.workingHours ? "show" : ""
+                    }`}
+                  >
+                    <div className="card-body change-number">
+                      <h5>Add your working hours...</h5>
+                      <div class="row">
+                        <div class="col-6 col-sm-3 col-md-3 col-lg-2">
+                          <p className="ml-2">From</p>
+                          <TimePicker
+                            name="from"
+                            className="ml-2 mt-2"
+                            placeholder="09:00"
+                            clearIcon={true}
+                            showSecond={false}
+                            minuteStep={5}
+                            defaultValue={
+                              userInfo &&
+                              userInfo?.extraInfo &&
+                              userInfo?.extraInfo?.working_hours
+                                ? Utils.getFormattedTime(
+                                    userInfo?.extraInfo?.working_hours.from
+                                  )
+                                : null
+                            }
+                            use12Hours
+                            onChange={(value) => {
+                              if (value) {
+                                const fromTime =
+                                  Utils.getFormattedDateDb(value);
+                                setWorkingHours((prev) => ({
+                                  ...prev,
+                                  from: fromTime,
+                                }));
+                              }
+                            }}
+                          />
+                        </div>
+                        <div class="col-6 col-sm-3 col-md-3 col-lg-2">
+                          <p className="ml-2">To</p>
+                          <TimePicker
+                            name="to"
+                            className="ml-2 mt-2"
+                            clearIcon={true}
+                            defaultValue={
+                              userInfo &&
+                              userInfo?.extraInfo &&
+                              userInfo?.extraInfo?.working_hours
+                                ? Utils.getFormattedTime(
+                                    userInfo?.extraInfo?.working_hours.to
+                                  )
+                                : null
+                            }
+                            placeholder="07:00"
+                            showSecond={false}
+                            minuteStep={5}
+                            use12Hours
+                            onChange={(value) => {
+                              if (value) {
+                                const toTime = Utils.getFormattedDateDb(value);
+                                setWorkingHours((prev) => ({
+                                  ...prev,
+                                  to: toTime,
+                                }));
+                              }
+                            }}
+                          />
+                        </div>
+                        <div class="col-12">
+                          <button
+                            type="button"
+                            className="ml-2 btn btn-sm btn-primary"
+                            disabled={
+                              workingHours.from.length && workingHours.to.length
+                                ? false
+                                : true
+                            }
+                            onClick={() => {
+                              const working_hours = {
+                                working_hours: workingHours,
+                              };
+                              if (working_hours) {
+                                dispatch(
+                                  updateProfileAsync({
+                                    extraInfo: {
+                                      ...userInfo?.extraInfo,
+                                      ...working_hours,
+                                    },
+                                  })
+                                );
+                              }
+                            }}
+                          >
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </React.Fragment>
+            ) : null}
           </div>
         </div>
         <div className="media">
