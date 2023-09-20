@@ -16,6 +16,7 @@ import {
   BookedSession,
   FormateDate,
   FormateHours,
+  TRAINER_AMOUNT_USD,
   leftSideBarOptions,
   meetingRatingTimeout,
 } from "../../common/constants";
@@ -26,6 +27,8 @@ import { SocketContext } from "../socket";
 import Ratings from "./ratings";
 import Rating from "react-rating";
 import { Star, X } from "react-feather";
+import { authState } from "../auth/auth.slice";
+import SocialMediaIcons from "../../common/socialMediaIcons";
 
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
@@ -34,6 +37,7 @@ const Bookings = ({ accountType = null }) => {
   const dispatch = useAppDispatch();
   const { handleActiveTab, handleSidebarTabClose } = bookingsAction;
   const { isLoading, configs } = useAppSelector(bookingsState);
+  const { userInfo } = useAppSelector(authState);
   const [bookedSession, setBookedSession] = useState({
     id: "",
     booked_status: "",
@@ -509,6 +513,49 @@ const Bookings = ({ accountType = null }) => {
     document.querySelector(".sidebar-toggle").classList.remove("none");
   };
 
+  const showRatings = (ratings, extraClasses = "") => {
+    const { ratingRatio, totalRating } = Utils.getRatings(ratings);
+    return (
+      <div>
+        <div className={extraClasses}>
+          <Star color="#FFC436" size={28} className="star-container star-svg" />
+          <p className="ml-1 mt-1 mr-1 font-weight-light">{ratingRatio || 0}</p>
+          <p className="mt-1">({totalRating || 0})</p>
+        </div>
+      </div>
+    );
+  };
+  const trainerInfo = () => (
+    <React.Fragment>
+      <div class="card rounded trainer-profile-card">
+        <div class="card-body">
+          <div className="row">
+            <div className="col-4 col-sm-3 col-md-5 col-lg-4 col-xl-2">
+              <img
+                src={userInfo && userInfo?.profile_picture}
+                alt="trainer_image"
+                className="rounded trainer-profile"
+              />
+            </div>
+            <div className="col-8 col-sm-6 col-md-6 col-lg-6 col-xl-8">
+              <h3 className="mt-3">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
+              {showRatings([], "mt-3 d-flex")}
+              {userInfo &&
+              userInfo.extraInfo &&
+              userInfo.extraInfo.social_media_links &&
+              userInfo.extraInfo.social_media_links ? (
+                <SocialMediaIcons
+                  profileImageURL={""}
+                  social_media_links={userInfo.extraInfo.social_media_links}
+                  isvisible={false}
+                />
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
+  );
   return (
     <React.Fragment>
       <div
@@ -549,10 +596,17 @@ const Bookings = ({ accountType = null }) => {
           renderVideoCall()
         ) : (
           <div>
-            <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
-              Bookings
-            </h3>
-            {Bookings()}
+            {accountType === AccountType.TRAINER ? (
+              <h1 className="mb-3">
+                Welcome : {userInfo && userInfo?.fullname}
+              </h1>
+            ) : (
+              <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
+                Bookings
+              </h3>
+            )}
+            {trainerInfo()}
+            {/* {Bookings()} */}
           </div>
         )}
       </div>
