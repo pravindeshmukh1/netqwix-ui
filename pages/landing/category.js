@@ -196,9 +196,7 @@ const Category = (masterRecords) => {
           } `}
         >
           <div className="row my-5">
-            <div
-              className={`col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12`}
-            >
+            <div className={`col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12`}>
               <SearchableDropdown
                 placeholder="Search Trainers..."
                 options={[...listOfTrainers, ...categoryList]}
@@ -207,7 +205,7 @@ const Category = (masterRecords) => {
                 customClasses={{
                   searchBar: "search-bar-trainee",
                   searchButton: "search-button-trainee",
-                  dropdown: "custom-dropdown-width",
+                  dropdown: "custom-dropdown-width-landing",
                 }}
                 onSearchClick={(query) => {
                   if (query) {

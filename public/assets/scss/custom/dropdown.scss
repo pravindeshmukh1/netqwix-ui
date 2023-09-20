@@ -88,6 +88,13 @@
 .custom-dropdown-width {
   width: 50vw;
   @media (max-width: 575px) {
+    margin-right: 123px !important;
+  }
+}
+
+.custom-dropdown-width-landing {
+  width: 50vw;
+  @media (max-width: 575px) {
     width: 69vw !important;
     padding: 10px !important;
   }
