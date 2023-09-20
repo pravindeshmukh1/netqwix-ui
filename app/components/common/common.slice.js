@@ -22,6 +22,7 @@ const initialState = {
     },
   },
   activeTab: "",
+  sidebarTab: "",
 };
 
 export const addRatingAsync = createAsyncThunk(

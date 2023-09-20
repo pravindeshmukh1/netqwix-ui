@@ -19,6 +19,7 @@ import {
   MOBILE_SIZE,
   POSITION_FIXED_SIDEBAR_MENU,
   leftSideBarOptions,
+  routingPaths,
 } from "../../app/common/constants";
 import { SocketContext } from "../../app/components/socket";
 import TodoSection from "../rightSidebar/todoSection";
@@ -57,13 +58,13 @@ const Index = (props) => {
   const { sidebarActiveTab } = useAppSelector(authState);
   const [width, setWidth] = useState(0);
   const [opentour, setopentour] = useState(true);
-  const [activeTab, setActiveTab] = useState(sidebarActiveTab);
+  let [activeTab, setActiveTab] = useState(sidebarActiveTab);
   const [mode, setMode] = useState(false);
   const router = useRouter();
   const [size, setSize] = useState([0, 0]);
   const [accountType, setAccountType] = useState("");
   const dispatch = useAppDispatch();
-  const { configs } = useAppSelector(bookingsState);
+  const bookingState = useAppSelector(bookingsState);
   const { handleActiveTab } = bookingsAction;
   useEffect(() => {
     setAccountType(localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE));
@@ -92,6 +93,21 @@ const Index = (props) => {
     updateSize();
     return () => window.removeEventListener("resize", updateSize);
   }, []);
+
+  useEffect(() => {
+    if (activeTab) {
+      if (bookingState.configs?.sidebar?.isMobileMode) {
+        document.querySelector(".main-nav").classList.remove("on");
+      }
+      dispatch(handleActiveTab(activeTab));
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    activeTab = bookingState.activeTab;
+    setActiveTab(activeTab);
+    router.push(routingPaths.dashboard);
+  }, [bookingState.activeTab]);
 
   const CloseAppSidebar = () => {
     document.querySelector(".chitchat-main").classList.remove("small-sidebar");
@@ -225,9 +241,7 @@ const Index = (props) => {
                   className={`icon-btn btn-light button-effect ${
                     activeTab === "home" ? "active" : ""
                   }`}
-                  onClick={() =>
-                    TogglTab("home") || dispatch(handleActiveTab("home"))
-                  }
+                  onClick={() => TogglTab("home")}
                 >
                   <i className="fa fa-home" />
                 </NavLink>
@@ -537,7 +551,7 @@ const Index = (props) => {
             </div>
           </aside>
         )}
-      {configs?.sidebar?.isMobileMode && <RecentSection />}
+      {bookingState.configs?.sidebar?.isMobileMode && <RecentSection />}
     </Fragment>
   );
 };

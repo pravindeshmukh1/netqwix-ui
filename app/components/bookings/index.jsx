@@ -16,6 +16,7 @@ import {
   BookedSession,
   FormateDate,
   FormateHours,
+  leftSideBarOptions,
   meetingRatingTimeout,
 } from "../../common/constants";
 import { Utils } from "../../../utils/utils";
@@ -24,13 +25,14 @@ import StartMeeting from "./start";
 import { SocketContext } from "../socket";
 import Ratings from "./ratings";
 import Rating from "react-rating";
-import { Star } from "react-feather";
+import { Star, X } from "react-feather";
 
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
 const Bookings = ({ accountType = null }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const { handleActiveTab } = bookingsAction;
   const { isLoading, configs } = useAppSelector(bookingsState);
   const [bookedSession, setBookedSession] = useState({
     id: "",
@@ -66,7 +68,6 @@ const Bookings = ({ accountType = null }) => {
 
   useEffect(() => {
     if (activeTab) {
-
     }
   }, [activeTab]);
 
@@ -506,28 +507,45 @@ const Bookings = ({ accountType = null }) => {
       }}
     />
   );
+
+  const OpenCloseSidebar = () => {
+    dispatch(handleActiveTab(leftSideBarOptions.HOME));
+    document.querySelector(".main-nav").classList.add("on");
+    document.querySelector(".sidebar-toggle").classList.remove("none");
+  };
+
   return (
     <React.Fragment>
       <div
         id="bookings"
         onScroll={() => {
           if (configs.sidebar.isMobileMode) {
-            dispatch(isSidebarToggleEnabled(true));
+            if (!activeTab.length) {
+              dispatch(isSidebarToggleEnabled(true));
+            }
           }
           return;
         }}
-        // className={`bookings custom-scroll custom-sidebar-content-booking ${
-        //   configs.sidebar.isMobileMode && configs.sidebar.isToggleEnable
-        //     ? `dynemic-sidebar submenu-width dynemic-sidebar ${
-        //         activeTab === "home" ? "active" : ""
-        //       } `
-        //     : ""
-        // }`}
-
-        className={`submenu-width dynemic-sidebar custom-scroll ${
-          activeTab === "home" ? "active" : ""
+        className={`bookings custom-scroll custom-sidebar-content-booking ${
+          accountType === AccountType.TRAINEE &&
+          configs.sidebar.isMobileMode &&
+          configs.sidebar.isToggleEnable &&
+          `submenu-width dynemic-sidebar ${
+            activeTab === leftSideBarOptions.SCHEDULE_TRAINING ? "active" : ""
+          }`
         }`}
       >
+        {configs.sidebar.isMobileMode && configs.sidebar.isMobileMode ? (
+          <div
+            className="media-body media-body text-right mb-1"
+            onClick={() => OpenCloseSidebar()}
+          >
+            <X
+              className="icon-btn btn-outline-light btn-sm close-panel"
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+        ) : null}
         {addRatingModel.isOpen ? renderRating() : null}
         {!scheduledMeetingDetails.length ? (
           <h3 className="d-flex justify-content-center mt-20">

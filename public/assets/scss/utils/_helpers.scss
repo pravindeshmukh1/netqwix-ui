@@ -34,8 +34,10 @@
   left: 103px !important;
   margin: 0;
   @media (max-width: 576px) {
-    left: 10px !important;
-    margin-top: 50px !important;
+    left: 0 !important;
+    width: 100% !important;
+    bottom: 0% !important;
+    margin-top: 45px !important;
   }
 }
 .custom-trainer-scroll {
