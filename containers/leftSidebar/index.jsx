@@ -495,7 +495,9 @@ const Index = (props) => {
                   </TabPane>
                   <TabPane
                     tabId="file"
-                    className={`${activeTab === "file" ? "left-90" : ""}`}
+                    className={`${
+                      activeTab === "file" ? "left-90 custom-mobile-menu" : ""
+                    }`}
                   >
                     <FileSection smallSideBarToggle={smallSideBarToggle} />
                   </TabPane>
@@ -513,7 +515,9 @@ const Index = (props) => {
                   <TabPane
                     tabId="notification"
                     className={`${
-                      activeTab === "notification" ? "left-90" : ""
+                      activeTab === "notification"
+                        ? "left-90 custom-mobile-menu"
+                        : ""
                     }`}
                   >
                     <NotificationSection
@@ -524,7 +528,11 @@ const Index = (props) => {
                   </TabPane>
                   <TabPane
                     tabId="setting"
-                    className={`${activeTab === "setting" ? "left-90 " : ""} ${
+                    className={`${
+                      activeTab === "setting"
+                        ? "left-90 custom-mobile-menu"
+                        : ""
+                    } ${
                       accountType === AccountType.TRAINER
                         ? "sidebar-full-width"
                         : ""

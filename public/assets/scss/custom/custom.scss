@@ -614,3 +614,13 @@ slick-slider .slick-list,
   z-index: 999999;
   // position: absolute;
 }
+
+@media (max-width: 575px) {
+  .custom-mobile-menu {
+    position: absolute;
+    width: 104.5vw !important;
+    left: 0% !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+  }
+}
