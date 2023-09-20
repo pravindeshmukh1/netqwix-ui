@@ -342,7 +342,7 @@ const ScheduleTraining = () => {
         <table
           className={`${
             screenWidth <= 767 ? "table-responsive overflow-x-auto" : "table"
-          } custom-trainer-slots-booking-table ml-30 mr-30`}
+          } custom-trainer-slots-booking-table`}
         >
           <thead
             className="justify-center align-center table-thead"
@@ -671,7 +671,7 @@ const ScheduleTraining = () => {
     <React.Fragment>
       <div className="container">
         <div className="row">
-          <div className="col-2 col-xs-2 col-sm-2 col-md-2 col-xs-2 datePicker mb-3">
+          <div className="col-6 col-xs-2 col-sm-2 col-md-2 col-xs-2 date-picker mb-3">
             <DatePicker
               className="border border-dark"
               minDate={moment().toDate()}

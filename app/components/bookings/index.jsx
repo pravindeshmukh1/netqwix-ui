@@ -527,7 +527,7 @@ const Bookings = ({ accountType = null }) => {
           }`
         }`}
       >
-        {accountType === AccountType.TRAINEE &&
+        {/* {accountType === AccountType.TRAINEE &&
         configs.sidebar.isMobileMode &&
         configs.sidebar.isToggleEnable ? (
           <div
@@ -539,7 +539,7 @@ const Bookings = ({ accountType = null }) => {
               style={{ cursor: "pointer" }}
             />
           </div>
-        ) : null}
+        ) : null} */}
         {addRatingModel.isOpen ? renderRating() : null}
         {!scheduledMeetingDetails.length ? (
           <h3 className="d-flex justify-content-center mt-20">

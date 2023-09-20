@@ -189,7 +189,7 @@ const ScheduleInventory = () => {
         return;
       }}
     >
-      {configs.sidebar.isMobileMode && configs.sidebar.isToggleEnable ? (
+      {/* {configs.sidebar.isMobileMode && configs.sidebar.isToggleEnable ? (
         <div
           className="media-body media-body text-right mb-1"
           onClick={OpenCloseSidebar}
@@ -199,7 +199,7 @@ const ScheduleInventory = () => {
             style={{ cursor: "pointer" }}
           />
         </div>
-      ) : null}
+      ) : null} */}
       <div id="header" className="header ml-3">
         <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
           Schedule Slots
