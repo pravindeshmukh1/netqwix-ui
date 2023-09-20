@@ -88,7 +88,8 @@
 .custom-dropdown-width {
   width: 50vw;
   @media (max-width: 575px) {
-    margin-right: 123px !important;
+    width: 69vw !important;
+    padding: 10px !important;
   }
 }
 

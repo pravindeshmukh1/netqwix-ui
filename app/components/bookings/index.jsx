@@ -527,7 +527,9 @@ const Bookings = ({ accountType = null }) => {
           }`
         }`}
       >
-        {configs.sidebar.isMobileMode && configs.sidebar.isToggleEnable ? (
+        {accountType === AccountType.TRAINEE &&
+        configs.sidebar.isMobileMode &&
+        configs.sidebar.isToggleEnable ? (
           <div
             className="media-body media-body text-right mb-1"
             onClick={OpenCloseSidebar}

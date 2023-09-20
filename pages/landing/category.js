@@ -197,11 +197,7 @@ const Category = (masterRecords) => {
         >
           <div className="row my-5">
             <div
-              className={`col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 `}
-              style={{
-                margin: 0,
-                marginLeft: isMobileScreen ? "33px" : null,
-              }}
+              className={`col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12`}
             >
               <SearchableDropdown
                 placeholder="Search Trainers..."
