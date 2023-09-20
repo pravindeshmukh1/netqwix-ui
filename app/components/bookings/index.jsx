@@ -598,7 +598,7 @@ const Bookings = ({ accountType = null }) => {
           <div>
             {accountType === AccountType.TRAINER ? (
               <h1 className="mb-3">
-                Welcome : {userInfo && userInfo?.fullname}
+                Welcome {userInfo && userInfo?.fullname}
               </h1>
             ) : (
               <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
