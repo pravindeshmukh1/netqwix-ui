@@ -230,7 +230,7 @@ const TrainersDetails = ({
       <React.Fragment>
         <h3>
           {" "}
-          Trainer: {bookSessionPayload.trainer_info.fullname} (Price per hour $
+          Trainer: {bookSessionPayload?.trainer_info.fullname} (Price per hour $
           {TRAINER_AMOUNT_USD}){" "}
         </h3>
         <h4 className="mt-3 mb-3">
@@ -239,7 +239,7 @@ const TrainersDetails = ({
           {bookSessionPayload.session_end_time}
         </h4>
         <h4 className="mb-3">
-          Price: <b>${bookSessionPayload.charging_price}</b>
+          Price: <b>${bookSessionPayload?.charging_price}</b>
         </h4>
       </React.Fragment>
     );
@@ -620,52 +620,50 @@ const TrainersDetails = ({
     setBookingTableData(result);
   };
   return (
-    <div className="custom-landing-page-trainer-details">
-      {trainerInfo === null ? (
-        <div className="media-body media-body text-right">
-          <div className="mr-2 mt-4">
+    <React.Fragment>
+      <div className="custom-landing-page-trainer-details">
+        {trainerInfo === null ? (
+          <div className="media-body media-body text-right">
             <X
               onClick={onClose}
               className="close"
               style={{ cursor: "pointer" }}
             />
           </div>
-        </div>
-      ) : (
-        <div
-          className={`${
-            (trainerInfo.isCategory &&
-              !trainerDetails.select_trainer &&
-              "media-body media-body text-right") ||
-            (!trainerInfo.isCategory && "media-body media-body text-right")
-          }`}
-        >
-          <div className="mt-4">
-            {!trainerInfo.isCategory ? (
-              <X
-                onClick={onClose}
-                className="close"
-                style={{ cursor: "pointer" }}
-              />
-            ) : !trainerDetails.select_trainer ? (
-              <X onClick={onClose} style={{ cursor: "pointer" }} />
-            ) : (
-              <ArrowLeft
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  setTrainerDetails((prev) => ({
-                    ...prev,
-                    _id: null,
-                    select_trainer: false,
-                    fullname: null,
-                  }));
-                }}
-              />
-            )}
+        ) : (
+          <div
+            className={`${
+              (trainerInfo.isCategory &&
+                !trainerDetails.select_trainer &&
+                "media-body media-body text-right") ||
+              (!trainerInfo.isCategory && "media-body media-body text-right")
+            }`}
+          >
+            <div>
+              {!trainerInfo.isCategory ? (
+                <X
+                  onClick={onClose}
+                  className="close"
+                  style={{ cursor: "pointer" }}
+                />
+              ) : !trainerDetails.select_trainer ? (
+                <X onClick={onClose} style={{ cursor: "pointer" }} />
+              ) : (
+                <ArrowLeft
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setTrainerDetails((prev) => ({
+                      ...prev,
+                      _id: null,
+                      select_trainer: false,
+                      fullname: null,
+                    }));
+                  }}
+                />
+              )}
+            </div>
           </div>
-        </div>
-      )}
-      <div>
+        )}
         {trainerDetails.select_trainer ? (
           <TrainerInfo
             accordionData={accordionData}
@@ -690,7 +688,7 @@ const TrainersDetails = ({
           />
         )}
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 
@@ -759,118 +757,10 @@ const TrainerInfo = ({
   }, []);
 
   return (
-    // <div
-    //   className={`row px-20 py-10 m-25 ${
-    //     isTablet ? "model-tablet-view" : "custom-trainer-details-scroll"
-    //   }`}
-    // >
-    //   <div className="col-5">
-    //     <div className="row">
-    //       <div className="col-3">
-    //         <img
-    //           src={
-    //             trainer && trainer.profilePicture
-    //               ? trainer.profilePicture
-    //               : "/assets/images/avtar/statusMenuIcon.jpeg"
-    //           }
-    //           width={"136px"}
-    //           height={"128px"}
-    //           style={{ borderRadius: "15px" }}
-    //           alt="profile-picture"
-    //         />
-    //       </div>
-    //       <div className="col-8 trainer-details">
-    //         <h2 className="ml-1 mt-1">
-    //           {trainer && trainer ? trainer.fullname : null}
-    //         </h2>
-    //         <h3 className="mb-3 mt-3 ml-1">
-    //           {" "}
-    //           Hourly Rate: ${TRAINER_AMOUNT_USD}{" "}
-    //         </h3>
-    //         {showRatings(trainer && trainer.trainer_ratings, "mb-3 d-flex")}
-    //       </div>
-    //     </div>
-    //     <div className="d-flex flex-row bd-highlight" />
-    //     {trainer &&
-    //     trainer.extraInfo &&
-    //     trainer.extraInfo.media &&
-    //     trainer.extraInfo.social_media_links ? (
-    //       <SocialMediaIcons
-    //         profileImageURL={
-    //           trainer &&
-    //           trainer.extraInfo &&
-    //           trainer.extraInfo.social_media_links &&
-    //           trainer.extraInfo.social_media_links.profile_image_url
-    //         }
-    //         social_media_links={
-    //           trainer &&
-    //           trainer.extraInfo &&
-    //           trainer.extraInfo.social_media_links
-    //         }
-    //         isvisible={false}
-    //       />
-    //     ) : null}
-    //     <p className="mt-3">
-    //       {trainer && trainer.extraInfo && trainer.extraInfo.about}
-    //     </p>
-    //     {accordionData.length
-    //       ? accordionData.map((data, index) => {
-    //           return (
-    //             <Accordion key={`accordion_${index}`} className="mb-5">
-    //               <Accordion.Item>
-    //                 <Accordion.Header
-    //                   index={index}
-    //                   activeAccordion={activeAccordion}
-    //                   onAClick={() => {
-    //                     if (activeAccordion[index]) {
-    //                       delete activeAccordion[index];
-    //                     } else if (!activeAccordion[index]) {
-    //                       activeAccordion[index] = true;
-    //                     } else {
-    //                       activeAccordion[index] = !activeAccordion[index];
-    //                     }
-    //                     setActiveAccordion(activeAccordion);
-    //                   }}
-    //                 >
-    //                   {data.label}
-    //                 </Accordion.Header>
-    //                 <Accordion.Body>
-    //                   {!data.value ? Message.notFound : data.value}
-    //                 </Accordion.Body>
-    //               </Accordion.Item>
-    //             </Accordion>
-    //           );
-    //         })
-    //       : Message.notFound}
-    //   </div>
-    //   <div className="col-7">
-    //     {/* <Carousel
-    //       media={
-    //         trainer &&
-    //         trainer.extraInfo &&
-    //         trainer.extraInfo.media &&
-    //         trainer.extraInfo.media
-    //       }
-    //     /> */}
-    //     <h2 className="mb-4">Featured content</h2>
-    //     {revampedMedia && revampedMedia.length ? (
-    //       <ImageVideoThumbnailCarousel
-    //         media={revampedMedia}
-    //         originalMedia={
-    //           trainer && trainer.extraInfo && trainer.extraInfo.media
-    //         }
-    //       />
-    //     ) : (
-    //       <div className="no-media-found">{Message.noMediaFound}</div>
-    //     )}
-    //     <h2>My Schedule</h2>
-    //     {datePicker}
-    //     <div className="mt-3">{element}</div>
-    //   </div>
-    // </div>
     <div
       className="row"
       style={{
+        padding: "10px",
         height: "92vh",
         overflowY: "auto",
         overflowX: "hidden",
@@ -888,6 +778,7 @@ const TrainerInfo = ({
               }
               width={100}
               style={{
+                marginTop: "19.2px",
                 minHeight: "120px",
                 minWidth: "80px",
               }}
@@ -899,7 +790,10 @@ const TrainerInfo = ({
             <h2 className="mt-3">
               {trainer && trainer ? trainer.fullname : null}
             </h2>
-            <h3 className="mt-3">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
+            <h3 className="mt-3">
+              Hourly Rate: $
+              {trainer?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD}
+            </h3>
             {showRatings(
               trainer && trainer.trainer_ratings,
               "mt-3 mb-3 d-flex"
@@ -925,51 +819,68 @@ const TrainerInfo = ({
             ) : null}
           </div>
         </div>
-        <p className="mt-3">
+        <p
+          className="mt-3"
+          style={{
+            marginRight: "10px",
+          }}
+        >
           {trainer && trainer.extraInfo && trainer.extraInfo.about}
         </p>
-        {accordionData.length
-          ? accordionData.map((data, index) => {
-              return (
-                <Accordion key={`accordion_${index}`} className="mb-5">
-                  <Accordion.Item>
-                    <Accordion.Header
-                      index={index}
-                      activeAccordion={activeAccordion}
-                      onAClick={() => {
-                        if (activeAccordion[index]) {
-                          delete activeAccordion[index];
-                        } else if (!activeAccordion[index]) {
-                          activeAccordion[index] = true;
-                        } else {
-                          activeAccordion[index] = !activeAccordion[index];
-                        }
-                        setActiveAccordion(activeAccordion);
-                      }}
-                    >
-                      {data.label}
-                    </Accordion.Header>
-                    <Accordion.Body>
-                      {!data.value ? Message.notFound : data.value}
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              );
-            })
-          : Message.notFound}
+        <div
+          style={{
+            marginRight: "15px",
+          }}
+        >
+          {accordionData.length
+            ? accordionData.map((data, index) => {
+                return (
+                  <Accordion key={`accordion_${index}`} className="mb-5">
+                    <Accordion.Item>
+                      <Accordion.Header
+                        index={index}
+                        activeAccordion={activeAccordion}
+                        onAClick={() => {
+                          if (activeAccordion[index]) {
+                            delete activeAccordion[index];
+                          } else if (!activeAccordion[index]) {
+                            activeAccordion[index] = true;
+                          } else {
+                            activeAccordion[index] = !activeAccordion[index];
+                          }
+                          setActiveAccordion(activeAccordion);
+                        }}
+                      >
+                        {data.label}
+                      </Accordion.Header>
+                      <Accordion.Body>
+                        {!data.value ? Message.notFound : data.value}
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  </Accordion>
+                );
+              })
+            : Message.notFound}
+        </div>
       </div>
       <div className="col-md-6">
         <h2 className="mb-4">Featured content</h2>
-        {revampedMedia && revampedMedia.length ? (
-          <ImageVideoThumbnailCarousel
-            media={revampedMedia}
-            originalMedia={
-              trainer && trainer.extraInfo && trainer.extraInfo.media
-            }
-          />
-        ) : (
-          <div className="no-media-found">{Message.noMediaFound}</div>
-        )}
+        <div
+          style={{
+            marginRight: "15px",
+          }}
+        >
+          {revampedMedia && revampedMedia.length ? (
+            <ImageVideoThumbnailCarousel
+              media={revampedMedia}
+              originalMedia={
+                trainer && trainer.extraInfo && trainer.extraInfo.media
+              }
+            />
+          ) : (
+            <div className="no-media-found">{Message.noMediaFound}</div>
+          )}
+        </div>
         <h2>My Schedule</h2>
         {datePicker}
         <div className="mt-3">{element}</div>
@@ -1001,7 +912,7 @@ const SelectedCategory = ({
   filterParams,
 }) => {
   return (
-    <div className="row m-0 overflowX-auto">
+    <div className="row mr-1 overflowX-auto">
       <div className="col-12 col-lg-2 col-md-3 col-sm-3">
         {/* <div className="col-12 col-lg-2 col-md-12 col-sm-6"> */}
         <div className="d-flex justify-content-between">
@@ -1133,7 +1044,9 @@ const SelectedCategory = ({
                         className="badge badge-pill badge-primary mb-2 p-2"
                         style={{ fontSize: "15px" }}
                       >
-                        {`$${TRAINER_AMOUNT_USD}.00`}
+                        {`$${
+                          data?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD
+                        }.00`}
                         {`/ ${TRAINER_MEETING_TIME}`}
                       </p>
                       <h4
@@ -1169,81 +1082,6 @@ const SelectedCategory = ({
                       {showRatings(data.trainer_ratings, "d-flex")}
                     </div>
                   </div>
-
-                  {/* <div className="card-body" key={index}>
-                    <div className="row">
-                      <div className="col-1.3 ml-3">
-                        <img
-                          src={
-                            data.profilePicture
-                              ? data.profilePicture
-                              : "/assets/images/avtar/statusMenuIcon.jpeg"
-                          }
-                          width={"136px"}
-                          height={"128px"}
-                          style={{ borderRadius: "15px" }}
-                          alt="profile-picture"
-                        />
-                      </div>
-                      <div className="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-10">
-                        <h3
-                          className="card-title pointer underline"
-                          onClick={() => {
-                            console.log(`data`);
-                            setTrainerDetails((prev) => ({
-                              ...prev,
-                              _id: data && data._id,
-                              select_trainer: true,
-                            }));
-                            selectTrainer(data && data._id);
-                          }}
-                        >
-                          {data ? data.fullname : ""}
-                        </h3>
-                        <p
-                          className="badge badge-pill badge-primary mb-2 p-2"
-                          style={{ fontSize: "15px" }}
-                        >
-                          {`$${TRAINER_AMOUNT_USD}.00`}
-                          {`/ ${TRAINER_MEETING_TIME}`}
-                        </p>
-                        <h4
-                          className={`${textTruncate ? "text-truncate" : ""}`}
-                          style={{ marginBottom: "0px" }}
-                        >
-                          {data && data.extraInfo
-                            ? Utils.truncateText(data.extraInfo.about, 200)
-                            : Message.notAvailableDescription}
-                        </h4>
-                        <div>
-                          {data &&
-                          data.extraInfo &&
-                          data.extraInfo.social_media_links ? (
-                            <SocialMediaIcons
-                              profileImageURL={
-                                data &&
-                                data.extraInfo &&
-                                data.extraInfo.social_media_links &&
-                                data.extraInfo.social_media_links
-                                  .profile_image_url
-                              }
-                              social_media_links={
-                                data &&
-                                data.extraInfo &&
-                                data.extraInfo.social_media_links
-                              }
-                            />
-                          ) : null}
-                        </div>
-                      </div>
-                      <div className="col-1.1 top-0 end-0">
-                        {showRatings(
-                          data.trainer_ratings,
-                          "d-flex justify-content-end"
-                        )}
-                      </div>
-                    </div>
-                  </div> */}
                 </div>
               </div>
             );

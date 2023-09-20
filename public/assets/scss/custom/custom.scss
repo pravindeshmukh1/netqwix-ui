@@ -515,8 +515,19 @@ slick-slider .slick-list,
 
 // button margin
 @media (max-width: 576px) {
-  .btn.ml-4 {
-    margin-top: 2px !important;
+  // .btn.ml-4 {
+  .btnbook {
+    margin-top: 10px !important;
+    margin-right: 15% !important;
+    margin-left: 0px !important;
+  }
+}
+
+// booking slot
+@media (max-width: 576px) {
+  // .btn.ml-4 {
+  .slot {
+    justify-content: end !important;
   }
 }
 
@@ -527,14 +538,121 @@ slick-slider .slick-list,
     left: 0px !important;
     overflow-x: hidden !important;
   }
-  .trainer-recommended {
-    margin-left: 71px !important;
-  }
-  .custom-silder-margin {
-    margin-left: 72px !important;
-  }
   .slick-slider .slick-track,
   .slick-slider .slick-list {
-    height: 18vh !important;
+    height: 31vh !important;
   }
+}
+
+// trainer-recommended
+.trainer-recommended {
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .trainer-recommended {
+    margin-left: 200px;
+  }
+}
+
+// trainee-dashboard
+.custom-trainee-dashboard {
+  width: 96vw !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+// trainee dashboard
+.trainer-dashboard {
+  margin-left: 0;
+}
+@media (max-width: 576px) {
+  .trainee-dashboard {
+    position: absolute !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    left: 0% !important;
+  }
+  .trainer-recommended {
+    margin-left: 15px !important;
+  }
+}
+
+// header image logo
+.header-image-logo {
+  max-width: 100% !important;
+  min-width: 160px !important;
+  height: auto !important;
+  /* Media queries for larger screens */
+  @media (min-width: 768px) {
+    width: 160px !important; /* Adjust the width for tablets and larger screens */
+  }
+
+  @media (min-width: 992px) {
+    width: 200px !important; /* Adjust the width for desktop screens */
+    height: 66px !important;
+  }
+
+  /* Media query for mobile screens */
+  @media (max-width: 575px) {
+    width: 160px !important;
+    height: auto !important;
+  }
+}
+
+// auth header-text
+.header-text {
+  @media (min-width: 768px) {
+    font-size: 44px !important; /* Adjust the width for tablets and larger screens */
+  }
+  @media (min-width: 992px) {
+    font-size: 44px !important; /* Adjust the width for desktop screens */
+  }
+  /* Media query for mobile screens */
+  @media (max-width: 575px) {
+    font-size: 35px !important;
+  }
+}
+.sidebar-toggle {
+  z-index: 999999;
+  // position: absolute;
+}
+
+
+.custom-close-icon {
+  position: absolute !important;
+  right: 1%;
+}
+
+
+
+// for mobile
+@media (max-width: 575px) {
+  .custom-mobile-menu {
+    position: absolute;
+    width: 100vw !important;
+    left: 0% !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+  }
+  .category-content {
+    overflow-x: hidden !important;
+  }
+  .custom-arrow-icon {
+    position: absolute;
+    top: 55px;
+    left: 7% !important;
+  }
+
+  .custom-close-icon {
+    right: 3% !important;
+  }
+  
+}
+
+
+.custom-arrow-icon {
+  position: absolute !important;
+  left: 7.5% !important;
 }

@@ -64,7 +64,7 @@ export const weekDays = [
   "thursday",
   "friday",
   "saturday",
-  "sunday"
+  "sunday",
 ];
 export const routingPaths = {
   landing: "/",
@@ -708,5 +708,6 @@ export const POSITION_FIXED_SIDEBAR_MENU = [
   "setting",
 ];
 
-
 export const FIXED_ITEM = ["notification", "file", "setting"];
+
+export const MOBILE_SIZE = 576;

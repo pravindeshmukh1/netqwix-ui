@@ -27,12 +27,14 @@ import { toast } from "react-toastify";
 import SearchableDropdown from "../helper/searchableDropdown";
 import { masterState } from "../../master/master.slice";
 import { TrainerDetails } from "../../trainer/trainerDetails";
-import { bookingsState } from "../../common/common.slice";
+import { bookingsAction, bookingsState } from "../../common/common.slice";
+
+const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
-  const { isLoading } = useAppSelector(bookingsState);
+  const { isLoading, configs } = useAppSelector(bookingsState);
 
   const { selectedTrainerId } = useAppSelector(bookingsState);
   const { master } = useAppSelector(masterState);
@@ -135,6 +137,7 @@ const ScheduleTraining = () => {
         fullname,
         profilePicture,
         trainer_id,
+        extraInfo,
         _id,
       }) => {
         const trainer_info = {
@@ -143,6 +146,7 @@ const ScheduleTraining = () => {
           fullname,
           profilePicture,
           trainer_id,
+          extraInfo,
           _id,
         };
         return {
@@ -253,6 +257,7 @@ const ScheduleTraining = () => {
   );
 
   const renderSlotsByDay = ({ slot, date, trainer_info }) => {
+    console.log(`trainer_info --- `, trainer_info);
     return slot.map((content, index) => (
       <Popover
         key={`popover${index}`}
@@ -279,7 +284,8 @@ const ScheduleTraining = () => {
                     onClick={() => {
                       const amountPayable = Utils.getMinutesFromHourMM(
                         content.start_time,
-                        content.end_time
+                        content.end_time,
+                        trainer_info?.extraInfo?.hourly_rate
                       );
                       if (amountPayable > 0) {
                         const payload = {
@@ -336,7 +342,7 @@ const ScheduleTraining = () => {
         <table
           className={`${
             screenWidth <= 767 ? "table-responsive overflow-x-auto" : "table"
-          } custom-trainer-slots-booking-table ml-30 mr-30`}
+          } custom-trainer-slots-booking-table`}
         >
           <thead
             className="justify-center align-center table-thead"
@@ -500,7 +506,9 @@ const ScheduleTraining = () => {
         <h3>
           {" "}
           Trainer: {bookSessionPayload.trainer_info.fullname} (Price per hour $
-          {TRAINER_AMOUNT_USD}){" "}
+          {bookSessionPayload?.trainer_info?.extraInfo?.hourly_rate ||
+            TRAINER_AMOUNT_USD}
+          ){" "}
         </h3>
         <h4 className="mt-3 mb-3">
           Booking time: {moment(bookSessionPayload.booked_date).format("ll")} |
@@ -557,9 +565,18 @@ const ScheduleTraining = () => {
     );
 
   const renderSearchMenu = () => (
-    <div className="bookings custom-scroll custom-sidebar-content custom-slider-search-align">
+    <div
+      onScroll={() => {
+        if (configs.sidebar.isMobileMode) {
+          dispatch(isSidebarToggleEnabled(true));
+        }
+        return;
+      }}
+      className="bookings custom-scroll custom-trainee-dashboard"
+    >
       <div
-        className="d-flex justify-content-center align-middle align-items-center"
+        id="dashboard"
+        className="d-flex justify-content-center align-items-center dashboard-search-trainer"
         style={{
           height: "94%",
         }}
@@ -608,17 +625,10 @@ const ScheduleTraining = () => {
           }}
         />
       </div>
-      <h2
-        style={{
-          display: "flex",
-          justifyContent: "start",
-          marginLeft: "8%",
-        }}
-        className="trainer-recommended"
-      >
-        Recommended
-      </h2>
-      <TrainerSlider list={listOfTrainers} />
+      <div className="trainer-recommended">
+        <h2>Recommended</h2>
+        <TrainerSlider list={listOfTrainers} />
+      </div>
       <div style={{ height: "11vh" }} />
     </div>
   );
@@ -661,7 +671,7 @@ const ScheduleTraining = () => {
     <React.Fragment>
       <div className="container">
         <div className="row">
-          <div className="col-2 col-xs-2 col-sm-2 col-md-2 col-xs-2 datePicker mb-3">
+          <div className="col-6 col-xs-2 col-sm-2 col-md-2 col-xs-2 date-picker mb-3">
             <DatePicker
               className="border border-dark"
               minDate={moment().toDate()}
@@ -716,11 +726,11 @@ const ScheduleTraining = () => {
             <TrainerSlider list={listOfTrainers} />
           )}
         </div>
-        <Modal
-          isOpen={showTransactionModal}
-          element={renderStripePaymentContent()}
-        />
       </div> */}
+      <Modal
+        isOpen={showTransactionModal}
+        element={renderStripePaymentContent()}
+      />
     </React.Fragment>
   );
 
@@ -799,14 +809,16 @@ const ScheduleTraining = () => {
     //     </div>
     //   )}
     // </div>
-    <div className="custom-scroll">
+    <React.Fragment>
       {trainerInfo.userInfo === null ||
       (trainerInfo && trainerInfo.userInfo) ? (
-        renderUserDetails()
+        <div className="custom-scroll">{renderUserDetails()}</div>
       ) : (
-        <React.Fragment>{renderSearchMenu()}</React.Fragment>
+        <div className="custom-scroll trainee-dashboard">
+          {renderSearchMenu()}
+        </div>
       )}
-    </div>
+    </React.Fragment>
   );
 };
 

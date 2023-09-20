@@ -15,6 +15,14 @@ const initialState = {
   isLoading: true,
   selectedTrainerId: null,
   profile_image_url: null,
+  configs: {
+    sidebar: {
+      isToggleEnable: false,
+      isMobileMode: false,
+    },
+  },
+  activeTab: "",
+  sidebarTab: "",
 };
 
 export const addRatingAsync = createAsyncThunk(
@@ -94,6 +102,24 @@ export const bookingsSlice = createSlice({
     },
     removeProfileImageUrl: (state, action) => {
       state.profile_image_url = action.payload;
+    },
+    isMobileFriendly: (state, action) => {
+      state.configs.sidebar = {
+        ...state.configs.sidebar,
+        isMobileMode: action.payload,
+      };
+    },
+    isSidebarToggleEnabled: (state, action) => {
+      state.configs.sidebar = {
+        ...state.configs.sidebar,
+        isToggleEnable: action.payload,
+      };
+    },
+    handleActiveTab: (state, action) => {
+      state.activeTab = action.payload;
+    },
+    handleSidebarTabClose: (state, action) => {
+      state.sidebarTab = action.payload;
     },
   },
   extraReducers: (builder) => {

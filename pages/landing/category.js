@@ -105,7 +105,7 @@ const Category = (masterRecords) => {
 
   return (
     <React.Fragment>
-      <div className="container">
+      <div className="container category-content">
         <div class="row">
           <div class="col d-none d-sm-block">
             {masterRecords?.masterRecords?.category?.map((item, index) => {
@@ -196,13 +196,7 @@ const Category = (masterRecords) => {
           } `}
         >
           <div className="row my-5">
-            <div
-              className={`col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 `}
-              style={{
-                margin: 0,
-                marginLeft: isMobileScreen ? "33px" : null,
-              }}
-            >
+            <div className={`col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12`}>
               <SearchableDropdown
                 placeholder="Search Trainers..."
                 options={[...listOfTrainers, ...categoryList]}
@@ -211,7 +205,7 @@ const Category = (masterRecords) => {
                 customClasses={{
                   searchBar: "search-bar-trainee",
                   searchButton: "search-button-trainee",
-                  dropdown: "custom-dropdown-width",
+                  dropdown: "custom-dropdown-width-landing",
                 }}
                 onSearchClick={(query) => {
                   if (query) {
@@ -253,7 +247,6 @@ const Category = (masterRecords) => {
         </div>
       </div>
 
-      
       <Modal
         isOpen={trainerInfo.isOpen}
         overflowHidden={true}

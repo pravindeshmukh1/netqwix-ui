@@ -56,7 +56,7 @@ const AccordionHeader = ({
         <div className="col-10">
           <Button
             color="link"
-            style={{ color: "#000080" }}
+            style={{ color: "#000080", textAlign: "start" }}
             onClick={() => {
               onAClick();
               onClick();

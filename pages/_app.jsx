@@ -66,8 +66,7 @@ export default function MyAppComponent({ Component, pageProps }) {
           <meta name="author" content="Netquix" />
           <link rel="icon" href="/favicon.png" />
           <link rel="shortcut icon" href="/favicon.png" />
-          <link rel="stylesheet" href="path/to/custom.css"/>
-
+          <link rel="stylesheet" href="path/to/custom.css" />
 
           <title>Netqwix</title>
         </Head>
@@ -81,11 +80,7 @@ export default function MyAppComponent({ Component, pageProps }) {
               //   <h3>Simple, secure messaging for fast connect to world..!</h3>
               // </div>
               <div className="chitchat-loader">
-                <img
-                  src="/assets/images/netquix_logo.png"
-                  alt="images"
-                  className="image-fluid"
-                />
+                <img src="/assets/images/netquix_logo.png" alt="images" />
               </div>
             )}
             <div>

@@ -34,6 +34,7 @@ import {
   uploadProfilePictureAsync,
 } from "../../app/components/common/common.slice";
 import { Utils } from "../../utils/utils";
+import { UpdateHourlyRateForm } from "../../app/components/trainer/settings/hourly_rate";
 
 const SettingSection = (props) => {
   const dispatch = useAppDispatch();
@@ -53,6 +54,7 @@ const SettingSection = (props) => {
     username: "",
     address: "Alabma , USA",
     wallet_amount: 0,
+    hourly_rate: 0,
     editStatus: false,
     profile_picture: undefined,
   });
@@ -63,6 +65,8 @@ const SettingSection = (props) => {
     changeNumber: false,
     accountInfo: false,
     deleteAccount: false,
+    hourlyRate: false,
+    workingHours: false,
   });
 
   const initialValues = {
@@ -700,90 +704,115 @@ const SettingSection = (props) => {
                 </div>
               </div>
             </div>
+
+            {/*  */}
+
             <div className="card">
               <div
                 className="card-header"
                 onClick={() =>
                   setCollapseShow({
                     ...collapseShow,
-                    accountInfo: !collapseShow.accountInfo,
                     changeNumber: false,
-                    privacy: false,
-                    deleteAccount: false,
+                    hourlyRate: !collapseShow.hourlyRate,
+                    workingHours: false,
                     verfication: false,
+                    accountInfo: false,
+                    deleteAccount: false,
+                    privacy: false,
                     security: false,
                   })
                 }
               >
                 <a href="#javascript">
-                  Request account info
-                  <a className="fa fa-angle-down" />
+                  Update Hourly Rate
+                  <i className="fa fa-angle-down" />
                 </a>
               </div>
               <div
-                className={`collapse ${collapseShow.accountInfo ? "show" : ""}`}
+                className={`collapse ${collapseShow.hourlyRate ? "show" : ""}`}
               >
-                <div className="card-body">
-                  <a
-                    className={`p-0 req-info ${
-                      acctRequestDisable ? "disabled" : ""
-                    }`}
-                    id="demo"
-                    href="#"
-                    disabled={acctRequestDisable}
-                    onClick={() => setDisable(true)}
-                  >
-                    Request Info
-                  </a>
-                  <p>
-                    {" "}
-                    <b>Note : </b>Create a report of your account information
-                    and settings, which you can access ot port to another app.
-                  </p>
+                <div className="card-body change-number">
+                  <UpdateHourlyRateForm
+                    userInfo={userInfo}
+                    extraInfo={userInfo?.extraInfo || {}}
+                    onFormSubmit={(formValue) => {
+                      //
+                      dispatch(
+                        updateProfileAsync({
+                          extraInfo: { ...userInfo?.extraInfo, ...formValue },
+                        })
+                      );
+                    }}
+                  />
                 </div>
               </div>
             </div>
+
+            {/*  */}
             <div className="card">
               <div
                 className="card-header"
                 onClick={() =>
                   setCollapseShow({
                     ...collapseShow,
-                    deleteAccount: !collapseShow.deleteAccount,
                     changeNumber: false,
-                    accountInfo: false,
-                    privacy: false,
+                    hourlyRate: false,
+                    workingHours: !collapseShow.workingHours,
                     verfication: false,
+                    accountInfo: false,
+                    deleteAccount: false,
+                    privacy: false,
                     security: false,
                   })
                 }
               >
                 <a href="#javascript">
-                  Delete My account
+                  Working hours
                   <i className="fa fa-angle-down" />
                 </a>
               </div>
               <div
                 className={`collapse ${
-                  collapseShow.deleteAccount ? "show" : ""
+                  collapseShow.workingHours ? "show" : ""
                 }`}
               >
-                <div className="card-body">
-                  <a
-                    className={`p-0 req-info font-danger ${
-                      deleteAcct ? "disabled" : ""
-                    }`}
-                    href="#"
-                    disabled={deleteAcct}
-                    onClick={() => setDeleteDisable(true)}
-                  >
-                    Delete Account{" "}
-                  </a>
-                  <p>
+                <div className="card-body change-number">
+                  <h5>Add your working hours...</h5>
+                  <div className="input-group">
+                    <input
+                      className="form-control"
+                      type="number"
+                      placeholder="9:00 AM"
+                    />
+                    <div className="input-group-prepend">
+                      <span className="input-group-text form-control m-0">
+                        AM
+                      </span>
+                    </div>
+                  </div>
+                  <h5>End time</h5>
+                  <div className="input-group">
+                    <input
+                      className="form-control"
+                      type="number"
+                      placeholder="7:00 PM"
+                    />
+                    <div className="input-group-prepend">
+                      <span className="input-group-text form-control m-0">
+                        PM
+                      </span>
+                    </div>
+                  </div>
+                  <div className="text-right">
                     {" "}
-                    <b>Note :</b>Deleting your account will delete your account
-                    info, profile photo, all groups & chat history.
-                  </p>
+                    <a
+                      className="btn btn-outline-primary button-effect btn-sm"
+                      href="#"
+                    >
+                      Save
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

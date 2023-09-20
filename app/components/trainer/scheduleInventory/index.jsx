@@ -8,6 +8,7 @@ import { Form, Formik, FieldArray, validateYupSchema } from "formik";
 import { useAppSelector, useAppDispatch } from "../../../store";
 import {
   Message,
+  leftSideBarOptions,
   timeFormatInDb,
   weekDays,
 } from "../../../common/constants";
@@ -18,12 +19,17 @@ import {
 } from "../scheduleInventory/scheduleInventory.slice";
 import { Utils } from "../../../../utils/utils";
 import { toast } from "react-toastify";
+import { bookingsAction, bookingsState } from "../../common/common.slice";
+import { X } from "react-feather";
 
 const ScheduleInventory = () => {
   const { status, scheduleInventoryData } = useAppSelector(
     scheduleInventoryState
   );
-  
+  const { handleSidebarTabClose } = bookingsAction;
+  const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
+  const { isLoading, configs } = useAppSelector(bookingsState);
+
   const dispatch = useAppDispatch();
   const [timePickerDiv, setTimePickerDiv] = useState(scheduleInventoryData);
   const [isError, setIsError] = useState(false);
@@ -167,10 +173,34 @@ const ScheduleInventory = () => {
     });
     setValues(updatedValues);
   };
+  const OpenCloseSidebar = () => {
+    dispatch(handleSidebarTabClose(leftSideBarOptions.HOME));
+    document.querySelector(".main-nav").classList.add("on");
+    document.querySelector(".sidebar-toggle").classList.remove("none");
+  };
 
   return (
-    <div className="bookings custom-scroll container-content">
-      <div id="header" className="header">
+    <div
+      className="bookings custom-scroll custom-sidebar-content-booking"
+      onScroll={() => {
+        if (configs.sidebar.isMobileMode) {
+          dispatch(isSidebarToggleEnabled(true));
+        }
+        return;
+      }}
+    >
+      {/* {configs.sidebar.isMobileMode && configs.sidebar.isToggleEnable ? (
+        <div
+          className="media-body media-body text-right mb-1"
+          onClick={OpenCloseSidebar}
+        >
+          <X
+            className="icon-btn btn-primary btn-sm close-panel"
+            style={{ cursor: "pointer" }}
+          />
+        </div>
+      ) : null} */}
+      <div id="header" className="header ml-3">
         <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
           Schedule Slots
         </h3>
@@ -206,8 +236,9 @@ const ScheduleInventory = () => {
             <Form>
               {/* {JSON.stringify(scheduleInventoryData)} */}
               {values.map(({ day, slots }, parentIndex) => {
-                return (<>
-                  {/* <div key={`schedule-inventory-${parentIndex}`}>
+                return (
+                  <>
+                    {/* <div key={`schedule-inventory-${parentIndex}`}>
                     <div key={parentIndex} className="row my-4">
                       <div className="col-2" />
                       <div className="col-2 text-capitalize">
@@ -349,123 +380,137 @@ const ScheduleInventory = () => {
                     </div>
                     <hr className="divider" />
                   </div> */}
-                  <div key={`schedule-inventory-${parentIndex}`}>
-  <div key={parentIndex} className="row my-4 align-items-center">
-    <div className="col-12 col-md-2 text-capitalize mb-3 mb-md-0">
-      <h3>{day}</h3>
-    </div>
-    <FieldArray name="slots">
-      {({ remove, push }) => {
-        return (
-          <div className="col-12 col-md-10">
-            {slots.map((time, slotIndex) => {
-              return (
-                <div key={`${slotIndex}-key`} className="row mb-3">
-                  <div className="col-12 col-sm-6 col-md-4 mb-2 mb-md-0">
-                  <TimePicker
-                                        name="startTime"
-                                        className={`${
-                                          (values[parentIndex].slots[slotIndex]
-                                            .error ||
+                    <div key={`schedule-inventory-${parentIndex}`}>
+                      <div
+                        key={parentIndex}
+                        className="row my-4 align-items-center"
+                      >
+                        <div className="col-12 col-md-2 text-capitalize mb-3 mb-md-0">
+                          <h3>{day}</h3>
+                        </div>
+                        <FieldArray name="slots">
+                          {({ remove, push }) => {
+                            return (
+                              <div className="col-12 col-md-10">
+                                {slots.map((time, slotIndex) => {
+                                  return (
+                                    <div
+                                      key={`${slotIndex}-key`}
+                                      className="row mb-3"
+                                    >
+                                      <div className="col-12 col-sm-6 col-md-4 mb-2 mb-md-0">
+                                        <TimePicker
+                                          name="startTime"
+                                          className={`${
+                                            (values[parentIndex].slots[
+                                              slotIndex
+                                            ].error ||
+                                              values[parentIndex].slots[
+                                                slotIndex
+                                              ].timeConflict) === true &&
+                                            "border border-danger"
+                                          }`}
+                                          placeholder="Select time"
+                                          defaultValue={
+                                            time.start_time &&
+                                            Utils.getFormattedTime(
+                                              time.start_time
+                                            )
+                                          }
+                                          showSecond={false}
+                                          minuteStep={5}
+                                          use12Hours
+                                          onChange={(value) =>
+                                            handleStartTimeChange(
+                                              value,
+                                              values,
+                                              parentIndex,
+                                              slotIndex,
+                                              setValues
+                                            )
+                                          }
+                                        />
+                                      </div>
+                                      <div className="col-12 col-sm-6 col-md-4 mb-2 mb-md-0">
+                                        <TimePicker
+                                          placeholder="Select time"
+                                          defaultValue={
+                                            time.end_time &&
+                                            Utils.getFormattedTime(
+                                              time.end_time
+                                            )
+                                          }
+                                          className={`${
                                             values[parentIndex].slots[slotIndex]
-                                              .timeConflict) === true &&
-                                          "border border-danger"
-                                        }`}
-                                        placeholder="Select time"
-                                        defaultValue={
-                                          time.start_time &&
-                                          Utils.getFormattedTime(
-                                            time.start_time
-                                          )
-                                        }
-                                        showSecond={false}
-                                        minuteStep={5}
-                                        use12Hours
-                                        onChange={(value) =>
-                                          handleStartTimeChange(
-                                            value,
-                                            values,
-                                            parentIndex,
-                                            slotIndex,
-                                            setValues
-                                          )
-                                        }
-                                      />
-                  </div>
-                  <div className="col-12 col-sm-6 col-md-4 mb-2 mb-md-0">
-                  <TimePicker
-                                        placeholder="Select time"
-                                        defaultValue={
-                                          time.end_time &&
-                                          Utils.getFormattedTime(time.end_time)
-                                        }
-                                        className={`${
-                                          values[parentIndex].slots[slotIndex]
-                                            .error === true &&
-                                          "border border-danger"
-                                        }`}
-                                        showSecond={false}
-                                        minuteStep={5}
-                                        use12Hours
-                                        onChange={(value) =>
-                                          handleEndTimeChange(
-                                            value,
-                                            values,
-                                            parentIndex,
-                                            slotIndex,
-                                            setValues
-                                          )
-                                        }
-                                      />
-                  </div>
-                  <div className="col-12 col-sm-12 col-md-4 d-flex justify-content-center justify-content-md-start justify-content-sm-center">
-                    {slotIndex === 0 && (
-                      <button
-                        className="btn btn-circle bg-primary text-white me-2"
-                        type="button"
-                        disabled={
-                          values[parentIndex].slots[slotIndex].timeConflict ||
-                          values[parentIndex].slots[slotIndex].error
-                        }
-                        onClick={() =>
-                          handleAddSlotToDaySlots(
-                            parentIndex,
-                            values,
-                            setValues
-                          )
-                        }
-                      >
-                        <i className="fa fa-plus"></i>
-                      </button>
-                    )}
-                    {slotIndex !== 0 && (
-                      <button
-                        className="btn btn-circle bg-danger text-white"
-                        type="button"
-                        onClick={() =>
-                          handleRemoveDaySlots(
-                            parentIndex,
-                            slotIndex,
-                            values,
-                            setValues
-                          )
-                        }
-                      >
-                        <i className="fa fa-minus"></i>
-                      </button>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        );
-      }}
-    </FieldArray>
-  </div>
-  <hr className="divider w-70 " />
-</div></>
-
+                                              .error === true &&
+                                            "border border-danger"
+                                          }`}
+                                          showSecond={false}
+                                          minuteStep={5}
+                                          use12Hours
+                                          onChange={(value) =>
+                                            handleEndTimeChange(
+                                              value,
+                                              values,
+                                              parentIndex,
+                                              slotIndex,
+                                              setValues
+                                            )
+                                          }
+                                        />
+                                      </div>
+                                      <div className="col-12 col-sm-12 col-md-4 d-flex justify-content-center justify-content-md-start justify-content-sm-end slot">
+                                        {slotIndex === 0 && (
+                                          <button
+                                            className="btn btn-circle bg-primary text-white me-2"
+                                            type="button"
+                                            disabled={
+                                              values[parentIndex].slots[
+                                                slotIndex
+                                              ].timeConflict ||
+                                              values[parentIndex].slots[
+                                                slotIndex
+                                              ].error
+                                            }
+                                            onClick={() =>
+                                              handleAddSlotToDaySlots(
+                                                parentIndex,
+                                                values,
+                                                setValues
+                                              )
+                                            }
+                                          >
+                                            <i className="fa fa-plus"></i>
+                                          </button>
+                                        )}
+                                        {slotIndex !== 0 && (
+                                          <button
+                                            className="btn btn-circle bg-danger text-white"
+                                            type="button"
+                                            onClick={() =>
+                                              handleRemoveDaySlots(
+                                                parentIndex,
+                                                slotIndex,
+                                                values,
+                                                setValues
+                                              )
+                                            }
+                                          >
+                                            <i className="fa fa-minus"></i>
+                                          </button>
+                                        )}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            );
+                          }}
+                        </FieldArray>
+                      </div>
+                      <hr className="divider w-70 " />
+                    </div>
+                  </>
                 );
               })}
               {scheduleInventoryData.length && (

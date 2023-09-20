@@ -6,7 +6,6 @@ import NotificationSection from "./notificationSection";
 import SettingSection from "./settingSection";
 import StatusSection from "./statusSection";
 import RecentSection from "./recentSection";
-import ChatSection from "./chatSection";
 import { Fragment, useState } from "react";
 import { NavLink, TabContent, TabPane } from "reactstrap";
 import { useRouter } from "next/router";
@@ -17,8 +16,10 @@ import { authAction, authState } from "../../app/components/auth/auth.slice";
 import {
   AccountType,
   LOCAL_STORAGE_KEYS,
+  MOBILE_SIZE,
   POSITION_FIXED_SIDEBAR_MENU,
   leftSideBarOptions,
+  routingPaths,
 } from "../../app/common/constants";
 import { SocketContext } from "../../app/components/socket";
 import TodoSection from "../rightSidebar/todoSection";
@@ -27,7 +28,11 @@ import NoteSection from "../rightSidebar/noteSection";
 import FileSection from "../rightSidebar/fileSection";
 import AppListSection from "../rightSidebar/appList";
 import { Book, File } from "react-feather";
-
+import {
+  bookingsAction,
+  bookingsState,
+} from "../../app/components/common/common.slice";
+const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 const steps = [
   {
     selector: ".step1",
@@ -53,13 +58,14 @@ const Index = (props) => {
   const { sidebarActiveTab } = useAppSelector(authState);
   const [width, setWidth] = useState(0);
   const [opentour, setopentour] = useState(true);
-  const [activeTab, setActiveTab] = useState(sidebarActiveTab);
+  let [activeTab, setActiveTab] = useState(sidebarActiveTab);
   const [mode, setMode] = useState(false);
   const router = useRouter();
   const [size, setSize] = useState([0, 0]);
   const [accountType, setAccountType] = useState("");
   const dispatch = useAppDispatch();
-
+  const bookingState = useAppSelector(bookingsState);
+  const { handleActiveTab } = bookingsAction;
   useEffect(() => {
     setAccountType(localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE));
   });
@@ -71,14 +77,38 @@ const Index = (props) => {
   }, []);
 
   useEffect(() => {
+    console.log(`window.innerWidth --- `, window.innerWidth);
     function updateSize() {
       setSize(window.innerWidth);
       setWidth(window.innerWidth);
+      if (window.innerWidth < MOBILE_SIZE) {
+        // for mobile device
+        dispatch(isMobileFriendly(true));
+        console.log(`size === `, window.innerWidth);
+      } else {
+        dispatch(isMobileFriendly(false));
+      }
     }
     window.addEventListener("resize", updateSize);
     updateSize();
     return () => window.removeEventListener("resize", updateSize);
   }, []);
+
+  useEffect(() => {
+    if (activeTab) {
+      if (bookingState.configs?.sidebar?.isMobileMode) {
+        document.querySelector(".main-nav").classList.remove("on");
+      }
+      dispatch(handleActiveTab(activeTab));
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (bookingState.sidebarTab) {
+      TogglTab(bookingState.sidebarTab);
+    }
+    console.log("TogglTab", bookingState.sidebarTab);
+  }, [bookingState.sidebarTab]);
 
   const CloseAppSidebar = () => {
     document.querySelector(".chitchat-main").classList.remove("small-sidebar");
@@ -148,6 +178,7 @@ const Index = (props) => {
           CloseAppSidebar={CloseAppSidebar}
           ToggleTab={ToggleTab}
         /> */}
+
       <nav
         className={`main-nav on custom-scroll ${
           accountType === AccountType.TRAINEE &&
@@ -465,7 +496,9 @@ const Index = (props) => {
                   </TabPane>
                   <TabPane
                     tabId="file"
-                    className={`${activeTab === "file" ? "left-90" : ""}`}
+                    className={`${
+                      activeTab === "file" ? "left-90 custom-mobile-menu" : ""
+                    }`}
                   >
                     <FileSection smallSideBarToggle={smallSideBarToggle} />
                   </TabPane>
@@ -483,7 +516,9 @@ const Index = (props) => {
                   <TabPane
                     tabId="notification"
                     className={`${
-                      activeTab === "notification" ? "left-90" : ""
+                      activeTab === "notification"
+                        ? "left-90 custom-mobile-menu"
+                        : ""
                     }`}
                   >
                     <NotificationSection
@@ -494,7 +529,11 @@ const Index = (props) => {
                   </TabPane>
                   <TabPane
                     tabId="setting"
-                    className={`${activeTab === "setting" ? "left-90 " : ""} ${
+                    className={`${
+                      activeTab === "setting"
+                        ? "left-90 custom-mobile-menu"
+                        : ""
+                    } ${
                       accountType === AccountType.TRAINER
                         ? "sidebar-full-width"
                         : ""
@@ -521,6 +560,7 @@ const Index = (props) => {
             </div>
           </aside>
         )}
+      {bookingState.configs?.sidebar?.isMobileMode && <RecentSection />}
     </Fragment>
   );
 };

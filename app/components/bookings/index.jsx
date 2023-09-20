@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import ReactStrapModal from "../../common/modal";
@@ -16,6 +16,7 @@ import {
   BookedSession,
   FormateDate,
   FormateHours,
+  leftSideBarOptions,
   meetingRatingTimeout,
 } from "../../common/constants";
 import { Utils } from "../../../utils/utils";
@@ -24,11 +25,15 @@ import StartMeeting from "./start";
 import { SocketContext } from "../socket";
 import Ratings from "./ratings";
 import Rating from "react-rating";
-import { Star } from "react-feather";
+import { Star, X } from "react-feather";
+
+const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
 const Bookings = ({ accountType = null }) => {
   const router = useRouter();
-
+  const dispatch = useAppDispatch();
+  const { handleActiveTab, handleSidebarTabClose } = bookingsAction;
+  const { isLoading, configs } = useAppSelector(bookingsState);
   const [bookedSession, setBookedSession] = useState({
     id: "",
     booked_status: "",
@@ -42,7 +47,7 @@ const Bookings = ({ accountType = null }) => {
   });
   const socket = useContext(SocketContext);
 
-  const dispatch = useAppDispatch();
+  const { activeTab } = useAppSelector(bookingsState);
   const { scheduledMeetingDetails, addRatingModel } =
     useAppSelector(bookingsState);
   const { addRating } = bookingsAction;
@@ -327,7 +332,7 @@ const Bookings = ({ accountType = null }) => {
                 </button>
               )}
               <button
-                className="btn btn-danger button-effect btn-sm ml-4"
+                className="btn btn-danger button-effect btn-sm ml-4 btnbook"
                 type="button"
                 style={{
                   cursor:
@@ -497,12 +502,44 @@ const Bookings = ({ accountType = null }) => {
       }}
     />
   );
+
+  const OpenCloseSidebar = () => {
+    dispatch(handleSidebarTabClose(leftSideBarOptions.HOME));
+    document.querySelector(".main-nav").classList.add("on");
+    document.querySelector(".sidebar-toggle").classList.remove("none");
+  };
+
   return (
-    <>
+    <React.Fragment>
       <div
         id="bookings"
-        className={`bookings custom-scroll custom-sidebar-content-booking`}
+        onScroll={() => {
+          if (configs.sidebar.isMobileMode) {
+            dispatch(isSidebarToggleEnabled(true));
+          }
+          return;
+        }}
+        className={`bookings custom-scroll custom-sidebar-content-booking ${
+          configs.sidebar.isMobileMode &&
+          configs.sidebar.isToggleEnable &&
+          `submenu-width dynemic-sidebar ${
+            activeTab === leftSideBarOptions.SCHEDULE_TRAINING ? "active" : ""
+          }`
+        }`}
       >
+        {/* {accountType === AccountType.TRAINEE &&
+        configs.sidebar.isMobileMode &&
+        configs.sidebar.isToggleEnable ? (
+          <div
+            className="media-body media-body text-right mb-1"
+            onClick={OpenCloseSidebar}
+          >
+            <X
+              className="icon-btn btn-primary btn-sm close-panel"
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+        ) : null} */}
         {addRatingModel.isOpen ? renderRating() : null}
         {!scheduledMeetingDetails.length ? (
           <h3 className="d-flex justify-content-center mt-20">
@@ -519,32 +556,7 @@ const Bookings = ({ accountType = null }) => {
           </div>
         )}
       </div>
-
-      {/* calling popup */}
-      {/* <Modal
-        key={"startMeeting"}
-        toggle={toggle}
-        allowFullWidth={true}
-        isOpen={startMeeting.isOpenModal}
-        // height="100vh"
-        element={
-          <StartMeeting
-            accountType={accountType}
-            traineeInfo={startMeeting.traineeInfo}
-            trainerInfo={startMeeting.trainerInfo}
-            isClose={() => {
-              setStartMeeting({
-                ...startMeeting,
-                id: null,
-                isOpenModal: false,
-                traineeInfo: null,
-                trainerInfo: null,
-              });
-            }}
-          />
-        }
-      /> */}
-    </>
+    </React.Fragment>
   );
 };
 export default Bookings;

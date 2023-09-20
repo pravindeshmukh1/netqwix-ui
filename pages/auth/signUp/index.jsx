@@ -167,15 +167,15 @@ const Auth_SignUp = (props) => {
                         alt="images"
                       /> */}
                       <img
-                         src="/assets/images/netquix_logo.png"
-                         alt="images"
-                         style={{ width: "240px", height: "100px" }}
+                        src="/assets/images/netquix_logo.png"
+                        alt="images"
+                        className="header-image-logo"
                       />
                     </Link>
                   </div>
                   {/* <h3>Hello Everyone , We are Chitchat</h3>
                   <h4>Welcome to chitchat please Register to your account.</h4> */}
-                  <h3>Hello Everyone</h3>
+                  <h3 className="header-text">Welcome</h3>
                   <h4>Please register to your account.</h4>
                   <div>
                     <Stepper
