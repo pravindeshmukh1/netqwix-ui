@@ -102,13 +102,13 @@ export const TrainerDetails = ({
   ];
 
   return (
-    <div className={`custom-trainer-scroll`}>
+    <React.Fragment>
       {trainerInfo === null ? (
         <div className="media-body media-body text-right">
           <div className="mr-4 mt-4">
             <X
               onClick={onClose}
-              className="close"
+              className="close custom-close-icon"
               style={{ cursor: "pointer" }}
             />
           </div>
@@ -126,14 +126,19 @@ export const TrainerDetails = ({
             {!trainerInfo.isCategory ? (
               <X
                 onClick={onClose}
-                className="close"
+                className="close custom-close-icon"
                 style={{ cursor: "pointer" }}
               />
             ) : !trainerDetails.select_trainer ? (
-              <X onClick={onClose} style={{ cursor: "pointer" }} />
+              <X
+                onClick={onClose}
+                style={{ cursor: "pointer" }}
+                className="custom-close-icon"
+              />
             ) : (
               <ArrowLeft
                 style={{ cursor: "pointer" }}
+                className="custom-arrow-icon"
                 onClick={() => {
                   setTrainerDetails((prev) => ({
                     ...prev,
@@ -147,29 +152,31 @@ export const TrainerDetails = ({
           </div>
         </div>
       )}
-      {trainerDetails.select_trainer ? (
-        <TrainerInfo
-          accordionData={accordionData}
-          activeAccordion={activeAccordion}
-          setActiveAccordion={setActiveAccordion}
-          element={element}
-          getTraineeSlots={getTraineeSlots}
-          trainerDetails={trainerDetails}
-          setAccordionsData={setAccordionsData}
-          trainerInfo={trainerInfo}
-        />
-      ) : (
-        <SelectedCategory
-          getTraineeSlots={getTraineeSlots}
-          trainerInfo={trainerInfo}
-          setTrainerDetails={setTrainerDetails}
-          selectTrainer={selectTrainer}
-          searchQuery={searchQuery}
-          setFilterParams={setFilterParams}
-          filterParams={filterParams}
-        />
-      )}
-    </div>
+      <div className={`custom-trainer-scroll`} style={{ marginTop: "24px" }}>
+        {trainerDetails.select_trainer ? (
+          <TrainerInfo
+            accordionData={accordionData}
+            activeAccordion={activeAccordion}
+            setActiveAccordion={setActiveAccordion}
+            element={element}
+            getTraineeSlots={getTraineeSlots}
+            trainerDetails={trainerDetails}
+            setAccordionsData={setAccordionsData}
+            trainerInfo={trainerInfo}
+          />
+        ) : (
+          <SelectedCategory
+            getTraineeSlots={getTraineeSlots}
+            trainerInfo={trainerInfo}
+            setTrainerDetails={setTrainerDetails}
+            selectTrainer={selectTrainer}
+            searchQuery={searchQuery}
+            setFilterParams={setFilterParams}
+            filterParams={filterParams}
+          />
+        )}
+      </div>
+    </React.Fragment>
   );
 };
 
@@ -312,7 +319,9 @@ const SelectedCategory = ({
                           className="badge badge-pill badge-primary mb-2 p-2"
                           style={{ fontSize: "15px" }}
                         >
-                          {`$${data?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD}.00`}
+                          {`$${
+                            data?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD
+                          }.00`}
                           {`/ ${TRAINER_MEETING_TIME}`}
                         </p>
                         <h4
@@ -452,7 +461,10 @@ const TrainerInfo = ({
             <h2 className="mt-3">
               {trainer && trainer ? trainer.fullname : null}
             </h2>
-            <h3 className="mt-3">Hourly Rate: ${trainer?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD}</h3>
+            <h3 className="mt-3">
+              Hourly Rate: $
+              {trainer?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD}
+            </h3>
             {showRatings(
               trainer && trainer.trainer_ratings,
               "mt-3 mb-3 d-flex"

@@ -630,4 +630,18 @@ slick-slider .slick-list,
   .category-content {
     overflow-x: hidden !important;
   }
+  .custom-arrow-icon {
+    position: absolute;
+    top: 55px;
+    left: 7% !important;
+  }
+}
+
+.custom-close-icon {
+  position: absolute !important;
+  right: 1% !important;
+}
+.custom-arrow-icon {
+  position: absolute !important;
+  left: 7.5% !important;
 }
