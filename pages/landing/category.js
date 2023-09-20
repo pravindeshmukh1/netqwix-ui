@@ -105,7 +105,7 @@ const Category = (masterRecords) => {
 
   return (
     <React.Fragment>
-      <div className="container">
+      <div className="container category-content">
         <div class="row">
           <div class="col d-none d-sm-block">
             {masterRecords?.masterRecords?.category?.map((item, index) => {
@@ -253,7 +253,6 @@ const Category = (masterRecords) => {
         </div>
       </div>
 
-      
       <Modal
         isOpen={trainerInfo.isOpen}
         overflowHidden={true}

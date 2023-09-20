@@ -618,9 +618,13 @@ slick-slider .slick-list,
 @media (max-width: 575px) {
   .custom-mobile-menu {
     position: absolute;
-    width: 104.5vw !important;
+    width: 100vw !important;
     left: 0% !important;
     overflow-x: hidden !important;
     overflow-y: hidden !important;
   }
+}
+
+.category-content {
+  overflow-x: hidden !important;
 }

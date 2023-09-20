@@ -104,10 +104,11 @@ const Index = (props) => {
   }, [activeTab]);
 
   useEffect(() => {
-    activeTab = bookingState.activeTab;
-    setActiveTab(activeTab);
-    router.push(routingPaths.dashboard);
-  }, [bookingState.activeTab]);
+    if (bookingState.sidebarTab) {
+      TogglTab(bookingState.sidebarTab);
+    }
+    console.log("TogglTab", bookingState.sidebarTab);
+  }, [bookingState.sidebarTab]);
 
   const CloseAppSidebar = () => {
     document.querySelector(".chitchat-main").classList.remove("small-sidebar");

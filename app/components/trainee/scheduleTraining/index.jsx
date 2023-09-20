@@ -809,14 +809,16 @@ const ScheduleTraining = () => {
     //     </div>
     //   )}
     // </div>
-    <div className="custom-scroll trainee-dashboard">
+    <React.Fragment>
       {trainerInfo.userInfo === null ||
       (trainerInfo && trainerInfo.userInfo) ? (
-        renderUserDetails()
+        <div className="custom-scroll">{renderUserDetails()}</div>
       ) : (
-        <React.Fragment>{renderSearchMenu()}</React.Fragment>
+        <div className="custom-scroll trainee-dashboard">
+          {renderSearchMenu()}
+        </div>
       )}
-    </div>
+    </React.Fragment>
   );
 };
 

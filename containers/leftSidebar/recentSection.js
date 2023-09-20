@@ -63,9 +63,11 @@ const RecentSection = (props) => {
 							></i>
 						</Link> */}
               <Link
-                style={{ marginTop: "10px" }}
+                style={{
+                  marginTop: "10px",
+                }}
                 className={`icon-btn ml-3 button-effect pull-right mainnav  ${
-                  sidebarToggle ? "btn-outline-primary" : "btn-outline-light"
+                  sidebarToggle ? "btn-primary" : "btn-outline-light"
                 }`}
                 href="#"
                 onClick={() => OpenCloseSidebar(sidebarToggle)}

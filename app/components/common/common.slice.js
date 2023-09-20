@@ -118,6 +118,9 @@ export const bookingsSlice = createSlice({
     handleActiveTab: (state, action) => {
       state.activeTab = action.payload;
     },
+    handleSidebarTabClose: (state, action) => {
+      state.sidebarTab = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder

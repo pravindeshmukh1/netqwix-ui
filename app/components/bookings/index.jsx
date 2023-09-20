@@ -32,7 +32,7 @@ const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 const Bookings = ({ accountType = null }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { handleActiveTab } = bookingsAction;
+  const { handleActiveTab, handleSidebarTabClose } = bookingsAction;
   const { isLoading, configs } = useAppSelector(bookingsState);
   const [bookedSession, setBookedSession] = useState({
     id: "",
@@ -65,11 +65,6 @@ const Bookings = ({ accountType = null }) => {
       dispatch(updateBookedSessionScheduledMeetingAsync(updatePayload));
     }
   }, [bookedSession]);
-
-  useEffect(() => {
-    if (activeTab) {
-    }
-  }, [activeTab]);
 
   const toggle = () => setStartMeeting(!startMeeting);
 
@@ -509,7 +504,7 @@ const Bookings = ({ accountType = null }) => {
   );
 
   const OpenCloseSidebar = () => {
-    dispatch(handleActiveTab(leftSideBarOptions.HOME));
+    dispatch(handleSidebarTabClose(leftSideBarOptions.HOME));
     document.querySelector(".main-nav").classList.add("on");
     document.querySelector(".sidebar-toggle").classList.remove("none");
   };
@@ -520,14 +515,11 @@ const Bookings = ({ accountType = null }) => {
         id="bookings"
         onScroll={() => {
           if (configs.sidebar.isMobileMode) {
-            if (!activeTab.length) {
-              dispatch(isSidebarToggleEnabled(true));
-            }
+            dispatch(isSidebarToggleEnabled(true));
           }
           return;
         }}
         className={`bookings custom-scroll custom-sidebar-content-booking ${
-          accountType === AccountType.TRAINEE &&
           configs.sidebar.isMobileMode &&
           configs.sidebar.isToggleEnable &&
           `submenu-width dynemic-sidebar ${
@@ -535,13 +527,13 @@ const Bookings = ({ accountType = null }) => {
           }`
         }`}
       >
-        {configs.sidebar.isMobileMode && configs.sidebar.isMobileMode ? (
+        {configs.sidebar.isMobileMode && configs.sidebar.isToggleEnable ? (
           <div
             className="media-body media-body text-right mb-1"
-            onClick={() => OpenCloseSidebar()}
+            onClick={OpenCloseSidebar}
           >
             <X
-              className="icon-btn btn-outline-light btn-sm close-panel"
+              className="icon-btn btn-primary btn-sm close-panel"
               style={{ cursor: "pointer" }}
             />
           </div>

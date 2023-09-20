@@ -49,6 +49,14 @@
   max-width: 93%;
   width: 93%;
 }
+@media (max-width: 576px) {
+  .custom-trainer-scroll {
+    position: absolute !important;
+    left: 0% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
 
 .custom-landing-page-trainer-details {
   height: 97vh !important;
