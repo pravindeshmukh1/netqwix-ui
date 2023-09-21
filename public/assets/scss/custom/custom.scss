@@ -10,7 +10,7 @@ $canvas-z-index: 8;
 .book-tabs {
   width: 25%;
   font-size: 24px;
-  @media (max-width:576px) {
+  @media (max-width: 576px) {
     width: 100% !important;
     display: flex !important;
     overflow-x: auto !important;
@@ -232,9 +232,11 @@ $canvas-z-index: 8;
   object-fit: cover;
 }
 
-@media (min-aspect-ratio: 16/9) {}
+@media (min-aspect-ratio: 16/9) {
+}
 
-@media (max-aspect-ratio: 16/9) {}
+@media (max-aspect-ratio: 16/9) {
+}
 
 video {
   // object-fit: fill;
@@ -535,7 +537,6 @@ slick-slider .slick-list,
 
 // button margin
 @media (max-width: 576px) {
-
   // .btn.ml-4 {
   .btnbook {
     margin-top: 10px !important;
@@ -546,7 +547,6 @@ slick-slider .slick-list,
 
 // booking slot
 @media (max-width: 576px) {
-
   // .btn.ml-4 {
   .slot {
     justify-content: end !important;
@@ -652,13 +652,10 @@ slick-slider .slick-list,
   // position: absolute;
 }
 
-
 .custom-close-icon {
   position: absolute !important;
   right: 1%;
 }
-
-
 
 // for mobile
 @media (max-width: 575px) {
@@ -683,7 +680,6 @@ slick-slider .slick-list,
   .custom-close-icon {
     right: 3% !important;
   }
-  
 }
 
 .custom-close-icon {
@@ -714,10 +710,13 @@ slick-slider .slick-list,
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-
 .welcome-text {
   font-size: 47px;
-  font-family: 'Roboto';
+  font-family: "Roboto";
   margin: 26px 0;
   font-weight: 300;
+}
+.trainer-bookings-card {
+  border-radius: 16px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }

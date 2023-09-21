@@ -425,7 +425,7 @@ const Bookings = ({ accountType = null }) => {
       } = bookingInfo;
       return (
         <div
-          className="card mb-4"
+          className="card mb-4 mt-5 trainer-bookings-card"
           key={`booking-schedule-training${booking_index}`}
         >
           <div className="card-body">
