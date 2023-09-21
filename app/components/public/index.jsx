@@ -17,6 +17,7 @@ import {
   Message,
   TRAINER_AMOUNT_USD,
   TRAINER_MEETING_TIME,
+  TimeRange,
   debouncedConfigs,
   params,
   routingPaths,
@@ -32,6 +33,9 @@ import ImageVideoThumbnailCarousel from "../../common/imageVideoThumbnailCarouse
 import { useRouter } from "next/router";
 import MultiRangeSlider from "../../common/multiRangeSlider";
 import { checkSlotAsync } from "../../common/common.slice";
+import RangeSlider, {
+  MultiTimeRangeSlider,
+} from "../../common/timeRangeSlider";
 
 const TrainersDetails = ({
   onClose,
@@ -51,11 +55,6 @@ const TrainersDetails = ({
   const [bookingColumns, setBookingColumns] = useState([]);
   const [listOfTrainers, setListOfTrainers] = useState([]);
   const [isPopoverOpen, setIsPopoverOpen] = useState(null);
-  const [checkSlot, setCheckSlot] = useState({
-    trainer_id: "",
-    booked_date: "",
-    slotTime: { from: "", to: "" },
-  });
   const [filterParams, setFilterParams] = useState({
     date: null,
     day: null,
@@ -127,19 +126,6 @@ const TrainersDetails = ({
       })
     );
   }, [getTraineeSlots]);
-
-  const debouncedDispatch = debounce(() => {
-    // dispatch(checkSlotAsync(checkSlot));
-  }, debouncedConfigs.oneSec);
-
-  useEffect(() => {
-    if (checkSlot) {
-      debouncedDispatch();
-      return () => {
-        debouncedDispatch.cancel();
-      };
-    }
-  }, [checkSlot]);
 
   const accordionData = [
     {
@@ -697,8 +683,6 @@ const TrainersDetails = ({
             trainerDetails={trainerDetails}
             setAccordionsData={setAccordionsData}
             trainerInfo={trainerInfo}
-            setCheckSlot={setCheckSlot}
-            checkSlot={checkSlot}
           />
         ) : (
           <SelectedCategory
@@ -730,7 +714,12 @@ const TrainerInfo = ({
   setCheckSlot,
   checkSlot,
 }) => {
+    const dispatch = useAppDispatch();
   const [isTablet, setIsTablet] = useState(false);
+  const [value, setValue] = useState({
+    from: TimeRange.start,
+    to: TimeRange.end,
+  });
   const findTrainerDetails = () => {
     const findByTrainerId = getTraineeSlots.find(
       (trainer) => trainer && trainer._id === trainerDetails._id
@@ -781,6 +770,33 @@ const TrainerInfo = ({
       window.removeEventListener("resize", checkScreenWidth);
     };
   }, []);
+
+  const debouncedDispatch = debounce(() => {
+    const payload = {
+      booked_date: "2023-09-22T06:17:29.952Z",
+      trainer_id: trainer.trainer_id,
+      slotTime: value,
+    };
+    // dispatch(checkSlotAsync(payload));
+  }, debouncedConfigs.oneSec);
+
+  useEffect(() => {
+    if (value) {
+      console.info("value----", value);
+      debouncedDispatch();
+      return () => {
+        debouncedDispatch.cancel();
+      };
+    }
+  }, [value]);
+
+  const changeStartHandler = (value) => {
+    console.log("Start Handler Called", value);
+  };
+
+  const changeCompleteHandler = (value) => {
+    console.log("Complete Handler Called", value);
+  };
 
   return (
     <div
@@ -910,20 +926,26 @@ const TrainerInfo = ({
         <h2>My Schedule</h2>
         {datePicker}
         <div className="row">
-          <div className="col-6 mt-5 mb-5">
-            <MultiRangeSlider
-              min={0}
-              isAvailable={false}
-              max={100}
-              onChange={(values) => {
-                const { min, max } = values;
-                // setCheckSlot({
-                //   ...checkSlot,
-                //   trainer_id: trainer.trainer_id,
-                //   booked_date: "",
-                //   slotTime: { from: min, to: max },
-                // });
+          <div className="col-6">
+            <MultiTimeRangeSlider
+              disabled={false}
+              draggableTrack={false}
+              format={24}
+              name={"time_range"}
+              onChange={(timeRange) => {
+                const { start, end } = timeRange;
+                setValue({
+                  ...value,
+                  from: start,
+                  to: end,
+                });
               }}
+              onChangeStart={changeStartHandler}
+              onChangeComplete={changeCompleteHandler}
+              from={value.from}
+              // value={value}
+              to={value.to}
+              key={"time_range"}
             />
           </div>
         </div>

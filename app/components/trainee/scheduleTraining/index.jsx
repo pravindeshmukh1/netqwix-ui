@@ -7,6 +7,7 @@ import {
   BookedSession,
   Message,
   TRAINER_AMOUNT_USD,
+  TimeRange,
   debouncedConfigs,
   params,
   weekDays,
@@ -32,6 +33,7 @@ import { bookingsAction, bookingsState } from "../../common/common.slice";
 import MultiRangeSlider from "../../../common/multiRangeSlider";
 import { debounce } from "lodash";
 import { checkSlotAsync } from "../../../common/common.slice";
+import { MultiTimeRangeSlider } from "../../../common/timeRangeSlider";
 
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
@@ -58,14 +60,13 @@ const ScheduleTraining = () => {
     userInfo: null,
     selected_category: null,
   });
-  const [checkSlot, setCheckSlot] = useState({
-    trainer_id: "",
-    booked_date: "",
-    slotTime: { from: "", to: "" },
-  });
   const [bookSessionPayload, setBookSessionPayload] = useState({});
   const toggle = () => setInstantScheduleMeeting(!isOpenInstantScheduleMeeting);
 
+  const [value, setValue] = useState({
+    from: TimeRange.start,
+    to: TimeRange.end,
+  });
   useEffect(() => {
     dispatch(getTraineeWithSlotsAsync(getParams));
   }, [getParams]);
@@ -138,17 +139,30 @@ const ScheduleTraining = () => {
   }, []);
 
   const debouncedDispatch = debounce(() => {
-    // dispatch(checkSlotAsync(checkSlot));
+    const payload = {
+      booked_date: "2023-09-22T06:17:29.952Z",
+      trainer_id: "64e452738523f55ec652d285",
+      slotTime: value,
+    };
+    dispatch(checkSlotAsync(payload));
   }, debouncedConfigs.oneSec);
 
   useEffect(() => {
-    if (checkSlot) {
+    if (value) {
       debouncedDispatch();
       return () => {
         debouncedDispatch.cancel();
       };
     }
-  }, [checkSlot]);
+  }, [value]);
+
+  const changeStartHandler = (value) => {
+    console.log("Start Handler Called", value);
+  };
+
+  const changeCompleteHandler = (value) => {
+    console.log("Complete Handler Called", value);
+  };
 
   const setTableData = (data = [], selectedDate) => {
     const result = data.map(
@@ -689,65 +703,67 @@ const ScheduleTraining = () => {
     return <CategoryTrainerDetails />;
   };
 
-  const renderBookingTable = () => (
-    <React.Fragment>
-      <div className="container">
-        <div className="row">
-          <div className="col-6 col-xs-2 col-sm-2 col-md-2 col-xs-2 date-picker mb-3">
-            <DatePicker
-              className="border border-dark"
-              minDate={moment().toDate()}
-              onChange={(date) => {
-                setStartDate(date);
-                const todaySDate = Utils.getDateInFormat(date.toString());
-                const { weekDateFormatted, weekDates } =
-                  Utils.getNext7WorkingDays(todaySDate);
-                setColumns(weekDateFormatted);
-                setTableData(getTraineeSlots, weekDates);
-                setColumns(weekDateFormatted);
-              }}
-              selected={startDate}
-              customInput={<Input />}
-            />
-          </div>
+  const renderBookingTable = () => {
+    return (
+      <React.Fragment>
+        <div className="container">
+          <div className="row">
+            <div className="col-6 col-xs-2 col-sm-2 col-md-2 col-xs-2 date-picker mb-3">
+              <DatePicker
+                className="border border-dark"
+                minDate={moment().toDate()}
+                onChange={(date) => {
+                  setStartDate(date);
+                  const todaySDate = Utils.getDateInFormat(date.toString());
+                  const { weekDateFormatted, weekDates } =
+                    Utils.getNext7WorkingDays(todaySDate);
+                  setColumns(weekDateFormatted);
+                  setTableData(getTraineeSlots, weekDates);
+                  setColumns(weekDateFormatted);
+                }}
+                selected={startDate}
+                customInput={<Input />}
+              />
+            </div>
 
-          <div className="col-12">
-            {(getParams.search && getParams.search.length) ||
-            !bookingColumns.length ? (
-              <div>
-                <div className="ml-3">
-                  <div className="row">
-                    <div className="col-8 mt-2 mb-5">
-                      <MultiRangeSlider
-                        isAvailable={false}
-                        max={100}
-                        min={0}
-                        onChange={(values) => {
-                          const { min, max } = values;
-                          setCheckSlot({
-                            ...checkSlot,
-                            booked_date: "",
-                            slotTime: { from: "", to: "" },
-                            trainer_id:
-                              selectedTrainer.id ||
-                              (trainerInfo &&
-                                trainerInfo.userInfo &&
-                                trainerInfo.userInfo?.id),
-                          });
-                        }}
-                      />
+            <div className="col-12">
+              {(getParams.search && getParams.search.length) ||
+              !bookingColumns.length ? (
+                <div>
+                  <div className="ml-3">
+                    <div className="row">
+                      <div className="col-8 mt-2 mb-5">
+                        <MultiTimeRangeSlider
+                          isAvailable={true}
+                          disabled={false}
+                          draggableTrack={false}
+                          format={24}
+                          from={value.from}
+                          to={value.to}
+                          name={"check-slots"}
+                          onChange={(timeRange) => {
+                            const { start, end } = timeRange;
+                            setValue({
+                              ...value,
+                              from: start,
+                              to: end,
+                            });
+                          }}
+                          onChangeStart={changeStartHandler}
+                          onChangeComplete={changeCompleteHandler}
+                        />
+                      </div>
                     </div>
                   </div>
+                  {renderTable()}
                 </div>
-                {renderTable()}
-              </div>
-            ) : (
-              <TrainerSlider list={listOfTrainers} />
-            )}
+              ) : (
+                <TrainerSlider list={listOfTrainers} />
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      {/* <div className="row">
+        {/* <div className="row">
         <div className="mt-4 col-1.4 datePicker">
           <DatePicker
             minDate={moment().toDate()}
@@ -776,12 +792,13 @@ const ScheduleTraining = () => {
           )}
         </div>
       </div> */}
-      <Modal
-        isOpen={showTransactionModal}
-        element={renderStripePaymentContent()}
-      />
-    </React.Fragment>
-  );
+        <Modal
+          isOpen={showTransactionModal}
+          element={renderStripePaymentContent()}
+        />
+      </React.Fragment>
+    );
+  };
 
   return (
     // <div>
