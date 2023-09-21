@@ -7,6 +7,7 @@ import {
   BookedSession,
   Message,
   TRAINER_AMOUNT_USD,
+  debouncedConfigs,
   params,
   weekDays,
 } from "../../../common/constants";
@@ -28,6 +29,9 @@ import SearchableDropdown from "../helper/searchableDropdown";
 import { masterState } from "../../master/master.slice";
 import { TrainerDetails } from "../../trainer/trainerDetails";
 import { bookingsAction, bookingsState } from "../../common/common.slice";
+import MultiRangeSlider from "../../../common/multiRangeSlider";
+import { debounce } from "lodash";
+import { checkSlotAsync } from "../../../common/common.slice";
 
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
@@ -53,6 +57,11 @@ const ScheduleTraining = () => {
   const [trainerInfo, setTrainerInfo] = useState({
     userInfo: null,
     selected_category: null,
+  });
+  const [checkSlot, setCheckSlot] = useState({
+    trainer_id: "",
+    booked_date: "",
+    slotTime: { from: "", to: "" },
   });
   const [bookSessionPayload, setBookSessionPayload] = useState({});
   const toggle = () => setInstantScheduleMeeting(!isOpenInstantScheduleMeeting);
@@ -127,6 +136,19 @@ const ScheduleTraining = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  const debouncedDispatch = debounce(() => {
+    // dispatch(checkSlotAsync(checkSlot));
+  }, debouncedConfigs.oneSec);
+
+  useEffect(() => {
+    if (checkSlot) {
+      debouncedDispatch();
+      return () => {
+        debouncedDispatch.cancel();
+      };
+    }
+  }, [checkSlot]);
 
   const setTableData = (data = [], selectedDate) => {
     const result = data.map(
@@ -688,10 +710,37 @@ const ScheduleTraining = () => {
               customInput={<Input />}
             />
           </div>
+
           <div className="col-12">
             {(getParams.search && getParams.search.length) ||
             !bookingColumns.length ? (
-              renderTable()
+              <div>
+                <div className="ml-3">
+                  <div className="row">
+                    <div className="col-8 mt-2 mb-5">
+                      <MultiRangeSlider
+                        isAvailable={false}
+                        max={100}
+                        min={0}
+                        onChange={(values) => {
+                          const { min, max } = values;
+                          setCheckSlot({
+                            ...checkSlot,
+                            booked_date: "",
+                            slotTime: { from: "", to: "" },
+                            trainer_id:
+                              selectedTrainer.id ||
+                              (trainerInfo &&
+                                trainerInfo.userInfo &&
+                                trainerInfo.userInfo?.id),
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                {renderTable()}
+              </div>
             ) : (
               <TrainerSlider list={listOfTrainers} />
             )}

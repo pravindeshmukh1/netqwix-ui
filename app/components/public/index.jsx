@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { debounce } from "lodash";
 import { ArrowLeft, Star, X } from "react-feather";
 import {
   getTraineeWithSlotsAsync,
@@ -16,6 +17,7 @@ import {
   Message,
   TRAINER_AMOUNT_USD,
   TRAINER_MEETING_TIME,
+  debouncedConfigs,
   params,
   routingPaths,
   weekDays,
@@ -28,6 +30,8 @@ import TrainerSlider from "../trainee/scheduleTraining/trainerSlider";
 import Modal from "../../common/modal";
 import ImageVideoThumbnailCarousel from "../../common/imageVideoThumbnailCarousel";
 import { useRouter } from "next/router";
+import MultiRangeSlider from "../../common/multiRangeSlider";
+import { checkSlotAsync } from "../../common/common.slice";
 
 const TrainersDetails = ({
   onClose,
@@ -47,6 +51,11 @@ const TrainersDetails = ({
   const [bookingColumns, setBookingColumns] = useState([]);
   const [listOfTrainers, setListOfTrainers] = useState([]);
   const [isPopoverOpen, setIsPopoverOpen] = useState(null);
+  const [checkSlot, setCheckSlot] = useState({
+    trainer_id: "",
+    booked_date: "",
+    slotTime: { from: "", to: "" },
+  });
   const [filterParams, setFilterParams] = useState({
     date: null,
     day: null,
@@ -118,6 +127,19 @@ const TrainersDetails = ({
       })
     );
   }, [getTraineeSlots]);
+
+  const debouncedDispatch = debounce(() => {
+    // dispatch(checkSlotAsync(checkSlot));
+  }, debouncedConfigs.oneSec);
+
+  useEffect(() => {
+    if (checkSlot) {
+      debouncedDispatch();
+      return () => {
+        debouncedDispatch.cancel();
+      };
+    }
+  }, [checkSlot]);
 
   const accordionData = [
     {
@@ -675,6 +697,8 @@ const TrainersDetails = ({
             trainerDetails={trainerDetails}
             setAccordionsData={setAccordionsData}
             trainerInfo={trainerInfo}
+            setCheckSlot={setCheckSlot}
+            checkSlot={checkSlot}
           />
         ) : (
           <SelectedCategory
@@ -703,6 +727,8 @@ const TrainerInfo = ({
   trainerDetails,
   setAccordionsData,
   datePicker,
+  setCheckSlot,
+  checkSlot,
 }) => {
   const [isTablet, setIsTablet] = useState(false);
   const findTrainerDetails = () => {
@@ -883,6 +909,24 @@ const TrainerInfo = ({
         </div>
         <h2>My Schedule</h2>
         {datePicker}
+        <div className="row">
+          <div className="col-6 mt-5 mb-5">
+            <MultiRangeSlider
+              min={0}
+              isAvailable={false}
+              max={100}
+              onChange={(values) => {
+                const { min, max } = values;
+                // setCheckSlot({
+                //   ...checkSlot,
+                //   trainer_id: trainer.trainer_id,
+                //   booked_date: "",
+                //   slotTime: { from: min, to: max },
+                // });
+              }}
+            />
+          </div>
+        </div>
         <div className="mt-3">{element}</div>
       </div>
     </div>
