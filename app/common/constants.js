@@ -68,10 +68,10 @@ export const weekDays = [
 ];
 
 export const bookingButton = [
-  "Upcoming",
-  "Confirmed",
-  "Cancelled",
-  "Completed"
+  "upcoming",
+  "confirmed",
+  "cancelled",
+  "completed"
  
 ];
 export const routingPaths = {

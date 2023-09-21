@@ -44,7 +44,7 @@ const Bookings = ({ accountType = null }) => {
     id: "",
     booked_status: "",
   });
-  const [tabs, setTabs] = useState("Upcoming")
+  const [tabs, setTabs] = useState(bookingButton[0])
 
   const [startMeeting, setStartMeeting] = useState({
     trainerInfo: null,
@@ -544,7 +544,7 @@ const Bookings = ({ accountType = null }) => {
                 src={
                   userInfo && userInfo?.profile_picture
                     ? userInfo && userInfo?.profile_picture
-                    : "/assets/images/avtar/statusMenuIcon.jpeg"
+                    : "/assets/images/avtar/user.png"
                 }
                 alt="trainer_image"
                 className="rounded trainer-profile"
@@ -575,7 +575,7 @@ const Bookings = ({ accountType = null }) => {
       <div class="card rounded trainer-profile-card">
         <div class="card-body">
           <div className="row">
-            <div className="col-12 col-sm-6 col-md-8 col-lg-12 col-xl-12">
+            <div className="col-12 col-mb-2 col-sm-6 col-sm-mb-2 col-md-8 col-lg-12 col-xl-12">
               {bookingButton?.map((tab, index) => {
                 return (
                   <button
@@ -625,7 +625,7 @@ const Bookings = ({ accountType = null }) => {
           </div>
         ) : null} */}
         {addRatingModel.isOpen ? renderRating() : null}
-        {!scheduledMeetingDetails.length ? (
+        {(!scheduledMeetingDetails && !scheduledMeetingDetails.length) ? (
           <h3 className="d-flex justify-content-center mt-20">
             No bookings available
           </h3>
@@ -664,6 +664,9 @@ const Bookings = ({ accountType = null }) => {
                 Bookings
               </h3>
             }
+            {/* <div className="mb-2">
+              {bookingTabs()}
+            </div> */}
             {Bookings()}
           </div>
         )}
