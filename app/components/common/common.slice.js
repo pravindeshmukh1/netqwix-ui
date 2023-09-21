@@ -43,9 +43,13 @@ export const addRatingAsync = createAsyncThunk(
 export const updateBookedSessionScheduledMeetingAsync = createAsyncThunk(
   "update/booked/session",
   async (payload, { dispatch }) => {
+    const { status, updatePayload } = payload;
+    const statusPayload = {
+      status,
+    };
     try {
-      const response = await updateBookedSessionScheduledMeeting(payload);
-      dispatch(getScheduledMeetingDetailsAsync());
+      const response = await updateBookedSessionScheduledMeeting(updatePayload);
+      dispatch(getScheduledMeetingDetailsAsync(statusPayload));
       //TODO:update redux state not calling get api
       return response;
     } catch (err) {
@@ -57,9 +61,9 @@ export const updateBookedSessionScheduledMeetingAsync = createAsyncThunk(
 
 export const getScheduledMeetingDetailsAsync = createAsyncThunk(
   "get/scheduled/meetings",
-  async () => {
+  async (payload) => {
     try {
-      const response = await getScheduledMeetingDetails();
+      const response = await getScheduledMeetingDetails(payload);
       return response;
     } catch (err) {
       toast.error(err.response.data.error);

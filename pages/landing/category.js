@@ -45,7 +45,7 @@ const Category = (masterRecords) => {
 
   useEffect(() => {
     setListOfTrainers(
-      getTraineeSlots.map((trainer) => {
+      getTraineeSlots?.map((trainer) => {
         return {
           id: trainer._id,
           background_image: trainer?.profilePicture,
