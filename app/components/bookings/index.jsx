@@ -29,6 +29,8 @@ import Rating from "react-rating";
 import { Star, X } from "react-feather";
 import { authState } from "../auth/auth.slice";
 import SocialMediaIcons from "../../common/socialMediaIcons";
+import { bookingButton } from "../../common/constants";
+
 
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
@@ -42,6 +44,7 @@ const Bookings = ({ accountType = null }) => {
     id: "",
     booked_status: "",
   });
+  const [tabs, setTabs] = useState("Upcoming")
 
   const [startMeeting, setStartMeeting] = useState({
     trainerInfo: null,
@@ -56,8 +59,14 @@ const Bookings = ({ accountType = null }) => {
     useAppSelector(bookingsState);
   const { addRating } = bookingsAction;
 
+  const handelBookingButton = (tab) => {
+    setTabs(tab)
+    dispatch(getScheduledMeetingDetailsAsync(tab))
+  }
+
+
   useEffect(() => {
-    dispatch(getScheduledMeetingDetailsAsync());
+    dispatch(getScheduledMeetingDetailsAsync(tabs));
   }, []);
 
   useEffect(() => {
@@ -150,9 +159,9 @@ const Bookings = ({ accountType = null }) => {
       <div>
         {isMeetingDone && <h3>Completed</h3>}
         {!isCurrentDateBefore &&
-        status === BookedSession.confirmed &&
-        !isStartButtonEnabled &&
-        !isMeetingDone ? (
+          status === BookedSession.confirmed &&
+          !isStartButtonEnabled &&
+          !isMeetingDone ? (
           <button
             className={`btn btn-success button-effect btn-sm mr-4`}
             type="button"
@@ -266,9 +275,9 @@ const Bookings = ({ accountType = null }) => {
       <div>
         {isMeetingDone && <h3>Completed</h3>}
         {!isCurrentDateBefore &&
-        status === BookedSession.confirmed &&
-        !isStartButtonEnabled &&
-        !isMeetingDone ? (
+          status === BookedSession.confirmed &&
+          !isStartButtonEnabled &&
+          !isMeetingDone ? (
           <button
             className={`btn btn-success button-effect btn-sm mr-4`}
             type="button"
@@ -532,7 +541,11 @@ const Bookings = ({ accountType = null }) => {
           <div className="row">
             <div className="col-4 col-sm-3 col-md-5 col-lg-4 col-xl-2">
               <img
-                src={userInfo && userInfo?.profile_picture}
+                src={
+                  userInfo && userInfo?.profile_picture
+                    ? userInfo && userInfo?.profile_picture
+                    : "/assets/images/avtar/statusMenuIcon.jpeg"
+                }
                 alt="trainer_image"
                 className="rounded trainer-profile"
               />
@@ -541,9 +554,9 @@ const Bookings = ({ accountType = null }) => {
               <h3 className="mt-3">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
               {showRatings([], "mt-3 d-flex")}
               {userInfo &&
-              userInfo.extraInfo &&
-              userInfo.extraInfo.social_media_links &&
-              userInfo.extraInfo.social_media_links ? (
+                userInfo.extraInfo &&
+                userInfo.extraInfo.social_media_links &&
+                userInfo.extraInfo.social_media_links ? (
                 <SocialMediaIcons
                   profileImageURL={""}
                   social_media_links={userInfo.extraInfo.social_media_links}
@@ -556,6 +569,32 @@ const Bookings = ({ accountType = null }) => {
       </div>
     </React.Fragment>
   );
+
+  const bookingTabs = () => (
+    <React.Fragment>
+      <div class="card rounded trainer-profile-card">
+        <div class="card-body">
+          <div className="row">
+            <div className="col-12 col-sm-6 col-md-8 col-lg-12 col-xl-12">
+              {bookingButton?.map((tab, index) => {
+                return (
+                  <button
+                    key={`booking-tab${index}`}
+                    type="button"
+                    className={`mr-3 ${tabs === tab ? 'btn border border-primary text-primary hover:none' : 'btn btn-primary '}`}
+                    onClick={() => handelBookingButton(tab)}
+                  >
+                    {tab}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
+  );
+
   return (
     <React.Fragment>
       <div
@@ -566,13 +605,11 @@ const Bookings = ({ accountType = null }) => {
           }
           return;
         }}
-        className={`bookings custom-scroll custom-sidebar-content-booking ${
-          configs.sidebar.isMobileMode &&
+        className={`bookings custom-scroll custom-sidebar-content-booking ${configs.sidebar.isMobileMode &&
           configs.sidebar.isToggleEnable &&
-          `submenu-width dynemic-sidebar ${
-            activeTab === leftSideBarOptions.SCHEDULE_TRAINING ? "active" : ""
+          `submenu-width dynemic-sidebar ${activeTab === leftSideBarOptions.SCHEDULE_TRAINING ? "active" : ""
           }`
-        }`}
+          }`}
       >
         {/* {accountType === AccountType.TRAINEE &&
         configs.sidebar.isMobileMode &&
@@ -596,7 +633,7 @@ const Bookings = ({ accountType = null }) => {
           renderVideoCall()
         ) : (
           <div>
-            {accountType === AccountType.TRAINER ? (
+            {/* {accountType === AccountType.TRAINER ? (
               <h1 className="mb-3">Welcome {userInfo && userInfo?.fullname}</h1>
             ) : null}
             {trainerInfo()}
@@ -605,6 +642,28 @@ const Bookings = ({ accountType = null }) => {
                 Bookings
               </h3>
             </div>
+            <div className="mb-2">
+              {bookingTabs()}
+            </div>
+            // {} */}
+            {
+              accountType === AccountType.TRAINER ? (
+                <>
+                  <h1 className="mb-3">Welcome {userInfo && userInfo?.fullname}</h1>
+                  <div>
+                    {trainerInfo()}
+                  </div>
+                  <h3 className="d-flex justify-content-center mt-2 fs-1 p-3 mb-2 bg-primary text-white rounded">
+                    Bookings
+                  </h3>
+                  <div className="mb-2">
+                    {bookingTabs()}
+                  </div>
+                </>
+              ) : <h3 className="mt-2 fs-1 p-3 mb-2 bg-primary text-white rounded">
+                Bookings
+              </h3>
+            }
             {Bookings()}
           </div>
         )}

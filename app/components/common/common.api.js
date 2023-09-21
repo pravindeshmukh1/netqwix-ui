@@ -20,7 +20,7 @@ export const addRating = async (payload) => {
   }
 };
 
-export const getScheduledMeetingDetails = async () => {
+export const getScheduledMeetingDetails = async (tab) => {
   try {
     const response = await axiosInstance({
       method: "get",
@@ -32,6 +32,9 @@ export const getScheduledMeetingDetails = async () => {
           LOCAL_STORAGE_KEYS.ACCESS_TOKEN
         )}`,
       },
+      params: {
+        status: tab,
+      }
     });
     return response.data;
   } catch (error) {

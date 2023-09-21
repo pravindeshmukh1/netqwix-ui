@@ -57,9 +57,9 @@ export const updateBookedSessionScheduledMeetingAsync = createAsyncThunk(
 
 export const getScheduledMeetingDetailsAsync = createAsyncThunk(
   "get/scheduled/meetings",
-  async () => {
+  async (tab) => {
     try {
-      const response = await getScheduledMeetingDetails();
+      const response = await getScheduledMeetingDetails(tab);
       return response;
     } catch (err) {
       toast.error(err.response.data.error);
