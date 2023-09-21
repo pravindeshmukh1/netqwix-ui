@@ -43,7 +43,7 @@ const Bookings = ({ accountType = null }) => {
     id: "",
     booked_status: "",
   });
-  const [tabs, setTabs] = useState(bookingButton[0]);
+  const [tabBook, setTabBook] = useState(bookingButton[0])
 
   const [startMeeting, setStartMeeting] = useState({
     trainerInfo: null,
@@ -59,17 +59,21 @@ const Bookings = ({ accountType = null }) => {
   const { addRating } = bookingsAction;
 
   const handelBookingButton = (tab) => {
-    setTabs(tab);
-  };
+    setTabBook(tab)
+  }
 
   useEffect(() => {
-    if (tabs) {
-      const payload = {
-        status: tabs,
-      };
-      dispatch(getScheduledMeetingDetailsAsync(payload));
+    if (accountType === AccountType.TRAINER) {
+      if (tabBook) {
+        const payload = {
+          status: tabBook,
+        };
+        dispatch(getScheduledMeetingDetailsAsync(payload));
+      }
+    } else {
+      dispatch(getScheduledMeetingDetailsAsync());
     }
-  }, [tabs]);
+  }, [tabBook]);
 
   useEffect(() => {
     if (bookedSession.id) {
@@ -78,7 +82,7 @@ const Bookings = ({ accountType = null }) => {
         booked_status: bookedSession.booked_status,
       };
       const payload = {
-        status: tabs,
+        status: tabBook,
         updatePayload,
       };
       dispatch(updateBookedSessionScheduledMeetingAsync(payload));
@@ -165,9 +169,9 @@ const Bookings = ({ accountType = null }) => {
       <div>
         {isMeetingDone && <h3>Completed</h3>}
         {!isCurrentDateBefore &&
-        status === BookedSession.confirmed &&
-        !isStartButtonEnabled &&
-        !isMeetingDone ? (
+          status === BookedSession.confirmed &&
+          !isStartButtonEnabled &&
+          !isMeetingDone ? (
           <button
             className={`btn btn-success button-effect btn-sm mr-4`}
             type="button"
@@ -281,9 +285,9 @@ const Bookings = ({ accountType = null }) => {
       <div>
         {isMeetingDone && <h3>Completed</h3>}
         {!isCurrentDateBefore &&
-        status === BookedSession.confirmed &&
-        !isStartButtonEnabled &&
-        !isMeetingDone ? (
+          status === BookedSession.confirmed &&
+          !isStartButtonEnabled &&
+          !isMeetingDone ? (
           <button
             className={`btn btn-success button-effect btn-sm mr-4`}
             type="button"
@@ -542,10 +546,10 @@ const Bookings = ({ accountType = null }) => {
   };
   const trainerInfo = () => (
     <React.Fragment>
-      <div class="card rounded trainer-profile-card">
-        <div class="card-body">
+      <div className="card rounded trainer-profile-card">
+        <div className="card-body">
           <div className="row">
-            <div className="col-4 col-sm-3 col-md-5 col-lg-4 col-xl-2">
+            <div className="col-5 col-sm-6 col-md-5 col-lg-4 col-xl-2">
               <img
                 src={
                   userInfo && userInfo?.profile_picture
@@ -560,9 +564,9 @@ const Bookings = ({ accountType = null }) => {
               <h3 className="mt-3">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
               {showRatings([], "mt-3 d-flex")}
               {userInfo &&
-              userInfo.extraInfo &&
-              userInfo.extraInfo.social_media_links &&
-              userInfo.extraInfo.social_media_links ? (
+                userInfo.extraInfo &&
+                userInfo.extraInfo.social_media_links &&
+                userInfo.extraInfo.social_media_links ? (
                 <SocialMediaIcons
                   profileImageURL={""}
                   social_media_links={userInfo.extraInfo.social_media_links}
@@ -578,26 +582,31 @@ const Bookings = ({ accountType = null }) => {
 
   const bookingTabs = () => (
     <React.Fragment>
-      <div class="card rounded trainer-profile-card">
-        <div class="card-body">
+      <div className="card rounded">
+        <div className="card-body">
           <div className="row">
             <div className="col-12 col-mb-2 col-sm-6 col-sm-mb-2 col-md-8 col-lg-12 col-xl-12">
-              {bookingButton?.map((tab, index) => {
-                return (
-                  <button
-                    key={`booking-tab${index}`}
-                    type="button"
-                    className={`mr-3 ${
-                      tabs === tab
-                        ? "btn border border-primary text-primary hover:none"
-                        : "btn btn-primary "
-                    }`}
-                    onClick={() => handelBookingButton(tab)}
-                  >
-                    {tab}
-                  </button>
-                );
-              })}
+              <nav>
+                <div className="nav nav-tabs" id="nav-tab" role="tablist">
+                  {bookingButton?.map((tab, index) => {
+                    return (
+                      <button key={`booking-tab${index}`} aria-selected={tab} onClick={() => handelBookingButton(tab)}
+                        className={`${tab === tabBook ? `border border-primary` : ''} 
+                        nav-link text-primary text-capitalize book-tabs`}
+                        id={tab}
+                        data-bs-toggle="tab" data-bs-target={`#${tab}`} type="button" role="tab" aria-controls="nav-home">
+                        {tab}
+                      </button>
+                    );
+                  })}
+                </div>
+              </nav>
+              <div className="tab-content" id="nav-tabContent">
+                {!scheduledMeetingDetails.length ?
+                  <h2 className="mt-5 d-flex justify-content-center">
+                    No {tabBook} sessions
+                  </h2> : (Bookings())}
+              </div>
             </div>
           </div>
         </div>
@@ -615,45 +624,44 @@ const Bookings = ({ accountType = null }) => {
           }
           return;
         }}
-        className={`bookings custom-scroll custom-sidebar-content-booking ${
-          configs.sidebar.isMobileMode &&
+        className={`bookings custom-scroll custom-sidebar-content-booking ${configs.sidebar.isMobileMode &&
           configs.sidebar.isToggleEnable &&
-          `submenu-width dynemic-sidebar ${
-            activeTab === leftSideBarOptions.SCHEDULE_TRAINING ? "active" : ""
+          `submenu-width dynemic-sidebar ${activeTab === leftSideBarOptions.SCHEDULE_TRAINING ? "active" : ""
           }`
-        }`}
+          }`}
       >
         {addRatingModel.isOpen ? renderRating() : null}
-        {!scheduledMeetingDetails && !scheduledMeetingDetails.length ? (
-          <h3 className="d-flex justify-content-center mt-20">
-            No bookings available
-          </h3>
-        ) : startMeeting.isOpenModal ? (
+        {startMeeting.isOpenModal ? (
           renderVideoCall()
         ) : (
           <div>
-            {accountType === AccountType.TRAINER ? (
-              <>
-                <h1 className="mb-3">
-                  Welcome {userInfo && userInfo?.fullname}
-                </h1>
-                <div>{trainerInfo()}</div>
-                <h3 className="d-flex justify-content-center mt-2 fs-1 p-3 mb-2 bg-primary text-white rounded">
-                  Bookings
-                </h3>
-                <div className="mb-2">{bookingTabs()}</div>
-              </>
-            ) : (
-              <h3 className="mt-2 fs-1 p-3 mb-2 bg-primary text-white rounded">
-                Bookings
-              </h3>
-            )}
-            {/* <div className="mb-2">
-              {bookingTabs()}
-            </div> */}
-            {Bookings()}
+            {
+              accountType === AccountType.TRAINER ? (
+                <React.Fragment>
+                  <div className="welcome-text mb-3">Welcome {userInfo && userInfo?.fullname}</div>
+                  <div>
+                    {trainerInfo()}
+                  </div>
+                  <h2 className="d-flex justify-content-center mt-2 p-5 mb-2 bg-primary text-white rounded">
+                    Bookings
+                  </h2>
+                  <div className="mb-2">
+                    {bookingTabs()}
+                  </div>
+                </React.Fragment>
+              ) : null
+            }
           </div>
         )}
+        {accountType === AccountType.TRAINEE ? !scheduledMeetingDetails && !scheduledMeetingDetails.length ? <h2 className="d-flex 
+        justify-content-center mt-4">No Bookings available</h2> :
+          <React.Fragment>
+            <h3 className="mt-2 p-3 mb-2 bg-primary text-white rounded">
+              Bookings
+            </h3>
+            {Bookings()}
+          </React.Fragment>
+          : null}
       </div>
     </React.Fragment>
   );

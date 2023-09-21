@@ -67,7 +67,12 @@ export const weekDays = [
   "sunday",
 ];
 
-export const bookingButton = ["upcoming", "confirmed", "canceled", "completed"];
+export const bookingButton = [
+  "upcoming",
+  "confirmed",
+  "canceled",
+  "completed"
+];
 export const routingPaths = {
   landing: "/",
   dashboard: "/dashboard",
