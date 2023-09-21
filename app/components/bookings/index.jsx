@@ -31,7 +31,6 @@ import { authState } from "../auth/auth.slice";
 import SocialMediaIcons from "../../common/socialMediaIcons";
 import { bookingButton } from "../../common/constants";
 
-
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
 const Bookings = ({ accountType = null }) => {
@@ -45,7 +44,6 @@ const Bookings = ({ accountType = null }) => {
     booked_status: "",
   });
   const [tabBook, setTabBook] = useState(bookingButton[0])
-  console.log("tebc....", tabBook)
 
   const [startMeeting, setStartMeeting] = useState({
     trainerInfo: null,
@@ -62,14 +60,20 @@ const Bookings = ({ accountType = null }) => {
 
   const handelBookingButton = (tab) => {
     setTabBook(tab)
-    dispatch(getScheduledMeetingDetailsAsync(tab))
   }
 
-
   useEffect(() => {
-    dispatch(getScheduledMeetingDetailsAsync(tabBook));
-
-  }, []);
+    if (accountType === AccountType.TRAINER) {
+      if (tabBook) {
+        const payload = {
+          status: tabBook,
+        };
+        dispatch(getScheduledMeetingDetailsAsync(payload));
+      }
+    } else {
+      dispatch(getScheduledMeetingDetailsAsync());
+    }
+  }, [tabBook]);
 
   useEffect(() => {
     if (bookedSession.id) {
@@ -77,7 +81,11 @@ const Bookings = ({ accountType = null }) => {
         id: bookedSession.id,
         booked_status: bookedSession.booked_status,
       };
-      dispatch(updateBookedSessionScheduledMeetingAsync(updatePayload));
+      const payload = {
+        status: tabBook,
+        updatePayload,
+      };
+      dispatch(updateBookedSessionScheduledMeetingAsync(payload));
     }
   }, [bookedSession]);
 
@@ -622,19 +630,6 @@ const Bookings = ({ accountType = null }) => {
           }`
           }`}
       >
-        {/* {accountType === AccountType.TRAINEE &&
-        configs.sidebar.isMobileMode &&
-        configs.sidebar.isToggleEnable ? (
-          <div
-            className="media-body media-body text-right mb-1"
-            onClick={OpenCloseSidebar}
-          >
-            <X
-              className="icon-btn btn-primary btn-sm close-panel"
-              style={{ cursor: "pointer" }}
-            />
-          </div>
-        ) : null} */}
         {addRatingModel.isOpen ? renderRating() : null}
         {startMeeting.isOpenModal ? (
           renderVideoCall()
@@ -642,7 +637,7 @@ const Bookings = ({ accountType = null }) => {
           <div>
             {
               accountType === AccountType.TRAINER ? (
-                <>
+                <React.Fragment>
                   <div className="welcome-text mb-3">Welcome {userInfo && userInfo?.fullname}</div>
                   <div>
                     {trainerInfo()}
@@ -653,7 +648,7 @@ const Bookings = ({ accountType = null }) => {
                   <div className="mb-2">
                     {bookingTabs()}
                   </div>
-                </>
+                </React.Fragment>
               ) : null
             }
           </div>

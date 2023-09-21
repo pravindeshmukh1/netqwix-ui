@@ -72,7 +72,6 @@ export const bookingButton = [
   "confirmed",
   "canceled",
   "completed"
- 
 ];
 export const routingPaths = {
   landing: "/",
