@@ -651,7 +651,7 @@ const Bookings = ({ accountType = null }) => {
             {
               accountType === AccountType.TRAINER ? (
                 <>
-                  <h1 className="mb-3">Welcome {userInfo && userInfo?.fullname}</h1>
+                  <div className="welcome-text mb-3">Welcome {userInfo && userInfo?.fullname}</div>
                   <div>
                     {trainerInfo()}
                   </div>
