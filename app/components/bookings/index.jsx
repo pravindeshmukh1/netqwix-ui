@@ -31,7 +31,6 @@ import { authState } from "../auth/auth.slice";
 import SocialMediaIcons from "../../common/socialMediaIcons";
 import { bookingButton } from "../../common/constants";
 
-
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
 const Bookings = ({ accountType = null }) => {
@@ -44,7 +43,7 @@ const Bookings = ({ accountType = null }) => {
     id: "",
     booked_status: "",
   });
-  const [tabs, setTabs] = useState(bookingButton[0])
+  const [tabs, setTabs] = useState(bookingButton[0]);
 
   const [startMeeting, setStartMeeting] = useState({
     trainerInfo: null,
@@ -60,14 +59,17 @@ const Bookings = ({ accountType = null }) => {
   const { addRating } = bookingsAction;
 
   const handelBookingButton = (tab) => {
-    setTabs(tab)
-    dispatch(getScheduledMeetingDetailsAsync(tab))
-  }
-
+    setTabs(tab);
+  };
 
   useEffect(() => {
-    dispatch(getScheduledMeetingDetailsAsync(tabs));
-  }, []);
+    if (tabs) {
+      const payload = {
+        status: tabs,
+      };
+      dispatch(getScheduledMeetingDetailsAsync(payload));
+    }
+  }, [tabs]);
 
   useEffect(() => {
     if (bookedSession.id) {
@@ -75,7 +77,11 @@ const Bookings = ({ accountType = null }) => {
         id: bookedSession.id,
         booked_status: bookedSession.booked_status,
       };
-      dispatch(updateBookedSessionScheduledMeetingAsync(updatePayload));
+      const payload = {
+        status: tabs,
+        updatePayload,
+      };
+      dispatch(updateBookedSessionScheduledMeetingAsync(payload));
     }
   }, [bookedSession]);
 
@@ -159,9 +165,9 @@ const Bookings = ({ accountType = null }) => {
       <div>
         {isMeetingDone && <h3>Completed</h3>}
         {!isCurrentDateBefore &&
-          status === BookedSession.confirmed &&
-          !isStartButtonEnabled &&
-          !isMeetingDone ? (
+        status === BookedSession.confirmed &&
+        !isStartButtonEnabled &&
+        !isMeetingDone ? (
           <button
             className={`btn btn-success button-effect btn-sm mr-4`}
             type="button"
@@ -275,9 +281,9 @@ const Bookings = ({ accountType = null }) => {
       <div>
         {isMeetingDone && <h3>Completed</h3>}
         {!isCurrentDateBefore &&
-          status === BookedSession.confirmed &&
-          !isStartButtonEnabled &&
-          !isMeetingDone ? (
+        status === BookedSession.confirmed &&
+        !isStartButtonEnabled &&
+        !isMeetingDone ? (
           <button
             className={`btn btn-success button-effect btn-sm mr-4`}
             type="button"
@@ -554,9 +560,9 @@ const Bookings = ({ accountType = null }) => {
               <h3 className="mt-3">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
               {showRatings([], "mt-3 d-flex")}
               {userInfo &&
-                userInfo.extraInfo &&
-                userInfo.extraInfo.social_media_links &&
-                userInfo.extraInfo.social_media_links ? (
+              userInfo.extraInfo &&
+              userInfo.extraInfo.social_media_links &&
+              userInfo.extraInfo.social_media_links ? (
                 <SocialMediaIcons
                   profileImageURL={""}
                   social_media_links={userInfo.extraInfo.social_media_links}
@@ -581,7 +587,11 @@ const Bookings = ({ accountType = null }) => {
                   <button
                     key={`booking-tab${index}`}
                     type="button"
-                    className={`mr-3 ${tabs === tab ? 'btn border border-primary text-primary hover:none' : 'btn btn-primary '}`}
+                    className={`mr-3 ${
+                      tabs === tab
+                        ? "btn border border-primary text-primary hover:none"
+                        : "btn btn-primary "
+                    }`}
                     onClick={() => handelBookingButton(tab)}
                   >
                     {tab}
@@ -605,27 +615,16 @@ const Bookings = ({ accountType = null }) => {
           }
           return;
         }}
-        className={`bookings custom-scroll custom-sidebar-content-booking ${configs.sidebar.isMobileMode &&
+        className={`bookings custom-scroll custom-sidebar-content-booking ${
+          configs.sidebar.isMobileMode &&
           configs.sidebar.isToggleEnable &&
-          `submenu-width dynemic-sidebar ${activeTab === leftSideBarOptions.SCHEDULE_TRAINING ? "active" : ""
+          `submenu-width dynemic-sidebar ${
+            activeTab === leftSideBarOptions.SCHEDULE_TRAINING ? "active" : ""
           }`
-          }`}
+        }`}
       >
-        {/* {accountType === AccountType.TRAINEE &&
-        configs.sidebar.isMobileMode &&
-        configs.sidebar.isToggleEnable ? (
-          <div
-            className="media-body media-body text-right mb-1"
-            onClick={OpenCloseSidebar}
-          >
-            <X
-              className="icon-btn btn-primary btn-sm close-panel"
-              style={{ cursor: "pointer" }}
-            />
-          </div>
-        ) : null} */}
         {addRatingModel.isOpen ? renderRating() : null}
-        {(!scheduledMeetingDetails && !scheduledMeetingDetails.length) ? (
+        {!scheduledMeetingDetails && !scheduledMeetingDetails.length ? (
           <h3 className="d-flex justify-content-center mt-20">
             No bookings available
           </h3>
@@ -633,37 +632,22 @@ const Bookings = ({ accountType = null }) => {
           renderVideoCall()
         ) : (
           <div>
-            {/* {accountType === AccountType.TRAINER ? (
-              <h1 className="mb-3">Welcome {userInfo && userInfo?.fullname}</h1>
-            ) : null}
-            {trainerInfo()}
-            <div className="">
-              <h3 className="d-flex justify-content-center mt-2 fs-1 p-3 mb-2 bg-primary text-white rounded">
+            {accountType === AccountType.TRAINER ? (
+              <>
+                <h1 className="mb-3">
+                  Welcome {userInfo && userInfo?.fullname}
+                </h1>
+                <div>{trainerInfo()}</div>
+                <h3 className="d-flex justify-content-center mt-2 fs-1 p-3 mb-2 bg-primary text-white rounded">
+                  Bookings
+                </h3>
+                <div className="mb-2">{bookingTabs()}</div>
+              </>
+            ) : (
+              <h3 className="mt-2 fs-1 p-3 mb-2 bg-primary text-white rounded">
                 Bookings
               </h3>
-            </div>
-            <div className="mb-2">
-              {bookingTabs()}
-            </div>
-            // {} */}
-            {
-              accountType === AccountType.TRAINER ? (
-                <>
-                  <div className="welcome-text mb-3">Welcome {userInfo && userInfo?.fullname}</div>
-                  <div>
-                    {trainerInfo()}
-                  </div>
-                  <h3 className="d-flex justify-content-center mt-2 fs-1 p-3 mb-2 bg-primary text-white rounded">
-                    Bookings
-                  </h3>
-                  <div className="mb-2">
-                    {bookingTabs()}
-                  </div>
-                </>
-              ) : <h3 className="mt-2 fs-1 p-3 mb-2 bg-primary text-white rounded">
-                Bookings
-              </h3>
-            }
+            )}
             {/* <div className="mb-2">
               {bookingTabs()}
             </div> */}
