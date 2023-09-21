@@ -66,6 +66,8 @@ export const weekDays = [
   "saturday",
   "sunday",
 ];
+
+export const bookingButton = ["upcoming", "confirmed", "canceled", "completed"];
 export const routingPaths = {
   landing: "/",
   dashboard: "/dashboard",
@@ -711,3 +713,5 @@ export const POSITION_FIXED_SIDEBAR_MENU = [
 export const FIXED_ITEM = ["notification", "file", "setting"];
 
 export const MOBILE_SIZE = 576;
+
+export const BookingsTabs = [{ id: 1 }];

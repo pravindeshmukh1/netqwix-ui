@@ -16,6 +16,7 @@ import {
   BookedSession,
   FormateDate,
   FormateHours,
+  TRAINER_AMOUNT_USD,
   leftSideBarOptions,
   meetingRatingTimeout,
 } from "../../common/constants";
@@ -26,6 +27,9 @@ import { SocketContext } from "../socket";
 import Ratings from "./ratings";
 import Rating from "react-rating";
 import { Star, X } from "react-feather";
+import { authState } from "../auth/auth.slice";
+import SocialMediaIcons from "../../common/socialMediaIcons";
+import { bookingButton } from "../../common/constants";
 
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
@@ -34,10 +38,12 @@ const Bookings = ({ accountType = null }) => {
   const dispatch = useAppDispatch();
   const { handleActiveTab, handleSidebarTabClose } = bookingsAction;
   const { isLoading, configs } = useAppSelector(bookingsState);
+  const { userInfo } = useAppSelector(authState);
   const [bookedSession, setBookedSession] = useState({
     id: "",
     booked_status: "",
   });
+  const [tabs, setTabs] = useState(bookingButton[0]);
 
   const [startMeeting, setStartMeeting] = useState({
     trainerInfo: null,
@@ -52,9 +58,18 @@ const Bookings = ({ accountType = null }) => {
     useAppSelector(bookingsState);
   const { addRating } = bookingsAction;
 
+  const handelBookingButton = (tab) => {
+    setTabs(tab);
+  };
+
   useEffect(() => {
-    dispatch(getScheduledMeetingDetailsAsync());
-  }, []);
+    if (tabs) {
+      const payload = {
+        status: tabs,
+      };
+      dispatch(getScheduledMeetingDetailsAsync(payload));
+    }
+  }, [tabs]);
 
   useEffect(() => {
     if (bookedSession.id) {
@@ -62,7 +77,11 @@ const Bookings = ({ accountType = null }) => {
         id: bookedSession.id,
         booked_status: bookedSession.booked_status,
       };
-      dispatch(updateBookedSessionScheduledMeetingAsync(updatePayload));
+      const payload = {
+        status: tabs,
+        updatePayload,
+      };
+      dispatch(updateBookedSessionScheduledMeetingAsync(payload));
     }
   }, [bookedSession]);
 
@@ -509,6 +528,83 @@ const Bookings = ({ accountType = null }) => {
     document.querySelector(".sidebar-toggle").classList.remove("none");
   };
 
+  const showRatings = (ratings, extraClasses = "") => {
+    const { ratingRatio, totalRating } = Utils.getRatings(ratings);
+    return (
+      <div>
+        <div className={extraClasses}>
+          <Star color="#FFC436" size={28} className="star-container star-svg" />
+          <p className="ml-1 mt-1 mr-1 font-weight-light">{ratingRatio || 0}</p>
+          <p className="mt-1">({totalRating || 0})</p>
+        </div>
+      </div>
+    );
+  };
+  const trainerInfo = () => (
+    <React.Fragment>
+      <div class="card rounded trainer-profile-card">
+        <div class="card-body">
+          <div className="row">
+            <div className="col-4 col-sm-3 col-md-5 col-lg-4 col-xl-2">
+              <img
+                src={
+                  userInfo && userInfo?.profile_picture
+                    ? userInfo && userInfo?.profile_picture
+                    : "/assets/images/avtar/user.png"
+                }
+                alt="trainer_image"
+                className="rounded trainer-profile"
+              />
+            </div>
+            <div className="col-8 col-sm-6 col-md-6 col-lg-6 col-xl-8">
+              <h3 className="mt-3">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
+              {showRatings([], "mt-3 d-flex")}
+              {userInfo &&
+              userInfo.extraInfo &&
+              userInfo.extraInfo.social_media_links &&
+              userInfo.extraInfo.social_media_links ? (
+                <SocialMediaIcons
+                  profileImageURL={""}
+                  social_media_links={userInfo.extraInfo.social_media_links}
+                  isvisible={false}
+                />
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
+  );
+
+  const bookingTabs = () => (
+    <React.Fragment>
+      <div class="card rounded trainer-profile-card">
+        <div class="card-body">
+          <div className="row">
+            <div className="col-12 col-mb-2 col-sm-6 col-sm-mb-2 col-md-8 col-lg-12 col-xl-12">
+              {bookingButton?.map((tab, index) => {
+                return (
+                  <button
+                    key={`booking-tab${index}`}
+                    type="button"
+                    className={`mr-3 ${
+                      tabs === tab
+                        ? "btn border border-primary text-primary hover:none"
+                        : "btn btn-primary "
+                    }`}
+                    onClick={() => handelBookingButton(tab)}
+                  >
+                    {tab}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
+  );
+
   return (
     <React.Fragment>
       <div
@@ -527,21 +623,8 @@ const Bookings = ({ accountType = null }) => {
           }`
         }`}
       >
-        {/* {accountType === AccountType.TRAINEE &&
-        configs.sidebar.isMobileMode &&
-        configs.sidebar.isToggleEnable ? (
-          <div
-            className="media-body media-body text-right mb-1"
-            onClick={OpenCloseSidebar}
-          >
-            <X
-              className="icon-btn btn-primary btn-sm close-panel"
-              style={{ cursor: "pointer" }}
-            />
-          </div>
-        ) : null} */}
         {addRatingModel.isOpen ? renderRating() : null}
-        {!scheduledMeetingDetails.length ? (
+        {!scheduledMeetingDetails && !scheduledMeetingDetails.length ? (
           <h3 className="d-flex justify-content-center mt-20">
             No bookings available
           </h3>
@@ -549,9 +632,25 @@ const Bookings = ({ accountType = null }) => {
           renderVideoCall()
         ) : (
           <div>
-            <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
-              Bookings
-            </h3>
+            {accountType === AccountType.TRAINER ? (
+              <>
+                <h1 className="mb-3">
+                  Welcome {userInfo && userInfo?.fullname}
+                </h1>
+                <div>{trainerInfo()}</div>
+                <h3 className="d-flex justify-content-center mt-2 fs-1 p-3 mb-2 bg-primary text-white rounded">
+                  Bookings
+                </h3>
+                <div className="mb-2">{bookingTabs()}</div>
+              </>
+            ) : (
+              <h3 className="mt-2 fs-1 p-3 mb-2 bg-primary text-white rounded">
+                Bookings
+              </h3>
+            )}
+            {/* <div className="mb-2">
+              {bookingTabs()}
+            </div> */}
             {Bookings()}
           </div>
         )}

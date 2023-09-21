@@ -656,3 +656,28 @@ slick-slider .slick-list,
   position: absolute !important;
   left: 7.5% !important;
 }
+
+.trainer-profile {
+  width: 248px;
+  margin-top: 12px;
+  height: auto;
+  min-height: 120px;
+  min-width: 80px;
+  @media (max-width: 576px) {
+    width: 80px !important;
+  }
+}
+.trainer-profile-card {
+  border-radius: 16px !important;
+  color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+
+
+.welcome-text {
+  font-size: 47px;
+  font-family: 'Roboto';
+  margin: 26px 0;
+  font-weight: 300;
+}
