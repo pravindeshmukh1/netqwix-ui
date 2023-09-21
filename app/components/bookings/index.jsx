@@ -45,6 +45,7 @@ const Bookings = ({ accountType = null }) => {
     booked_status: "",
   });
   const [tabBook, setTabBook] = useState(bookingButton[0])
+  console.log("tebc....", tabBook)
 
   const [startMeeting, setStartMeeting] = useState({
     trainerInfo: null,
@@ -537,10 +538,10 @@ const Bookings = ({ accountType = null }) => {
   };
   const trainerInfo = () => (
     <React.Fragment>
-      <div class="card rounded trainer-profile-card">
-        <div class="card-body">
+      <div className="card rounded trainer-profile-card">
+        <div className="card-body">
           <div className="row">
-            <div className="col-4 col-sm-3 col-md-5 col-lg-4 col-xl-2">
+            <div className="col-5 col-sm-6 col-md-5 col-lg-4 col-xl-2">
               <img
                 src={
                   userInfo && userInfo?.profile_picture
@@ -573,35 +574,30 @@ const Bookings = ({ accountType = null }) => {
 
   const bookingTabs = () => (
     <React.Fragment>
-      <div class="card rounded trainer-profile-card">
-        <div class="card-body">
+      <div className="card rounded">
+        <div className="card-body">
           <div className="row">
             <div className="col-12 col-mb-2 col-sm-6 col-sm-mb-2 col-md-8 col-lg-12 col-xl-12">
               <nav>
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <div className="nav nav-tabs" id="nav-tab" role="tablist">
                   {bookingButton?.map((tab, index) => {
                     return (
-                      // <button
-                      //   key={`booking-tab${index}`}
-                      //   type="button"
-                      //   className={`mr-3 ${tabs === tab ? 'btn border border-primary text-primary hover:none' : 'btn btn-primary '}`}
-                      //   onClick={() => handelBookingButton(tab)}
-                      // >
-                      //   {tab}
-                      // </button>
-
-
-
-                      <button key={`booking-tab${index}`} aria-selected={tabBook} onClick={() => handelBookingButton(tab)} style={{width:"25%",fontSize:"18px"}} className={`nav-link text-primary`} id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home">
-                        {tab}</button>
+                      <button key={`booking-tab${index}`} aria-selected={tab} onClick={() => handelBookingButton(tab)}
+                        className={`${tab === tabBook ? `border border-primary` : ''} 
+                        nav-link text-primary text-capitalize book-tabs`}
+                        id={tab}
+                        data-bs-toggle="tab" data-bs-target={`#${tab}`} type="button" role="tab" aria-controls="nav-home">
+                        {tab}
+                      </button>
                     );
                   })}
                 </div>
               </nav>
-              <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show " id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">...</div>
-                {/* <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
-                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div> */}
+              <div className="tab-content" id="nav-tabContent">
+                {!scheduledMeetingDetails.length ?
+                  <h2 className="mt-5 d-flex justify-content-center">
+                    No {tabBook} sessions
+                  </h2> : (Bookings())}
               </div>
             </div>
           </div>
@@ -640,11 +636,7 @@ const Bookings = ({ accountType = null }) => {
           </div>
         ) : null} */}
         {addRatingModel.isOpen ? renderRating() : null}
-        {(!scheduledMeetingDetails && !scheduledMeetingDetails.length) ? (
-          <h3 className="d-flex justify-content-center mt-120">
-            No bookings available
-          </h3>
-        ) : startMeeting.isOpenModal ? (
+        {startMeeting.isOpenModal ? (
           renderVideoCall()
         ) : (
           <div>
@@ -655,23 +647,26 @@ const Bookings = ({ accountType = null }) => {
                   <div>
                     {trainerInfo()}
                   </div>
-                  <h2 className="d-flex justify-content-center mt-2 p-3 mb-2 bg-primary text-white rounded">
+                  <h2 className="d-flex justify-content-center mt-2 p-5 mb-2 bg-primary text-white rounded">
                     Bookings
                   </h2>
                   <div className="mb-2">
                     {bookingTabs()}
                   </div>
                 </>
-              ) : <h3 className="mt-2 fs-1 p-3 mb-2 bg-primary text-white rounded">
-                Bookings
-              </h3>
+              ) : null
             }
-
-            {(!scheduledMeetingDetails && !scheduledMeetingDetails.length) ? Bookings() : <h3 className="d-flex justify-content-center mt-120">
-              No {tabBook} sessions
-            </h3>}
           </div>
         )}
+        {accountType === AccountType.TRAINEE ? !scheduledMeetingDetails && !scheduledMeetingDetails.length ? <h2 className="d-flex 
+        justify-content-center mt-4">No Bookings available</h2> :
+          <React.Fragment>
+            <h3 className="mt-2 p-3 mb-2 bg-primary text-white rounded">
+              Bookings
+            </h3>
+            {Bookings()}
+          </React.Fragment>
+          : null}
       </div>
     </React.Fragment>
   );

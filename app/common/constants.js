@@ -70,7 +70,7 @@ export const weekDays = [
 export const bookingButton = [
   "upcoming",
   "confirmed",
-  "cancelled",
+  "canceled",
   "completed"
  
 ];
