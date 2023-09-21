@@ -711,3 +711,5 @@ export const POSITION_FIXED_SIDEBAR_MENU = [
 export const FIXED_ITEM = ["notification", "file", "setting"];
 
 export const MOBILE_SIZE = 576;
+
+export const BookingsTabs = [{ id: 1 }];

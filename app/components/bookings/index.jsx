@@ -597,16 +597,15 @@ const Bookings = ({ accountType = null }) => {
         ) : (
           <div>
             {accountType === AccountType.TRAINER ? (
-              <h1 className="mb-3">
-                Welcome {userInfo && userInfo?.fullname}
-              </h1>
-            ) : (
-              <h3 className="fs-1 p-3 mb-2 bg-primary text-white rounded">
+              <h1 className="mb-3">Welcome {userInfo && userInfo?.fullname}</h1>
+            ) : null}
+            {trainerInfo()}
+            <div className="">
+              <h3 className="d-flex justify-content-center mt-2 fs-1 p-3 mb-2 bg-primary text-white rounded">
                 Bookings
               </h3>
-            )}
-            {trainerInfo()}
-            {/* {Bookings()} */}
+            </div>
+            {Bookings()}
           </div>
         )}
       </div>
