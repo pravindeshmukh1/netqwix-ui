@@ -44,7 +44,7 @@ const Bookings = ({ accountType = null }) => {
     id: "",
     booked_status: "",
   });
-  const [tabs, setTabs] = useState(bookingButton[0])
+  const [tabBook, setTabBook] = useState(bookingButton[0])
 
   const [startMeeting, setStartMeeting] = useState({
     trainerInfo: null,
@@ -60,13 +60,14 @@ const Bookings = ({ accountType = null }) => {
   const { addRating } = bookingsAction;
 
   const handelBookingButton = (tab) => {
-    setTabs(tab)
+    setTabBook(tab)
     dispatch(getScheduledMeetingDetailsAsync(tab))
   }
 
 
   useEffect(() => {
-    dispatch(getScheduledMeetingDetailsAsync(tabs));
+    dispatch(getScheduledMeetingDetailsAsync(tabBook));
+
   }, []);
 
   useEffect(() => {
@@ -576,18 +577,32 @@ const Bookings = ({ accountType = null }) => {
         <div class="card-body">
           <div className="row">
             <div className="col-12 col-mb-2 col-sm-6 col-sm-mb-2 col-md-8 col-lg-12 col-xl-12">
-              {bookingButton?.map((tab, index) => {
-                return (
-                  <button
-                    key={`booking-tab${index}`}
-                    type="button"
-                    className={`mr-3 ${tabs === tab ? 'btn border border-primary text-primary hover:none' : 'btn btn-primary '}`}
-                    onClick={() => handelBookingButton(tab)}
-                  >
-                    {tab}
-                  </button>
-                );
-              })}
+              <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  {bookingButton?.map((tab, index) => {
+                    return (
+                      // <button
+                      //   key={`booking-tab${index}`}
+                      //   type="button"
+                      //   className={`mr-3 ${tabs === tab ? 'btn border border-primary text-primary hover:none' : 'btn btn-primary '}`}
+                      //   onClick={() => handelBookingButton(tab)}
+                      // >
+                      //   {tab}
+                      // </button>
+
+
+
+                      <button key={`booking-tab${index}`} aria-selected={tabBook} onClick={() => handelBookingButton(tab)} style={{width:"25%",fontSize:"18px"}} className={`nav-link text-primary`} id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home">
+                        {tab}</button>
+                    );
+                  })}
+                </div>
+              </nav>
+              <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show " id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">...</div>
+                {/* <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
+                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div> */}
+              </div>
             </div>
           </div>
         </div>
@@ -626,26 +641,13 @@ const Bookings = ({ accountType = null }) => {
         ) : null} */}
         {addRatingModel.isOpen ? renderRating() : null}
         {(!scheduledMeetingDetails && !scheduledMeetingDetails.length) ? (
-          <h3 className="d-flex justify-content-center mt-20">
+          <h3 className="d-flex justify-content-center mt-120">
             No bookings available
           </h3>
         ) : startMeeting.isOpenModal ? (
           renderVideoCall()
         ) : (
           <div>
-            {/* {accountType === AccountType.TRAINER ? (
-              <h1 className="mb-3">Welcome {userInfo && userInfo?.fullname}</h1>
-            ) : null}
-            {trainerInfo()}
-            <div className="">
-              <h3 className="d-flex justify-content-center mt-2 fs-1 p-3 mb-2 bg-primary text-white rounded">
-                Bookings
-              </h3>
-            </div>
-            <div className="mb-2">
-              {bookingTabs()}
-            </div>
-            // {} */}
             {
               accountType === AccountType.TRAINER ? (
                 <>
@@ -653,9 +655,9 @@ const Bookings = ({ accountType = null }) => {
                   <div>
                     {trainerInfo()}
                   </div>
-                  <h3 className="d-flex justify-content-center mt-2 fs-1 p-3 mb-2 bg-primary text-white rounded">
+                  <h2 className="d-flex justify-content-center mt-2 p-3 mb-2 bg-primary text-white rounded">
                     Bookings
-                  </h3>
+                  </h2>
                   <div className="mb-2">
                     {bookingTabs()}
                   </div>
@@ -664,10 +666,10 @@ const Bookings = ({ accountType = null }) => {
                 Bookings
               </h3>
             }
-            {/* <div className="mb-2">
-              {bookingTabs()}
-            </div> */}
-            {Bookings()}
+
+            {(!scheduledMeetingDetails && !scheduledMeetingDetails.length) ? Bookings() : <h3 className="d-flex justify-content-center mt-120">
+              No {tabBook} sessions
+            </h3>}
           </div>
         )}
       </div>
