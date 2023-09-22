@@ -717,4 +717,4 @@ export const FIXED_ITEM = ["notification", "file", "setting"];
 
 export const MOBILE_SIZE = 576;
 
-export const TimeRange = { start: "12:00", end: "23:59" };
+export const TimeRange = { start: "00:00", end: "23:59" };

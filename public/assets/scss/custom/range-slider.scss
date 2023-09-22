@@ -30,7 +30,7 @@
 }
 
 .slider__range {
-  background-color: $primary;
+  background-color: gray;
   z-index: 2;
 }
 
@@ -113,5 +113,5 @@
 
 .default-range-slider {
   @extend .slider__range;
-  background: $primary !important;
+  background: gray !important;
 }

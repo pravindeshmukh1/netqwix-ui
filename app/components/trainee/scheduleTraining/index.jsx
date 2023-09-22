@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import "../scheduleTraining/index.scss";
@@ -137,6 +137,19 @@ const ScheduleTraining = () => {
     };
   }, []);
 
+  const debouncedDispatch = debounce(() => {
+    // dispatch(checkSlotAsync(timeRange));
+  }, debouncedConfigs.oneSec);
+
+  useEffect(() => {
+    if (timeRange) {
+      debouncedDispatch();
+      return () => {
+        debouncedDispatch.cancel();
+      };
+    }
+  }, [timeRange]);
+
   const setTableData = (data = [], selectedDate) => {
     const result = data.map(
       ({
@@ -261,6 +274,7 @@ const ScheduleTraining = () => {
       onClick={onClick}
       className="select_date"
     >
+      ssljn
       {Utils.formateDate(startDate)}
     </span>
   );
@@ -704,11 +718,18 @@ const ScheduleTraining = () => {
                 <div>
                   <div className="ml-4">
                     <div className="row">
-                      <div className="col-8 mt-1 mb-5">
+                      <div className="col-12 col-sm-12 col-md-12 col-lg-8 mt-1 mb-2">
                         <MultiRangeSlider
                           isSlotAvailable={isSlotAvailable}
                           onChange={(time) => {
                             const { startTime, endTime } = time;
+                            // setTimeRange({
+                            //   ...timeRange,
+                            //   booked_date: startDate,
+                            //   trainer_id:
+                            //     trainerInfo.userInfo.id || selectedTrainer.id,
+                            //   slotTime: { from: startTime, to: endTime },
+                            // });
                           }}
                           startTime={
                             trainerInfo &&
@@ -734,6 +755,17 @@ const ScheduleTraining = () => {
                           }
                           key={"time-range-slider"}
                         />
+                      </div>
+                      <div className="col-12 mt-4 mb-3 ml-3">
+                        {isSlotAvailable ? (
+                          <button
+                            type="button"
+                            className="mt-5 btn btn-sm btn-primary"
+                            onClick={() => {}}
+                          >
+                            Book Slot Now
+                          </button>
+                        ) : null}
                       </div>
                     </div>
                   </div>

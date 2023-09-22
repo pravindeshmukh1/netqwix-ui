@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { debounce } from "lodash";
 import { ArrowLeft, Star, X } from "react-feather";
 import {
@@ -770,24 +770,17 @@ const TrainerInfo = ({
     };
   }, []);
 
-  // const debouncedChangeTimeRangeHandler = debounce((startTime, endTime) => {
-  //   const payload = {
-  //     booked_date: startDate,
-  //     trainer_id: trainer.trainer_id,
-  //     slotTime: { from: startTime, to: endTime },
-  //   };
-  //   dispatch(checkSlotAsync(payload));
-  // }, 1000);
+  const debouncedAPICall = debounce((startTime, endTime) => {
+    const payload = {
+      booked_date: startDate,
+      trainer_id: trainer.trainer_id,
+      slotTime: { from: startTime, to: endTime },
+    };
+    // dispatch(checkSlotAsync(payload));
+  }, debouncedConfigs.oneSec);
 
-  // useEffect(() => {
-  //   debouncedChangeTimeRangeHandler();
-  //   return () => {
-  //     debouncedChangeTimeRangeHandler.cancel();
-  //   };
-  // }, []);
-
-  const handleChange = (startTime, endTime) => {
-    // debouncedChangeTimeRangeHandler(startTime, endTime);
+  const handleSliderChange = (startTime, endTime) => {
+    debouncedAPICall(startTime, endTime);
   };
   const handleSignInRedirect = () => {
     router.push({ pathname: routingPaths.signIn });
@@ -921,35 +914,39 @@ const TrainerInfo = ({
         <h2>My Schedule</h2>
         {datePicker}
         <div className="row">
-          <div className="col-6 mt-4">
+          <div className="col-10 col-sm-10 col-md-10 col-lg-6 mt-4">
             <MultiRangeSlider
               onChange={(time) => {
                 const { startTime, endTime } = time;
                 if (startTime && endTime) {
-                  handleChange(startTime, endTime);
+                  handleSliderChange(startTime, endTime);
                 }
               }}
-              endTime={
+              defaultEndTime={
                 trainer && trainer.extraInfo && trainer.extraInfo.working_hours
                   ? Utils.getTimeFormate(trainer.extraInfo.working_hours.to)
                   : TimeRange.end
               }
-              startTime={
+              defaultStartTime={
                 trainer && trainer.extraInfo && trainer.extraInfo.working_hours
                   ? Utils.getTimeFormate(trainer.extraInfo.working_hours.from)
                   : TimeRange.start
               }
               key={"time-range"}
-              isSlotAvailable={isSlotAvailable}
+              isSlotAvailable={true}
             />
           </div>
-          <button
-            type="button"
-            className="ml-3 mt-3 btn btn-sm btn-primary"
-            onClick={handleSignInRedirect}
-          >
-            Book Slot Now
-          </button>
+          <div className="col-12">
+            {isSlotAvailable ? (
+              <button
+                type="button"
+                className="mt-5 btn btn-sm btn-primary"
+                onClick={handleSignInRedirect}
+              >
+                Book Slot Now
+              </button>
+            ) : null}
+          </div>
         </div>
         <div className="mt-5">{element}</div>
       </div>

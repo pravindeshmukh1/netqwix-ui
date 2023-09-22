@@ -6,8 +6,14 @@ const MultiRangeSlider = ({
   endTime,
   onChange,
   isSlotAvailable,
+  defaultEndTime,
+  defaultStartTime,
 }) => {
   // Convert time to minutes (hh:mm to minutes since midnight)
+
+  const from = defaultStartTime;
+  const to = defaultEndTime;
+
   function timeToMinutes(time) {
     const [hours, minutes] = time.split(":").map(Number);
     return hours * 60 + minutes;
@@ -16,10 +22,6 @@ const MultiRangeSlider = ({
   // Convert time values to minutes for easier manipulation
   const minTime = timeToMinutes(startTime);
   const maxTime = timeToMinutes(endTime);
-
-  useEffect(() => {
-    console.log("start---", startTime);
-  }, []);
 
   const [minVal, setMinVal] = useState(minTime);
   const [maxVal, setMaxVal] = useState(maxTime);
@@ -63,7 +65,6 @@ const MultiRangeSlider = ({
     }
   }, [maxVal, getPercent]);
 
-  // Get min and max values in time format when their state changes
   useEffect(() => {
     onChange({
       startTime: minutesToTime(minVal),
@@ -71,9 +72,17 @@ const MultiRangeSlider = ({
     });
   }, [minVal, maxVal, onChange]);
 
-  const range_slider = isSlotAvailable
-    ? "time-range-success"
-    : "time-range-danger";
+  const checkRangeSliderColor = () => {
+    let color = "";
+    switch (isSlotAvailable) {
+      case true:
+        return (color = "time-range-success");
+      case false:
+        return (color = "time-range-danger");
+      default:
+        return (color = "default-range-slider");
+    }
+  };
   return (
     <div className="range-slider-container">
       <input
@@ -101,19 +110,15 @@ const MultiRangeSlider = ({
         }}
         className="thumb thumb--right"
       />
-
+      <div className="slider__left-value">
+        <p className="text-dark">{minutesToTime(minVal)}</p>
+      </div>
+      <div className="slider__right-value">
+        <p className="text-dark">{minutesToTime(maxVal)}</p>
+      </div>
       <div className="range-slider">
         <div className="slider__track" />
-        <div
-          ref={range}
-          className={`${range_slider || "default-range-slider"}`}
-        />
-        <div className="slider__left-value">
-          <p className="text-dark">{minutesToTime(minVal)}</p>
-        </div>
-        <div className="slider__right-value">
-          <p className="text-dark">{minutesToTime(maxVal)}</p>
-        </div>
+        <div ref={range} className={checkRangeSliderColor()} />
       </div>
     </div>
   );

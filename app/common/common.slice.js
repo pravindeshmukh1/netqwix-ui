@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 const initialState = {
   status: "idle",
-  isSlotAvailable: false,
+  isSlotAvailable: null,
 };
 
 export const checkSlotAsync = createAsyncThunk("checkSlot", async (payload) => {
