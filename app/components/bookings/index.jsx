@@ -30,6 +30,9 @@ import { Star, X } from "react-feather";
 import { authState } from "../auth/auth.slice";
 import SocialMediaIcons from "../../common/socialMediaIcons";
 import { bookingButton } from "../../common/constants";
+// import React, { useState } from 'react';
+import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
+import classnames from 'classnames';
 
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
@@ -58,9 +61,19 @@ const Bookings = ({ accountType = null }) => {
     useAppSelector(bookingsState);
   const { addRating } = bookingsAction;
 
+  const [activeTabs, setActiveTab] = useState(bookingButton[0]);
+
+  const toggle1 = (tab) => {
+    if (activeTab !== tab) {
+      setActiveTab(tab);
+    }
+  }
+
   const handelBookingButton = (tab) => {
     setTabBook(tab)
   }
+
+
 
   useEffect(() => {
     if (accountType === AccountType.TRAINER) {
@@ -504,7 +517,7 @@ const Bookings = ({ accountType = null }) => {
         }
         isOpen={addRatingModel.isOpen}
         id={addRatingModel._id}
-        width={"50%"}
+      // width={"50%"}
       />
     );
   };
@@ -548,19 +561,18 @@ const Bookings = ({ accountType = null }) => {
     <React.Fragment>
       <div className="card rounded trainer-profile-card">
         <div className="card-body">
+
+
           <div className="row">
-            <div className="col-5 col-sm-6 col-md-5 col-lg-4 col-xl-2">
+            <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3">
               <img
-                src={
-                  userInfo && userInfo?.profile_picture
-                    ? userInfo && userInfo?.profile_picture
-                    : "/assets/images/avtar/user.png"
-                }
+                src={userInfo?.profile_picture || "/assets/images/avtar/user.png"}
                 alt="trainer_image"
                 className="rounded trainer-profile"
+                style={{ maxWidth: "100%", height: "auto" }}
               />
             </div>
-            <div className="col-8 col-sm-6 col-md-6 col-lg-6 col-xl-8">
+            <div className="col-12 col-sm-6 col-md-7 col-lg-8 col-xl-9">
               <h3 className="mt-3">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
               {showRatings([], "mt-3 d-flex")}
               {userInfo &&
@@ -575,6 +587,7 @@ const Bookings = ({ accountType = null }) => {
               ) : null}
             </div>
           </div>
+
         </div>
       </div>
     </React.Fragment>
@@ -584,32 +597,69 @@ const Bookings = ({ accountType = null }) => {
     <React.Fragment>
       <div className="card rounded">
         <div className="card-body">
-          <div className="row">
+          {/* <div className="row">
             <div className="col-12 col-mb-2 col-sm-6 col-sm-mb-2 col-md-8 col-lg-12 col-xl-12">
-              <nav>
-                <div className="nav nav-tabs" id="nav-tab" role="tablist">
+              <div className="col-12"> */}
+
+          {/* <nav>
+                <div className="nav nav-tabs " id="nav-tab" role="tablist">
                   {bookingButton?.map((tab, index) => {
                     return (
                       <button key={`booking-tab${index}`} aria-selected={tab} onClick={() => handelBookingButton(tab)}
-                        className={`${tab === tabBook ? `border border-primary` : ''} 
-                        nav-link text-primary text-capitalize book-tabs`}
-                        id={tab}
-                        data-bs-toggle="tab" data-bs-target={`#${tab}`} type="button" role="tab" aria-controls="nav-home">
+                      className={`${tab === tabBook ? `border border-primary custom-border-bottm` : ''} 
+                      nav-link text-primary text-capitalize book-tabs custom-border`}
+                      id={tab}
+                      data-bs-toggle="tab" data-bs-target={`#${tab}`} type="button" role="tab" aria-controls="nav-home">
                         {tab}
                       </button>
                     );
                   })}
                 </div>
-              </nav>
-              <div className="tab-content" id="nav-tabContent">
+              </nav> */}
+          <div>
+            <Nav tabs>
+              {
+                bookingButton.map((tabName, index) => {
+                  return (
+                    <>
+                      <NavItem>
+                        <NavLink
+                          ey={`booking-tab${index}`}
+                          className={`${classnames({ active: activeTabs === tabName })} text-primary text-capitalize`}
+                          onClick={() => { toggle1(tabName); setTabBook(tabName) }}
+                          style={{ fontSize: "13px" }}
+                        >
+                          {tabName}
+                        </NavLink>
+                      </NavItem>
+                    </>
+                  )
+                })
+              }
+            </Nav>
+
+            <TabContent activeTab={activeTabs}>
+              <TabPane tabId={tabBook}>
+
+                {!scheduledMeetingDetails.length ?
+                  <h2 className="mb-2 mt-4 d-flex justify-content-center">
+                    No {tabBook} sessions
+                  </h2> : (Bookings())}
+              </TabPane>
+
+            </TabContent>
+          </div>
+
+        </div>
+        {/* <div className="tab-content" id="nav-tabContent">
                 {!scheduledMeetingDetails.length ?
                   <h2 className="mt-5 d-flex justify-content-center">
                     No {tabBook} sessions
                   </h2> : (Bookings())}
-              </div>
-            </div>
+              </div> */}
+        {/* </div>
           </div>
-        </div>
+         </div>  */}
       </div>
     </React.Fragment>
   );
