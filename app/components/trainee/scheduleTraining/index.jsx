@@ -808,7 +808,7 @@ const ScheduleTraining = () => {
                       </div>
                     </div>
                   </div>
-                  {renderTable()}
+                  {/* {renderTable()} */}
                 </div>
               ) : (
                 <TrainerSlider list={listOfTrainers} />
