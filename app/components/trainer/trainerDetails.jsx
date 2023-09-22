@@ -535,7 +535,7 @@ const TrainerInfo = ({
         ) : (
           <div className="no-media-found">{Message.noMediaFound}</div>
         )}
-        <h2>My Schedule</h2>
+        <h2>Book session</h2>
         <div className="mt-3">{element}</div>
       </div>
     </div>

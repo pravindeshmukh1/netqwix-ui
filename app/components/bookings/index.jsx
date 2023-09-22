@@ -30,9 +30,8 @@ import { Star, X } from "react-feather";
 import { authState } from "../auth/auth.slice";
 import SocialMediaIcons from "../../common/socialMediaIcons";
 import { bookingButton } from "../../common/constants";
-// import React, { useState } from 'react';
-import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
-import classnames from 'classnames';
+import { TabContent, TabPane, Nav, NavItem, NavLink } from "reactstrap";
+import classnames from "classnames";
 
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
@@ -46,7 +45,7 @@ const Bookings = ({ accountType = null }) => {
     id: "",
     booked_status: "",
   });
-  const [tabBook, setTabBook] = useState(bookingButton[0])
+  const [tabBook, setTabBook] = useState(bookingButton[0]);
 
   const [startMeeting, setStartMeeting] = useState({
     trainerInfo: null,
@@ -67,13 +66,11 @@ const Bookings = ({ accountType = null }) => {
     if (activeTab !== tab) {
       setActiveTab(tab);
     }
-  }
+  };
 
   const handelBookingButton = (tab) => {
-    setTabBook(tab)
-  }
-
-
+    setTabBook(tab);
+  };
 
   useEffect(() => {
     if (accountType === AccountType.TRAINER) {
@@ -199,7 +196,7 @@ const Bookings = ({ accountType = null }) => {
             Rating
           </button>
         ) : (
-          <div className="d-flex">
+          <div className="d-flex small-screen">
             {!isMeetingDone && (
               <>
                 {status !== BookedSession.canceled && (
@@ -248,7 +245,7 @@ const Bookings = ({ accountType = null }) => {
                 )}
 
                 <button
-                  className="btn btn-danger button-effect btn-sm ml-4"
+                  className="btn btn-danger button-effect btn-sm ml-4 button-booking"
                   type="button"
                   style={{
                     cursor:
@@ -561,18 +558,18 @@ const Bookings = ({ accountType = null }) => {
     <React.Fragment>
       <div className="card rounded trainer-profile-card">
         <div className="card-body">
-
-
           <div className="row">
-            <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3">
+            <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 d-flex justify-content-center">
               <img
-                src={userInfo?.profile_picture || "/assets/images/avtar/user.png"}
+                src={
+                  userInfo?.profile_picture || "/assets/images/avtar/user.png"
+                }
                 alt="trainer_image"
                 className="rounded trainer-profile"
                 style={{ maxWidth: "100%", height: "auto" }}
               />
             </div>
-            <div className="col-12 col-sm-6 col-md-7 col-lg-8 col-xl-9">
+            <div className="col-12 col-sm-6 col-md-7 col-lg-8 col-xl-9 card-trainer">
               <h3 className="mt-3">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
               {showRatings([], "mt-3 d-flex")}
               {userInfo &&
@@ -587,7 +584,6 @@ const Bookings = ({ accountType = null }) => {
               ) : null}
             </div>
           </div>
-
         </div>
       </div>
     </React.Fragment>
@@ -618,38 +614,42 @@ const Bookings = ({ accountType = null }) => {
               </nav> */}
           <div>
             <Nav tabs>
-              {
-                bookingButton.map((tabName, index) => {
-                  return (
-                    <>
-                      <NavItem>
-                        <NavLink
-                          ey={`booking-tab${index}`}
-                          className={`${classnames({ active: activeTabs === tabName })} ${activeTabs === tabName ?'text-primary':'text-dark'} text-capitalize`}
-                          onClick={() => { toggle1(tabName); setTabBook(tabName) }}
-                          style={{ fontSize: "13px" }}
-                        >
-                          {tabName}
-                        </NavLink>
-                      </NavItem>
-                    </>
-                  )
-                })
-              }
+              {bookingButton.map((tabName, index) => {
+                return (
+                  <>
+                    <NavItem>
+                      <NavLink
+                        ey={`booking-tab${index}`}
+                        className={`${classnames({
+                          active: activeTabs === tabName,
+                        })} ${activeTabs === tabName ? "text-primary" : "text-dark"
+                          } text-capitalize`}
+                        onClick={() => {
+                          toggle1(tabName);
+                          setTabBook(tabName);
+                        }}
+                        style={{ fontSize: "13px" }}
+                      >
+                        {tabName}
+                      </NavLink>
+                    </NavItem>
+                  </>
+                );
+              })}
             </Nav>
 
             <TabContent activeTab={activeTabs}>
               <TabPane tabId={tabBook}>
-
-                {!scheduledMeetingDetails.length ?
+                {!scheduledMeetingDetails.length ? (
                   <h2 className="mb-2 mt-4 d-flex justify-content-center">
                     No {tabBook} sessions
-                  </h2> : (Bookings())}
+                  </h2>
+                ) : (
+                  Bookings()
+                )}
               </TabPane>
-
             </TabContent>
           </div>
-
         </div>
         {/* <div className="tab-content" id="nav-tabContent">
                 {!scheduledMeetingDetails.length ?
@@ -685,33 +685,41 @@ const Bookings = ({ accountType = null }) => {
           renderVideoCall()
         ) : (
           <div>
-            {
-              accountType === AccountType.TRAINER ? (
-                <React.Fragment>
-                  <div className="welcome-text mb-3">Welcome {userInfo && userInfo?.fullname}</div>
-                  <div>
-                    {trainerInfo()}
-                  </div>
-                  <h2 className="d-flex justify-content-center mt-2 p-5 mb-2 bg-primary text-white rounded">
-                    Bookings
-                  </h2>
-                  <div className="mb-2">
-                    {bookingTabs()}
-                  </div>
-                </React.Fragment>
-              ) : null
-            }
+            {accountType === AccountType.TRAINER ? (
+              <React.Fragment>
+                <div className="welcome-text mb-3">
+                  Welcome, <br/> {userInfo && userInfo?.fullname}
+                </div>
+                <div>{trainerInfo()}</div>
+                {/* <h2 className="d-flex justify-content-center mt-2 p-5 mb-2 bg-primary text-white rounded">
+                  Bookings
+                </h2> */}
+                <h2 className="d-flex justify-content-center p-5">
+                  Bookings
+                </h2>
+                
+                <div className="mb-2">{bookingTabs()}</div>
+              </React.Fragment>
+            ) : null}
           </div>
         )}
-        {accountType === AccountType.TRAINEE ? !scheduledMeetingDetails && !scheduledMeetingDetails.length ? <h2 className="d-flex 
-        justify-content-center mt-4">No Bookings available</h2> :
-          <React.Fragment>
-            <h3 className="mt-2 p-3 mb-2 bg-primary text-white rounded">
-              Bookings
-            </h3>
-            {Bookings()}
-          </React.Fragment>
-          : null}
+        {accountType === AccountType.TRAINEE ? (
+          !scheduledMeetingDetails && !scheduledMeetingDetails.length ? (
+            <h2
+              className="d-flex 
+        justify-content-center mt-4"
+            >
+              No Bookings available
+            </h2>
+          ) : (
+            <React.Fragment>
+              <h3 className="mt-2 p-3 mb-2 bg-primary text-white rounded">
+                Bookings
+              </h3>
+              {Bookings()}
+            </React.Fragment>
+          )
+        ) : null}
       </div>
     </React.Fragment>
   );
