@@ -137,6 +137,7 @@ const ScheduleTraining = () => {
     };
   }, []);
 
+
   const setTableData = (data = [], selectedDate) => {
     const result = data.map(
       ({
@@ -705,7 +706,6 @@ const ScheduleTraining = () => {
                   <div className="ml-4">
                     <div className="row">
                       <div className="col-8 mt-2 mb-5">
-                        {JSON.stringify(trainerInfo.userInfo.trainer_id)}
                         <MultiRangeSlider
                           isSlotAvailable={isSlotAvailable}
                           onChange={(time) => {
@@ -714,7 +714,7 @@ const ScheduleTraining = () => {
                               ...timeRange,
                               booked_date: startDate,
                               slotTime: { from: startTime, to: endTime },
-                              trainer_id:""
+                              trainer_id: "",
                             });
                           }}
                           startTime={Utils.getTimeFormate(

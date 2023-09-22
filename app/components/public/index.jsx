@@ -39,6 +39,9 @@ const TrainersDetails = ({
   selectOption,
   searchQuery,
 }) => {
+  const handleSignInRedirect = () => {
+    push({ pathname: routingPaths.signIn });
+  };
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { push } = router;
@@ -715,6 +718,7 @@ const TrainerInfo = ({
 }) => {
   const [isTablet, setIsTablet] = useState(false);
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const findTrainerDetails = () => {
     const findByTrainerId = getTraineeSlots.find(
       (trainer) => trainer && trainer._id === trainerDetails._id
@@ -784,6 +788,9 @@ const TrainerInfo = ({
 
   const handleChange = (startTime, endTime) => {
     // debouncedChangeTimeRangeHandler(startTime, endTime);
+  };
+  const handleSignInRedirect = () => {
+    router.push({ pathname: routingPaths.signIn });
   };
 
   return (
@@ -923,18 +930,30 @@ const TrainerInfo = ({
                 }
               }}
               endTime={
-                Utils.getTimeFormate(trainer.extraInfo.working_hours.to) ||
-                TimeRange.end
+                Utils.getTimeFormate(
+                  trainer &&
+                    trainer?.extraInfo &&
+                    trainer?.extraInfo?.working_hours &&
+                    trainer?.extraInfo?.working_hours?.to
+                ) || TimeRange.end
               }
               startTime={
-                Utils.getTimeFormate(trainer.extraInfo.working_hours.from) ||
-                TimeRange.start
+                Utils.getTimeFormate(
+                  trainer &&
+                    trainer?.extraInfo &&
+                    trainer?.extraInfo?.working_hours &&
+                    trainer?.extraInfo?.working_hours?.from
+                ) || TimeRange.start
               }
               key={"time-range"}
               isSlotAvailable={isSlotAvailable}
             />
           </div>
-          <button type="button" className="ml-3 mt-3 btn btn-sm btn-primary">
+          <button
+            type="button"
+            className="ml-3 mt-3 btn btn-sm btn-primary"
+            onClick={handleSignInRedirect}
+          >
             Book Slot Now
           </button>
         </div>
