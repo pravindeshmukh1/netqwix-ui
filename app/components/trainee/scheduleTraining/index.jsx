@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import "../scheduleTraining/index.scss";
@@ -33,7 +33,7 @@ import { bookingsAction, bookingsState } from "../../common/common.slice";
 import { debounce } from "lodash";
 import { checkSlotAsync, commonState } from "../../../common/common.slice";
 import MultiRangeSlider from "../../../common/timeRangeSlider";
-const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
+const { isSidebarToggleEnabled } = bookingsAction;
 
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
@@ -52,11 +52,6 @@ const ScheduleTraining = () => {
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState({ id: null });
   const [query, setQuery] = useState("");
-  const [timeRange, setTimeRange] = useState({
-    booked_date: "",
-    trainer_id: "",
-    slotTime: { from: "", to: "" },
-  });
   const [isOpenInstantScheduleMeeting, setInstantScheduleMeeting] =
     useState(false);
   const [trainerInfo, setTrainerInfo] = useState({
@@ -136,19 +131,6 @@ const ScheduleTraining = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  const debouncedDispatch = debounce(() => {
-    // dispatch(checkSlotAsync(timeRange));
-  }, debouncedConfigs.oneSec);
-
-  useEffect(() => {
-    if (timeRange) {
-      debouncedDispatch();
-      return () => {
-        debouncedDispatch.cancel();
-      };
-    }
-  }, [timeRange]);
 
   const setTableData = (data = [], selectedDate) => {
     const result = data.map(
@@ -274,7 +256,6 @@ const ScheduleTraining = () => {
       onClick={onClick}
       className="select_date"
     >
-      ssljn
       {Utils.formateDate(startDate)}
     </span>
   );
@@ -723,13 +704,18 @@ const ScheduleTraining = () => {
                           isSlotAvailable={isSlotAvailable}
                           onChange={(time) => {
                             const { startTime, endTime } = time;
-                            // setTimeRange({
-                            //   ...timeRange,
-                            //   booked_date: startDate,
-                            //   trainer_id:
-                            //     trainerInfo.userInfo.id || selectedTrainer.id,
-                            //   slotTime: { from: startTime, to: endTime },
-                            // });
+                            const payload = {
+                              booked_date: startDate,
+                              trainer_id:
+                                trainerInfo?.userInfo?.id ||
+                                selectedTrainer?.id,
+                              slotTime: { from: startTime, to: endTime },
+                            };
+                            console.info(payload);
+                            // const debouncedAPI = debounce(() => {
+                            // dispatch(checkSlotAsync(payload));
+                            // }, debouncedConfigs.towSec);
+                            // debouncedAPI();
                           }}
                           startTime={
                             trainerInfo &&
@@ -757,7 +743,7 @@ const ScheduleTraining = () => {
                         />
                       </div>
                       <div className="col-12 mt-4 mb-3 ml-3">
-                        {isSlotAvailable ? (
+                        {/* {isSlotAvailable ? (
                           <button
                             type="button"
                             className="mt-5 btn btn-sm btn-primary"
@@ -765,7 +751,7 @@ const ScheduleTraining = () => {
                           >
                             Book Slot Now
                           </button>
-                        ) : null}
+                        ) : null} */}
                       </div>
                     </div>
                   </div>

@@ -70,6 +70,7 @@ export const weekDays = [
 export const bookingButton = ["upcoming", "confirmed", "canceled", "completed"];
 export const debouncedConfigs = {
   oneSec: 1000,
+  towSec: 2000,
 };
 export const routingPaths = {
   landing: "/",

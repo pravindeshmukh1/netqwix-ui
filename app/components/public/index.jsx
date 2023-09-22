@@ -685,6 +685,7 @@ const TrainersDetails = ({
             trainerInfo={trainerInfo}
             startDate={startDate}
             isSlotAvailable={isSlotAvailable}
+            dispatch={dispatch}
           />
         ) : (
           <SelectedCategory
@@ -715,9 +716,8 @@ const TrainerInfo = ({
   datePicker,
   startDate,
   isSlotAvailable,
+  dispatch,
 }) => {
-  const [isTablet, setIsTablet] = useState(false);
-  const dispatch = useAppDispatch();
   const router = useRouter();
   const findTrainerDetails = () => {
     const findByTrainerId = getTraineeSlots.find(
@@ -759,29 +759,6 @@ const TrainerInfo = ({
       };
     });
 
-  useEffect(() => {
-    const checkScreenWidth = () => {
-      setIsTablet(window.innerWidth >= 720 && window.innerWidth <= 1280);
-    };
-    window.addEventListener("resize", checkScreenWidth);
-    checkScreenWidth();
-    return () => {
-      window.removeEventListener("resize", checkScreenWidth);
-    };
-  }, []);
-
-  const debouncedAPICall = debounce((startTime, endTime) => {
-    const payload = {
-      booked_date: startDate,
-      trainer_id: trainer.trainer_id,
-      slotTime: { from: startTime, to: endTime },
-    };
-    // dispatch(checkSlotAsync(payload));
-  }, debouncedConfigs.oneSec);
-
-  const handleSliderChange = (startTime, endTime) => {
-    debouncedAPICall(startTime, endTime);
-  };
   const handleSignInRedirect = () => {
     router.push({ pathname: routingPaths.signIn });
   };
@@ -919,21 +896,21 @@ const TrainerInfo = ({
               onChange={(time) => {
                 const { startTime, endTime } = time;
                 if (startTime && endTime) {
-                  handleSliderChange(startTime, endTime);
+                  
                 }
               }}
-              defaultEndTime={
-                trainer && trainer.extraInfo && trainer.extraInfo.working_hours
-                  ? Utils.getTimeFormate(trainer.extraInfo.working_hours.to)
-                  : TimeRange.end
-              }
-              defaultStartTime={
+              startTime={
                 trainer && trainer.extraInfo && trainer.extraInfo.working_hours
                   ? Utils.getTimeFormate(trainer.extraInfo.working_hours.from)
                   : TimeRange.start
               }
+              endTime={
+                trainer && trainer.extraInfo && trainer.extraInfo.working_hours
+                  ? Utils.getTimeFormate(trainer.extraInfo.working_hours.to)
+                  : TimeRange.end
+              }
               key={"time-range"}
-              isSlotAvailable={true}
+              isSlotAvailable={isSlotAvailable}
             />
           </div>
           <div className="col-12">

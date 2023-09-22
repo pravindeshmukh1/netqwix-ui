@@ -6,13 +6,8 @@ const MultiRangeSlider = ({
   endTime,
   onChange,
   isSlotAvailable,
-  defaultEndTime,
-  defaultStartTime,
 }) => {
-  // Convert time to minutes (hh:mm to minutes since midnight)
-
-  const from = defaultStartTime;
-  const to = defaultEndTime;
+  // Convert time to minutes (hh:mm to minutes since midnight
 
   function timeToMinutes(time) {
     const [hours, minutes] = time.split(":").map(Number);
