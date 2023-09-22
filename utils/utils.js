@@ -31,10 +31,8 @@ export class Utils {
 
   static formateDate = (value) => {
     const date = moment(value);
-    const startDate = date.startOf("week").format("MMM D");
-    const endDate = date.endOf("week").format("D,YYYY");
-    const formattedDateRange = `${startDate}-${endDate}`;
-    return formattedDateRange;
+    const formattedDate = date.format("dddd DD-MM-YYYY");
+    return formattedDate;
   };
 
   static getCurrentWeekByDate(date) {
@@ -297,6 +295,6 @@ export class Utils {
     );
   };
   static getTimeFormate = (time) => {
-    return `${time.replace(":00","")}`;
+    return `${time.replace(":00", "")}`;
   };
 }
