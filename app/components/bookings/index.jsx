@@ -625,7 +625,7 @@ const Bookings = ({ accountType = null }) => {
                       <NavItem>
                         <NavLink
                           ey={`booking-tab${index}`}
-                          className={`${classnames({ active: activeTabs === tabName })} text-primary text-capitalize`}
+                          className={`${classnames({ active: activeTabs === tabName })} ${activeTabs === tabName ?'text-primary':'text-dark'} text-capitalize`}
                           onClick={() => { toggle1(tabName); setTabBook(tabName) }}
                           style={{ fontSize: "13px" }}
                         >
