@@ -287,7 +287,8 @@ const ScheduleTraining = () => {
         content={(
           { position, nudgedLeft, nudgedTop } // you can also provide a render function that injects some useful stuff!
         ) => (
-          <div style={{ zIndex: 5000 }} key={`tablist-${index}`}>
+          <div key={`tablist-${index}`}>
+          {/* <div style={{ zIndex: 5000 }} key={`tablist-${index}`}> */}
             <div className="alert alert-info m-20" role="alert">
               <p>
                 Want to schedule a meeting with <b>{trainer_info.fullname}?</b>

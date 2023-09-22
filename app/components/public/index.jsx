@@ -894,7 +894,7 @@ const TrainerInfo = ({
             <div className="no-media-found">{Message.noMediaFound}</div>
           )}
         </div>
-        <h2>My Schedule</h2>
+        <h2>Book session</h2>
         {datePicker}
         <div className="row">
           <div className="col-10 col-sm-10 col-md-10 col-lg-6 mt-4">
