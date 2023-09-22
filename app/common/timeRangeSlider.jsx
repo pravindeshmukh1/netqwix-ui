@@ -1,5 +1,5 @@
-import React from "react";
-import TimeRangeSlider from "react-time-range-slider";
+import React from 'react';
+import MultiRangeSlider from './timeRangeSliderV2';
 
 export const MultiTimeRangeSlider = ({
   disabled,
@@ -17,25 +17,17 @@ export const MultiTimeRangeSlider = ({
   to,
   isAvailable,
 }) => {
-    const sliderClassName = isAvailable ? "slider-green" : "slider-red";
+  const sliderClassName = isAvailable ? 'slider-green' : 'slider-red';
   return (
-    <div style={{ width: "300px", margin: "20px" }}>
+    <div style={{width: '300px', margin: '20px'}}>
       <div className="time-range">
-        <b>Start Time:</b> {from} <b>End Time:</b> {to}
+        {/* <b>Start Time:</b> {from} <b>End Time:</b> {to} */}
       </div>
       <div className={`time-range-slider${sliderClassName}`}>
-        <TimeRangeSlider
-          disabled={disabled}
-          draggableTrack={draggableTrack}
-          maxValue={maxValue}
-          minValue={minValue}
-          format={format}
-          name={name}
-          onChangeStart={onChangeStart}
-          onChangeComplete={onChangeComplete}
-          onChange={onChange}
-          step={step}
-          value={value}
+        <MultiRangeSlider
+          startTime="08:00"
+          endTime="19:00"
+          onChange={(result) => console.log (`min = ${result}`, result)}
         />
       </div>
     </div>

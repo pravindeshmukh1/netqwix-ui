@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
 import "node_modules/react-image-gallery/styles/scss/image-gallery.scss";
-import 'react-time-range-slider/dist/styles.css';
 import Head from "next/head";
 import { useRouter } from "next/router";
 import "../public/assets/scss/color.scss";
