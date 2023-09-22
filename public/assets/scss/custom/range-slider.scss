@@ -110,3 +110,8 @@
   @extend .slider__range;
   background: red !important;
 }
+
+.default-range-slider {
+  @extend .slider__range;
+  background: $primary !important;
+}

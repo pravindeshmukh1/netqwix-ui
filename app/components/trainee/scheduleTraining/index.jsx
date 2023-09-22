@@ -137,7 +137,6 @@ const ScheduleTraining = () => {
     };
   }, []);
 
-
   const setTableData = (data = [], selectedDate) => {
     const result = data.map(
       ({
@@ -705,26 +704,34 @@ const ScheduleTraining = () => {
                 <div>
                   <div className="ml-4">
                     <div className="row">
-                      <div className="col-8 mt-2 mb-5">
+                      <div className="col-8 mt-1 mb-5">
                         <MultiRangeSlider
                           isSlotAvailable={isSlotAvailable}
                           onChange={(time) => {
                             const { startTime, endTime } = time;
-                            setTimeRange({
-                              ...timeRange,
-                              booked_date: startDate,
-                              slotTime: { from: startTime, to: endTime },
-                              trainer_id: "",
-                            });
                           }}
-                          startTime={Utils.getTimeFormate(
-                            trainerInfo?.userInfo?.extraInfo?.working_hours
-                              ?.from || TimeRange.start
-                          )}
-                          endTime={Utils.getTimeFormate(
-                            trainerInfo?.userInfo?.extraInfo?.working_hours
-                              ?.to || TimeRange.end
-                          )}
+                          startTime={
+                            trainerInfo &&
+                            trainerInfo.userInfo &&
+                            trainerInfo.userInfo.extraInfo &&
+                            trainerInfo.userInfo.extraInfo.working_hours
+                              ? Utils.getTimeFormate(
+                                  trainerInfo.userInfo.extraInfo.working_hours
+                                    .from
+                                )
+                              : TimeRange.start
+                          }
+                          endTime={
+                            trainerInfo &&
+                            trainerInfo.userInfo &&
+                            trainerInfo.userInfo.extraInfo &&
+                            trainerInfo.userInfo.extraInfo.working_hours
+                              ? Utils.getTimeFormate(
+                                  trainerInfo.userInfo.extraInfo.working_hours
+                                    .to
+                                )
+                              : TimeRange.end
+                          }
                           key={"time-range-slider"}
                         />
                       </div>

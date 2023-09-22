@@ -17,6 +17,10 @@ const MultiRangeSlider = ({
   const minTime = timeToMinutes(startTime);
   const maxTime = timeToMinutes(endTime);
 
+  useEffect(() => {
+    console.log("start---", startTime);
+  }, []);
+
   const [minVal, setMinVal] = useState(minTime);
   const [maxVal, setMaxVal] = useState(maxTime);
   const minValRef = useRef(minTime);
@@ -66,6 +70,7 @@ const MultiRangeSlider = ({
       endTime: minutesToTime(maxVal),
     });
   }, [minVal, maxVal, onChange]);
+
   const range_slider = isSlotAvailable
     ? "time-range-success"
     : "time-range-danger";
@@ -99,7 +104,10 @@ const MultiRangeSlider = ({
 
       <div className="range-slider">
         <div className="slider__track" />
-        <div ref={range} className={`${range_slider}`} />
+        <div
+          ref={range}
+          className={`${range_slider || "default-range-slider"}`}
+        />
         <div className="slider__left-value">
           <p className="text-dark">{minutesToTime(minVal)}</p>
         </div>

@@ -930,20 +930,14 @@ const TrainerInfo = ({
                 }
               }}
               endTime={
-                Utils.getTimeFormate(
-                  trainer &&
-                    trainer?.extraInfo &&
-                    trainer?.extraInfo?.working_hours &&
-                    trainer?.extraInfo?.working_hours?.to
-                ) || TimeRange.end
+                trainer && trainer.extraInfo && trainer.extraInfo.working_hours
+                  ? Utils.getTimeFormate(trainer.extraInfo.working_hours.to)
+                  : TimeRange.end
               }
               startTime={
-                Utils.getTimeFormate(
-                  trainer &&
-                    trainer?.extraInfo &&
-                    trainer?.extraInfo?.working_hours &&
-                    trainer?.extraInfo?.working_hours?.from
-                ) || TimeRange.start
+                trainer && trainer.extraInfo && trainer.extraInfo.working_hours
+                  ? Utils.getTimeFormate(trainer.extraInfo.working_hours.from)
+                  : TimeRange.start
               }
               key={"time-range"}
               isSlotAvailable={isSlotAvailable}
@@ -957,7 +951,7 @@ const TrainerInfo = ({
             Book Slot Now
           </button>
         </div>
-        {/* <div className="mt-5">{element}</div> */}
+        <div className="mt-5">{element}</div>
       </div>
     </div>
   );
