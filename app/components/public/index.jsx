@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { debounce } from "lodash";
 import { ArrowLeft, Star, X } from "react-feather";
 import {
   getTraineeWithSlotsAsync,
@@ -16,6 +17,8 @@ import {
   Message,
   TRAINER_AMOUNT_USD,
   TRAINER_MEETING_TIME,
+  TimeRange,
+  debouncedConfigs,
   params,
   routingPaths,
   weekDays,
@@ -23,11 +26,15 @@ import {
 import { Utils } from "../../../utils/utils";
 import SocialMediaIcons from "../../common/socialMediaIcons";
 import Accordion from "../../common/accordion";
-import { bookingsState } from "../common/common.slice";
-import TrainerSlider from "../trainee/scheduleTraining/trainerSlider";
 import Modal from "../../common/modal";
 import ImageVideoThumbnailCarousel from "../../common/imageVideoThumbnailCarousel";
 import { useRouter } from "next/router";
+import {
+  checkSlotAsync,
+  commonAction,
+  commonState,
+} from "../../common/common.slice";
+import MultiRangeSlider from "../../common/timeRangeSlider";
 
 const TrainersDetails = ({
   onClose,
@@ -36,10 +43,16 @@ const TrainersDetails = ({
   selectOption,
   searchQuery,
 }) => {
+  const handleSignInRedirect = () => {
+    push({ pathname: routingPaths.signIn });
+  };
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { push } = router;
+  const { status } = useAppSelector(commonState);
+  const { handleTrainerAvailable } = commonAction;
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
+  const { isSlotAvailable } = useAppSelector(commonState);
   const [accordion, setAccordion] = useState({});
   const [startDate, setStartDate] = useState(new Date());
   const [getParams, setParams] = useState(params);
@@ -675,6 +688,9 @@ const TrainersDetails = ({
             trainerDetails={trainerDetails}
             setAccordionsData={setAccordionsData}
             trainerInfo={trainerInfo}
+            startDate={startDate}
+            isSlotAvailable={isSlotAvailable}
+            dispatch={dispatch}
           />
         ) : (
           <SelectedCategory
@@ -685,6 +701,8 @@ const TrainersDetails = ({
             searchQuery={searchQuery}
             setFilterParams={setFilterParams}
             filterParams={filterParams}
+            dispatch={dispatch}
+            handleTrainerAvailable={handleTrainerAvailable}
           />
         )}
       </div>
@@ -703,8 +721,11 @@ const TrainerInfo = ({
   trainerDetails,
   setAccordionsData,
   datePicker,
+  startDate,
+  isSlotAvailable,
+  dispatch,
 }) => {
-  const [isTablet, setIsTablet] = useState(false);
+  const router = useRouter();
   const findTrainerDetails = () => {
     const findByTrainerId = getTraineeSlots.find(
       (trainer) => trainer && trainer._id === trainerDetails._id
@@ -745,17 +766,9 @@ const TrainerInfo = ({
       };
     });
 
-  useEffect(() => {
-    const checkScreenWidth = () => {
-      setIsTablet(window.innerWidth >= 720 && window.innerWidth <= 1280);
-    };
-    window.addEventListener("resize", checkScreenWidth);
-    checkScreenWidth();
-    return () => {
-      window.removeEventListener("resize", checkScreenWidth);
-    };
-  }, []);
-
+  const handleSignInRedirect = () => {
+    router.push({ pathname: routingPaths.signIn });
+  };
   return (
     <div
       className="row"
@@ -881,9 +894,50 @@ const TrainerInfo = ({
             <div className="no-media-found">{Message.noMediaFound}</div>
           )}
         </div>
-        <h2>My Schedule</h2>
+        <h2>Book session</h2>
         {datePicker}
-        <div className="mt-3">{element}</div>
+        <div className="row">
+          <div className="col-10 col-sm-10 col-md-10 col-lg-6 mt-4">
+            <MultiRangeSlider
+              onChange={(time) => {
+                const { startTime, endTime } = time;
+                const payload = {
+                  trainer_id: trainer.trainer_id,
+                  booked_date: startDate,
+                  slotTime: { from: startTime, to: endTime },
+                };
+                const debouncedAPI = debounce(() => {
+                  dispatch(checkSlotAsync(payload));
+                }, debouncedConfigs.towSec);
+                debouncedAPI();
+              }}
+              startTime={
+                trainer && trainer.extraInfo && trainer.extraInfo.working_hours
+                  ? Utils.getTimeFormate(trainer.extraInfo.working_hours.from)
+                  : TimeRange.start
+              }
+              endTime={
+                trainer && trainer.extraInfo && trainer.extraInfo.working_hours
+                  ? Utils.getTimeFormate(trainer.extraInfo.working_hours.to)
+                  : TimeRange.end
+              }
+              key={"time-range"}
+              isSlotAvailable={isSlotAvailable}
+            />
+          </div>
+          <div className="col-12">
+            {isSlotAvailable ? (
+              <button
+                type="button"
+                className="mt-5 btn btn-sm btn-primary"
+                onClick={handleSignInRedirect}
+              >
+                Book Slot Now
+              </button>
+            ) : null}
+          </div>
+        </div>
+        {/* <div className="mt-5">{element}</div> */}
       </div>
     </div>
   );
@@ -910,6 +964,8 @@ const SelectedCategory = ({
   searchQuery,
   setFilterParams,
   filterParams,
+  dispatch,
+  handleTrainerAvailable,
 }) => {
   return (
     <div className="row mr-1 overflowX-auto">
@@ -1018,8 +1074,6 @@ const SelectedCategory = ({
                             ? data.profilePicture
                             : "/assets/images/avtar/statusMenuIcon.jpeg"
                         }
-                        // width={"136px"}
-                        // height={"128px"}
                         className="cardimg"
                         style={{ borderRadius: "15px" }}
                         alt="profile-picture"
@@ -1030,6 +1084,7 @@ const SelectedCategory = ({
                         className="card-title pointer underline"
                         onClick={() => {
                           console.log(`data`);
+                          dispatch(handleTrainerAvailable(null));
                           setTrainerDetails((prev) => ({
                             ...prev,
                             _id: data && data._id,

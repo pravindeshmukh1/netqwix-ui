@@ -67,12 +67,11 @@ export const weekDays = [
   "sunday",
 ];
 
-export const bookingButton = [
-  "upcoming",
-  "confirmed",
-  "canceled",
-  "completed"
-];
+export const bookingButton = ["upcoming", "confirmed", "canceled", "completed"];
+export const debouncedConfigs = {
+  oneSec: 1000,
+  towSec: 2000,
+};
 export const routingPaths = {
   landing: "/",
   dashboard: "/dashboard",
@@ -719,4 +718,4 @@ export const FIXED_ITEM = ["notification", "file", "setting"];
 
 export const MOBILE_SIZE = 576;
 
-export const BookingsTabs = [{ id: 1 }];
+export const TimeRange = { start: "00:00", end: "23:59" };
