@@ -29,7 +29,11 @@ import Accordion from "../../common/accordion";
 import Modal from "../../common/modal";
 import ImageVideoThumbnailCarousel from "../../common/imageVideoThumbnailCarousel";
 import { useRouter } from "next/router";
-import { checkSlotAsync, commonState } from "../../common/common.slice";
+import {
+  checkSlotAsync,
+  commonAction,
+  commonState,
+} from "../../common/common.slice";
 import MultiRangeSlider from "../../common/timeRangeSlider";
 
 const TrainersDetails = ({
@@ -46,6 +50,7 @@ const TrainersDetails = ({
   const router = useRouter();
   const { push } = router;
   const { status } = useAppSelector(commonState);
+  const { handleTrainerAvailable } = commonAction;
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
   const { isSlotAvailable } = useAppSelector(commonState);
   const [accordion, setAccordion] = useState({});
@@ -696,6 +701,8 @@ const TrainersDetails = ({
             searchQuery={searchQuery}
             setFilterParams={setFilterParams}
             filterParams={filterParams}
+            dispatch={dispatch}
+            handleTrainerAvailable={handleTrainerAvailable}
           />
         )}
       </div>
@@ -762,7 +769,6 @@ const TrainerInfo = ({
   const handleSignInRedirect = () => {
     router.push({ pathname: routingPaths.signIn });
   };
-
   return (
     <div
       className="row"
@@ -895,9 +901,15 @@ const TrainerInfo = ({
             <MultiRangeSlider
               onChange={(time) => {
                 const { startTime, endTime } = time;
-                if (startTime && endTime) {
-                  
-                }
+                const payload = {
+                  trainer_id: trainer.trainer_id,
+                  booked_date: startDate,
+                  slotTime: { from: startTime, to: endTime },
+                };
+                const debouncedAPI = debounce(() => {
+                  dispatch(checkSlotAsync(payload));
+                }, debouncedConfigs.towSec);
+                debouncedAPI();
               }}
               startTime={
                 trainer && trainer.extraInfo && trainer.extraInfo.working_hours
@@ -925,7 +937,7 @@ const TrainerInfo = ({
             ) : null}
           </div>
         </div>
-        <div className="mt-5">{element}</div>
+        {/* <div className="mt-5">{element}</div> */}
       </div>
     </div>
   );
@@ -952,6 +964,8 @@ const SelectedCategory = ({
   searchQuery,
   setFilterParams,
   filterParams,
+  dispatch,
+  handleTrainerAvailable,
 }) => {
   return (
     <div className="row mr-1 overflowX-auto">
@@ -1070,6 +1084,7 @@ const SelectedCategory = ({
                         className="card-title pointer underline"
                         onClick={() => {
                           console.log(`data`);
+                          dispatch(handleTrainerAvailable(null));
                           setTrainerDetails((prev) => ({
                             ...prev,
                             _id: data && data._id,

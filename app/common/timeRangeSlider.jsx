@@ -39,7 +39,7 @@ const MultiRangeSlider = ({
     [minTime, maxTime]
   );
 
-  // Set width of the range to decrease from the left side
+  // // Set width of the range to decrease from the left side
   useEffect(() => {
     const minPercent = getPercent(minVal);
     const maxPercent = getPercent(maxValRef.current);
@@ -59,13 +59,6 @@ const MultiRangeSlider = ({
       range.current.style.width = `${maxPercent - minPercent}%`;
     }
   }, [maxVal, getPercent]);
-
-  useEffect(() => {
-    onChange({
-      startTime: minutesToTime(minVal),
-      endTime: minutesToTime(maxVal),
-    });
-  }, [minVal, maxVal, onChange]);
 
   const checkRangeSliderColor = () => {
     let color = "";
@@ -89,6 +82,10 @@ const MultiRangeSlider = ({
           const value = Math.min(Number(event.target.value), maxVal - 1);
           setMinVal(value);
           minValRef.current = value;
+          onChange({
+            startTime: minutesToTime(value),
+            endTime: minutesToTime(maxVal),
+          });
         }}
         className="thumb thumb--left"
         style={{ zIndex: minVal > maxTime - 60 && "5" }}
@@ -101,6 +98,10 @@ const MultiRangeSlider = ({
         onChange={(event) => {
           const value = Math.max(Number(event.target.value), minVal + 1);
           setMaxVal(value);
+          onChange({
+            startTime: minutesToTime(minVal),
+            endTime: minutesToTime(value),
+          });
           maxValRef.current = value;
         }}
         className="thumb thumb--right"

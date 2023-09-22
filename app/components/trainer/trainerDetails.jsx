@@ -24,6 +24,7 @@ import ImageVideoThumbnailCarousel from "../../common/imageVideoThumbnailCarouse
 import moment from "moment";
 import { Input, Label } from "reactstrap";
 import { useDispatch } from "react-redux";
+import { commonAction } from "../../common/common.slice";
 
 export const TrainerDetails = ({
   onClose,
@@ -36,6 +37,7 @@ export const TrainerDetails = ({
 }) => {
   const dispatch = useDispatch();
   const { getTraineeSlots } = useAppSelector(traineeState);
+  const { handleTrainerAvailable } = commonAction;
   const [accordion, setAccordion] = useState({});
   const [filterParams, setFilterParams] = useState({
     date: null,
@@ -173,6 +175,8 @@ export const TrainerDetails = ({
             searchQuery={searchQuery}
             setFilterParams={setFilterParams}
             filterParams={filterParams}
+            dispatch={dispatch}
+            handleTrainerAvailable={handleTrainerAvailable}
           />
         )}
       </div>
@@ -188,6 +192,8 @@ const SelectedCategory = ({
   searchQuery,
   setFilterParams,
   filterParams,
+  dispatch,
+  handleTrainerAvailable,
 }) => {
   return (
     <>
@@ -304,13 +310,17 @@ const SelectedCategory = ({
                         <h3
                           className="card-title pointer underline"
                           onClick={() => {
-                            console.log(`data`);
                             setTrainerDetails((prev) => ({
                               ...prev,
                               _id: data && data._id,
                               select_trainer: true,
                             }));
-                            selectTrainer(data && data._id);
+                            dispatch(handleTrainerAvailable(null));
+                            selectTrainer(
+                              data && data._id,
+                              data && data.trainer_id,
+                              data && data
+                            );
                           }}
                         >
                           {data ? data.fullname : ""}

@@ -50,7 +50,17 @@ const ScheduleTraining = () => {
   const [listOfTrainers, setListOfTrainers] = useState([]);
   const [bookingTableData, setBookingTableData] = useState([]);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
-  const [selectedTrainer, setSelectedTrainer] = useState({ id: null });
+  const [trainer, setTrainer] = useState({ trainer_id: "" });
+  const [timeRange, setTimeRange] = useState({
+    startTime: "",
+    endTime: "",
+  });
+
+  const [selectedTrainer, setSelectedTrainer] = useState({
+    id: null,
+    trainer_id: null,
+    data: {},
+  });
   const [query, setQuery] = useState("");
   const [isOpenInstantScheduleMeeting, setInstantScheduleMeeting] =
     useState(false);
@@ -75,6 +85,7 @@ const ScheduleTraining = () => {
       getTraineeSlots.map((trainer) => {
         return {
           id: trainer._id,
+          trainer_id: trainer.trainer_id,
           background_image: trainer?.profilePicture,
           isActive: true,
           category: trainer?.category,
@@ -646,9 +657,14 @@ const ScheduleTraining = () => {
         key={`trainerDetails`}
         searchQuery={query}
         trainerInfo={trainerInfo.userInfo}
-        selectTrainer={(_id) => {
+        selectTrainer={(_id, trainer_id, data) => {
           if (_id) {
-            setSelectedTrainer({ ...selectedTrainer, id: _id });
+            setSelectedTrainer({
+              ...selectedTrainer,
+              id: _id,
+              trainer_id,
+              data,
+            });
           }
         }}
         onClose={() => {
@@ -672,6 +688,11 @@ const ScheduleTraining = () => {
   };
 
   const renderBookingTable = () => {
+    const { data: { extraInfo } = {} } = selectedTrainer || {};
+    const { from, to } = extraInfo?.working_hours || {};
+
+    const fromHours = from ? Utils.getTimeFormate(from) : null;
+    const toHours = to ? Utils.getTimeFormate(to) : null;
     return (
       <React.Fragment>
         <div className="container">
@@ -704,54 +725,85 @@ const ScheduleTraining = () => {
                           isSlotAvailable={isSlotAvailable}
                           onChange={(time) => {
                             const { startTime, endTime } = time;
+                            setTimeRange({ ...timeRange, startTime, endTime });
                             const payload = {
                               booked_date: startDate,
                               trainer_id:
-                                trainerInfo?.userInfo?.id ||
-                                selectedTrainer?.id,
+                                trainerInfo?.userInfo?.trainer_id ||
+                                selectedTrainer?.trainer_id,
                               slotTime: { from: startTime, to: endTime },
                             };
-                            console.info(payload);
-                            // const debouncedAPI = debounce(() => {
-                            // dispatch(checkSlotAsync(payload));
-                            // }, debouncedConfigs.towSec);
-                            // debouncedAPI();
+                            const debouncedAPI = debounce(() => {
+                              dispatch(checkSlotAsync(payload));
+                            }, debouncedConfigs.towSec);
+                            debouncedAPI();
                           }}
                           startTime={
-                            trainerInfo &&
-                            trainerInfo.userInfo &&
-                            trainerInfo.userInfo.extraInfo &&
-                            trainerInfo.userInfo.extraInfo.working_hours
+                            fromHours ||
+                            (trainerInfo?.userInfo?.extraInfo?.working_hours
                               ? Utils.getTimeFormate(
                                   trainerInfo.userInfo.extraInfo.working_hours
                                     .from
                                 )
-                              : TimeRange.start
+                              : TimeRange.start)
                           }
                           endTime={
-                            trainerInfo &&
-                            trainerInfo.userInfo &&
-                            trainerInfo.userInfo.extraInfo &&
-                            trainerInfo.userInfo.extraInfo.working_hours
+                            toHours ||
+                            (trainerInfo?.userInfo?.extraInfo?.working_hours
                               ? Utils.getTimeFormate(
                                   trainerInfo.userInfo.extraInfo.working_hours
                                     .to
                                 )
-                              : TimeRange.end
+                              : TimeRange.end)
                           }
                           key={"time-range-slider"}
                         />
                       </div>
                       <div className="col-12 mt-4 mb-3 ml-3">
-                        {/* {isSlotAvailable ? (
+                        {isSlotAvailable &&
+                        timeRange.startTime &&
+                        timeRange.endTime ? (
                           <button
                             type="button"
                             className="mt-5 btn btn-sm btn-primary"
-                            onClick={() => {}}
+                            onClick={() => {
+                              const amountPayable = Utils.getMinutesFromHourMM(
+                                timeRange.startTime,
+                                timeRange.endTime,
+                                trainerInfo?.userInfo?.extraInfo?.hourly_rate
+                              );
+                              console.log("trainerInfo", trainerInfo);
+                              console.log(
+                                "selectedTrainer---",
+                                selectedTrainer.data
+                              );
+                              if (amountPayable > 0) {
+                                const payload = {
+                                  charging_price: amountPayable,
+                                  trainer_id:
+                                    trainerInfo?.userInfo?.trainer_id ||
+                                    selectedTrainer?.trainer_id,
+                                  trainer_info:
+                                    trainerInfo || selectedTrainer.data,
+                                  status: BookedSession.booked,
+                                  booked_date: startDate,
+                                  session_start_time: timeRange.startTime,
+                                  session_end_time: timeRange.endTime,
+                                };
+                                setBookSessionPayload(payload);
+                                dispatch(
+                                  createPaymentIntentAsync({
+                                    amount: +amountPayable.toFixed(2),
+                                  })
+                                );
+                              } else {
+                                toast.error("Invalid slot timing...");
+                              }
+                            }}
                           >
                             Book Slot Now
                           </button>
-                        ) : null} */}
+                        ) : null}
                       </div>
                     </div>
                   </div>
@@ -763,6 +815,10 @@ const ScheduleTraining = () => {
             </div>
           </div>
         </div>
+        <Modal
+          isOpen={showTransactionModal}
+          element={renderStripePaymentContent()}
+        />
         {/* <div className="row">
         <div className="mt-4 col-1.4 datePicker">
           <DatePicker
@@ -792,10 +848,6 @@ const ScheduleTraining = () => {
           )}
         </div>
       </div> */}
-        <Modal
-          isOpen={showTransactionModal}
-          element={renderStripePaymentContent()}
-        />
       </React.Fragment>
     );
   };

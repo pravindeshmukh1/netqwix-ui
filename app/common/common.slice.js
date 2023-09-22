@@ -24,6 +24,9 @@ export const commonSlice = createSlice({
     common: (state) => {
       return state;
     },
+    handleTrainerAvailable: (state, action) => {
+      state.isSlotAvailable = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
