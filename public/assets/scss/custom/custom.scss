@@ -726,12 +726,8 @@ slick-slider .slick-list,
 }
 
 .card-trainer {
-  padding: 6% !important;
-  float: left !important;
-
   @media (max-width: 576px) {
-    padding: 13% !important;
-    margin-left: 18px !important;
+    margin: auto !important;
   }
 }
 
@@ -747,4 +743,3 @@ slick-slider .slick-list,
     display: block !important;
   }
 }
-

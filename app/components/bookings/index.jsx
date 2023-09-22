@@ -569,7 +569,7 @@ const Bookings = ({ accountType = null }) => {
                 style={{ maxWidth: "100%", height: "auto" }}
               />
             </div>
-            <div className="col-12 col-sm-6 col-md-7 col-lg-8 col-xl-9 card-trainer">
+            <div className="col-7 col-sm-6 col-md-7 col-lg-8 col-xl-9 card-trainer ">
               <h3 className="mt-3">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
               {showRatings([], "mt-3 d-flex")}
               {userInfo &&
@@ -688,7 +688,7 @@ const Bookings = ({ accountType = null }) => {
             {accountType === AccountType.TRAINER ? (
               <React.Fragment>
                 <div className="welcome-text mb-3">
-                  Welcome, <br/> {userInfo && userInfo?.fullname}
+                  Welcome, <br /> {userInfo && userInfo?.fullname}
                 </div>
                 <div>{trainerInfo()}</div>
                 {/* <h2 className="d-flex justify-content-center mt-2 p-5 mb-2 bg-primary text-white rounded">
@@ -697,7 +697,7 @@ const Bookings = ({ accountType = null }) => {
                 <h2 className="d-flex justify-content-center p-5">
                   Bookings
                 </h2>
-                
+
                 <div className="mb-2">{bookingTabs()}</div>
               </React.Fragment>
             ) : null}
