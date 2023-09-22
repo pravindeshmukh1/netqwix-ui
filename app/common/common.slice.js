@@ -32,6 +32,9 @@ export const commonSlice = createSlice({
       })
       .addCase(checkSlotAsync.fulfilled, (state, action) => {
         state.status = "fulfilled";
+        console.info("inside--");
+        console.info(action.payload);
+        state.isSlotAvailable = action.payload.data.isAvailable;
       })
       .addCase(checkSlotAsync.rejected, (state, action) => {
         state.status = "rejected";

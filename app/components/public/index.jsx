@@ -26,16 +26,11 @@ import {
 import { Utils } from "../../../utils/utils";
 import SocialMediaIcons from "../../common/socialMediaIcons";
 import Accordion from "../../common/accordion";
-import { bookingsState } from "../common/common.slice";
-import TrainerSlider from "../trainee/scheduleTraining/trainerSlider";
 import Modal from "../../common/modal";
 import ImageVideoThumbnailCarousel from "../../common/imageVideoThumbnailCarousel";
 import { useRouter } from "next/router";
-import MultiRangeSlider from "../../common/multiRangeSlider";
-import { checkSlotAsync } from "../../common/common.slice";
-import RangeSlider, {
-  MultiTimeRangeSlider,
-} from "../../common/timeRangeSlider";
+import { checkSlotAsync, commonState } from "../../common/common.slice";
+import MultiRangeSlider from "../../common/timeRangeSlider";
 
 const TrainersDetails = ({
   onClose,
@@ -47,7 +42,9 @@ const TrainersDetails = ({
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { push } = router;
+  const { status } = useAppSelector(commonState);
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
+  const { isSlotAvailable } = useAppSelector(commonState);
   const [accordion, setAccordion] = useState({});
   const [startDate, setStartDate] = useState(new Date());
   const [getParams, setParams] = useState(params);
@@ -683,6 +680,8 @@ const TrainersDetails = ({
             trainerDetails={trainerDetails}
             setAccordionsData={setAccordionsData}
             trainerInfo={trainerInfo}
+            startDate={startDate}
+            isSlotAvailable={isSlotAvailable}
           />
         ) : (
           <SelectedCategory
@@ -711,15 +710,11 @@ const TrainerInfo = ({
   trainerDetails,
   setAccordionsData,
   datePicker,
-  setCheckSlot,
-  checkSlot,
+  startDate,
+  isSlotAvailable,
 }) => {
-    const dispatch = useAppDispatch();
   const [isTablet, setIsTablet] = useState(false);
-  const [value, setValue] = useState({
-    from: TimeRange.start,
-    to: TimeRange.end,
-  });
+  const dispatch = useAppDispatch();
   const findTrainerDetails = () => {
     const findByTrainerId = getTraineeSlots.find(
       (trainer) => trainer && trainer._id === trainerDetails._id
@@ -771,31 +766,24 @@ const TrainerInfo = ({
     };
   }, []);
 
-  const debouncedDispatch = debounce(() => {
-    const payload = {
-      booked_date: "2023-09-22T06:17:29.952Z",
-      trainer_id: trainer.trainer_id,
-      slotTime: value,
-    };
-    // dispatch(checkSlotAsync(payload));
-  }, debouncedConfigs.oneSec);
+  // const debouncedChangeTimeRangeHandler = debounce((startTime, endTime) => {
+  //   const payload = {
+  //     booked_date: startDate,
+  //     trainer_id: trainer.trainer_id,
+  //     slotTime: { from: startTime, to: endTime },
+  //   };
+  //   dispatch(checkSlotAsync(payload));
+  // }, 1000);
 
-  useEffect(() => {
-    if (value) {
-      console.info("value----", value);
-      debouncedDispatch();
-      return () => {
-        debouncedDispatch.cancel();
-      };
-    }
-  }, [value]);
+  // useEffect(() => {
+  //   debouncedChangeTimeRangeHandler();
+  //   return () => {
+  //     debouncedChangeTimeRangeHandler.cancel();
+  //   };
+  // }, []);
 
-  const changeStartHandler = (value) => {
-    console.log("Start Handler Called", value);
-  };
-
-  const changeCompleteHandler = (value) => {
-    console.log("Complete Handler Called", value);
+  const handleChange = (startTime, endTime) => {
+    // debouncedChangeTimeRangeHandler(startTime, endTime);
   };
 
   return (
@@ -926,30 +914,31 @@ const TrainerInfo = ({
         <h2>My Schedule</h2>
         {datePicker}
         <div className="row">
-          <div className="col-6">
-            <MultiTimeRangeSlider
-              disabled={false}
-              draggableTrack={false}
-              format={24}
-              name={"time_range"}
-              onChange={(timeRange) => {
-                const { start, end } = timeRange;
-                setValue({
-                  ...value,
-                  from: start,
-                  to: end,
-                });
+          <div className="col-6 mt-4">
+            <MultiRangeSlider
+              onChange={(time) => {
+                const { startTime, endTime } = time;
+                if (startTime && endTime) {
+                  handleChange(startTime, endTime);
+                }
               }}
-              onChangeStart={changeStartHandler}
-              onChangeComplete={changeCompleteHandler}
-              from={value.from}
-              // value={value}
-              to={value.to}
-              key={"time_range"}
+              endTime={
+                Utils.getTimeFormate(trainer.extraInfo.working_hours.to) ||
+                TimeRange.end
+              }
+              startTime={
+                Utils.getTimeFormate(trainer.extraInfo.working_hours.from) ||
+                TimeRange.start
+              }
+              key={"time-range"}
+              isSlotAvailable={isSlotAvailable}
             />
           </div>
+          <button type="button" className="ml-3 mt-3 btn btn-sm btn-primary">
+            Book Slot Now
+          </button>
         </div>
-        <div className="mt-3">{element}</div>
+        {/* <div className="mt-5">{element}</div> */}
       </div>
     </div>
   );
@@ -1084,8 +1073,6 @@ const SelectedCategory = ({
                             ? data.profilePicture
                             : "/assets/images/avtar/statusMenuIcon.jpeg"
                         }
-                        // width={"136px"}
-                        // height={"128px"}
                         className="cardimg"
                         style={{ borderRadius: "15px" }}
                         alt="profile-picture"

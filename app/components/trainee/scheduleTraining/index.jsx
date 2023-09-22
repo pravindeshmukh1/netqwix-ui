@@ -30,18 +30,16 @@ import SearchableDropdown from "../helper/searchableDropdown";
 import { masterState } from "../../master/master.slice";
 import { TrainerDetails } from "../../trainer/trainerDetails";
 import { bookingsAction, bookingsState } from "../../common/common.slice";
-import MultiRangeSlider from "../../../common/multiRangeSlider";
 import { debounce } from "lodash";
-import { checkSlotAsync } from "../../../common/common.slice";
-import { MultiTimeRangeSlider } from "../../../common/timeRangeSlider";
-
+import { checkSlotAsync, commonState } from "../../../common/common.slice";
+import MultiRangeSlider from "../../../common/timeRangeSlider";
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
-  const { isLoading, configs } = useAppSelector(bookingsState);
-
+  const { configs } = useAppSelector(bookingsState);
+  const { isSlotAvailable } = useAppSelector(commonState);
   const { selectedTrainerId } = useAppSelector(bookingsState);
   const { master } = useAppSelector(masterState);
   const [startDate, setStartDate] = useState(new Date());
@@ -54,6 +52,11 @@ const ScheduleTraining = () => {
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [selectedTrainer, setSelectedTrainer] = useState({ id: null });
   const [query, setQuery] = useState("");
+  const [timeRange, setTimeRange] = useState({
+    booked_date: "",
+    trainer_id: "",
+    slotTime: { from: "", to: "" },
+  });
   const [isOpenInstantScheduleMeeting, setInstantScheduleMeeting] =
     useState(false);
   const [trainerInfo, setTrainerInfo] = useState({
@@ -63,10 +66,6 @@ const ScheduleTraining = () => {
   const [bookSessionPayload, setBookSessionPayload] = useState({});
   const toggle = () => setInstantScheduleMeeting(!isOpenInstantScheduleMeeting);
 
-  const [value, setValue] = useState({
-    from: TimeRange.start,
-    to: TimeRange.end,
-  });
   useEffect(() => {
     dispatch(getTraineeWithSlotsAsync(getParams));
   }, [getParams]);
@@ -137,32 +136,6 @@ const ScheduleTraining = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  const debouncedDispatch = debounce(() => {
-    const payload = {
-      booked_date: "2023-09-22T06:17:29.952Z",
-      trainer_id: "64e452738523f55ec652d285",
-      slotTime: value,
-    };
-    dispatch(checkSlotAsync(payload));
-  }, debouncedConfigs.oneSec);
-
-  useEffect(() => {
-    if (value) {
-      debouncedDispatch();
-      return () => {
-        debouncedDispatch.cancel();
-      };
-    }
-  }, [value]);
-
-  const changeStartHandler = (value) => {
-    console.log("Start Handler Called", value);
-  };
-
-  const changeCompleteHandler = (value) => {
-    console.log("Complete Handler Called", value);
-  };
 
   const setTableData = (data = [], selectedDate) => {
     const result = data.map(
@@ -725,32 +698,34 @@ const ScheduleTraining = () => {
                 customInput={<Input />}
               />
             </div>
-
             <div className="col-12">
               {(getParams.search && getParams.search.length) ||
               !bookingColumns.length ? (
                 <div>
-                  <div className="ml-3">
+                  <div className="ml-4">
                     <div className="row">
                       <div className="col-8 mt-2 mb-5">
-                        <MultiTimeRangeSlider
-                          isAvailable={true}
-                          disabled={false}
-                          draggableTrack={false}
-                          format={24}
-                          from={value.from}
-                          to={value.to}
-                          name={"check-slots"}
-                          onChange={(timeRange) => {
-                            const { start, end } = timeRange;
-                            setValue({
-                              ...value,
-                              from: start,
-                              to: end,
+                        {JSON.stringify(trainerInfo.userInfo.trainer_id)}
+                        <MultiRangeSlider
+                          isSlotAvailable={isSlotAvailable}
+                          onChange={(time) => {
+                            const { startTime, endTime } = time;
+                            setTimeRange({
+                              ...timeRange,
+                              booked_date: startDate,
+                              slotTime: { from: startTime, to: endTime },
+                              trainer_id:""
                             });
                           }}
-                          onChangeStart={changeStartHandler}
-                          onChangeComplete={changeCompleteHandler}
+                          startTime={Utils.getTimeFormate(
+                            trainerInfo?.userInfo?.extraInfo?.working_hours
+                              ?.from || TimeRange.start
+                          )}
+                          endTime={Utils.getTimeFormate(
+                            trainerInfo?.userInfo?.extraInfo?.working_hours
+                              ?.to || TimeRange.end
+                          )}
+                          key={"time-range-slider"}
                         />
                       </div>
                     </div>

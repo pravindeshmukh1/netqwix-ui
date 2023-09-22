@@ -296,4 +296,7 @@ export class Utils {
       new Date(current).getDay() === 6
     );
   };
+  static getTimeFormate = (time) => {
+    return `${time.replace(":00","")}`;
+  };
 }

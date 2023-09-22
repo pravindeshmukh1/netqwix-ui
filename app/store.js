@@ -6,7 +6,7 @@ import scheduleInventoryReducer from "./components/trainer/scheduleInventory/sch
 import traineeReducer from "./components/trainee/trainee.slice";
 import trainerReducer from "./components/trainer/trainer.slice";
 import bookingsReducer from "./components/common/common.slice";
-import commonReducer from "./components/common/common.slice";
+import commonReducer from "../app/common/common.slice";
 
 const makeStore = () => {
   return configureStore({
