@@ -61,7 +61,12 @@
 }
 
 .dropdown .options.open {
+  min-width: 94%;
+  width: 94%;
   display: block;
+  @media (max-width: 576px) {
+    width: 279px !important;
+  }
 }
 
 .dropdown .option {

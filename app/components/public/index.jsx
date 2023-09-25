@@ -34,7 +34,7 @@ import {
   commonAction,
   commonState,
 } from "../../common/common.slice";
-import MultiRangeSlider from "../../common/timeRangeSlider";
+import CustomRangePicker from "../../common/timeRangeSlider";
 
 const TrainersDetails = ({
   onClose,
@@ -898,43 +898,53 @@ const TrainerInfo = ({
         {datePicker}
         <div className="row">
           <div className="col-10 col-sm-10 col-md-10 col-lg-6 mt-4">
-            <MultiRangeSlider
-              onChange={(time) => {
-                const { startTime, endTime } = time;
-                const payload = {
-                  trainer_id: trainer.trainer_id,
-                  booked_date: startDate,
-                  slotTime: { from: startTime, to: endTime },
-                };
-                const debouncedAPI = debounce(() => {
-                  dispatch(checkSlotAsync(payload));
-                }, debouncedConfigs.towSec);
-                debouncedAPI();
-              }}
-              startTime={
-                trainer && trainer.extraInfo && trainer.extraInfo.working_hours
-                  ? Utils.getTimeFormate(trainer.extraInfo.working_hours.from)
-                  : TimeRange.start
-              }
-              endTime={
-                trainer && trainer.extraInfo && trainer.extraInfo.working_hours
-                  ? Utils.getTimeFormate(trainer.extraInfo.working_hours.to)
-                  : TimeRange.end
-              }
+            <CustomRangePicker
+              availableSlots={[
+                {
+                  start_time:
+                    trainer &&
+                    trainer.extraInfo &&
+                    trainer.extraInfo.working_hours
+                      ? Utils.getTimeFormate(
+                          trainer.extraInfo.working_hours.from
+                        )
+                      : TimeRange.start,
+                  end_time:
+                    trainer &&
+                    trainer.extraInfo &&
+                    trainer.extraInfo.working_hours
+                      ? Utils.getTimeFormate(trainer.extraInfo.working_hours.to)
+                      : TimeRange.end,
+                },
+              ]}
               key={"time-range"}
               isSlotAvailable={isSlotAvailable}
+              onChange={(time) => {
+                const startTime = Utils.convertMinutesToHour(time.startTime);
+                const endTime = Utils.convertMinutesToHour(time.endTime);
+                if (startTime && endTime) {
+                  const payload = {
+                    trainer_id: trainer.trainer_id,
+                    booked_date: startDate,
+                    slotTime: { from: startTime, to: endTime },
+                  };
+                  // const debouncedAPI = debounce(() => {
+                  //   dispatch(checkSlotAsync(payload));
+                  // }, debouncedConfigs.towSec);
+                  // debouncedAPI();
+                }
+              }}
             />
           </div>
           <div className="col-12">
-            {isSlotAvailable ? (
-              <button
-                type="button"
-                className="mt-5 btn btn-sm btn-primary"
-                onClick={handleSignInRedirect}
-              >
-                Book Slot Now
-              </button>
-            ) : null}
+            <button
+              type="button"
+              disabled={!isSlotAvailable}
+              className="mt-5 btn btn-sm btn-primary"
+              onClick={handleSignInRedirect}
+            >
+              Book Slot Now
+            </button>
           </div>
         </div>
         {/* <div className="mt-5">{element}</div> */}
