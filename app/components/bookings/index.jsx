@@ -545,13 +545,13 @@ const Bookings = ({ accountType = null }) => {
   const showRatings = (ratings, extraClasses = "") => {
     const { ratingRatio, totalRating } = Utils.getRatings(ratings);
     return (
-      <div>
+      <>
         <div className={extraClasses}>
           <Star color="#FFC436" size={28} className="star-container star-svg" />
           <p className="ml-1 mt-1 mr-1 font-weight-light">{ratingRatio || 0}</p>
           <p className="mt-1">({totalRating || 0})</p>
         </div>
-      </div>
+      </>
     );
   };
   const trainerInfo = () => (
@@ -559,7 +559,7 @@ const Bookings = ({ accountType = null }) => {
       <div className="card rounded trainer-profile-card">
         <div className="card-body">
           <div className="row">
-            <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 d-flex justify-content-center">
+            <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 d-flex justify-content-center align-items-center">
               <img
                 src={
                   userInfo?.profile_picture || "/assets/images/avtar/user.png"
@@ -569,9 +569,9 @@ const Bookings = ({ accountType = null }) => {
                 style={{ maxWidth: "100%", height: "auto" }}
               />
             </div>
-            <div className="col-7 col-sm-6 col-md-7 col-lg-8 col-xl-9 card-trainer ">
-              <h3 className="mt-3">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
-              {showRatings([], "mt-3 d-flex")}
+            <div className="col-7 col-sm-6 col-md-7 col-lg-8 col-xl-9 card-trainer">
+              <h3 className="mt-3 ">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
+              {showRatings([], "mt-3 d-flex ml-n2")}
               {userInfo &&
                 userInfo.extraInfo &&
                 userInfo.extraInfo.social_media_links &&
