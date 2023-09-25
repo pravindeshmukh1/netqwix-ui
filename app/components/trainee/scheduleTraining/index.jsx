@@ -288,7 +288,7 @@ const ScheduleTraining = () => {
           { position, nudgedLeft, nudgedTop } // you can also provide a render function that injects some useful stuff!
         ) => (
           <div key={`tablist-${index}`}>
-          {/* <div style={{ zIndex: 5000 }} key={`tablist-${index}`}> */}
+            {/* <div style={{ zIndex: 5000 }} key={`tablist-${index}`}> */}
             <div className="alert alert-info m-20" role="alert">
               <p>
                 Want to schedule a meeting with <b>{trainer_info.fullname}?</b>
@@ -738,6 +738,9 @@ const ScheduleTraining = () => {
                               dispatch(checkSlotAsync(payload));
                             }, debouncedConfigs.towSec);
                             debouncedAPI();
+                            if (!isSlotAvailable) {
+                              toast.error("", { type: "error" });
+                            }
                           }}
                           startTime={
                             fromHours ||
@@ -761,11 +764,13 @@ const ScheduleTraining = () => {
                         />
                       </div>
                       <div className="col-12 mt-4 mb-3 ml-3">
-                        {isSlotAvailable &&
-                        timeRange.startTime &&
-                        timeRange.endTime ? (
+                        {isSlotAvailable ||
+                        (!isSlotAvailable &&
+                          timeRange.startTime &&
+                          timeRange.endTime) ? (
                           <button
                             type="button"
+                            disabled={!isSlotAvailable}
                             className="mt-5 btn btn-sm btn-primary"
                             onClick={() => {
                               const amountPayable = Utils.getMinutesFromHourMM(
