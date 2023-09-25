@@ -698,9 +698,14 @@ const ScheduleTraining = () => {
       <React.Fragment>
         <div className="container">
           <div className="row">
-            <div className="col-6 col-xs-2 col-sm-2 col-md-2 col-xs-2 date-picker mb-3">
+            
+            <div className="col-12 mb-3 d-flex ml-n3">
+            {/* <div className="col-6 col-xs-2 col-sm-2 col-md-2 col-xs-2 date-picker mb-3"> */}
+            <label className="mr-2" style={{ fontSize: '14px' }}>Select date : </label>
               <DatePicker
-                className="border border-dark"
+                // className="border border-dark"
+                style={{ fontSize: '14px' }}
+                className="mt-1"
                 minDate={moment().toDate()}
                 onChange={(date) => {
                   setStartDate(date);
@@ -719,9 +724,11 @@ const ScheduleTraining = () => {
               {(getParams.search && getParams.search.length) ||
               !bookingColumns.length ? (
                 <div>
-                  <div className="ml-4">
+                  < >
                     <div className="row">
-                      <div className="col-12 col-sm-12 col-md-12 col-lg-8 mt-1 mb-2">
+                      <label style={{ fontSize: '13px' }}>Session Duration : </label>
+                      <div className="col-12 col-sm-11 col-md-11 mt-2 col-lg-11 mb-2 ">
+                      {/* <div className="col-12 col-sm-12 col-md-12 col-lg-8 mt-1 mb-2"> */}
                         <MultiRangeSlider
                           isSlotAvailable={isSlotAvailable}
                           onChange={(time) => {
@@ -763,7 +770,8 @@ const ScheduleTraining = () => {
                           key={"time-range-slider"}
                         />
                       </div>
-                      <div className="col-12 mt-4 mb-3 ml-3">
+                      {/* <div className="col-12 mt-4 mb-3 ml-3 d-flex justify-content-center align-item-center"> */}
+                      <div className="col-12  mt-4 mb-3 d-flex justify-content-center align-items-center">
                         {isSlotAvailable ||
                         (!isSlotAvailable &&
                           timeRange.startTime &&
@@ -812,7 +820,8 @@ const ScheduleTraining = () => {
                         ) : null}
                       </div>
                     </div>
-                  </div>
+                    
+                  </>
                   {/* {renderTable()} */}
                 </div>
               ) : (
