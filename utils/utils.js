@@ -297,4 +297,13 @@ export class Utils {
   static getTimeFormate = (time) => {
     return `${time.replace(":00", "")}`;
   };
+
+  static convertMinutesToHour(minutes) {
+    const hours = Math.floor(minutes / 60);
+    const minutesPart = minutes % 60;
+    const formattedHour = `${hours.toString().padStart(2, "0")}:${minutesPart
+      .toString()
+      .padStart(2, "0")}`;
+    return formattedHour;
+  }
 }

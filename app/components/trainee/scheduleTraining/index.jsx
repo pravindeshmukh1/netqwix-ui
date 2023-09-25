@@ -32,14 +32,14 @@ import { TrainerDetails } from "../../trainer/trainerDetails";
 import { bookingsAction, bookingsState } from "../../common/common.slice";
 import { debounce } from "lodash";
 import { checkSlotAsync, commonState } from "../../../common/common.slice";
-import MultiRangeSlider from "../../../common/timeRangeSlider";
+import CustomRangePicker from "../../../common/timeRangeSlider";
 const { isSidebarToggleEnabled } = bookingsAction;
 
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
   const { configs } = useAppSelector(bookingsState);
-  const { isSlotAvailable } = useAppSelector(commonState);
+  const { isSlotAvailable, session_durations } = useAppSelector(commonState);
   const { selectedTrainerId } = useAppSelector(bookingsState);
   const { master } = useAppSelector(masterState);
   const [startDate, setStartDate] = useState(new Date());
@@ -55,6 +55,7 @@ const ScheduleTraining = () => {
     startTime: "",
     endTime: "",
   });
+  // const [isSlotAvailable, setIsSlotAvailable] = useState(true);
 
   const [selectedTrainer, setSelectedTrainer] = useState({
     id: null,
@@ -142,6 +143,31 @@ const ScheduleTraining = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    if (selectedTrainer?.trainer_id || trainerInfo?.userInfo?.trainer_id) {
+      const frontendTimestamp = new Date(startDate);
+      const iso8601Date = frontendTimestamp.toISOString();
+      const payload = {
+        booked_date: iso8601Date,
+        trainer_id:
+          trainerInfo?.userInfo?.trainer_id || selectedTrainer?.trainer_id,
+        slotTime: {
+          from: trainerInfo?.userInfo?.extraInfo?.working_hours
+            ? Utils.getTimeFormate(
+                trainerInfo.userInfo.extraInfo.working_hours.from
+              )
+            : TimeRange.start,
+          to: trainerInfo?.userInfo?.extraInfo?.working_hours
+            ? Utils.getTimeFormate(
+                trainerInfo.userInfo.extraInfo.working_hours.to
+              )
+            : TimeRange.end,
+        },
+      };
+      dispatch(checkSlotAsync(payload));
+    }
+  }, [selectedTrainer, trainerInfo]);
 
   const setTableData = (data = [], selectedDate) => {
     const result = data.map(
@@ -272,7 +298,6 @@ const ScheduleTraining = () => {
   );
 
   const renderSlotsByDay = ({ slot, date, trainer_info }) => {
-    console.log(`trainer_info --- `, trainer_info);
     return slot.map((content, index) => (
       <Popover
         key={`popover${index}`}
@@ -621,7 +646,6 @@ const ScheduleTraining = () => {
             setParams({ search: value });
           }}
           selectedOption={(option) => {
-            console.log(`option --- `, option);
             if (option && option.isCategory) {
               setTrainerInfo((prev) => ({
                 ...prev,
@@ -694,6 +718,7 @@ const ScheduleTraining = () => {
 
     const fromHours = from ? Utils.getTimeFormate(from) : null;
     const toHours = to ? Utils.getTimeFormate(to) : null;
+
     return (
       <React.Fragment>
         <div className="container">
@@ -727,14 +752,13 @@ const ScheduleTraining = () => {
               {(getParams.search && getParams.search.length) ||
               !bookingColumns.length ? (
                 <div>
-                  < >
                     <div className="row">
                       <label style={{ fontSize: '13px' }}>Session Duration : </label>
                       {/* <div className="col-12 col-sm-12 col-md-12 mt-2 col-lg-12 mb-2 "> */}
                       <div className="col-12 col-sm-12 col-md-11 col-lg-12 col-xl-8 col-xxl-8 mt-1 mb-2 ">
-                        <MultiRangeSlider
+                      <MultiRangeSlider
                           isSlotAvailable={isSlotAvailable}
-                          onChange={(time) => {
+                         onChange={(item)=>{
                             const { startTime, endTime } = time;
                             setTimeRange({ ...timeRange, startTime, endTime });
                             const payload = {
@@ -748,11 +772,8 @@ const ScheduleTraining = () => {
                               dispatch(checkSlotAsync(payload));
                             }, debouncedConfigs.towSec);
                             debouncedAPI();
-                            if (!isSlotAvailable) {
-                              toast.error("", { type: "error" });
-                            }
-                          }}
-                          startTime={
+                         }}
+                         startTime={
                             fromHours ||
                             (trainerInfo?.userInfo?.extraInfo?.working_hours
                               ? Utils.getTimeFormate(
@@ -823,9 +844,50 @@ const ScheduleTraining = () => {
                           </button>
                         ) : null}
                       </div>
+                    {/* <div className="col-12 mt-4 mb-3 ml-3 d-flex justify-content-center align-item-center"> */}
+                    <div className="col-12  mt-4 mb-3 d-flex justify-content-center align-items-center">
+                      <button
+                        type="button"
+                        disabled={!isSlotAvailable}
+                        className="mt-5 btn btn-sm btn-primary"
+                        onClick={() => {
+                          const amountPayable = Utils.getMinutesFromHourMM(
+                            timeRange.startTime,
+                            timeRange.endTime,
+                            trainerInfo?.userInfo?.extraInfo?.hourly_rate
+                          );
+                          console.log("trainerInfo", trainerInfo);
+                          console.log(
+                            "selectedTrainer---",
+                            selectedTrainer.data
+                          );
+                          if (amountPayable > 0) {
+                            const payload = {
+                              charging_price: amountPayable,
+                              trainer_id:
+                                trainerInfo?.userInfo?.trainer_id ||
+                                selectedTrainer?.trainer_id,
+                              trainer_info: trainerInfo || selectedTrainer.data,
+                              status: BookedSession.booked,
+                              booked_date: startDate,
+                              session_start_time: timeRange.startTime,
+                              session_end_time: timeRange.endTime,
+                            };
+                            setBookSessionPayload(payload);
+                            dispatch(
+                              createPaymentIntentAsync({
+                                amount: +amountPayable.toFixed(2),
+                              })
+                            );
+                          } else {
+                            toast.error("Invalid slot timing...");
+                          }
+                        }}
+                      >
+                        Book Slot Now
+                      </button>
                     </div>
-                    
-                  </>
+                  </div>
                   {/* {renderTable()} */}
                 </div>
               ) : (

@@ -34,8 +34,12 @@ import {
   commonAction,
   commonState,
 } from "../../common/common.slice";
+<<<<<<< HEAD
 import MultiRangeSlider from "../../common/timeRangeSlider";
 import ReviewCard from "../../common/reviewCard";
+=======
+import CustomRangePicker from "../../common/timeRangeSlider";
+>>>>>>> a01bf4c5ceb0d63280bf4d06e302a50a43313694
 
 const TrainersDetails = ({
   onClose,
@@ -943,6 +947,21 @@ const TrainerInfo = ({
               }
               key={"time-range"}
               isSlotAvailable={isSlotAvailable}
+              onChange={(time) => {
+                const startTime = Utils.convertMinutesToHour(time.startTime);
+                const endTime = Utils.convertMinutesToHour(time.endTime);
+                if (startTime && endTime) {
+                  const payload = {
+                    trainer_id: trainer.trainer_id,
+                    booked_date: startDate,
+                    slotTime: { from: startTime, to: endTime },
+                  };
+                  // const debouncedAPI = debounce(() => {
+                  //   dispatch(checkSlotAsync(payload));
+                  // }, debouncedConfigs.towSec);
+                  // debouncedAPI();
+                }
+              }}
             />
            
           </div> 
