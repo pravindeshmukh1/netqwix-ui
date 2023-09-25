@@ -35,6 +35,7 @@ import {
   commonState,
 } from "../../common/common.slice";
 import MultiRangeSlider from "../../common/timeRangeSlider";
+import ReviewCard from "../../common/reviewCard";
 
 const TrainersDetails = ({
   onClose,
@@ -169,7 +170,7 @@ const TrainersDetails = ({
   const renderBookingTable = () => (
     <React.Fragment>
       <div className="row">
-        <div className="mt-4 col-1.4  border border-dark p-10 ml-3">
+        {/* <div className="mt-4 col-1.4  border border-dark p-10 ml-3">
           <DatePicker
             minDate={moment().toDate()}
             onChange={(date) => {
@@ -183,6 +184,26 @@ const TrainersDetails = ({
             }}
             selected={startDate}
             // ref={null}
+            customInput={<Input />}
+          />
+        </div> */}
+        <div className="col-12 mb-3 d-flex mt-4 ml-n4" >
+          <label className="mr-2" style={{ fontSize: '14px' }}>Select date : </label>
+          <DatePicker
+            className="border border-dark"
+            style={{ fontSize: '14px' }}
+            // className="mt-1"
+            minDate={moment().toDate()}
+            onChange={(date) => {
+              setStartDate(date);
+              const todaySDate = Utils.getDateInFormat(date.toString());
+              const { weekDateFormatted, weekDates } =
+                Utils.getNext7WorkingDays(todaySDate);
+              setColumns(weekDateFormatted);
+              setTableData(getTraineeSlots, weekDates);
+              setColumns(weekDateFormatted);
+            }}
+            selected={startDate}
             customInput={<Input />}
           />
         </div>
@@ -337,16 +358,14 @@ const TrainersDetails = ({
 
   const renderTable = () => (
     <div
-      className={`${
-        trainerInfo && trainerInfo.userInfo
+      className={`${trainerInfo && trainerInfo.userInfo
           ? "table-responsive-width"
           : "table-responsive-width"
-      }`}
+        }`}
     >
       <table
-        className={`${
-          screenWidth <= 767 ? "table-responsive overflow-x-auto" : "table"
-        } custom-table-scroll-width ml-30 mr-30 border border-dark`}
+        className={`${screenWidth <= 767 ? "table-responsive overflow-x-auto" : "table"
+          } custom-table-scroll-width ml-30 mr-30 border border-dark`}
         style={{
           width: "91.5%",
         }}
@@ -645,12 +664,11 @@ const TrainersDetails = ({
           </div>
         ) : (
           <div
-            className={`${
-              (trainerInfo.isCategory &&
+            className={`${(trainerInfo.isCategory &&
                 !trainerDetails.select_trainer &&
                 "media-body media-body text-right") ||
               (!trainerInfo.isCategory && "media-body media-body text-right")
-            }`}
+              }`}
           >
             <div>
               {!trainerInfo.isCategory ? (
@@ -812,9 +830,9 @@ const TrainerInfo = ({
               "mt-3 mb-3 d-flex"
             )}
             {trainer &&
-            trainer.extraInfo &&
-            trainer.extraInfo.media &&
-            trainer.extraInfo.social_media_links ? (
+              trainer.extraInfo &&
+              trainer.extraInfo.media &&
+              trainer.extraInfo.social_media_links ? (
               <SocialMediaIcons
                 profileImageURL={
                   trainer &&
@@ -847,37 +865,37 @@ const TrainerInfo = ({
         >
           {accordionData.length
             ? accordionData.map((data, index) => {
-                return (
-                  <Accordion key={`accordion_${index}`} className="mb-5">
-                    <Accordion.Item>
-                      <Accordion.Header
-                        index={index}
-                        activeAccordion={activeAccordion}
-                        onAClick={() => {
-                          if (activeAccordion[index]) {
-                            delete activeAccordion[index];
-                          } else if (!activeAccordion[index]) {
-                            activeAccordion[index] = true;
-                          } else {
-                            activeAccordion[index] = !activeAccordion[index];
-                          }
-                          setActiveAccordion(activeAccordion);
-                        }}
-                      >
-                        {data.label}
-                      </Accordion.Header>
-                      <Accordion.Body>
-                        {!data.value ? Message.notFound : data.value}
-                      </Accordion.Body>
-                    </Accordion.Item>
-                  </Accordion>
-                );
-              })
+              return (
+                <Accordion key={`accordion_${index}`} className="mb-5">
+                  <Accordion.Item>
+                    <Accordion.Header
+                      index={index}
+                      activeAccordion={activeAccordion}
+                      onAClick={() => {
+                        if (activeAccordion[index]) {
+                          delete activeAccordion[index];
+                        } else if (!activeAccordion[index]) {
+                          activeAccordion[index] = true;
+                        } else {
+                          activeAccordion[index] = !activeAccordion[index];
+                        }
+                        setActiveAccordion(activeAccordion);
+                      }}
+                    >
+                      {data.label}
+                    </Accordion.Header>
+                    <Accordion.Body>
+                      {!data.value ? Message.notFound : data.value}
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
+              );
+            })
             : Message.notFound}
         </div>
       </div>
       <div className="col-md-6">
-        <h2 className="mb-4">Featured content</h2>
+        <h2 className="mb-4 tag-name">Featured content</h2>
         <div
           style={{
             marginRight: "15px",
@@ -894,10 +912,12 @@ const TrainerInfo = ({
             <div className="no-media-found">{Message.noMediaFound}</div>
           )}
         </div>
-        <h2>Book session</h2>
+        <h2 className="tag-name ml-n4">Book session</h2>
         {datePicker}
-        <div className="row">
-          <div className="col-10 col-sm-10 col-md-10 col-lg-6 mt-4">
+        <div className="row ">
+          {/* <div className="col-10 col-sm-10 col-md-10 col-lg-6 mt-4"> */}
+          <label style={{ fontSize: '13px' }} className="ml-n2">Session Duration : </label>
+          <div className="col-12 col-sm-12 col-md-11 col-lg-11 col-xl-8  mt-1 mb-2 ">
             <MultiRangeSlider
               onChange={(time) => {
                 const { startTime, endTime } = time;
@@ -924,8 +944,9 @@ const TrainerInfo = ({
               key={"time-range"}
               isSlotAvailable={isSlotAvailable}
             />
-          </div>
-          <div className="col-12">
+           
+          </div> 
+          <div className="col-12 mt-4 mb-4 d-flex justify-content-center align-items-center rangebtn">
             {isSlotAvailable ? (
               <button
                 type="button"
@@ -936,6 +957,13 @@ const TrainerInfo = ({
               </button>
             ) : null}
           </div>
+          
+        </div>
+        <div className="ml-n4 " ><h2 className=" mb-3 tag-name">Reviews of lessons with </h2>
+        <div style={{alignItems: 'center', justifyContent: 'center' }} className="ml-n4 d-flex " >
+
+      <ReviewCard trainer={trainer} />
+        </div>
         </div>
         {/* <div className="mt-5">{element}</div> */}
       </div>
@@ -1099,9 +1127,8 @@ const SelectedCategory = ({
                         className="badge badge-pill badge-primary mb-2 p-2"
                         style={{ fontSize: "15px" }}
                       >
-                        {`$${
-                          data?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD
-                        }.00`}
+                        {`$${data?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD
+                          }.00`}
                         {`/ ${TRAINER_MEETING_TIME}`}
                       </p>
                       <h4
@@ -1114,8 +1141,8 @@ const SelectedCategory = ({
                       </h4>
                       <div>
                         {data &&
-                        data.extraInfo &&
-                        data.extraInfo.social_media_links ? (
+                          data.extraInfo &&
+                          data.extraInfo.social_media_links ? (
                           <SocialMediaIcons
                             profileImageURL={
                               data &&

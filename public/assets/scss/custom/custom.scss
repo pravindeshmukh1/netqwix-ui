@@ -720,7 +720,17 @@ slick-slider .slick-list,
     font-size: 22px !important;
   }
 }
-
+.tag-name{
+  font-family: "Roboto";
+}
+.booking-text {
+  font-size: 37px;
+  font-family: "Roboto";
+  font-weight: 300;
+  @media (max-width: 576px) {
+    font-size: 22px !important;
+  }
+}
 .trainer-bookings-card {
   border-radius: 16px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -733,6 +743,12 @@ slick-slider .slick-list,
 // .slider-red {
 //   background-color: red !important;
 // }
+.rangebtn {
+  @media (min-width: 1200px){
+    margin-left: 30px !important;
+  }
+}
+
 .card-trainer {
   @media (max-width: 576px) {
     margin: auto !important;

@@ -713,7 +713,7 @@ const Bookings = ({ accountType = null }) => {
             </h2>
           ) : (
             <React.Fragment>
-              <h3 className="mt-2 p-3 mb-2 bg-primary text-white rounded">
+              <h3 className="mt-2 p-3 mb-2 bg-primary text-white rounded booking-text tag-name" >
                 Bookings
               </h3>
               {Bookings()}

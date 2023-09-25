@@ -699,12 +699,15 @@ const ScheduleTraining = () => {
         <div className="container">
           <div className="row">
             
-            <div className="col-12 mb-3 d-flex ml-n3">
-            {/* <div className="col-6 col-xs-2 col-sm-2 col-md-2 col-xs-2 date-picker mb-3"> */}
+            <div className="col-12 mb-3 d-flex ml-n3 ">
             <label className="mr-2" style={{ fontSize: '14px' }}>Select date : </label>
+            {/* <div className="col-6 col-xs-2 col-sm-2 col-md-2 col-xs-2 date-picker mb-3"> */}
               <DatePicker
                 // className="border border-dark"
-                style={{ fontSize: '14px' }}
+                style={{
+                  fontSize: '14px',
+                  border: '1px solid black'
+                }}
                 className="mt-1"
                 minDate={moment().toDate()}
                 onChange={(date) => {
@@ -727,8 +730,8 @@ const ScheduleTraining = () => {
                   < >
                     <div className="row">
                       <label style={{ fontSize: '13px' }}>Session Duration : </label>
-                      <div className="col-12 col-sm-11 col-md-11 mt-2 col-lg-11 mb-2 ">
-                      {/* <div className="col-12 col-sm-12 col-md-12 col-lg-8 mt-1 mb-2"> */}
+                      {/* <div className="col-12 col-sm-12 col-md-12 mt-2 col-lg-12 mb-2 "> */}
+                      <div className="col-12 col-sm-12 col-md-11 col-lg-12 col-xl-8 col-xxl-8 mt-1 mb-2 ">
                         <MultiRangeSlider
                           isSlotAvailable={isSlotAvailable}
                           onChange={(time) => {
@@ -769,9 +772,10 @@ const ScheduleTraining = () => {
                           }
                           key={"time-range-slider"}
                         />
+                        
                       </div>
                       {/* <div className="col-12 mt-4 mb-3 ml-3 d-flex justify-content-center align-item-center"> */}
-                      <div className="col-12  mt-4 mb-3 d-flex justify-content-center align-items-center">
+                      <div className="col-12 mt-4 mb-3 d-flex justify-content-center align-items-center rangebtn">
                         {isSlotAvailable ||
                         (!isSlotAvailable &&
                           timeRange.startTime &&
@@ -779,7 +783,7 @@ const ScheduleTraining = () => {
                           <button
                             type="button"
                             disabled={!isSlotAvailable}
-                            className="mt-5 btn btn-sm btn-primary"
+                            className="mt-5 btn btn-sm btn-primary "
                             onClick={() => {
                               const amountPayable = Utils.getMinutesFromHourMM(
                                 timeRange.startTime,
