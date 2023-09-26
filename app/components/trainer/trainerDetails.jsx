@@ -452,7 +452,7 @@ const TrainerInfo = ({
         overflowX: !AccountType.TRAINEE || (!AccountType.TRAINER && "auto"),
       }}
     >
-      <div className="col-md-5">
+      <div className="col-md-6">
         <div className="row">
           <div className="col-4 col-md-3 col-lg-2">
             <img

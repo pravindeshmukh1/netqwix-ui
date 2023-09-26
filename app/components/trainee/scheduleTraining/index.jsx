@@ -724,37 +724,36 @@ const ScheduleTraining = () => {
         <div className="container">
           <div className="row">
             <div className="col-12 mb-3 d-flex ml-n3 ">
-              <label className="mr-2" style={{ fontSize: "14px" }}>
+              <label className="mr-2 mt-2" style={{ fontSize: "14px" }}>
                 Select date :{" "}
               </label>
-              {/* <div className="col-6 col-xs-2 col-sm-2 col-md-2 col-xs-2 date-picker mb-3"> */}
-              <DatePicker
-                // className="border border-dark"
-                style={{
-                  fontSize: "14px",
-                  border: "1px solid black",
-                }}
-                className="mt-1"
-                minDate={moment().toDate()}
-                onChange={(date) => {
-                  setStartDate(date);
-                  const todaySDate = Utils.getDateInFormat(date.toString());
-                  const { weekDateFormatted, weekDates } =
-                    Utils.getNext7WorkingDays(todaySDate);
-                  setColumns(weekDateFormatted);
-                  setTableData(getTraineeSlots, weekDates);
-                  setColumns(weekDateFormatted);
-                }}
-                selected={startDate}
-                customInput={<Input />}
-              />
+              <div className="date-picker">
+                <DatePicker
+                  style={{
+                    fontSize: "14px",
+                  }}
+                  className="mt-1 date-picker"
+                  minDate={moment().toDate()}
+                  onChange={(date) => {
+                    setStartDate(date);
+                    const todaySDate = Utils.getDateInFormat(date.toString());
+                    const { weekDateFormatted, weekDates } =
+                      Utils.getNext7WorkingDays(todaySDate);
+                    setColumns(weekDateFormatted);
+                    setTableData(getTraineeSlots, weekDates);
+                    setColumns(weekDateFormatted);
+                  }}
+                  selected={startDate}
+                  customInput={<Input />}
+                />
+              </div>
             </div>
             <div className="col-12">
               {(getParams.search && getParams.search.length) ||
               !bookingColumns.length ? (
                 <div>
                   <div className="row">
-                    <label style={{ fontSize: "13px" }}>
+                    <label className="mt-1" style={{ fontSize: "13px" }}>
                       Session Duration :{" "}
                     </label>
                     {/* <div className="col-12 col-sm-12 col-md-12 mt-2 col-lg-12 mb-2 "> */}
@@ -808,61 +807,11 @@ const ScheduleTraining = () => {
                         key={"time-range-slider"}
                       />
                     </div>
-                    {/* <div className="col-12 mt-4 mb-3 ml-3 d-flex justify-content-center align-item-center"> */}
-                    {/* <div className="col-12 mt-4 mb-3 d-flex justify-content-center align-items-center rangebtn">
-                      {isSlotAvailable ||
-                      (!isSlotAvailable &&
-                        timeRange.startTime &&
-                        timeRange.endTime) ? (
-                        <button
-                          type="button"
-                          disabled={!isSlotAvailable}
-                          className="mt-5 btn btn-sm btn-primary "
-                          onClick={() => {
-                            const amountPayable = Utils.getMinutesFromHourMM(
-                              timeRange.startTime,
-                              timeRange.endTime,
-                              trainerInfo?.userInfo?.extraInfo?.hourly_rate
-                            );
-                            console.log("trainerInfo", trainerInfo);
-                            console.log(
-                              "selectedTrainer---",
-                              selectedTrainer.data
-                            );
-                            if (amountPayable > 0) {
-                              const payload = {
-                                charging_price: amountPayable,
-                                trainer_id:
-                                  trainerInfo?.userInfo?.trainer_id ||
-                                  selectedTrainer?.trainer_id,
-                                trainer_info:
-                                  trainerInfo || selectedTrainer.data,
-                                status: BookedSession.booked,
-                                booked_date: startDate,
-                                session_start_time: timeRange.startTime,
-                                session_end_time: timeRange.endTime,
-                              };
-                              setBookSessionPayload(payload);
-                              dispatch(
-                                createPaymentIntentAsync({
-                                  amount: +amountPayable.toFixed(2),
-                                })
-                              );
-                            } else {
-                              toast.error("Invalid slot timing...");
-                            }
-                          }}
-                        >
-                          Book Slot Now
-                        </button>
-                      ) : null}
-                    </div> */}
-                    {/* <div className="col-12 mt-4 mb-3 ml-3 d-flex justify-content-center align-item-center"> */}
-                    <div className="col-12  mt-4 mb-3 d-flex justify-content-center align-items-center">
+                    <div className="col-12 mb-3 d-flex justify-content-center align-items-center">
                       <button
                         type="button"
                         disabled={!isSlotAvailable}
-                        className="mt-5 btn btn-sm btn-primary"
+                        className="mt-3 btn btn-sm btn-primary"
                         onClick={() => {
                           const amountPayable = Utils.getMinutesFromHourMM(
                             timeRange.startTime,
