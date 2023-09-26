@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { debounce } from "lodash";
+import _debounce from "lodash/debounce";
 import { ArrowLeft, Star, X } from "react-feather";
 import {
   getTraineeWithSlotsAsync,
@@ -36,6 +36,7 @@ import {
 } from "../../common/common.slice";
 import ReviewCard from "../../common/reviewCard";
 import CustomRangePicker from "../../common/timeRangeSlider";
+import { toast } from "react-toastify";
 
 const TrainersDetails = ({
   onClose,
@@ -53,7 +54,7 @@ const TrainersDetails = ({
   const { status } = useAppSelector(commonState);
   const { handleTrainerAvailable } = commonAction;
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
-  const { isSlotAvailable } = useAppSelector(commonState);
+  const { isSlotAvailable, availableSlots } = useAppSelector(commonState);
   const [accordion, setAccordion] = useState({});
   const [startDate, setStartDate] = useState(new Date());
   const [getParams, setParams] = useState(params);
@@ -62,6 +63,10 @@ const TrainersDetails = ({
   const [listOfTrainers, setListOfTrainers] = useState([]);
   const [isPopoverOpen, setIsPopoverOpen] = useState(null);
   const [bookSessionPayload, setBookSessionPayload] = useState({});
+  const [timeRange, setTimeRange] = useState({
+    startTime: "",
+    endTime: "",
+  });
   const [filterParams, setFilterParams] = useState({
     date: null,
     day: null,
@@ -134,6 +139,18 @@ const TrainersDetails = ({
     );
   }, [getTraineeSlots]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const accordionData = [
     {
       id: 1,
@@ -156,42 +173,13 @@ const TrainersDetails = ({
 
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setScreenWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
   const renderBookingTable = () => (
     <React.Fragment>
       <div className="row">
-        {/* <div className="mt-4 col-1.4  border border-dark p-10 ml-3">
-          <DatePicker
-            minDate={moment().toDate()}
-            onChange={(date) => {
-              setStartDate(date);
-              const todaySDate = Utils.getDateInFormat(date.toString());
-              const { weekDateFormatted, weekDates } =
-                Utils.getNext7WorkingDays(todaySDate);
-              setColumns(weekDateFormatted);
-              setTableData(getTraineeSlots, weekDates);
-              setColumns(weekDateFormatted);
-            }}
-            selected={startDate}
-            // ref={null}
-            customInput={<Input />}
-          />
-        </div> */}
         <div className="col-12 mb-3 d-flex mt-4">
-          <label className="mr-2 mt-2" style={{ fontSize: "14px" }}>
+          <span className="mr-2 mt-2" style={{ fontSize: "14px" }}>
             Select date :{" "}
-          </label>
+          </span>
           <div className="date-picker">
             <DatePicker
               className=""
@@ -717,6 +705,9 @@ const TrainersDetails = ({
             startDate={startDate}
             isSlotAvailable={isSlotAvailable}
             dispatch={dispatch}
+            timeRange={timeRange}
+            setTimeRange={setTimeRange}
+            availableSlots={availableSlots}
           />
         ) : (
           <SelectedCategory
@@ -751,6 +742,9 @@ const TrainerInfo = ({
   isSlotAvailable,
   dispatch,
   trainerInfo,
+  timeRange,
+  setTimeRange,
+  availableSlots,
 }) => {
   const router = useRouter();
   const findTrainerDetails = () => {
@@ -796,7 +790,24 @@ const TrainerInfo = ({
   const handleSignInRedirect = () => {
     router.push({ pathname: routingPaths.signIn });
   };
+  useEffect(() => {
+    if (trainer.trainer_id) {
+      const payload = {
+        booked_date: Utils.getDateInFormat(startDate),
+        trainer_id: trainer.trainer_id,
+        slotTime: { from: timeRange.startTime, to: timeRange.endTime },
+      };
+      dispatch(checkSlotAsync(payload));
+    }
+  }, []);
+
   const hasRatings = trainer?.trainer_ratings.some((item) => item.ratings);
+  const formateStartTime = Utils.getTimeFormate(
+    trainer?.extraInfo?.working_hours?.from
+  );
+  const formateEndTime = Utils.getTimeFormate(
+    trainer?.extraInfo?.working_hours?.to
+  );
   return (
     <div
       className="row"
@@ -926,54 +937,60 @@ const TrainerInfo = ({
         {datePicker}
         <div className="row">
           {/* <div className="col-10 col-sm-10 col-md-10 col-lg-6 mt-4"> */}
-          <label style={{ fontSize: "13px" }} className="ml-3 mt-1">
+          <span style={{ fontSize: "13px" }} className="ml-3 mt-1">
             Session Duration :{" "}
-          </label>
+          </span>
           <div className="col-12 col-sm-12 col-md-11 col-lg-11 col-xl-8  mt-1 mb-2 ">
             <CustomRangePicker
-              availableSlots={[
-                {
-                  start_time: trainerInfo?.userInfo?.extraInfo?.working_hours
-                    ? Utils.getTimeFormate(
-                        trainerInfo.userInfo.extraInfo.working_hours.from
-                      )
-                    : TimeRange.start,
-                  end_time: trainerInfo?.userInfo?.extraInfo?.working_hours
-                    ? Utils.getTimeFormate(
-                        trainerInfo.userInfo.extraInfo.working_hours.to
-                      )
-                    : TimeRange.end,
-                },
-              ]}
+              availableSlots={
+                availableSlots
+                  ? availableSlots
+                  : [
+                      {
+                        start_time: "",
+                        end_time: "",
+                      },
+                    ]
+              }
+              startTime={
+                trainer?.extraInfo?.working_hours?.from
+                  ? Utils.convertHoursToMinutes(formateStartTime)
+                  : TimeRange.start
+              }
+              endTime={
+                trainer?.extraInfo?.working_hours?.to
+                  ? Utils.convertHoursToMinutes(formateEndTime)
+                  : TimeRange.end
+              }
               onChange={(time) => {
                 const startTime = Utils.convertMinutesToHour(time.startTime);
                 const endTime = Utils.convertMinutesToHour(time.endTime);
+                setTimeRange({ ...timeRange, startTime, endTime });
                 if (startTime && endTime) {
                   const payload = {
-                    booked_date: startDate,
+                    booked_date: Utils.getDateInFormat(startDate),
                     trainer_id: trainer.trainer_id,
                     slotTime: { from: startTime, to: endTime },
                   };
-                  const debouncedAPI = debounce(() => {
-                    dispatch(checkSlotAsync(payload));
-                  }, debouncedConfigs.towSec);
-                  debouncedAPI();
+                  dispatch(checkSlotAsync(payload));
                 }
+                // if (!isSlotAvailable) {
+                //   toast.error(Message.notAvailable, { type: "error" });
+                // }
               }}
               isSlotAvailable={isSlotAvailable}
               key={"time-range-slider"}
             />
           </div>
-          <div className="col-12 mt-4 mb-4 d-flex justify-content-center align-items-center rangebtn">
-            {isSlotAvailable ? (
-              <button
-                type="button"
-                className="mt-5 btn btn-sm btn-primary"
-                onClick={handleSignInRedirect}
-              >
-                Book Slot Now
-              </button>
-            ) : null}
+          <div className="col-12 mt-1 mb-5 d-flex justify-content-center align-items-center">
+            <button
+              type="button"
+              disabled={!isSlotAvailable}
+              className="mt-3 btn btn-sm btn-primary"
+              onClick={handleSignInRedirect}
+            >
+              Book Slot Now
+            </button>
           </div>
         </div>
         {hasRatings && (

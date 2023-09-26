@@ -39,7 +39,8 @@ const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
   const { configs } = useAppSelector(bookingsState);
-  const { isSlotAvailable, session_durations } = useAppSelector(commonState);
+  const { isSlotAvailable, session_durations, availableSlots } =
+    useAppSelector(commonState);
   const { selectedTrainerId } = useAppSelector(bookingsState);
   const { master } = useAppSelector(masterState);
   const [startDate, setStartDate] = useState(new Date());
@@ -146,10 +147,9 @@ const ScheduleTraining = () => {
 
   useEffect(() => {
     if (selectedTrainer?.trainer_id || trainerInfo?.userInfo?.trainer_id) {
-      const frontendTimestamp = new Date(startDate);
-      const iso8601Date = frontendTimestamp.toISOString();
+      const bookingDate = Utils.getDateInFormat(startDate);
       const payload = {
-        booked_date: iso8601Date,
+        booked_date: bookingDate,
         trainer_id:
           trainerInfo?.userInfo?.trainer_id || selectedTrainer?.trainer_id,
         slotTime: {
@@ -718,7 +718,12 @@ const ScheduleTraining = () => {
 
     const fromHours = from ? Utils.getTimeFormate(from) : null;
     const toHours = to ? Utils.getTimeFormate(to) : null;
-
+    const formateStartTime = Utils.getTimeFormate(
+      trainerInfo?.userInfo?.extraInfo?.working_hours.from
+    );
+    const formateEndTime = Utils.getTimeFormate(
+      trainerInfo?.userInfo?.extraInfo?.working_hours.to
+    );
     return (
       <React.Fragment>
         <div className="container">
@@ -756,29 +761,28 @@ const ScheduleTraining = () => {
                     <label className="mt-1" style={{ fontSize: "13px" }}>
                       Session Duration :{" "}
                     </label>
-                    {/* <div className="col-12 col-sm-12 col-md-12 mt-2 col-lg-12 mb-2 "> */}
                     <div className="col-12 col-sm-12 col-md-11 col-lg-12 col-xl-8 col-xxl-8 mt-1 mb-2 ">
                       <CustomRangePicker
-                        availableSlots={[
-                          {
-                            start_time:
-                              fromHours ||
-                              (trainerInfo?.userInfo?.extraInfo?.working_hours
-                                ? Utils.getTimeFormate(
-                                    trainerInfo.userInfo.extraInfo.working_hours
-                                      .from
-                                  )
-                                : TimeRange.start),
-                            end_time:
-                              toHours ||
-                              (trainerInfo?.userInfo?.extraInfo?.working_hours
-                                ? Utils.getTimeFormate(
-                                    trainerInfo.userInfo.extraInfo.working_hours
-                                      .to
-                                  )
-                                : TimeRange.end),
-                          },
-                        ]}
+                        availableSlots={
+                          availableSlots
+                            ? availableSlots
+                            : [
+                                {
+                                  start_time: "",
+                                  end_time: "",
+                                },
+                              ]
+                        }
+                        startTime={
+                          trainerInfo?.userInfo?.extraInfo?.working_hours?.from
+                            ? Utils.convertHoursToMinutes(formateStartTime)
+                            : TimeRange.start
+                        }
+                        endTime={
+                          trainerInfo?.userInfo?.extraInfo?.working_hours?.to
+                            ? Utils.convertHoursToMinutes(formateEndTime)
+                            : TimeRange.end
+                        }
                         onChange={(time) => {
                           const startTime = Utils.convertMinutesToHour(
                             time.startTime
@@ -788,8 +792,6 @@ const ScheduleTraining = () => {
                           );
                           if (startTime && endTime) {
                             setTimeRange({ ...timeRange, startTime, endTime });
-                            console.info("startTime----", startTime);
-                            console.info("endTime----", endTime);
                             const payload = {
                               booked_date: startDate,
                               trainer_id:

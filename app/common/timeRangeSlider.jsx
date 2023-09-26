@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-const CustomRangePicker = ({ availableSlots, onChange }) => {
+const CustomRangePicker = ({
+  availableSlots,
+  onChange,
+  startTime,
+  endTime,
+}) => {
   const [startPosition, setStartPosition] = useState(0);
   const [endPosition, setEndPosition] = useState(100);
   const [isSlotAvailable, setIsSlotAvailable] = useState(true);
@@ -80,7 +85,6 @@ const CustomRangePicker = ({ availableSlots, onChange }) => {
     const newPosition = (offsetX / rangeRect.width) * 100;
     return newPosition;
   };
-
   return (
     <React.Fragment>
       <div
@@ -130,6 +134,7 @@ const CustomRangePicker = ({ availableSlots, onChange }) => {
 CustomRangePicker.prototype = {
   availableSlots: PropTypes.arrayOf(PropTypes.object).isRequired,
   onChange: PropTypes.func.isRequired,
-  isSlotAvailable: PropTypes.bool.isRequired,
+  startTime: PropTypes.string.isRequired,
+  endTime: PropTypes.string.isRequired,
 };
 export default CustomRangePicker;
