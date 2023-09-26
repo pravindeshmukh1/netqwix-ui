@@ -6,11 +6,9 @@ const CustomRangePicker = ({
   onChange,
   startTime,
   endTime,
-  startPosition = 0,
-  endPosition = 20,
 }) => {
-  // const [startPosition, setStartPosition] = useState(0);
-  // const [endPosition, setEndPosition] = useState(100);
+  const [startPosition, setStartPosition] = useState(0);
+  const [endPosition, setEndPosition] = useState(100);
   const [isSlotAvailable, setIsSlotAvailable] = useState(true);
   const [draggingStart, setDraggingStart] = useState(false);
   const [draggingEnd, setDraggingEnd] = useState(false);
@@ -136,6 +134,7 @@ const CustomRangePicker = ({
 CustomRangePicker.prototype = {
   availableSlots: PropTypes.arrayOf(PropTypes.object).isRequired,
   onChange: PropTypes.func.isRequired,
-  isSlotAvailable: PropTypes.bool.isRequired,
+  startTime: PropTypes.string.isRequired,
+  endTime: PropTypes.string.isRequired,
 };
 export default CustomRangePicker;

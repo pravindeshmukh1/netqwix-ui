@@ -6,6 +6,7 @@ const initialState = {
   status: "idle",
   isSlotAvailable: null,
   session_durations: { from: "", to: "" },
+  availableSlots: [],
 };
 
 export const checkSlotAsync = createAsyncThunk("checkSlot", async (payload) => {
@@ -37,6 +38,14 @@ export const commonSlice = createSlice({
       .addCase(checkSlotAsync.fulfilled, (state, action) => {
         state.status = "fulfilled";
         state.isSlotAvailable = action.payload.data.isAvailable;
+        const revamped = action.payload.data.result.map((item) => {
+          const { session_start_time, session_end_time } = item;
+          return {
+            start_time: session_start_time,
+            end_time: session_end_time,
+          };
+        });
+        state.availableSlots = revamped;
         action.payload.data.result.map((session) => {
           const { session_end_time, session_start_time } = session;
           state.session_durations = {

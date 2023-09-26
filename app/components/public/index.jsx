@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { debounce } from "lodash";
+import _debounce from "lodash/debounce";
 import { ArrowLeft, Star, X } from "react-feather";
 import {
   getTraineeWithSlotsAsync,
@@ -36,6 +36,7 @@ import {
 } from "../../common/common.slice";
 import ReviewCard from "../../common/reviewCard";
 import CustomRangePicker from "../../common/timeRangeSlider";
+import { toast } from "react-toastify";
 
 const TrainersDetails = ({
   onClose,
@@ -53,7 +54,7 @@ const TrainersDetails = ({
   const { status } = useAppSelector(commonState);
   const { handleTrainerAvailable } = commonAction;
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
-  const { isSlotAvailable } = useAppSelector(commonState);
+  const { isSlotAvailable, availableSlots } = useAppSelector(commonState);
   const [accordion, setAccordion] = useState({});
   const [startDate, setStartDate] = useState(new Date());
   const [getParams, setParams] = useState(params);
@@ -175,23 +176,6 @@ const TrainersDetails = ({
   const renderBookingTable = () => (
     <React.Fragment>
       <div className="row">
-        {/* <div className="mt-4 col-1.4  border border-dark p-10 ml-3">
-          <DatePicker
-            minDate={moment().toDate()}
-            onChange={(date) => {
-              setStartDate(date);
-              const todaySDate = Utils.getDateInFormat(date.toString());
-              const { weekDateFormatted, weekDates } =
-                Utils.getNext7WorkingDays(todaySDate);
-              setColumns(weekDateFormatted);
-              setTableData(getTraineeSlots, weekDates);
-              setColumns(weekDateFormatted);
-            }}
-            selected={startDate}
-            // ref={null}
-            customInput={<Input />}
-          />
-        </div> */}
         <div className="col-12 mb-3 d-flex mt-4">
           <span className="mr-2 mt-2" style={{ fontSize: "14px" }}>
             Select date :{" "}
@@ -723,6 +707,7 @@ const TrainersDetails = ({
             dispatch={dispatch}
             timeRange={timeRange}
             setTimeRange={setTimeRange}
+            availableSlots={availableSlots}
           />
         ) : (
           <SelectedCategory
@@ -759,6 +744,7 @@ const TrainerInfo = ({
   trainerInfo,
   timeRange,
   setTimeRange,
+  availableSlots,
 }) => {
   const router = useRouter();
   const findTrainerDetails = () => {
@@ -956,20 +942,16 @@ const TrainerInfo = ({
           </span>
           <div className="col-12 col-sm-12 col-md-11 col-lg-11 col-xl-8  mt-1 mb-2 ">
             <CustomRangePicker
-              availableSlots={[
-                {
-                  start_time: trainer?.extraInfo?.working_hours
-                    ? Utils.getTimeFormate(
-                        trainer?.extraInfo?.working_hours?.from 
-                      )
-                    : "",
-                  end_time: trainer?.extraInfo?.working_hours
-                    ? Utils.getTimeFormate(
-                        trainer?.extraInfo?.working_hours?.to
-                      )
-                    : "",
-                },
-              ]}
+              availableSlots={
+                availableSlots
+                  ? availableSlots
+                  : [
+                      {
+                        start_time: "",
+                        end_time: "",
+                      },
+                    ]
+              }
               startTime={
                 trainer?.extraInfo?.working_hours?.from
                   ? Utils.convertHoursToMinutes(formateStartTime)
@@ -984,19 +966,17 @@ const TrainerInfo = ({
                 const startTime = Utils.convertMinutesToHour(time.startTime);
                 const endTime = Utils.convertMinutesToHour(time.endTime);
                 setTimeRange({ ...timeRange, startTime, endTime });
-                console.info("startTime----", startTime);
-                console.info("endTime----", endTime);
                 if (startTime && endTime) {
                   const payload = {
-                    booked_date: startDate,
+                    booked_date: Utils.getDateInFormat(startDate),
                     trainer_id: trainer.trainer_id,
                     slotTime: { from: startTime, to: endTime },
                   };
-                  const debouncedAPI = debounce(() => {
-                    dispatch(checkSlotAsync(payload));
-                  }, debouncedConfigs.towSec);
-                  debouncedAPI();
+                  dispatch(checkSlotAsync(payload));
                 }
+                // if (!isSlotAvailable) {
+                //   toast.error(Message.notAvailable, { type: "error" });
+                // }
               }}
               isSlotAvailable={isSlotAvailable}
               key={"time-range-slider"}

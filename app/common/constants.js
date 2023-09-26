@@ -144,6 +144,7 @@ export const Message = {
   notFound: "No data available",
   noMediaFound: "No media found",
   noSlotsAvailable: "No slots found",
+  notAvailable: "Not available slot",
   notAvailableDescription: "Description not available",
   errorMessage: {
     wip: "work in progress",
@@ -719,4 +720,4 @@ export const FIXED_ITEM = ["notification", "file", "setting"];
 
 export const MOBILE_SIZE = 576;
 
-export const TimeRange = { start: 0, end: 100 };
+export const TimeRange = { start: 0, end: 1440 };
