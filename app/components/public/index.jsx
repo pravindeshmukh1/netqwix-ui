@@ -748,6 +748,7 @@ const TrainerInfo = ({
   startDate,
   isSlotAvailable,
   dispatch,
+  trainerInfo,
 }) => {
   const router = useRouter();
   const findTrainerDetails = () => {
@@ -793,8 +794,6 @@ const TrainerInfo = ({
   const handleSignInRedirect = () => {
     router.push({ pathname: routingPaths.signIn });
   };
-  const fromHours = {};
-  const toHours = {};
   return (
     <div
       className="row"
@@ -931,32 +930,25 @@ const TrainerInfo = ({
             <CustomRangePicker
               availableSlots={[
                 {
-                  start_time:
-                    fromHours ||
-                    (trainerInfo?.userInfo?.extraInfo?.working_hours
-                      ? Utils.getTimeFormate(
-                          trainerInfo.userInfo.extraInfo.working_hours.from
-                        )
-                      : TimeRange.start),
-                  end_time:
-                    toHours ||
-                    (trainerInfo?.userInfo?.extraInfo?.working_hours
-                      ? Utils.getTimeFormate(
-                          trainerInfo.userInfo.extraInfo.working_hours.to
-                        )
-                      : TimeRange.end),
+                  start_time: trainerInfo?.userInfo?.extraInfo?.working_hours
+                    ? Utils.getTimeFormate(
+                        trainerInfo.userInfo.extraInfo.working_hours.from
+                      )
+                    : TimeRange.start,
+                  end_time: trainerInfo?.userInfo?.extraInfo?.working_hours
+                    ? Utils.getTimeFormate(
+                        trainerInfo.userInfo.extraInfo.working_hours.to
+                      )
+                    : TimeRange.end,
                 },
               ]}
               onChange={(time) => {
                 const startTime = Utils.convertMinutesToHour(time.startTime);
                 const endTime = Utils.convertMinutesToHour(time.endTime);
                 if (startTime && endTime) {
-                  setTimeRange({ ...timeRange, startTime, endTime });
                   const payload = {
                     booked_date: startDate,
-                    trainer_id:
-                      trainerInfo?.userInfo?.trainer_id ||
-                      selectedTrainer?.trainer_id,
+                    trainer_id: trainer.trainer_id,
                     slotTime: { from: startTime, to: endTime },
                   };
                   const debouncedAPI = debounce(() => {

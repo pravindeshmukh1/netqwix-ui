@@ -780,8 +780,6 @@ const ScheduleTraining = () => {
                                 : TimeRange.end),
                           },
                         ]}
-                        startTime={"08:30"}
-                        endTime={"10:30"}
                         onChange={(time) => {
                           const startTime = Utils.convertMinutesToHour(
                             time.startTime
@@ -800,10 +798,10 @@ const ScheduleTraining = () => {
                                 selectedTrainer?.trainer_id,
                               slotTime: { from: startTime, to: endTime },
                             };
-                            // const debouncedAPI = debounce(() => {
-                            //   dispatch(checkSlotAsync(payload));
-                            // }, debouncedConfigs.towSec);
-                            // debouncedAPI();
+                            const debouncedAPI = debounce(() => {
+                              dispatch(checkSlotAsync(payload));
+                            }, debouncedConfigs.towSec);
+                            debouncedAPI();
                           }
                         }}
                         isSlotAvailable={isSlotAvailable}
@@ -861,6 +859,7 @@ const ScheduleTraining = () => {
                     </div> */}
                     {/* <div className="col-12 mt-4 mb-3 ml-3 d-flex justify-content-center align-item-center"> */}
                     <div className="col-12  mt-4 mb-3 d-flex justify-content-center align-items-center">
+                      {JSON.stringify(isSlotAvailable)}
                       <button
                         type="button"
                         disabled={!isSlotAvailable}
