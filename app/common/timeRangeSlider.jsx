@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-const CustomRangePicker = ({ availableSlots, onChange }) => {
-  const [startPosition, setStartPosition] = useState(0);
-  const [endPosition, setEndPosition] = useState(100);
+const CustomRangePicker = ({
+  availableSlots,
+  onChange,
+  startTime,
+  endTime,
+  startPosition = 0,
+  endPosition = 20,
+}) => {
+  // const [startPosition, setStartPosition] = useState(0);
+  // const [endPosition, setEndPosition] = useState(100);
   const [isSlotAvailable, setIsSlotAvailable] = useState(true);
   const [draggingStart, setDraggingStart] = useState(false);
   const [draggingEnd, setDraggingEnd] = useState(false);
@@ -80,7 +87,6 @@ const CustomRangePicker = ({ availableSlots, onChange }) => {
     const newPosition = (offsetX / rangeRect.width) * 100;
     return newPosition;
   };
-
   return (
     <React.Fragment>
       <div

@@ -1,4 +1,5 @@
-import { Star, X, ArrowLeft } from "react-feather";
+import exp from "constants";
+
 export const signUpSteps = [{ title: "Basic Info" }, { title: "Details" }];
 export const LIST_OF_ACCOUNT_TYPE = [
   {
@@ -718,4 +719,4 @@ export const FIXED_ITEM = ["notification", "file", "setting"];
 
 export const MOBILE_SIZE = 576;
 
-export const TimeRange = { start: "00:00", end: "23:59" };
+export const TimeRange = { start: 0, end: 100 };

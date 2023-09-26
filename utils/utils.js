@@ -295,7 +295,10 @@ export class Utils {
     );
   };
   static getTimeFormate = (time) => {
-    return `${time.replace(":00", "")}`;
+    if (typeof time === "string") {
+      return time.replace(":00", "");
+    }
+    return "";
   };
 
   static convertMinutesToHour(minutes) {
@@ -306,4 +309,9 @@ export class Utils {
       .padStart(2, "0")}`;
     return formattedHour;
   }
+  static convertHoursToMinutes = (time) => {
+    const [hours, minutes] = time.split(":").map(Number);
+    const totalMinutes = hours * 60 + minutes;
+    return totalMinutes;
+  };
 }
