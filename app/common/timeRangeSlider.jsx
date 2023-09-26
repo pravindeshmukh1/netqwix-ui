@@ -10,9 +10,12 @@ const CustomRangePicker = ({ availableSlots, onChange }) => {
   const [time, setTime] = useState({});
 
   useEffect(() => {
-    // Check if the selected time range overlaps with any available slot
     const startTime = (startPosition / 100) * 1440;
     const endTime = (endPosition / 100) * 1440;
+    onChange({
+      startTime: Math.floor(startTime).toFixed(2),
+      endTime: Math.floor(endTime).toFixed(2),
+    });
     setTime({
       startTime: Math.floor(startTime).toFixed(2),
       endTime: Math.floor(endTime).toFixed(2),
@@ -30,7 +33,7 @@ const CustomRangePicker = ({ availableSlots, onChange }) => {
       }
     }
     setIsSlotAvailable(true);
-  }, [startPosition, endPosition, availableSlots]);
+  }, [startPosition, endPosition]);
 
   const handleStartDrag = (e) => {
     setDraggingStart(true);
@@ -114,7 +117,6 @@ const CustomRangePicker = ({ availableSlots, onChange }) => {
           />
         ))}
       </div>
-      {onChange({ ...time })}
       <span>Start Time : {convertMinutesToHour(time.startTime)}</span>
       <span className="ml-2">
         End Time : {convertMinutesToHour(time.endTime)}

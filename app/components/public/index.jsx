@@ -34,12 +34,8 @@ import {
   commonAction,
   commonState,
 } from "../../common/common.slice";
-<<<<<<< HEAD
-import MultiRangeSlider from "../../common/timeRangeSlider";
 import ReviewCard from "../../common/reviewCard";
-=======
 import CustomRangePicker from "../../common/timeRangeSlider";
->>>>>>> a01bf4c5ceb0d63280bf4d06e302a50a43313694
 
 const TrainersDetails = ({
   onClose,
@@ -65,6 +61,7 @@ const TrainersDetails = ({
   const [bookingColumns, setBookingColumns] = useState([]);
   const [listOfTrainers, setListOfTrainers] = useState([]);
   const [isPopoverOpen, setIsPopoverOpen] = useState(null);
+  const [bookSessionPayload, setBookSessionPayload] = useState({});
   const [filterParams, setFilterParams] = useState({
     date: null,
     day: null,
@@ -191,11 +188,13 @@ const TrainersDetails = ({
             customInput={<Input />}
           />
         </div> */}
-        <div className="col-12 mb-3 d-flex mt-4 ml-n4" >
-          <label className="mr-2" style={{ fontSize: '14px' }}>Select date : </label>
+        <div className="col-12 mb-3 d-flex mt-4 ml-n4">
+          <label className="mr-2" style={{ fontSize: "14px" }}>
+            Select date :{" "}
+          </label>
           <DatePicker
             className="border border-dark"
-            style={{ fontSize: '14px' }}
+            style={{ fontSize: "14px" }}
             // className="mt-1"
             minDate={moment().toDate()}
             onChange={(date) => {
@@ -362,14 +361,16 @@ const TrainersDetails = ({
 
   const renderTable = () => (
     <div
-      className={`${trainerInfo && trainerInfo.userInfo
+      className={`${
+        trainerInfo && trainerInfo.userInfo
           ? "table-responsive-width"
           : "table-responsive-width"
-        }`}
+      }`}
     >
       <table
-        className={`${screenWidth <= 767 ? "table-responsive overflow-x-auto" : "table"
-          } custom-table-scroll-width ml-30 mr-30 border border-dark`}
+        className={`${
+          screenWidth <= 767 ? "table-responsive overflow-x-auto" : "table"
+        } custom-table-scroll-width ml-30 mr-30 border border-dark`}
         style={{
           width: "91.5%",
         }}
@@ -668,11 +669,12 @@ const TrainersDetails = ({
           </div>
         ) : (
           <div
-            className={`${(trainerInfo.isCategory &&
+            className={`${
+              (trainerInfo.isCategory &&
                 !trainerDetails.select_trainer &&
                 "media-body media-body text-right") ||
               (!trainerInfo.isCategory && "media-body media-body text-right")
-              }`}
+            }`}
           >
             <div>
               {!trainerInfo.isCategory ? (
@@ -791,6 +793,8 @@ const TrainerInfo = ({
   const handleSignInRedirect = () => {
     router.push({ pathname: routingPaths.signIn });
   };
+  const fromHours = {};
+  const toHours = {};
   return (
     <div
       className="row"
@@ -834,9 +838,9 @@ const TrainerInfo = ({
               "mt-3 mb-3 d-flex"
             )}
             {trainer &&
-              trainer.extraInfo &&
-              trainer.extraInfo.media &&
-              trainer.extraInfo.social_media_links ? (
+            trainer.extraInfo &&
+            trainer.extraInfo.media &&
+            trainer.extraInfo.social_media_links ? (
               <SocialMediaIcons
                 profileImageURL={
                   trainer &&
@@ -869,32 +873,32 @@ const TrainerInfo = ({
         >
           {accordionData.length
             ? accordionData.map((data, index) => {
-              return (
-                <Accordion key={`accordion_${index}`} className="mb-5">
-                  <Accordion.Item>
-                    <Accordion.Header
-                      index={index}
-                      activeAccordion={activeAccordion}
-                      onAClick={() => {
-                        if (activeAccordion[index]) {
-                          delete activeAccordion[index];
-                        } else if (!activeAccordion[index]) {
-                          activeAccordion[index] = true;
-                        } else {
-                          activeAccordion[index] = !activeAccordion[index];
-                        }
-                        setActiveAccordion(activeAccordion);
-                      }}
-                    >
-                      {data.label}
-                    </Accordion.Header>
-                    <Accordion.Body>
-                      {!data.value ? Message.notFound : data.value}
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              );
-            })
+                return (
+                  <Accordion key={`accordion_${index}`} className="mb-5">
+                    <Accordion.Item>
+                      <Accordion.Header
+                        index={index}
+                        activeAccordion={activeAccordion}
+                        onAClick={() => {
+                          if (activeAccordion[index]) {
+                            delete activeAccordion[index];
+                          } else if (!activeAccordion[index]) {
+                            activeAccordion[index] = true;
+                          } else {
+                            activeAccordion[index] = !activeAccordion[index];
+                          }
+                          setActiveAccordion(activeAccordion);
+                        }}
+                      >
+                        {data.label}
+                      </Accordion.Header>
+                      <Accordion.Body>
+                        {!data.value ? Message.notFound : data.value}
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  </Accordion>
+                );
+              })
             : Message.notFound}
         </div>
       </div>
@@ -920,51 +924,51 @@ const TrainerInfo = ({
         {datePicker}
         <div className="row ">
           {/* <div className="col-10 col-sm-10 col-md-10 col-lg-6 mt-4"> */}
-          <label style={{ fontSize: '13px' }} className="ml-n2">Session Duration : </label>
+          <label style={{ fontSize: "13px" }} className="ml-n2">
+            Session Duration :{" "}
+          </label>
           <div className="col-12 col-sm-12 col-md-11 col-lg-11 col-xl-8  mt-1 mb-2 ">
-            <MultiRangeSlider
-              onChange={(time) => {
-                const { startTime, endTime } = time;
-                const payload = {
-                  trainer_id: trainer.trainer_id,
-                  booked_date: startDate,
-                  slotTime: { from: startTime, to: endTime },
-                };
-                const debouncedAPI = debounce(() => {
-                  dispatch(checkSlotAsync(payload));
-                }, debouncedConfigs.towSec);
-                debouncedAPI();
-              }}
-              startTime={
-                trainer && trainer.extraInfo && trainer.extraInfo.working_hours
-                  ? Utils.getTimeFormate(trainer.extraInfo.working_hours.from)
-                  : TimeRange.start
-              }
-              endTime={
-                trainer && trainer.extraInfo && trainer.extraInfo.working_hours
-                  ? Utils.getTimeFormate(trainer.extraInfo.working_hours.to)
-                  : TimeRange.end
-              }
-              key={"time-range"}
-              isSlotAvailable={isSlotAvailable}
+            <CustomRangePicker
+              availableSlots={[
+                {
+                  start_time:
+                    fromHours ||
+                    (trainerInfo?.userInfo?.extraInfo?.working_hours
+                      ? Utils.getTimeFormate(
+                          trainerInfo.userInfo.extraInfo.working_hours.from
+                        )
+                      : TimeRange.start),
+                  end_time:
+                    toHours ||
+                    (trainerInfo?.userInfo?.extraInfo?.working_hours
+                      ? Utils.getTimeFormate(
+                          trainerInfo.userInfo.extraInfo.working_hours.to
+                        )
+                      : TimeRange.end),
+                },
+              ]}
               onChange={(time) => {
                 const startTime = Utils.convertMinutesToHour(time.startTime);
                 const endTime = Utils.convertMinutesToHour(time.endTime);
                 if (startTime && endTime) {
+                  setTimeRange({ ...timeRange, startTime, endTime });
                   const payload = {
-                    trainer_id: trainer.trainer_id,
                     booked_date: startDate,
+                    trainer_id:
+                      trainerInfo?.userInfo?.trainer_id ||
+                      selectedTrainer?.trainer_id,
                     slotTime: { from: startTime, to: endTime },
                   };
-                  // const debouncedAPI = debounce(() => {
-                  //   dispatch(checkSlotAsync(payload));
-                  // }, debouncedConfigs.towSec);
-                  // debouncedAPI();
+                  const debouncedAPI = debounce(() => {
+                    dispatch(checkSlotAsync(payload));
+                  }, debouncedConfigs.towSec);
+                  debouncedAPI();
                 }
               }}
+              isSlotAvailable={isSlotAvailable}
+              key={"time-range-slider"}
             />
-           
-          </div> 
+          </div>
           <div className="col-12 mt-4 mb-4 d-flex justify-content-center align-items-center rangebtn">
             {isSlotAvailable ? (
               <button
@@ -976,13 +980,15 @@ const TrainerInfo = ({
               </button>
             ) : null}
           </div>
-          
         </div>
-        <div className="ml-n4 " ><h2 className=" mb-3 tag-name">Reviews of lessons with </h2>
-        <div style={{alignItems: 'center', justifyContent: 'center' }} className="ml-n4 d-flex " >
-
-      <ReviewCard trainer={trainer} />
-        </div>
+        <div className="ml-n4 ">
+          <h2 className=" mb-3 tag-name">Reviews of lessons with </h2>
+          <div
+            style={{ alignItems: "center", justifyContent: "center" }}
+            className="ml-n4 d-flex "
+          >
+            <ReviewCard trainer={trainer} />
+          </div>
         </div>
         {/* <div className="mt-5">{element}</div> */}
       </div>
@@ -1146,8 +1152,9 @@ const SelectedCategory = ({
                         className="badge badge-pill badge-primary mb-2 p-2"
                         style={{ fontSize: "15px" }}
                       >
-                        {`$${data?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD
-                          }.00`}
+                        {`$${
+                          data?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD
+                        }.00`}
                         {`/ ${TRAINER_MEETING_TIME}`}
                       </p>
                       <h4
@@ -1160,8 +1167,8 @@ const SelectedCategory = ({
                       </h4>
                       <div>
                         {data &&
-                          data.extraInfo &&
-                          data.extraInfo.social_media_links ? (
+                        data.extraInfo &&
+                        data.extraInfo.social_media_links ? (
                           <SocialMediaIcons
                             profileImageURL={
                               data &&

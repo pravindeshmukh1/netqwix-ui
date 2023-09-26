@@ -723,15 +723,16 @@ const ScheduleTraining = () => {
       <React.Fragment>
         <div className="container">
           <div className="row">
-            
             <div className="col-12 mb-3 d-flex ml-n3 ">
-            <label className="mr-2" style={{ fontSize: '14px' }}>Select date : </label>
-            {/* <div className="col-6 col-xs-2 col-sm-2 col-md-2 col-xs-2 date-picker mb-3"> */}
+              <label className="mr-2" style={{ fontSize: "14px" }}>
+                Select date :{" "}
+              </label>
+              {/* <div className="col-6 col-xs-2 col-sm-2 col-md-2 col-xs-2 date-picker mb-3"> */}
               <DatePicker
                 // className="border border-dark"
                 style={{
-                  fontSize: '14px',
-                  border: '1px solid black'
+                  fontSize: "14px",
+                  border: "1px solid black",
                 }}
                 className="mt-1"
                 minDate={moment().toDate()}
@@ -752,15 +753,46 @@ const ScheduleTraining = () => {
               {(getParams.search && getParams.search.length) ||
               !bookingColumns.length ? (
                 <div>
-                    <div className="row">
-                      <label style={{ fontSize: '13px' }}>Session Duration : </label>
-                      {/* <div className="col-12 col-sm-12 col-md-12 mt-2 col-lg-12 mb-2 "> */}
-                      <div className="col-12 col-sm-12 col-md-11 col-lg-12 col-xl-8 col-xxl-8 mt-1 mb-2 ">
-                      <MultiRangeSlider
-                          isSlotAvailable={isSlotAvailable}
-                         onChange={(item)=>{
-                            const { startTime, endTime } = time;
+                  <div className="row">
+                    <label style={{ fontSize: "13px" }}>
+                      Session Duration :{" "}
+                    </label>
+                    {/* <div className="col-12 col-sm-12 col-md-12 mt-2 col-lg-12 mb-2 "> */}
+                    <div className="col-12 col-sm-12 col-md-11 col-lg-12 col-xl-8 col-xxl-8 mt-1 mb-2 ">
+                      <CustomRangePicker
+                        availableSlots={[
+                          {
+                            start_time:
+                              fromHours ||
+                              (trainerInfo?.userInfo?.extraInfo?.working_hours
+                                ? Utils.getTimeFormate(
+                                    trainerInfo.userInfo.extraInfo.working_hours
+                                      .from
+                                  )
+                                : TimeRange.start),
+                            end_time:
+                              toHours ||
+                              (trainerInfo?.userInfo?.extraInfo?.working_hours
+                                ? Utils.getTimeFormate(
+                                    trainerInfo.userInfo.extraInfo.working_hours
+                                      .to
+                                  )
+                                : TimeRange.end),
+                          },
+                        ]}
+                        startTime={"08:30"}
+                        endTime={"10:30"}
+                        onChange={(time) => {
+                          const startTime = Utils.convertMinutesToHour(
+                            time.startTime
+                          );
+                          const endTime = Utils.convertMinutesToHour(
+                            time.endTime
+                          );
+                          if (startTime && endTime) {
                             setTimeRange({ ...timeRange, startTime, endTime });
+                            console.info("startTime----", startTime);
+                            console.info("endTime----", endTime);
                             const payload = {
                               booked_date: startDate,
                               trainer_id:
@@ -768,82 +800,65 @@ const ScheduleTraining = () => {
                                 selectedTrainer?.trainer_id,
                               slotTime: { from: startTime, to: endTime },
                             };
-                            const debouncedAPI = debounce(() => {
-                              dispatch(checkSlotAsync(payload));
-                            }, debouncedConfigs.towSec);
-                            debouncedAPI();
-                         }}
-                         startTime={
-                            fromHours ||
-                            (trainerInfo?.userInfo?.extraInfo?.working_hours
-                              ? Utils.getTimeFormate(
-                                  trainerInfo.userInfo.extraInfo.working_hours
-                                    .from
-                                )
-                              : TimeRange.start)
+                            // const debouncedAPI = debounce(() => {
+                            //   dispatch(checkSlotAsync(payload));
+                            // }, debouncedConfigs.towSec);
+                            // debouncedAPI();
                           }
-                          endTime={
-                            toHours ||
-                            (trainerInfo?.userInfo?.extraInfo?.working_hours
-                              ? Utils.getTimeFormate(
-                                  trainerInfo.userInfo.extraInfo.working_hours
-                                    .to
-                                )
-                              : TimeRange.end)
-                          }
-                          key={"time-range-slider"}
-                        />
-                        
-                      </div>
-                      {/* <div className="col-12 mt-4 mb-3 ml-3 d-flex justify-content-center align-item-center"> */}
-                      <div className="col-12 mt-4 mb-3 d-flex justify-content-center align-items-center rangebtn">
-                        {isSlotAvailable ||
-                        (!isSlotAvailable &&
-                          timeRange.startTime &&
-                          timeRange.endTime) ? (
-                          <button
-                            type="button"
-                            disabled={!isSlotAvailable}
-                            className="mt-5 btn btn-sm btn-primary "
-                            onClick={() => {
-                              const amountPayable = Utils.getMinutesFromHourMM(
-                                timeRange.startTime,
-                                timeRange.endTime,
-                                trainerInfo?.userInfo?.extraInfo?.hourly_rate
+                        }}
+                        isSlotAvailable={isSlotAvailable}
+                        key={"time-range-slider"}
+                      />
+                    </div>
+                    {/* <div className="col-12 mt-4 mb-3 ml-3 d-flex justify-content-center align-item-center"> */}
+                    {/* <div className="col-12 mt-4 mb-3 d-flex justify-content-center align-items-center rangebtn">
+                      {isSlotAvailable ||
+                      (!isSlotAvailable &&
+                        timeRange.startTime &&
+                        timeRange.endTime) ? (
+                        <button
+                          type="button"
+                          disabled={!isSlotAvailable}
+                          className="mt-5 btn btn-sm btn-primary "
+                          onClick={() => {
+                            const amountPayable = Utils.getMinutesFromHourMM(
+                              timeRange.startTime,
+                              timeRange.endTime,
+                              trainerInfo?.userInfo?.extraInfo?.hourly_rate
+                            );
+                            console.log("trainerInfo", trainerInfo);
+                            console.log(
+                              "selectedTrainer---",
+                              selectedTrainer.data
+                            );
+                            if (amountPayable > 0) {
+                              const payload = {
+                                charging_price: amountPayable,
+                                trainer_id:
+                                  trainerInfo?.userInfo?.trainer_id ||
+                                  selectedTrainer?.trainer_id,
+                                trainer_info:
+                                  trainerInfo || selectedTrainer.data,
+                                status: BookedSession.booked,
+                                booked_date: startDate,
+                                session_start_time: timeRange.startTime,
+                                session_end_time: timeRange.endTime,
+                              };
+                              setBookSessionPayload(payload);
+                              dispatch(
+                                createPaymentIntentAsync({
+                                  amount: +amountPayable.toFixed(2),
+                                })
                               );
-                              console.log("trainerInfo", trainerInfo);
-                              console.log(
-                                "selectedTrainer---",
-                                selectedTrainer.data
-                              );
-                              if (amountPayable > 0) {
-                                const payload = {
-                                  charging_price: amountPayable,
-                                  trainer_id:
-                                    trainerInfo?.userInfo?.trainer_id ||
-                                    selectedTrainer?.trainer_id,
-                                  trainer_info:
-                                    trainerInfo || selectedTrainer.data,
-                                  status: BookedSession.booked,
-                                  booked_date: startDate,
-                                  session_start_time: timeRange.startTime,
-                                  session_end_time: timeRange.endTime,
-                                };
-                                setBookSessionPayload(payload);
-                                dispatch(
-                                  createPaymentIntentAsync({
-                                    amount: +amountPayable.toFixed(2),
-                                  })
-                                );
-                              } else {
-                                toast.error("Invalid slot timing...");
-                              }
-                            }}
-                          >
-                            Book Slot Now
-                          </button>
-                        ) : null}
-                      </div>
+                            } else {
+                              toast.error("Invalid slot timing...");
+                            }
+                          }}
+                        >
+                          Book Slot Now
+                        </button>
+                      ) : null}
+                    </div> */}
                     {/* <div className="col-12 mt-4 mb-3 ml-3 d-flex justify-content-center align-item-center"> */}
                     <div className="col-12  mt-4 mb-3 d-flex justify-content-center align-items-center">
                       <button
@@ -855,11 +870,6 @@ const ScheduleTraining = () => {
                             timeRange.startTime,
                             timeRange.endTime,
                             trainerInfo?.userInfo?.extraInfo?.hourly_rate
-                          );
-                          console.log("trainerInfo", trainerInfo);
-                          console.log(
-                            "selectedTrainer---",
-                            selectedTrainer.data
                           );
                           if (amountPayable > 0) {
                             const payload = {
