@@ -25,6 +25,7 @@ import moment from "moment";
 import { Input, Label } from "reactstrap";
 import { useDispatch } from "react-redux";
 import { commonAction } from "../../common/common.slice";
+import ReviewCard from "../../common/reviewCard";
 
 export const TrainerDetails = ({
   onClose,
@@ -54,6 +55,8 @@ export const TrainerDetails = ({
     credentials_and_affiliations: null,
     curriculum: null,
   });
+
+  console.info("trainerInfo----", trainerInfo);
   // TODO: showing dummy records, will replace it with actual records
   useEffect(() => {
     if (trainerInfo && trainerInfo.extraInfo) {
@@ -407,6 +410,7 @@ const TrainerInfo = ({
     return findByTrainerId;
   };
   const trainer = findTrainerDetails();
+
   useEffect(() => {
     if (trainer && trainer.extraInfo) {
       setAccordionsData((prev) => ({
@@ -438,6 +442,8 @@ const TrainerInfo = ({
         type,
       };
     });
+  const hasRatings = trainer?.trainer_ratings.some((item) => item.ratings);
+
   return (
     <div
       className="row"
@@ -448,7 +454,7 @@ const TrainerInfo = ({
         overflowX: !AccountType.TRAINEE || (!AccountType.TRAINER && "auto"),
       }}
     >
-      <div className="col-md-5">
+      <div className="col-md-6">
         <div className="row">
           <div className="col-4 col-md-3 col-lg-2">
             <img
@@ -534,7 +540,7 @@ const TrainerInfo = ({
           : Message.notFound}
       </div>
       <div className="col-md-6">
-        <h2 className="mb-4">Featured content </h2>
+        <h2 className="mb-4 tag-name booking-text">Featured content </h2>
         {revampedMedia && revampedMedia.length ? (
           <ImageVideoThumbnailCarousel
             media={revampedMedia}
@@ -545,8 +551,18 @@ const TrainerInfo = ({
         ) : (
           <div className="no-media-found">{Message.noMediaFound}</div>
         )}
-        <h2>Book session</h2>
+        <h2 className="ml-n1 tag-name booking-text">Book session</h2>
         <div className="mt-3">{element}</div>
+        {hasRatings && (
+          <div>
+            <h2 className="mb-3 booking-text  tag-name">
+              Reviews of lessons with{" "}
+            </h2>
+            <div className="ml-lg-n4">
+              <ReviewCard trainer={trainer} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

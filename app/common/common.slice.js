@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 const initialState = {
   status: "idle",
   isSlotAvailable: null,
+  session_durations: { from: "", to: "" },
 };
 
 export const checkSlotAsync = createAsyncThunk("checkSlot", async (payload) => {
@@ -36,6 +37,13 @@ export const commonSlice = createSlice({
       .addCase(checkSlotAsync.fulfilled, (state, action) => {
         state.status = "fulfilled";
         state.isSlotAvailable = action.payload.data.isAvailable;
+        action.payload.data.result.map((session) => {
+          const { session_end_time, session_start_time } = session;
+          state.session_durations = {
+            from: session_start_time,
+            to: session_end_time,
+          };
+        });
       })
       .addCase(checkSlotAsync.rejected, (state, action) => {
         state.status = "rejected";

@@ -1,117 +1,182 @@
-// .range-slider-container {
-//   // height: 100vh;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
+// // .range-slider-container {
+// //   // height: 100vh;
+// //   display: flex;
+// //   align-items: center;
+// //   justify-content: center;
+// // }
+
+// .range-slider {
+//   position: relative;
+//   width: 100%;
 // }
 
-.range-slider {
+// .slider__track,
+// .slider__range,
+// .slider__left-value,
+// .slider__right-value {
+//   position: absolute;
+// }
+
+// .slider__track,
+// .slider__range {
+//   border-radius: 3px;
+//   height: 5px;
+// }
+
+// .slider__track {
+//   background-color: #ced4da;
+//   width: 100%;
+//   z-index: 1;
+// }
+
+// .slider__range {
+//   background-color: gray;
+//   z-index: 2;
+// }
+
+// .slider__left-value,
+// .slider__right-value {
+//   color: #dee2e6;
+//   font-size: 12px;
+//   margin-top: 20px;
+// }
+
+// .slider__left-value {
+//   left: 6px;
+// }
+
+// .slider__right-value {
+//   right: -4px;
+// }
+
+// /* Removing the default appearance */
+// .thumb,
+// .thumb::-webkit-slider-thumb {
+//   -webkit-appearance: none;
+//   -webkit-tap-highlight-color: transparent;
+// }
+
+// .thumb {
+//   pointer-events: none;
+//   position: absolute;
+//   height: 0;
+//   width: 200px;
+//   outline: none;
+// }
+
+// .thumb--left {
+//   width: 96%;
+//   z-index: 3;
+// }
+
+// .thumb--right {
+//   width: 96%;
+//   z-index: 4;
+// }
+
+// /* For Chrome browsers */
+// .thumb::-webkit-slider-thumb {
+//   background-color: #f1f5f7;
+//   border: none;
+//   border-radius: 50%;
+//   box-shadow: 0 0 1px 1px #ced4da;
+//   cursor: pointer;
+//   height: 18px;
+//   width: 18px;
+//   margin-top: 4px;
+//   pointer-events: all;
+//   position: relative;
+// }
+
+// /* For Firefox browsers */
+// .thumb::-moz-range-thumb {
+//   background-color: #f1f5f7;
+//   border: none;
+//   border-radius: 50%;
+//   box-shadow: 0 0 1px 1px #ced4da;
+//   cursor: pointer;
+//   height: 18px;
+//   width: 18px;
+//   margin-top: 4px;
+//   pointer-events: all;
+//   position: relative;
+// }
+
+// .time-range-success {
+//   @extend .slider__range;
+//   background: green !important;
+// }
+// .time-range-danger {
+//   @extend .slider__range;
+//   background: red !important;
+// }
+
+// .default-range-slider {
+//   @extend .slider__range;
+//   background: rgba(0, 0, 0, 0.03) !important;
+// }
+
+
+/* CustomRangePicker.module.css */
+
+.custom-range-picker {
   position: relative;
-  width: 100%;
-}
-
-.slider__track,
-.slider__range,
-.slider__left-value,
-.slider__right-value {
-  position: absolute;
-}
-
-.slider__track,
-.slider__range {
-  border-radius: 3px;
-  height: 5px;
-}
-
-.slider__track {
-  background-color: #ced4da;
-  width: 100%;
-  z-index: 1;
-}
-
-.slider__range {
+  width: 96%;
+  height: 20px; /* Increased height to accommodate time labels */
   background-color: gray;
-  z-index: 2;
+  cursor: pointer; /* Ensure the range stays within the container */
+  pointer-events: auto; /* Allow clicking on the range */
 }
 
-.slider__left-value,
-.slider__right-value {
-  color: #dee2e6;
-  font-size: 12px;
-  margin-top: 20px;
+.unavailable {
+  /* background-color: red; */
 }
 
-.slider__left-value {
-  left: 6px;
-}
-
-.slider__right-value {
-  right: -4px;
-}
-
-/* Removing the default appearance */
-.thumb,
-.thumb::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.thumb {
-  pointer-events: none;
+.start-range,
+.end-range {
   position: absolute;
-  height: 0;
-  width: 200px;
-  outline: none;
+  top: 0;
+  width: 10px; /* Adjust the width of the markers */
+  height: 100%;
+  z-index: 1; /* Ensure the markers are above the slots */
 }
 
-.thumb--left {
-  width: 96%;
-  z-index: 3;
+.start-range {
+  left: 0;
+  background-color: green;
+  cursor: ew-resize; /* Horizontal resize cursor for the start marker */
 }
 
-.thumb--right {
-  width: 96%;
-  z-index: 4;
+.end-range {
+  right: 0;
+  background-color: green;
+  cursor: ew-resize; /* Horizontal resize cursor for the end marker */
 }
 
-/* For Chrome browsers */
-.thumb::-webkit-slider-thumb {
-  background-color: #f1f5f7;
-  border: none;
-  border-radius: 50%;
-  box-shadow: 0 0 1px 1px #ced4da;
-  cursor: pointer;
-  height: 18px;
-  width: 18px;
-  margin-top: 4px;
-  pointer-events: all;
-  position: relative;
+.slot {
+  position: absolute;
+  height: 100%;
+  background-color: red;
+  opacity: 0.5;
+  z-index: 0;
 }
 
-/* For Firefox browsers */
-.thumb::-moz-range-thumb {
-  background-color: #f1f5f7;
-  border: none;
-  border-radius: 50%;
-  box-shadow: 0 0 1px 1px #ced4da;
-  cursor: pointer;
-  height: 18px;
-  width: 18px;
-  margin-top: 4px;
-  pointer-events: all;
-  position: relative;
+.time-label {
+  position: absolute;
+  top: 40px; /* Adjust top position for time labels */
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: #333;
+  z-index: 2; /* Ensure time labels are above markers */
+  white-space: nowrap; /* Prevent labels from wrapping */
 }
 
-.time-range-success {
-  @extend .slider__range;
-  background: green !important;
-}
-.time-range-danger {
-  @extend .slider__range;
-  background: red !important;
-}
-
-.default-range-slider {
-  @extend .slider__range;
-  background: rgba(0, 0, 0, 0.03) !important;
+/* Ensure labels stay within the content */
+.time-label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
 }

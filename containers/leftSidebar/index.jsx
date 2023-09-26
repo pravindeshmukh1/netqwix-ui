@@ -248,7 +248,7 @@ const Index = (props) => {
                 </NavLink>
               </Tooltip>
             </li>
-            <li>
+            {accountType === AccountType.TRAINEE&&   <li>
               <Tooltip
                 title={
                   accountType === AccountType.TRAINEE
@@ -258,7 +258,7 @@ const Index = (props) => {
                 position="right-end"
                 trigger="mouseenter"
               >
-                <NavLink
+              <NavLink
                   className={`icon-btn btn-light button-effect ${
                     activeTab === leftSideBarOptions.SCHEDULE_TRAINING
                       ? "active"
@@ -269,7 +269,7 @@ const Index = (props) => {
                   <i className="fa fa-calendar" />
                 </NavLink>
               </Tooltip>
-            </li>
+            </li>}
             <li>
               <Tooltip title="Media" position="top" trigger="mouseenter">
                 <NavLink

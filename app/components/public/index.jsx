@@ -34,7 +34,8 @@ import {
   commonAction,
   commonState,
 } from "../../common/common.slice";
-import MultiRangeSlider from "../../common/timeRangeSlider";
+import ReviewCard from "../../common/reviewCard";
+import CustomRangePicker from "../../common/timeRangeSlider";
 
 const TrainersDetails = ({
   onClose,
@@ -60,6 +61,7 @@ const TrainersDetails = ({
   const [bookingColumns, setBookingColumns] = useState([]);
   const [listOfTrainers, setListOfTrainers] = useState([]);
   const [isPopoverOpen, setIsPopoverOpen] = useState(null);
+  const [bookSessionPayload, setBookSessionPayload] = useState({});
   const [filterParams, setFilterParams] = useState({
     date: null,
     day: null,
@@ -169,7 +171,7 @@ const TrainersDetails = ({
   const renderBookingTable = () => (
     <React.Fragment>
       <div className="row">
-        <div className="mt-4 col-1.4  border border-dark p-10 ml-3">
+        {/* <div className="mt-4 col-1.4  border border-dark p-10 ml-3">
           <DatePicker
             minDate={moment().toDate()}
             onChange={(date) => {
@@ -185,6 +187,30 @@ const TrainersDetails = ({
             // ref={null}
             customInput={<Input />}
           />
+        </div> */}
+        <div className="col-12 mb-3 d-flex mt-4">
+          <label className="mr-2 mt-2" style={{ fontSize: "14px" }}>
+            Select date :{" "}
+          </label>
+          <div className="date-picker">
+            <DatePicker
+              className=""
+              style={{ fontSize: "14px" }}
+              // className="mt-1"
+              minDate={moment().toDate()}
+              onChange={(date) => {
+                setStartDate(date);
+                const todaySDate = Utils.getDateInFormat(date.toString());
+                const { weekDateFormatted, weekDates } =
+                  Utils.getNext7WorkingDays(todaySDate);
+                setColumns(weekDateFormatted);
+                setTableData(getTraineeSlots, weekDates);
+                setColumns(weekDateFormatted);
+              }}
+              selected={startDate}
+              customInput={<Input />}
+            />
+          </div>
         </div>
       </div>
       <div className="row">
@@ -724,6 +750,7 @@ const TrainerInfo = ({
   startDate,
   isSlotAvailable,
   dispatch,
+  trainerInfo,
 }) => {
   const router = useRouter();
   const findTrainerDetails = () => {
@@ -769,6 +796,7 @@ const TrainerInfo = ({
   const handleSignInRedirect = () => {
     router.push({ pathname: routingPaths.signIn });
   };
+  const hasRatings = trainer?.trainer_ratings.some((item) => item.ratings);
   return (
     <div
       className="row"
@@ -877,7 +905,7 @@ const TrainerInfo = ({
         </div>
       </div>
       <div className="col-md-6">
-        <h2 className="mb-4">Featured content</h2>
+        <h2 className="mb-4 tag-name booking-text">Featured content</h2>
         <div
           style={{
             marginRight: "15px",
@@ -894,38 +922,49 @@ const TrainerInfo = ({
             <div className="no-media-found">{Message.noMediaFound}</div>
           )}
         </div>
-        <h2>Book session</h2>
+        <h2 className="tag-name booking-text">Book session</h2>
         {datePicker}
         <div className="row">
-          <div className="col-10 col-sm-10 col-md-10 col-lg-6 mt-4">
-            <MultiRangeSlider
+          {/* <div className="col-10 col-sm-10 col-md-10 col-lg-6 mt-4"> */}
+          <label style={{ fontSize: "13px" }} className="ml-3 mt-1">
+            Session Duration :{" "}
+          </label>
+          <div className="col-12 col-sm-12 col-md-11 col-lg-11 col-xl-8  mt-1 mb-2 ">
+            <CustomRangePicker
+              availableSlots={[
+                {
+                  start_time: trainerInfo?.userInfo?.extraInfo?.working_hours
+                    ? Utils.getTimeFormate(
+                        trainerInfo.userInfo.extraInfo.working_hours.from
+                      )
+                    : TimeRange.start,
+                  end_time: trainerInfo?.userInfo?.extraInfo?.working_hours
+                    ? Utils.getTimeFormate(
+                        trainerInfo.userInfo.extraInfo.working_hours.to
+                      )
+                    : TimeRange.end,
+                },
+              ]}
               onChange={(time) => {
-                const { startTime, endTime } = time;
-                const payload = {
-                  trainer_id: trainer.trainer_id,
-                  booked_date: startDate,
-                  slotTime: { from: startTime, to: endTime },
-                };
-                const debouncedAPI = debounce(() => {
-                  dispatch(checkSlotAsync(payload));
-                }, debouncedConfigs.towSec);
-                debouncedAPI();
+                const startTime = Utils.convertMinutesToHour(time.startTime);
+                const endTime = Utils.convertMinutesToHour(time.endTime);
+                if (startTime && endTime) {
+                  const payload = {
+                    booked_date: startDate,
+                    trainer_id: trainer.trainer_id,
+                    slotTime: { from: startTime, to: endTime },
+                  };
+                  const debouncedAPI = debounce(() => {
+                    dispatch(checkSlotAsync(payload));
+                  }, debouncedConfigs.towSec);
+                  debouncedAPI();
+                }
               }}
-              startTime={
-                trainer && trainer.extraInfo && trainer.extraInfo.working_hours
-                  ? Utils.getTimeFormate(trainer.extraInfo.working_hours.from)
-                  : TimeRange.start
-              }
-              endTime={
-                trainer && trainer.extraInfo && trainer.extraInfo.working_hours
-                  ? Utils.getTimeFormate(trainer.extraInfo.working_hours.to)
-                  : TimeRange.end
-              }
-              key={"time-range"}
               isSlotAvailable={isSlotAvailable}
+              key={"time-range-slider"}
             />
           </div>
-          <div className="col-12">
+          <div className="col-12 mt-4 mb-4 d-flex justify-content-center align-items-center rangebtn">
             {isSlotAvailable ? (
               <button
                 type="button"
@@ -937,6 +976,16 @@ const TrainerInfo = ({
             ) : null}
           </div>
         </div>
+        {hasRatings && (
+          <div>
+            <h2 className="mb-3 booking-text tag-name">
+              Reviews of lessons with{" "}
+            </h2>
+            <div className="mr-4">
+              <ReviewCard trainer={trainer} isPublic={true} />
+            </div>
+          </div>
+        )}
         {/* <div className="mt-5">{element}</div> */}
       </div>
     </div>
