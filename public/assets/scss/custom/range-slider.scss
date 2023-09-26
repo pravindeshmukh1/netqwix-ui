@@ -116,14 +116,13 @@
 //   background: rgba(0, 0, 0, 0.03) !important;
 // }
 
-
 /* CustomRangePicker.module.css */
 
 .custom-range-picker {
   position: relative;
   width: 96%;
   height: 20px; /* Increased height to accommodate time labels */
-  background-color: gray;
+  background-color: rgba(0, 0, 0, 0.03);
   cursor: pointer; /* Ensure the range stays within the container */
   pointer-events: auto; /* Allow clicking on the range */
 }
@@ -143,13 +142,17 @@
 
 .start-range {
   left: 0;
-  background-color: green;
+  width: 21px;
+  border-radius: 30px;
+  background-color: $primary-color;
   cursor: ew-resize; /* Horizontal resize cursor for the start marker */
 }
 
 .end-range {
   right: 0;
-  background-color: green;
+  width: 20px;
+  border-radius: 30px;
+  background-color: $primary-color;
   cursor: ew-resize; /* Horizontal resize cursor for the end marker */
 }
 
