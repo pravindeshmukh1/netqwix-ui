@@ -859,7 +859,6 @@ const ScheduleTraining = () => {
                     </div> */}
                     {/* <div className="col-12 mt-4 mb-3 ml-3 d-flex justify-content-center align-item-center"> */}
                     <div className="col-12  mt-4 mb-3 d-flex justify-content-center align-items-center">
-                      {JSON.stringify(isSlotAvailable)}
                       <button
                         type="button"
                         disabled={!isSlotAvailable}

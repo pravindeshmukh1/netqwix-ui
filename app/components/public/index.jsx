@@ -973,7 +973,7 @@ const TrainerInfo = ({
             ) : null}
           </div>
         </div>
-        <div className="ml-n4 ">
+        {/* <div className="ml-n4 ">
           <h2 className=" mb-3 tag-name">Reviews of lessons with </h2>
           <div
             style={{ alignItems: "center", justifyContent: "center" }}
@@ -981,7 +981,7 @@ const TrainerInfo = ({
           >
             <ReviewCard trainer={trainer} />
           </div>
-        </div>
+        </div> */}
         {/* <div className="mt-5">{element}</div> */}
       </div>
     </div>

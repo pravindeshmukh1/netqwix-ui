@@ -56,7 +56,7 @@ export const TrainerDetails = ({
     curriculum: null,
   });
 
-  console.info("trainerInfo----",trainerInfo)
+  console.info("trainerInfo----", trainerInfo);
   // TODO: showing dummy records, will replace it with actual records
   useEffect(() => {
     if (trainerInfo && trainerInfo.extraInfo) {
@@ -410,7 +410,7 @@ const TrainerInfo = ({
     return findByTrainerId;
   };
   const trainer = findTrainerDetails();
-  
+
   useEffect(() => {
     if (trainer && trainer.extraInfo) {
       setAccordionsData((prev) => ({
@@ -551,12 +551,11 @@ const TrainerInfo = ({
         )}
         <h2 className="ml-n1 tag-name">Book session</h2>
         <div className="mt-3">{element}</div>
-        <div className="ml-n4">
-<h2 className="ml-4 mb-3  tag-name">Reviews of lessons with </h2>
-      <ReviewCard trainer={trainer} />
-        </div>
+        {/* <div className="ml-n4">
+          <h2 className="ml-4 mb-3  tag-name">Reviews of lessons with </h2>
+          <ReviewCard trainer={trainer} />
+        </div> */}
       </div>
-     
     </div>
   );
 };
