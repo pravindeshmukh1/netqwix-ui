@@ -2,7 +2,7 @@ import React from "react";
 import Rating from "react-rating";
 import { Utils } from "../../utils/utils";
 
-const ReviewCard = ({ trainer }) => {
+const ReviewCard = ({ trainer, isPublic = false }) => {
   const itemsWithRatings = trainer?.trainer_ratings.filter(
     (item) => item.ratings
   );
@@ -11,7 +11,10 @@ const ReviewCard = ({ trainer }) => {
       {itemsWithRatings.map((item, index) => {
         return (
           <React.Fragment>
-            <div key={`trainer_ratings${index}`} className="col-sm-6 mb-4">
+            <div
+              key={`trainer_ratings${index}`}
+              className={`${isPublic ? "col-sm-5" : "col-sm-6"} mb-4`}
+            >
               <div className="card">
                 <div className="card-body">
                   <div class="row">

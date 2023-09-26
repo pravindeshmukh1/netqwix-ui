@@ -188,27 +188,29 @@ const TrainersDetails = ({
             customInput={<Input />}
           />
         </div> */}
-        <div className="col-12 mb-3 d-flex mt-4 ml-n4">
-          <label className="mr-2" style={{ fontSize: "14px" }}>
+        <div className="col-12 mb-3 d-flex mt-4">
+          <label className="mr-2 mt-2" style={{ fontSize: "14px" }}>
             Select date :{" "}
           </label>
-          <DatePicker
-            className="border border-dark"
-            style={{ fontSize: "14px" }}
-            // className="mt-1"
-            minDate={moment().toDate()}
-            onChange={(date) => {
-              setStartDate(date);
-              const todaySDate = Utils.getDateInFormat(date.toString());
-              const { weekDateFormatted, weekDates } =
-                Utils.getNext7WorkingDays(todaySDate);
-              setColumns(weekDateFormatted);
-              setTableData(getTraineeSlots, weekDates);
-              setColumns(weekDateFormatted);
-            }}
-            selected={startDate}
-            customInput={<Input />}
-          />
+          <div className="date-picker">
+            <DatePicker
+              className=""
+              style={{ fontSize: "14px" }}
+              // className="mt-1"
+              minDate={moment().toDate()}
+              onChange={(date) => {
+                setStartDate(date);
+                const todaySDate = Utils.getDateInFormat(date.toString());
+                const { weekDateFormatted, weekDates } =
+                  Utils.getNext7WorkingDays(todaySDate);
+                setColumns(weekDateFormatted);
+                setTableData(getTraineeSlots, weekDates);
+                setColumns(weekDateFormatted);
+              }}
+              selected={startDate}
+              customInput={<Input />}
+            />
+          </div>
         </div>
       </div>
       <div className="row">
@@ -794,6 +796,7 @@ const TrainerInfo = ({
   const handleSignInRedirect = () => {
     router.push({ pathname: routingPaths.signIn });
   };
+  const hasRatings = trainer?.trainer_ratings.some((item) => item.ratings);
   return (
     <div
       className="row"
@@ -902,7 +905,7 @@ const TrainerInfo = ({
         </div>
       </div>
       <div className="col-md-6">
-        <h2 className="mb-4 tag-name">Featured content</h2>
+        <h2 className="mb-4 tag-name booking-text">Featured content</h2>
         <div
           style={{
             marginRight: "15px",
@@ -919,11 +922,11 @@ const TrainerInfo = ({
             <div className="no-media-found">{Message.noMediaFound}</div>
           )}
         </div>
-        <h2 className="tag-name ml-n4">Book session</h2>
+        <h2 className="tag-name booking-text">Book session</h2>
         {datePicker}
-        <div className="row ">
+        <div className="row">
           {/* <div className="col-10 col-sm-10 col-md-10 col-lg-6 mt-4"> */}
-          <label style={{ fontSize: "13px" }} className="ml-n2">
+          <label style={{ fontSize: "13px" }} className="ml-3 mt-1">
             Session Duration :{" "}
           </label>
           <div className="col-12 col-sm-12 col-md-11 col-lg-11 col-xl-8  mt-1 mb-2 ">
@@ -973,15 +976,16 @@ const TrainerInfo = ({
             ) : null}
           </div>
         </div>
-        {/* <div className="ml-n4 ">
-          <h2 className=" mb-3 tag-name">Reviews of lessons with </h2>
-          <div
-            style={{ alignItems: "center", justifyContent: "center" }}
-            className="ml-n4 d-flex "
-          >
-            <ReviewCard trainer={trainer} />
+        {hasRatings && (
+          <div>
+            <h2 className="mb-3 booking-text tag-name">
+              Reviews of lessons with{" "}
+            </h2>
+            <div className="mr-4">
+              <ReviewCard trainer={trainer} isPublic={true} />
+            </div>
           </div>
-        </div> */}
+        )}
         {/* <div className="mt-5">{element}</div> */}
       </div>
     </div>

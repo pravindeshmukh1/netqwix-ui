@@ -117,10 +117,12 @@ const CustomRangePicker = ({ availableSlots, onChange }) => {
           />
         ))}
       </div>
-      <span>Start Time : {convertMinutesToHour(time.startTime)}</span>
-      <span className="ml-2">
-        End Time : {convertMinutesToHour(time.endTime)}
-      </span>
+      <div className="mt-3">
+        <span>Start Time : {convertMinutesToHour(time.startTime)}</span>
+        <span className="ml-2">
+          End Time : {convertMinutesToHour(time.endTime)}
+        </span>
+      </div>
     </React.Fragment>
   );
 };
