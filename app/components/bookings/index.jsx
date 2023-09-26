@@ -179,9 +179,9 @@ const Bookings = ({ accountType = null }) => {
       <div>
         {isMeetingDone && <h3>Completed</h3>}
         {!isCurrentDateBefore &&
-          status === BookedSession.confirmed &&
-          !isStartButtonEnabled &&
-          !isMeetingDone ? (
+        status === BookedSession.confirmed &&
+        !isStartButtonEnabled &&
+        !isMeetingDone ? (
           <button
             className={`btn btn-success button-effect btn-sm mr-4`}
             type="button"
@@ -295,9 +295,9 @@ const Bookings = ({ accountType = null }) => {
       <div>
         {isMeetingDone && <h3>Completed</h3>}
         {!isCurrentDateBefore &&
-          status === BookedSession.confirmed &&
-          !isStartButtonEnabled &&
-          !isMeetingDone ? (
+        status === BookedSession.confirmed &&
+        !isStartButtonEnabled &&
+        !isMeetingDone ? (
           <button
             className={`btn btn-success button-effect btn-sm mr-4`}
             type="button"
@@ -514,7 +514,7 @@ const Bookings = ({ accountType = null }) => {
         }
         isOpen={addRatingModel.isOpen}
         id={addRatingModel._id}
-      // width={"50%"}
+        // width={"50%"}
       />
     );
   };
@@ -545,13 +545,13 @@ const Bookings = ({ accountType = null }) => {
   const showRatings = (ratings, extraClasses = "") => {
     const { ratingRatio, totalRating } = Utils.getRatings(ratings);
     return (
-      <div>
+      <>
         <div className={extraClasses}>
           <Star color="#FFC436" size={28} className="star-container star-svg" />
           <p className="ml-1 mt-1 mr-1 font-weight-light">{ratingRatio || 0}</p>
           <p className="mt-1">({totalRating || 0})</p>
         </div>
-      </div>
+      </>
     );
   };
   const trainerInfo = () => (
@@ -559,7 +559,7 @@ const Bookings = ({ accountType = null }) => {
       <div className="card rounded trainer-profile-card">
         <div className="card-body">
           <div className="row">
-            <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 d-flex justify-content-center">
+            <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 d-flex justify-content-center align-items-center">
               <img
                 src={
                   userInfo?.profile_picture || "/assets/images/avtar/user.png"
@@ -569,13 +569,13 @@ const Bookings = ({ accountType = null }) => {
                 style={{ maxWidth: "100%", height: "auto" }}
               />
             </div>
-            <div className="col-7 col-sm-6 col-md-7 col-lg-8 col-xl-9 card-trainer ">
-              <h3 className="mt-3">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
-              {showRatings([], "mt-3 d-flex")}
+            <div className="col-7 col-sm-6 col-md-7 col-lg-8 col-xl-9 card-trainer">
+              <h3 className="mt-3 ">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
+              {showRatings([], "mt-3 d-flex ml-n2")}
               {userInfo &&
-                userInfo.extraInfo &&
-                userInfo.extraInfo.social_media_links &&
-                userInfo.extraInfo.social_media_links ? (
+              userInfo.extraInfo &&
+              userInfo.extraInfo.social_media_links &&
+              userInfo.extraInfo.social_media_links ? (
                 <SocialMediaIcons
                   profileImageURL={""}
                   social_media_links={userInfo.extraInfo.social_media_links}
@@ -622,8 +622,9 @@ const Bookings = ({ accountType = null }) => {
                         ey={`booking-tab${index}`}
                         className={`${classnames({
                           active: activeTabs === tabName,
-                        })} ${activeTabs === tabName ? "text-primary" : "text-dark"
-                          } text-capitalize`}
+                        })} ${
+                          activeTabs === tabName ? "text-primary" : "text-dark"
+                        } text-capitalize`}
                         onClick={() => {
                           toggle1(tabName);
                           setTabBook(tabName);
@@ -674,11 +675,13 @@ const Bookings = ({ accountType = null }) => {
           }
           return;
         }}
-        className={`bookings custom-scroll custom-sidebar-content-booking ${configs.sidebar.isMobileMode &&
+        className={`bookings custom-scroll custom-sidebar-content-booking ${
+          configs.sidebar.isMobileMode &&
           configs.sidebar.isToggleEnable &&
-          `submenu-width dynemic-sidebar ${activeTab === leftSideBarOptions.SCHEDULE_TRAINING ? "active" : ""
+          `submenu-width dynemic-sidebar ${
+            activeTab === leftSideBarOptions.SCHEDULE_TRAINING ? "active" : ""
           }`
-          }`}
+        }`}
       >
         {addRatingModel.isOpen ? renderRating() : null}
         {startMeeting.isOpenModal ? (
@@ -694,9 +697,7 @@ const Bookings = ({ accountType = null }) => {
                 {/* <h2 className="d-flex justify-content-center mt-2 p-5 mb-2 bg-primary text-white rounded">
                   Bookings
                 </h2> */}
-                <h2 className="d-flex justify-content-center p-5">
-                  Bookings
-                </h2>
+                <h2 className="d-flex justify-content-center p-5">Bookings</h2>
 
                 <div className="mb-2">{bookingTabs()}</div>
               </React.Fragment>
@@ -713,7 +714,7 @@ const Bookings = ({ accountType = null }) => {
             </h2>
           ) : (
             <React.Fragment>
-              <h3 className="mt-2 p-3 mb-2 bg-primary text-white rounded booking-text tag-name" >
+              <h3 className="mt-2 p-3 mb-2 bg-primary text-white rounded booking-text tag-name">
                 Bookings
               </h3>
               {Bookings()}

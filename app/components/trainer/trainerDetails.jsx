@@ -442,6 +442,8 @@ const TrainerInfo = ({
         type,
       };
     });
+  const hasRatings = trainer?.trainer_ratings.some((item) => item.ratings);
+
   return (
     <div
       className="row"
@@ -538,7 +540,7 @@ const TrainerInfo = ({
           : Message.notFound}
       </div>
       <div className="col-md-6">
-        <h2 className="mb-4 tag-name">Featured content </h2>
+        <h2 className="mb-4 tag-name booking-text">Featured content </h2>
         {revampedMedia && revampedMedia.length ? (
           <ImageVideoThumbnailCarousel
             media={revampedMedia}
@@ -549,12 +551,18 @@ const TrainerInfo = ({
         ) : (
           <div className="no-media-found">{Message.noMediaFound}</div>
         )}
-        <h2 className="ml-n1 tag-name">Book session</h2>
+        <h2 className="ml-n1 tag-name booking-text">Book session</h2>
         <div className="mt-3">{element}</div>
-        {/* <div className="ml-n4">
-          <h2 className="ml-4 mb-3  tag-name">Reviews of lessons with </h2>
-          <ReviewCard trainer={trainer} />
-        </div> */}
+        {hasRatings && (
+          <div>
+            <h2 className="mb-3 booking-text  tag-name">
+              Reviews of lessons with{" "}
+            </h2>
+            <div className="ml-lg-n4">
+              <ReviewCard trainer={trainer} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
