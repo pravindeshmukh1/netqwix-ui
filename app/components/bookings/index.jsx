@@ -189,11 +189,11 @@ const Bookings = ({ accountType = null }) => {
     return (
       <React.Fragment>
         {status !== BookedSession.canceled && isMeetingDone && (
-          <h3>Completed</h3>
+          <h3 className="mt-1">Completed</h3>
         )}
         {status === BookedSession.canceled && isMeetingDone && (
           <button
-            className="btn btn-danger button-effect btn-sm ml-4 button-booking"
+            className="btn btn-danger button-effect btn-sm ml-4"
             type="button"
             style={{
               cursor:
@@ -224,12 +224,12 @@ const Bookings = ({ accountType = null }) => {
             Rating
           </button>
         ) : (
-          <div className="d-flex small-screen">
+          <React.Fragment>
             {!isMeetingDone && (
               <React.Fragment>
                 {status !== BookedSession.canceled && (
                   <button
-                    className={`btn btn-primary button-effect btn-sm`}
+                    className={`btn btn-primary button-effect btn-sm mr-2`}
                     type="button"
                     style={{
                       cursor:
@@ -249,10 +249,9 @@ const Bookings = ({ accountType = null }) => {
                       : BookedSession.confirm}
                   </button>
                 )}
-
                 {status === BookedSession.confirmed && (
                   <button
-                    className={`btn btn-primary button-effect btn-sm ml-4`}
+                    className={`btn btn-primary button-effect btn-sm mr-2`}
                     type="button"
                     disabled={!isStartButtonEnabled}
                     style={{
@@ -272,7 +271,7 @@ const Bookings = ({ accountType = null }) => {
                   </button>
                 )}
                 <button
-                  className="btn btn-danger button-effect btn-sm ml-4 button-booking"
+                  className={`btn btn-danger button-effect btn-sm`}
                   type="button"
                   style={{
                     cursor:
@@ -303,7 +302,7 @@ const Bookings = ({ accountType = null }) => {
                 </button>
               </React.Fragment>
             )}
-          </div>
+          </React.Fragment>
         )}
       </React.Fragment>
     );
@@ -320,7 +319,7 @@ const Bookings = ({ accountType = null }) => {
   ) => {
     return (
       <React.Fragment>
-        {isMeetingDone && <h3>Completed</h3>}
+        {isMeetingDone && <h3 className="mt-1">Completed</h3>}
         {!isCurrentDateBefore &&
         status === BookedSession.confirmed &&
         !isStartButtonEnabled &&
@@ -346,7 +345,7 @@ const Bookings = ({ accountType = null }) => {
                   <React.Fragment>
                     {status === BookedSession.booked ? (
                       <button
-                        className="btn btn-dark button-effect btn-sm"
+                        className="btn btn-dark button-effect btn-sm mr-4"
                         type="button"
                         style={{
                           cursor:
@@ -358,7 +357,7 @@ const Bookings = ({ accountType = null }) => {
                       </button>
                     ) : (
                       <button
-                        className="btn btn-primary button-effect btn-sm btnbook"
+                        className="btn btn-primary button-effect btn-sm mr-4"
                         type="button"
                         style={{
                           cursor:
@@ -373,7 +372,7 @@ const Bookings = ({ accountType = null }) => {
                 )}
                 {status === BookedSession.confirmed && (
                   <button
-                    className="btn btn-primary button-effect btn-sm ml-4 mt-2 mt-md-0"
+                    className="btn btn-primary button-effect btn-sm mr-4"
                     type="button"
                     disabled={!isStartButtonEnabled}
                     style={{
@@ -392,9 +391,8 @@ const Bookings = ({ accountType = null }) => {
                     {BookedSession.start}
                   </button>
                 )}
-
                 <button
-                  className="btn btn-danger button-effect btn-sm ml-4 btnbook"
+                  className="btn btn-danger button-effect btn-sm"
                   type="button"
                   style={{
                     cursor:
@@ -499,7 +497,7 @@ const Bookings = ({ accountType = null }) => {
           </div>
           <div className="card-footer">
             <div className="row">
-              <div className="col-6">
+              <div className="col-11">
                 {showRatingLabel(bookingInfo.ratings)}
               </div>
               <div className="col-12 col-lg-auto ml-lg-auto">
@@ -619,61 +617,39 @@ const Bookings = ({ accountType = null }) => {
     <React.Fragment>
       <div className="card rounded">
         <div className="card-body">
-          {/* <div className="row">
-            <div className="col-12 col-mb-2 col-sm-6 col-sm-mb-2 col-md-8 col-lg-12 col-xl-12">
-              <div className="col-12"> */}
-
-          {/* <nav>
-                <div className="nav nav-tabs " id="nav-tab" role="tablist">
-                  {bookingButton?.map((tab, index) => {
-                    return (
-                      <button key={`booking-tab${index}`} aria-selected={tab} onClick={() => handelBookingButton(tab)}
-                      className={`${tab === tabBook ? `border border-primary custom-border-bottm` : ''} 
-                      nav-link text-primary text-capitalize book-tabs custom-border`}
-                      id={tab}
-                      data-bs-toggle="tab" data-bs-target={`#${tab}`} type="button" role="tab" aria-controls="nav-home">
-                        {tab}
-                      </button>
-                    );
-                  })}
-                </div>
-              </nav> */}
-          <div>
-            <Nav tabs>
-              {bookingButton.map((tabName, index) => {
-                return (
-                  <NavItem key={`bookings_tabs${index}`}>
-                    <NavLink
-                      className={`${classnames({
-                        active: activeTabs === tabName,
-                      })} ${
-                        activeTabs === tabName ? "text-primary" : "text-dark"
-                      } text-capitalize`}
-                      onClick={() => {
-                        toggle1(tabName);
-                        setTabBook(tabName);
-                      }}
-                      style={{ fontSize: "13px" }}
-                    >
-                      {tabName}
-                    </NavLink>
-                  </NavItem>
-                );
-              })}
-            </Nav>
-
-            <TabContent activeTab={activeTabs}>
-              <TabPane tabId={tabBook}>
-                {!scheduledMeetingDetails.length ? (
-                  <h2 className="mb-2 mt-4 d-flex justify-content-center">
-                    No {tabBook} sessions
-                  </h2>
-                ) : (
-                  Bookings()
-                )}
-              </TabPane>
-            </TabContent>
-          </div>
+          <Nav tabs>
+            {bookingButton.map((tabName, index) => {
+              return (
+                <NavItem key={`bookings_tabs${index}`}>
+                  <NavLink
+                    className={`${classnames({
+                      active: activeTabs === tabName,
+                    })} ${
+                      activeTabs === tabName ? "text-primary" : "text-dark"
+                    } text-capitalize`}
+                    onClick={() => {
+                      toggle1(tabName);
+                      setTabBook(tabName);
+                    }}
+                    style={{ fontSize: "13px" }}
+                  >
+                    {tabName}
+                  </NavLink>
+                </NavItem>
+              );
+            })}
+          </Nav>
+          <TabContent activeTab={activeTabs}>
+            <TabPane tabId={tabBook}>
+              {!scheduledMeetingDetails.length ? (
+                <h2 className="mb-2 mt-4 d-flex justify-content-center">
+                  No {tabBook} sessions
+                </h2>
+              ) : (
+                Bookings()
+              )}
+            </TabPane>
+          </TabContent>
         </div>
       </div>
     </React.Fragment>

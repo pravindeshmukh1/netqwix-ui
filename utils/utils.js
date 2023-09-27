@@ -110,6 +110,12 @@ export class Utils {
     return moment(newDate).format("YYYY-MM-DD");
   };
 
+  static convertDate = (inputDate) => {
+    const parsedDate = moment(inputDate);
+    const outputFormat = "DD-MMM-YYYY";
+    return parsedDate.format(outputFormat);
+  };
+
   static convertToAmPm = (timeString) => {
     const [hours, minutes] = timeString.split(":");
     let formattedHours = parseInt(hours, 10);

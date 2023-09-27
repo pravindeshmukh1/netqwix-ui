@@ -776,3 +776,12 @@ slick-slider .slick-list,
   align-items: center;
   margin-top: 0px;
 }
+
+// trainer-profile-review card
+
+.reviews {
+  min-height: 26vh !important;
+  @media (max-width: 576px) {
+    min-height: 32vh !important;
+  }
+}
