@@ -86,13 +86,24 @@ const Bookings = ({ accountType = null }) => {
   }, [tabBook]);
 
   useEffect(() => {
-    if (bookedSession.id) {
+    if (accountType === AccountType.TRAINER) {
+      if (bookedSession.id) {
+        const updatePayload = {
+          id: bookedSession.id,
+          booked_status: bookedSession.booked_status,
+        };
+        const payload = {
+          status: tabBook,
+          updatePayload,
+        };
+        dispatch(updateBookedSessionScheduledMeetingAsync(payload));
+      }
+    } else {
       const updatePayload = {
         id: bookedSession.id,
         booked_status: bookedSession.booked_status,
       };
       const payload = {
-        status: tabBook,
         updatePayload,
       };
       dispatch(updateBookedSessionScheduledMeetingAsync(payload));
@@ -176,8 +187,25 @@ const Bookings = ({ accountType = null }) => {
     isMeetingDone
   ) => {
     return (
-      <div>
-        {isMeetingDone && <h3>Completed</h3>}
+      <React.Fragment>
+        {status !== BookedSession.canceled && isMeetingDone && (
+          <h3>Completed</h3>
+        )}
+        {status === BookedSession.canceled && isMeetingDone && (
+          <button
+            className="btn btn-danger button-effect btn-sm ml-4 button-booking"
+            type="button"
+            style={{
+              cursor:
+                status === BookedSession.canceled ? "not-allowed" : "pointer",
+            }}
+            disabled={status === BookedSession.canceled}
+          >
+            {status === BookedSession.canceled
+              ? BookedSession.canceled
+              : "Cancel"}
+          </button>
+        )}
         {!isCurrentDateBefore &&
         status === BookedSession.confirmed &&
         !isStartButtonEnabled &&
@@ -198,7 +226,7 @@ const Bookings = ({ accountType = null }) => {
         ) : (
           <div className="d-flex small-screen">
             {!isMeetingDone && (
-              <>
+              <React.Fragment>
                 {status !== BookedSession.canceled && (
                   <button
                     className={`btn btn-primary button-effect btn-sm`}
@@ -243,7 +271,6 @@ const Bookings = ({ accountType = null }) => {
                     {BookedSession.start}
                   </button>
                 )}
-
                 <button
                   className="btn btn-danger button-effect btn-sm ml-4 button-booking"
                   type="button"
@@ -274,11 +301,11 @@ const Bookings = ({ accountType = null }) => {
                     ? BookedSession.canceled
                     : "Cancel"}
                 </button>
-              </>
+              </React.Fragment>
             )}
           </div>
         )}
-      </div>
+      </React.Fragment>
     );
   };
 
@@ -292,7 +319,7 @@ const Bookings = ({ accountType = null }) => {
     isMeetingDone
   ) => {
     return (
-      <div>
+      <React.Fragment>
         {isMeetingDone && <h3>Completed</h3>}
         {!isCurrentDateBefore &&
         status === BookedSession.confirmed &&
@@ -312,92 +339,95 @@ const Bookings = ({ accountType = null }) => {
             Rating
           </button>
         ) : (
-          !isMeetingDone && (
-            <div>
-              {status !== BookedSession.canceled && (
-                <>
-                  {status === BookedSession.booked ? (
-                    <button
-                      className={`btn btn-dark button-effect btn-sm`}
-                      type="button"
-                      style={{
-                        cursor:
-                          status === BookedSession.booked && "not-allowed",
-                      }}
-                      disabled={status === BookedSession.booked}
-                    >
-                      {BookedSession.booked}
-                    </button>
-                  ) : (
-                    <button
-                      className={`btn btn-primary button-effect btn-sm`}
-                      type="button"
-                      style={{
-                        cursor:
-                          status === BookedSession.confirmed && "not-allowed",
-                      }}
-                      disabled={status === BookedSession.confirmed}
-                    >
-                      {BookedSession.confirmed}
-                    </button>
-                  )}
-                </>
-              )}
-              {status === BookedSession.confirmed && (
+          <React.Fragment>
+            {!isMeetingDone && (
+              <React.Fragment>
+                {status !== BookedSession.canceled && (
+                  <React.Fragment>
+                    {status === BookedSession.booked ? (
+                      <button
+                        className="btn btn-dark button-effect btn-sm"
+                        type="button"
+                        style={{
+                          cursor:
+                            status === BookedSession.booked && "not-allowed",
+                        }}
+                        disabled={status === BookedSession.booked}
+                      >
+                        {BookedSession.booked}
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-primary button-effect btn-sm btnbook"
+                        type="button"
+                        style={{
+                          cursor:
+                            status === BookedSession.confirmed && "not-allowed",
+                        }}
+                        disabled={status === BookedSession.confirmed}
+                      >
+                        {BookedSession.confirmed}
+                      </button>
+                    )}
+                  </React.Fragment>
+                )}
+                {status === BookedSession.confirmed && (
+                  <button
+                    className="btn btn-primary button-effect btn-sm ml-4 mt-2 mt-md-0"
+                    type="button"
+                    disabled={!isStartButtonEnabled}
+                    style={{
+                      cursor: !isStartButtonEnabled ? "not-allowed" : "pointer",
+                    }}
+                    onClick={() => {
+                      setStartMeeting({
+                        ...startMeeting,
+                        id: _id,
+                        isOpenModal: true,
+                        traineeInfo: trainee_info,
+                        trainerInfo: trainer_info,
+                      });
+                    }}
+                  >
+                    {BookedSession.start}
+                  </button>
+                )}
+
                 <button
-                  className={`btn btn-primary button-effect btn-sm ml-4`}
+                  className="btn btn-danger button-effect btn-sm ml-4 btnbook"
                   type="button"
-                  disabled={!isStartButtonEnabled}
                   style={{
-                    cursor: !isStartButtonEnabled ? "not-allowed" : "pointer",
+                    cursor:
+                      status === BookedSession.canceled || isStartButtonEnabled
+                        ? "not-allowed"
+                        : "pointer",
                   }}
+                  disabled={
+                    status === BookedSession.canceled || isStartButtonEnabled
+                  }
                   onClick={() => {
-                    setStartMeeting({
-                      ...startMeeting,
-                      id: _id,
-                      isOpenModal: true,
-                      traineeInfo: trainee_info,
-                      trainerInfo: trainer_info,
-                    });
+                    if (
+                      !isStartButtonEnabled &&
+                      (status === BookedSession.booked ||
+                        status === BookedSession.confirmed)
+                    ) {
+                      setBookedSession({
+                        ...bookedSession,
+                        id: _id,
+                        booked_status: BookedSession.canceled,
+                      });
+                    }
                   }}
                 >
-                  {BookedSession.start}
+                  {status === BookedSession.canceled
+                    ? BookedSession.canceled
+                    : "Cancel"}
                 </button>
-              )}
-              <button
-                className="btn btn-danger button-effect btn-sm ml-4 btnbook"
-                type="button"
-                style={{
-                  cursor:
-                    status === BookedSession.canceled || isStartButtonEnabled
-                      ? "not-allowed"
-                      : "pointer",
-                }}
-                disabled={
-                  status === BookedSession.canceled || isStartButtonEnabled
-                }
-                onClick={() => {
-                  if (
-                    !isStartButtonEnabled &&
-                    (status === BookedSession.booked ||
-                      status === BookedSession.confirmed)
-                  ) {
-                    setBookedSession({
-                      ...bookedSession,
-                      id: _id,
-                      booked_status: BookedSession.canceled,
-                    });
-                  }
-                }}
-              >
-                {status === BookedSession.canceled
-                  ? BookedSession.canceled
-                  : "Cancel"}
-              </button>
-            </div>
-          )
+              </React.Fragment>
+            )}
+          </React.Fragment>
         )}
-      </div>
+      </React.Fragment>
     );
   };
 
@@ -417,9 +447,7 @@ const Bookings = ({ accountType = null }) => {
         <Star color="#FFC436" size={28} className="star-container star-svg" />{" "}
         to this {accountType?.toLowerCase()}.
       </div>
-    ) : (
-      <></>
-    );
+    ) : null;
   };
 
   const Bookings = () =>
@@ -469,14 +497,12 @@ const Bookings = ({ accountType = null }) => {
               </div>
             </div>
           </div>
-
           <div className="card-footer">
             <div className="row">
               <div className="col-6">
                 {showRatingLabel(bookingInfo.ratings)}
               </div>
-              {/* <div className="col-6 d-flex justify-content-end"> */}
-              <div className="col-12 d-flex justify-content-end  ">
+              <div className="col-12 col-lg-auto ml-lg-auto">
                 {renderBooking(
                   status,
                   booking_index,
