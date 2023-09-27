@@ -68,7 +68,7 @@ export const weekDays = [
   "sunday",
 ];
 
-export const bookingButton = ["upcoming", "confirmed", "canceled", "completed"];
+export const bookingButton = ["upcoming", "canceled", "completed"];
 export const debouncedConfigs = {
   oneSec: 1000,
   towSec: 2000,
