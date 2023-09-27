@@ -517,6 +517,11 @@ slick-slider .slick-list,
 
 .custom-block-height {
   height: 180vh !important;
+  @media (max-width: 576px) {
+    overflow-y: auto !important;
+    scroll-behavior: smooth !important;
+    top: 95px !important;
+  }
 }
 
 // dashboard logo image width & height
@@ -663,7 +668,7 @@ slick-slider .slick-list,
     width: 100vw !important;
     left: 0% !important;
     overflow-x: hidden !important;
-    overflow-y: hidden !important;
+    overflow-y: auto !important;
   }
 
   .category-content {
@@ -783,5 +788,21 @@ slick-slider .slick-list,
   min-height: 26vh !important;
   @media (max-width: 576px) {
     min-height: 32vh !important;
+  }
+}
+
+// profile-picture
+.profile_picture {
+  @media (max-width: 576px) {
+    margin-top: 18px !important;
+    min-height: 114px !important;
+    min-width: 102px !important;
+  }
+}
+
+//  btn_cancel
+.btn_cancel {
+  @media (max-width: 576px) {
+    margin-top: 12px;
   }
 }

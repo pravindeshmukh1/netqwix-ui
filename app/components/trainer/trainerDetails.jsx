@@ -465,11 +465,11 @@ const TrainerInfo = ({
               }
               width={100}
               style={{
-                marginTop: "19.2px",
+                marginTop: "15px",
                 minHeight: "120px",
-                minWidth: "80px",
+                minWidth: "110px",
               }}
-              className="img-fluid rounded"
+              className="img-fluid rounded profile_picture"
               alt="profile-picture"
             />
           </div>
@@ -555,9 +555,7 @@ const TrainerInfo = ({
         <div className="mt-3">{element}</div>
         {hasRatings && (
           <div>
-            <h2 className="mb-3 booking-text  tag-name">
-              Reviews
-            </h2>
+            <h2 className="mb-3 booking-text  tag-name">Reviews</h2>
             <div className="ml-lg-n4">
               <ReviewCard trainer={trainer} />
             </div>

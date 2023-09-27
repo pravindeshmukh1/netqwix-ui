@@ -106,15 +106,15 @@ const SearchableDropdown = ({
                     {/* {(option)} */}
                     {option.isCategory ? (
                       <div className="row m-0 option-item">
-                        <div className="col-10 ">{option.name}</div>
-                        <div className="col-2 ">
+                        <div className="col-6 col-lg-10">{option.name}</div>
+                        <div className="col-2">
                           {" "}
                           <b> Category </b>{" "}
                         </div>
                       </div>
                     ) : (
                       <div className="row m-0 option-item">
-                        <div className="col-10 ">{option.name}</div>
+                        <div className="col-6 col-lg-10">{option.name}</div>
                         <div className="col-2 ">
                           {" "}
                           <b> Trainer </b>{" "}
