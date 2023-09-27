@@ -229,7 +229,7 @@ const Bookings = ({ accountType = null }) => {
               <React.Fragment>
                 {status !== BookedSession.canceled && (
                   <button
-                    className={`btn btn-primary button-effect btn-sm mr-2`}
+                    className={`btn btn-primary button-effect btn-sm mr-2 btn_cancel`}
                     type="button"
                     style={{
                       cursor:
@@ -251,7 +251,7 @@ const Bookings = ({ accountType = null }) => {
                 )}
                 {status === BookedSession.confirmed && (
                   <button
-                    className={`btn btn-primary button-effect btn-sm mr-2`}
+                    className={`btn btn-primary button-effect btn-sm mr-2 btn_cancel`}
                     type="button"
                     disabled={!isStartButtonEnabled}
                     style={{
@@ -271,7 +271,7 @@ const Bookings = ({ accountType = null }) => {
                   </button>
                 )}
                 <button
-                  className={`btn btn-danger button-effect btn-sm`}
+                  className={`btn btn-danger button-effect btn-sm btn_cancel`}
                   type="button"
                   style={{
                     cursor:
@@ -345,7 +345,7 @@ const Bookings = ({ accountType = null }) => {
                   <React.Fragment>
                     {status === BookedSession.booked ? (
                       <button
-                        className="btn btn-dark button-effect btn-sm mr-4"
+                        className="btn btn-dark button-effect btn-sm mr-4 btn_cancel"
                         type="button"
                         style={{
                           cursor:
@@ -392,7 +392,7 @@ const Bookings = ({ accountType = null }) => {
                   </button>
                 )}
                 <button
-                  className="btn btn-danger button-effect btn-sm"
+                  className="btn btn-danger button-effect btn-sm btn_cancel"
                   type="button"
                   style={{
                     cursor:
