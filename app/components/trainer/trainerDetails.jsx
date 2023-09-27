@@ -347,8 +347,8 @@ const SelectedCategory = ({
                         </h4>
                         <div>
                           {data &&
-                          data.extraInfo &&
-                          data.extraInfo.social_media_links ? (
+                          data?.extraInfo &&
+                          data?.extraInfo?.social_media_links ? (
                             <SocialMediaIcons
                               profileImageURL={
                                 data &&
@@ -415,10 +415,10 @@ const TrainerInfo = ({
     if (trainer && trainer.extraInfo) {
       setAccordionsData((prev) => ({
         prev,
-        teaching_style: trainer.extraInfo.teaching_style,
+        teaching_style: trainer?.extraInfo?.teaching_style,
         credentials_and_affiliations:
-          trainer.extraInfo.credentials_and_affiliations,
-        curriculum: trainer.extraInfo.curriculum,
+          trainer?.extraInfo?.credentials_and_affiliations,
+        curriculum: trainer?.extraInfo?.curriculum,
       }));
     } else {
       setAccordionsData((prev) => ({
@@ -431,8 +431,8 @@ const TrainerInfo = ({
   }, [trainer]);
   const revampedMedia =
     trainer &&
-    trainer.extraInfo &&
-    trainer.extraInfo.media.map((data, index) => {
+    trainer?.extraInfo &&
+    trainer?.extraInfo?.media?.map((data, index) => {
       const { url, description, title, type, thumbnail = "" } = data;
       return {
         original: url,
@@ -482,24 +482,24 @@ const TrainerInfo = ({
               {trainer?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD}
             </h3>
             {showRatings(
-              trainer && trainer.trainer_ratings,
+              trainer && trainer?.trainer_ratings,
               "mt-3 mb-3 d-flex"
             )}
             {trainer &&
-            trainer.extraInfo &&
-            trainer.extraInfo.media &&
-            trainer.extraInfo.social_media_links ? (
+            trainer?.extraInfo &&
+            trainer?.extraInfo?.media &&
+            trainer?.extraInfo?.social_media_links ? (
               <SocialMediaIcons
                 profileImageURL={
                   trainer &&
-                  trainer.extraInfo &&
-                  trainer.extraInfo.social_media_links &&
-                  trainer.extraInfo.social_media_links.profile_image_url
+                  trainer?.extraInfo &&
+                  trainer?.extraInfo?.social_media_links &&
+                  trainer?.extraInfo?.social_media_links?.profile_image_url
                 }
                 social_media_links={
                   trainer &&
-                  trainer.extraInfo &&
-                  trainer.extraInfo.social_media_links
+                  trainer?.extraInfo &&
+                  trainer?.extraInfo?.social_media_links
                 }
                 isvisible={false}
               />
@@ -541,11 +541,11 @@ const TrainerInfo = ({
       </div>
       <div className="col-md-6">
         <h2 className="mb-4 tag-name booking-text">Featured content </h2>
-        {revampedMedia && revampedMedia.length ? (
+        {revampedMedia && revampedMedia?.length ? (
           <ImageVideoThumbnailCarousel
             media={revampedMedia}
             originalMedia={
-              trainer && trainer.extraInfo && trainer.extraInfo.media
+              trainer && trainer?.extraInfo && trainer?.extraInfo?.media
             }
           />
         ) : (

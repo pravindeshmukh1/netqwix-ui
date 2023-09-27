@@ -616,25 +616,22 @@ const Bookings = ({ accountType = null }) => {
             <Nav tabs>
               {bookingButton.map((tabName, index) => {
                 return (
-                  <>
-                    <NavItem>
-                      <NavLink
-                        ey={`booking-tab${index}`}
-                        className={`${classnames({
-                          active: activeTabs === tabName,
-                        })} ${
-                          activeTabs === tabName ? "text-primary" : "text-dark"
-                        } text-capitalize`}
-                        onClick={() => {
-                          toggle1(tabName);
-                          setTabBook(tabName);
-                        }}
-                        style={{ fontSize: "13px" }}
-                      >
-                        {tabName}
-                      </NavLink>
-                    </NavItem>
-                  </>
+                  <NavItem key={`bookings_tabs${index}`}>
+                    <NavLink
+                      className={`${classnames({
+                        active: activeTabs === tabName,
+                      })} ${
+                        activeTabs === tabName ? "text-primary" : "text-dark"
+                      } text-capitalize`}
+                      onClick={() => {
+                        toggle1(tabName);
+                        setTabBook(tabName);
+                      }}
+                      style={{ fontSize: "13px" }}
+                    >
+                      {tabName}
+                    </NavLink>
+                  </NavItem>
                 );
               })}
             </Nav>
@@ -652,15 +649,6 @@ const Bookings = ({ accountType = null }) => {
             </TabContent>
           </div>
         </div>
-        {/* <div className="tab-content" id="nav-tabContent">
-                {!scheduledMeetingDetails.length ?
-                  <h2 className="mt-5 d-flex justify-content-center">
-                    No {tabBook} sessions
-                  </h2> : (Bookings())}
-              </div> */}
-        {/* </div>
-          </div>
-         </div>  */}
       </div>
     </React.Fragment>
   );
