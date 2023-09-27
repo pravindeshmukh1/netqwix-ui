@@ -123,6 +123,7 @@
   width: 96%;
   height: 20px; /* Increased height to accommodate time labels */
   background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 20px;
   cursor: pointer; /* Ensure the range stays within the container */
   pointer-events: auto; /* Allow clicking on the range */
 }

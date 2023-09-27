@@ -251,7 +251,7 @@ export class Utils {
   }
 
   static getRatings = (ratings) => {
-    const validRatings = ratings.filter(
+    const validRatings = ratings?.filter(
       (rating) =>
         rating &&
         rating.ratings &&

@@ -15,15 +15,17 @@ const CustomRangePicker = ({
   const [time, setTime] = useState({});
 
   useEffect(() => {
-    const startTime = (startPosition / 100) * 1440;
-    const endTime = (endPosition / 100) * 1440;
+    const changeStartTime = (startPosition / 100) * (endTime - startTime);
+    const changeEndTime = (endPosition / 100) * (endTime - startTime);
     onChange({
-      startTime: Math.floor(startTime).toFixed(2),
-      endTime: Math.floor(endTime).toFixed(2),
+      startTime: convertMinutesToHour(+time.startTime + startTime),
+      endTime: convertMinutesToHour(
+        endTime - (endTime - startTime - +time.endTime)
+      ),
     });
     setTime({
-      startTime: Math.floor(startTime).toFixed(2),
-      endTime: Math.floor(endTime).toFixed(2),
+      startTime: Math.floor(changeStartTime).toFixed(2),
+      endTime: Math.floor(changeEndTime).toFixed(2),
     });
     for (const slot of availableSlots) {
       const slotStart =
@@ -32,7 +34,7 @@ const CustomRangePicker = ({
       const slotEnd =
         parseInt(slot.end_time.split(":")[0]) * 60 +
         parseInt(slot.end_time.split(":")[1]);
-      if (startTime < slotEnd && endTime > slotStart) {
+      if (changeStartTime < slotEnd && changeEndTime > slotStart) {
         setIsSlotAvailable(false);
         return;
       }
@@ -64,14 +66,14 @@ const CustomRangePicker = ({
     }
   };
 
-  function convertMinutesToHour(minutes) {
+  const convertMinutesToHour = (minutes) => {
     const hours = Math.floor(minutes / 60);
     const minutesPart = minutes % 60;
     const formattedHour = `${hours.toString().padStart(2, "0")}:${minutesPart
       .toString()
       .padStart(2, "0")}`;
     return formattedHour;
-  }
+  };
 
   const handleMouseUp = () => {
     setDraggingStart(false);
@@ -122,9 +124,14 @@ const CustomRangePicker = ({
         ))}
       </div>
       <div className="mt-3">
-        <span>Start Time : {convertMinutesToHour(time.startTime)}</span>
+        <span>
+          Time Start Time : {convertMinutesToHour(+time.startTime + startTime)}
+        </span>
         <span className="ml-2">
-          End Time : {convertMinutesToHour(time.endTime)}
+          End Time:{" "}
+          {convertMinutesToHour(
+            endTime - (endTime - startTime - +time.endTime)
+          )}
         </span>
       </div>
     </React.Fragment>
