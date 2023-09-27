@@ -556,7 +556,7 @@ const TrainerInfo = ({
         {hasRatings && (
           <div>
             <h2 className="mb-3 booking-text  tag-name">
-              Reviews of lessons with{" "}
+              Reviews
             </h2>
             <div className="ml-lg-n4">
               <ReviewCard trainer={trainer} />
