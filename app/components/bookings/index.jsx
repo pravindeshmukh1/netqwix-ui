@@ -86,29 +86,19 @@ const Bookings = ({ accountType = null }) => {
   }, [tabBook]);
 
   useEffect(() => {
-    if (accountType === AccountType.TRAINER) {
-      if (bookedSession.id) {
-        const updatePayload = {
-          id: bookedSession.id,
-          booked_status: bookedSession.booked_status,
-        };
-        const payload = {
-          status: tabBook,
-          updatePayload,
-        };
-        dispatch(updateBookedSessionScheduledMeetingAsync(payload));
-      }
-    } else {
+    if (bookedSession.id) {
       const updatePayload = {
         id: bookedSession.id,
         booked_status: bookedSession.booked_status,
       };
       const payload = {
-        updatePayload,
+        ...(accountType === AccountType.TRAINER
+          ? { status: tabBook, updatePayload }
+          : { updatePayload }),
       };
       dispatch(updateBookedSessionScheduledMeetingAsync(payload));
     }
-  }, [bookedSession]);
+  }, [bookedSession, accountType, tabBook]);
 
   const toggle = () => setStartMeeting(!startMeeting);
 
@@ -134,7 +124,8 @@ const Bookings = ({ accountType = null }) => {
     session_end_time,
     _id,
     trainee_info,
-    trainer_info
+    trainer_info,
+    ratings
   ) => {
     const availabilityInfo = Utils.meetingAvailability(
       booked_date,
@@ -145,6 +136,7 @@ const Bookings = ({ accountType = null }) => {
       isStartButtonEnabled,
       has24HoursPassedSinceBooking,
       isCurrentDateBefore,
+      isUpcomingSession,
     } = availabilityInfo;
 
     const isMeetingDone =
@@ -160,7 +152,9 @@ const Bookings = ({ accountType = null }) => {
           trainer_info,
           isCurrentDateBefore,
           isStartButtonEnabled,
-          isMeetingDone
+          isMeetingDone,
+          isUpcomingSession,
+          ratings
         );
       case AccountType.TRAINEE:
         return TraineeRenderBooking(
@@ -170,7 +164,10 @@ const Bookings = ({ accountType = null }) => {
           trainer_info,
           isCurrentDateBefore,
           isStartButtonEnabled,
-          isMeetingDone
+          isMeetingDone,
+          isUpcomingSession,
+          ratings,
+          booking_index
         );
       default:
         break;
@@ -184,7 +181,8 @@ const Bookings = ({ accountType = null }) => {
     trainer_info,
     isCurrentDateBefore,
     isStartButtonEnabled,
-    isMeetingDone
+    isMeetingDone,
+    isUpcomingSession
   ) => {
     return (
       <React.Fragment>
@@ -206,7 +204,8 @@ const Bookings = ({ accountType = null }) => {
               : "Cancel"}
           </button>
         )}
-        {!isCurrentDateBefore &&
+        {!isUpcomingSession &&
+        !isCurrentDateBefore &&
         status === BookedSession.confirmed &&
         !isStartButtonEnabled &&
         !isMeetingDone ? (
@@ -217,6 +216,7 @@ const Bookings = ({ accountType = null }) => {
               const payload = {
                 _id,
                 isOpen: true,
+                booking_id: _id,
               };
               handleAddRatingModelState(payload);
             }}
@@ -315,15 +315,22 @@ const Bookings = ({ accountType = null }) => {
     trainer_info,
     isCurrentDateBefore,
     isStartButtonEnabled,
-    isMeetingDone
+    isMeetingDone,
+    isUpcomingSession,
+    ratings,
+    booking_index
   ) => {
     return (
       <React.Fragment>
-        {isMeetingDone && <h3 className="mt-1">Completed</h3>}
-        {!isCurrentDateBefore &&
-        status === BookedSession.confirmed &&
-        !isStartButtonEnabled &&
-        !isMeetingDone ? (
+        {ratings?.trainee || isMeetingDone ? (
+          <h3 className="mt-1">Completed</h3>
+        ) : null}
+        {!ratings?.trainee &&
+        !isMeetingDone &&
+        status !== BookedSession.booked &&
+        !isUpcomingSession &&
+        !isCurrentDateBefore &&
+        !isStartButtonEnabled ? (
           <button
             className={`btn btn-success button-effect btn-sm mr-4`}
             type="button"
@@ -458,6 +465,7 @@ const Bookings = ({ accountType = null }) => {
         session_start_time,
         session_end_time,
         status,
+        ratings,
       } = bookingInfo;
       return (
         <div
@@ -497,9 +505,7 @@ const Bookings = ({ accountType = null }) => {
           </div>
           <div className="card-footer">
             <div className="row">
-              <div className="col-11">
-                {showRatingLabel(bookingInfo.ratings)}
-              </div>
+              <div className="col-11">{showRatingLabel(ratings)}</div>
               <div className="col-12 col-lg-auto ml-lg-auto">
                 {renderBooking(
                   status,
@@ -509,7 +515,8 @@ const Bookings = ({ accountType = null }) => {
                   session_end_time,
                   _id,
                   trainee_info,
-                  trainer_info
+                  trainer_info,
+                  ratings
                 )}
               </div>
             </div>
@@ -534,6 +541,7 @@ const Bookings = ({ accountType = null }) => {
               };
               handleAddRatingModelState(payload);
             }}
+            tabBook={tabBook}
           />
         }
         isOpen={addRatingModel.isOpen}

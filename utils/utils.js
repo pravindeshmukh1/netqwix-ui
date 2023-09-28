@@ -69,7 +69,7 @@ export class Utils {
     const result = this.getNext7WorkingDays(date);
     return {
       weekDates,
-      weekDateFormatted
+      weekDateFormatted,
     };
   }
 
@@ -108,7 +108,7 @@ export class Utils {
 
     return {
       weekDates,
-      weekDateFormatted
+      weekDateFormatted,
     };
   }
 
@@ -196,18 +196,24 @@ export class Utils {
     );
   };
 
+  static isUpcomingSession = (bookedDate, sessionStartTime, sessionEndTime) => {
+    const currentDate = moment();
+    const bookedDateMoment = moment(bookedDate);
+    const sessionStartTimeMoment = moment(sessionStartTime, "h:mm A");
+    return (
+      bookedDateMoment.isSame(currentDate, "day") &&
+      currentDate.isBefore(sessionStartTimeMoment)
+    );
+  };
+
   static has24HoursPassedSinceBooking = (
     bookedDate,
     currentDate,
     currentFormattedTime,
     sessionEndTime
   ) => {
-    const {
-      YYYY_MM_DD
-    } = FormateDate;
-    const {
-      HH_MM
-    } = FormateHours;
+    const { YYYY_MM_DD } = FormateDate;
+    const { HH_MM } = FormateHours;
     const bookingEndTime = moment(
       `${bookedDate} ${sessionEndTime}`,
       `${YYYY_MM_DD} ${HH_MM}`
@@ -246,10 +252,16 @@ export class Utils {
       currentFormattedTime,
       sessionEndTime
     );
+    const isUpcomingSession = this.isUpcomingSession(
+      bookedDate,
+      sessionStartTime,
+      sessionEndTime
+    );
     return {
       isStartButtonEnabled,
       has24HoursPassedSinceBooking,
       isCurrentDateBefore,
+      isUpcomingSession,
     };
   };
 
@@ -264,10 +276,10 @@ export class Utils {
   static getRatings = (ratings) => {
     const validRatings = ratings?.filter(
       (rating) =>
-      rating &&
-      rating.ratings &&
-      rating.ratings.trainee &&
-      rating.ratings.trainee.recommendRating
+        rating &&
+        rating.ratings &&
+        rating.ratings.trainee &&
+        rating.ratings.trainee.recommendRating
     );
 
     if (validRatings && validRatings.length) {
@@ -354,8 +366,7 @@ export class Utils {
     }
 
     return true; // No time conflict
-  }
-
+  };
 
   static getPercentageForSlot = (startTime, endTime, fromTime, toTime) => {
     const [startHour, startMinute] = startTime.split(":").map(Number);
@@ -370,26 +381,37 @@ export class Utils {
 
     // Calculate the duration in minutes
     const durationInMinutes = endTimeInMinutes - startTimeInMinutes;
-    const startPos = (((startTimeInMinutes - rangeStartInMinutes) / (rangeEndInMinutes - rangeStartInMinutes)) * 100);
-    const endPos = (((endTimeInMinutes - rangeStartInMinutes) / (rangeEndInMinutes - rangeStartInMinutes)) * 100);
-    const v2 = (((endTimeInMinutes - rangeStartInMinutes) / (rangeEndInMinutes - rangeStartInMinutes)) * 100) + (((startTimeInMinutes - rangeStartInMinutes) / (rangeEndInMinutes - rangeStartInMinutes)) * 100);
+    const startPos =
+      ((startTimeInMinutes - rangeStartInMinutes) /
+        (rangeEndInMinutes - rangeStartInMinutes)) *
+      100;
+    const endPos =
+      ((endTimeInMinutes - rangeStartInMinutes) /
+        (rangeEndInMinutes - rangeStartInMinutes)) *
+      100;
+    const v2 =
+      ((endTimeInMinutes - rangeStartInMinutes) /
+        (rangeEndInMinutes - rangeStartInMinutes)) *
+        100 +
+      ((startTimeInMinutes - rangeStartInMinutes) /
+        (rangeEndInMinutes - rangeStartInMinutes)) *
+        100;
 
     // Calculate the percentage
-    const percentage = (durationInMinutes / (rangeEndInMinutes - rangeStartInMinutes)) * 100;
+    const percentage =
+      (durationInMinutes / (rangeEndInMinutes - rangeStartInMinutes)) * 100;
     return {
       startPos,
       endPos,
-      percentage
+      percentage,
     };
-  }
-
+  };
 
   static isValidTimeDuration = (fromTime, toTime, minTimeRequired) => {
     const [rangeStartHour, rangeStartMinute] = fromTime.split(":").map(Number);
     const [rangeEndHour, rangeEndMinute] = toTime.split(":").map(Number);
     const rangeStartInMinutes = rangeStartHour * 60 + rangeStartMinute;
     const rangeEndInMinutes = rangeEndHour * 60 + rangeEndMinute;
-    return (rangeEndInMinutes - rangeStartInMinutes ) > minTimeRequired;
-  }
-
+    return rangeEndInMinutes - rangeStartInMinutes > minTimeRequired;
+  };
 }
