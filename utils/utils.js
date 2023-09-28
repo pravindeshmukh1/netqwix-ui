@@ -320,4 +320,31 @@ export class Utils {
     const totalMinutes = hours * 60 + minutes;
     return totalMinutes;
   };
+
+  static isTimeRangeAvailable = (timeRanges, start_time, end_time) => {
+    for (const range of timeRanges) {
+      const rangeStartTime = new Date(`2000-01-01T${range.start_time}:00`);
+      const rangeEndTime = new Date(`2000-01-01T${range.end_time}:00`);
+      const inputStartTime = new Date(`2000-01-01T${start_time}:00`);
+      const inputEndTime = new Date(`2000-01-01T${end_time}:00`);
+  
+      // Check if the input start time is within the range
+      if (inputStartTime >= rangeStartTime && inputStartTime < rangeEndTime) {
+        return false; // Time conflict
+      }
+  
+      // Check if the input end time is within the range
+      if (inputEndTime > rangeStartTime && inputEndTime <= rangeEndTime) {
+        return false; // Time conflict
+      }
+
+      if (inputStartTime < rangeEndTime && inputEndTime > rangeStartTime) {
+        return false; // Time conflict
+      }
+    }
+  
+    return true; // No time conflict
+  }
 }
+  
+  

@@ -20,6 +20,7 @@ import {
   bookSessionAsync,
   createPaymentIntentAsync,
   getTraineeWithSlotsAsync,
+  traineeAction,
   traineeState,
 } from "../trainee.slice";
 import { Nav, NavItem, NavLink } from "reactstrap";
@@ -33,10 +34,10 @@ import { masterState } from "../../master/master.slice";
 import { TrainerDetails } from "../../trainer/trainerDetails";
 import { bookingsAction, bookingsState } from "../../common/common.slice";
 import { debounce } from "lodash";
-import { checkSlotAsync, commonState } from "../../../common/common.slice";
+import { checkSlotAsync, commonAction, commonState } from "../../../common/common.slice";
 import CustomRangePicker from "../../../common/timeRangeSlider";
 const { isSidebarToggleEnabled } = bookingsAction;
-
+const { removePaymentIntent } = traineeAction;
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
   const { status } = useAppSelector(traineeState);
@@ -124,6 +125,7 @@ const ScheduleTraining = () => {
       ...prev,
       userInfo: null,
     }));
+
   }, []);
 
   useEffect(() => {
@@ -158,12 +160,12 @@ const ScheduleTraining = () => {
         slotTime: {
           from: trainerInfo?.userInfo?.extraInfo?.working_hours
             ? Utils.getTimeFormate(
-                trainerInfo.userInfo.extraInfo.working_hours.from
+                trainerInfo.userInfo.extraInfo.working_hours?.from
               )
             : DefaultTimeRange.startTime,
           to: trainerInfo?.userInfo?.extraInfo?.working_hours
             ? Utils.getTimeFormate(
-                trainerInfo.userInfo.extraInfo.working_hours.to
+                trainerInfo.userInfo.extraInfo.working_hours?.to
               )
             : DefaultTimeRange.endTime,
         },
@@ -598,6 +600,7 @@ const ScheduleTraining = () => {
             aria-label="Close"
             onClick={() => {
               setShowTransactionModal(false);
+              dispatch(removePaymentIntent());
             }}
           >
             <X />
@@ -744,10 +747,10 @@ const ScheduleTraining = () => {
     const fromHours = from ? Utils.getTimeFormate(from) : null;
     const toHours = to ? Utils.getTimeFormate(to) : null;
     const formateStartTime = Utils.getTimeFormate(
-      trainerInfo?.userInfo?.extraInfo?.working_hours.from
+      trainerInfo?.userInfo?.extraInfo?.working_hours?.from
     );
     const formateEndTime = Utils.getTimeFormate(
-      trainerInfo?.userInfo?.extraInfo?.working_hours.to
+      trainerInfo?.userInfo?.extraInfo?.working_hours?.to
     );
     return (
       <React.Fragment>
@@ -856,7 +859,7 @@ const ScheduleTraining = () => {
                     <div className="col-12 mb-3 d-flex justify-content-center align-items-center">
                       <button
                         type="button"
-                        disabled={!isSlotAvailable}
+                        disabled={!Utils.isTimeRangeAvailable(availableSlots, timeRange.startTime, timeRange.endTime)}
                         className="mt-3 btn btn-sm btn-primary"
                         onClick={() => {
                           const amountPayable = Utils.getMinutesFromHourMM(

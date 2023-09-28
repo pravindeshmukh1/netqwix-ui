@@ -55,14 +55,14 @@ const CustomRangePicker = ({
   const handleDrag = (e) => {
     if (draggingStart) {
       const newPosition = calculateNewPosition(e.clientX);
-      if (newPosition <= endPosition - 10 && newPosition >= 0) {
+      if (newPosition <= endPosition - 3 && newPosition >= 0) {
         setStartPosition(newPosition);
       }
     }
 
     if (draggingEnd) {
       const newPosition = calculateNewPosition(e.clientX);
-      if (newPosition >= startPosition + 10 && newPosition <= 100) {
+      if (newPosition >= startPosition + 3 && newPosition <= 100) {
         setEndPosition(newPosition);
       }
     }
