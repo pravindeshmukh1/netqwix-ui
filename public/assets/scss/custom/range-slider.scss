@@ -120,10 +120,12 @@
 
 .custom-range-picker {
   position: relative;
-  width: 96%;
+  width: 100%;
   height: 20px; /* Increased height to accommodate time labels */
-  background-color: rgba(0, 0, 0, 0.03);
+  background-color: #198754;
+  //  rgba(0, 0, 0, 0.03);
   border-radius: 20px;
+  // border-radius: 20px 0px 0px 20px;
   // border: 1px solid gray;
   cursor: pointer; /* Ensure the range stays within the container */
   pointer-events: auto; /* Allow clicking on the range */
@@ -144,10 +146,10 @@
 
 .start-range {
   left: 0;
-  width: 21px;
+  width: 20px;
   border-radius: 30px;
   background-color: $primary-color;
-  cursor: ew-resize; /* Horizontal resize cursor for the start marker */
+  cursor: pointer; /* Horizontal resize cursor for the start marker */
 }
 
 .end-range {
@@ -162,7 +164,7 @@
   position: absolute;
   height: 100%;
   background-color: red;
-  opacity: 0.5;
+  opacity: 1;
   z-index: 0;
 }
 

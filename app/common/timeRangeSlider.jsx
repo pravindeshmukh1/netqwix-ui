@@ -61,33 +61,17 @@ const CustomRangePicker = ({
     setDraggingEnd (true);
   };
 
-  const getMosuePositionOnCanvas = (event) => {
-    if (
-        event.clientX ||
-        event.clientY ||
-        (event?.touches && event?.touches[0])
-    ) {
-        const clientX = event.clientX || event?.touches[0]?.clientX;
-        const clientY = event.clientY || event?.touches[0]?.clientY;
-        const { offsetLeft, offsetTop } = event.target;
-        const canvasX = clientX - offsetLeft;
-        const canvasY = clientY - offsetTop;
-        return { x: canvasX, y: canvasY };
-    }
-};
-
   const handleDrag = e => {
-    console.log(`eee `, e);
     if (draggingStart) {
       const newPosition = calculateNewPosition (e.clientX || e?.touches[0]?.clientX);
-      if (newPosition <= endPosition - 3 && newPosition >= 0) {
+      if (newPosition <= (endPosition - 1.5) && newPosition >= 0) {
         setStartPosition (newPosition);
       }
     }
 
     if (draggingEnd) {
       const newPosition = calculateNewPosition (e.clientX || e?.touches[0]?.clientX);
-      if (newPosition >= startPosition + 3 && newPosition <= 100) {
+      if (newPosition >= (startPosition + 1.5) && newPosition <= 100) {
         setEndPosition (newPosition);
       }
     }
@@ -130,13 +114,17 @@ const CustomRangePicker = ({
           onMouseDown={handleStartDrag}
           onTouchStart={handleStartDrag} // Handle touch events
         />
-        <div
-          className={'end-range'}
-          style={{left: `${endPosition}%`}}
+        <div 
+        onMouseDown={handleEndDrag}
+        onTouchStart={handleEndDrag}
+          className={'end-range-content'}
+        > 
+          <div    
+             style={{left: `${endPosition}%`}}         
           onMouseDown={handleEndDrag}
-          onTouchStart={handleEndDrag} // Handle touch events
-
-        />
+          onTouchStart={handleEndDrag}
+        className={'end-range'}/>
+        </div>
         {availableSlots.map ((slot, index) => { 
           const { startPos, endPos } = Utils.getPercentageForSlot(slot.start_time, slot.end_time, trainerHourlyRate.from, trainerHourlyRate.to);
           

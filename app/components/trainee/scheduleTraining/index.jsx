@@ -11,6 +11,7 @@ import {
   TRAINER_AMOUNT_USD,
   TimeRange,
   debouncedConfigs,
+  minimumMeetingDurationInMin,
   params,
   weekDays,
 } from "../../../common/constants";
@@ -869,23 +870,27 @@ const ScheduleTraining = () => {
                             trainerInfo?.userInfo?.extraInfo?.hourly_rate
                           );
                           if (amountPayable > 0) {
-                            const payload = {
-                              charging_price: amountPayable,
-                              trainer_id:
-                                trainerInfo?.userInfo?.trainer_id ||
-                                selectedTrainer?.trainer_id,
-                              trainer_info: trainerInfo || selectedTrainer.data,
-                              status: BookedSession.booked,
-                              booked_date: startDate,
-                              session_start_time: timeRange.startTime,
-                              session_end_time: timeRange.endTime,
-                            };
-                            setBookSessionPayload(payload);
-                            dispatch(
-                              createPaymentIntentAsync({
-                                amount: +amountPayable.toFixed(1),
-                              })
-                            );
+                            if(Utils.isValidTimeDuration(timeRange.startTime, timeRange.endTime, minimumMeetingDurationInMin)) {
+                              const payload = {
+                                charging_price: amountPayable,
+                                trainer_id:
+                                  trainerInfo?.userInfo?.trainer_id ||
+                                  selectedTrainer?.trainer_id,
+                                trainer_info: trainerInfo || selectedTrainer.data,
+                                status: BookedSession.booked,
+                                booked_date: startDate,
+                                session_start_time: timeRange.startTime,
+                                session_end_time: timeRange.endTime,
+                              };
+                              setBookSessionPayload(payload);
+                              dispatch(
+                                createPaymentIntentAsync({
+                                  amount: +amountPayable.toFixed(1),
+                                })
+                              );
+                            } else {
+                              toast.error(`Session duration must be greater then ${minimumMeetingDurationInMin} minutes...`);
+                            }
                           } else {
                             toast.error("Invalid slot timing...");
                           }
