@@ -1,19 +1,25 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Rating from "react-rating";
 import {
   AccountType,
+  BookedSession,
   Message,
+  STATUS,
   validationMessage,
 } from "../../../common/constants";
 import { X } from "react-feather";
-import { useAppDispatch } from "../../../store";
-import { addRatingAsync } from "../../common/common.slice";
+import { useAppDispatch, useAppSelector } from "../../../store";
+import {
+  addRatingAsync,
+  bookingsState,
+  updateBookedSessionScheduledMeetingAsync,
+} from "../../common/common.slice";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import { HandleErrorLabel } from "../../../common/error";
 import ColoredRating from "../../../common/rating";
 
-const Ratings = ({ onClose, booking_id, accountType }) => {
+const Ratings = ({ onClose, booking_id, accountType, tabBook }) => {
   const dispatch = useAppDispatch();
   const formRef = useRef(null);
 
@@ -33,15 +39,13 @@ const Ratings = ({ onClose, booking_id, accountType }) => {
     audioVideoRating: Yup.number()
       .nullable()
       .required(validationMessage.rating.audioVideoRating),
-    recommendRating:
-
-      Yup.number()
-        .when('accountType', ([type], schema) => {
-          if (type !== AccountType.TRAINER)
-            return Yup.number().nullable()
-              .required(validationMessage.rating.recommandRating);
-          return Yup.number().nullable().optional()
-        }),
+    recommendRating: Yup.number().when("accountType", ([type], schema) => {
+      if (type !== AccountType.TRAINER)
+        return Yup.number()
+          .nullable()
+          .required(validationMessage.rating.recommandRating);
+      return Yup.number().nullable().optional();
+    }),
     title: Yup.string().nullable().required(validationMessage.rating.title),
     remarksInfo: Yup.string()
       .nullable()
@@ -53,10 +57,22 @@ const Ratings = ({ onClose, booking_id, accountType }) => {
       innerRef={formRef}
       initialValues={initialValues}
       validationSchema={validationSchema}
-
       onSubmit={(values) => {
-        dispatch(addRatingAsync({...values, booking_id}));
-        console.info("values", values);
+        const updatePayload = {
+          id: booking_id,
+          booked_status: BookedSession.completed,
+        };
+        const commonPayload = {
+          ...values,
+          booking_id,
+        };
+        const payload = {
+          ...(accountType === AccountType.TRAINER
+            ? { status: tabBook, updatePayload }
+            : { updatePayload }),
+        };
+        dispatch(updateBookedSessionScheduledMeetingAsync(payload));
+        dispatch(addRatingAsync(commonPayload));
       }}
     >
       {({
@@ -98,7 +114,6 @@ const Ratings = ({ onClose, booking_id, accountType }) => {
                 <div className="col">
                   <ColoredRating
                     initialRating={values.sessionRating}
-
                     key={"sessionRating"}
                     onChange={(value) => {
                       setValues({ ...values, sessionRating: value });
@@ -110,9 +125,7 @@ const Ratings = ({ onClose, booking_id, accountType }) => {
                 <HandleErrorLabel
                   isError={errors.sessionRating}
                   isTouched={
-                    touched.sessionRating && errors.sessionRating
-                      ? true
-                      : false
+                    touched.sessionRating && errors.sessionRating ? true : false
                   }
                 />
               </div>
@@ -122,7 +135,6 @@ const Ratings = ({ onClose, booking_id, accountType }) => {
                   <ColoredRating
                     key={"audioVideoRating"}
                     initialRating={values.audioVideoRating}
-
                     onChange={(value) => {
                       setValues({ ...values, audioVideoRating: value });
                     }}
@@ -139,14 +151,17 @@ const Ratings = ({ onClose, booking_id, accountType }) => {
                   }
                 />
               </div>
-              {accountType === AccountType.TRAINER ? <></> :
+              {accountType === AccountType.TRAINER ? (
+                <></>
+              ) : (
                 <>
                   <div className="row mt-3 mb-3">
-                    <h4 className="col-8">How strongly would you like to recommend?</h4>
+                    <h4 className="col-8">
+                      How strongly would you like to recommend?
+                    </h4>
                     <div className="col">
                       <ColoredRating
                         initialRating={values.recommendRating}
-
                         key={"recommandRating"}
                         onChange={(value) => {
                           setValues({
@@ -161,15 +176,14 @@ const Ratings = ({ onClose, booking_id, accountType }) => {
                     <HandleErrorLabel
                       isError={errors.recommendRating}
                       isTouched={
-                        touched.recommendRating &&
-                          errors.recommendRating
+                        touched.recommendRating && errors.recommendRating
                           ? true
                           : false
                       }
                     />
                   </div>
                 </>
-              }
+              )}
               <div className="row">
                 <div className="col">
                   <div className="form-group">
@@ -195,27 +209,33 @@ const Ratings = ({ onClose, booking_id, accountType }) => {
               <div className="row mt-2">
                 <div className="col">
                   <div className="form-group">
-                    <textarea onChange={(event) => {
-                      const { value } = event.target;
-                      setValues({ ...values, remarksInfo: value });
-                    }}
+                    <textarea
+                      onChange={(event) => {
+                        const { value } = event.target;
+                        setValues({ ...values, remarksInfo: value });
+                      }}
                       value={values.remarksInfo}
                       placeholder="Add remarks"
-                      onBlur={handleBlur} className="form-control mt-1" name="" id="" cols="10" rows="4"></textarea>
+                      onBlur={handleBlur}
+                      className="form-control mt-1"
+                      name=""
+                      id=""
+                      cols="10"
+                      rows="4"
+                    ></textarea>
                   </div>
                 </div>
               </div>
               <div>
                 <HandleErrorLabel
                   isError={errors.remarksInfo}
-                  isTouched={touched.remarksInfo && errors.remarksInfo ? true : false}
+                  isTouched={
+                    touched.remarksInfo && errors.remarksInfo ? true : false
+                  }
                 />
               </div>
               <div className="d-flex justify-content-center mt-4">
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                >
+                <button type="submit" className="btn btn-primary">
                   Submit
                 </button>
               </div>
