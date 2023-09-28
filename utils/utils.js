@@ -9,6 +9,7 @@ import {
   meetingRatingTimeout,
   MAX_FILE_SIZE_MB,
   allowedExtensions,
+  minimumMeetingDurationInMin,
 } from "../app/common/constants";
 import moment from "moment";
 
@@ -362,9 +363,6 @@ export class Utils {
     const startTimeInMinutes = startHour * 60 + startMinute;
     const endTimeInMinutes = endHour * 60 + endMinute;
 
-    // Define the range of 10 to 20 hours in minutes
-    // const rangeStartInMinutes = fromHour * 60;
-    // const rangeEndInMinutes = toHour * 60;
     const [rangeStartHour, rangeStartMinute] = fromTime.split(":").map(Number);
     const [rangeEndHour, rangeEndMinute] = toTime.split(":").map(Number);
     const rangeStartInMinutes = rangeStartHour * 60 + rangeStartMinute;
@@ -384,4 +382,14 @@ export class Utils {
       percentage
     };
   }
+
+
+  static isValidTimeDuration = (fromTime, toTime, minTimeRequired) => {
+    const [rangeStartHour, rangeStartMinute] = fromTime.split(":").map(Number);
+    const [rangeEndHour, rangeEndMinute] = toTime.split(":").map(Number);
+    const rangeStartInMinutes = rangeStartHour * 60 + rangeStartMinute;
+    const rangeEndInMinutes = rangeEndHour * 60 + rangeEndMinute;
+    return (rangeEndInMinutes - rangeStartInMinutes ) > minTimeRequired;
+  }
+
 }

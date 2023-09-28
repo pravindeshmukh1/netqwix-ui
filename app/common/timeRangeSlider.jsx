@@ -77,17 +77,16 @@ const CustomRangePicker = ({
 };
 
   const handleDrag = e => {
-    console.log(`eee `, e);
     if (draggingStart) {
       const newPosition = calculateNewPosition (e.clientX || e?.touches[0]?.clientX);
-      if (newPosition <= endPosition - 3 && newPosition >= 0) {
+      if (newPosition <= (endPosition - 1.5) && newPosition >= 0) {
         setStartPosition (newPosition);
       }
     }
 
     if (draggingEnd) {
       const newPosition = calculateNewPosition (e.clientX || e?.touches[0]?.clientX);
-      if (newPosition >= startPosition + 3 && newPosition <= 100) {
+      if (newPosition >= (startPosition + 1.5) && newPosition <= 100) {
         setEndPosition (newPosition);
       }
     }
