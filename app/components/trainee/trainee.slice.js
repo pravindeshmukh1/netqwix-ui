@@ -78,6 +78,9 @@ export const traineeSlice = createSlice ({
     trainee: state => {
       return state;
     },
+    removePaymentIntent: (state, action) => {
+      state.transaction.intent = null;
+    },
   },
   extraReducers: builder => {
     builder
@@ -96,7 +99,7 @@ export const traineeSlice = createSlice ({
       })
       .addCase (bookSessionAsync.fulfilled, (state, action) => {
         state.status = 'fulfilled';
-        state.transaction.intent = {};
+        state.transaction.intent = null;
         const {data} = action.payload;
         toast.success (data.message);
 

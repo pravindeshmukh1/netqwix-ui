@@ -721,3 +721,5 @@ export const FIXED_ITEM = ["notification", "file", "setting"];
 export const MOBILE_SIZE = 576;
 
 export const TimeRange = { start: 0, end: 1440 };
+
+export const DefaultTimeRange = { startTime: "00:00", endTime: "24:00" };

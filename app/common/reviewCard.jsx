@@ -45,9 +45,9 @@ const ReviewCard = ({ trainer, isPublic = false }) => {
                   fractions={2}
                 />
                 <p className="mt-2">
-                  {Utils.convertDate(item.updatedAt)}
+                  {Utils.convertDate(item?.updatedAt)}
                 </p>
-                <p>{item.ratings.trainee.remarksInfo}</p>
+                <p>{item?.ratings?.trainee?.remarksInfo}</p>
               </div>
             </div>
           </React.Fragment>

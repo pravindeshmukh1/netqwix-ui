@@ -12,6 +12,7 @@ import moment from "moment";
 import StripeCard from "../../common/stripe/index";
 import { Input, Label, Nav, NavItem, NavLink } from "reactstrap";
 import {
+  DefaultTimeRange,
   FILTER_DEFAULT_CHECKED_ID,
   FILTER_TIME,
   Message,
@@ -63,6 +64,7 @@ const TrainersDetails = ({
   const [listOfTrainers, setListOfTrainers] = useState([]);
   const [isPopoverOpen, setIsPopoverOpen] = useState(null);
   const [bookSessionPayload, setBookSessionPayload] = useState({});
+  const [trainer, setTrainer] = useState({});
   const [timeRange, setTimeRange] = useState({
     startTime: "",
     endTime: "",
@@ -77,6 +79,7 @@ const TrainersDetails = ({
   const [trainerDetails, setTrainerDetails] = useState({
     _id: null,
     select_trainer: false,
+    trainer_id: null,
   });
   const [accordionsData, setAccordionsData] = useState({
     teaching_style: null,
@@ -184,9 +187,28 @@ const TrainersDetails = ({
             <DatePicker
               className=""
               style={{ fontSize: "14px" }}
-              // className="mt-1"
               minDate={moment().toDate()}
               onChange={(date) => {
+                const booked_date = Utils.getDateInFormat(date);
+                const payload = {
+                  trainer_id: trainerDetails.trainer_id || trainer.trainer_id,
+                  booked_date,
+                  slotTime: {
+                    from:
+                      Utils.getTimeFormate(
+                        trainer?.extraInfo?.working_hours?.from
+                      ) ||
+                      timeRange?.startTime ||
+                      DefaultTimeRange.startTime,
+                    to:
+                      Utils.getTimeFormate(
+                        trainer?.extraInfo?.working_hours?.to
+                      ) ||
+                      timeRange?.endTime ||
+                      DefaultTimeRange.endTime,
+                  },
+                };
+                dispatch(checkSlotAsync(payload));
                 setStartDate(date);
                 const todaySDate = Utils.getDateInFormat(date.toString());
                 const { weekDateFormatted, weekDates } =
@@ -300,30 +322,6 @@ const TrainersDetails = ({
                   <NavLink
                     style={{ background: "white" }}
                     onClick={() => {
-                      // const amountPayable = Utils.getMinutesFromHourMM(
-                      //   content.start_time,
-                      //   content.end_time
-                      // );
-                      // if (amountPayable > 0) {
-                      //   const payload = {
-                      //     charging_price: +amountPayable.toFixed(2),
-                      //     trainer_id: trainer_info.trainer_id,
-                      //     trainer_info,
-                      //     status: BookedSession.booked,
-                      //     booked_date: date,
-                      //     session_start_time: content.start_time,
-                      //     session_end_time: content.end_time,
-                      //   };
-                      //   setBookSessionPayload(payload);
-                      //   alert("h");
-                      //   dispatch(
-                      //     createPaymentIntentAsync({
-                      //       amount: +amountPayable.toFixed(2),
-                      //     })
-                      //   );
-                      // } else {
-                      //   toast.error("Invalid slot timing...");
-                      // }
                       handleSignInRedirect();
                     }}
                   >
@@ -707,6 +705,7 @@ const TrainersDetails = ({
             dispatch={dispatch}
             timeRange={timeRange}
             setTimeRange={setTimeRange}
+            setTrainer={setTrainer}
             availableSlots={availableSlots}
           />
         ) : (
@@ -745,6 +744,7 @@ const TrainerInfo = ({
   timeRange,
   setTimeRange,
   availableSlots,
+  setTrainer,
 }) => {
   const router = useRouter();
   const findTrainerDetails = () => {
@@ -791,11 +791,21 @@ const TrainerInfo = ({
     router.push({ pathname: routingPaths.signIn });
   };
   useEffect(() => {
+    setTrainer(trainer);
     if (trainer.trainer_id) {
       const payload = {
         booked_date: Utils.getDateInFormat(startDate),
         trainer_id: trainer.trainer_id,
-        slotTime: { from: timeRange.startTime, to: timeRange.endTime },
+        slotTime: {
+          from:
+            timeRange.startTime ||
+            trainer?.extraInfo?.working_hours?.from ||
+            DefaultTimeRange.startTime,
+          to:
+            timeRange.endTime ||
+            trainer?.extraInfo?.working_hours?.to ||
+            DefaultTimeRange.endTime,
+        },
       };
       dispatch(checkSlotAsync(payload));
     }
@@ -936,7 +946,6 @@ const TrainerInfo = ({
         <h2 className="tag-name booking-text">Book session</h2>
         {datePicker}
         <div className="row">
-          {/* <div className="col-10 col-sm-10 col-md-10 col-lg-6 mt-4"> */}
           <span style={{ fontSize: "13px" }} className="ml-3 mt-1">
             Session Duration :{" "}
           </span>
@@ -963,17 +972,17 @@ const TrainerInfo = ({
                   : TimeRange.end
               }
               onChange={(time) => {
-                const startTime = Utils.convertMinutesToHour(time.startTime);
-                const endTime = Utils.convertMinutesToHour(time.endTime);
-                setTimeRange({ ...timeRange, startTime, endTime });
-                if (startTime && endTime) {
+                const startTime = time.startTime;
+                const endTime = time.endTime;
+                if (startTime !== undefined && endTime !== undefined) {
                   const payload = {
                     booked_date: Utils.getDateInFormat(startDate),
                     trainer_id: trainer.trainer_id,
                     slotTime: { from: startTime, to: endTime },
                   };
-                  dispatch(checkSlotAsync(payload));
+                  // dispatch(checkSlotAsync(payload));
                 }
+                setTimeRange({ ...timeRange, startTime, endTime });
                 // if (!isSlotAvailable) {
                 //   toast.error(Message.notAvailable, { type: "error" });
                 // }
@@ -995,9 +1004,7 @@ const TrainerInfo = ({
         </div>
         {hasRatings && (
           <div>
-            <h2 className="mb-3 booking-text tag-name">
-              Reviews
-            </h2>
+            <h2 className="mb-3 booking-text tag-name">Reviews</h2>
             <div className="mr-4">
               <ReviewCard trainer={trainer} isPublic={true} />
             </div>
@@ -1154,6 +1161,7 @@ const SelectedCategory = ({
                           setTrainerDetails((prev) => ({
                             ...prev,
                             _id: data && data._id,
+                            trainer_id: data.trainer_id,
                             select_trainer: true,
                           }));
                           selectTrainer(data && data._id);
