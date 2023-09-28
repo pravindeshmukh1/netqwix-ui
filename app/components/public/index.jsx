@@ -994,7 +994,7 @@ const TrainerInfo = ({
           <div className="col-12 mt-1 mb-5 d-flex justify-content-center align-items-center">
             <button
               type="button"
-              disabled={!isSlotAvailable}
+              disabled={!Utils.isTimeRangeAvailable(availableSlots, timeRange.startTime, timeRange.endTime)}
               className="mt-3 btn btn-sm btn-primary"
               onClick={handleSignInRedirect}
             >
