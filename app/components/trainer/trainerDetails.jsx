@@ -56,7 +56,6 @@ export const TrainerDetails = ({
     curriculum: null,
   });
 
-  console.info("trainerInfo----", trainerInfo);
   // TODO: showing dummy records, will replace it with actual records
   useEffect(() => {
     if (trainerInfo && trainerInfo.extraInfo) {

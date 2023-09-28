@@ -831,6 +831,7 @@ const ScheduleTraining = () => {
                             ? Utils.convertHoursToMinutes(formateEndTime)
                             : TimeRange.end
                         }
+                        trainerHourlyRate={trainerInfo?.userInfo?.extraInfo?.working_hours}
                         onChange={(time) => {
                           const startTime = time.startTime;
                           const endTime = time.endTime;

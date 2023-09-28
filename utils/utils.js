@@ -66,7 +66,10 @@ export class Utils {
     }
 
     const result = this.getNext7WorkingDays(date);
-    return { weekDates, weekDateFormatted };
+    return {
+      weekDates,
+      weekDateFormatted
+    };
   }
 
   static getNext7WorkingDays(date) {
@@ -102,7 +105,10 @@ export class Utils {
       }
     }
 
-    return { weekDates, weekDateFormatted };
+    return {
+      weekDates,
+      weekDateFormatted
+    };
   }
 
   static getDateInFormat = (date = "") => {
@@ -195,8 +201,12 @@ export class Utils {
     currentFormattedTime,
     sessionEndTime
   ) => {
-    const { YYYY_MM_DD } = FormateDate;
-    const { HH_MM } = FormateHours;
+    const {
+      YYYY_MM_DD
+    } = FormateDate;
+    const {
+      HH_MM
+    } = FormateHours;
     const bookingEndTime = moment(
       `${bookedDate} ${sessionEndTime}`,
       `${YYYY_MM_DD} ${HH_MM}`
@@ -253,14 +263,13 @@ export class Utils {
   static getRatings = (ratings) => {
     const validRatings = ratings?.filter(
       (rating) =>
-        rating &&
-        rating.ratings &&
-        rating.ratings.trainee &&
-        rating.ratings.trainee.recommendRating
+      rating &&
+      rating.ratings &&
+      rating.ratings.trainee &&
+      rating.ratings.trainee.recommendRating
     );
 
     if (validRatings && validRatings.length) {
-      console.log(`validRatings`, validRatings);
       let avgRatingNumber = 0;
       const ratingCount = validRatings.length || 0;
 
@@ -327,12 +336,12 @@ export class Utils {
       const rangeEndTime = new Date(`2000-01-01T${range.end_time}:00`);
       const inputStartTime = new Date(`2000-01-01T${start_time}:00`);
       const inputEndTime = new Date(`2000-01-01T${end_time}:00`);
-  
+
       // Check if the input start time is within the range
       if (inputStartTime >= rangeStartTime && inputStartTime < rangeEndTime) {
         return false; // Time conflict
       }
-  
+
       // Check if the input end time is within the range
       if (inputEndTime > rangeStartTime && inputEndTime <= rangeEndTime) {
         return false; // Time conflict
@@ -342,9 +351,37 @@ export class Utils {
         return false; // Time conflict
       }
     }
-  
+
     return true; // No time conflict
   }
+
+
+  static getPercentageForSlot = (startTime, endTime, fromTime, toTime) => {
+    const [startHour, startMinute] = startTime.split(":").map(Number);
+    const [endHour, endMinute] = endTime.split(":").map(Number);
+    const startTimeInMinutes = startHour * 60 + startMinute;
+    const endTimeInMinutes = endHour * 60 + endMinute;
+
+    // Define the range of 10 to 20 hours in minutes
+    // const rangeStartInMinutes = fromHour * 60;
+    // const rangeEndInMinutes = toHour * 60;
+    const [rangeStartHour, rangeStartMinute] = fromTime.split(":").map(Number);
+    const [rangeEndHour, rangeEndMinute] = toTime.split(":").map(Number);
+    const rangeStartInMinutes = rangeStartHour * 60 + rangeStartMinute;
+    const rangeEndInMinutes = rangeEndHour * 60 + rangeEndMinute;
+
+    // Calculate the duration in minutes
+    const durationInMinutes = endTimeInMinutes - startTimeInMinutes;
+    const startPos = (((startTimeInMinutes - rangeStartInMinutes) / (rangeEndInMinutes - rangeStartInMinutes)) * 100);
+    const endPos = (((endTimeInMinutes - rangeStartInMinutes) / (rangeEndInMinutes - rangeStartInMinutes)) * 100);
+    const v2 = (((endTimeInMinutes - rangeStartInMinutes) / (rangeEndInMinutes - rangeStartInMinutes)) * 100) + (((startTimeInMinutes - rangeStartInMinutes) / (rangeEndInMinutes - rangeStartInMinutes)) * 100);
+
+    // Calculate the percentage
+    const percentage = (durationInMinutes / (rangeEndInMinutes - rangeStartInMinutes)) * 100;
+    return {
+      startPos,
+      endPos,
+      percentage
+    };
+  }
 }
-  
-  

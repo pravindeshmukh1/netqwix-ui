@@ -951,6 +951,7 @@ const TrainerInfo = ({
           </span>
           <div className="col-12 col-sm-12 col-md-11 col-lg-11 col-xl-8  mt-1 mb-2 ">
             <CustomRangePicker
+
               availableSlots={
                 availableSlots
                   ? availableSlots
@@ -971,6 +972,7 @@ const TrainerInfo = ({
                   ? Utils.convertHoursToMinutes(formateEndTime)
                   : TimeRange.end
               }
+              trainerHourlyRate={trainer?.extraInfo?.working_hours}
               onChange={(time) => {
                 const startTime = time.startTime;
                 const endTime = time.endTime;
@@ -994,7 +996,7 @@ const TrainerInfo = ({
           <div className="col-12 mt-1 mb-5 d-flex justify-content-center align-items-center">
             <button
               type="button"
-              disabled={!isSlotAvailable}
+              disabled={!Utils.isTimeRangeAvailable(availableSlots, timeRange.startTime, timeRange.endTime)}
               className="mt-3 btn btn-sm btn-primary"
               onClick={handleSignInRedirect}
             >
