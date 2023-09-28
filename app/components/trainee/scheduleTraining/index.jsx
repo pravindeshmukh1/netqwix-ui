@@ -368,7 +368,7 @@ const ScheduleTraining = () => {
                         setBookSessionPayload(payload);
                         dispatch(
                           createPaymentIntentAsync({
-                            amount: +amountPayable.toFixed(2),
+                            amount: +amountPayable.toFixed(1),
                           })
                         );
                       } else {
@@ -883,7 +883,7 @@ const ScheduleTraining = () => {
                             setBookSessionPayload(payload);
                             dispatch(
                               createPaymentIntentAsync({
-                                amount: +amountPayable.toFixed(2),
+                                amount: +amountPayable.toFixed(1),
                               })
                             );
                           } else {
