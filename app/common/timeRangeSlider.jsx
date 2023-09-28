@@ -61,21 +61,6 @@ const CustomRangePicker = ({
     setDraggingEnd (true);
   };
 
-  const getMosuePositionOnCanvas = (event) => {
-    if (
-        event.clientX ||
-        event.clientY ||
-        (event?.touches && event?.touches[0])
-    ) {
-        const clientX = event.clientX || event?.touches[0]?.clientX;
-        const clientY = event.clientY || event?.touches[0]?.clientY;
-        const { offsetLeft, offsetTop } = event.target;
-        const canvasX = clientX - offsetLeft;
-        const canvasY = clientY - offsetTop;
-        return { x: canvasX, y: canvasY };
-    }
-};
-
   const handleDrag = e => {
     if (draggingStart) {
       const newPosition = calculateNewPosition (e.clientX || e?.touches[0]?.clientX);
@@ -129,13 +114,17 @@ const CustomRangePicker = ({
           onMouseDown={handleStartDrag}
           onTouchStart={handleStartDrag} // Handle touch events
         />
-        <div
-          className={'end-range'}
-          style={{left: `${endPosition}%`}}
+        <div 
+        onMouseDown={handleEndDrag}
+        onTouchStart={handleEndDrag}
+          className={'end-range-content'}
+        > 
+          <div    
+             style={{left: `${endPosition}%`}}         
           onMouseDown={handleEndDrag}
-          onTouchStart={handleEndDrag} // Handle touch events
-
-        />
+          onTouchStart={handleEndDrag}
+        className={'end-range'}/>
+        </div>
         {availableSlots.map ((slot, index) => { 
           const { startPos, endPos } = Utils.getPercentageForSlot(slot.start_time, slot.end_time, trainerHourlyRate.from, trainerHourlyRate.to);
           
