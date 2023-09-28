@@ -980,7 +980,7 @@ const TrainerInfo = ({
                     trainer_id: trainer.trainer_id,
                     slotTime: { from: startTime, to: endTime },
                   };
-                  dispatch(checkSlotAsync(payload));
+                  // dispatch(checkSlotAsync(payload));
                 }
                 setTimeRange({ ...timeRange, startTime, endTime });
                 // if (!isSlotAvailable) {

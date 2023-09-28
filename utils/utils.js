@@ -106,7 +106,7 @@ export class Utils {
   }
 
   static getDateInFormat = (date = "") => {
-    const newDate = date && date.length ? date : new Date();
+    const newDate = date ? date : new Date();
     return moment(newDate).format("YYYY-MM-DD");
   };
 

@@ -841,7 +841,7 @@ const ScheduleTraining = () => {
                             };
                             setTimeRange({ ...timeRange, startTime, endTime });
                             const debouncedAPI = debounce(() => {
-                              dispatch(checkSlotAsync(payload));
+                              // dispatch(checkSlotAsync(payload));
                             }, debouncedConfigs.towSec);
                             debouncedAPI();
                           }

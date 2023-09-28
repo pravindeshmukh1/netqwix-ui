@@ -17,12 +17,14 @@ const CustomRangePicker = ({
   useEffect(() => {
     const changeStartTime = (startPosition / 100) * (endTime - startTime);
     const changeEndTime = (endPosition / 100) * (endTime - startTime);
-    onChange({
-      startTime: convertMinutesToHour(+time.startTime + startTime),
-      endTime: convertMinutesToHour(
-        endTime - (endTime - startTime - +time.endTime)
-      ),
-    });
+    if(time && time.startTime && time.endTime) {
+      onChange({
+        startTime: convertMinutesToHour(+time.startTime + startTime),
+        endTime: convertMinutesToHour(
+          endTime - (endTime - startTime - +time.endTime)
+        ),
+      });
+    }
     setTime({
       startTime: Math.floor(changeStartTime).toFixed(2),
       endTime: Math.floor(changeEndTime).toFixed(2),
