@@ -910,7 +910,7 @@ const SettingSection = (props) => {
                           <select
                             name="timezone_offset"
                             id="timezone-offset"
-                            class="timezone_offset mt-2"
+                            class="timezone_offset mt-2 ml-2"
                             value={
                               userInfo?.extraInfo?.working_hours?.time_zone ??
                               null
