@@ -462,6 +462,9 @@ slick-slider .slick-list,
   user-select: none;
   z-index: 10;
   overflow: hidden;
+  @media (max-width: 576px) {
+    width: 100%;
+  }
 }
 
 .custom-card:hover {
@@ -805,4 +808,11 @@ slick-slider .slick-list,
   @media (max-width: 576px) {
     margin-top: 12px;
   }
+}
+
+.timezone_offset {
+  background: white;
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #d9d9d9;
 }

@@ -414,4 +414,20 @@ export class Utils {
     const rangeEndInMinutes = rangeEndHour * 60 + rangeEndMinute;
     return rangeEndInMinutes - rangeStartInMinutes > minTimeRequired;
   };
+
+  static hasTimeConflicts = (start_time, end_time) => {
+    const parseTime = (time) => {
+      const [hours, minutes, seconds] = time.split(":").map(Number);
+      return hours * 60 + minutes + seconds / 60;
+    };
+    const startTimeInMinutes = parseTime(start_time);
+    const endTimeInMinutes = parseTime(end_time);
+    if (startTimeInMinutes >= endTimeInMinutes) {
+      return true;
+    }
+    if (endTimeInMinutes <= startTimeInMinutes) {
+      return true;
+    }
+    return false;
+  };
 }

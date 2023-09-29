@@ -51,11 +51,14 @@
 }
 @media (max-width: 576px) {
   .custom-trainer-scroll {
-    position: absolute !important;
-    left: 2% !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin-top: 49px !important;
+    position: absolute;
+    margin: 12px;
+    overflow-x: hidden;
+    width: 96%;
+    max-width: 100%;
+    margin-top: 49px;
+    left: 0;
+    right: 0;
   }
 }
 
@@ -66,4 +69,12 @@
   padding: 10px;
   max-width: 100% !important;
   width: 96% !important;
+  @media (max-width: 576px) {
+    margin: 10px;
+    padding: 4px;
+    left: 0;
+    right: 0;
+    width: 97% !important;
+    overflow-x: hidden !important;
+  }
 }

@@ -15,6 +15,7 @@ import {
   LOCAL_STORAGE_KEYS,
   Message,
   STATUS,
+  TimeZone,
   allowedPNGExtensions,
   settingMenuFilterSection,
   validationMessage,
@@ -51,7 +52,12 @@ const SettingSection = (props) => {
   const [deleteAcct, setDeleteDisable] = useState(false);
   const [settingTab, setSettingTab] = useState("");
   const [isError, setIsError] = useState(false);
-  const [workingHours, setWorkingHours] = useState({ from: "", to: "" });
+  const [workingHours, setWorkingHours] = useState({
+    from: "",
+    to: "",
+    time_zone: "",
+  });
+  const [isTimeConflicts, setIsTimeConflicts] = useState(false);
   const [profile, setProfile] = useState({
     username: "",
     address: "Alabma , USA",
@@ -788,7 +794,9 @@ const SettingSection = (props) => {
                           <p className="ml-2">From</p>
                           <TimePicker
                             name="from"
-                            className="ml-2 mt-2"
+                            className={`ml-2 mt-2 ${
+                              isTimeConflicts ? `border border-danger` : ``
+                            }  rounded`}
                             placeholder="09:00"
                             clearIcon={true}
                             showSecond={false}
@@ -807,6 +815,11 @@ const SettingSection = (props) => {
                               if (value) {
                                 const fromTime =
                                   Utils.getFormattedDateDb(value);
+                                const hasTimeConflicts = Utils.hasTimeConflicts(
+                                  fromTime,
+                                  workingHours.to
+                                );
+                                setIsTimeConflicts(hasTimeConflicts);
                                 setWorkingHours((prev) => ({
                                   ...prev,
                                   from: fromTime,
@@ -814,12 +827,19 @@ const SettingSection = (props) => {
                               }
                             }}
                           />
+                          {isTimeConflicts && (
+                            <label className="mt-2 ml-2 text-danger">
+                              {Message.timeConflicts}
+                            </label>
+                          )}
                         </div>
                         <div class="col-6 col-sm-3 col-md-3 col-lg-2">
                           <p className="ml-2">To</p>
                           <TimePicker
                             name="to"
-                            className="ml-2 mt-2"
+                            className={`ml-2 mt-2 ${
+                              isTimeConflicts ? `border border-danger` : ``
+                            }  rounded`}
                             clearIcon={true}
                             defaultValue={
                               userInfo &&
@@ -837,6 +857,11 @@ const SettingSection = (props) => {
                             onChange={(value) => {
                               if (value) {
                                 const toTime = Utils.getFormattedDateDb(value);
+                                const hasTimeConflicts = Utils.hasTimeConflicts(
+                                  workingHours.from,
+                                  toTime
+                                );
+                                setIsTimeConflicts(hasTimeConflicts);
                                 setWorkingHours((prev) => ({
                                   ...prev,
                                   to: toTime,
@@ -844,15 +869,48 @@ const SettingSection = (props) => {
                               }
                             }}
                           />
+                          {isTimeConflicts && (
+                            <label className="mt-2 ml-2 text-danger">
+                              {Message.timeConflicts}
+                            </label>
+                          )}
+                        </div>
+                        <div class="col-6 col-sm-3 col-md-3 col-lg-2">
+                          <p className="ml-2">Time Zone</p>
+                          <select
+                            name="timezone_offset"
+                            id="timezone-offset"
+                            class="timezone_offset mt-2"
+                            value={
+                              userInfo?.extraInfo?.working_hours?.time_zone ??
+                              null
+                            }
+                            onChange={(event) => {
+                              const { value } = event.target;
+                              setWorkingHours((prev) => ({
+                                ...prev,
+                                time_zone: value,
+                              }));
+                            }}
+                          >
+                            {TimeZone.map(({ timezone, value }, index) => {
+                              return (
+                                <option key={`timezone_${index}`} value={value}>
+                                  {timezone}
+                                </option>
+                              );
+                            })}
+                          </select>
                         </div>
                         <div class="col-12">
                           <button
                             type="button"
                             className="ml-2 btn btn-sm btn-primary"
                             disabled={
-                              workingHours.from.length && workingHours.to.length
-                                ? false
-                                : true
+                              !workingHours.from ||
+                              !workingHours.to ||
+                              !workingHours.time_zone ||
+                              isTimeConflicts
                             }
                             onClick={() => {
                               const working_hours = {
