@@ -970,3 +970,6 @@ export const TimeZone = [
     value: "(GMT +14:00) Line Islands, Tokelau",
   },
 ];
+
+export const MINIMUM_RATE = 10;
+export const MAXIMUM_RATE = 999;
