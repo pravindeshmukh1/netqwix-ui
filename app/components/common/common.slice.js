@@ -27,10 +27,9 @@ const initialState = {
 
 export const addRatingAsync = createAsyncThunk(
   "add/rating",
-  async (payload, { dispatch }) => {
+  async (payload) => {
     try {
       const res = await addRating(payload);
-      dispatch(getScheduledMeetingDetailsAsync());
       return res;
     } catch (err) {
       console.log(`rre `, err);
