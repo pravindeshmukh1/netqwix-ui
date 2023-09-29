@@ -15,8 +15,11 @@ import {
   LOCAL_STORAGE_KEYS,
   Message,
   STATUS,
+  TimeZone,
+  URL_MAX_LENGTH,
   allowedPNGExtensions,
   settingMenuFilterSection,
+  urlRegex,
   validationMessage,
 } from "../../app/common/constants";
 import { UpdateSettingProfileForm } from "../../app/components/trainer/settings/form";
@@ -51,7 +54,12 @@ const SettingSection = (props) => {
   const [deleteAcct, setDeleteDisable] = useState(false);
   const [settingTab, setSettingTab] = useState("");
   const [isError, setIsError] = useState(false);
-  const [workingHours, setWorkingHours] = useState({ from: "", to: "" });
+  const [workingHours, setWorkingHours] = useState({
+    from: "",
+    to: "",
+    time_zone: "",
+  });
+  const [isTimeConflicts, setIsTimeConflicts] = useState(false);
   const [profile, setProfile] = useState({
     username: "",
     address: "Alabma , USA",
@@ -101,18 +109,28 @@ const SettingSection = (props) => {
   const validationSchema = Yup.object().shape({
     fb: Yup.string()
       .required(validationMessage.social_media.field_required)
+      .matches(urlRegex, Message.validUrl)
+      .max(URL_MAX_LENGTH.MAX_LENGTH, URL_MAX_LENGTH.MESSAGE)
       .nullable(),
     instagram: Yup.string()
       .required(validationMessage.social_media.field_required)
+      .matches(urlRegex, Message.validUrl)
+      .max(URL_MAX_LENGTH.MAX_LENGTH, URL_MAX_LENGTH.MESSAGE)
       .nullable(),
     twitter: Yup.string()
       .required(validationMessage.social_media.field_required)
+      .matches(urlRegex, Message.validUrl)
+      .max(URL_MAX_LENGTH.MAX_LENGTH, URL_MAX_LENGTH.MESSAGE)
       .nullable(),
     google: Yup.string()
       .required(validationMessage.social_media.field_required)
+      .matches(urlRegex, Message.validUrl)
+      .max(URL_MAX_LENGTH.MAX_LENGTH, URL_MAX_LENGTH.MESSAGE)
       .nullable(),
     slack: Yup.string()
       .required(validationMessage.social_media.field_required)
+      .matches(urlRegex, Message.validUrl)
+      .max(URL_MAX_LENGTH.MAX_LENGTH, URL_MAX_LENGTH.MESSAGE)
       .nullable(),
     profile_image_url: Yup.string().test(
       "imageValidation",
@@ -167,25 +185,43 @@ const SettingSection = (props) => {
     if (profile.editStatus) {
       if (profile.username && profile.username.trim().length) {
         // updating trainee profile
+        const isMatch = userInfo.fullname === profile.username;
         if (accountType === AccountType.TRAINEE) {
-          dispatch(
-            updateTraineeProfileAsync({
-              fullname: profile.username,
-              profile_picture: profile.profile_picture,
-            })
-          );
-          setIsError(false);
+          if (isMatch) {
+            toast(
+              "Sorry, this username is already taken. Please choose a different username.",
+              { type: "error" }
+            );
+          } else {
+            dispatch(
+              updateTraineeProfileAsync({
+                fullname: profile.username,
+                profile_picture: profile.profile_picture,
+              })
+            );
+            setIsError(false);
+          }
         } else if (accountType === AccountType.TRAINER) {
-          // updating trainer profile
-          dispatch(
-            updateTraineeProfileAsync({
-              fullname: profile.username,
-              profile_picture: profile.profile_picture,
-            })
-          );
-          setIsError(false);
+          if (isMatch) {
+            toast(
+              "Sorry, this username is already taken. Please choose a different username.",
+              { type: "error" }
+            );
+          } else {
+            // updating trainer profile
+            dispatch(
+              updateTraineeProfileAsync({
+                fullname: profile.username,
+                profile_picture: profile.profile_picture,
+              })
+            );
+            setIsError(false);
+          }
         }
-        setProfile({ ...profile, editStatus: !profile.editStatus });
+        setProfile({
+          ...profile,
+          editStatus: isMatch ? profile.editStatus : !profile.editStatus,
+        });
       } else {
         toast("please enter required values.");
       }
@@ -788,7 +824,9 @@ const SettingSection = (props) => {
                           <p className="ml-2">From</p>
                           <TimePicker
                             name="from"
-                            className="ml-2 mt-2"
+                            className={`ml-2 mt-2 ${
+                              isTimeConflicts ? `border border-danger` : ``
+                            }  rounded`}
                             placeholder="09:00"
                             clearIcon={true}
                             showSecond={false}
@@ -807,6 +845,11 @@ const SettingSection = (props) => {
                               if (value) {
                                 const fromTime =
                                   Utils.getFormattedDateDb(value);
+                                const hasTimeConflicts = Utils.hasTimeConflicts(
+                                  fromTime,
+                                  workingHours.to
+                                );
+                                setIsTimeConflicts(hasTimeConflicts);
                                 setWorkingHours((prev) => ({
                                   ...prev,
                                   from: fromTime,
@@ -814,12 +857,19 @@ const SettingSection = (props) => {
                               }
                             }}
                           />
+                          {isTimeConflicts && (
+                            <label className="mt-2 ml-2 text-danger">
+                              {Message.timeConflicts}
+                            </label>
+                          )}
                         </div>
                         <div class="col-6 col-sm-3 col-md-3 col-lg-2">
                           <p className="ml-2">To</p>
                           <TimePicker
                             name="to"
-                            className="ml-2 mt-2"
+                            className={`ml-2 mt-2 ${
+                              isTimeConflicts ? `border border-danger` : ``
+                            }  rounded`}
                             clearIcon={true}
                             defaultValue={
                               userInfo &&
@@ -837,6 +887,11 @@ const SettingSection = (props) => {
                             onChange={(value) => {
                               if (value) {
                                 const toTime = Utils.getFormattedDateDb(value);
+                                const hasTimeConflicts = Utils.hasTimeConflicts(
+                                  workingHours.from,
+                                  toTime
+                                );
+                                setIsTimeConflicts(hasTimeConflicts);
                                 setWorkingHours((prev) => ({
                                   ...prev,
                                   to: toTime,
@@ -844,15 +899,48 @@ const SettingSection = (props) => {
                               }
                             }}
                           />
+                          {isTimeConflicts && (
+                            <label className="mt-2 ml-2 text-danger">
+                              {Message.timeConflicts}
+                            </label>
+                          )}
+                        </div>
+                        <div class="col-6 col-sm-3 col-md-3 col-lg-2">
+                          <p className="ml-2">Time Zone</p>
+                          <select
+                            name="timezone_offset"
+                            id="timezone-offset"
+                            class="timezone_offset mt-2"
+                            value={
+                              userInfo?.extraInfo?.working_hours?.time_zone ??
+                              null
+                            }
+                            onChange={(event) => {
+                              const { value } = event.target;
+                              setWorkingHours((prev) => ({
+                                ...prev,
+                                time_zone: value,
+                              }));
+                            }}
+                          >
+                            {TimeZone.map(({ timezone, value }, index) => {
+                              return (
+                                <option key={`timezone_${index}`} value={value}>
+                                  {timezone}
+                                </option>
+                              );
+                            })}
+                          </select>
                         </div>
                         <div class="col-12">
                           <button
                             type="button"
                             className="ml-2 btn btn-sm btn-primary"
                             disabled={
-                              workingHours.from.length && workingHours.to.length
-                                ? false
-                                : true
+                              !workingHours.from ||
+                              !workingHours.to ||
+                              !workingHours.time_zone ||
+                              isTimeConflicts
                             }
                             onClick={() => {
                               const working_hours = {
@@ -1247,9 +1335,9 @@ const SettingSection = (props) => {
                                     placeholder="Facebook URL"
                                     type="url"
                                     onBlur={handleBlur}
-                                    className="form-control mt-1"
+                                    className={`form-control mt-1`}
                                     name="fb"
-                                    id=""
+                                    id="fb"
                                   ></input>
                                 </div>
                               </div>

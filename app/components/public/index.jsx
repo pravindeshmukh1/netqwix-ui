@@ -646,9 +646,9 @@ const TrainersDetails = ({
   };
   return (
     <React.Fragment>
-      <div className="custom-landing-page-trainer-details">
+      <div>
         {trainerInfo === null ? (
-          <div className="media-body media-body text-right">
+          <div className="d-flex justify-content-end">
             <X
               onClick={onClose}
               className="close"
@@ -657,38 +657,39 @@ const TrainersDetails = ({
           </div>
         ) : (
           <div
-            className={`${
-              (trainerInfo.isCategory &&
-                !trainerDetails.select_trainer &&
-                "media-body media-body text-right") ||
-              (!trainerInfo.isCategory && "media-body media-body text-right")
+            className={`d-flex ${
+              trainerInfo.isCategory && trainerDetails.select_trainer
+                ? `justify-content-start`
+                : `justify-content-end`
             }`}
           >
-            <div>
-              {!trainerInfo.isCategory ? (
-                <X
-                  onClick={onClose}
-                  className="close"
-                  style={{ cursor: "pointer" }}
-                />
-              ) : !trainerDetails.select_trainer ? (
-                <X onClick={onClose} style={{ cursor: "pointer" }} />
-              ) : (
-                <ArrowLeft
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    setTrainerDetails((prev) => ({
-                      ...prev,
-                      _id: null,
-                      select_trainer: false,
-                      fullname: null,
-                    }));
-                  }}
-                />
-              )}
-            </div>
+            {!trainerInfo.isCategory && (
+              <X
+                onClick={onClose}
+                className="close"
+                style={{ cursor: "pointer" }}
+              />
+            )}
+            {trainerInfo.isCategory && !trainerDetails.select_trainer && (
+              <X onClick={onClose} style={{ cursor: "pointer" }} />
+            )}
+            {trainerInfo.isCategory && trainerDetails.select_trainer && (
+              <ArrowLeft
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setTrainerDetails((prev) => ({
+                    ...prev,
+                    _id: null,
+                    select_trainer: false,
+                    fullname: null,
+                  }));
+                }}
+              />
+            )}
           </div>
         )}
+      </div>
+      <div className="custom-landing-page-trainer-details">
         {trainerDetails.select_trainer ? (
           <TrainerInfo
             accordionData={accordionData}
@@ -811,7 +812,10 @@ const TrainerInfo = ({
     }
   }, []);
 
-  const hasRatings = trainer?.trainer_ratings.some((item) => item.ratings);
+  const hasRatings = Array.isArray(trainer?.trainer_ratings)
+    ? trainer.trainer_ratings.some(({ ratings }) => ratings?.trainee)
+    : null;
+
   const formateStartTime = Utils.getTimeFormate(
     trainer?.extraInfo?.working_hours?.from
   );
@@ -951,7 +955,6 @@ const TrainerInfo = ({
           </span>
           <div className="col-12 col-sm-12 col-md-11 col-lg-11 col-xl-8  mt-1 mb-2 ">
             <CustomRangePicker
-
               availableSlots={
                 availableSlots
                   ? availableSlots
@@ -996,7 +999,13 @@ const TrainerInfo = ({
           <div className="col-12 mt-1 mb-5 d-flex justify-content-center align-items-center">
             <button
               type="button"
-              disabled={!Utils.isTimeRangeAvailable(availableSlots, timeRange.startTime, timeRange.endTime)}
+              disabled={
+                !Utils.isTimeRangeAvailable(
+                  availableSlots,
+                  timeRange.startTime,
+                  timeRange.endTime
+                )
+              }
               className="mt-3 btn btn-sm btn-primary"
               onClick={handleSignInRedirect}
             >
@@ -1043,7 +1052,7 @@ const SelectedCategory = ({
   handleTrainerAvailable,
 }) => {
   return (
-    <div className="row mr-1 overflowX-auto">
+    <div className="row">
       <div className="col-12 col-lg-2 col-md-3 col-sm-3">
         {/* <div className="col-12 col-lg-2 col-md-12 col-sm-6"> */}
         <div className="d-flex justify-content-between">

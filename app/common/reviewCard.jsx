@@ -3,9 +3,9 @@ import Rating from "react-rating";
 import { Utils } from "../../utils/utils";
 
 const ReviewCard = ({ trainer, isPublic = false }) => {
-  const itemsWithRatings = trainer?.trainer_ratings.filter(
-    (item) => item.ratings
-  );
+  const itemsWithRatings = Array.isArray(trainer?.trainer_ratings)
+    ? trainer.trainer_ratings.filter(({ ratings }) => ratings?.trainee)
+    : [];
   return (
     <div className="row">
       {itemsWithRatings.map((item, index) => {
@@ -44,9 +44,7 @@ const ReviewCard = ({ trainer, isPublic = false }) => {
                   ]}
                   fractions={2}
                 />
-                <p className="mt-2">
-                  {Utils.convertDate(item?.updatedAt)}
-                </p>
+                <p className="mt-2">{Utils.convertDate(item?.updatedAt)}</p>
                 <p>{item?.ratings?.trainee?.remarksInfo}</p>
               </div>
             </div>

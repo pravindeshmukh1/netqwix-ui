@@ -1,5 +1,10 @@
 import exp from "constants";
 
+export const urlRegex = /^https:\/\/[a-zA-Z0-9.-]+\.[a-z]{2,}(\/\S*)?$/;
+export const URL_MAX_LENGTH = {
+  MAX_LENGTH: 200,
+  MESSAGE: "URL must be at most 200 characters",
+};
 export const signUpSteps = [{ title: "Basic Info" }, { title: "Details" }];
 export const LIST_OF_ACCOUNT_TYPE = [
   {
@@ -142,9 +147,11 @@ export const TRAINER_MEETING_TIME = "Hour";
 
 export const Message = {
   notFound: "No data available",
+  validUrl: "Please enter a valid URL starting with https",
   noMediaFound: "No media found",
   noSlotsAvailable: "No slots found",
   notAvailable: "Not available slot",
+  timeConflicts: "Please Select a valid time",
   notAvailableDescription: "Description not available",
   errorMessage: {
     wip: "work in progress",
@@ -170,6 +177,9 @@ export const FileFormates = {
   image: ".jpg, .jpeg, .png",
 };
 
+export const MIN_DESCRIPTION_LENGTH = 100;
+export const MAX_DESCRIPTION_LENGTH = 500;
+
 export const validationMessage = {
   rating: {
     howWasYourSession: "This field is required",
@@ -183,6 +193,24 @@ export const validationMessage = {
     teaching_style: "This field is required ",
     credentials_and_affiliations: "This field is required ",
     curriculum: "This field is required ",
+    minMax: {
+      about: {
+        min: `about must be at least ${MIN_DESCRIPTION_LENGTH} characters`,
+        max: `about must be less than ${MAX_DESCRIPTION_LENGTH} characters`,
+      },
+      teaching_style: {
+        min: `teaching style must be at least ${MIN_DESCRIPTION_LENGTH} characters`,
+        max: `teaching style must be less than ${MAX_DESCRIPTION_LENGTH} characters`,
+      },
+      credentials_affiliations: {
+        min: `credentials & affiliations must be at least ${MIN_DESCRIPTION_LENGTH} characters`,
+        max: `credentials & affiliations must be less than ${MAX_DESCRIPTION_LENGTH} characters`,
+      },
+      curriculum: {
+        min: `curriculum must be at least ${MIN_DESCRIPTION_LENGTH} characters`,
+        max: `curriculum must be less than ${MAX_DESCRIPTION_LENGTH} characters`,
+      },
+    },
   },
   social_media: {
     field_required: "This field is required",
@@ -724,5 +752,251 @@ export const TimeRange = { start: 0, end: 1440 };
 
 export const DefaultTimeRange = { startTime: "00:00", endTime: "24:00" };
 
-
 export const minimumMeetingDurationInMin = 50;
+
+export const TimeZone = [
+  {
+    id: 1,
+    offset: "-12:00",
+    timezone: "(GMT -12:00) Eniwetok Kwajalein",
+    value: "(GMT -12:00) Eniwetok Kwajalein",
+  },
+  {
+    id: 2,
+    offset: "-11:00",
+    timezone: "(GMT -11:00) Midway Island, Samoa",
+    value: "(GMT -11:00) Midway Island, Samoa",
+  },
+  {
+    id: 3,
+    offset: "-10:00",
+    timezone: "(GMT -10:00) Hawaii",
+    value: "(GMT -10:00) Hawaii",
+  },
+  {
+    id: 4,
+    offset: "-09:50",
+    timezone: "(GMT -9:30) Taiohae",
+    value: "(GMT -9:30) Taiohae",
+  },
+  {
+    id: 5,
+    offset: "-09:00",
+    timezone: "(GMT -9:00) Alaska",
+    value: "(GMT -9:00) Alaska",
+  },
+  {
+    id: 5,
+    offset: "-08:00",
+    timezone: "(GMT -8:00) Pacific Time (US & Canada)",
+    value: "(GMT -8:00) Pacific Time (US & Canada)",
+  },
+  {
+    id: 6,
+    offset: "-07:00",
+    timezone: "(GMT -7:00) Mountain Time (US & Canada)",
+    value: "(GMT -7:00) Mountain Time (US & Canada)",
+  },
+  {
+    id: 7,
+    offset: "-06:00",
+    timezone: "(GMT -6:00) Central Time (US & Canada)",
+    value: "(GMT -6:00) Central Time (US & Canada)",
+  },
+  {
+    id: 8,
+    offset: "-05:00",
+    timezone: "(GMT -5:00) Eastern Time (US & Canada)",
+    value: "(GMT -5:00) Eastern Time (US & Canada)",
+  },
+  {
+    id: 9,
+    offset: "-04:50",
+    timezone: "(GMT -4:30) Caracas",
+    value: "(GMT -4:30) Caracas",
+  },
+  {
+    id: 10,
+    offset: "-04:00",
+    timezone: "(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz",
+    value: "(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz",
+  },
+  {
+    id: 11,
+    offset: "-03:50",
+    timezone: "(GMT -3:30) Newfoundland",
+    value: "(GMT -3:30) Newfoundland",
+  },
+  {
+    id: 12,
+    offset: "-03:00",
+    timezone: "(GMT -3:00) Brazil, Buenos Aires, Georgetown",
+    value: "(GMT -3:00) Brazil, Buenos Aires, Georgetown",
+  },
+  {
+    id: 13,
+    offset: "-02:00",
+    timezone: "(GMT -2:00) Mid-Atlantic",
+    value: "(GMT -2:00) Mid-Atlantic",
+  },
+  {
+    id: 14,
+    offset: "-01:00",
+    timezone: "(GMT -1:00) Azores",
+    value: "(GMT -1:00) Azores",
+  },
+  {
+    id: 15,
+    offset: "+00:00",
+    timezone: "(GMT) Western Europe Time",
+    value: "(GMT) Western Europe Time",
+  },
+  {
+    id: 16,
+    offset: "+01:00",
+    timezone: "(GMT +1:00) Brussels",
+    value: "(GMT +1:00) Brussels",
+  },
+  {
+    id: 17,
+    offset: "+02:00",
+    timezone: "(GMT +2:00) Kaliningrad",
+    value: "(GMT +2:00) Kaliningrad",
+  },
+  {
+    id: 18,
+    offset: "+03:00",
+    timezone: "(GMT +3:00) Baghdad",
+    value: "(GMT +3:00) Baghdad",
+  },
+  {
+    id: 19,
+    offset: "+03:50",
+    timezone: "(GMT +3:30) Tehran",
+    value: "(GMT +3:30) Tehran",
+  },
+  {
+    id: 20,
+
+    offset: "+04:00",
+    timezone: "(GMT +4:00) Abu Dhabi",
+    value: "(GMT +4:00) Abu Dhabi",
+  },
+  {
+    id: 21,
+    offset: "+04:50",
+    timezone: "(GMT +4:30) Kabul",
+    value: "(GMT +4:30) Kabul",
+  },
+  {
+    id: 22,
+    offset: "+05:00",
+    timezone: "(GMT +5:00) Ekaterinburg",
+    value: "(GMT +5:00) Ekaterinburg",
+  },
+  {
+    id: 23,
+    offset: "+05:50",
+    timezone: "(GMT +5:30) Bombay",
+    value: "(GMT +5:30) Bombay",
+  },
+  {
+    id: 24,
+    offset: "+05:75",
+    timezone: "(GMT +5:45) Kathmandu",
+    value: "(GMT +5:45) Kathmandu",
+  },
+  {
+    id: 25,
+    offset: "+06:00",
+    timezone: "(GMT +6:00) Almaty",
+    value: "(GMT +6:00) Almaty",
+  },
+  {
+    id: 26,
+    offset: "+06:50",
+    timezone: "(GMT +6:30) Yangon",
+    value: "(GMT +6:30) Yangon",
+  },
+  {
+    id: 27,
+    offset: "+07:00",
+    timezone: "(GMT +7:00) Bangkok",
+    value: "(GMT +7:00) Bangkok",
+  },
+  {
+    id: 28,
+    offset: "+08:00",
+    timezone: "(GMT +8:00) Beijing",
+    value: "(GMT +8:00) Beijing",
+  },
+  {
+    id: 29,
+    offset: "+08:75",
+    timezone: "(GMT +8:45) Eucla",
+    value: "(GMT +8:45) Eucla",
+  },
+  {
+    id: 30,
+    offset: "+09:00",
+    timezone: "(GMT +9:00) Tokyo",
+    value: "(GMT +9:00) Tokyo",
+  },
+  {
+    id: 31,
+    offset: "+09:50",
+    timezone: "(GMT +9:30) Adelaide",
+    value: "(GMT +9:30) Adelaide",
+  },
+  {
+    id: 32,
+    offset: "+10:00",
+    timezone: "(GMT +10:00) Eastern Australia",
+    value: "(GMT +10:00) Eastern Australia",
+  },
+  {
+    id: 33,
+    offset: "+10:50",
+    timezone: "(GMT +10:30) Lord Howe Island",
+    value: "(GMT +10:30) Lord Howe Island",
+  },
+  {
+    id: 34,
+    offset: "+11:00",
+    timezone: "(GMT +11:00) Magadan, Solomon Islands, New Caledonia",
+    value: "(GMT +11:00) Magadan, Solomon Islands, New Caledonia",
+  },
+  {
+    id: 35,
+    offset: "+11:50",
+    timezone: "(GMT +11:30) Norfolk Island",
+    value: "(GMT +11:30) Norfolk Island",
+  },
+  {
+    id: 36,
+    offset: "+12:00",
+    timezone: "(GMT +12:00) Auckland",
+    value: "(GMT +12:00) Auckland",
+  },
+  {
+    id: 37,
+    offset: "+12:75",
+    timezone: "(GMT +12:45) Chatham Islands",
+    value: "(GMT +12:45) Chatham Islands",
+  },
+  {
+    id: 38,
+    offset: "+13:00",
+    timezone: "(GMT +13:00) Apia, Nukualofa",
+    value: "(GMT +13:00) Apia, Nukualofa",
+  },
+  {
+    id: 39,
+    offset: "+14:00",
+    timezone: "(GMT +14:00) Line Islands, Tokelau",
+    value: "(GMT +14:00) Line Islands, Tokelau",
+  },
+];
+
+export const MINIMUM_RATE = 10;
+export const MAXIMUM_RATE = 999;
