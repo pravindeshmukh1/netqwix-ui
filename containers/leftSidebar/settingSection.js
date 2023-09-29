@@ -16,8 +16,10 @@ import {
   Message,
   STATUS,
   TimeZone,
+  URL_MAX_LENGTH,
   allowedPNGExtensions,
   settingMenuFilterSection,
+  urlRegex,
   validationMessage,
 } from "../../app/common/constants";
 import { UpdateSettingProfileForm } from "../../app/components/trainer/settings/form";
@@ -107,18 +109,28 @@ const SettingSection = (props) => {
   const validationSchema = Yup.object().shape({
     fb: Yup.string()
       .required(validationMessage.social_media.field_required)
+      .matches(urlRegex, Message.validUrl)
+      .max(URL_MAX_LENGTH.MAX_LENGTH, URL_MAX_LENGTH.MESSAGE)
       .nullable(),
     instagram: Yup.string()
       .required(validationMessage.social_media.field_required)
+      .matches(urlRegex, Message.validUrl)
+      .max(URL_MAX_LENGTH.MAX_LENGTH, URL_MAX_LENGTH.MESSAGE)
       .nullable(),
     twitter: Yup.string()
       .required(validationMessage.social_media.field_required)
+      .matches(urlRegex, Message.validUrl)
+      .max(URL_MAX_LENGTH.MAX_LENGTH, URL_MAX_LENGTH.MESSAGE)
       .nullable(),
     google: Yup.string()
       .required(validationMessage.social_media.field_required)
+      .matches(urlRegex, Message.validUrl)
+      .max(URL_MAX_LENGTH.MAX_LENGTH, URL_MAX_LENGTH.MESSAGE)
       .nullable(),
     slack: Yup.string()
       .required(validationMessage.social_media.field_required)
+      .matches(urlRegex, Message.validUrl)
+      .max(URL_MAX_LENGTH.MAX_LENGTH, URL_MAX_LENGTH.MESSAGE)
       .nullable(),
     profile_image_url: Yup.string().test(
       "imageValidation",
@@ -173,25 +185,43 @@ const SettingSection = (props) => {
     if (profile.editStatus) {
       if (profile.username && profile.username.trim().length) {
         // updating trainee profile
+        const isMatch = userInfo.fullname === profile.username;
         if (accountType === AccountType.TRAINEE) {
-          dispatch(
-            updateTraineeProfileAsync({
-              fullname: profile.username,
-              profile_picture: profile.profile_picture,
-            })
-          );
-          setIsError(false);
+          if (isMatch) {
+            toast(
+              "Sorry, this username is already taken. Please choose a different username.",
+              { type: "error" }
+            );
+          } else {
+            dispatch(
+              updateTraineeProfileAsync({
+                fullname: profile.username,
+                profile_picture: profile.profile_picture,
+              })
+            );
+            setIsError(false);
+          }
         } else if (accountType === AccountType.TRAINER) {
-          // updating trainer profile
-          dispatch(
-            updateTraineeProfileAsync({
-              fullname: profile.username,
-              profile_picture: profile.profile_picture,
-            })
-          );
-          setIsError(false);
+          if (isMatch) {
+            toast(
+              "Sorry, this username is already taken. Please choose a different username.",
+              { type: "error" }
+            );
+          } else {
+            // updating trainer profile
+            dispatch(
+              updateTraineeProfileAsync({
+                fullname: profile.username,
+                profile_picture: profile.profile_picture,
+              })
+            );
+            setIsError(false);
+          }
         }
-        setProfile({ ...profile, editStatus: !profile.editStatus });
+        setProfile({
+          ...profile,
+          editStatus: isMatch ? profile.editStatus : !profile.editStatus,
+        });
       } else {
         toast("please enter required values.");
       }
@@ -1305,9 +1335,9 @@ const SettingSection = (props) => {
                                     placeholder="Facebook URL"
                                     type="url"
                                     onBlur={handleBlur}
-                                    className="form-control mt-1"
+                                    className={`form-control mt-1`}
                                     name="fb"
-                                    id=""
+                                    id="fb"
                                   ></input>
                                 </div>
                               </div>

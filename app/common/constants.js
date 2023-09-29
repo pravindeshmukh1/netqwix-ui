@@ -1,5 +1,10 @@
 import exp from "constants";
 
+export const urlRegex = /^https:\/\/[a-zA-Z0-9.-]+\.[a-z]{2,}(\/\S*)?$/;
+export const URL_MAX_LENGTH = {
+  MAX_LENGTH: 200,
+  MESSAGE: "URL must be at most 200 characters",
+};
 export const signUpSteps = [{ title: "Basic Info" }, { title: "Details" }];
 export const LIST_OF_ACCOUNT_TYPE = [
   {
@@ -142,6 +147,7 @@ export const TRAINER_MEETING_TIME = "Hour";
 
 export const Message = {
   notFound: "No data available",
+  validUrl: "Please enter a valid URL starting with https",
   noMediaFound: "No media found",
   noSlotsAvailable: "No slots found",
   notAvailable: "Not available slot",
@@ -171,6 +177,9 @@ export const FileFormates = {
   image: ".jpg, .jpeg, .png",
 };
 
+export const MIN_DESCRIPTION_LENGTH = 100;
+export const MAX_DESCRIPTION_LENGTH = 500;
+
 export const validationMessage = {
   rating: {
     howWasYourSession: "This field is required",
@@ -184,6 +193,24 @@ export const validationMessage = {
     teaching_style: "This field is required ",
     credentials_and_affiliations: "This field is required ",
     curriculum: "This field is required ",
+    minMax: {
+      about: {
+        min: `about must be at least ${MIN_DESCRIPTION_LENGTH} characters`,
+        max: `about must be less than ${MAX_DESCRIPTION_LENGTH} characters`,
+      },
+      teaching_style: {
+        min: `teaching style must be at least ${MIN_DESCRIPTION_LENGTH} characters`,
+        max: `teaching style must be less than ${MAX_DESCRIPTION_LENGTH} characters`,
+      },
+      credentials_affiliations: {
+        min: `credentials & affiliations must be at least ${MIN_DESCRIPTION_LENGTH} characters`,
+        max: `credentials & affiliations must be less than ${MAX_DESCRIPTION_LENGTH} characters`,
+      },
+      curriculum: {
+        min: `curriculum must be at least ${MIN_DESCRIPTION_LENGTH} characters`,
+        max: `curriculum must be less than ${MAX_DESCRIPTION_LENGTH} characters`,
+      },
+    },
   },
   social_media: {
     field_required: "This field is required",
