@@ -98,7 +98,7 @@ const Bookings = ({ accountType = null }) => {
       };
       dispatch(updateBookedSessionScheduledMeetingAsync(payload));
     }
-  }, [bookedSession, accountType, tabBook]);
+  }, [bookedSession, accountType]);
 
   const toggle = () => setStartMeeting(!startMeeting);
 
@@ -167,7 +167,8 @@ const Bookings = ({ accountType = null }) => {
           isMeetingDone,
           isUpcomingSession,
           ratings,
-          booking_index
+          booking_index,
+          has24HoursPassedSinceBooking
         );
       default:
         break;
@@ -318,19 +319,24 @@ const Bookings = ({ accountType = null }) => {
     isMeetingDone,
     isUpcomingSession,
     ratings,
-    booking_index
+    booking_index,
+    has24HoursPassedSinceBooking
   ) => {
+    const isCompleted =
+      has24HoursPassedSinceBooking ||
+      scheduledMeetingDetails[booking_index]?.ratings?.trainee;
+
+    const canShowRatingButton =
+      !isUpcomingSession &&
+      !isCurrentDateBefore &&
+      !isStartButtonEnabled &&
+      status !== BookedSession.booked &&
+      !isCompleted;
+
     return (
       <React.Fragment>
-        {ratings?.trainee || isMeetingDone ? (
-          <h3 className="mt-1">Completed</h3>
-        ) : null}
-        {!ratings?.trainee &&
-        !isMeetingDone &&
-        status !== BookedSession.booked &&
-        !isUpcomingSession &&
-        !isCurrentDateBefore &&
-        !isStartButtonEnabled ? (
+        {isCompleted ? <h3>Completed</h3> : null}
+        {canShowRatingButton ? (
           <button
             className={`btn btn-success button-effect btn-sm mr-4`}
             type="button"
