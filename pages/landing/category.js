@@ -6,11 +6,12 @@ import {
 } from "../../app/components/trainee/trainee.slice";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import { masterState } from "../../app/components/master/master.slice";
-import { params } from "../../app/common/constants";
+import { debouncedConfigs, params } from "../../app/common/constants";
 import Modal from "../../app/common/modal";
 import TrainersDetails from "../../app/components/public";
 import { bookingsAction } from "../../app/components/common/common.slice";
 import { ChevronRight } from "react-feather";
+import { debounce } from "lodash";
 
 const Category = (masterRecords) => {
   const dispatch = useAppDispatch();
@@ -28,8 +29,11 @@ const Category = (masterRecords) => {
   const { master } = useAppSelector(masterState);
   const [categoryList, setCategoryList] = useState([]);
   const [listOfTrainers, setListOfTrainers] = useState([]);
+
   useEffect(() => {
-    dispatch(getTraineeWithSlotsAsync(getParams));
+    if (getParams.search) {
+      dispatch(getTraineeWithSlotsAsync(getParams));
+    }
   }, [getParams]);
 
   useEffect(() => {

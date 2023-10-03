@@ -39,7 +39,7 @@ export const UpdateSettingProfileForm = ({
   }, [formRef]);
 
   const validationSchema = Yup.object().shape({
-    fullname: Yup.string().default(""),
+    fullname: Yup.string().default("").trim(),
     about: Yup.string()
       .required(validationMessage.edit_trainer_profile.about)
       .min(
@@ -50,7 +50,8 @@ export const UpdateSettingProfileForm = ({
         MAX_DESCRIPTION_LENGTH,
         validationMessage.edit_trainer_profile.minMax.about.max
       )
-      .nullable(),
+      .nullable()
+      .trim(),
     teaching_style: Yup.string()
       .required(validationMessage.edit_trainer_profile.teaching_style)
       .min(
@@ -61,7 +62,8 @@ export const UpdateSettingProfileForm = ({
         MAX_DESCRIPTION_LENGTH,
         validationMessage.edit_trainer_profile.minMax.teaching_style.max
       )
-      .nullable(),
+      .nullable()
+      .trim(),
     credentials_and_affiliations: Yup.string()
       .required(
         validationMessage.edit_trainer_profile.credentials_and_affiliations
@@ -76,7 +78,8 @@ export const UpdateSettingProfileForm = ({
         validationMessage.edit_trainer_profile.minMax.credentials_affiliations
           .max
       )
-      .nullable(),
+      .nullable()
+      .trim(),
     curriculum: Yup.string()
       .required(validationMessage.edit_trainer_profile.curriculum)
       .min(
@@ -87,23 +90,37 @@ export const UpdateSettingProfileForm = ({
         MAX_DESCRIPTION_LENGTH,
         validationMessage.edit_trainer_profile.minMax.curriculum.max
       )
-      .nullable(),
+      .nullable()
+      .trim(),
     media: Yup.array().of(
       Yup.object().shape({
         type: Yup.string().required("type required").nullable(),
         url: Yup.string().required("Description required").nullable(),
-        title: Yup.string().required("title required").nullable(),
-        description: Yup.string()
-          .required("Description required")
-          .nullable()
+        title: Yup.string()
+          .required("title required")
           .min(
             MIN_DESCRIPTION_LENGTH,
-            `about must be less than ${MIN_DESCRIPTION_LENGTH} characters`
+            `title must be at least ${MIN_DESCRIPTION_LENGTH} characters`
           )
           .max(
             MAX_DESCRIPTION_LENGTH,
-            `about must be less than ${MAX_DESCRIPTION_LENGTH} characters`
-          ),
+            `title must be less than ${MAX_DESCRIPTION_LENGTH} characters`
+          )
+          .nullable()
+          .trim(),
+        description: Yup.string()
+          .required("Description required")
+          .min(
+            MIN_DESCRIPTION_LENGTH,
+            `description must be at least ${MIN_DESCRIPTION_LENGTH} characters`
+          )
+
+          .max(
+            MAX_DESCRIPTION_LENGTH,
+            `description must be less than ${MAX_DESCRIPTION_LENGTH} characters`
+          )
+          .nullable()
+          .trim(),
       })
     ),
   });
@@ -210,10 +227,31 @@ export const UpdateSettingProfileForm = ({
                                     value={values.media[index].title}
                                     placeholder="Media title"
                                     onBlur={handleBlur}
-                                    className="form-control mt-1"
+                                    className={`form-control mt-1
+                                    ${
+                                      touched?.media &&
+                                      touched?.media[index] &&
+                                      touched?.media[index]?.title &&
+                                      errors?.media[index]?.title
+                                        ? `border border-danger`
+                                        : ``
+                                    }`}
                                     name="title"
                                     id="title"
-                                  ></input>
+                                  />
+                                  <HandleErrorLabel
+                                    isError={
+                                      errors?.media &&
+                                      errors?.media[index] &&
+                                      errors?.media[index]?.title
+                                    }
+                                    isTouched={
+                                      touched?.media &&
+                                      touched?.media[index] &&
+                                      touched?.media[index]?.title &&
+                                      errors?.media[index]?.title
+                                    }
+                                  />
                                 </div>
                               </div>
                               <div className="mb-3">
@@ -231,12 +269,33 @@ export const UpdateSettingProfileForm = ({
                                   value={values.media[index].description}
                                   placeholder="Media description"
                                   onBlur={handleBlur}
-                                  className="form-control mt-1"
+                                  className={`form-control mt-1
+                                    ${
+                                      touched?.media &&
+                                      touched?.media[index] &&
+                                      touched?.media[index]?.description &&
+                                      errors?.media[index]?.description
+                                        ? `border border-danger`
+                                        : ``
+                                    }`}
                                   name="description"
                                   id="description"
                                   cols="10"
                                   rows="3"
-                                ></textarea>
+                                />
+                                <HandleErrorLabel
+                                  isError={
+                                    errors?.media &&
+                                    errors?.media[index] &&
+                                    errors?.media[index]?.description
+                                  }
+                                  isTouched={
+                                    touched?.media &&
+                                    touched?.media[index] &&
+                                    touched?.media[index]?.description &&
+                                    errors?.media[index]?.description
+                                  }
+                                />
                               </div>
                               <div
                                 className="row mb-4 items-center"
