@@ -35,7 +35,11 @@ import { masterState } from "../../master/master.slice";
 import { TrainerDetails } from "../../trainer/trainerDetails";
 import { bookingsAction, bookingsState } from "../../common/common.slice";
 import { debounce } from "lodash";
-import { checkSlotAsync, commonAction, commonState } from "../../../common/common.slice";
+import {
+  checkSlotAsync,
+  commonAction,
+  commonState,
+} from "../../../common/common.slice";
 import CustomRangePicker from "../../../common/timeRangeSlider";
 const { isSidebarToggleEnabled } = bookingsAction;
 const { removePaymentIntent } = traineeAction;
@@ -79,7 +83,9 @@ const ScheduleTraining = () => {
   const toggle = () => setInstantScheduleMeeting(!isOpenInstantScheduleMeeting);
 
   useEffect(() => {
-    dispatch(getTraineeWithSlotsAsync(getParams));
+    if (getParams.search) {
+      dispatch(getTraineeWithSlotsAsync(getParams));
+    }
   }, [getParams]);
 
   useEffect(() => {
@@ -126,7 +132,6 @@ const ScheduleTraining = () => {
       ...prev,
       userInfo: null,
     }));
-
   }, []);
 
   useEffect(() => {
@@ -832,7 +837,9 @@ const ScheduleTraining = () => {
                             ? Utils.convertHoursToMinutes(formateEndTime)
                             : TimeRange.end
                         }
-                        trainerHourlyRate={trainerInfo?.userInfo?.extraInfo?.working_hours}
+                        trainerHourlyRate={
+                          trainerInfo?.userInfo?.extraInfo?.working_hours
+                        }
                         onChange={(time) => {
                           const startTime = time.startTime;
                           const endTime = time.endTime;
@@ -861,7 +868,13 @@ const ScheduleTraining = () => {
                     <div className="col-12 mb-3 d-flex justify-content-center align-items-center">
                       <button
                         type="button"
-                        disabled={!Utils.isTimeRangeAvailable(availableSlots, timeRange.startTime, timeRange.endTime)}
+                        disabled={
+                          !Utils.isTimeRangeAvailable(
+                            availableSlots,
+                            timeRange.startTime,
+                            timeRange.endTime
+                          )
+                        }
                         className="mt-3 btn btn-sm btn-primary"
                         onClick={() => {
                           const amountPayable = Utils.getMinutesFromHourMM(
@@ -870,13 +883,20 @@ const ScheduleTraining = () => {
                             trainerInfo?.userInfo?.extraInfo?.hourly_rate
                           );
                           if (amountPayable > 0) {
-                            if(Utils.isValidTimeDuration(timeRange.startTime, timeRange.endTime, minimumMeetingDurationInMin)) {
+                            if (
+                              Utils.isValidTimeDuration(
+                                timeRange.startTime,
+                                timeRange.endTime,
+                                minimumMeetingDurationInMin
+                              )
+                            ) {
                               const payload = {
                                 charging_price: amountPayable,
                                 trainer_id:
                                   trainerInfo?.userInfo?.trainer_id ||
                                   selectedTrainer?.trainer_id,
-                                trainer_info: trainerInfo || selectedTrainer.data,
+                                trainer_info:
+                                  trainerInfo || selectedTrainer.data,
                                 status: BookedSession.booked,
                                 booked_date: startDate,
                                 session_start_time: timeRange.startTime,
@@ -889,7 +909,9 @@ const ScheduleTraining = () => {
                                 })
                               );
                             } else {
-                              toast.error(`Session duration must be greater then ${minimumMeetingDurationInMin} minutes...`);
+                              toast.error(
+                                `Session duration must be greater then ${minimumMeetingDurationInMin} minutes...`
+                              );
                             }
                           } else {
                             toast.error("Invalid slot timing...");
