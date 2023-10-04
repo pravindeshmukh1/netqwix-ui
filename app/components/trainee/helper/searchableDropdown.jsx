@@ -89,7 +89,7 @@ const SearchableDropdown = ({
           <div className="col-12 p-0 m-0">
             <div
               className={`options ${
-                isOpen && filter(options).length ? "open" : ""
+                isOpen &&   (options).length ? "open" : ""
               }`}
             >
               {filter(options).map((option, index) => {

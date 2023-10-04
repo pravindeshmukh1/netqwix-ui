@@ -61,14 +61,22 @@
 }
 
 .dropdown .options.open {
-  width: 94%;
-  min-width: 94%;
+  width: 48.7vw;
+  min-width: auto;
   display: block;
   @media (max-width: 576px) {
-    width: 279px !important;
+    width: 90vw;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
   }
-  @media (min-width: 577px) and (max-width: 799px) {
-    width: 52vw !important;
+  @media (min-width: 577px) and (max-width: 1024px) {
+    width: 80vw;
+    max-width: 556px;
+  }
+
+  @media (min-width: 1025px) and (max-width: 1280px) {
+    width: 51.7vw;
   }
 }
 
@@ -96,7 +104,9 @@
 .custom-dropdown-width {
   width: 50vw;
   @media (max-width: 575px) {
-    margin-right: 123px !important;
+    width: calc(100vw - 20px) !important;
+    max-width: 231px;
+    margin-right: 80px !important;
   }
 }
 
