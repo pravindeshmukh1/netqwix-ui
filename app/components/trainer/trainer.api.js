@@ -35,3 +35,19 @@ export const updateProfile = async (payload) => {
     throw err;
   }
 };
+export const getTrainers = async () => {
+  try {
+    const response = await axiosInstance({
+      method: "get",
+      url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/trainer/get-trainers`,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

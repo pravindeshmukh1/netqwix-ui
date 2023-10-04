@@ -76,7 +76,7 @@ const SearchableDropdown = ({
         </div>
         <div className="col-2 p-0 m-0">
           <button
-            className={`btn btn-primary rounded-0 ${customClasses.searchButton}`}
+            className={`btn btn-primary rounded-0 search_button ${customClasses.searchButton}`}
             onClick={() => onSearchClick(query)}
           >
             {" "}

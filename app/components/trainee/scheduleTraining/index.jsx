@@ -41,12 +41,13 @@ import {
   commonState,
 } from "../../../common/common.slice";
 import CustomRangePicker from "../../../common/timeRangeSlider";
+import { getTrainersAsync, trainerState } from "../../trainer/trainer.slice";
 const { isSidebarToggleEnabled } = bookingsAction;
 const { removePaymentIntent } = traineeAction;
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
-  const { status } = useAppSelector(traineeState);
-  const { getTraineeSlots, transaction } = useAppSelector(traineeState);
+  const { status, getTraineeSlots, transaction } = useAppSelector(traineeState);
+  const { trainersList } = useAppSelector(trainerState);
   const { configs } = useAppSelector(bookingsState);
   const { isSlotAvailable, session_durations, availableSlots } =
     useAppSelector(commonState);
@@ -57,6 +58,7 @@ const ScheduleTraining = () => {
   const [getParams, setParams] = useState(params);
   const [categoryList, setCategoryList] = useState([]);
   const [bookingColumns, setBookingColumns] = useState([]);
+  const [trainers, setTrainers] = useState([]);
   const [listOfTrainers, setListOfTrainers] = useState([]);
   const [bookingTableData, setBookingTableData] = useState([]);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
@@ -89,10 +91,28 @@ const ScheduleTraining = () => {
   }, [getParams]);
 
   useEffect(() => {
+    dispatch(getTrainersAsync());
+  }, []);
+
+  useEffect(() => {
     const todaySDate = Utils.getDateInFormat(new Date());
     const { weekDates, weekDateFormatted } =
       Utils.getNext7WorkingDays(todaySDate);
-    setTableData(getTraineeSlots, weekDates);
+    // setTableData(getTraineeSlots, weekDates);
+    setTrainers(
+      trainersList.map((trainer) => {
+        const { id, fullname, profile_picture, category, extraInfo } = trainer;
+        return {
+          id,
+          isActive: true,
+          isCategory: false,
+          name: fullname,
+          background_image: profile_picture,
+          category,
+          extraInfo,
+        };
+      })
+    );
     setColumns(weekDateFormatted);
     setListOfTrainers(
       getTraineeSlots.map((trainer) => {
@@ -122,7 +142,12 @@ const ScheduleTraining = () => {
   }, [master]);
 
   useEffect(() => {
-    if (transaction && transaction.intent && transaction.intent.client_secret) {
+    if (
+      transaction &&
+      transaction?.intent &&
+      transaction?.intent?.result &&
+      transaction?.intent.result?.client_secret
+    ) {
       setShowTransactionModal(true);
     }
   }, [transaction]);
@@ -368,6 +393,9 @@ const ScheduleTraining = () => {
                           trainer_info,
                           status: BookedSession.booked,
                           booked_date: date,
+                          hourly_rate:
+                            trainerInfo?.userInfo?.extraInfo?.hourly_rate ||
+                            selectedTrainer?.data?.extraInfo?.hourly_rate,
                           session_start_time: content.start_time,
                           session_end_time: content.end_time,
                         };
@@ -580,7 +608,7 @@ const ScheduleTraining = () => {
         <h3>
           {" "}
           Trainer: {bookSessionPayload.trainer_info.fullname} (Price per hour $
-          {bookSessionPayload?.trainer_info?.extraInfo?.hourly_rate ||
+          {bookSessionPayload?.trainer_info?.userInfo?.extraInfo?.hourly_rate ||
             TRAINER_AMOUNT_USD}
           ){" "}
         </h3>
@@ -590,14 +618,19 @@ const ScheduleTraining = () => {
           {bookSessionPayload.session_end_time}
         </h4>
         <h4 className="mb-3">
-          Price: <b>${bookSessionPayload.charging_price}</b>
+          Price:
+          <b>
+            $
+            {bookSessionPayload?.trainer_info?.userInfo?.extraInfo
+              ?.hourly_rate || TRAINER_AMOUNT_USD}
+          </b>
         </h4>
       </div>
     );
   };
 
   const renderStripePaymentContent = () =>
-    transaction && transaction.intent ? (
+    transaction && transaction?.intent && transaction?.intent?.result ? (
       <div>
         <div className="d-flex justify-content-end mr-3">
           <h2
@@ -616,7 +649,7 @@ const ScheduleTraining = () => {
           {/* <h5>To book a slot, please pay {TRAINER_AMOUNT_USD}$.</h5> */}
           <div>
             <StripeCard
-              clientSecret={transaction.intent.client_secret}
+              clientSecret={transaction?.intent?.result?.client_secret}
               handlePaymentSuccess={() => {
                 setShowTransactionModal(false);
                 const payload = bookSessionPayload;
@@ -701,7 +734,7 @@ const ScheduleTraining = () => {
       </div>
       <div className="trainer-recommended">
         <h2>Recommended</h2>
-        <TrainerSlider list={listOfTrainers} />
+        <TrainerSlider list={trainers} />
       </div>
       <div style={{ height: "11vh" }} />
     </div>
@@ -799,7 +832,7 @@ const ScheduleTraining = () => {
                     const { weekDateFormatted, weekDates } =
                       Utils.getNext7WorkingDays(todaySDate);
                     setColumns(weekDateFormatted);
-                    setTableData(getTraineeSlots, weekDates);
+                    // setTableData(getTraineeSlots, weekDates);
                     setColumns(weekDateFormatted);
                   }}
                   selected={startDate}
@@ -872,7 +905,7 @@ const ScheduleTraining = () => {
                           !Utils.isTimeRangeAvailable(
                             availableSlots,
                             timeRange.startTime,
-                            timeRange.endTime
+                            timeRange.endTime || status === STATUS.pending
                           )
                         }
                         className="mt-3 btn btn-sm btn-primary"
@@ -897,6 +930,10 @@ const ScheduleTraining = () => {
                                   selectedTrainer?.trainer_id,
                                 trainer_info:
                                   trainerInfo || selectedTrainer.data,
+                                hourly_rate:
+                                  trainerInfo?.userInfo?.extraInfo
+                                    ?.hourly_rate ||
+                                  selectedTrainer?.data?.extraInfo?.hourly_rate,
                                 status: BookedSession.booked,
                                 booked_date: startDate,
                                 session_start_time: timeRange.startTime,
