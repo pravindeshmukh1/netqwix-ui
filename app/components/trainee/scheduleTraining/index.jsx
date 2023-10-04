@@ -46,9 +46,8 @@ const { isSidebarToggleEnabled } = bookingsAction;
 const { removePaymentIntent } = traineeAction;
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
-  const { status } = useAppSelector(traineeState);
+  const { status, getTraineeSlots, transaction } = useAppSelector(traineeState);
   const { trainersList } = useAppSelector(trainerState);
-  const { getTraineeSlots, transaction } = useAppSelector(traineeState);
   const { configs } = useAppSelector(bookingsState);
   const { isSlotAvailable, session_durations, availableSlots } =
     useAppSelector(commonState);
@@ -146,7 +145,8 @@ const ScheduleTraining = () => {
     if (
       transaction &&
       transaction?.intent &&
-      transaction?.intent?.client_secret
+      transaction?.intent?.result &&
+      transaction?.intent.result?.client_secret
     ) {
       setShowTransactionModal(true);
     }
@@ -608,7 +608,7 @@ const ScheduleTraining = () => {
         <h3>
           {" "}
           Trainer: {bookSessionPayload.trainer_info.fullname} (Price per hour $
-          {bookSessionPayload?.trainer_info?.extraInfo?.hourly_rate ||
+          {bookSessionPayload?.trainer_info?.userInfo?.extraInfo?.hourly_rate ||
             TRAINER_AMOUNT_USD}
           ){" "}
         </h3>
@@ -618,14 +618,19 @@ const ScheduleTraining = () => {
           {bookSessionPayload.session_end_time}
         </h4>
         <h4 className="mb-3">
-          Price: <b>${bookSessionPayload.charging_price}</b>
+          Price:
+          <b>
+            $
+            {bookSessionPayload?.trainer_info?.userInfo?.extraInfo
+              ?.hourly_rate || TRAINER_AMOUNT_USD}
+          </b>
         </h4>
       </div>
     );
   };
 
   const renderStripePaymentContent = () =>
-    transaction && transaction.intent ? (
+    transaction && transaction?.intent && transaction?.intent?.result ? (
       <div>
         <div className="d-flex justify-content-end mr-3">
           <h2
@@ -644,7 +649,7 @@ const ScheduleTraining = () => {
           {/* <h5>To book a slot, please pay {TRAINER_AMOUNT_USD}$.</h5> */}
           <div>
             <StripeCard
-              clientSecret={transaction.intent.client_secret}
+              clientSecret={transaction?.intent?.result?.client_secret}
               handlePaymentSuccess={() => {
                 setShowTransactionModal(false);
                 const payload = bookSessionPayload;
@@ -900,7 +905,7 @@ const ScheduleTraining = () => {
                           !Utils.isTimeRangeAvailable(
                             availableSlots,
                             timeRange.startTime,
-                            timeRange.endTime
+                            timeRange.endTime || status === STATUS.pending
                           )
                         }
                         className="mt-3 btn btn-sm btn-primary"
@@ -925,6 +930,10 @@ const ScheduleTraining = () => {
                                   selectedTrainer?.trainer_id,
                                 trainer_info:
                                   trainerInfo || selectedTrainer.data,
+                                hourly_rate:
+                                  trainerInfo?.userInfo?.extraInfo
+                                    ?.hourly_rate ||
+                                  selectedTrainer?.data?.extraInfo?.hourly_rate,
                                 status: BookedSession.booked,
                                 booked_date: startDate,
                                 session_start_time: timeRange.startTime,
