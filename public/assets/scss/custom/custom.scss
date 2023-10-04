@@ -349,6 +349,9 @@ slick-slider .slick-list,
   max-height: 70vh;
   overflow: auto;
   // width: 70px;
+  @media (max-width: 576px) {
+    left: 12px;
+  }
 }
 
 .creationBarItem {
@@ -799,7 +802,7 @@ slick-slider .slick-list,
   @media (max-width: 576px) {
     margin-top: 18px !important;
     min-height: 114px !important;
-    min-width: 102px !important;
+    min-width: 99px !important;
   }
 }
 
@@ -818,4 +821,9 @@ slick-slider .slick-list,
   @media (max-width: 576px) {
     width: 75vw;
   }
+}
+// search button height
+
+.search_button {
+  height: 58px;
 }

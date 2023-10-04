@@ -98,7 +98,11 @@ export const UpdateHourlyRateForm = ({ userInfo, onFormSubmit, extraInfo }) => {
               <button
                 type="submit"
                 className="btn btn-primary"
-                disabled={!isValid || !values.hourly_rate}
+                disabled={
+                  !isValid ||
+                  !values.hourly_rate ||
+                  +extraInfo?.hourly_rate === values.hourly_rate
+                }
               >
                 Save
               </button>

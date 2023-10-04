@@ -125,7 +125,7 @@ const TrainersDetails = ({
     const todaySDate = Utils.getDateInFormat(new Date());
     const { weekDates, weekDateFormatted } =
       Utils.getNext7WorkingDays(todaySDate);
-    setTableData(getTraineeSlots, weekDates);
+    // setTableData(getTraineeSlots, weekDates);
     setColumns(weekDateFormatted);
     setListOfTrainers(
       getTraineeSlots.map((trainer) => {
@@ -214,7 +214,7 @@ const TrainersDetails = ({
                 const { weekDateFormatted, weekDates } =
                   Utils.getNext7WorkingDays(todaySDate);
                 setColumns(weekDateFormatted);
-                setTableData(getTraineeSlots, weekDates);
+                // setTableData(getTraineeSlots, weekDates);
                 setColumns(weekDateFormatted);
               }}
               selected={startDate}

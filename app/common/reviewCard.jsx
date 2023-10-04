@@ -13,9 +13,11 @@ const ReviewCard = ({ trainer, isPublic = false }) => {
           <React.Fragment>
             <div
               key={`trainer_ratings${index}`}
-              className={`${isPublic ? "col-sm-5" : "col-sm-6"} mb-4`}
+              className={`${
+                isPublic ? "col-sm-5 p-2 m-2" : "col-sm-6 p-2 m-0"
+              }`}
             >
-              <div className="card reviews p-3">
+              <div className={`card reviews p-3 ${!isPublic && `mb-3`}`}>
                 <h5 className="card-title " style={{ fontSize: "18px" }}>
                   {item?.ratings?.trainee?.title}
                 </h5>

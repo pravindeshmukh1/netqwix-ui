@@ -1409,8 +1409,8 @@ const SettingSection = (props) => {
                                     type="url"
                                     onBlur={handleBlur}
                                     className="form-control mt-1"
-                                    name="Instagram"
-                                    id=""
+                                    name="instagram"
+                                    id="instagram"
                                   ></input>
                                 </div>
                               </div>
@@ -1480,8 +1480,8 @@ const SettingSection = (props) => {
                                     type="url"
                                     onBlur={handleBlur}
                                     className="form-control mt-1"
-                                    name="Twitter"
-                                    id=""
+                                    name="twitter"
+                                    id="twitter"
                                   ></input>
                                 </div>
                               </div>
@@ -1552,8 +1552,8 @@ const SettingSection = (props) => {
                                     type="url"
                                     onBlur={handleBlur}
                                     className="form-control mt-1"
-                                    name="Google"
-                                    id=""
+                                    name="google"
+                                    id="google"
                                   ></input>
                                 </div>
                               </div>
@@ -1699,8 +1699,8 @@ const SettingSection = (props) => {
                                     type="url"
                                     onBlur={handleBlur}
                                     className="form-control mt-1"
-                                    name="Slack"
-                                    id=""
+                                    name="slack"
+                                    id="slack"
                                   />
                                 </div>
                               </div>
@@ -1735,18 +1735,17 @@ const SettingSection = (props) => {
                           <>{values.slack || "Not available"}</>
                         )}
                         {isSocialFormOpen ? (
-                          <>
-                            <div className="my-4">
-                              <div className="d-flex  mt-4">
-                                <button
-                                  type="submit"
-                                  className="btn btn-primary"
-                                >
-                                  Save details
-                                </button>
-                              </div>
+                          <div className="my-4">
+                            <div className="d-flex  mt-4">
+                              <button
+                                type="submit"
+                                disabled={!isValid}
+                                className="btn btn-primary"
+                              >
+                                Save details
+                              </button>
                             </div>
-                          </>
+                          </div>
                         ) : (
                           <></>
                         )}

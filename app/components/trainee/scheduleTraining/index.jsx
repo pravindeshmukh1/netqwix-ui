@@ -41,11 +41,13 @@ import {
   commonState,
 } from "../../../common/common.slice";
 import CustomRangePicker from "../../../common/timeRangeSlider";
+import { getTrainersAsync, trainerState } from "../../trainer/trainer.slice";
 const { isSidebarToggleEnabled } = bookingsAction;
 const { removePaymentIntent } = traineeAction;
 const ScheduleTraining = () => {
   const dispatch = useAppDispatch();
   const { status } = useAppSelector(traineeState);
+  const { trainersList } = useAppSelector(trainerState);
   const { getTraineeSlots, transaction } = useAppSelector(traineeState);
   const { configs } = useAppSelector(bookingsState);
   const { isSlotAvailable, session_durations, availableSlots } =
@@ -57,6 +59,7 @@ const ScheduleTraining = () => {
   const [getParams, setParams] = useState(params);
   const [categoryList, setCategoryList] = useState([]);
   const [bookingColumns, setBookingColumns] = useState([]);
+  const [trainers, setTrainers] = useState([]);
   const [listOfTrainers, setListOfTrainers] = useState([]);
   const [bookingTableData, setBookingTableData] = useState([]);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
@@ -89,10 +92,28 @@ const ScheduleTraining = () => {
   }, [getParams]);
 
   useEffect(() => {
+    dispatch(getTrainersAsync());
+  }, []);
+
+  useEffect(() => {
     const todaySDate = Utils.getDateInFormat(new Date());
     const { weekDates, weekDateFormatted } =
       Utils.getNext7WorkingDays(todaySDate);
-    setTableData(getTraineeSlots, weekDates);
+    // setTableData(getTraineeSlots, weekDates);
+    setTrainers(
+      trainersList.map((trainer) => {
+        const { id, fullname, profile_picture, category, extraInfo } = trainer;
+        return {
+          id,
+          isActive: true,
+          isCategory: false,
+          name: fullname,
+          background_image: profile_picture,
+          category,
+          extraInfo,
+        };
+      })
+    );
     setColumns(weekDateFormatted);
     setListOfTrainers(
       getTraineeSlots.map((trainer) => {
@@ -122,7 +143,11 @@ const ScheduleTraining = () => {
   }, [master]);
 
   useEffect(() => {
-    if (transaction && transaction.intent && transaction.intent.client_secret) {
+    if (
+      transaction &&
+      transaction?.intent &&
+      transaction?.intent?.client_secret
+    ) {
       setShowTransactionModal(true);
     }
   }, [transaction]);
@@ -368,6 +393,9 @@ const ScheduleTraining = () => {
                           trainer_info,
                           status: BookedSession.booked,
                           booked_date: date,
+                          hourly_rate:
+                            trainerInfo?.userInfo?.extraInfo?.hourly_rate ||
+                            selectedTrainer?.data?.extraInfo?.hourly_rate,
                           session_start_time: content.start_time,
                           session_end_time: content.end_time,
                         };
@@ -701,7 +729,7 @@ const ScheduleTraining = () => {
       </div>
       <div className="trainer-recommended">
         <h2>Recommended</h2>
-        <TrainerSlider list={listOfTrainers} />
+        <TrainerSlider list={trainers} />
       </div>
       <div style={{ height: "11vh" }} />
     </div>
@@ -799,7 +827,7 @@ const ScheduleTraining = () => {
                     const { weekDateFormatted, weekDates } =
                       Utils.getNext7WorkingDays(todaySDate);
                     setColumns(weekDateFormatted);
-                    setTableData(getTraineeSlots, weekDates);
+                    // setTableData(getTraineeSlots, weekDates);
                     setColumns(weekDateFormatted);
                   }}
                   selected={startDate}

@@ -671,26 +671,26 @@ const Bookings = ({ accountType = null }) => {
 
   return (
     <React.Fragment>
-      <div
-        id="bookings"
-        onScroll={() => {
-          if (configs.sidebar.isMobileMode) {
-            dispatch(isSidebarToggleEnabled(true));
-          }
-          return;
-        }}
-        className={`bookings custom-scroll custom-sidebar-content-booking ${
-          configs.sidebar.isMobileMode &&
-          configs.sidebar.isToggleEnable &&
-          `submenu-width dynemic-sidebar ${
-            activeTab === leftSideBarOptions.SCHEDULE_TRAINING ? "active" : ""
-          }`
-        }`}
-      >
-        {addRatingModel.isOpen ? renderRating() : null}
-        {startMeeting.isOpenModal ? (
-          renderVideoCall()
-        ) : (
+      {startMeeting.isOpenModal ? (
+        renderVideoCall()
+      ) : (
+        <div
+          id="bookings"
+          onScroll={() => {
+            if (configs.sidebar.isMobileMode) {
+              dispatch(isSidebarToggleEnabled(true));
+            }
+            return;
+          }}
+          className={`bookings custom-scroll custom-sidebar-content-booking ${
+            configs.sidebar.isMobileMode &&
+            configs.sidebar.isToggleEnable &&
+            `submenu-width dynemic-sidebar ${
+              activeTab === leftSideBarOptions.SCHEDULE_TRAINING ? "active" : ""
+            }`
+          }`}
+        >
+          {addRatingModel.isOpen ? renderRating() : null}
           <div>
             {accountType === AccountType.TRAINER ? (
               <React.Fragment>
@@ -707,25 +707,25 @@ const Bookings = ({ accountType = null }) => {
               </React.Fragment>
             ) : null}
           </div>
-        )}
-        {accountType === AccountType.TRAINEE ? (
-          !scheduledMeetingDetails && !scheduledMeetingDetails.length ? (
-            <h2
-              className="d-flex 
+          {accountType === AccountType.TRAINEE ? (
+            !scheduledMeetingDetails && !scheduledMeetingDetails.length ? (
+              <h2
+                className="d-flex 
         justify-content-center mt-4"
-            >
-              No Bookings available
-            </h2>
-          ) : (
-            <React.Fragment>
-              <h3 className="mt-2 p-3 mb-2 bg-primary text-white rounded">
-                Bookings
-              </h3>
-              {Bookings()}
-            </React.Fragment>
-          )
-        ) : null}
-      </div>
+              >
+                No Bookings available
+              </h2>
+            ) : (
+              <React.Fragment>
+                <h3 className="mt-2 p-3 mb-2 bg-primary text-white rounded">
+                  Bookings
+                </h3>
+                {Bookings()}
+              </React.Fragment>
+            )
+          ) : null}
+        </div>
+      )}
     </React.Fragment>
   );
 };
