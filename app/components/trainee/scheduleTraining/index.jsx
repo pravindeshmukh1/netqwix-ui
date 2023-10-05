@@ -925,26 +925,38 @@ const ScheduleTraining = () => {
                             minimumMeetingDurationInMin
                           )
                         ) {
-                          const payload = {
-                            charging_price: amountPayable,
-                            trainer_id:
-                              trainerInfo?.userInfo?.trainer_id ||
-                              selectedTrainer?.trainer_id,
-                            trainer_info: trainerInfo || selectedTrainer.data,
-                            hourly_rate:
-                              trainerInfo?.userInfo?.extraInfo?.hourly_rate ||
-                              selectedTrainer?.data?.extraInfo?.hourly_rate,
-                            status: BookedSession.booked,
-                            booked_date: startDate,
-                            session_start_time: timeRange.startTime,
-                            session_end_time: timeRange.endTime,
-                          };
-                          setBookSessionPayload(payload);
-                          dispatch(
-                            createPaymentIntentAsync({
-                              amount: +amountPayable.toFixed(1),
-                            })
-                          );
+                          if (
+                            Utils.isInRange(
+                              startDate,
+                              timeRange.startTime,
+                              timeRange.endTime
+                            )
+                          ) {
+                            toast.error(
+                              "The specified time has elapsed. Please select another time..."
+                            );
+                          } else {
+                            const payload = {
+                              charging_price: amountPayable,
+                              trainer_id:
+                                trainerInfo?.userInfo?.trainer_id ||
+                                selectedTrainer?.trainer_id,
+                              trainer_info: trainerInfo || selectedTrainer.data,
+                              hourly_rate:
+                                trainerInfo?.userInfo?.extraInfo?.hourly_rate ||
+                                selectedTrainer?.data?.extraInfo?.hourly_rate,
+                              status: BookedSession.booked,
+                              booked_date: startDate,
+                              session_start_time: timeRange.startTime,
+                              session_end_time: timeRange.endTime,
+                            };
+                            setBookSessionPayload(payload);
+                            dispatch(
+                              createPaymentIntentAsync({
+                                amount: +amountPayable.toFixed(1),
+                              })
+                            );
+                          }
                         } else {
                           toast.error(
                             `Session duration must be greater then ${minimumMeetingDurationInMin} minutes...`

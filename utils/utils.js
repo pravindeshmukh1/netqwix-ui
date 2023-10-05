@@ -430,4 +430,19 @@ export class Utils {
     }
     return false;
   };
+
+  static isInRange = (targetDate, startTime, endTime) => {
+    const formateDate = moment(targetDate).format(FormateDate.YYYY_MM_DD);
+    const currentTime = moment();
+    const targetDateTime = moment(
+      `${formateDate} ${startTime}`,
+      "YYYY-MM-DD HH:mm"
+    );
+    const endDateTime = moment(`${formateDate} ${endTime}`, "YYYY-MM-DD HH:mm");
+
+    return (
+      currentTime.isBetween(targetDateTime, endDateTime, null, "[]") ||
+      currentTime.isSameOrAfter(endDateTime) // Check if current time is after the end time
+    );
+  };
 }
