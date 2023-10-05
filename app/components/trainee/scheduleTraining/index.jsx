@@ -6,6 +6,7 @@ import { Popover } from "react-tiny-popover";
 import {
   BookedSession,
   DefaultTimeRange,
+  FormateHours,
   Message,
   STATUS,
   TRAINER_AMOUNT_USD,
@@ -99,20 +100,6 @@ const ScheduleTraining = () => {
     const { weekDates, weekDateFormatted } =
       Utils.getNext7WorkingDays(todaySDate);
     // setTableData(getTraineeSlots, weekDates);
-    setTrainers(
-      trainersList.map((trainer) => {
-        const { id, fullname, profile_picture, category, extraInfo } = trainer;
-        return {
-          id,
-          isActive: true,
-          isCategory: false,
-          name: fullname,
-          background_image: profile_picture,
-          category,
-          extraInfo,
-        };
-      })
-    );
     setColumns(weekDateFormatted);
     setListOfTrainers(
       getTraineeSlots.map((trainer) => {
@@ -129,6 +116,23 @@ const ScheduleTraining = () => {
       })
     );
   }, [getTraineeSlots]);
+
+  useEffect(() => {
+    setTrainers(
+      trainersList.map((trainer) => {
+        const { id, fullname, profile_picture, category, extraInfo } = trainer;
+        return {
+          id,
+          isActive: true,
+          isCategory: false,
+          name: fullname,
+          background_image: profile_picture,
+          category,
+          extraInfo,
+        };
+      })
+    );
+  }, [trainersList]);
 
   useEffect(() => {
     const { masterData } = master;
@@ -793,178 +797,171 @@ const ScheduleTraining = () => {
     );
     return (
       <React.Fragment>
-        <div className="container">
-          <div className="row">
-            <div className="col-12 mb-3 d-flex ml-n3 ">
-              <label className="mr-2 mt-2" style={{ fontSize: "14px" }}>
-                Select date :{" "}
-              </label>
-              <div className="date-picker">
-                <DatePicker
-                  style={{
-                    fontSize: "14px",
-                  }}
-                  className="mt-1 date-picker"
-                  minDate={moment().toDate()}
-                  onChange={(date) => {
-                    if (date) {
-                      const booked_date = Utils.getDateInFormat(date);
-                      const payload = {
-                        trainer_id:
-                          trainerInfo?.userInfo?.trainer_id ||
-                          selectedTrainer?.trainer_id,
-                        booked_date,
-                        slotTime: {
-                          from:
-                            formateStartTime ||
-                            timeRange.startTime ||
-                            DefaultTimeRange.startTime,
-                          to:
-                            formateEndTime ||
-                            timeRange.endTime ||
-                            DefaultTimeRange.endTime,
-                        },
-                      };
-                      dispatch(checkSlotAsync(payload));
-                      setStartDate(date);
-                    }
-                    const todaySDate = Utils.getDateInFormat(date.toString());
-                    const { weekDateFormatted, weekDates } =
-                      Utils.getNext7WorkingDays(todaySDate);
-                    setColumns(weekDateFormatted);
-                    // setTableData(getTraineeSlots, weekDates);
-                    setColumns(weekDateFormatted);
-                  }}
-                  selected={startDate}
-                  customInput={<Input />}
-                />
-              </div>
+        <div className="row">
+          <div className="col-12 mb-3 d-flex ml-n3 ">
+            <label className="mr-2 mt-2 ml-3" style={{ fontSize: "14px" }}>
+              Select date :{" "}
+            </label>
+            <div className="date-picker">
+              <DatePicker
+                style={{
+                  fontSize: "14px",
+                }}
+                className="mt-1"
+                minDate={moment().toDate()}
+                onChange={(date) => {
+                  if (date) {
+                    const booked_date = Utils.getDateInFormat(date);
+                    const payload = {
+                      trainer_id:
+                        trainerInfo?.userInfo?.trainer_id ||
+                        selectedTrainer?.trainer_id,
+                      booked_date,
+                      slotTime: {
+                        from:
+                          formateStartTime ||
+                          timeRange.startTime ||
+                          DefaultTimeRange.startTime,
+                        to:
+                          formateEndTime ||
+                          timeRange.endTime ||
+                          DefaultTimeRange.endTime,
+                      },
+                    };
+                    dispatch(checkSlotAsync(payload));
+                    setStartDate(date);
+                  }
+                  const todaySDate = Utils.getDateInFormat(date.toString());
+                  const { weekDateFormatted, weekDates } =
+                    Utils.getNext7WorkingDays(todaySDate);
+                  setColumns(weekDateFormatted);
+                  // setTableData(getTraineeSlots, weekDates);
+                  setColumns(weekDateFormatted);
+                }}
+                selected={startDate}
+                customInput={<Input />}
+              />
             </div>
-            <div className="col-12">
-              {(getParams.search && getParams.search.length) ||
-              !bookingColumns.length ? (
-                <div>
-                  <div className="row">
-                    <label className="mt-1" style={{ fontSize: "13px" }}>
-                      Session Duration :{" "}
-                    </label>
-                    <div className="col-12 col-sm-12 col-md-11 col-lg-12 col-xl-8 col-xxl-8 mt-1 mb-2 ">
-                      <CustomRangePicker
-                        availableSlots={
-                          availableSlots
-                            ? availableSlots
-                            : [
-                                {
-                                  start_time: "",
-                                  end_time: "",
-                                },
-                              ]
-                        }
-                        startTime={
-                          trainerInfo?.userInfo?.extraInfo?.working_hours?.from
-                            ? Utils.convertHoursToMinutes(formateStartTime)
-                            : TimeRange.start
-                        }
-                        endTime={
-                          trainerInfo?.userInfo?.extraInfo?.working_hours?.to
-                            ? Utils.convertHoursToMinutes(formateEndTime)
-                            : TimeRange.end
-                        }
-                        trainerHourlyRate={
-                          trainerInfo?.userInfo?.extraInfo?.working_hours
-                        }
-                        onChange={(time) => {
-                          const startTime = time.startTime;
-                          const endTime = time.endTime;
-                          if (startTime && endTime) {
-                            const payload = {
-                              booked_date: startDate,
-                              trainer_id:
-                                trainerInfo?.userInfo?.trainer_id ||
-                                selectedTrainer?.trainer_id,
-                              slotTime: { from: startTime, to: endTime },
-                            };
-                            setTimeRange({ ...timeRange, startTime, endTime });
-                            const debouncedAPI = debounce(() => {
-                              // dispatch(checkSlotAsync(payload));
-                            }, debouncedConfigs.towSec);
-                            debouncedAPI();
-                          }
-                          // if (!isSlotAvailable) {
-                          //   toast.error(Message.notAvailable, { type: "error" });
-                          // }
-                        }}
-                        isSlotAvailable={isSlotAvailable}
-                        key={"time-range-slider"}
-                      />
-                    </div>
-                    <div className="col-12 mb-3 d-flex justify-content-center align-items-center">
-                      <button
-                        type="button"
-                        disabled={
-                          !Utils.isTimeRangeAvailable(
-                            availableSlots,
-                            timeRange.startTime,
-                            timeRange.endTime || status === STATUS.pending
-                          )
-                        }
-                        className="mt-3 btn btn-sm btn-primary"
-                        onClick={() => {
-                          const amountPayable = Utils.getMinutesFromHourMM(
+          </div>
+          <div className="col-11">
+            {(getParams.search && getParams.search.length) ||
+            !bookingColumns.length ? (
+              <div className="row">
+                <label className="mt-1 ml-3" style={{ fontSize: "13px" }}>
+                  Session Duration :{" "}
+                </label>
+                <div className="col-12 col-sm-12 col-md-11 col-lg-12 col-xl-8 col-xxl-8 mt-1 mb-2 ">
+                  <CustomRangePicker
+                    availableSlots={
+                      availableSlots
+                        ? availableSlots
+                        : [
+                            {
+                              start_time: "",
+                              end_time: "",
+                            },
+                          ]
+                    }
+                    startTime={
+                      trainerInfo?.userInfo?.extraInfo?.working_hours?.from
+                        ? Utils.convertHoursToMinutes(formateStartTime)
+                        : TimeRange.start
+                    }
+                    endTime={
+                      trainerInfo?.userInfo?.extraInfo?.working_hours?.to
+                        ? Utils.convertHoursToMinutes(formateEndTime)
+                        : TimeRange.end
+                    }
+                    trainerHourlyRate={
+                      trainerInfo?.userInfo?.extraInfo?.working_hours
+                    }
+                    onChange={(time) => {
+                      const startTime = time.startTime;
+                      const endTime = time.endTime;
+                      if (startTime && endTime) {
+                        const payload = {
+                          booked_date: startDate,
+                          trainer_id:
+                            trainerInfo?.userInfo?.trainer_id ||
+                            selectedTrainer?.trainer_id,
+                          slotTime: { from: startTime, to: endTime },
+                        };
+                        setTimeRange({ ...timeRange, startTime, endTime });
+                        const debouncedAPI = debounce(() => {
+                          // dispatch(checkSlotAsync(payload));
+                        }, debouncedConfigs.towSec);
+                        debouncedAPI();
+                      }
+                      // if (!isSlotAvailable) {
+                      //   toast.error(Message.notAvailable, { type: "error" });
+                      // }
+                    }}
+                    isSlotAvailable={isSlotAvailable}
+                    key={"time-range-slider"}
+                  />
+                </div>
+                <div className="col-12 mb-3 d-flex justify-content-center align-items-center">
+                  <button
+                    type="button"
+                    disabled={
+                      !Utils.isTimeRangeAvailable(
+                        availableSlots,
+                        timeRange.startTime,
+                        timeRange.endTime || status === STATUS.pending
+                      )
+                    }
+                    className="mt-3 btn btn-sm btn-primary"
+                    onClick={() => {
+                      const amountPayable = Utils.getMinutesFromHourMM(
+                        timeRange.startTime,
+                        timeRange.endTime,
+                        trainerInfo?.userInfo?.extraInfo?.hourly_rate
+                      );
+                      if (amountPayable > 0) {
+                        if (
+                          Utils.isValidTimeDuration(
                             timeRange.startTime,
                             timeRange.endTime,
-                            trainerInfo?.userInfo?.extraInfo?.hourly_rate
+                            minimumMeetingDurationInMin
+                          )
+                        ) {
+                          const payload = {
+                            charging_price: amountPayable,
+                            trainer_id:
+                              trainerInfo?.userInfo?.trainer_id ||
+                              selectedTrainer?.trainer_id,
+                            trainer_info: trainerInfo || selectedTrainer.data,
+                            hourly_rate:
+                              trainerInfo?.userInfo?.extraInfo?.hourly_rate ||
+                              selectedTrainer?.data?.extraInfo?.hourly_rate,
+                            status: BookedSession.booked,
+                            booked_date: startDate,
+                            session_start_time: timeRange.startTime,
+                            session_end_time: timeRange.endTime,
+                          };
+                          setBookSessionPayload(payload);
+                          dispatch(
+                            createPaymentIntentAsync({
+                              amount: +amountPayable.toFixed(1),
+                            })
                           );
-                          if (amountPayable > 0) {
-                            if (
-                              Utils.isValidTimeDuration(
-                                timeRange.startTime,
-                                timeRange.endTime,
-                                minimumMeetingDurationInMin
-                              )
-                            ) {
-                              const payload = {
-                                charging_price: amountPayable,
-                                trainer_id:
-                                  trainerInfo?.userInfo?.trainer_id ||
-                                  selectedTrainer?.trainer_id,
-                                trainer_info:
-                                  trainerInfo || selectedTrainer.data,
-                                hourly_rate:
-                                  trainerInfo?.userInfo?.extraInfo
-                                    ?.hourly_rate ||
-                                  selectedTrainer?.data?.extraInfo?.hourly_rate,
-                                status: BookedSession.booked,
-                                booked_date: startDate,
-                                session_start_time: timeRange.startTime,
-                                session_end_time: timeRange.endTime,
-                              };
-                              setBookSessionPayload(payload);
-                              dispatch(
-                                createPaymentIntentAsync({
-                                  amount: +amountPayable.toFixed(1),
-                                })
-                              );
-                            } else {
-                              toast.error(
-                                `Session duration must be greater then ${minimumMeetingDurationInMin} minutes...`
-                              );
-                            }
-                          } else {
-                            toast.error("Invalid slot timing...");
-                          }
-                        }}
-                      >
-                        Book Slot Now
-                      </button>
-                    </div>
-                  </div>
-                  {/* {renderTable()} */}
+                        } else {
+                          toast.error(
+                            `Session duration must be greater then ${minimumMeetingDurationInMin} minutes...`
+                          );
+                        }
+                      } else {
+                        toast.error("Invalid slot timing...");
+                      }
+                    }}
+                  >
+                    Book Slot Now
+                  </button>
                 </div>
-              ) : (
-                <TrainerSlider list={listOfTrainers} />
-              )}
-            </div>
+              </div>
+            ) : (
+              <TrainerSlider list={listOfTrainers} />
+            )}
           </div>
         </div>
         <Modal
