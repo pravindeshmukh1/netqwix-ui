@@ -672,7 +672,18 @@ const Bookings = ({ accountType = null }) => {
   return (
     <React.Fragment>
       {startMeeting.isOpenModal ? (
-        renderVideoCall()
+        <div
+          id="bookings"
+          className="bookings custom-scroll custom-sidebar-content-booking"
+          onScroll={() => {
+            if (configs.sidebar.isMobileMode) {
+              dispatch(isSidebarToggleEnabled(true));
+            }
+            return;
+          }}
+        >
+          {renderVideoCall()}
+        </div>
       ) : (
         <div
           id="bookings"
