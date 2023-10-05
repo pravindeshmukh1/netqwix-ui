@@ -172,6 +172,8 @@
   height: 100%;
   background-color: red;
   opacity: 1;
+  border-top-right-radius: 20px; /* Border radius for the top right corner */
+  border-bottom-right-radius: 20px; /* Border radius for the bottom right corner */
   z-index: 0;
 }
 
