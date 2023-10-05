@@ -617,17 +617,13 @@ const ScheduleTraining = () => {
           ){" "}
         </h3>
         <h4 className="mt-3 mb-3">
-          Booking time: {moment(bookSessionPayload.booked_date).format("ll")} |
-          From: {bookSessionPayload.session_start_time} To:{" "}
-          {bookSessionPayload.session_end_time}
+          Booking time: {moment(bookSessionPayload?.booked_date).format("ll")} |
+          From: {bookSessionPayload?.session_start_time} To:{" "}
+          {bookSessionPayload?.session_end_time}
         </h4>
         <h4 className="mb-3">
           Price:
-          <b>
-            $
-            {bookSessionPayload?.trainer_info?.userInfo?.extraInfo
-              ?.hourly_rate || TRAINER_AMOUNT_USD}
-          </b>
+          <b>${bookSessionPayload?.charging_price}</b>
         </h4>
       </div>
     );
@@ -850,7 +846,7 @@ const ScheduleTraining = () => {
                 <label className="mt-1 ml-3" style={{ fontSize: "13px" }}>
                   Session Duration :{" "}
                 </label>
-                <div className="col-12 col-sm-12 col-md-11 col-lg-12 col-xl-8 col-xxl-8 mt-1 mb-2 ">
+                <div className="col-12 col-sm-12 col-md-11 col-lg-12 col-xl-8 col-xxl-8 mt-1 mb-2 ml-2 ">
                   <CustomRangePicker
                     availableSlots={
                       availableSlots

@@ -110,8 +110,8 @@ const Category = (masterRecords) => {
   return (
     <React.Fragment>
       <div className="container category-content">
-        <div class="row">
-          <div class="col d-none d-sm-block">
+        <div className="row">
+          <div className="col d-none d-sm-block">
             {masterRecords?.masterRecords?.category?.map((item, index) => {
               return (
                 <span
