@@ -819,8 +819,8 @@ const SettingSection = (props) => {
                   >
                     <div className="card-body change-number">
                       <h5>Add your working hours...</h5>
-                      <div class="row">
-                        <div class="col-6 col-sm-3 col-md-3 col-lg-2">
+                      <div className="row">
+                        <div className="col-6 col-sm-3 col-md-3 col-lg-2">
                           <p className="ml-2">From</p>
                           <TimePicker
                             name="from"
@@ -863,7 +863,7 @@ const SettingSection = (props) => {
                             </label>
                           )}
                         </div>
-                        <div class="col-6 col-sm-3 col-md-3 col-lg-2">
+                        <div className="col-6 col-sm-3 col-md-3 col-lg-2">
                           <p className="ml-2">To</p>
                           <TimePicker
                             name="to"
@@ -905,12 +905,12 @@ const SettingSection = (props) => {
                             </label>
                           )}
                         </div>
-                        <div class="col-6 col-sm-3 col-md-3 col-lg-2">
+                        <div className="col-6 col-sm-3 col-md-3 col-lg-2">
                           <p className="ml-2">Time Zone</p>
                           <select
                             name="timezone_offset"
                             id="timezone-offset"
-                            class="timezone_offset mt-2 ml-2"
+                            className="timezone_offset mt-2 ml-2"
                             value={
                               userInfo?.extraInfo?.working_hours?.time_zone ??
                               null
@@ -932,7 +932,7 @@ const SettingSection = (props) => {
                             })}
                           </select>
                         </div>
-                        <div class="col-12">
+                        <div className="col-12">
                           <button
                             type="button"
                             className="ml-2 btn btn-sm btn-primary"
