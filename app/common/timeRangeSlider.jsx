@@ -140,7 +140,7 @@ const CustomRangePicker = ({
           return (
             <div
               key={index}
-              className={"slot"}
+              className="slot"
               style={{
                 // left: `${(parseInt(slot.start_time.split(":")[0]) / +slot.end_time.split(":")[0]) * 100}%`,
                 // left: `${(parseInt(slot.start_time.split(":")[0]) / +slot.end_time.split(":")[0]) * 100}%`,
