@@ -1,5 +1,6 @@
 "use client";
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+// import { Peer } from "peerjs";
 import SimplePeer from "simple-peer";
 import { EVENTS } from "../../../helpers/events";
 import { SocketContext } from "../socket";
@@ -37,8 +38,9 @@ let savedPos;
 let startPos;
 let currPos;
 let strikes = [];
+let extraStream;
 let localVideoRef;
-
+let Peer;
 export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     // const dispatch = useAppDispatch();
     const socket = useContext(SocketContext);
@@ -48,7 +50,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         b: 19,
         a: 1,
     });
-    
+
     const [remoteStream, setRemoteStream] = useState(null);
     const [isMuted, setIsMuted] = useState(false);
     const [isFeedStopped, setIsFeedStopped] = useState(false);
@@ -65,13 +67,20 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     const peerRef = useRef(null);
 
     useEffect(() => {
-        windowsRef.current = window;
-        handleStartCall();
-        listenSocketEvents();
-        initializeLocalStates();
-        return () => {
-            cutCall();
-        };
+        console.log(`fromUser && toUser --- `, fromUser, toUser)
+        if (fromUser && toUser) {
+            if (typeof navigator !== "undefined") {
+                Peer = require("peerjs").default
+            }
+
+            windowsRef.current = window;
+            handleStartCall();
+            listenSocketEvents();
+            initializeLocalStates();
+            return () => {
+                cutCall();
+            };
+        }
     }, []);
 
 
@@ -255,8 +264,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         };
     }, []);
 
-    useEffect(() => {
-        if (remoteVideoRef.current && remoteStream) {
+    useMemo(() => {
+        if (remoteVideoRef.current && remoteStream && !remoteVideoRef.current.srcObject) {
             remoteVideoRef.current.srcObject = remoteStream;
         }
     }, [remoteStream]);
@@ -279,6 +288,15 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     };
 
     const listenSocketEvents = () => {
+
+        // once user joins the call
+        socket.on('ON_CALL_JOIN', ({ userInfo }) => {
+            console.log(` end user join --- `, userInfo, peerRef.current, fromUser, toUser);
+            const { to_user, from_user } = userInfo;
+            if (!(peerRef && peerRef.current)) return;
+            connectToPeer(peerRef.current, from_user);
+        });
+
         // Handle signaling events from the signaling server
         socket.on(EVENTS.VIDEO_CALL.ON_OFFER, (offer) => {
             console.log(` -- on OFFER --`);
@@ -376,6 +394,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     };
 
     const handleStartCall = () => {
+        // console.clear();
         console.log(`--- handleStartCall ---`);
         const startVideoCall = async () => {
             try {
@@ -393,38 +412,32 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     showMsg: true,
                     msg: `Waiting for ${toUser?.fullname}  to join...`,
                 });
+
                 videoRef.current.srcObject = stream;
                 // setLocalVideoRef(stream);
                 // localVideoRef = { srcObject: stream };
-                const peer = new SimplePeer({
-                    initiator: true,
-                    // trickle: false,
-                    stream,
+                const peer = new Peer(fromUser._id)
+                peerRef.current = peer;
+                peer.on('open', (id) => {
+                    socket.emit('ON_CALL_JOIN', { userInfo: { from_user: fromUser._id, to_user: toUser._id }, })
+                    console.log('My peer ID is: ' + id);
+                });
+                peer.on('error', (error) => {
+                    console.error(`error ---`, error);
                 });
 
-                peerRef.current = peer;
-
-                peer.on(EVENTS.VIDEO_CALL.ON_SIGNAL, (offer) => {
-                    // Send the offer to the signaling server
-                    socket.emit(EVENTS.VIDEO_CALL.ON_OFFER, {
-                        offer,
-                        userInfo: { from_user: fromUser._id, to_user: toUser._id },
+                // Handle incoming voice/video connection
+                peer.on('call', (call) => {
+                    console.log(`incoming call ----`)
+                    call.answer(stream); // Answer the call with an A/V stream.
+                    call.on('stream', (remoteStream) => {
+                        setDisplayMsg({ showMsg: false, msg: "" });
+                        console.log(`onCall: setting remoteStream here for initially connected user ---- `);
+                        setRemoteStream(remoteStream);
                     });
                 });
 
-                peer.on(EVENTS.VIDEO_CALL.ON_STREAM, (stream) => {
-                    setDisplayMsg({ showMsg: false, msg: "" });
-                    setRemoteStream(stream);
-                });
 
-                peer.on(EVENTS.VIDEO_CALL.ON_CONNECT, () => {
-                    // setIsCalling(true);
-                });
-
-                peer.on(EVENTS.VIDEO_CALL.ON_CLOSE, () => {
-                    // setIsCalling(false);
-                    cleanupFunction();
-                });
             } catch (error) {
                 toast.error("Please allow media permission to microphone and camera for video call...");
                 console.error("Error accessing media devices:", error);
@@ -432,6 +445,35 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         };
         startVideoCall().then(() => { });
     };
+
+    // Initiate outgoing connection
+    let connectToPeer = (peer, peerId) => {
+
+        console.log(`Connecting to ${peerId}...`);
+
+        // let conn = peer.connect(peerId);
+        // conn.on('data', (data) => {
+        //     console.log(`received: ${data}`);
+        // });
+        // conn.on('open', () => {
+        //     conn.send('hi!');
+        // });
+
+        // navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+            // .then((stream) => {
+                if(!(videoRef && videoRef?.current)) return;
+                let call = peer.call(peerId, videoRef?.current?.srcObject);
+                call.on('stream', (remoteStream) => {
+                    console.log(`setting remoteStream for 2nd user here ---- `);
+                    setDisplayMsg({ showMsg: false, msg: "" });
+                    setRemoteStream(remoteStream);
+                });
+            // })
+            // .catch((err) => {
+            //     console.log('Failed to get local stream', err);
+            // });
+    };
+
 
     const sendDrawEvent = () => {
         const canvas = canvasRef.current;
@@ -469,11 +511,54 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         }
     };
 
+    function handlePeerDisconnect() {
+        if (!(peerRef && peerRef.current)) return;
+        console.log(`peerRef.current.connections --- `, peerRef.current.connections);
+        // manually close the peer connections
+        for (let conns in peerRef.current.connections) {
+            peerRef.current.connections[conns].forEach((conn, index, array) => {
+                console.log(`closing ${conn.connectionId} peerConnection (${index + 1}/${array.length})`, conn.peerConnection);
+                conn.peerConnection.close();
+
+                // close it using peerjs methods
+                if (conn.close)
+                    conn.close();
+            });
+        }
+    }
+
     const cleanupFunction = () => {
+
+
+        handlePeerDisconnect();
         let videorefSrc = videoRef.current || localVideoRef;
         if (videoRef && videorefSrc && videorefSrc.srcObject) {
             const availableTracks = videorefSrc.srcObject.getTracks();
             const availableVideoTracks = videorefSrc.srcObject.getVideoTracks();
+            for (
+                let videoRefIndex = 0;
+                videoRefIndex < availableTracks.length;
+                videoRefIndex++
+            ) {
+                const track = availableTracks[videoRefIndex];
+                track.stop();
+            }
+
+            for (
+                let videoRefIndex = 0;
+                videoRefIndex < availableVideoTracks.length;
+                videoRefIndex++
+            ) {
+                const track = availableVideoTracks[videoRefIndex];
+                track.stop();
+            }
+        }
+
+
+        let videorefSrcRemote = remoteVideoRef.current;
+        if (remoteVideoRef && videorefSrcRemote && videorefSrcRemote.srcObject) {
+            const availableTracks = videorefSrcRemote.srcObject.getTracks();
+            const availableVideoTracks = videorefSrcRemote.srcObject.getVideoTracks();
             for (
                 let videoRefIndex = 0;
                 videoRefIndex < availableTracks.length;
