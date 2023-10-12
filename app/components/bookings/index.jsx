@@ -674,7 +674,7 @@ const Bookings = ({ accountType = null }) => {
       {startMeeting.isOpenModal ? (
         <div
           id="bookings"
-          className="bookings custom-scroll custom-sidebar-content-booking"
+          className="video_call custom-scroll custom-sidebar-content-booking"
           onScroll={() => {
             if (configs.sidebar.isMobileMode) {
               dispatch(isSidebarToggleEnabled(true));

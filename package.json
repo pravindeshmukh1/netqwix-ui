@@ -21,6 +21,7 @@
     "moment": "^2.29.4",
     "next": "^13.1.1",
     "next-images": "^1.8.4",
+    "peerjs": "^1.5.1",
     "photoswipe": "^5.3.4",
     "prop-types": "^15.8.1",
     "rc-time-picker": "^3.7.3",
