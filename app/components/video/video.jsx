@@ -772,48 +772,10 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
   return (
     <React.Fragment>
       {displayMsg.showMsg ? (
-        <div className="no-user-joined">{displayMsg.msg}</div>
+        <div className="no-user-joined font-weight-bold">{displayMsg.msg}</div>
       ) : (
         <></>
       )}
-      {/* <div className="flex">
-        <div className="absolute z-50 bottom-0 left-21">
-          <div className="flex items-center">
-            <div>
-              {videoRef && (
-                <video
-                  id="end-user-video"
-                  playsInline
-                  muted
-                  className="rounded z-50"
-                  ref={videoRef}
-                  autoPlay
-                />
-              )}
-            </div>
-          </div>
-        </div>
-        {remoteVideoRef && (
-          <div id="remote-user" className="remote-user">
-            <canvas
-              id="drawing-canvas"
-              width={document.getElementById("bookings")?.clientWidth}
-              height={document.getElementById("bookings")?.clientHeight}
-              className="canvas-print absolute  all-0"
-              ref={canvasRef}
-            />
-            <video
-              width={document.getElementById("bookings")?.clientWidth}
-              height={document.getElementById("bookings")?.clientHeight}
-              ref={remoteVideoRef}
-              playsInline
-              autoPlay
-              className="bg-video"
-              id="video"
-            />
-          </div>
-        )}
-      </div> */}
       <div className="flex">
         <div className="absolute z-50 bottom-0 left-21">
           <div className="flex items-center">

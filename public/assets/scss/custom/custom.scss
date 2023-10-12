@@ -132,7 +132,7 @@ $canvas-z-index: 8;
 }
 
 .full-height {
-  height: 90vh !important;
+  height: 100vh !important;
 }
 
 .call-action-buttons {
@@ -231,7 +231,6 @@ $canvas-z-index: 8;
   font-size: 20px;
   z-index: $canvas-z-index;
   background: white;
-  height: 40vh;
   padding: 20px;
 }
 
@@ -261,7 +260,7 @@ video {
   position: absolute;
   top: $navbar-height-top - 55px;
   bottom: 10;
-  left: $sidebar-width-left;
+  left: 0px;
   right: 0;
 }
 
