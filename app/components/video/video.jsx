@@ -457,15 +457,9 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             console.log(`unable to access video call ---- `, err);
           });
         // setLocalStream(stream);
-        console.log("toUser", toUser);
-        console.log("fromUser", fromUser);
         setDisplayMsg({
           showMsg: true,
-          msg: `Waiting for ${
-            accountType === AccountType.TRAINER
-              ? toUser.fullname
-              : fromUser.fullname
-          }  to join...`,
+          msg: `Waiting for ${toUser?.fullname}  to join...`,
         });
 
         videoRef.current.srcObject = stream;
