@@ -912,8 +912,8 @@ const SettingSection = (props) => {
                             id="timezone-offset"
                             className="timezone_offset mt-2 ml-2"
                             value={
-                              userInfo?.extraInfo?.working_hours?.time_zone ??
-                              null
+                              workingHours.time_zone ||
+                              userInfo?.extraInfo?.working_hours?.time_zone
                             }
                             onChange={(event) => {
                               const { value } = event.target;
@@ -936,12 +936,7 @@ const SettingSection = (props) => {
                           <button
                             type="button"
                             className="ml-2 btn btn-sm btn-primary"
-                            disabled={
-                              !workingHours.from ||
-                              !workingHours.to ||
-                              !workingHours.time_zone ||
-                              isTimeConflicts
-                            }
+                            disabled={isTimeConflicts}
                             onClick={() => {
                               const working_hours = {
                                 working_hours: workingHours,
