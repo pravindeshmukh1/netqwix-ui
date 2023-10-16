@@ -673,7 +673,7 @@ const Bookings = ({ accountType = null }) => {
     <React.Fragment>
       {startMeeting.isOpenModal ? (
         <div
-          id="video-call"
+          id="bookings"
           className="video_call custom-scroll"
           onScroll={() => {
             if (configs.sidebar.isMobileMode) {
@@ -686,7 +686,7 @@ const Bookings = ({ accountType = null }) => {
         </div>
       ) : (
         <div
-          id="video-call"
+          id="bookings"
           onScroll={() => {
             if (configs.sidebar.isMobileMode) {
               dispatch(isSidebarToggleEnabled(true));

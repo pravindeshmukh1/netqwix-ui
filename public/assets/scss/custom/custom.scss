@@ -177,6 +177,9 @@ $canvas-z-index: 8;
   position: absolute;
   left: $sidebar-width-left;
   top: $navbar-height-top - 55px;
+  width: 90vw;
+  top: 5%;
+  height: 90vh;
 }
 // .bg-video {
 //   object-fit: cover; /* Maintain aspect ratio; cover entire area even if it means cutting off parts of the video */
@@ -234,6 +237,35 @@ $canvas-z-index: 8;
     height: 150px;
     width: 150px;
   }
+
+  .bg-video {
+    left: 20px;
+  }
+
+
+.left-21 {
+  left: 15%;
+  bottom: 6%;
+}
+}
+
+
+//   for small screen
+@media only screen and (max-width: 920px) {
+  #end-user-video {
+    height: 150px;
+    width: 150px;
+  }
+
+  .bg-video {
+    left: $sidebar-width-left + 10px !important;
+  }
+
+
+.left-21 {
+  left: 15%;
+  bottom: 6%;
+}
 }
 
 .no-user-joined {

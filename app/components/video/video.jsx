@@ -108,8 +108,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
       savedPos = context.getImageData(
         0,
         0,
-        document.getElementById("video-call")?.clientWidth,
-        document.getElementById("video-call")?.clientHeight
+        document.getElementById("bookings")?.clientWidth,
+        document.getElementById("bookings")?.clientHeight
       );
       if (strikes.length >= 10) strikes.shift(); // removing first position if strikes > 10;
       strikes.push(savedPos);
@@ -703,7 +703,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
   const renderCallActionButtons = () => {
     return (
-      <div className="call-action-buttons z-50 ml-2  absolute bottom-10  z-50">
+      <div className="call-action-buttons z-50 ml-2  absolute bottom-10">
         <div
           className={`icon-btn ${
             isMuted ? "btn-danger" : "btn-light"
@@ -797,8 +797,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
           <div id="remote-user" className="remote-user">
             <canvas
               id="drawing-canvas"
-              width={document.getElementById("video-call")?.clientWidth}
-              height={document.getElementById("video-call")?.clientHeight}
+              width={document.getElementById("bookings")?.clientWidth}
+              height={document.getElementById("bookings")?.clientHeight}
               className="canvas-print absolute all-0"
               ref={canvasRef}
             />
