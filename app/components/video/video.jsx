@@ -108,8 +108,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
       savedPos = context.getImageData(
         0,
         0,
-        document.getElementById("bookings")?.clientWidth,
-        document.getElementById("bookings")?.clientHeight
+        document.getElementById("video-call")?.clientWidth,
+        document.getElementById("video-call")?.clientHeight
       );
       if (strikes.length >= 10) strikes.shift(); // removing first position if strikes > 10;
       strikes.push(savedPos);
@@ -424,8 +424,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
       event.clientY ||
       (event?.touches && event?.touches[0])
     ) {
-      const clientX = event.clientX || event?.touches[0]?.clientX;
-      const clientY = event.clientY || event?.touches[0]?.clientY;
+      const clientX = event?.clientX || event?.touches[0]?.clientX;
+      const clientY = event?.clientY || event?.touches[0]?.clientY;
       const { offsetLeft, offsetTop } = event.target;
       const canvasX = clientX - offsetLeft;
       const canvasY = clientY - offsetTop;
@@ -797,8 +797,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
           <div id="remote-user" className="remote-user">
             <canvas
               id="drawing-canvas"
-              width={document.getElementById("bookings")?.clientWidth}
-              height={document.getElementById("bookings")?.clientHeight}
+              width={document.getElementById("video-call")?.clientWidth}
+              height={document.getElementById("video-call")?.clientHeight}
               className="canvas-print absolute all-0"
               ref={canvasRef}
             />

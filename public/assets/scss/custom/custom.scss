@@ -158,19 +158,30 @@ $canvas-z-index: 8;
   height: 100%; /* Set the height of the parent container to 100% */
 }
 
-.canvas-print,
-.bg-video {
-  position: absolute;
-  width: 100%; /* Set the width of the canvas and video to 100% of their parent container */
-  height: 100%; /* Set the height of the canvas and video to 100% of their parent container */
-  top: 0;
-  left: 0;
+// .canvas-print,
+// .bg-video {
+//   position: absolute;
+//   width: 100%; /* Set the width of the canvas and video to 100% of their parent container */
+//   height: 100%; /* Set the height of the canvas and video to 100% of their parent container */
+//   top: 0;
+//   left: 0;
+// }
+
+
+
+.canvas-print {
+  left: $sidebar-width-left + 5px !important;
 }
 
 .bg-video {
-  object-fit: cover; /* Maintain aspect ratio; cover entire area even if it means cutting off parts of the video */
-  height: 104vh;
+  position: absolute;
+  left: $sidebar-width-left;
+  top: $navbar-height-top - 55px;
 }
+// .bg-video {
+//   object-fit: cover; /* Maintain aspect ratio; cover entire area even if it means cutting off parts of the video */
+//   height: 104vh;
+// }
 
 .canvas-print {
   z-index: $canvas-z-index !important;
@@ -258,7 +269,7 @@ video {
 
 .all-0 {
   position: absolute;
-  top: $navbar-height-top - 55px;
+  top: 5px;
   bottom: 10;
   left: 0px;
   right: 0;
@@ -445,8 +456,8 @@ slick-slider .slick-list,
 
 // video call
 .video_call {
-  margin: 30px;
-  width: 95vw;
+  // margin: 30px;
+  width: 100vw;
   height: 100vh;
   overflow: hidden;
   box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
