@@ -7,8 +7,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Peer } from "peerjs";
-// import SimplePeer from "simple-peer";
 import { EVENTS } from "../../../helpers/events";
 import { SocketContext } from "../socket";
 import { Popover } from "react-tiny-popover";
