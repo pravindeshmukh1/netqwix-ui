@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import { Nav, NavLink, NavItem, TabContent, TabPane, Col } from "reactstrap";
+import { Nav, NavLink, NavItem, TabContent, TabPane, Col, Button } from "reactstrap";
 import {  Link, X } from "react-feather";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import "photoswipe/style.css";
+import { useAppDispatch } from "../../app/store";
+import { videouploadAction } from "../../app/components/videoupload/videoupload.slice";
+
 const fiveImageGallary = [
   {
     mainColClass: "isotopeSelector filter",
@@ -96,6 +99,8 @@ const eightImageGallary = [
   },
 ];
 const FileSection = (props) => {
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     let lightbox = new PhotoSwipeLightbox({
       gallery: "#" + "my-test-gallery",
@@ -146,7 +151,7 @@ const FileSection = (props) => {
       <div className="theme-title">
         <div className="media">
           <div>
-            <h2>Media</h2>
+            <h2>Clips</h2>
             {/* <h4>Shared Media</h4> */}
           </div>
           <div className="media-body media-body text-right">
@@ -159,6 +164,9 @@ const FileSection = (props) => {
             </div>
         </div>
       </div>
+      <Button className="button-effect mb-3" style={{width: "100%", justifyContent: 'center'}} color="primary" onClick={() => dispatch(videouploadAction.setIsOpen(true))} >
+        Clip Upload
+      </Button>
       <div className="theme-tab">
         <Nav tabs>
           <NavItem className="ml-5px">
@@ -168,17 +176,7 @@ const FileSection = (props) => {
               }`}
               onClick={() => setActiveTab("media")}
             >
-              Trainer
-            </NavLink>
-          </NavItem>
-          <NavItem className="ml-5px">
-            <NavLink
-              className={`button-effect ${
-                activeTab === "link" ? "active" : ""
-              }`}
-              onClick={() => setActiveTab("link")}
-            >
-              Trainee
+              My Clips
             </NavLink>
           </NavItem>
           <NavItem className="ml-5px">

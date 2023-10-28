@@ -7,6 +7,7 @@ import traineeReducer from "./components/trainee/trainee.slice";
 import trainerReducer from "./components/trainer/trainer.slice";
 import bookingsReducer from "./components/common/common.slice";
 import commonReducer from "../app/common/common.slice";
+import videouploadReducer from "./components/videoupload/videoupload.slice";
 
 const makeStore = () => {
   return configureStore({
@@ -18,6 +19,7 @@ const makeStore = () => {
       trainer: trainerReducer,
       bookings: bookingsReducer,
       common: commonReducer,
+      videoupload: videouploadReducer
     },
   });
 };

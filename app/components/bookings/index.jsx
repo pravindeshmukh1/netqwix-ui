@@ -32,7 +32,7 @@ import SocialMediaIcons from "../../common/socialMediaIcons";
 import { bookingButton } from "../../common/constants";
 import { TabContent, TabPane, Nav, NavItem, NavLink } from "reactstrap";
 import classnames from "classnames";
-
+import VideoUpload from '../videoupload'
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
 const Bookings = ({ accountType = null }) => {
@@ -707,6 +707,7 @@ const Bookings = ({ accountType = null }) => {
               <React.Fragment>
                 <div className="welcome-text mb-3">
                   Welcome, <br /> {userInfo && userInfo?.fullname}
+                  <VideoUpload/>
                 </div>
                 <div>{trainerInfo()}</div>
                 {/* <h2 className="d-flex justify-content-center mt-2 p-5 mb-2 bg-primary text-white rounded">
