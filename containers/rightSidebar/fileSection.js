@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Nav, NavLink, NavItem, TabContent, TabPane, Col, Button } from "reactstrap";
-import {  Link, X } from "react-feather";
+import { Link, X } from "react-feather";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import "photoswipe/style.css";
 import { useAppDispatch } from "../../app/store";
@@ -155,25 +155,24 @@ const FileSection = (props) => {
             {/* <h4>Shared Media</h4> */}
           </div>
           <div className="media-body media-body text-right">
-              <div
-                className="icon-btn btn-sm btn-outline-light close-apps pointer"
-                onClick={() => props.smallSideBarToggle()}
-              >
-                <X />
-              </div>
+            <div
+              className="icon-btn btn-sm btn-outline-light close-apps pointer"
+              onClick={() => props.smallSideBarToggle()}
+            >
+              <X />
             </div>
+          </div>
         </div>
       </div>
-      <Button className="button-effect mb-3" style={{width: "100%", justifyContent: 'center'}} color="primary" onClick={() => dispatch(videouploadAction.setIsOpen(true))} >
+      <Button className="button-effect mb-3" style={{ width: "100%", justifyContent: 'center' }} color="primary" onClick={() => dispatch(videouploadAction.setIsOpen(true))} >
         Clip Upload
       </Button>
       <div className="theme-tab">
         <Nav tabs>
           <NavItem className="ml-5px">
             <NavLink
-              className={`button-effect ${
-                activeTab === "media" ? "active" : ""
-              }`}
+              className={`button-effect ${activeTab === "media" ? "active" : ""
+                }`}
               onClick={() => setActiveTab("media")}
             >
               My Clips
@@ -181,9 +180,8 @@ const FileSection = (props) => {
           </NavItem>
           <NavItem className="ml-5px">
             <NavLink
-              className={`button-effect ${
-                activeTab === "docs" ? "active" : ""
-              }`}
+              className={`button-effect ${activeTab === "docs" ? "active" : ""
+                }`}
               onClick={() => setActiveTab("docs")}
             >
               Netquix
@@ -209,9 +207,8 @@ const FileSection = (props) => {
                       {fiveImageGallary.map((image, index) => (
                         <div
                           key={index}
-                          className={`col-4 ${
-                            image.mainColClass ? image.mainColClass : ""
-                          }`}
+                          className={`col-4 ${image.mainColClass ? image.mainColClass : ""
+                            }`}
                         >
                           <div className={image.mediaClass}>
                             <div className="overlay">
@@ -283,9 +280,8 @@ const FileSection = (props) => {
                       {fiveImageGallary.map((image, index) => (
                         <div
                           key={index}
-                          className={`col-4 ${
-                            image.mainColClass && image.mainColClass
-                          }`}
+                          className={`col-4 ${image.mainColClass && image.mainColClass
+                            }`}
                         >
                           <div className={image.mediaClass}>
                             <div className="overlay">
@@ -354,9 +350,8 @@ const FileSection = (props) => {
                       {eightImageGallary.map((image, index) => (
                         <div
                           key={index}
-                          className={`col-4 ${
-                            image.mainColClass && image.mainColClass
-                          }`}
+                          className={`col-4 ${image.mainColClass && image.mainColClass
+                            }`}
                         >
                           <div className={image.mediaClass}>
                             <div className="overlay">
@@ -431,9 +426,8 @@ const FileSection = (props) => {
                       {eightImageGallary.map((image, index) => (
                         <div
                           key={index}
-                          className={`col-4 ${
-                            image.mainColClass && image.mainColClass
-                          }`}
+                          className={`col-4 ${image.mainColClass && image.mainColClass
+                            }`}
                         >
                           <div className={image.mediaClass}>
                             <div className="overlay">
@@ -492,7 +486,7 @@ const FileSection = (props) => {
             </div>
           </TabPane>
           <TabPane tabId="link">
-          <div className="media-gallery portfolio-section grid-portfolio">
+            <div className="media-gallery portfolio-section grid-portfolio">
               <div className={`collapse-block ${collapse1 ? "" : "open"}`}>
                 <h5
                   className="block-title"
@@ -507,9 +501,8 @@ const FileSection = (props) => {
                       {fiveImageGallary.map((image, index) => (
                         <div
                           key={index}
-                          className={`col-4 ${
-                            image.mainColClass ? image.mainColClass : ""
-                          }`}
+                          className={`col-4 ${image.mainColClass ? image.mainColClass : ""
+                            }`}
                         >
                           <div className={image.mediaClass}>
                             <div className="overlay">
@@ -581,9 +574,8 @@ const FileSection = (props) => {
                       {fiveImageGallary.map((image, index) => (
                         <div
                           key={index}
-                          className={`col-4 ${
-                            image.mainColClass && image.mainColClass
-                          }`}
+                          className={`col-4 ${image.mainColClass && image.mainColClass
+                            }`}
                         >
                           <div className={image.mediaClass}>
                             <div className="overlay">
@@ -652,9 +644,8 @@ const FileSection = (props) => {
                       {eightImageGallary.map((image, index) => (
                         <div
                           key={index}
-                          className={`col-4 ${
-                            image.mainColClass && image.mainColClass
-                          }`}
+                          className={`col-4 ${image.mainColClass && image.mainColClass
+                            }`}
                         >
                           <div className={image.mediaClass}>
                             <div className="overlay">
@@ -729,9 +720,8 @@ const FileSection = (props) => {
                       {eightImageGallary.map((image, index) => (
                         <div
                           key={index}
-                          className={`col-4 ${
-                            image.mainColClass && image.mainColClass
-                          }`}
+                          className={`col-4 ${image.mainColClass && image.mainColClass
+                            }`}
                         >
                           <div className={image.mediaClass}>
                             <div className="overlay">
@@ -790,7 +780,7 @@ const FileSection = (props) => {
             </div>
           </TabPane>
           <TabPane tabId="docs">
-          <div className="media-gallery portfolio-section grid-portfolio">
+            <div className="media-gallery portfolio-section grid-portfolio">
               <div className={`collapse-block ${collapse1 ? "" : "open"}`}>
                 <h5
                   className="block-title"
@@ -805,9 +795,8 @@ const FileSection = (props) => {
                       {fiveImageGallary.map((image, index) => (
                         <div
                           key={index}
-                          className={`col-4 ${
-                            image.mainColClass ? image.mainColClass : ""
-                          }`}
+                          className={`col-4 ${image.mainColClass ? image.mainColClass : ""
+                            }`}
                         >
                           <div className={image.mediaClass}>
                             <div className="overlay">
@@ -879,9 +868,8 @@ const FileSection = (props) => {
                       {fiveImageGallary.map((image, index) => (
                         <div
                           key={index}
-                          className={`col-4 ${
-                            image.mainColClass && image.mainColClass
-                          }`}
+                          className={`col-4 ${image.mainColClass && image.mainColClass
+                            }`}
                         >
                           <div className={image.mediaClass}>
                             <div className="overlay">
@@ -950,9 +938,8 @@ const FileSection = (props) => {
                       {eightImageGallary.map((image, index) => (
                         <div
                           key={index}
-                          className={`col-4 ${
-                            image.mainColClass && image.mainColClass
-                          }`}
+                          className={`col-4 ${image.mainColClass && image.mainColClass
+                            }`}
                         >
                           <div className={image.mediaClass}>
                             <div className="overlay">
@@ -1027,9 +1014,8 @@ const FileSection = (props) => {
                       {eightImageGallary.map((image, index) => (
                         <div
                           key={index}
-                          className={`col-4 ${
-                            image.mainColClass && image.mainColClass
-                          }`}
+                          className={`col-4 ${image.mainColClass && image.mainColClass
+                            }`}
                         >
                           <div className={image.mediaClass}>
                             <div className="overlay">
