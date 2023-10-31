@@ -18,6 +18,8 @@ const VideoUpload = (props) => {
     useEffect(() => {
         getCategoryData()
     }, [])
+    console.log('fdsgfhhjghj');
+
 
     const getCategoryData = async () => {
         var res = await getMasterData()

@@ -15,11 +15,10 @@ const Modal = ({
 }) => {
   return (
     <ReactStrapModal
-      className={`${
-        allowFullWidth
-          ? "react-strap-modal-full"
-          : "custom-react-strap-modal-full"
-      } `}
+      className={`${allowFullWidth
+        ? "react-strap-modal-full"
+        : "custom-react-strap-modal-full"
+        } `}
       isOpen={isOpen}
       toggle={toggle}
       key={id}
@@ -29,7 +28,7 @@ const Modal = ({
         overflow: overflowHidden ? "hidden" : null,
         margin: "0px",
         minHeight: minHeight ? "100vh" : null,
-  }}
+      }}
     >
       <ModalBody>{element}</ModalBody>
       <ModalFooter>{footer}</ModalFooter>

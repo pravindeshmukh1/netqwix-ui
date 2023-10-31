@@ -5,6 +5,10 @@ import PhotoSwipeLightbox from "photoswipe/lightbox";
 import "photoswipe/style.css";
 import { useAppDispatch } from "../../app/store";
 import { videouploadAction } from "../../app/components/videoupload/videoupload.slice";
+import { myClips } from "./fileSection.api";
+import { LOCAL_STORAGE_KEYS } from "../../app/common/constants";
+import Modal from "../../app/common/modal";
+import VideoUpload from "../../app/components/videoupload";
 
 const fiveImageGallary = [
   {
@@ -45,54 +49,33 @@ const fiveImageGallary = [
 ];
 const eightImageGallary = [
   {
-    mainColClass: "isotopeSelector filter",
-    mediaClass: "media-big",
-    src: "/assets/images/gallery/1.jpg",
-    width: 150,
-    height: 150,
-  },
-  {
-    mediaClass: "media-small isotopeSelector filter",
-    src: "/assets/images/gallery/2.jpg",
-    width: 150,
-    height: 150,
-    Children: [
-      {
-        mediaClass: "media-small isotopeSelector filter",
-        src: "/assets/images/gallery/3.jpg",
-        width: 150,
-        height: 150,
-      },
-    ],
-  },
-  {
-    mediaClass: "media-small isotopeSelector filter",
     src: "/assets/images/gallery/4.jpg",
     width: 150,
     height: 150,
-    Children: [
-      {
-        mediaClass: "media-small isotopeSelector filter fashion",
-        src: "/assets/images/gallery/5.jpg",
-        width: 150,
-        height: 150,
-      },
-    ],
-  },
-  {
-    src: "/assets/images/gallery/2.jpg",
+    mediaClass: "media-small isotopeSelector filter",
+  }, {
+    src: "/assets/images/gallery/4.jpg",
+    width: 150,
+    height: 150,
+    mediaClass: "media-small isotopeSelector filter",
+  }, {
+    src: "/assets/images/gallery/4.jpg",
+    width: 150,
+    height: 150,
+    mediaClass: "media-small isotopeSelector filter",
+  }, {
+    src: "/assets/images/gallery/4.jpg",
+    width: 150,
+    height: 150,
+    mediaClass: "media-small isotopeSelector filter",
+  }, {
+    src: "/assets/images/gallery/4.jpg",
     width: 150,
     height: 150,
     mediaClass: "media-small isotopeSelector filter",
   },
   {
     src: "/assets/images/gallery/3.jpg",
-    width: 150,
-    height: 150,
-    mediaClass: "media-small isotopeSelector filter",
-  },
-  {
-    src: "/assets/images/gallery/4.jpg",
     width: 150,
     height: 150,
     mediaClass: "media-small isotopeSelector filter",
@@ -140,11 +123,24 @@ const FileSection = (props) => {
       lightbox4 = null;
     };
   }, []);
+
   const [activeTab, setActiveTab] = useState("media");
+  const [clips, setClips] = useState([]);
   const [collapse1, setCollapse1] = useState(false);
   const [collapse2, setCollapse2] = useState(false);
   const [collapse3, setCollapse3] = useState(false);
   const [collapse4, setCollapse4] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState("");
+
+  useEffect(() => {
+    getMyClips()
+  }, [])
+
+  const getMyClips = async () => {
+    var res = await myClips({})
+    setClips(res?.data)
+  }
 
   return (
     <div className="apps-content" id="files">
@@ -167,6 +163,7 @@ const FileSection = (props) => {
       <Button className="button-effect mb-3" style={{ width: "100%", justifyContent: 'center' }} color="primary" onClick={() => dispatch(videouploadAction.setIsOpen(true))} >
         Clip Upload
       </Button>
+      <VideoUpload />
       <div className="theme-tab">
         <Nav tabs>
           <NavItem className="ml-5px">
@@ -178,7 +175,16 @@ const FileSection = (props) => {
               My Clips
             </NavLink>
           </NavItem>
-          <NavItem className="ml-5px">
+          {localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE) === "Trainer" && <NavItem className="ml-5px">
+            <NavLink
+              className={`button-effect ${activeTab === "trainee" ? "active" : ""
+                }`}
+              onClick={() => setActiveTab("trainee")}
+            >
+              Trainee
+            </NavLink>
+          </NavItem>}
+          {localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE) === "Trainer" && <NavItem className="ml-5px">
             <NavLink
               className={`button-effect ${activeTab === "docs" ? "active" : ""
                 }`}
@@ -186,303 +192,90 @@ const FileSection = (props) => {
             >
               Netquix
             </NavLink>
-          </NavItem>
+          </NavItem>}
         </Nav>
       </div>
       <div className="file-tab">
         <TabContent activeTab={activeTab} className="custom-scroll">
           <TabPane tabId="media">
             <div className="media-gallery portfolio-section grid-portfolio">
-              <div className={`collapse-block ${collapse1 ? "" : "open"}`}>
-                <h5
-                  className="block-title"
-                  onClick={() => setCollapse1(!collapse1)}
-                >
-                  12/12/2019
-                  <label className="badge badge-primary sm ml-2">8</label>
-                </h5>
-                <div className={`block-content ${collapse1 ? "d-none" : ""}`}>
-                  <div className="row share-media zoom-gallery">
-                    <div className="pswp-gallery row mx-0" id="my-test-gallery">
-                      {fiveImageGallary.map((image, index) => (
+
+              {clips?.length && clips?.map((cl, ind) =>
+                <div className={`collapse-block ${!cl?.show ? "" : "open"}`}>
+                  <h5
+                    className="block-title"
+                    onClick={() => {
+                      var temp = clips
+                      temp = temp.map(vl => { return { ...vl, show: false } })
+                      temp[ind].show = true
+                      setClips([...temp])
+                    }}
+                  >
+                    {cl?._id}
+                    <label className="badge badge-primary sm ml-2">{cl?.clips?.length}</label>
+                  </h5>
+                  {/*  NORMAL  STRUCTURE END  */}
+                  <div className={`block-content ${!cl?.show ? "d-none" : ""}`}>
+                    <div className="row">
+                      {cl?.clips.map((clp, index) => (
                         <div
                           key={index}
-                          className={`col-4 ${image.mainColClass ? image.mainColClass : ""
-                            }`}
+                          className={`col-4 p-1`}
+                          style={{ borderRadius: 5 }}
+                          onClick={() => {
+                            setSelectedVideo(`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`)
+                            setIsOpen(true)
+                          }}
                         >
-                          <div className={image.mediaClass}>
-                            <div className="overlay">
-                              <div className="border-portfolio">
-                                <a
-                                  href={image.src}
-                                  data-pswp-width={image.width}
-                                  data-pswp-height={image.height}
-                                  rel="noreferrer"
-                                >
-                                  <div className="overlay-background">
-                                    <i
-                                      className="ti-plus"
-                                      aria-hidden="true"
-                                    ></i>
-                                  </div>
-                                  <img
-                                    src={image.src}
-                                    className="img-fluid"
-                                    alt=""
-                                  />
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                          {image.Children &&
-                            image.Children.map((data, index) => (
-                              <div key={index} className={data.mediaClass}>
-                                <div className="overlay">
-                                  <div className="border-portfolio">
-                                    <div
-                                      className="pswp-gallery"
-                                      id="my-test-gallery"
-                                    >
-                                      <a
-                                        href={data.src}
-                                        data-pswp-width={data.width}
-                                        data-pswp-height={data.height}
-                                        rel="noreferrer"
-                                      >
-                                        <div className="overlay-background">
-                                          <i
-                                            className="ti-plus"
-                                            aria-hidden="true"
-                                          ></i>
-                                        </div>
-                                        <img src={data.src} alt="" />
-                                      </a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
+                          <video style={{ width: "80%", height: "80%" }}  >
+                            <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                          </video>
                         </div>
                       ))}
                     </div>
                   </div>
                 </div>
-                <h5
-                  className="block-title"
-                  onClick={() => setCollapse2(!collapse2)}
-                >
-                  10/01/2020
-                  <label className="badge badge-primary sm ml-2">5</label>
-                </h5>
-                <div className={`block-content ${collapse2 ? "d-none" : ""}`}>
-                  <div className="row share-media zoom-gallery">
-                    <div className="pswp-gallery row mx-0" id="my-gallery">
-                      {fiveImageGallary.map((image, index) => (
+              )}
+            </div>
+          </TabPane>
+          <TabPane tabId="trainee">
+            <div className="media-gallery portfolio-section grid-portfolio">
+              {clips?.length && clips?.map((cl, ind) =>
+                <div className={`collapse-block ${!cl?.show ? "" : "open"}`}>
+                  <h5
+                    className="block-title"
+                    onClick={() => {
+                      var temp = clips
+                      temp = temp.map(vl => { return { ...vl, show: false } })
+                      temp[ind].show = true
+                      setClips([...temp])
+                    }}
+                  >
+                    {cl?._id}
+                    <label className="badge badge-primary sm ml-2">{cl?.clips?.length}</label>
+                  </h5>
+                  {/*  NORMAL  STRUCTURE END  */}
+                  <div className={`block-content ${!cl?.show ? "d-none" : ""}`}>
+                    <div className="row">
+                      {cl?.clips.map((clp, index) => (
                         <div
                           key={index}
-                          className={`col-4 ${image.mainColClass && image.mainColClass
-                            }`}
+                          className={`col-4 p-1`}
+                          style={{ borderRadius: 5 }}
+                          onClick={() => {
+                            setSelectedVideo(`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`)
+                            setIsOpen(true)
+                          }}
                         >
-                          <div className={image.mediaClass}>
-                            <div className="overlay">
-                              <div className="border-portfolio">
-                                <a
-                                  href={image.src}
-                                  data-pswp-width={image.width}
-                                  data-pswp-height={image.height}
-                                  rel="noreferrer"
-                                >
-                                  <div className="overlay-background">
-                                    <i
-                                      className="ti-plus"
-                                      aria-hidden="true"
-                                    ></i>
-                                  </div>
-                                  <img src={image.src} alt="" />
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                          {image.Children &&
-                            image.Children.map((data, index2) => (
-                              <div key={index2} className={data.mediaClass}>
-                                <div className="overlay">
-                                  <div className="border-portfolio">
-                                    <div
-                                      className="pswp-gallery"
-                                      id="my-test-gallery"
-                                    >
-                                      <a
-                                        href={data.src}
-                                        data-pswp-width={data.width}
-                                        data-pswp-height={data.height}
-                                        rel="noreferrer"
-                                      >
-                                        <div className="overlay-background">
-                                          <i
-                                            className="ti-plus"
-                                            aria-hidden="true"
-                                          ></i>
-                                        </div>
-                                        <img src={data.src} alt="" />
-                                      </a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
+                          <video style={{ width: "80%", height: "80%" }}  >
+                            <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                          </video>
                         </div>
                       ))}
                     </div>
                   </div>
                 </div>
-                {/*  Eight  STRUCTURE Start  */}
-                <h5
-                  className="block-title"
-                  onClick={() => setCollapse3(!collapse3)}
-                >
-                  30/04/2020
-                  <label className="badge badge-primary sm ml-2">2</label>
-                </h5>
-                <div className={`block-content ${collapse3 ? "d-none" : ""}`}>
-                  <div className="row share-media zoom-gallery">
-                    <div className="pswp-gallery row mx-0" id="gallery8">
-                      {eightImageGallary.map((image, index) => (
-                        <div
-                          key={index}
-                          className={`col-4 ${image.mainColClass && image.mainColClass
-                            }`}
-                        >
-                          <div className={image.mediaClass}>
-                            <div className="overlay">
-                              <div className="border-portfolio">
-                                {/* <div
-                                className="pswp-gallery"
-                                id="my-test-gallery"
-                              > */}
-                                <a
-                                  href={image.src}
-                                  data-pswp-width={image.width}
-                                  data-pswp-height={image.height}
-                                  rel="noreferrer"
-                                >
-                                  <div className="overlay-background">
-                                    <i
-                                      className="ti-plus"
-                                      aria-hidden="true"
-                                    ></i>
-                                  </div>
-                                  <img src={image.src} alt="" />
-                                </a>
-                                {/* </div> */}
-                              </div>
-                            </div>
-                          </div>
-                          {image.Children &&
-                            image.Children.map((data, index2) => (
-                              <div key={index2} className={data.mediaClass}>
-                                <div className="overlay">
-                                  <div className="border-portfolio">
-                                    <div
-                                      className="pswp-gallery"
-                                      id="my-test-gallery"
-                                    >
-                                      <a
-                                        href={data.src}
-                                        data-pswp-width={data.width}
-                                        data-pswp-height={data.height}
-                                        rel="noreferrer"
-                                      >
-                                        <div className="overlay-background">
-                                          <i
-                                            className="ti-plus"
-                                            aria-hidden="true"
-                                          ></i>
-                                        </div>
-                                        <img src={data.src} alt="" />
-                                      </a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                {/*  Eight  STRUCTURE END  */}
-                <h5
-                  className="block-title"
-                  onClick={() => setCollapse4(!collapse4)}
-                >
-                  10/01/2020
-                  <label className="badge badge-primary sm ml-2">2</label>
-                </h5>
-                {/*  NORMAL  STRUCTURE END  */}
-                <div className={`block-content ${collapse4 ? "d-none" : ""}`}>
-                  <div className="row share-media zoom-gallery">
-                    <div className="pswp-gallery row mx-0" id="gallery">
-                      {eightImageGallary.map((image, index) => (
-                        <div
-                          key={index}
-                          className={`col-4 ${image.mainColClass && image.mainColClass
-                            }`}
-                        >
-                          <div className={image.mediaClass}>
-                            <div className="overlay">
-                              <div className="border-portfolio">
-                                <a
-                                  href={image.src}
-                                  data-pswp-width={image.width}
-                                  data-pswp-height={image.height}
-                                  rel="noreferrer"
-                                >
-                                  <div className="overlay-background">
-                                    <i
-                                      className="ti-plus"
-                                      aria-hidden="true"
-                                    ></i>
-                                  </div>
-                                  <img src={image.src} alt="" />
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                          {image.Children &&
-                            image.Children.map((data, index2) => (
-                              <div key={index2} className={data.mediaClass}>
-                                <div className="overlay">
-                                  <div className="border-portfolio">
-                                    <div
-                                      className="pswp-gallery"
-                                      id="my-test-gallery"
-                                    >
-                                      <a
-                                        href={data.src}
-                                        data-pswp-width={data.width}
-                                        data-pswp-height={data.height}
-                                        rel="noreferrer"
-                                      >
-                                        <div className="overlay-background">
-                                          <i
-                                            className="ti-plus"
-                                            aria-hidden="true"
-                                          ></i>
-                                        </div>
-                                        <img src={data.src} alt="" />
-                                      </a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
           </TabPane>
           <TabPane tabId="link">
@@ -782,292 +575,20 @@ const FileSection = (props) => {
           <TabPane tabId="docs">
             <div className="media-gallery portfolio-section grid-portfolio">
               <div className={`collapse-block ${collapse1 ? "" : "open"}`}>
-                <h5
-                  className="block-title"
-                  onClick={() => setCollapse1(!collapse1)}
-                >
-                  12/12/2019
-                  <label className="badge badge-primary sm ml-2">8</label>
-                </h5>
-                <div className={`block-content ${collapse1 ? "d-none" : ""}`}>
-                  <div className="row share-media zoom-gallery">
-                    <div className="pswp-gallery row mx-0" id="my-test-gallery">
-                      {fiveImageGallary.map((image, index) => (
-                        <div
-                          key={index}
-                          className={`col-4 ${image.mainColClass ? image.mainColClass : ""
-                            }`}
-                        >
-                          <div className={image.mediaClass}>
-                            <div className="overlay">
-                              <div className="border-portfolio">
-                                <a
-                                  href={image.src}
-                                  data-pswp-width={image.width}
-                                  data-pswp-height={image.height}
-                                  rel="noreferrer"
-                                >
-                                  <div className="overlay-background">
-                                    <i
-                                      className="ti-plus"
-                                      aria-hidden="true"
-                                    ></i>
-                                  </div>
-                                  <img
-                                    src={image.src}
-                                    className="img-fluid"
-                                    alt=""
-                                  />
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                          {image.Children &&
-                            image.Children.map((data, index) => (
-                              <div key={index} className={data.mediaClass}>
-                                <div className="overlay">
-                                  <div className="border-portfolio">
-                                    <div
-                                      className="pswp-gallery"
-                                      id="my-test-gallery"
-                                    >
-                                      <a
-                                        href={data.src}
-                                        data-pswp-width={data.width}
-                                        data-pswp-height={data.height}
-                                        rel="noreferrer"
-                                      >
-                                        <div className="overlay-background">
-                                          <i
-                                            className="ti-plus"
-                                            aria-hidden="true"
-                                          ></i>
-                                        </div>
-                                        <img src={data.src} alt="" />
-                                      </a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <h5
-                  className="block-title"
-                  onClick={() => setCollapse2(!collapse2)}
-                >
-                  10/01/2020
-                  <label className="badge badge-primary sm ml-2">5</label>
-                </h5>
-                <div className={`block-content ${collapse2 ? "d-none" : ""}`}>
-                  <div className="row share-media zoom-gallery">
-                    <div className="pswp-gallery row mx-0" id="my-gallery">
-                      {fiveImageGallary.map((image, index) => (
-                        <div
-                          key={index}
-                          className={`col-4 ${image.mainColClass && image.mainColClass
-                            }`}
-                        >
-                          <div className={image.mediaClass}>
-                            <div className="overlay">
-                              <div className="border-portfolio">
-                                <a
-                                  href={image.src}
-                                  data-pswp-width={image.width}
-                                  data-pswp-height={image.height}
-                                  rel="noreferrer"
-                                >
-                                  <div className="overlay-background">
-                                    <i
-                                      className="ti-plus"
-                                      aria-hidden="true"
-                                    ></i>
-                                  </div>
-                                  <img src={image.src} alt="" />
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                          {image.Children &&
-                            image.Children.map((data, index2) => (
-                              <div key={index2} className={data.mediaClass}>
-                                <div className="overlay">
-                                  <div className="border-portfolio">
-                                    <div
-                                      className="pswp-gallery"
-                                      id="my-test-gallery"
-                                    >
-                                      <a
-                                        href={data.src}
-                                        data-pswp-width={data.width}
-                                        data-pswp-height={data.height}
-                                        rel="noreferrer"
-                                      >
-                                        <div className="overlay-background">
-                                          <i
-                                            className="ti-plus"
-                                            aria-hidden="true"
-                                          ></i>
-                                        </div>
-                                        <img src={data.src} alt="" />
-                                      </a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                {/*  Eight  STRUCTURE Start  */}
-                <h5
-                  className="block-title"
-                  onClick={() => setCollapse3(!collapse3)}
-                >
-                  30/04/2020
-                  <label className="badge badge-primary sm ml-2">2</label>
-                </h5>
-                <div className={`block-content ${collapse3 ? "d-none" : ""}`}>
-                  <div className="row share-media zoom-gallery">
-                    <div className="pswp-gallery row mx-0" id="gallery8">
-                      {eightImageGallary.map((image, index) => (
-                        <div
-                          key={index}
-                          className={`col-4 ${image.mainColClass && image.mainColClass
-                            }`}
-                        >
-                          <div className={image.mediaClass}>
-                            <div className="overlay">
-                              <div className="border-portfolio">
-                                {/* <div
-                                className="pswp-gallery"
-                                id="my-test-gallery"
-                              > */}
-                                <a
-                                  href={image.src}
-                                  data-pswp-width={image.width}
-                                  data-pswp-height={image.height}
-                                  rel="noreferrer"
-                                >
-                                  <div className="overlay-background">
-                                    <i
-                                      className="ti-plus"
-                                      aria-hidden="true"
-                                    ></i>
-                                  </div>
-                                  <img src={image.src} alt="" />
-                                </a>
-                                {/* </div> */}
-                              </div>
-                            </div>
-                          </div>
-                          {image.Children &&
-                            image.Children.map((data, index2) => (
-                              <div key={index2} className={data.mediaClass}>
-                                <div className="overlay">
-                                  <div className="border-portfolio">
-                                    <div
-                                      className="pswp-gallery"
-                                      id="my-test-gallery"
-                                    >
-                                      <a
-                                        href={data.src}
-                                        data-pswp-width={data.width}
-                                        data-pswp-height={data.height}
-                                        rel="noreferrer"
-                                      >
-                                        <div className="overlay-background">
-                                          <i
-                                            className="ti-plus"
-                                            aria-hidden="true"
-                                          ></i>
-                                        </div>
-                                        <img src={data.src} alt="" />
-                                      </a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                {/*  Eight  STRUCTURE END  */}
-                <h5
-                  className="block-title"
-                  onClick={() => setCollapse4(!collapse4)}
-                >
-                  10/01/2020
-                  <label className="badge badge-primary sm ml-2">2</label>
-                </h5>
-                {/*  NORMAL  STRUCTURE END  */}
                 <div className={`block-content ${collapse4 ? "d-none" : ""}`}>
-                  <div className="row share-media zoom-gallery">
-                    <div className="pswp-gallery row mx-0" id="gallery">
-                      {eightImageGallary.map((image, index) => (
-                        <div
-                          key={index}
-                          className={`col-4 ${image.mainColClass && image.mainColClass
-                            }`}
-                        >
-                          <div className={image.mediaClass}>
-                            <div className="overlay">
-                              <div className="border-portfolio">
-                                <a
-                                  href={image.src}
-                                  data-pswp-width={image.width}
-                                  data-pswp-height={image.height}
-                                  rel="noreferrer"
-                                >
-                                  <div className="overlay-background">
-                                    <i
-                                      className="ti-plus"
-                                      aria-hidden="true"
-                                    ></i>
-                                  </div>
-                                  <img src={image.src} alt="" />
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                          {image.Children &&
-                            image.Children.map((data, index2) => (
-                              <div key={index2} className={data.mediaClass}>
-                                <div className="overlay">
-                                  <div className="border-portfolio">
-                                    <div
-                                      className="pswp-gallery"
-                                      id="my-test-gallery"
-                                    >
-                                      <a
-                                        href={data.src}
-                                        data-pswp-width={data.width}
-                                        data-pswp-height={data.height}
-                                        rel="noreferrer"
-                                      >
-                                        <div className="overlay-background">
-                                          <i
-                                            className="ti-plus"
-                                            aria-hidden="true"
-                                          ></i>
-                                        </div>
-                                        <img src={data.src} alt="" />
-                                      </a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                        </div>
-                      ))}
-                    </div>
+                  <div className="row">
+                    {eightImageGallary.map((clp, index) => (
+                      <div
+                        key={index}
+                        className={`col-6 p-1`}
+                        style={{ borderRadius: 5 }}
+                        onClick={() => setIsOpen(true)}
+                      >
+                        <video style={{ width: "80%", height: "80%" }}  >
+                          <source src={"https://v.pinimg.com/videos/mc/720p/f6/88/88/f68888290d70aca3cbd4ad9cd3aa732f.mp4"} type="video/mp4" />
+                        </video>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -1075,6 +596,28 @@ const FileSection = (props) => {
           </TabPane>
         </TabContent>
       </div>
+
+      <Modal
+        isOpen={isOpen}
+        allowFullWidth={true}
+        element={
+          <>
+            <div className="d-flex flex-column align-items-center p-3 justify-content-center h-100">
+              <div
+                className={`col-5 `}
+                style={{ borderRadius: 5 }}
+              >
+                <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+                  <span onClick={() => setIsOpen(false)}>X</span>
+                </div>
+                <video style={{ width: "80%", height: "80%" }} autoplay controls   >
+                  <source src={selectedVideo} type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </>
+        }
+      />
     </div>
   );
 };

@@ -17,7 +17,6 @@ export const videouploadSlice = createSlice({
       state.isOpen = action.payload;
     },
     uploadVideoS3: (state, action) => {
-      console.log("action.payload", action.payload);
       toast.success("Clip upload successfully.");
       state.isOpen = false;
     },

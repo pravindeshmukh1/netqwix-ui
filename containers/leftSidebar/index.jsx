@@ -180,11 +180,10 @@ const Index = (props) => {
         /> */}
 
       <nav
-        className={`main-nav on custom-scroll ${
-          accountType === AccountType.TRAINEE &&
+        className={`main-nav on custom-scroll ${accountType === AccountType.TRAINEE &&
           POSITION_FIXED_SIDEBAR_MENU.includes(activeTab) &&
           "custom-sidebar"
-        }`}
+          }`}
       >
         {/* logo section */}
         <div className="logo-warpper">
@@ -239,16 +238,15 @@ const Index = (props) => {
             <li>
               <Tooltip title="Home" position="top" trigger="mouseenter">
                 <NavLink
-                  className={`icon-btn btn-light button-effect ${
-                    activeTab === "home" ? "active" : ""
-                  }`}
+                  className={`icon-btn btn-light button-effect ${activeTab === "home" ? "active" : ""
+                    }`}
                   onClick={() => TogglTab("home")}
                 >
                   <i className="fa fa-home" />
                 </NavLink>
               </Tooltip>
             </li>
-            {accountType === AccountType.TRAINEE&&   <li>
+            {accountType === AccountType.TRAINEE && <li>
               <Tooltip
                 title={
                   accountType === AccountType.TRAINEE
@@ -258,12 +256,11 @@ const Index = (props) => {
                 position="right-end"
                 trigger="mouseenter"
               >
-              <NavLink
-                  className={`icon-btn btn-light button-effect ${
-                    activeTab === leftSideBarOptions.SCHEDULE_TRAINING
-                      ? "active"
-                      : ""
-                  }`}
+                <NavLink
+                  className={`icon-btn btn-light button-effect ${activeTab === leftSideBarOptions.SCHEDULE_TRAINING
+                    ? "active"
+                    : ""
+                    }`}
                   onClick={() => TogglTab(leftSideBarOptions.SCHEDULE_TRAINING)}
                 >
                   <i className="fa fa-calendar" />
@@ -273,9 +270,8 @@ const Index = (props) => {
             <li>
               <Tooltip title="Media" position="top" trigger="mouseenter">
                 <NavLink
-                  className={`icon-btn btn-light button-effect step2 ${
-                    activeTab === "file" ? "active" : ""
-                  }`}
+                  className={`icon-btn btn-light button-effect step2 ${activeTab === "file" ? "active" : ""
+                    }`}
                   onClick={() => ToggleTab("file")}
                   data-intro=""
                 >
@@ -382,9 +378,8 @@ const Index = (props) => {
                   trigger="mouseenter"
                 >
                   <NavLink
-                    className={`icon-btn btn-light button-effect ${
-                      activeTab === "notification" ? "active" : ""
-                    }`}
+                    className={`icon-btn btn-light button-effect ${activeTab === "notification" ? "active" : ""
+                      }`}
                     onClick={() => ToggleTab("notification")}
                   >
                     <i className="fa fa-bell" />
@@ -396,9 +391,8 @@ const Index = (props) => {
             <li>
               <Tooltip title="Settings" position="top" trigger="mouseenter">
                 <NavLink
-                  className={`icon-btn btn-light button-effect step2 ${
-                    activeTab === "setting" ? "active" : ""
-                  }`}
+                  className={`icon-btn btn-light button-effect step2 ${activeTab === "setting" ? "active" : ""
+                    }`}
                   onClick={() => ToggleTab("setting")}
                   data-intro="You can change settings by clicking here"
                 >
@@ -496,9 +490,8 @@ const Index = (props) => {
                   </TabPane>
                   <TabPane
                     tabId="file"
-                    className={`${
-                      activeTab === "file" ? "left-90 custom-mobile-menu" : ""
-                    }`}
+                    className={`${activeTab === "file" ? "left-90 custom-mobile-menu" : ""
+                      }`}
                   >
                     <FileSection smallSideBarToggle={smallSideBarToggle} />
                   </TabPane>
@@ -515,11 +508,10 @@ const Index = (props) => {
                   </TabPane>
                   <TabPane
                     tabId="notification"
-                    className={`${
-                      activeTab === "notification"
-                        ? "left-90 custom-mobile-menu"
-                        : ""
-                    }`}
+                    className={`${activeTab === "notification"
+                      ? "left-90 custom-mobile-menu"
+                      : ""
+                      }`}
                   >
                     <NotificationSection
                       smallSideBarToggle={smallSideBarToggle}
@@ -529,15 +521,13 @@ const Index = (props) => {
                   </TabPane>
                   <TabPane
                     tabId="setting"
-                    className={`${
-                      activeTab === "setting"
-                        ? "left-90 custom-mobile-menu"
-                        : ""
-                    } ${
-                      accountType === AccountType.TRAINER
+                    className={`${activeTab === "setting"
+                      ? "left-90 custom-mobile-menu"
+                      : ""
+                      } ${accountType === AccountType.TRAINER
                         ? "sidebar-full-width"
                         : ""
-                    }`}
+                      }`}
                   >
                     <SettingSection
                       smallSideBarToggle={smallSideBarToggle}

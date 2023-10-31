@@ -30,9 +30,10 @@ import { Star, X } from "react-feather";
 import { authState } from "../auth/auth.slice";
 import SocialMediaIcons from "../../common/socialMediaIcons";
 import { bookingButton } from "../../common/constants";
-import { TabContent, TabPane, Nav, NavItem, NavLink } from "reactstrap";
+import { TabContent, TabPane, Nav, NavItem, NavLink, Button } from "reactstrap";
 import classnames from "classnames";
 import VideoUpload from '../videoupload'
+import { myClips } from "../../../containers/rightSidebar/fileSection.api";
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
 const Bookings = ({ accountType = null }) => {
@@ -61,6 +62,19 @@ const Bookings = ({ accountType = null }) => {
   const { addRating } = bookingsAction;
 
   const [activeTabs, setActiveTab] = useState(bookingButton[0]);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const [clips, setClips] = useState([]);
+  const [selectedClips, setSelectedClips] = useState([]);
+
+  useEffect(() => {
+    getMyClips()
+  }, [])
+
+  const getMyClips = async () => {
+    var res = await myClips({})
+    setClips(res?.data)
+  }
 
   const toggle1 = (tab) => {
     if (activeTab !== tab) {
@@ -168,7 +182,13 @@ const Bookings = ({ accountType = null }) => {
           isUpcomingSession,
           ratings,
           booking_index,
-          has24HoursPassedSinceBooking
+          has24HoursPassedSinceBooking,
+          isOpen,
+          setIsOpen,
+          clips,
+          setClips,
+          selectedClips,
+          setSelectedClips
         );
       default:
         break;
@@ -206,10 +226,10 @@ const Bookings = ({ accountType = null }) => {
           </button>
         )}
         {!isUpcomingSession &&
-        !isCurrentDateBefore &&
-        status === BookedSession.confirmed &&
-        !isStartButtonEnabled &&
-        !isMeetingDone ? (
+          !isCurrentDateBefore &&
+          status === BookedSession.confirmed &&
+          !isStartButtonEnabled &&
+          !isMeetingDone ? (
           <button
             className={`btn btn-success button-effect btn-sm mr-4`}
             type="button"
@@ -320,8 +340,16 @@ const Bookings = ({ accountType = null }) => {
     isUpcomingSession,
     ratings,
     booking_index,
-    has24HoursPassedSinceBooking
+    has24HoursPassedSinceBooking,
+    isOpen,
+    setIsOpen,
+    clips,
+    setClips,
+    selectedClips,
+    setSelectedClips
   ) => {
+    console.log("selectedClips", selectedClips);
+
     const isCompleted =
       has24HoursPassedSinceBooking ||
       scheduledMeetingDetails[booking_index]?.ratings?.trainee;
@@ -356,6 +384,13 @@ const Bookings = ({ accountType = null }) => {
               <React.Fragment>
                 {status !== BookedSession.canceled && (
                   <React.Fragment>
+                    <button
+                      className="btn btn-success button-effect btn-sm mr-4 btn_cancel"
+                      type="button"
+                      onClick={() => setIsOpen(true)}
+                    >
+                      Add Clip
+                    </button>
                     {status === BookedSession.booked ? (
                       <button
                         className="btn btn-dark button-effect btn-sm mr-4 btn_cancel"
@@ -381,6 +416,71 @@ const Bookings = ({ accountType = null }) => {
                         {BookedSession.confirmed}
                       </button>
                     )}
+                    <Modal
+                      width={400}
+                      isOpen={isOpen}
+                      element={
+                        <>
+                          <div className="media-gallery portfolio-section grid-portfolio">
+                            {selectedClips?.length ? <div className={`collapse-block open`}>
+                              <h5 className="block-title"> Selected Clips<label className="badge badge-primary sm ml-2">{selectedClips?.length}</label></h5>
+                              <div className={`block-content`}>
+                                <div className="row">
+                                  {selectedClips.map((clp, index) => (
+                                    <div
+                                      key={index}
+                                      className={`col-4 p-1`}
+                                      style={{ borderRadius: 5, position: "relative", }}
+                                    >
+                                      <video style={{ width: "80%", height: "80%", }}  >
+                                        <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                                      </video>
+                                      <span style={{ position: "absolute", right: 26, top: -3, cursor: "pointer", background: "red", borderRadius: "50%", padding: "0px 6px", color: "#fff" }}
+                                        onClick={() => {
+                                          var temp = selectedClips;
+                                          temp = temp.filter(val => val._id !== clp?._id)
+                                          setSelectedClips([...temp]);
+                                        }}
+                                      >x</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </div> : <></>}
+                            {clips?.length && clips?.map((cl, ind) => <div className={`collapse-block ${cl?.show ? "" : "open"}`}>
+                              <h5 className="block-title"> {cl?._id}<label className="badge badge-primary sm ml-2">{cl?.clips?.length}</label></h5>
+                              <div className={`block-content ${cl?.show ? "d-none" : ""}`}>
+                                <div className="row">
+                                  {cl?.clips.map((clp, index) => {
+                                    var sld = selectedClips.find(val => val?._id === clp?._id)
+                                    return <div
+                                      key={index}
+                                      className={`col-4 p-1`}
+                                      style={{ borderRadius: 5 }}
+                                      onClick={() => {
+                                        if (!sld) {
+                                          selectedClips.push(clp);
+                                          setSelectedClips([...selectedClips]);
+                                        }
+                                      }}
+                                    >
+                                      <video style={{ width: "80%", height: "80%", border: `${sld ? "2px" : "0px"} solid green` }}  >
+                                        <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                                      </video>
+                                    </div>
+                                  })}
+                                </div>
+                              </div>
+                            </div>
+                            )}
+                          </div>
+                          <div className="d-flex justify-content-around w-100 p-3">
+                            <Button color="primary" onClick={() => { }}>Add</Button>
+                            <Button color="secondary" onClick={() => { setIsOpen(false) }}>Close</Button>
+                          </div>
+                        </>
+                      }
+                    />
                   </React.Fragment>
                 )}
                 {status === BookedSession.confirmed && (
@@ -552,7 +652,7 @@ const Bookings = ({ accountType = null }) => {
         }
         isOpen={addRatingModel.isOpen}
         id={addRatingModel._id}
-        // width={"50%"}
+      // width={"50%"}
       />
     );
   };
@@ -611,9 +711,9 @@ const Bookings = ({ accountType = null }) => {
               <h3 className="mt-3 ">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
               {showRatings([], "mt-3 d-flex ml-n2")}
               {userInfo &&
-              userInfo.extraInfo &&
-              userInfo.extraInfo.social_media_links &&
-              userInfo.extraInfo.social_media_links ? (
+                userInfo.extraInfo &&
+                userInfo.extraInfo.social_media_links &&
+                userInfo.extraInfo.social_media_links ? (
                 <SocialMediaIcons
                   profileImageURL={""}
                   social_media_links={userInfo.extraInfo.social_media_links}
@@ -638,9 +738,8 @@ const Bookings = ({ accountType = null }) => {
                   <NavLink
                     className={`${classnames({
                       active: activeTabs === tabName,
-                    })} ${
-                      activeTabs === tabName ? "text-primary" : "text-dark"
-                    } text-capitalize`}
+                    })} ${activeTabs === tabName ? "text-primary" : "text-dark"
+                      } text-capitalize`}
                     onClick={() => {
                       toggle1(tabName);
                       setTabBook(tabName);
@@ -693,13 +792,11 @@ const Bookings = ({ accountType = null }) => {
             }
             return;
           }}
-          className={`bookings custom-scroll custom-sidebar-content-booking ${
-            configs.sidebar.isMobileMode &&
+          className={`bookings custom-scroll custom-sidebar-content-booking ${configs.sidebar.isMobileMode &&
             configs.sidebar.isToggleEnable &&
-            `submenu-width dynemic-sidebar ${
-              activeTab === leftSideBarOptions.SCHEDULE_TRAINING ? "active" : ""
+            `submenu-width dynemic-sidebar ${activeTab === leftSideBarOptions.SCHEDULE_TRAINING ? "active" : ""
             }`
-          }`}
+            }`}
         >
           {addRatingModel.isOpen ? renderRating() : null}
           <div>
@@ -707,7 +804,7 @@ const Bookings = ({ accountType = null }) => {
               <React.Fragment>
                 <div className="welcome-text mb-3">
                   Welcome, <br /> {userInfo && userInfo?.fullname}
-                  <VideoUpload/>
+                  <VideoUpload />
                 </div>
                 <div>{trainerInfo()}</div>
                 {/* <h2 className="d-flex justify-content-center mt-2 p-5 mb-2 bg-primary text-white rounded">
