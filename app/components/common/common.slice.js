@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   addRating,
+  addTraineeClipInBookedSession,
   getScheduledMeetingDetails,
   updateBookedSessionScheduledMeeting,
   uploadProfilePicture,
@@ -50,6 +51,20 @@ export const updateBookedSessionScheduledMeetingAsync = createAsyncThunk(
       const response = await updateBookedSessionScheduledMeeting(updatePayload);
       dispatch(getScheduledMeetingDetailsAsync(statusPayload));
       //TODO:update redux state not calling get api
+      return response;
+    } catch (err) {
+      toast.error(err.response.data.error);
+      throw err;
+    }
+  }
+);
+
+
+export const addTraineeClipInBookedSessionAsync = createAsyncThunk(
+  "add/clip/booked/session",
+  async (payload, { dispatch }) => {
+    try {
+      const response = await addTraineeClipInBookedSession(payload);
       return response;
     } catch (err) {
       toast.error(err.response.data.error);
@@ -152,6 +167,25 @@ export const bookingsSlice = createSlice({
       )
       .addCase(
         updateBookedSessionScheduledMeetingAsync.rejected,
+        (state, action) => {
+          state.status = "rejected";
+        }
+      )
+      .addCase(
+        addTraineeClipInBookedSessionAsync.pending,
+        (state, action) => {
+          state.status = "pending";
+        }
+      )
+      .addCase(
+        addTraineeClipInBookedSessionAsync.fulfilled,
+        (state, action) => {
+          state.status = "fulfilled";
+          toast.success(action.payload.message);
+        }
+      )
+      .addCase(
+        addTraineeClipInBookedSessionAsync.rejected,
         (state, action) => {
           state.status = "rejected";
         }

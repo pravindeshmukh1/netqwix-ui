@@ -154,8 +154,10 @@ $canvas-z-index: 8;
 
 .remote-user {
   position: inherit;
-  width: 100%; /* Set the width of the parent container to 100% */
-  height: 100%; /* Set the height of the parent container to 100% */
+  width: 100%;
+  /* Set the width of the parent container to 100% */
+  height: 100%;
+  /* Set the height of the parent container to 100% */
 }
 
 // .canvas-print,
@@ -181,6 +183,7 @@ $canvas-z-index: 8;
   top: 5%;
   height: 90vh;
 }
+
 // .bg-video {
 //   object-fit: cover; /* Maintain aspect ratio; cover entire area even if it means cutting off parts of the video */
 //   height: 104vh;
@@ -243,10 +246,10 @@ $canvas-z-index: 8;
   }
 
 
-.left-21 {
-  left: 15%;
-  bottom: 6%;
-}
+  .left-21 {
+    left: 15%;
+    bottom: 6%;
+  }
 }
 
 
@@ -262,10 +265,10 @@ $canvas-z-index: 8;
   }
 
 
-.left-21 {
-  left: 15%;
-  bottom: 6%;
-}
+  .left-21 {
+    left: 15%;
+    bottom: 6%;
+  }
 }
 
 .no-user-joined {
@@ -284,20 +287,18 @@ $canvas-z-index: 8;
   object-fit: cover;
 }
 
-@media (min-aspect-ratio: 16/9) {
-}
+@media (min-aspect-ratio: 16/9) {}
 
-@media (max-aspect-ratio: 16/9) {
-}
+@media (max-aspect-ratio: 16/9) {}
 
-video {
-  // object-fit: fill;
-  transform: rotateY(180deg);
-  -webkit-transform: rotateY(180deg);
-  /* Safari and Chrome */
-  -moz-transform: rotateY(180deg);
-  /* Firefox */
-}
+// video {
+// object-fit: fill;
+// transform: rotateY(180deg);
+// -webkit-transform: rotateY(180deg);
+/* Safari and Chrome */
+// -moz-transform: rotateY(180deg);
+/* Firefox */
+// }
 
 .all-0 {
   position: absolute;
@@ -404,6 +405,7 @@ slick-slider .slick-list,
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   max-height: 70vh;
   overflow: auto;
+
   // width: 70px;
   @media (max-width: 576px) {
     left: 12px;
@@ -492,7 +494,8 @@ slick-slider .slick-list,
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+  box-sizing: border-box;
+  /* Ensures padding and border are included in the element's total width and height */
 }
 
 .star-container {
@@ -530,6 +533,7 @@ slick-slider .slick-list,
   user-select: none;
   z-index: 10;
   overflow: hidden;
+
   @media (max-width: 576px) {
     width: 96% !important;
   }
@@ -588,6 +592,7 @@ slick-slider .slick-list,
 
 .custom-block-height {
   height: 180vh !important;
+
   @media (max-width: 576px) {
     overflow-y: auto !important;
     scroll-behavior: smooth !important;
@@ -612,6 +617,7 @@ slick-slider .slick-list,
 
 // button margin
 @media (max-width: 576px) {
+
   // .btn.ml-4 {
   .btnbook {
     margin-top: 10px !important;
@@ -622,6 +628,7 @@ slick-slider .slick-list,
 
 // booking slot
 @media (max-width: 576px) {
+
   // .btn.ml-4 {
   .slot {
     justify-content: end !important;
@@ -796,17 +803,21 @@ slick-slider .slick-list,
     font-size: 22px !important;
   }
 }
+
 .tag-name {
   font-family: "Roboto";
 }
+
 .booking-text {
   font-size: 37px;
   font-family: "Roboto";
   font-weight: 300;
+
   @media (max-width: 576px) {
     font-size: 22px !important;
   }
 }
+
 .trainer-bookings-card {
   border-radius: 16px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -857,6 +868,7 @@ slick-slider .slick-list,
 
 .reviews {
   min-height: 26vh !important;
+
   @media (max-width: 576px) {
     min-height: 32vh !important;
   }
@@ -883,10 +895,12 @@ slick-slider .slick-list,
   padding: 5px;
   border-radius: 3px;
   border: 1px solid #d9d9d9;
+
   @media (max-width: 576px) {
     width: 75vw;
   }
 }
+
 // search button height
 
 .search_button {

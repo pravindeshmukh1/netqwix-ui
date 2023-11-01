@@ -8,6 +8,7 @@ import {
   bookingsState,
   getScheduledMeetingDetailsAsync,
   updateBookedSessionScheduledMeetingAsync,
+  addTraineeClipInBookedSessionAsync,
 } from "../common/common.slice";
 
 import { useAppSelector, useAppDispatch } from "../../store";
@@ -47,7 +48,6 @@ const Bookings = ({ accountType = null }) => {
     booked_status: "",
   });
   const [tabBook, setTabBook] = useState(bookingButton[0]);
-
   const [startMeeting, setStartMeeting] = useState({
     trainerInfo: null,
     traineeInfo: null,
@@ -62,8 +62,9 @@ const Bookings = ({ accountType = null }) => {
   const { addRating } = bookingsAction;
 
   const [activeTabs, setActiveTab] = useState(bookingButton[0]);
-  const [isOpen, setIsOpen] = useState(false);
 
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenID, setIsOpenID] = useState("");
   const [clips, setClips] = useState([]);
   const [selectedClips, setSelectedClips] = useState([]);
 
@@ -113,6 +114,12 @@ const Bookings = ({ accountType = null }) => {
       dispatch(updateBookedSessionScheduledMeetingAsync(payload));
     }
   }, [bookedSession, accountType]);
+
+  const addTraineeClipInBookedSession = async () => {
+    const payload = { id: isOpenID, trainee_clip: selectedClips?.map(val => val?._id) };
+    dispatch(addTraineeClipInBookedSessionAsync(payload));
+    setIsOpen(false)
+  }
 
   const toggle = () => setStartMeeting(!startMeeting);
 
@@ -188,7 +195,9 @@ const Bookings = ({ accountType = null }) => {
           clips,
           setClips,
           selectedClips,
-          setSelectedClips
+          setSelectedClips,
+          setIsOpenID,
+          addTraineeClipInBookedSession
         );
       default:
         break;
@@ -346,10 +355,10 @@ const Bookings = ({ accountType = null }) => {
     clips,
     setClips,
     selectedClips,
-    setSelectedClips
+    setSelectedClips,
+    setIsOpenID,
+    addTraineeClipInBookedSession
   ) => {
-    console.log("selectedClips", selectedClips);
-
     const isCompleted =
       has24HoursPassedSinceBooking ||
       scheduledMeetingDetails[booking_index]?.ratings?.trainee;
@@ -387,7 +396,10 @@ const Bookings = ({ accountType = null }) => {
                     <button
                       className="btn btn-success button-effect btn-sm mr-4 btn_cancel"
                       type="button"
-                      onClick={() => setIsOpen(true)}
+                      onClick={() => {
+                        setIsOpenID(_id)
+                        setIsOpen(true)
+                      }}
                     >
                       Add Clip
                     </button>
@@ -458,7 +470,7 @@ const Bookings = ({ accountType = null }) => {
                                       className={`col-4 p-1`}
                                       style={{ borderRadius: 5 }}
                                       onClick={() => {
-                                        if (!sld) {
+                                        if (!sld && selectedClips?.length < 2) {
                                           selectedClips.push(clp);
                                           setSelectedClips([...selectedClips]);
                                         }
@@ -475,7 +487,7 @@ const Bookings = ({ accountType = null }) => {
                             )}
                           </div>
                           <div className="d-flex justify-content-around w-100 p-3">
-                            <Button color="primary" onClick={() => { }}>Add</Button>
+                            <Button color="primary" onClick={() => { addTraineeClipInBookedSession() }}>Add</Button>
                             <Button color="secondary" onClick={() => { setIsOpen(false) }}>Close</Button>
                           </div>
                         </>

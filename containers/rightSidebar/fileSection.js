@@ -5,7 +5,7 @@ import PhotoSwipeLightbox from "photoswipe/lightbox";
 import "photoswipe/style.css";
 import { useAppDispatch } from "../../app/store";
 import { videouploadAction } from "../../app/components/videoupload/videoupload.slice";
-import { myClips } from "./fileSection.api";
+import { myClips, traineeClips } from "./fileSection.api";
 import { LOCAL_STORAGE_KEYS } from "../../app/common/constants";
 import Modal from "../../app/common/modal";
 import VideoUpload from "../../app/components/videoupload";
@@ -132,6 +132,7 @@ const FileSection = (props) => {
   const [collapse4, setCollapse4] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState("");
+  const [traineeClip, setTraineeClips] = useState([]);
 
   useEffect(() => {
     getMyClips()
@@ -140,7 +141,11 @@ const FileSection = (props) => {
   const getMyClips = async () => {
     var res = await myClips({})
     setClips(res?.data)
+    var res2 = await traineeClips({})
+    setTraineeClips(res2?.data)
   }
+
+  console.log("traineeClip", traineeClip);
 
   return (
     <div className="apps-content" id="files">
@@ -240,18 +245,18 @@ const FileSection = (props) => {
           </TabPane>
           <TabPane tabId="trainee">
             <div className="media-gallery portfolio-section grid-portfolio">
-              {clips?.length && clips?.map((cl, ind) =>
+              {traineeClip?.length && traineeClip?.map((cl, ind) =>
                 <div className={`collapse-block ${!cl?.show ? "" : "open"}`}>
                   <h5
                     className="block-title"
                     onClick={() => {
-                      var temp = clips
+                      var temp = traineeClip
                       temp = temp.map(vl => { return { ...vl, show: false } })
                       temp[ind].show = true
-                      setClips([...temp])
+                      setTraineeClips([...temp])
                     }}
                   >
-                    {cl?._id}
+                    {cl?._id?.fullname}
                     <label className="badge badge-primary sm ml-2">{cl?.clips?.length}</label>
                   </h5>
                   {/*  NORMAL  STRUCTURE END  */}
@@ -263,12 +268,12 @@ const FileSection = (props) => {
                           className={`col-4 p-1`}
                           style={{ borderRadius: 5 }}
                           onClick={() => {
-                            setSelectedVideo(`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`)
+                            setSelectedVideo(`https://netquix.s3.ap-south-1.amazonaws.com/${clp?.clips?._id}`)
                             setIsOpen(true)
                           }}
                         >
                           <video style={{ width: "80%", height: "80%" }}  >
-                            <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                            <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?.clips?._id}`} type="video/mp4" />
                           </video>
                         </div>
                       ))}
@@ -582,7 +587,10 @@ const FileSection = (props) => {
                         key={index}
                         className={`col-6 p-1`}
                         style={{ borderRadius: 5 }}
-                        onClick={() => setIsOpen(true)}
+                        onClick={() => {
+                          setSelectedVideo("https://v.pinimg.com/videos/mc/720p/f6/88/88/f68888290d70aca3cbd4ad9cd3aa732f.mp4")
+                          setIsOpen(true)
+                        }}
                       >
                         <video style={{ width: "80%", height: "80%" }}  >
                           <source src={"https://v.pinimg.com/videos/mc/720p/f6/88/88/f68888290d70aca3cbd4ad9cd3aa732f.mp4"} type="video/mp4" />
@@ -607,8 +615,13 @@ const FileSection = (props) => {
                 className={`col-5 `}
                 style={{ borderRadius: 5 }}
               >
-                <div style={{ display: "flex", flexDirection: "row-reverse" }}>
-                  <span onClick={() => setIsOpen(false)}>X</span>
+                <div className="media-body media-body text-right">
+                  <div
+                    className="icon-btn btn-sm btn-outline-light close-apps pointer"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <X />
+                  </div>
                 </div>
                 <video style={{ width: "80%", height: "80%" }} autoplay controls   >
                   <source src={selectedVideo} type="video/mp4" />

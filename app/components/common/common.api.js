@@ -81,3 +81,25 @@ export const uploadProfilePicture = async (payload) => {
     throw err;
   }
 };
+
+
+export const addTraineeClipInBookedSession = async (payload) => {
+  try {
+    const response = await axiosInstance({
+      method: "put",
+      url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/add-trainee-clip/${payload.id}`,
+      data: payload,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${Utils.getToken(
+          LOCAL_STORAGE_KEYS.ACCESS_TOKEN
+        )}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
+

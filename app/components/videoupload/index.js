@@ -6,6 +6,7 @@ import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { getS3SignUrl } from "./videoupload.api";
 import { LIST_OF_ACCOUNT_TYPE } from "../../common/constants";
 import { getMasterData } from "../master/master.api";
+import axios from "axios";
 
 const VideoUpload = (props) => {
     const { isOpen } = useAppSelector(videouploadState);
@@ -14,12 +15,15 @@ const VideoUpload = (props) => {
     const [title, setTitle] = useState("")
     const [category, setCategory] = useState({})
     const [categoryList, setCategoryList] = useState([])
+    const [progress, setProgress] = useState(0)
 
     useEffect(() => {
         getCategoryData()
     }, [])
-    console.log('fdsgfhhjghj');
 
+    useEffect(() => {
+        if (isOpen) setProgress(0)
+    }, [isOpen])
 
     const getCategoryData = async () => {
         var res = await getMasterData()
@@ -44,12 +48,23 @@ const VideoUpload = (props) => {
         var payload = { filename: selectedFile?.name, fileType: selectedFile?.type, title: title, category: category };
         const data = await getS3SignUrl(payload);
         if (data?.url) await pushProfilePhotoToS3(data.url, selectedFile);
-        dispatch(videouploadAction.uploadVideoS3(selectedFile));
     }
 
     async function pushProfilePhotoToS3(presignedUrl, uploadPhoto) {
         const myHeaders = new Headers({ 'Content-Type': 'image/*' });
-        const response = await fetch(presignedUrl, { method: 'PUT', headers: myHeaders, body: uploadPhoto });
+        axios.put(presignedUrl, uploadPhoto, {
+            headers: myHeaders,
+            onUploadProgress: progressEvent => {
+                const { loaded, total } = progressEvent;
+                const percentCompleted = (loaded / total) * 100;
+                setProgress(Math.trunc(percentCompleted))
+            },
+        }).then(response => {
+            dispatch(videouploadAction.uploadVideoS3(selectedFile));
+            console.log(response);
+        }).catch(error => {
+            console.error('Error:', error);
+        });
     }
 
     return (<Modal
@@ -88,6 +103,9 @@ const VideoUpload = (props) => {
                     <Button color="primary" disabled={!selectedFile} onClick={handleUpload}>Upload</Button>
                     <Button color="secondary" onClick={() => dispatch(videouploadAction.setIsOpen(false))}>Close</Button>
                 </div>
+                <label className="col-form-label mt-2" htmlFor="account_type">
+                    {progress ? <> Uploading... {progress}%</> : <></>}
+                </label>
             </div>
         }
     />)
