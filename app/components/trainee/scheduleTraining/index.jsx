@@ -43,6 +43,7 @@ import {
 } from "../../../common/common.slice";
 import CustomRangePicker from "../../../common/timeRangeSlider";
 import { getTrainersAsync, trainerState } from "../../trainer/trainer.slice";
+import { authAction } from "../../auth/auth.slice";
 const { isSidebarToggleEnabled } = bookingsAction;
 const { removePaymentIntent } = traineeAction;
 const ScheduleTraining = () => {
@@ -195,13 +196,13 @@ const ScheduleTraining = () => {
         slotTime: {
           from: trainerInfo?.userInfo?.extraInfo?.working_hours
             ? Utils.getTimeFormate(
-                trainerInfo.userInfo.extraInfo.working_hours?.from
-              )
+              trainerInfo.userInfo.extraInfo.working_hours?.from
+            )
             : DefaultTimeRange.startTime,
           to: trainerInfo?.userInfo?.extraInfo?.working_hours
             ? Utils.getTimeFormate(
-                trainerInfo.userInfo.extraInfo.working_hours?.to
-              )
+              trainerInfo.userInfo.extraInfo.working_hours?.to
+            )
             : DefaultTimeRange.endTime,
         },
       };
@@ -439,16 +440,14 @@ const ScheduleTraining = () => {
   const renderTable = () => {
     return (
       <div
-        className={`${
-          trainerInfo.userInfo
-            ? "table-responsive-width"
-            : "table-responsive-width"
-        }`}
+        className={`${trainerInfo.userInfo
+          ? "table-responsive-width"
+          : "table-responsive-width"
+          }`}
       >
         <table
-          className={`${
-            screenWidth <= 767 ? "table-responsive overflow-x-auto" : "table"
-          } custom-trainer-slots-booking-table`}
+          className={`${screenWidth <= 767 ? "table-responsive overflow-x-auto" : "table"
+            } custom-trainer-slots-booking-table`}
         >
           <thead
             className="justify-center align-center table-thead"
@@ -656,6 +655,7 @@ const ScheduleTraining = () => {
                 dispatch(bookSessionAsync(payload));
                 setIsPopoverOpen(null);
                 setBookSessionPayload({});
+                dispatch(authAction.setActiveTab("scheduleTraining"));
               }}
               extraContent={
                 bookSessionPayload && bookSessionPayload.trainer_id ? (
@@ -841,7 +841,7 @@ const ScheduleTraining = () => {
           </div>
           <div className="col-11">
             {(getParams.search && getParams.search.length) ||
-            !bookingColumns.length ? (
+              !bookingColumns.length ? (
               <div className="row">
                 <label className="mt-1 ml-3" style={{ fontSize: "13px" }}>
                   Session Duration :{" "}
@@ -852,11 +852,11 @@ const ScheduleTraining = () => {
                       availableSlots
                         ? availableSlots
                         : [
-                            {
-                              start_time: "",
-                              end_time: "",
-                            },
-                          ]
+                          {
+                            start_time: "",
+                            end_time: "",
+                          },
+                        ]
                     }
                     startTime={
                       trainerInfo?.userInfo?.extraInfo?.working_hours?.from
@@ -1086,7 +1086,7 @@ const ScheduleTraining = () => {
     // </div>
     <React.Fragment>
       {trainerInfo.userInfo === null ||
-      (trainerInfo && trainerInfo.userInfo) ? (
+        (trainerInfo && trainerInfo.userInfo) ? (
         <div className="custom-scroll">{renderUserDetails()}</div>
       ) : (
         <div className="custom-scroll trainee-dashboard">

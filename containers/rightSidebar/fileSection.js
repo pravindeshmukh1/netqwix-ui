@@ -145,8 +145,6 @@ const FileSection = (props) => {
     setTraineeClips(res2?.data)
   }
 
-  console.log("traineeClip", traineeClip);
-
   return (
     <div className="apps-content" id="files">
       <div className="theme-title">
@@ -171,7 +169,7 @@ const FileSection = (props) => {
       <VideoUpload />
       <div className="theme-tab">
         <Nav tabs>
-          <NavItem className="ml-5px">
+          {localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE) === "Trainer" && <NavItem className="ml-5px">
             <NavLink
               className={`button-effect ${activeTab === "media" ? "active" : ""
                 }`}
@@ -179,7 +177,7 @@ const FileSection = (props) => {
             >
               My Clips
             </NavLink>
-          </NavItem>
+          </NavItem>}
           {localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE) === "Trainer" && <NavItem className="ml-5px">
             <NavLink
               className={`button-effect ${activeTab === "trainee" ? "active" : ""
@@ -204,8 +202,7 @@ const FileSection = (props) => {
         <TabContent activeTab={activeTab} className="custom-scroll">
           <TabPane tabId="media">
             <div className="media-gallery portfolio-section grid-portfolio">
-
-              {clips?.length && clips?.map((cl, ind) =>
+              {clips?.length ? clips?.map((cl, ind) =>
                 <div className={`collapse-block ${!cl?.show ? "" : "open"}`}>
                   <h5
                     className="block-title"
@@ -240,12 +237,16 @@ const FileSection = (props) => {
                     </div>
                   </div>
                 </div>
-              )}
+              ) : <>
+                <div style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}>
+                  <h5 className="block-title">  No Data Found</h5>
+                </div>
+              </>}
             </div>
           </TabPane>
           <TabPane tabId="trainee">
             <div className="media-gallery portfolio-section grid-portfolio">
-              {traineeClip?.length && traineeClip?.map((cl, ind) =>
+              {traineeClip?.length ? traineeClip?.map((cl, ind) =>
                 <div className={`collapse-block ${!cl?.show ? "" : "open"}`}>
                   <h5
                     className="block-title"
@@ -280,7 +281,9 @@ const FileSection = (props) => {
                     </div>
                   </div>
                 </div>
-              )}
+              ) : <div style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}>
+                <h5 className="block-title">  No Data Found</h5>
+              </div>}
             </div>
           </TabPane>
           <TabPane tabId="link">
