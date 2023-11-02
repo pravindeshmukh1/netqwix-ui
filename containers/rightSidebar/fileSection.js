@@ -3,8 +3,8 @@ import { Nav, NavLink, NavItem, TabContent, TabPane, Col, Button } from "reactst
 import { Link, X } from "react-feather";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import "photoswipe/style.css";
-import { useAppDispatch } from "../../app/store";
-import { videouploadAction } from "../../app/components/videoupload/videoupload.slice";
+import { useAppDispatch, useAppSelector } from "../../app/store";
+import { videouploadAction, videouploadState } from "../../app/components/videoupload/videoupload.slice";
 import { myClips, traineeClips } from "./fileSection.api";
 import { LOCAL_STORAGE_KEYS } from "../../app/common/constants";
 import Modal from "../../app/common/modal";
@@ -123,20 +123,20 @@ const FileSection = (props) => {
       lightbox4 = null;
     };
   }, []);
-
+  const { isOpen } = useAppSelector(videouploadState);
   const [activeTab, setActiveTab] = useState("media");
   const [clips, setClips] = useState([]);
   const [collapse1, setCollapse1] = useState(false);
   const [collapse2, setCollapse2] = useState(false);
   const [collapse3, setCollapse3] = useState(false);
   const [collapse4, setCollapse4] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenPlayVideo, setIsOpen] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState("");
   const [traineeClip, setTraineeClips] = useState([]);
 
   useEffect(() => {
-    getMyClips()
-  }, [])
+    if (!isOpen) getMyClips()
+  }, [isOpen])
 
   const getMyClips = async () => {
     var res = await myClips({})
@@ -595,7 +595,7 @@ const FileSection = (props) => {
                           setIsOpen(true)
                         }}
                       >
-                        <video style={{ width: "80%", height: "80%" }}  >
+                        <video style={{ width: "100%", height: "100%" }}  >
                           <source src={"https://v.pinimg.com/videos/mc/720p/f6/88/88/f68888290d70aca3cbd4ad9cd3aa732f.mp4"} type="video/mp4" />
                         </video>
                       </div>
@@ -609,13 +609,12 @@ const FileSection = (props) => {
       </div>
 
       <Modal
-        isOpen={isOpen}
+        isOpenPlayVideo={isOpenPlayVideo}
         allowFullWidth={true}
         element={
           <>
             <div className="d-flex flex-column align-items-center p-3 justify-content-center h-100">
               <div
-                className={`col-5 `}
                 style={{ borderRadius: 5 }}
               >
                 <div className="media-body media-body text-right">
@@ -626,7 +625,7 @@ const FileSection = (props) => {
                     <X />
                   </div>
                 </div>
-                <video style={{ width: "80%", height: "80%" }} autoplay controls   >
+                <video style={{ width: "100%", height: "100%" }} autoplay controls   >
                   <source src={selectedVideo} type="video/mp4" />
                 </video>
               </div>

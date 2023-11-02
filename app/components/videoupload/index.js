@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { videouploadState, videouploadAction } from "./videoupload.slice";
 import { useAppSelector, useAppDispatch } from "../../store";
 import Modal from "../../common/modal";
@@ -16,14 +16,22 @@ const VideoUpload = (props) => {
     const [category, setCategory] = useState({})
     const [categoryList, setCategoryList] = useState([])
     const [progress, setProgress] = useState(0)
+    const ref = useRef();
 
     useEffect(() => {
-        getCategoryData()
-    }, [])
+        getCategoryData();
+
+    }, []);
 
     useEffect(() => {
         if (isOpen) setProgress(0)
-    }, [isOpen])
+    }, [isOpen]);
+
+    const resetForm = () => {
+        setTitle("");
+        setCategory({});
+        setSelectedFile(null);
+    }
 
     const getCategoryData = async () => {
         var res = await getMasterData()
@@ -39,15 +47,23 @@ const VideoUpload = (props) => {
     const handleFileChange = (e) => {
         if (e.target.files) {
             const file = e.target.files[0];
-            const fileLink = URL.createObjectURL(file);
-            setSelectedFile(file)
+            const fileSize = file?.size / 1024 / 1024; // in MiB
+            if (fileSize > 150) {
+                ref.current.value = "";
+                alert('File size exceeds 50 MiB');
+            } else {
+                setSelectedFile(file)
+            }
         }
     }
 
     const handleUpload = async () => {
         var payload = { filename: selectedFile?.name, fileType: selectedFile?.type, title: title, category: category };
         const data = await getS3SignUrl(payload);
-        if (data?.url) await pushProfilePhotoToS3(data.url, selectedFile);
+        if (data?.url) {
+            await pushProfilePhotoToS3(data.url, selectedFile);
+            resetForm();
+        }
     }
 
     async function pushProfilePhotoToS3(presignedUrl, uploadPhoto) {
@@ -68,7 +84,6 @@ const VideoUpload = (props) => {
     }
 
     return (<Modal
-        width={440}
         isOpen={isOpen}
         element={
             <div className="d-flex flex-column align-items-center p-3 justify-content-center h-100">
@@ -76,6 +91,7 @@ const VideoUpload = (props) => {
                 <div className="form-group">
                     <label className="col-form-label mt-2">Title</label>
                     <input
+                        disabled={progress}
                         className="form-control"
                         type="text"
                         name="fullname"
@@ -87,6 +103,7 @@ const VideoUpload = (props) => {
                         Choose Category
                     </label>
                     <select
+                        disabled={progress}
                         id="account_type"
                         className="form-control"
                         name="account_type"
@@ -96,12 +113,15 @@ const VideoUpload = (props) => {
                         <option>Choose Category</option>
                         {categoryList.map((category_type, index) => <option key={index} value={category_type.label}>  {category_type.label}</option>)}
                     </select>
-                    <label className="col-form-label mt-2">Select a clip to upload:</label>
-                    <input type="file" name="file" id="fileUpload" onChange={handleFileChange} />
+                    <label className="col-form-label mt-2">Select a clip to upload: &nbsp;</label>
+                    <input disabled={progress} ref={ref} type="file" name="file" id="fileUpload" onChange={handleFileChange} />
                 </div>
-                <div className="d-flex justify-content-around w-100 p-3">
-                    <Button color="primary" disabled={!selectedFile} onClick={handleUpload}>Upload</Button>
-                    <Button color="secondary" onClick={() => dispatch(videouploadAction.setIsOpen(false))}>Close</Button>
+                <div className="d-flex justify-content-center w-100 p-3">
+                    <Button className="mx-3" color="primary" disabled={!selectedFile || progress} onClick={handleUpload}>Upload</Button>
+                    <Button className="mx-3" color="secondary" disabled={progress} onClick={() => {
+                        dispatch(videouploadAction.setIsOpen(false));
+                        resetForm();
+                    }}>Close</Button>
                 </div>
                 <label className="col-form-label mt-2" htmlFor="account_type">
                     {progress ? <> Uploading... {progress}%</> : <></>}
