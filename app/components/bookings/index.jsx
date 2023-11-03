@@ -61,6 +61,8 @@ const Bookings = ({ accountType = null }) => {
     useAppSelector(bookingsState);
   const { addRating } = bookingsAction;
 
+  console.log("scheduledMeetingDetails", scheduledMeetingDetails);
+
   const [activeTabs, setActiveTab] = useState(bookingButton[0]);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -146,7 +148,8 @@ const Bookings = ({ accountType = null }) => {
     _id,
     trainee_info,
     trainer_info,
-    ratings
+    ratings,
+    trainee_clips
   ) => {
     const availabilityInfo = Utils.meetingAvailability(
       booked_date,
@@ -175,7 +178,10 @@ const Bookings = ({ accountType = null }) => {
           isStartButtonEnabled,
           isMeetingDone,
           isUpcomingSession,
-          ratings
+          ratings,
+          trainee_clips,
+          selectedClips,
+          setSelectedClips,
         );
       case AccountType.TRAINEE:
         return TraineeRenderBooking(
@@ -197,7 +203,8 @@ const Bookings = ({ accountType = null }) => {
           selectedClips,
           setSelectedClips,
           setIsOpenID,
-          addTraineeClipInBookedSession
+          addTraineeClipInBookedSession,
+          trainee_clips
         );
       default:
         break;
@@ -212,7 +219,11 @@ const Bookings = ({ accountType = null }) => {
     isCurrentDateBefore,
     isStartButtonEnabled,
     isMeetingDone,
-    isUpcomingSession
+    isUpcomingSession,
+    ratings,
+    trainee_clips,
+    selectedClips,
+    setSelectedClips,
   ) => {
     return (
       <React.Fragment>
@@ -221,7 +232,12 @@ const Bookings = ({ accountType = null }) => {
         )}
         <span className="px-2">
           <span>Trainee share video clips with you </span>
-          <span onClick={() => { setIsOpenID(_id); setIsOpen(true); }} style={{ textDecoration: 'underline', cursor: 'pointer' }} >click here</span> to view Clip
+          <span onClick={() => {
+            if (trainee_clips?.length > 0) setSelectedClips(trainee_clips)
+            else setSelectedClips([])
+            setIsOpenID(_id);
+            setIsOpen(true);
+          }} style={{ textDecoration: 'underline', cursor: 'pointer' }} >click here</span> to view Clip
         </span>
         {
           status === BookedSession.canceled && isMeetingDone && (
@@ -356,7 +372,9 @@ const Bookings = ({ accountType = null }) => {
                     <div className="media-body media-body text-right">
                       <div
                         className="icon-btn btn-sm btn-outline-light close-apps pointer"
-                        onClick={() => { setIsOpen(false) }}
+                        onClick={() => {
+                          setIsOpen(false)
+                        }}
                       >
                         <X />
                       </div>
@@ -372,13 +390,6 @@ const Bookings = ({ accountType = null }) => {
                           <video style={{ width: "25vw" }} className="p-2">
                             <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
                           </video>
-                          <span style={{ position: "absolute", right: 5, top: -3, cursor: "pointer", background: "red", borderRadius: "50%", padding: "0px 6px", color: "#fff" }}
-                            onClick={() => {
-                              var temp = selectedClips;
-                              temp = temp.filter(val => val._id !== clp?._id)
-                              setSelectedClips([...temp]);
-                            }}
-                          >x</span>
                         </div>
                       ))}
                     </div>
@@ -411,7 +422,8 @@ const Bookings = ({ accountType = null }) => {
     selectedClips,
     setSelectedClips,
     setIsOpenID,
-    addTraineeClipInBookedSession
+    addTraineeClipInBookedSession,
+    trainee_clips
   ) => {
     const isCompleted =
       has24HoursPassedSinceBooking ||
@@ -451,6 +463,8 @@ const Bookings = ({ accountType = null }) => {
                       className="btn btn-success button-effect btn-sm mr-4 btn_cancel"
                       type="button"
                       onClick={() => {
+                        if (trainee_clips?.length > 0) setSelectedClips(trainee_clips)
+                        else setSelectedClips([])
                         setIsOpenID(_id)
                         setIsOpen(true)
                       }}
@@ -634,6 +648,7 @@ const Bookings = ({ accountType = null }) => {
         session_end_time,
         status,
         ratings,
+        trainee_clips
       } = bookingInfo;
       return (
         <div
@@ -684,7 +699,8 @@ const Bookings = ({ accountType = null }) => {
                   _id,
                   trainee_info,
                   trainer_info,
-                  ratings
+                  ratings,
+                  trainee_clips
                 )}
               </div>
             </div>
