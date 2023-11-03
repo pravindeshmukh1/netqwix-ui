@@ -609,7 +609,7 @@ const FileSection = (props) => {
       </div>
 
       <Modal
-        isOpenPlayVideo={isOpenPlayVideo}
+        isOpen={isOpenPlayVideo}
         allowFullWidth={true}
         element={
           <>
@@ -625,7 +625,7 @@ const FileSection = (props) => {
                     <X />
                   </div>
                 </div>
-                <video style={{ width: "100%", height: "100%" }} autoplay controls   >
+                <video style={{ width: "100%", height: "70%" }} autoplay controls   >
                   <source src={selectedVideo} type="video/mp4" />
                 </video>
               </div>
