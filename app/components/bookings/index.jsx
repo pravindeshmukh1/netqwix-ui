@@ -348,7 +348,21 @@ const Bookings = ({ accountType = null }) => {
           element={
             <>
               <div className="container media-gallery portfolio-section grid-portfolio ">
-                <h2 className="my-5">Trainee share video clips with you.</h2>
+                <div className="theme-title">
+                  <div className="media">
+                    <div>
+                      <h2>Trainee share video clips with you.</h2>
+                    </div>
+                    <div className="media-body media-body text-right">
+                      <div
+                        className="icon-btn btn-sm btn-outline-light close-apps pointer"
+                        onClick={() => { setIsOpen(false) }}
+                      >
+                        <X />
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 {selectedClips?.length ? <div >
                   <h5 className="block-title p-0"> Selected Clips<label className="badge badge-primary sm ml-2">{selectedClips?.length}</label></h5>
                   <div className={`block-content`}>
@@ -370,9 +384,6 @@ const Bookings = ({ accountType = null }) => {
                     </div>
                   </div>
                 </div> : <></>}
-              </div>
-              <div className="d-flex justify-content-around w-100 p-3">
-                <Button color="secondary" onClick={() => { setIsOpen(false) }}>Close</Button>
               </div>
             </>
           }
