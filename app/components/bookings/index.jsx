@@ -219,122 +219,165 @@ const Bookings = ({ accountType = null }) => {
         {status !== BookedSession.canceled && isMeetingDone && (
           <h3 className="mt-1">Completed</h3>
         )}
-        {status === BookedSession.canceled && isMeetingDone && (
-          <button
-            className="btn btn-danger button-effect btn-sm ml-4"
-            type="button"
-            style={{
-              cursor:
-                status === BookedSession.canceled ? "not-allowed" : "pointer",
-            }}
-            disabled={status === BookedSession.canceled}
-          >
-            {status === BookedSession.canceled
-              ? BookedSession.canceled
-              : "Cancel"}
-          </button>
-        )}
-        {!isUpcomingSession &&
-          !isCurrentDateBefore &&
-          status === BookedSession.confirmed &&
-          !isStartButtonEnabled &&
-          !isMeetingDone ? (
-          <button
-            className={`btn btn-success button-effect btn-sm mr-4`}
-            type="button"
-            onClick={() => {
-              const payload = {
-                _id,
-                isOpen: true,
-                booking_id: _id,
-              };
-              handleAddRatingModelState(payload);
-            }}
-          >
-            Rating
-          </button>
-        ) : (
-          <React.Fragment>
-            {!isMeetingDone && (
-              <React.Fragment>
-                {status !== BookedSession.canceled && (
+        <span className="px-2">
+          <span>Trainee share video clips with you </span>
+          <span onClick={() => { setIsOpenID(_id); setIsOpen(true); }} style={{ textDecoration: 'underline', cursor: 'pointer' }} >click here</span> to view Clip
+        </span>
+        {
+          status === BookedSession.canceled && isMeetingDone && (
+            <button
+              className="btn btn-danger button-effect btn-sm ml-4"
+              type="button"
+              style={{
+                cursor:
+                  status === BookedSession.canceled ? "not-allowed" : "pointer",
+              }}
+              disabled={status === BookedSession.canceled}
+            >
+              {status === BookedSession.canceled
+                ? BookedSession.canceled
+                : "Cancel"}
+            </button>
+          )
+        }
+        {
+          !isUpcomingSession &&
+            !isCurrentDateBefore &&
+            status === BookedSession.confirmed &&
+            !isStartButtonEnabled &&
+            !isMeetingDone ? (
+            <button
+              className={`btn btn-success button-effect btn-sm mr-4`}
+              type="button"
+              onClick={() => {
+                const payload = {
+                  _id,
+                  isOpen: true,
+                  booking_id: _id,
+                };
+                handleAddRatingModelState(payload);
+              }}
+            >
+              Rating
+            </button>
+          ) : (
+            <React.Fragment>
+              {!isMeetingDone && (
+                <React.Fragment>
+                  {status !== BookedSession.canceled && (
+                    <button
+                      className={`btn btn-primary button-effect btn-sm mr-2 btn_cancel`}
+                      type="button"
+                      style={{
+                        cursor:
+                          status === BookedSession.confirmed && "not-allowed",
+                      }}
+                      disabled={status === BookedSession.confirmed}
+                      onClick={() =>
+                        setBookedSession({
+                          ...bookedSession,
+                          id: _id,
+                          booked_status: BookedSession.confirmed,
+                        })
+                      }
+                    >
+                      {status === BookedSession.confirmed
+                        ? BookedSession.confirmed
+                        : BookedSession.confirm}
+                    </button>
+                  )}
+                  {status === BookedSession.confirmed && (
+                    <button
+                      className={`btn btn-primary button-effect btn-sm mr-2 btn_cancel`}
+                      type="button"
+                      disabled={!isStartButtonEnabled}
+                      style={{
+                        cursor: !isStartButtonEnabled ? "not-allowed" : "pointer",
+                      }}
+                      onClick={() => {
+                        setStartMeeting({
+                          ...startMeeting,
+                          id: _id,
+                          isOpenModal: true,
+                          traineeInfo: trainee_info,
+                          trainerInfo: trainer_info,
+                        });
+                      }}
+                    >
+                      {BookedSession.start}
+                    </button>
+                  )}
                   <button
-                    className={`btn btn-primary button-effect btn-sm mr-2 btn_cancel`}
+                    className={`btn btn-danger button-effect btn-sm btn_cancel`}
                     type="button"
                     style={{
                       cursor:
-                        status === BookedSession.confirmed && "not-allowed",
+                        status === BookedSession.canceled || isStartButtonEnabled
+                          ? "not-allowed"
+                          : "pointer",
                     }}
-                    disabled={status === BookedSession.confirmed}
-                    onClick={() =>
-                      setBookedSession({
-                        ...bookedSession,
-                        id: _id,
-                        booked_status: BookedSession.confirmed,
-                      })
-                    }
-                  >
-                    {status === BookedSession.confirmed
-                      ? BookedSession.confirmed
-                      : BookedSession.confirm}
-                  </button>
-                )}
-                {status === BookedSession.confirmed && (
-                  <button
-                    className={`btn btn-primary button-effect btn-sm mr-2 btn_cancel`}
-                    type="button"
-                    disabled={!isStartButtonEnabled}
-                    style={{
-                      cursor: !isStartButtonEnabled ? "not-allowed" : "pointer",
-                    }}
-                    onClick={() => {
-                      setStartMeeting({
-                        ...startMeeting,
-                        id: _id,
-                        isOpenModal: true,
-                        traineeInfo: trainee_info,
-                        trainerInfo: trainer_info,
-                      });
-                    }}
-                  >
-                    {BookedSession.start}
-                  </button>
-                )}
-                <button
-                  className={`btn btn-danger button-effect btn-sm btn_cancel`}
-                  type="button"
-                  style={{
-                    cursor:
+                    disabled={
                       status === BookedSession.canceled || isStartButtonEnabled
-                        ? "not-allowed"
-                        : "pointer",
-                  }}
-                  disabled={
-                    status === BookedSession.canceled || isStartButtonEnabled
-                  }
-                  onClick={() => {
-                    if (
-                      !isStartButtonEnabled &&
-                      (status === BookedSession.booked ||
-                        status === BookedSession.confirmed)
-                    ) {
-                      setBookedSession({
-                        ...bookedSession,
-                        id: _id,
-                        booked_status: BookedSession.canceled,
-                      });
                     }
-                  }}
-                >
-                  {status === BookedSession.canceled
-                    ? BookedSession.canceled
-                    : "Cancel"}
-                </button>
-              </React.Fragment>
-            )}
-          </React.Fragment>
-        )}
-      </React.Fragment>
+                    onClick={() => {
+                      if (
+                        !isStartButtonEnabled &&
+                        (status === BookedSession.booked ||
+                          status === BookedSession.confirmed)
+                      ) {
+                        setBookedSession({
+                          ...bookedSession,
+                          id: _id,
+                          booked_status: BookedSession.canceled,
+                        });
+                      }
+                    }}
+                  >
+                    {status === BookedSession.canceled
+                      ? BookedSession.canceled
+                      : "Cancel"}
+                  </button>
+                </React.Fragment>
+              )}
+            </React.Fragment>
+          )
+        }
+
+        <Modal
+          isOpen={isOpen}
+          element={
+            <>
+              <div className="container media-gallery portfolio-section grid-portfolio ">
+                <h2 className="my-5">Trainee share video clips with you.</h2>
+                {selectedClips?.length ? <div >
+                  <h5 className="block-title p-0"> Selected Clips<label className="badge badge-primary sm ml-2">{selectedClips?.length}</label></h5>
+                  <div className={`block-content`}>
+                    <div className="row">
+                      {selectedClips.map((clp, index) => (
+                        <div key={index} style={{ borderRadius: 5, position: "relative" }}>
+                          <video style={{ width: "25vw" }} className="p-2">
+                            <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                          </video>
+                          <span style={{ position: "absolute", right: 5, top: -3, cursor: "pointer", background: "red", borderRadius: "50%", padding: "0px 6px", color: "#fff" }}
+                            onClick={() => {
+                              var temp = selectedClips;
+                              temp = temp.filter(val => val._id !== clp?._id)
+                              setSelectedClips([...temp]);
+                            }}
+                          >x</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div> : <></>}
+              </div>
+              <div className="d-flex justify-content-around w-100 p-3">
+                <Button color="secondary" onClick={() => { setIsOpen(false) }}>Close</Button>
+              </div>
+            </>
+          }
+        />
+      </React.Fragment >
     );
   };
 
