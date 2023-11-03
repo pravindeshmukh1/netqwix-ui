@@ -649,10 +649,10 @@ const ScheduleTraining = () => {
           <div>
             <StripeCard
               clientSecret={transaction?.intent?.result?.client_secret}
-              handlePaymentSuccess={() => {
+              handlePaymentSuccess={async () => {
                 setShowTransactionModal(false);
                 const payload = bookSessionPayload;
-                dispatch(bookSessionAsync(payload));
+                await dispatch(bookSessionAsync(payload));
                 setIsPopoverOpen(null);
                 setBookSessionPayload({});
                 dispatch(authAction.setActiveTab("scheduleTraining"));

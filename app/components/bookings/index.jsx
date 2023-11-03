@@ -429,25 +429,21 @@ const Bookings = ({ accountType = null }) => {
                       </button>
                     )}
                     <Modal
-                      width={400}
                       isOpen={isOpen}
                       element={
                         <>
-                          <div className="media-gallery portfolio-section grid-portfolio">
-                            {selectedClips?.length ? <div className={`collapse-block open`}>
-                              <h5 className="block-title"> Selected Clips<label className="badge badge-primary sm ml-2">{selectedClips?.length}</label></h5>
+                          <div className="container media-gallery portfolio-section grid-portfolio ">
+                            <h2 className="my-5">Select any 2 clips to share it with your Trainer.</h2>
+                            {selectedClips?.length ? <div >
+                              <h5 className="block-title p-0"> Selected Clips<label className="badge badge-primary sm ml-2">{selectedClips?.length}</label></h5>
                               <div className={`block-content`}>
                                 <div className="row">
                                   {selectedClips.map((clp, index) => (
-                                    <div
-                                      key={index}
-                                      className={`col-4 p-1`}
-                                      style={{ borderRadius: 5, position: "relative", }}
-                                    >
-                                      <video style={{ width: "80%", height: "80%", }}  >
+                                    <div key={index} style={{ borderRadius: 5, position: "relative" }}>
+                                      <video style={{ width: "25vw" }} className="p-2">
                                         <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
                                       </video>
-                                      <span style={{ position: "absolute", right: 26, top: -3, cursor: "pointer", background: "red", borderRadius: "50%", padding: "0px 6px", color: "#fff" }}
+                                      <span style={{ position: "absolute", right: 5, top: -3, cursor: "pointer", background: "red", borderRadius: "50%", padding: "0px 6px", color: "#fff" }}
                                         onClick={() => {
                                           var temp = selectedClips;
                                           temp = temp.filter(val => val._id !== clp?._id)
@@ -460,14 +456,14 @@ const Bookings = ({ accountType = null }) => {
                               </div>
                             </div> : <></>}
                             {clips?.length && clips?.map((cl, ind) => <div className={`collapse-block ${cl?.show ? "" : "open"}`}>
-                              <h5 className="block-title"> {cl?._id}<label className="badge badge-primary sm ml-2">{cl?.clips?.length}</label></h5>
+                              <h5 className="block-title pb-0"> {cl?._id}<label className="badge badge-primary sm ml-2">{cl?.clips?.length}</label></h5>
                               <div className={`block-content ${cl?.show ? "d-none" : ""}`}>
                                 <div className="row">
                                   {cl?.clips.map((clp, index) => {
                                     var sld = selectedClips.find(val => val?._id === clp?._id)
                                     return <div
                                       key={index}
-                                      className={`col-4 p-1`}
+                                      className={`col-4 `}
                                       style={{ borderRadius: 5 }}
                                       onClick={() => {
                                         if (!sld && selectedClips?.length < 2) {
@@ -476,7 +472,7 @@ const Bookings = ({ accountType = null }) => {
                                         }
                                       }}
                                     >
-                                      <video style={{ width: "80%", height: "80%", border: `${sld ? "2px" : "0px"} solid green` }}  >
+                                      <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "17vw" }} className="p-2"  >
                                         <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
                                       </video>
                                     </div>
