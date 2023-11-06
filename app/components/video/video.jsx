@@ -60,6 +60,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
   const state = {
     mousedown: false,
   };
+  const [selectedClips, setSelectedClips] = useState([]);
 
   const windowsRef = useRef(null);
 
@@ -101,7 +102,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     const startDrawing = (event) => {
       event.preventDefault();
       isDrawing = true;
-      console.log(`--- start drawing ---- `, selectedShape);
       if (!context) return;
       savedPos = context.getImageData(
         0,
@@ -125,7 +125,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     const findDistance = () => {
       let dis = Math.sqrt(
         Math.pow(currPos.x - startPos.x, 2) +
-          Math.pow(currPos.y - startPos.y, 2)
+        Math.pow(currPos.y - startPos.y, 2)
       );
       return dis;
     };
@@ -494,7 +494,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         console.error("Error accessing media devices:", error);
       }
     };
-    startVideoCall().then(() => {});
+    startVideoCall().then(() => { });
   };
 
   // Initiate outgoing connection
@@ -570,8 +570,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     for (let conns in peerRef.current.connections) {
       peerRef.current.connections[conns].forEach((conn, index, array) => {
         console.log(
-          `closing ${conn.connectionId} peerConnection (${index + 1}/${
-            array.length
+          `closing ${conn.connectionId} peerConnection (${index + 1}/${array.length
           })`,
           conn.peerConnection
         );
@@ -703,9 +702,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     return (
       <div className="call-action-buttons z-50 ml-2  absolute bottom-10">
         <div
-          className={`icon-btn ${
-            isMuted ? "btn-danger" : "btn-light"
-          } btn-xl button-effect mic`}
+          className={`icon-btn ${isMuted ? "btn-danger" : "btn-light"
+            } btn-xl button-effect mic`}
           onClick={() => {
             setIsMuted(!isMuted);
             if (remoteVideoRef && remoteVideoRef.current) {
@@ -810,13 +808,12 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
           </div>
         )}
       </div>
-
       {/* action buttons */}
       {/* {accountType === AccountType.TRAINER && renderActionItems()} */}
       {/* call cut and mute options */}
       {renderCallActionButtons()}
       {/* render menubar */}
-      {accountType === AccountType.TRAINER ? (
+      {accountType === AccountType.TRAINER ? <>
         <div>
           <CanvasMenuBar
             setSketchPickerColor={(rgb) => {
@@ -852,9 +849,11 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
               clearCanvas();
               sendClearCanvasEvent();
             }}
+            selectedClips={selectedClips}
+            setSelectedClips={setSelectedClips}
           />
         </div>
-      ) : (
+      </> : (
         <></>
       )}
     </React.Fragment>

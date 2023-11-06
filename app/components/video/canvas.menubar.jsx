@@ -1,9 +1,13 @@
-import { Edit2, RefreshCw } from "react-feather";
+import { Edit2, RefreshCw, X } from "react-feather";
 import Image from "next/image";
 import { SketchPicker } from "react-color";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Popover } from "react-tiny-popover";
 import { SHAPES } from "../../common/constants";
+import Modal from "../../common/modal";
+import { Nav, NavLink, NavItem, TabContent, TabPane, Col, Button } from "reactstrap";
+import { myClips, traineeClips } from "../../../containers/rightSidebar/fileSection.api";
+
 
 export const CanvasMenuBar = ({
   canvasConfigs,
@@ -13,9 +17,27 @@ export const CanvasMenuBar = ({
   refreshDrawing,
   setCanvasConfigs,
   drawShapes,
+  selectedClips,
+  setSelectedClips
 }) => {
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [activeTab, setActiveTab] = useState(SHAPES.FREE_HAND);
+  const [videoActiveTab, setAideoActiveTab] = useState("media");
+  const [clips, setClips] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [traineeClip, setTraineeClips] = useState([]);
+
+  useEffect(() => {
+    getMyClips()
+  }, [])
+
+  const getMyClips = async () => {
+    var res = await myClips({})
+    setClips(res?.data)
+    var res2 = await traineeClips({})
+    setTraineeClips(res2?.data)
+  }
+
   return (
     <div className="canvas-menus custom-scroll">
       <div className="creationBarItem">
@@ -75,11 +97,10 @@ export const CanvasMenuBar = ({
           {/* free hand */}
           <span>
             <div
-              className={`icon-btn m-5 my-3  button-effect btn-sm ${
-                SHAPES.FREE_HAND === activeTab
-                  ? "btn-outline-primary"
-                  : "btn-outline-light"
-              }`}
+              className={`icon-btn m-5 my-3  button-effect btn-sm ${SHAPES.FREE_HAND === activeTab
+                ? "btn-outline-primary"
+                : "btn-outline-light"
+                }`}
               onClick={() => {
                 drawShapes(SHAPES.FREE_HAND);
                 setActiveTab(SHAPES.FREE_HAND);
@@ -91,11 +112,10 @@ export const CanvasMenuBar = ({
           {/* line */}
           <span>
             <div
-              className={`icon-btn m-5 my-3  button-effect btn-sm ${
-                activeTab === SHAPES.LINE
-                  ? "btn-outline-primary"
-                  : "btn-outline-light"
-              }`}
+              className={`icon-btn m-5 my-3  button-effect btn-sm ${activeTab === SHAPES.LINE
+                ? "btn-outline-primary"
+                : "btn-outline-light"
+                }`}
               onClick={() => {
                 drawShapes(SHAPES.LINE);
                 setActiveTab(SHAPES.LINE);
@@ -107,11 +127,10 @@ export const CanvasMenuBar = ({
           {/* circle */}
           <span>
             <div
-              className={`icon-btn m-5 my-3  button-effect btn-sm ${
-                activeTab === SHAPES.CIRCLE
-                  ? "btn-outline-primary"
-                  : "btn-outline-light"
-              }`}
+              className={`icon-btn m-5 my-3  button-effect btn-sm ${activeTab === SHAPES.CIRCLE
+                ? "btn-outline-primary"
+                : "btn-outline-light"
+                }`}
               onClick={() => {
                 drawShapes(SHAPES.CIRCLE);
                 setActiveTab(SHAPES.CIRCLE);
@@ -123,11 +142,10 @@ export const CanvasMenuBar = ({
           {/* square */}
           <span>
             <div
-              className={`icon-btn m-5 my-3  button-effect btn-sm ${
-                activeTab === SHAPES.SQUARE
-                  ? "btn-outline-primary"
-                  : "btn-outline-light"
-              }`}
+              className={`icon-btn m-5 my-3  button-effect btn-sm ${activeTab === SHAPES.SQUARE
+                ? "btn-outline-primary"
+                : "btn-outline-light"
+                }`}
               onClick={() => {
                 drawShapes(SHAPES.SQUARE);
                 setActiveTab(SHAPES.SQUARE);
@@ -139,11 +157,10 @@ export const CanvasMenuBar = ({
           {/* rectangle */}
           <span>
             <div
-              className={`icon-btn m-5 my-3  button-effect btn-sm ${
-                activeTab === SHAPES.RECTANGLE
-                  ? "btn-outline-primary"
-                  : "btn-outline-light"
-              }`}
+              className={`icon-btn m-5 my-3  button-effect btn-sm ${activeTab === SHAPES.RECTANGLE
+                ? "btn-outline-primary"
+                : "btn-outline-light"
+                }`}
               onClick={() => {
                 drawShapes(SHAPES.RECTANGLE);
                 setActiveTab(SHAPES.RECTANGLE);
@@ -160,11 +177,10 @@ export const CanvasMenuBar = ({
           {/* oval */}
           <span>
             <div
-              className={`icon-btn m-5 my-3  button-effect btn-sm ${
-                activeTab === SHAPES.OVAL
-                  ? "btn-outline-primary"
-                  : "btn-outline-light"
-              }`}
+              className={`icon-btn m-5 my-3  button-effect btn-sm ${activeTab === SHAPES.OVAL
+                ? "btn-outline-primary"
+                : "btn-outline-light"
+                }`}
               onClick={() => {
                 drawShapes(SHAPES.OVAL);
                 setActiveTab(SHAPES.OVAL);
@@ -177,11 +193,10 @@ export const CanvasMenuBar = ({
           {/* triangle */}
           <span>
             <div
-              className={`icon-btn m-5 my-3  button-effect btn-sm ${
-                activeTab === SHAPES.TRIANGLE
-                  ? "btn-outline-primary"
-                  : "btn-outline-light"
-              }`}
+              className={`icon-btn m-5 my-3  button-effect btn-sm ${activeTab === SHAPES.TRIANGLE
+                ? "btn-outline-primary"
+                : "btn-outline-light"
+                }`}
               onClick={() => {
                 drawShapes(SHAPES.TRIANGLE);
                 setActiveTab(SHAPES.TRIANGLE);
@@ -198,11 +213,10 @@ export const CanvasMenuBar = ({
           {/* arrows */}
           <span>
             <div
-              className={`icon-btn m-5 my-3  button-effect btn-sm ${
-                activeTab === SHAPES.ARROW_RIGHT
-                  ? "btn-outline-primary"
-                  : "btn-outline-light"
-              }`}
+              className={`icon-btn m-5 my-3  button-effect btn-sm ${activeTab === SHAPES.ARROW_RIGHT
+                ? "btn-outline-primary"
+                : "btn-outline-light"
+                }`}
               onClick={() => {
                 drawShapes(SHAPES.ARROW_RIGHT);
                 setActiveTab(SHAPES.ARROW_RIGHT);
@@ -213,11 +227,10 @@ export const CanvasMenuBar = ({
           </span>
           <span>
             <div
-              className={`icon-btn m-5  button-effect btn-sm ${
-                activeTab === SHAPES.TWO_SIDE_ARROW
-                  ? "btn-outline-primary"
-                  : "btn-outline-light"
-              }`}
+              className={`icon-btn m-5  button-effect btn-sm ${activeTab === SHAPES.TWO_SIDE_ARROW
+                ? "btn-outline-primary"
+                : "btn-outline-light"
+                }`}
               onClick={() => {
                 drawShapes(SHAPES.TWO_SIDE_ARROW);
                 setActiveTab(SHAPES.TWO_SIDE_ARROW);
@@ -242,8 +255,170 @@ export const CanvasMenuBar = ({
               <RefreshCw />
             </div>
           </span>
+          <span>
+            <div
+              className={`icon-btn m-5  button-effect btn-sm my-3`}
+              onClick={() => { setIsOpen(true) }}
+            >
+              <i className="fa fa-film" />
+            </div>
+          </span>
         </div>
       </div>
+
+
+      {/* ------------------------------ ------------------ -----------------------------*/}
+
+      <Modal
+        isOpen={isOpen}
+        element={
+          <>
+            <div className="container media-gallery portfolio-section grid-portfolio">
+              <div className="theme-title  mb-5">
+                <div className="media">
+                  <div>
+                    <h2>Select up to 2 clips for analysis.</h2>
+                  </div>
+                  <div className="media-body media-body text-right" >
+                    <div
+                      className="icon-btn btn-sm btn-outline-light close-apps pointer"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <X />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="theme-tab">
+                <Nav tabs>
+                  <NavItem className="ml-5px">
+                    <NavLink
+                      className={`button-effect ${videoActiveTab === "media" ? "active" : ""
+                        }`}
+                      onClick={() => setAideoActiveTab("media")}
+                    >
+                      My Clips
+                    </NavLink>
+                  </NavItem>
+                  <NavItem className="ml-5px">
+                    <NavLink
+                      className={`button-effect ${videoActiveTab === "trainee" ? "active" : ""
+                        }`}
+                      onClick={() => setAideoActiveTab("trainee")}
+                    >
+                      Trainee
+                    </NavLink>
+                  </NavItem>
+                </Nav>
+              </div>
+              <div className="file-tab">
+                <TabContent activeTab={videoActiveTab} className="custom-scroll">
+                  <TabPane tabId="media">
+                    <div className="media-gallery portfolio-section grid-portfolio">
+                      {clips?.length ? clips?.map((cl, ind) =>
+                        <div className={`collapse-block open`}>
+                          <h5
+                            className="block-title"
+                            onClick={() => {
+                              var temp = clips
+                              temp = temp.map(vl => { return { ...vl, show: false } })
+                              temp[ind].show = true
+                              setClips([...temp])
+                            }}
+                          >
+                            {cl?._id}
+                            <label className="badge badge-primary sm ml-2">{cl?.clips?.length}</label>
+                          </h5>
+                          {/*  NORMAL  STRUCTURE END  */}
+                          <div className={`block-content`}>
+                            <div className="row">
+                              {cl?.clips.map((clp, index) => {
+                                var sld = selectedClips.find(val => val?._id === clp?._id)
+                                return <div
+                                  key={index}
+                                  className={`col-4 p-1`}
+                                  style={{ borderRadius: 5 }}
+                                  onClick={() => {
+                                    if (!sld && selectedClips?.length < 2) {
+                                      selectedClips.push(clp);
+                                      setSelectedClips([...selectedClips]);
+                                    } else {
+                                      var temp = selectedClips;
+                                      temp = temp.filter(val => val._id !== clp?._id)
+                                      setSelectedClips([...temp]);
+                                    }
+                                  }}
+                                >
+                                  <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "80%", height: "80%" }}  >
+                                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                                  </video>
+                                </div>
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      ) : <>
+                        <div style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}>
+                          <h5 className="block-title">  No Data Found</h5>
+                        </div>
+                      </>}
+                    </div>
+                  </TabPane>
+                  <TabPane tabId="trainee">
+                    <div className="media-gallery portfolio-section grid-portfolio">
+                      {traineeClip?.length ? traineeClip?.map((cl, ind) =>
+                        <div className={`collapse-block open`}>
+                          <h5
+                            className="block-title"
+                            onClick={() => {
+                              var temp = traineeClip
+                              temp = temp.map(vl => { return { ...vl, show: false } })
+                              temp[ind].show = true
+                              setTraineeClips([...temp])
+                            }}
+                          >
+                            {cl?._id?.fullname}
+                            <label className="badge badge-primary sm ml-2">{cl?.clips?.length}</label>
+                          </h5>
+                          {/*  NORMAL  STRUCTURE END  */}
+                          <div className={`block-content `}>
+                            <div className="row">
+                              {cl?.clips.map((clp, index) => {
+                                var sld = selectedClips.find(val => val?._id === clp?._id)
+                                return <div
+                                  key={index}
+                                  className={`col-4 p-1`}
+                                  style={{ borderRadius: 5 }}
+                                  onClick={() => {
+                                    if (!sld && selectedClips?.length < 2) {
+                                      selectedClips.push(clp);
+                                      setSelectedClips([...selectedClips]);
+                                    } else {
+                                      var temp = selectedClips;
+                                      temp = temp.filter(val => val._id !== clp?._id)
+                                      setSelectedClips([...temp]);
+                                    }
+                                  }}
+                                >
+                                  <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "80%", height: "80%" }}  >
+                                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?.clips?._id}`} type="video/mp4" />
+                                  </video>
+                                </div>
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      ) : <div style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}>
+                        <h5 className="block-title">  No Data Found</h5>
+                      </div>}
+                    </div>
+                  </TabPane>
+                </TabContent>
+              </div>
+            </div>
+          </>
+        }
+      />
     </div>
   );
 };
