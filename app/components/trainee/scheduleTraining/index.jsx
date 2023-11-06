@@ -652,7 +652,7 @@ const ScheduleTraining = () => {
               handlePaymentSuccess={async () => {
                 setShowTransactionModal(false);
                 const payload = bookSessionPayload;
-                await dispatch(bookSessionAsync(payload));
+                var res = await dispatch(bookSessionAsync(payload));
                 setIsPopoverOpen(null);
                 setBookSessionPayload({});
                 dispatch(authAction.setActiveTab("scheduleTraining"));

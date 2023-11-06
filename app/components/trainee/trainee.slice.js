@@ -14,6 +14,7 @@ const initialState = {
   transaction: {
     intent: null,
   },
+  newBookingData: {}
 };
 
 export const getTraineeWithSlotsAsync = createAsyncThunk(
@@ -88,8 +89,10 @@ export const traineeSlice = createSlice({
         state.status = "pending";
       })
       .addCase(getTraineeWithSlotsAsync.fulfilled, (state, action) => {
+        console.log("state, action", state, action);
         state.status = "fulfilled";
         state.getTraineeSlots = action.payload.data;
+
       })
       .addCase(getTraineeWithSlotsAsync.rejected, (state, action) => {
         state.status = "rejected";
@@ -102,8 +105,7 @@ export const traineeSlice = createSlice({
         state.transaction.intent = null;
         const { data } = action.payload;
         toast.success(data.message);
-
-        // state.getTraineeSlots = action.payload.data;
+        state.newBookingData = data;
       })
       .addCase(bookSessionAsync.rejected, (state, action) => {
         state.status = "rejected";

@@ -119,12 +119,11 @@ export const TrainerDetails = ({
         </div>
       ) : (
         <div
-          className={`${
-            (trainerInfo.isCategory &&
-              !trainerDetails.select_trainer &&
-              "media-body media-body text-right") ||
+          className={`${(trainerInfo.isCategory &&
+            !trainerDetails.select_trainer &&
+            "media-body media-body text-right") ||
             (!trainerInfo.isCategory && "media-body media-body text-right")
-          }`}
+            }`}
         >
           <div className="mr-2 mt-1">
             {!trainerInfo.isCategory ? (
@@ -330,9 +329,8 @@ const SelectedCategory = ({
                         className="badge badge-pill badge-primary mb-2 p-2"
                         style={{ fontSize: "15px" }}
                       >
-                        {`$${
-                          data?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD
-                        }.00`}
+                        {`$${data?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD
+                          }.00`}
                         {`/ ${TRAINER_MEETING_TIME}`}
                       </p>
                       <h4
@@ -345,8 +343,8 @@ const SelectedCategory = ({
                       </h4>
                       <div>
                         {data &&
-                        data?.extraInfo &&
-                        data?.extraInfo?.social_media_links ? (
+                          data?.extraInfo &&
+                          data?.extraInfo?.social_media_links ? (
                           <SocialMediaIcons
                             profileImageURL={
                               data &&
@@ -485,9 +483,9 @@ const TrainerInfo = ({
               "mt-3 mb-3 d-flex"
             )}
             {trainer &&
-            trainer?.extraInfo &&
-            trainer?.extraInfo?.media &&
-            trainer?.extraInfo?.social_media_links ? (
+              trainer?.extraInfo &&
+              trainer?.extraInfo?.media &&
+              trainer?.extraInfo?.social_media_links ? (
               <SocialMediaIcons
                 profileImageURL={
                   trainer &&
@@ -510,32 +508,32 @@ const TrainerInfo = ({
         </p>
         {accordionData.length
           ? accordionData.map((data, index) => {
-              return (
-                <Accordion key={`accordion_${index}`} className="mb-5">
-                  <Accordion.Item>
-                    <Accordion.Header
-                      index={index}
-                      activeAccordion={activeAccordion}
-                      onAClick={() => {
-                        if (activeAccordion[index]) {
-                          delete activeAccordion[index];
-                        } else if (!activeAccordion[index]) {
-                          activeAccordion[index] = true;
-                        } else {
-                          activeAccordion[index] = !activeAccordion[index];
-                        }
-                        setActiveAccordion(activeAccordion);
-                      }}
-                    >
-                      {data.label}
-                    </Accordion.Header>
-                    <Accordion.Body>
-                      {!data.value ? Message.notFound : data.value}
-                    </Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              );
-            })
+            return (
+              <Accordion key={`accordion_${index}`} className="mb-5">
+                <Accordion.Item>
+                  <Accordion.Header
+                    index={index}
+                    activeAccordion={activeAccordion}
+                    onAClick={() => {
+                      if (activeAccordion[index]) {
+                        delete activeAccordion[index];
+                      } else if (!activeAccordion[index]) {
+                        activeAccordion[index] = true;
+                      } else {
+                        activeAccordion[index] = !activeAccordion[index];
+                      }
+                      setActiveAccordion(activeAccordion);
+                    }}
+                  >
+                    {data.label}
+                  </Accordion.Header>
+                  <Accordion.Body>
+                    {!data.value ? Message.notFound : data.value}
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
+            );
+          })
           : Message.notFound}
       </div>
       <div className="col-md-6">

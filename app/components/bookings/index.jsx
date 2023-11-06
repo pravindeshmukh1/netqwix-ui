@@ -35,12 +35,14 @@ import { TabContent, TabPane, Nav, NavItem, NavLink, Button } from "reactstrap";
 import classnames from "classnames";
 import VideoUpload from '../videoupload'
 import { myClips } from "../../../containers/rightSidebar/fileSection.api";
+import { traineeState } from "../trainee/trainee.slice";
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
 const Bookings = ({ accountType = null }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { handleActiveTab, handleSidebarTabClose } = bookingsAction;
+  const { newBookingData } = useAppSelector(traineeState);
   const { isLoading, configs } = useAppSelector(bookingsState);
   const { userInfo } = useAppSelector(authState);
   const [bookedSession, setBookedSession] = useState({
@@ -56,16 +58,17 @@ const Bookings = ({ accountType = null }) => {
   });
   const socket = useContext(SocketContext);
 
+
   const { activeTab } = useAppSelector(bookingsState);
   const { scheduledMeetingDetails, addRatingModel } =
     useAppSelector(bookingsState);
   const { addRating } = bookingsAction;
 
-  console.log("scheduledMeetingDetails", scheduledMeetingDetails);
 
   const [activeTabs, setActiveTab] = useState(bookingButton[0]);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenNewBookModal, setIsOpenNewBookModal] = useState(false);
   const [isOpenID, setIsOpenID] = useState("");
   const [clips, setClips] = useState([]);
   const [selectedClips, setSelectedClips] = useState([]);
@@ -73,6 +76,15 @@ const Bookings = ({ accountType = null }) => {
   useEffect(() => {
     getMyClips()
   }, [])
+
+
+  useEffect(() => {
+    if (newBookingData?._id) {
+      setIsOpenNewBookModal(true)
+    }
+  }, [newBookingData])
+
+  console.log("isOpenID", isOpenID, newBookingData);
 
   const getMyClips = async () => {
     var res = await myClips({})
@@ -394,11 +406,14 @@ const Bookings = ({ accountType = null }) => {
                       ))}
                     </div>
                   </div>
-                </div> : <></>}
+                </div> :
+                  <></>
+                }
               </div>
             </>
           }
         />
+
       </React.Fragment >
     );
   };
@@ -553,6 +568,30 @@ const Bookings = ({ accountType = null }) => {
                           <div className="d-flex justify-content-around w-100 p-3">
                             <Button color="primary" onClick={() => { addTraineeClipInBookedSession() }}>Add</Button>
                             <Button color="secondary" onClick={() => { setIsOpen(false) }}>Close</Button>
+                          </div>
+                        </>
+                      }
+                    />
+                    <Modal
+                      isOpen={isOpenNewBookModal}
+                      element={
+                        <>
+                          <div className="container media-gallery portfolio-section grid-portfolio ">
+                            <div className="theme-title">
+                              <div className="media">
+                                <div>
+                                  <h2>You can share 2 videos to trainee.</h2>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="d-flex justify-content-around w-100 p-3">
+                            <Button color="primary" onClick={() => {
+                              setIsOpenID(newBookingData?._id)
+                              setIsOpen(true)
+                              setIsOpenNewBookModal(false)
+                            }}>Add</Button>
+                            <Button color="secondary" onClick={() => { setIsOpenNewBookModal(false) }}>Close</Button>
                           </div>
                         </>
                       }
