@@ -68,7 +68,6 @@ const Bookings = ({ accountType = null }) => {
   const [activeTabs, setActiveTab] = useState(bookingButton[0]);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenNewBookModal, setIsOpenNewBookModal] = useState(false);
   const [isOpenID, setIsOpenID] = useState("");
   const [clips, setClips] = useState([]);
   const [selectedClips, setSelectedClips] = useState([]);
@@ -80,7 +79,8 @@ const Bookings = ({ accountType = null }) => {
 
   useEffect(() => {
     if (newBookingData?._id) {
-      setIsOpenNewBookModal(true)
+      setIsOpenID(newBookingData?._id)
+      setIsOpen(true);
     }
   }, [newBookingData])
 
@@ -564,30 +564,6 @@ const Bookings = ({ accountType = null }) => {
                           <div className="d-flex justify-content-around w-100 p-3">
                             <Button color="primary" onClick={() => { addTraineeClipInBookedSession() }}>Add</Button>
                             <Button color="secondary" onClick={() => { setIsOpen(false) }}>Close</Button>
-                          </div>
-                        </>
-                      }
-                    />
-                    <Modal
-                      isOpen={isOpenNewBookModal}
-                      element={
-                        <>
-                          <div className="container media-gallery portfolio-section grid-portfolio ">
-                            <div className="theme-title">
-                              <div className="media">
-                                <div>
-                                  <h2>You can share 2 videos to trainee.</h2>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="d-flex justify-content-around w-100 p-3">
-                            <Button color="primary" onClick={() => {
-                              setIsOpenID(newBookingData?._id)
-                              setIsOpen(true)
-                              setIsOpenNewBookModal(false)
-                            }}>Add</Button>
-                            <Button color="secondary" onClick={() => { setIsOpenNewBookModal(false) }}>Close</Button>
                           </div>
                         </>
                       }
