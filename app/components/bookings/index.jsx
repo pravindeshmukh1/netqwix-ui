@@ -10,7 +10,6 @@ import {
   updateBookedSessionScheduledMeetingAsync,
   addTraineeClipInBookedSessionAsync,
 } from "../common/common.slice";
-
 import { useAppSelector, useAppDispatch } from "../../store";
 import {
   AccountType,
@@ -510,7 +509,16 @@ const Bookings = ({ accountType = null }) => {
                     <Modal
                       isOpen={isOpen}
                       element={
-                        <>
+                        <div>
+                          <div className="theme-title">
+                            <div className="media">
+                              <div className="media-body media-body text-right">
+                                <div className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => {
+                                  setIsOpen(false)
+                                }} > <X /> </div>
+                              </div>
+                            </div>
+                          </div>
                           <div className="container media-gallery portfolio-section grid-portfolio ">
                             <h2 className="my-5">Select any 2 clips to share it with your Trainer.</h2>
                             {selectedClips?.length ? <div >
@@ -563,9 +571,8 @@ const Bookings = ({ accountType = null }) => {
                           </div>
                           <div className="d-flex justify-content-around w-100 p-3">
                             <Button color="primary" onClick={() => { addTraineeClipInBookedSession() }}>Add</Button>
-                            <Button color="secondary" onClick={() => { setIsOpen(false) }}>Close</Button>
                           </div>
-                        </>
+                        </div>
                       }
                     />
                   </React.Fragment>
