@@ -175,7 +175,7 @@ const FileSection = (props) => {
                 }`}
               onClick={() => setActiveTab("media")}
             >
-              My Clips
+              My Locker
             </NavLink>
           </NavItem>}
           {localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE) === "Trainer" && <NavItem className="ml-5px">

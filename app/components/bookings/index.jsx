@@ -378,37 +378,33 @@ const Bookings = ({ accountType = null }) => {
               <div className="container media-gallery portfolio-section grid-portfolio ">
                 <div className="theme-title">
                   <div className="media">
-                    <div>
-                      <h2>Trainee share video clips with you.</h2>
-                    </div>
+
                     <div className="media-body media-body text-right">
-                      <div
-                        className="icon-btn btn-sm btn-outline-light close-apps pointer"
-                        onClick={() => {
-                          setIsOpen(false)
-                        }}
-                      >
-                        <X />
-                      </div>
+                      <div className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { setIsOpen(false) }} > <X /> </div>
                     </div>
                   </div>
                 </div>
-                {selectedClips?.length ? <div >
-                  <h5 className="block-title p-0"> Selected Clips<label className="badge badge-primary sm ml-2">{selectedClips?.length}</label></h5>
-                  <div className={`block-content`}>
-                    <div className="row">
-                      {selectedClips.map((clp, index) => (
-                        <div key={index} style={{ borderRadius: 5, position: "relative" }}>
-                          <video style={{ width: "25vw" }} className="p-2">
-                            <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
-                          </video>
-                        </div>
-                      ))}
+                <div className="d-flex flex-column  align-items-center">
+                  <h2 className="p-3">Trainee share video clips with you.</h2>
+                  {selectedClips?.length ? <div >
+                    <div className={`block-content`}>
+                      <div className="d-flex">
+                        {selectedClips.map((clp, index) => (
+                          <div key={index} className="p-2">
+                            <video style={{ width: "40vw" }} >
+                              <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                            </video>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                </div> :
-                  <></>
-                }
+                  </div> :
+                    <></>
+                  }
+                </div>
+                <div className="justify-content-center">
+
+                </div>
               </div>
             </>
           }
