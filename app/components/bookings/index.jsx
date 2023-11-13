@@ -245,7 +245,6 @@ const Bookings = ({ accountType = null }) => {
           <span>Trainee share video clips with you </span>
           <span onClick={() => {
             if (trainee_clips?.length > 0) setSelectedClips(trainee_clips)
-            else setSelectedClips([])
             setIsOpenID(_id);
             setIsOpen(true);
           }} style={{ textDecoration: 'underline', cursor: 'pointer' }} >click here</span> to view Clip
@@ -390,7 +389,7 @@ const Bookings = ({ accountType = null }) => {
                       <div className="d-flex">
                         {selectedClips.map((clp, index) => (
                           <div key={index} className="p-2">
-                            <video style={{ width: "40vw" }} >
+                            <video style={{ width: "40vw" }} controls>
                               <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
                             </video>
                           </div>
@@ -474,7 +473,6 @@ const Bookings = ({ accountType = null }) => {
                       type="button"
                       onClick={() => {
                         if (trainee_clips?.length > 0) setSelectedClips(trainee_clips)
-                        else setSelectedClips([])
                         setIsOpenID(_id)
                         setIsOpen(true)
                       }}
