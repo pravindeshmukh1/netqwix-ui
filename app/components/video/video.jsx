@@ -61,8 +61,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     mousedown: false,
   };
   const [selectedClips, setSelectedClips] = useState([]);
-
   const windowsRef = useRef(null);
+
 
   const remoteVideoRef = useRef(null);
   const peerRef = useRef(null);
@@ -765,6 +765,74 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     );
   };
 
+  const selectedVideoRef1 = useRef(null);
+  const selectedVideoRef2 = useRef(null);
+  const progressBarRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    if (selectedClips?.length) socket.emit(EVENTS.ON_VIDEO_SELECT, {
+      userInfo: { from_user: fromUser._id, to_user: toUser._id },
+      videos: selectedClips,
+    });
+  }, [selectedClips?.length])
+
+  socket.on(EVENTS.ON_VIDEO_PLAY_PAUSE, ({ isPlaying }) => {
+    if (!isPlaying) {
+      selectedVideoRef1?.current?.pause();
+      selectedVideoRef2?.current?.pause();
+    } else {
+      selectedVideoRef1?.current?.play();
+      selectedVideoRef2?.current?.play();
+    }
+    setIsPlaying(isPlaying)
+  });
+
+  socket.on(EVENTS.ON_VIDEO_TIME, ({ clickedTime }) => {
+    selectedVideoRef1.current.currentTime = clickedTime;
+    selectedVideoRef2.current.currentTime = clickedTime;
+  });
+
+  socket.on(EVENTS.ON_VIDEO_SELECT, ({ videos }) => {
+    setSelectedClips(videos)
+  });
+
+  const togglePlay = () => {
+    if (isPlaying) {
+      selectedVideoRef1?.current?.pause();
+      selectedVideoRef2.current.pause();
+    } else {
+      selectedVideoRef1?.current?.play();
+      selectedVideoRef2?.current?.play();
+    }
+    setIsPlaying(!isPlaying);
+    socket?.emit(EVENTS?.ON_VIDEO_PLAY_PAUSE, {
+      userInfo: { from_user: fromUser?._id, to_user: toUser?._id },
+      isPlaying: !isPlaying,
+    });
+  };
+
+  const handleTimeUpdate = () => {
+    const progress = (selectedVideoRef1?.current?.currentTime + selectedVideoRef2?.current?.currentTime) / 2;
+    progressBarRef.current.value = progress;
+
+    // Convert currentTime to minutes and seconds
+    const minutes = Math?.floor(progress / 60);
+    const seconds = Math?.floor(progress % 60);
+    // console?.log(`Current Time: ${minutes}:${seconds}`);
+  };
+
+  const handleProgressBarClick = (e) => {
+    const clickedTime = (e?.nativeEvent?.offsetX / progressBarRef?.current?.offsetWidth) * progressBarRef?.current.getAttribute('max');
+
+    selectedVideoRef1.current.currentTime = clickedTime;
+    selectedVideoRef2.current.currentTime = clickedTime;
+
+    socket?.emit(EVENTS?.ON_VIDEO_TIME, {
+      userInfo: { from_user: fromUser?._id, to_user: toUser?._id },
+      clickedTime: clickedTime,
+    });
+  };
   return (
     <React.Fragment>
       {displayMsg.showMsg ? (
@@ -772,8 +840,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
       ) : (
         <></>
       )}
-      <div className="flex">
-        <div className="absolute z-50 bottom-0 left-21">
+      <div className="flex" style={{ flexDirection: "column" }}>
+        {/* <div className="absolute z-50 bottom-0 left-21">
           <div className="flex items-center">
             <div>
               {videoRef && (
@@ -788,30 +856,50 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
               )}
             </div>
           </div>
-        </div>
-        {remoteVideoRef && (
-          <div id="remote-user" className="remote-user">
-            <canvas
-              id="drawing-canvas"
-              width={document.getElementById("bookings")?.clientWidth}
-              height={document.getElementById("bookings")?.clientHeight}
-              className="canvas-print absolute all-0"
-              ref={canvasRef}
-            />
-            <video
+        </div> */}
+
+
+        <div id="remote-user" className="remote-user">
+          <canvas
+            id="drawing-canvas"
+            width={document.getElementById("bookings")?.clientWidth}
+            height={document.getElementById("bookings")?.clientHeight}
+            className="canvas-print absolute all-0"
+            ref={canvasRef}
+          />
+          {/* <video
               ref={remoteVideoRef}
               playsInline
               autoPlay
               className="bg-video"
               id="video"
-            />
-          </div>
-        )}
+            /> */}
+          {selectedClips?.length && <>
+            <video style={{ width: "50%", height: "35%", margin: "10px" }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate} >
+              <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
+            </video>
+            <video style={{ width: "50%", height: "35%", margin: "10px" }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate}>
+              <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
+            </video>
+          </>
+          }
+        </div>
       </div>
       {/* action buttons */}
       {/* {accountType === AccountType.TRAINER && renderActionItems()} */}
       {/* call cut and mute options */}
       {renderCallActionButtons()}
+      {selectedClips?.length && <div className="call-action-buttons z-50 ml-2  absolute bottom-10" style={{ bottom: "75px" }}>
+        <div className="external-control-bar">
+          <button onClick={togglePlay}>{isPlaying ? 'Pause' : 'Play'}</button>
+        </div>
+        <progress
+          ref={progressBarRef}
+          value="0"
+          max={selectedVideoRef1.current ? selectedVideoRef1.current.duration : 100}
+          onClick={handleProgressBarClick}
+        />
+      </div>}
       {/* render menubar */}
       {accountType === AccountType.TRAINER ? <>
         <div>
@@ -854,7 +942,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
           />
         </div>
       </> : (
-        <></>
+        <div></div>
       )}
     </React.Fragment>
   );

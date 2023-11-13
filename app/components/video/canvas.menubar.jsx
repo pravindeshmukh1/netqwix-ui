@@ -26,6 +26,7 @@ export const CanvasMenuBar = ({
   const [clips, setClips] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [traineeClip, setTraineeClips] = useState([]);
+  const [selectClips, setSelectClips] = useState([]);
 
   useEffect(() => {
     getMyClips()
@@ -282,7 +283,10 @@ export const CanvasMenuBar = ({
                   <div className="media-body media-body text-right" >
                     <div
                       className="icon-btn btn-sm btn-outline-light close-apps pointer"
-                      onClick={() => setIsOpen(false)}
+                      onClick={() => {
+                        setSelectedClips(selectClips)
+                        setIsOpen(false)
+                      }}
                     >
                       <X />
                     </div>
@@ -333,19 +337,19 @@ export const CanvasMenuBar = ({
                           <div className={`block-content`}>
                             <div className="row">
                               {cl?.clips.map((clp, index) => {
-                                var sld = selectedClips.find(val => val?._id === clp?._id)
+                                var sld = selectClips.find(val => val?._id === clp?._id)
                                 return <div
                                   key={index}
                                   className={`col-4 p-1`}
                                   style={{ borderRadius: 5 }}
                                   onClick={() => {
-                                    if (!sld && selectedClips?.length < 2) {
-                                      selectedClips.push(clp);
-                                      setSelectedClips([...selectedClips]);
+                                    if (!sld && selectClips?.length < 2) {
+                                      selectClips.push(clp);
+                                      setSelectClips([...selectClips]);
                                     } else {
-                                      var temp = selectedClips;
+                                      var temp = selectClips;
                                       temp = temp.filter(val => val._id !== clp?._id)
-                                      setSelectedClips([...temp]);
+                                      setSelectClips([...temp]);
                                     }
                                   }}
                                 >
@@ -384,19 +388,19 @@ export const CanvasMenuBar = ({
                           <div className={`block-content `}>
                             <div className="row">
                               {cl?.clips.map((clp, index) => {
-                                var sld = selectedClips.find(val => val?._id === clp?._id)
+                                var sld = selectClips.find(val => val?._id === clp?._id)
                                 return <div
                                   key={index}
                                   className={`col-4 p-1`}
                                   style={{ borderRadius: 5 }}
                                   onClick={() => {
-                                    if (!sld && selectedClips?.length < 2) {
-                                      selectedClips.push(clp);
-                                      setSelectedClips([...selectedClips]);
+                                    if (!sld && selectClips?.length < 2) {
+                                      selectClips.push(clp);
+                                      setSelectClips([...selectClips]);
                                     } else {
-                                      var temp = selectedClips;
+                                      var temp = selectClips;
                                       temp = temp.filter(val => val._id !== clp?._id)
-                                      setSelectedClips([...temp]);
+                                      setSelectClips([...temp]);
                                     }
                                   }}
                                 >
