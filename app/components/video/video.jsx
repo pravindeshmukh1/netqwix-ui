@@ -700,7 +700,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
   const renderCallActionButtons = () => {
     return (
-      <div className="call-action-buttons z-50 ml-2  absolute bottom-10">
+      <div className="call-action-buttons z-50 ml-2  " style={{ position: "absolute", bottom: 0, left: "50%", transform: "translate(-50%, -50%)" }}>
         <div
           className={`icon-btn ${isMuted ? "btn-danger" : "btn-light"
             } btn-xl button-effect mic`}
@@ -769,6 +769,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
   const selectedVideoRef2 = useRef(null);
   const progressBarRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [maxMin, setMaxMin] = useState(false);
+
 
   useEffect(() => {
     if (selectedClips?.length) socket.emit(EVENTS.ON_VIDEO_SELECT, {
@@ -833,117 +835,172 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
       clickedTime: clickedTime,
     });
   };
+  console.log(">>>>>>>>>>>>>>", selectedClips);
   return (
     <React.Fragment>
-      {displayMsg.showMsg ? (
-        <div className="no-user-joined font-weight-bold">{displayMsg.msg}</div>
-      ) : (
-        <></>
-      )}
-      <div className="flex" style={{ flexDirection: "column" }}>
-        {/* <div className="absolute z-50 bottom-0 left-21">
-          <div className="flex items-center">
+      <div className="canvas-print absolute  " style={{ zIndex: 10, right: 5 }}>
+        <div style={{ textAlign: "end" }} onClick={(event) => { event.stopPropagation(); setMaxMin(!maxMin) }}>
+          <button className="btn btn-primary px-2 py-1 my-3" >{maxMin ? 'Minimise' : 'Maximise'}</button>
+        </div>
+      </div>
+      <canvas
+        id="drawing-canvas"
+        width={document.getElementById("bookings")?.clientWidth}
+        height={document.getElementById("bookings")?.clientHeight}
+        className="canvas-print absolute all-0"
+        ref={canvasRef} style={{ top: 60, left: 60 }}
+      />
+      <div className="row" style={{ height: "100%", display: "flex", alignItems: "center", position: "relative", zIndex: 9999 }}>
+
+
+        {accountType === AccountType.TRAINER ?
+          <div className="col-1">
             <div>
-              {videoRef && (
-                <video
-                  id="end-user-video"
-                  playsInline
-                  muted
-                  className="rounded z-50"
-                  ref={videoRef}
-                  autoPlay
-                />
-              )}
+              <CanvasMenuBar
+                setSketchPickerColor={(rgb) => {
+                  setSketchPickerColor(rgb);
+                }}
+                undoDrawing={() => {
+                  undoDrawing(
+                    {
+                      coordinates: storedLocalDrawPaths.sender,
+                      theme: canvasConfigs.sender,
+                    },
+                    {
+                      coordinates: storedLocalDrawPaths.receiver,
+                      theme: {
+                        lineWidth: canvasConfigs.receiver.lineWidth,
+                        strokeStyle: canvasConfigs.receiver.strokeStyle,
+                      },
+                    }
+                  );
+                }}
+                sketchPickerColor={sketchPickerColor}
+                canvasConfigs={canvasConfigs}
+                setCanvasConfigs={(config) => {
+                  canvasConfigs = config;
+                }}
+                drawShapes={(shapeType) => {
+                  selectedShape = shapeType;
+                }}
+                refreshDrawing={() => {
+                  // deleting the canvas drawing
+                  storedLocalDrawPaths.sender = [];
+                  storedLocalDrawPaths.receiver = [];
+                  clearCanvas();
+                  sendClearCanvasEvent();
+                }}
+                selectedClips={selectedClips}
+                setSelectedClips={setSelectedClips}
+              />
             </div>
+          </div> : null
+        }
+
+        <div className={accountType === AccountType.TRAINER ? maxMin ? "col-10" : "col-6" : maxMin ? "col-12" : "col-8"} style={{ position: "relative", height: "100%", display: "flex", alignItems: "center" }}>
+          {displayMsg.showMsg ? (
+            <div className="no-user-joined font-weight-bold text-center">{displayMsg.msg}</div>
+          ) : (
+            <></>
+          )}
+
+          {selectedClips?.length ?
+            <div className="row">
+              <div className="col-6">
+                <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate} >
+                  <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
+                </video>
+              </div>
+              <div className="col-6">
+                <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate}>
+                  <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
+                </video>
+              </div>
+              <div className="col-12">
+                <div style={{ textAlign: "center" }}>
+                  <div className="external-control-bar">
+                    <button className="btn btn-primary px-2 py-1 my-3" onClick={togglePlay}>{isPlaying ? 'Pause' : 'Play'}</button>
+                  </div>
+                  <progress className="progress"
+                    ref={progressBarRef}
+                    value="0"
+                    max={selectedVideoRef1.current ? selectedVideoRef1.current.duration : 100}
+                    onClick={handleProgressBarClick}
+                  />
+                </div>
+              </div>
+            </div> :
+            null
+          }
+
+          {/* action buttons */}
+          {/* {accountType === AccountType.TRAINER && renderActionItems()} */}
+          {/* call cut and mute options */}
+
+
+          {renderCallActionButtons()}
+        </div>
+        < div className={maxMin ? "col-1" : "col-4"} >
+          <div style={{ width: "100%", textAlign: "center" }}>
+            {videoRef && (
+              <video
+                id="end-user-video"
+                playsInline
+                muted
+                className="rounded " style={{ width: 'initial' }}
+                ref={videoRef}
+                autoPlay
+              />
+            )}
           </div>
-        </div> */}
-
-
-        <div id="remote-user" className="remote-user">
-          <canvas
-            id="drawing-canvas"
-            width={document.getElementById("bookings")?.clientWidth}
-            height={document.getElementById("bookings")?.clientHeight}
-            className="canvas-print absolute all-0"
-            ref={canvasRef}
-          />
-          {/* <video
+          <div style={{ width: "100%", textAlign: "center" }}>
+            {/* <canvas
+                id="drawing-canvas"
+                // width={document.getElementById("bookings")?.clientWidth}
+                // height={document.getElementById("bookings")?.clientHeight}
+                className=""
+                ref={canvasRef}
+              /> */}
+            <video
               ref={remoteVideoRef}
               playsInline
               autoPlay
-              className="bg-video"
-              id="video"
-            /> */}
-          {selectedClips?.length && <>
-            <video style={{ width: "50%", height: "35%", margin: "10px" }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate} >
-              <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
-            </video>
-            <video style={{ width: "50%", height: "35%", margin: "10px" }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate}>
-              <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
-            </video>
-          </>
-          }
+              className="rounded " style={{ width: 'initial' }}
+              id="end-user-video"
+            />
+
+          </div>
         </div>
+
       </div>
-      {/* action buttons */}
-      {/* {accountType === AccountType.TRAINER && renderActionItems()} */}
-      {/* call cut and mute options */}
-      {renderCallActionButtons()}
-      {selectedClips?.length && <div className="call-action-buttons z-50 ml-2  absolute bottom-10" style={{ bottom: "75px" }}>
-        <div className="external-control-bar">
-          <button onClick={togglePlay}>{isPlaying ? 'Pause' : 'Play'}</button>
-        </div>
-        <progress
-          ref={progressBarRef}
-          value="0"
-          max={selectedVideoRef1.current ? selectedVideoRef1.current.duration : 100}
-          onClick={handleProgressBarClick}
+      {/* <div id="remote-user" className="remote-user">
+        <canvas
+          id="drawing-canvas"
+          width={document.getElementById("bookings")?.clientWidth}
+          height={document.getElementById("bookings")?.clientHeight}
+          className="canvas-print absolute all-0"
+          ref={canvasRef}
         />
-      </div>}
-      {/* render menubar */}
-      {accountType === AccountType.TRAINER ? <>
-        <div>
-          <CanvasMenuBar
-            setSketchPickerColor={(rgb) => {
-              setSketchPickerColor(rgb);
-            }}
-            undoDrawing={() => {
-              undoDrawing(
-                {
-                  coordinates: storedLocalDrawPaths.sender,
-                  theme: canvasConfigs.sender,
-                },
-                {
-                  coordinates: storedLocalDrawPaths.receiver,
-                  theme: {
-                    lineWidth: canvasConfigs.receiver.lineWidth,
-                    strokeStyle: canvasConfigs.receiver.strokeStyle,
-                  },
-                }
-              );
-            }}
-            sketchPickerColor={sketchPickerColor}
-            canvasConfigs={canvasConfigs}
-            setCanvasConfigs={(config) => {
-              canvasConfigs = config;
-            }}
-            drawShapes={(shapeType) => {
-              selectedShape = shapeType;
-            }}
-            refreshDrawing={() => {
-              // deleting the canvas drawing
-              storedLocalDrawPaths.sender = [];
-              storedLocalDrawPaths.receiver = [];
-              clearCanvas();
-              sendClearCanvasEvent();
-            }}
-            selectedClips={selectedClips}
-            setSelectedClips={setSelectedClips}
-          />
-        </div>
-      </> : (
-        <div></div>
-      )}
-    </React.Fragment>
+        <video
+          ref={remoteVideoRef}
+          playsInline
+          autoPlay
+          className="bg-video"
+          id="video"
+        />
+        {selectedClips?.length && <>
+          <video style={{ width: "50%", height: "35%", margin: "10px" }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate} >
+            <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
+          </video>
+          <video style={{ width: "50%", height: "35%", margin: "10px" }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate}>
+            <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
+          </video>
+        </>
+        }
+      </div> */}
+
+
+
+    </React.Fragment >
   );
 };

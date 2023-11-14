@@ -40,7 +40,7 @@ export const CanvasMenuBar = ({
   }
 
   return (
-    <div className="canvas-menus custom-scroll">
+    <div style={{ margin: "1rem 0", display: "flex", justifyContent: "center" }}>
       <div className="creationBarItem">
         <div className="CreationBarCustomizable">
           <span>

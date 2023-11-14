@@ -136,10 +136,10 @@ $canvas-z-index: 8;
 }
 
 .call-action-buttons {
-  position: absolute !important;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  // position: absolute !important;
+  // bottom: 0;
+  // left: 0;
+  // right: 0;
   text-align: center;
 }
 
@@ -172,7 +172,7 @@ $canvas-z-index: 8;
 
 
 .canvas-print {
-  left: $sidebar-width-left + 5px !important;
+  left: $sidebar-width-left + 40px !important;
 }
 
 .bg-video {
@@ -905,4 +905,10 @@ slick-slider .slick-list,
 
 .search_button {
   height: 58px;
+}
+
+// new
+.progress {
+  width: 100%;
+  height: 20px;
 }

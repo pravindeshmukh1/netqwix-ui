@@ -15,7 +15,7 @@ const StartMeeting = ({ isClose, accountType, traineeInfo, trainerInfo }) => {
   });
 
   return (
-    <div className="d-flex justify-content-end mr-3 full-height">
+    <div className="mr-3 full-height">
       <HandleVideoCall
         isClose={isClose}
         accountType={accountType}
