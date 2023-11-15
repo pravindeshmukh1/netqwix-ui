@@ -850,7 +850,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         className="canvas-print absolute all-0"
         ref={canvasRef} style={{ top: 60, left: 60 }}
       />
-      <div className="row" style={{ height: "100%", display: "flex", alignItems: "center", position: "relative", zIndex: 9999 }}>
+      <div className="row" style={{ height: "100%", display: "flex", alignItems: "center", }}>
 
 
         {accountType === AccountType.TRAINER ?
@@ -916,7 +916,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                   <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
                 </video>
               </div>
-              <div className="col-12">
+              <div className="col-12" style={{ position: "relative", zIndex: 9999 }}>
                 <div style={{ textAlign: "center" }}>
                   <div className="external-control-bar">
                     <button className="btn btn-primary px-2 py-1 my-3" onClick={togglePlay}>{isPlaying ? 'Pause' : 'Play'}</button>
@@ -940,7 +940,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
           {renderCallActionButtons()}
         </div>
-        < div className={maxMin ? "col-1" : "col-4"} >
+        < div className={maxMin ? "col-0" : "col-4"} >
           <div style={{ width: "100%", textAlign: "center" }}>
             {videoRef && (
               <video
