@@ -7,6 +7,8 @@ import { getS3SignUrl } from "./videoupload.api";
 import { LIST_OF_ACCOUNT_TYPE } from "../../common/constants";
 import { getMasterData } from "../master/master.api";
 import axios from "axios";
+import { X } from "react-feather";
+
 
 const VideoUpload = (props) => {
     const { isOpen } = useAppSelector(videouploadState);
@@ -86,46 +88,54 @@ const VideoUpload = (props) => {
     return (<Modal
         isOpen={isOpen}
         element={
-            <div className="d-flex flex-column align-items-center p-3 justify-content-center h-100">
-                <h2>Clip Upload</h2>
-                <div className="form-group">
-                    <label className="col-form-label mt-2">Title</label>
-                    <input
-                        disabled={progress}
-                        className="form-control"
-                        type="text"
-                        name="fullname"
-                        placeholder="Title"
-                        onChange={(e) => setTitle(e?.target?.value)}
-                        defaultValue={title}
-                    />
+            <div>
+                <div className="theme-title">
+                    <div className="media">
+                        <div className="media-body media-body text-right">
+                            {!progress && <div className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => {
+                                dispatch(videouploadAction.setIsOpen(false));
+                                resetForm();
+                            }} > <X /> </div>}
+                        </div>
+                    </div>
+                </div>
+                <div className="d-flex flex-column align-items-center p-3 justify-content-center h-100">
+                    <h2>Clip Upload</h2>
+                    <div className="form-group">
+                        <label className="col-form-label mt-2">Title</label>
+                        <input
+                            disabled={progress}
+                            className="form-control"
+                            type="text"
+                            name="fullname"
+                            placeholder="Title"
+                            onChange={(e) => setTitle(e?.target?.value)}
+                            defaultValue={title}
+                        />
+                        <label className="col-form-label mt-2" htmlFor="account_type">
+                            Choose Category
+                        </label>
+                        <select
+                            disabled={progress}
+                            id="account_type"
+                            className="form-control"
+                            name="account_type"
+                            onChange={(e) => setCategory(e?.target?.value)}
+                            defaultValue={category}
+                        >
+                            <option>Choose Category</option>
+                            {categoryList.map((category_type, index) => <option key={index} value={category_type.label}>  {category_type.label}</option>)}
+                        </select>
+                        <label className="col-form-label mt-2">Select a clip to upload: &nbsp;</label>
+                        <input disabled={progress} ref={ref} type="file" name="file" id="fileUpload" onChange={handleFileChange} />
+                    </div>
+                    <div className="d-flex justify-content-center w-100 p-3">
+                        <Button className="mx-3" color="primary" disabled={!selectedFile || progress} onClick={handleUpload}>Upload</Button>
+                    </div>
                     <label className="col-form-label mt-2" htmlFor="account_type">
-                        Choose Category
+                        {progress ? <> Uploading... {progress}%</> : <></>}
                     </label>
-                    <select
-                        disabled={progress}
-                        id="account_type"
-                        className="form-control"
-                        name="account_type"
-                        onChange={(e) => setCategory(e?.target?.value)}
-                        defaultValue={category}
-                    >
-                        <option>Choose Category</option>
-                        {categoryList.map((category_type, index) => <option key={index} value={category_type.label}>  {category_type.label}</option>)}
-                    </select>
-                    <label className="col-form-label mt-2">Select a clip to upload: &nbsp;</label>
-                    <input disabled={progress} ref={ref} type="file" name="file" id="fileUpload" onChange={handleFileChange} />
                 </div>
-                <div className="d-flex justify-content-center w-100 p-3">
-                    <Button className="mx-3" color="primary" disabled={!selectedFile || progress} onClick={handleUpload}>Upload</Button>
-                    <Button className="mx-3" color="secondary" disabled={progress} onClick={() => {
-                        dispatch(videouploadAction.setIsOpen(false));
-                        resetForm();
-                    }}>Close</Button>
-                </div>
-                <label className="col-form-label mt-2" htmlFor="account_type">
-                    {progress ? <> Uploading... {progress}%</> : <></>}
-                </label>
             </div>
         }
     />)

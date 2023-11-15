@@ -10,7 +10,6 @@ import {
   updateBookedSessionScheduledMeetingAsync,
   addTraineeClipInBookedSessionAsync,
 } from "../common/common.slice";
-
 import { useAppSelector, useAppDispatch } from "../../store";
 import {
   AccountType,
@@ -68,7 +67,6 @@ const Bookings = ({ accountType = null }) => {
   const [activeTabs, setActiveTab] = useState(bookingButton[0]);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenNewBookModal, setIsOpenNewBookModal] = useState(false);
   const [isOpenID, setIsOpenID] = useState("");
   const [clips, setClips] = useState([]);
   const [selectedClips, setSelectedClips] = useState([]);
@@ -80,7 +78,8 @@ const Bookings = ({ accountType = null }) => {
 
   useEffect(() => {
     if (newBookingData?._id) {
-      setIsOpenNewBookModal(true)
+      setIsOpenID(newBookingData?._id)
+      setIsOpen(true);
     }
   }, [newBookingData])
 
@@ -246,7 +245,6 @@ const Bookings = ({ accountType = null }) => {
           <span>Trainee share video clips with you </span>
           <span onClick={() => {
             if (trainee_clips?.length > 0) setSelectedClips(trainee_clips)
-            else setSelectedClips([])
             setIsOpenID(_id);
             setIsOpen(true);
           }} style={{ textDecoration: 'underline', cursor: 'pointer' }} >click here</span> to view Clip
@@ -378,37 +376,33 @@ const Bookings = ({ accountType = null }) => {
               <div className="container media-gallery portfolio-section grid-portfolio ">
                 <div className="theme-title">
                   <div className="media">
-                    <div>
-                      <h2>Trainee share video clips with you.</h2>
-                    </div>
+
                     <div className="media-body media-body text-right">
-                      <div
-                        className="icon-btn btn-sm btn-outline-light close-apps pointer"
-                        onClick={() => {
-                          setIsOpen(false)
-                        }}
-                      >
-                        <X />
-                      </div>
+                      <div className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { setIsOpen(false) }} > <X /> </div>
                     </div>
                   </div>
                 </div>
-                {selectedClips?.length ? <div >
-                  <h5 className="block-title p-0"> Selected Clips<label className="badge badge-primary sm ml-2">{selectedClips?.length}</label></h5>
-                  <div className={`block-content`}>
-                    <div className="row">
-                      {selectedClips.map((clp, index) => (
-                        <div key={index} style={{ borderRadius: 5, position: "relative" }}>
-                          <video style={{ width: "25vw" }} className="p-2">
-                            <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
-                          </video>
-                        </div>
-                      ))}
+                <div className="d-flex flex-column  align-items-center">
+                  <h2 className="p-3">Trainee share video clips with you.</h2>
+                  {selectedClips?.length ? <div >
+                    <div className={`block-content`}>
+                      <div className="d-flex">
+                        {selectedClips.map((clp, index) => (
+                          <div key={index} className="p-2">
+                            <video style={{ width: "40vw" }} controls>
+                              <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                            </video>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                </div> :
-                  <></>
-                }
+                  </div> :
+                    <></>
+                  }
+                </div>
+                <div className="justify-content-center">
+
+                </div>
               </div>
             </>
           }
@@ -479,7 +473,6 @@ const Bookings = ({ accountType = null }) => {
                       type="button"
                       onClick={() => {
                         if (trainee_clips?.length > 0) setSelectedClips(trainee_clips)
-                        else setSelectedClips([])
                         setIsOpenID(_id)
                         setIsOpen(true)
                       }}
@@ -514,7 +507,16 @@ const Bookings = ({ accountType = null }) => {
                     <Modal
                       isOpen={isOpen}
                       element={
-                        <>
+                        <div>
+                          <div className="theme-title">
+                            <div className="media">
+                              <div className="media-body media-body text-right">
+                                <div className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => {
+                                  setIsOpen(false)
+                                }} > <X /> </div>
+                              </div>
+                            </div>
+                          </div>
                           <div className="container media-gallery portfolio-section grid-portfolio ">
                             <h2 className="my-5">Select any 2 clips to share it with your Trainer.</h2>
                             {selectedClips?.length ? <div >
@@ -567,33 +569,8 @@ const Bookings = ({ accountType = null }) => {
                           </div>
                           <div className="d-flex justify-content-around w-100 p-3">
                             <Button color="primary" onClick={() => { addTraineeClipInBookedSession() }}>Add</Button>
-                            <Button color="secondary" onClick={() => { setIsOpen(false) }}>Close</Button>
                           </div>
-                        </>
-                      }
-                    />
-                    <Modal
-                      isOpen={isOpenNewBookModal}
-                      element={
-                        <>
-                          <div className="container media-gallery portfolio-section grid-portfolio ">
-                            <div className="theme-title">
-                              <div className="media">
-                                <div>
-                                  <h2>You can share 2 videos to trainee.</h2>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="d-flex justify-content-around w-100 p-3">
-                            <Button color="primary" onClick={() => {
-                              setIsOpenID(newBookingData?._id)
-                              setIsOpen(true)
-                              setIsOpenNewBookModal(false)
-                            }}>Add</Button>
-                            <Button color="secondary" onClick={() => { setIsOpenNewBookModal(false) }}>Close</Button>
-                          </div>
-                        </>
+                        </div>
                       }
                     />
                   </React.Fragment>
