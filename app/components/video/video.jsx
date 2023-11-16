@@ -12,7 +12,7 @@ import { SocketContext } from "../socket";
 import { Popover } from "react-tiny-popover";
 import _debounce from "lodash/debounce";
 
-import { MicOff, PauseCircle, Phone, PlayCircle, ExternalLink } from "react-feather";
+import { MicOff, PauseCircle, Phone, PlayCircle, ExternalLink, Play, Pause } from "react-feather";
 import { AccountType, SHAPES } from "../../common/constants";
 import { CanvasMenuBar } from "./canvas.menubar";
 import { toast } from "react-toastify";
@@ -948,16 +948,9 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate} >
                       <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
                     </video>
-                  </div>
-                  <div className="col-6">
-                    <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate}>
-                      <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
-                    </video>
-                  </div>
-                  <div className="col-12" style={{ position: "relative", zIndex: 9999 }}>
-                    <div style={{ textAlign: "center" }}>
+                    <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <div className="external-control-bar">
-                        <button className="btn btn-primary px-2 py-1 my-3" onClick={togglePlay}>{isPlaying ? 'Pause' : 'Play'}</button>
+                        <button className="btn btn-primary px-1 py-1 my-3 mr-2" onClick={togglePlay}>{isPlaying ? <Play style={{ verticalAlign: "middle" }} /> : <Pause style={{ verticalAlign: "middle" }} />}</button>
                       </div>
                       <progress className="progress"
                         ref={progressBarRef}
@@ -967,6 +960,23 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                       />
                     </div>
                   </div>
+                  <div className="col-6">
+                    <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate}>
+                      <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
+                    </video>
+                    <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <div className="external-control-bar">
+                        <button className="btn btn-primary px-1 py-1 my-3 mr-2 " onClick={togglePlay}>{isPlaying ? <Play style={{ verticalAlign: "middle" }} /> : <Pause style={{ verticalAlign: "middle" }} />}</button>
+                      </div>
+                      <progress className="progress"
+                        ref={progressBarRef}
+                        value="0"
+                        max={selectedVideoRef1.current ? selectedVideoRef1.current.duration : 100}
+                        onClick={handleProgressBarClick}
+                      />
+                    </div>
+                  </div>
+
                 </div> :
               accountType === AccountType.TRAINER && <button className="btn btn-primary px-2 py-1 my-3" style={{ zIndex: 10, right: 5 }} onClick={() => setIsOpen(true)} >Add clip</button>
             }
