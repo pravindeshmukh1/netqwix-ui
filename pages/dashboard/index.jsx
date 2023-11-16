@@ -50,8 +50,7 @@ const Dashboard = () => {
           </React.Fragment>
         );
       case leftSideBarOptions.HOME:
-        return <span>
-          {getDashboard()}</span>
+        return getDashboard();
 
       case leftSideBarOptions.SCHEDULE_TRAINING:
         return getScheduledInventory();
@@ -71,6 +70,7 @@ const Dashboard = () => {
             {getActiveTabs()}
           </div>
         </SocketContext.Provider>
+
       </Fragment>
     )
   );

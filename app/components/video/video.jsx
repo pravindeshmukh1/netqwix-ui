@@ -12,10 +12,11 @@ import { SocketContext } from "../socket";
 import { Popover } from "react-tiny-popover";
 import _debounce from "lodash/debounce";
 
-import { MicOff, PauseCircle, Phone, PlayCircle } from "react-feather";
+import { MicOff, PauseCircle, Phone, PlayCircle, ExternalLink } from "react-feather";
 import { AccountType, SHAPES } from "../../common/constants";
 import { CanvasMenuBar } from "./canvas.menubar";
 import { toast } from "react-toastify";
+import { max } from "lodash";
 
 let storedLocalDrawPaths = { sender: [], receiver: [] };
 let selectedShape = null;
@@ -761,6 +762,14 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         >
           <Phone />
         </div>
+        {!displayMsg?.showMsg && <div
+          className={!maxMin ? `icon-btn btn-light  button-effect btn-xl ml-3` : `icon-btn btn-danger  button-effect btn-xl ml-3`}
+          onClick={() => {
+            setMaxMin(!maxMin)
+          }}
+        >
+          <ExternalLink />
+        </div>}
       </div>
     );
   };
@@ -770,6 +779,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
   const progressBarRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [maxMin, setMaxMin] = useState(false);
+
 
 
   useEffect(() => {
@@ -838,11 +848,11 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
   console.log(">>>>>>>>>>>>>>", selectedClips);
   return (
     <React.Fragment>
-      <div className="canvas-print absolute  " style={{ zIndex: 10, right: 5 }}>
+      {/* <div className="canvas-print absolute  " style={{ zIndex: 10, right: 5 }}>
         <div style={{ textAlign: "end" }} onClick={(event) => { event.stopPropagation(); setMaxMin(!maxMin) }}>
           <button className="btn btn-primary px-2 py-1 my-3" >{maxMin ? 'Minimise' : 'Maximise'}</button>
         </div>
-      </div>
+      </div> */}
       <canvas
         id="drawing-canvas"
         width={document.getElementById("bookings")?.clientWidth}
@@ -850,9 +860,9 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         className="canvas-print absolute all-0"
         ref={canvasRef} style={{ top: 60, left: 60 }}
       />
-      <div className="row" style={{ height: "100%", display: "flex", alignItems: "center", }}>
+      <div className="row" style={{ height: "100%", display: "flex", alignItems: "center" }}>
 
-
+        {/* 1 */}
         {accountType === AccountType.TRAINER ?
           <div className="col-1">
             <div>
@@ -896,80 +906,97 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             </div>
           </div> : null
         }
-
-        <div className={accountType === AccountType.TRAINER ? maxMin ? "col-10" : "col-6" : maxMin ? "col-12" : "col-8"} style={{ position: "relative", height: "100%", display: "flex", alignItems: "center" }}>
+        {/* 2 */}
+        {!maxMin && selectedClips?.length === 0 ? <div className={accountType === AccountType.TRAINER ? "col-8" : "col-9"} style={{ position: "relative", height: "100%", display: "flex", alignItems: "center" }}>
           {displayMsg.showMsg ? (
             <div className="no-user-joined font-weight-bold text-center">{displayMsg.msg}</div>
           ) : (
-            <></>
+            <div style={{ width: "100%", textAlign: "center", display: "block" }}>
+              <video
+
+                playsInline
+                autoPlay
+                className="rounded " style={{ width: '100%' }}
+                id="end-user-video"
+              />
+            </div>
           )}
-
-          {selectedClips?.length ?
-            <div className="row">
-              <div className="col-6">
-                <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate} >
-                  <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
-                </video>
-              </div>
-              <div className="col-6">
-                <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate}>
-                  <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
-                </video>
-              </div>
-              <div className="col-12" style={{ position: "relative", zIndex: 9999 }}>
-                <div style={{ textAlign: "center" }}>
-                  <div className="external-control-bar">
-                    <button className="btn btn-primary px-2 py-1 my-3" onClick={togglePlay}>{isPlaying ? 'Pause' : 'Play'}</button>
-                  </div>
-                  <progress className="progress"
-                    ref={progressBarRef}
-                    value="0"
-                    max={selectedVideoRef1.current ? selectedVideoRef1.current.duration : 100}
-                    onClick={handleProgressBarClick}
-                  />
-                </div>
-              </div>
-            </div> :
-            null
-          }
-
-          {/* action buttons */}
-          {/* {accountType === AccountType.TRAINER && renderActionItems()} */}
-          {/* call cut and mute options */}
-
-
           {renderCallActionButtons()}
         </div>
-        < div className={maxMin ? "col-0" : "col-4"} >
+          :
+          <div className={accountType === AccountType.TRAINER ? "col-8" : "col-9"} style={{ position: "relative", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            {displayMsg.showMsg ? (
+              <div className="no-user-joined font-weight-bold text-center">{displayMsg.msg}</div>
+            ) : (
+              <></>
+            )}
+            {selectedClips?.length ?
+              !maxMin ?
+                <div style={{ width: "100%", textAlign: "center", display: "block" }}>
+                  <video
+                    playsInline
+                    autoPlay
+                    className="rounded " style={{ width: '100%' }}
+                    id="end-user-video"
+                  />
+                </div> :
+                <div className="row">
+                  <div className="col-6">
+                    <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate} >
+                      <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
+                    </video>
+                  </div>
+                  <div className="col-6">
+                    <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate}>
+                      <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
+                    </video>
+                  </div>
+                  <div className="col-12" style={{ position: "relative", zIndex: 9999 }}>
+                    <div style={{ textAlign: "center" }}>
+                      <div className="external-control-bar">
+                        <button className="btn btn-primary px-2 py-1 my-3" onClick={togglePlay}>{isPlaying ? 'Pause' : 'Play'}</button>
+                      </div>
+                      <progress className="progress"
+                        ref={progressBarRef}
+                        value="0"
+                        max={selectedVideoRef1.current ? selectedVideoRef1.current.duration : 100}
+                        onClick={handleProgressBarClick}
+                      />
+                    </div>
+                  </div>
+                </div> :
+              accountType === AccountType.TRAINER && <button className="btn btn-primary px-2 py-1 my-3" style={{ zIndex: 10, right: 5 }} >Add clip</button>
+
+            }
+            {renderCallActionButtons()}
+          </div>
+        }
+
+
+        {/* 3 */}
+        < div className={"col-3"} style={{ textAlign: "end" }} >
+          <div style={!maxMin ? { display: "none" } : { width: "100%", textAlign: "center", display: "block" }}>
+            <video
+              ref={remoteVideoRef}
+              playsInline
+              autoPlay
+              className="rounded " style={{ width: '100%' }}
+              id="end-user-video"
+            />
+          </div>
           <div style={{ width: "100%", textAlign: "center" }}>
             {videoRef && (
               <video
                 id="end-user-video"
                 playsInline
                 muted
-                className="rounded " style={{ width: 'initial' }}
+                className="rounded " style={{ width: '100%' }}
                 ref={videoRef}
                 autoPlay
               />
             )}
           </div>
-          <div style={{ width: "100%", textAlign: "center" }}>
-            {/* <canvas
-                id="drawing-canvas"
-                // width={document.getElementById("bookings")?.clientWidth}
-                // height={document.getElementById("bookings")?.clientHeight}
-                className=""
-                ref={canvasRef}
-              /> */}
-            <video
-              ref={remoteVideoRef}
-              playsInline
-              autoPlay
-              className="rounded " style={{ width: 'initial' }}
-              id="end-user-video"
-            />
 
-          </div>
         </div>
 
       </div>
