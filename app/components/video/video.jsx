@@ -779,6 +779,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
   const progressBarRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [maxMin, setMaxMin] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
 
 
 
@@ -867,6 +869,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
           <div className="col-1">
             <div>
               <CanvasMenuBar
+                isOpenModal={isOpen}
                 setSketchPickerColor={(rgb) => {
                   setSketchPickerColor(rgb);
                 }}
@@ -965,8 +968,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     </div>
                   </div>
                 </div> :
-              accountType === AccountType.TRAINER && <button className="btn btn-primary px-2 py-1 my-3" style={{ zIndex: 10, right: 5 }} >Add clip</button>
-
+              accountType === AccountType.TRAINER && <button className="btn btn-primary px-2 py-1 my-3" style={{ zIndex: 10, right: 5 }} onClick={() => setIsOpen(true)} >Add clip</button>
             }
             {renderCallActionButtons()}
           </div>

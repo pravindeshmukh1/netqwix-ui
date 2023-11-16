@@ -10,6 +10,7 @@ import { myClips, traineeClips } from "../../../containers/rightSidebar/fileSect
 
 
 export const CanvasMenuBar = ({
+  isOpenModal,
   canvasConfigs,
   sketchPickerColor,
   setSketchPickerColor,
@@ -20,6 +21,7 @@ export const CanvasMenuBar = ({
   selectedClips,
   setSelectedClips
 }) => {
+  console.log(isOpenModal);
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [activeTab, setActiveTab] = useState(SHAPES.FREE_HAND);
   const [videoActiveTab, setAideoActiveTab] = useState("media");
@@ -29,8 +31,9 @@ export const CanvasMenuBar = ({
   const [selectClips, setSelectClips] = useState([]);
 
   useEffect(() => {
-    getMyClips()
-  }, [])
+    getMyClips();
+    setIsOpen(isOpenModal)
+  }, [isOpenModal])
 
   const getMyClips = async () => {
     var res = await myClips({})
