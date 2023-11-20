@@ -10,7 +10,8 @@ import { myClips, traineeClips } from "../../../containers/rightSidebar/fileSect
 
 
 export const CanvasMenuBar = ({
-  isOpenModal,
+  isOpen,
+  setIsOpen,
   canvasConfigs,
   sketchPickerColor,
   setSketchPickerColor,
@@ -21,19 +22,17 @@ export const CanvasMenuBar = ({
   selectedClips,
   setSelectedClips
 }) => {
-  console.log(isOpenModal);
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [activeTab, setActiveTab] = useState(SHAPES.FREE_HAND);
   const [videoActiveTab, setAideoActiveTab] = useState("media");
   const [clips, setClips] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
   const [traineeClip, setTraineeClips] = useState([]);
   const [selectClips, setSelectClips] = useState([]);
 
   useEffect(() => {
-    getMyClips();
-    setIsOpen(isOpenModal)
-  }, [isOpenModal])
+    if (isOpen) { getMyClips(); }
+  }, [isOpen])
+
 
   const getMyClips = async () => {
     var res = await myClips({})
@@ -94,7 +93,6 @@ export const CanvasMenuBar = ({
                   />
                 </div>
               </Popover>
-
               {/* : null} */}
             </div>
           </span>
@@ -259,14 +257,14 @@ export const CanvasMenuBar = ({
               <RefreshCw />
             </div>
           </span>
-          <span>
+          {/* <span>
             <div
               className={`icon-btn m-5  button-effect btn-sm my-3`}
               onClick={() => { setIsOpen(true) }}
             >
               <i className="fa fa-film" />
             </div>
-          </span>
+          </span> */}
         </div>
       </div>
 

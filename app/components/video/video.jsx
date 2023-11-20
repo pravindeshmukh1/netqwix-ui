@@ -64,9 +64,17 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
   const [selectedClips, setSelectedClips] = useState([]);
   const windowsRef = useRef(null);
 
+  const selectedVideoRef1 = useRef(null);
+  const selectedVideoRef2 = useRef(null);
+  const progressBarRef = useRef(null);
+  const progressBarRef2 = useRef(null);
+  const [isPlaying, setIsPlaying] = useState({ isPlaying: false, number: "" });
+  const [maxMin, setMaxMin] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const remoteVideoRef = useRef(null);
   const peerRef = useRef(null);
+
 
   useEffect(() => {
     console.log(`fromUser && toUser --- `, fromUser, toUser);
@@ -706,12 +714,12 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
           className={`icon-btn ${isMuted ? "btn-danger" : "btn-light"
             } btn-xl button-effect mic`}
           onClick={() => {
-            setIsMuted(!isMuted);
             if (remoteVideoRef && remoteVideoRef.current) {
               socket.emit(EVENTS.VIDEO_CALL.MUTE_ME, {
                 userInfo: { from_user: fromUser._id, to_user: toUser._id },
-                muteStatus: isMuted,
+                isClicked: !isMuted,
               });
+              setIsMuted(!isMuted);
             }
           }}
         >
@@ -762,9 +770,13 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         >
           <Phone />
         </div>
-        {!displayMsg?.showMsg && <div
+        {(!displayMsg?.showMsg && accountType === AccountType.TRAINER) && <div
           className={!maxMin ? `icon-btn btn-light  button-effect btn-xl ml-3` : `icon-btn btn-danger  button-effect btn-xl ml-3`}
           onClick={() => {
+            socket.emit(EVENTS.ON_VIDEO_SHOW, {
+              userInfo: { from_user: fromUser._id, to_user: toUser._id },
+              isClicked: !maxMin,
+            });
             setMaxMin(!maxMin)
           }}
         >
@@ -774,16 +786,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     );
   };
 
-  const selectedVideoRef1 = useRef(null);
-  const selectedVideoRef2 = useRef(null);
-  const progressBarRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [maxMin, setMaxMin] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-
-
-
-
   useEffect(() => {
     if (selectedClips?.length) socket.emit(EVENTS.ON_VIDEO_SELECT, {
       userInfo: { from_user: fromUser._id, to_user: toUser._id },
@@ -791,63 +793,77 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     });
   }, [selectedClips?.length])
 
-  socket.on(EVENTS.ON_VIDEO_PLAY_PAUSE, ({ isPlaying }) => {
+  socket.on(EVENTS.ON_VIDEO_PLAY_PAUSE, ({ isPlaying, number }) => {
     if (!isPlaying) {
-      selectedVideoRef1?.current?.pause();
-      selectedVideoRef2?.current?.pause();
+      if (number === "one") selectedVideoRef1?.current?.pause();
+      else selectedVideoRef2?.current?.pause();
     } else {
-      selectedVideoRef1?.current?.play();
-      selectedVideoRef2?.current?.play();
+      if (number === "one") selectedVideoRef1?.current?.play();
+      else selectedVideoRef2?.current?.play();
     }
-    setIsPlaying(isPlaying)
+    setIsPlaying({ isPlaying: isPlaying, number })
   });
 
-  socket.on(EVENTS.ON_VIDEO_TIME, ({ clickedTime }) => {
-    selectedVideoRef1.current.currentTime = clickedTime;
-    selectedVideoRef2.current.currentTime = clickedTime;
+  socket.on(EVENTS.ON_VIDEO_TIME, ({ clickedTime, number }) => {
+    if (selectedVideoRef1.current) {
+      if (number === "one") selectedVideoRef1.current.currentTime = clickedTime;
+      else selectedVideoRef2.current.currentTime = clickedTime;
+    }
   });
 
   socket.on(EVENTS.ON_VIDEO_SELECT, ({ videos }) => {
     setSelectedClips(videos)
   });
 
-  const togglePlay = () => {
-    if (isPlaying) {
-      selectedVideoRef1?.current?.pause();
-      selectedVideoRef2.current.pause();
+
+  socket.on(EVENTS.ON_VIDEO_SHOW, ({ isClicked }) => {
+    setMaxMin(isClicked)
+  });
+
+  const togglePlay = (number) => {
+    if (isPlaying?.isPlaying) {
+      if (number === "one") selectedVideoRef1?.current?.pause();
+      else selectedVideoRef2.current.pause();
+
     } else {
-      selectedVideoRef1?.current?.play();
-      selectedVideoRef2?.current?.play();
+      if (number === "one") selectedVideoRef1?.current?.play();
+      else selectedVideoRef2?.current?.play();
     }
-    setIsPlaying(!isPlaying);
     socket?.emit(EVENTS?.ON_VIDEO_PLAY_PAUSE, {
       userInfo: { from_user: fromUser?._id, to_user: toUser?._id },
-      isPlaying: !isPlaying,
+      isPlaying: !isPlaying?.isPlaying,
+      number: number
     });
+    setIsPlaying({ isPlaying: !isPlaying?.isPlaying, number })
   };
 
   const handleTimeUpdate = () => {
-    const progress = (selectedVideoRef1?.current?.currentTime + selectedVideoRef2?.current?.currentTime) / 2;
-    progressBarRef.current.value = progress;
-
+    progressBarRef.current.value = selectedVideoRef1?.current?.currentTime;
+    progressBarRef2.current.value = selectedVideoRef2?.current?.currentTime;
     // Convert currentTime to minutes and seconds
-    const minutes = Math?.floor(progress / 60);
-    const seconds = Math?.floor(progress % 60);
+    // const minutes = Math?.floor(progress / 60);
+    // const seconds = Math?.floor(progress % 60);
     // console?.log(`Current Time: ${minutes}:${seconds}`);
   };
 
-  const handleProgressBarClick = (e) => {
-    const clickedTime = (e?.nativeEvent?.offsetX / progressBarRef?.current?.offsetWidth) * progressBarRef?.current.getAttribute('max');
+  const handleProgressBarClick = (e, number) => {
 
-    selectedVideoRef1.current.currentTime = clickedTime;
-    selectedVideoRef2.current.currentTime = clickedTime;
+    var clickedTime;
+
+    if (number === "one") {
+      clickedTime = (e?.nativeEvent?.offsetX / progressBarRef?.current?.offsetWidth) * progressBarRef?.current.getAttribute('max');
+      selectedVideoRef1.current.currentTime = clickedTime;
+    } else {
+      clickedTime = (e?.nativeEvent?.offsetX / progressBarRef2?.current?.offsetWidth) * progressBarRef2?.current.getAttribute('max');
+      selectedVideoRef2.current.currentTime = clickedTime;
+    }
 
     socket?.emit(EVENTS?.ON_VIDEO_TIME, {
       userInfo: { from_user: fromUser?._id, to_user: toUser?._id },
       clickedTime: clickedTime,
+      number: number
     });
   };
-  console.log(">>>>>>>>>>>>>>", selectedClips);
   return (
     <React.Fragment>
       {/* <div className="canvas-print absolute  " style={{ zIndex: 10, right: 5 }}>
@@ -869,7 +885,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
           <div className="col-1">
             <div>
               <CanvasMenuBar
-                isOpenModal={isOpen}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
                 setSketchPickerColor={(rgb) => {
                   setSketchPickerColor(rgb);
                 }}
@@ -907,32 +924,30 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 setSelectedClips={setSelectedClips}
               />
             </div>
-          </div> : null
+          </div> : <div className="col-1"></div>
         }
         {/* 2 */}
-        {!maxMin && selectedClips?.length === 0 ? <div className={accountType === AccountType.TRAINER ? "col-8" : "col-9"} style={{ position: "relative", height: "100%", display: "flex", alignItems: "center" }}>
-          {displayMsg.showMsg ? (
-            <div className="no-user-joined font-weight-bold text-center">{displayMsg.msg}</div>
-          ) : (
-            <div style={{ width: "100%", textAlign: "center", display: "block" }}>
-              <video
-
-                playsInline
-                autoPlay
-                className="rounded " style={{ width: '100%' }}
-                id="end-user-video"
-              />
-            </div>
-          )}
-          {renderCallActionButtons()}
-        </div>
-          :
-          <div className={accountType === AccountType.TRAINER ? "col-8" : "col-9"} style={{ position: "relative", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        {!maxMin && selectedClips?.length === 0
+          ? <div className="col-8" style={{ position: "relative", height: "100%", display: "flex", alignItems: "center" }}>
             {displayMsg.showMsg ? (
               <div className="no-user-joined font-weight-bold text-center">{displayMsg.msg}</div>
             ) : (
-              <></>
+              <div style={{ width: "100%", textAlign: "center", display: "block" }}>
+                <video
+                  playsInline
+                  autoPlay
+                  className="rounded " style={{ width: '100%' }}
+                  id="end-user-video"
+                />
+              </div>
             )}
+            {renderCallActionButtons()}
+          </div>
+          :
+          <div className="col-8" style={{ position: "relative", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            {displayMsg.showMsg ? (
+              <div className="no-user-joined font-weight-bold text-center">{displayMsg.msg}</div>
+            ) : (<></>)}
             {selectedClips?.length ?
               !maxMin ?
                 <div style={{ width: "100%", textAlign: "center", display: "block" }}>
@@ -950,13 +965,13 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     </video>
                     <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <div className="external-control-bar">
-                        <button className="btn btn-primary px-1 py-1 my-3 mr-2" onClick={togglePlay}>{isPlaying ? <Play style={{ verticalAlign: "middle" }} /> : <Pause style={{ verticalAlign: "middle" }} />}</button>
+                        <button className="btn btn-primary px-1 py-1 my-3 mr-2" onClick={() => togglePlay("one")}>{(isPlaying?.isPlaying && isPlaying?.number === "one") ? <Pause style={{ verticalAlign: "middle" }} /> : <Play style={{ verticalAlign: "middle" }} />}</button>
                       </div>
                       <progress className="progress"
                         ref={progressBarRef}
                         value="0"
                         max={selectedVideoRef1.current ? selectedVideoRef1.current.duration : 100}
-                        onClick={handleProgressBarClick}
+                        onClick={(e) => handleProgressBarClick(e, "one")}
                       />
                     </div>
                   </div>
@@ -966,19 +981,23 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     </video>
                     <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <div className="external-control-bar">
-                        <button className="btn btn-primary px-1 py-1 my-3 mr-2 " onClick={togglePlay}>{isPlaying ? <Play style={{ verticalAlign: "middle" }} /> : <Pause style={{ verticalAlign: "middle" }} />}</button>
+                        <button className="btn btn-primary px-1 py-1 my-3 mr-2 " onClick={() => togglePlay("two")}>{(isPlaying?.isPlaying && isPlaying?.number === "two") ? <Pause style={{ verticalAlign: "middle" }} /> : <Play style={{ verticalAlign: "middle" }} />}</button>
                       </div>
                       <progress className="progress"
-                        ref={progressBarRef}
+                        ref={progressBarRef2}
                         value="0"
-                        max={selectedVideoRef1.current ? selectedVideoRef1.current.duration : 100}
-                        onClick={handleProgressBarClick}
+                        max={selectedVideoRef2.current ? selectedVideoRef2.current.duration : 100}
+                        onClick={(e) => handleProgressBarClick(e, "two")}
                       />
                     </div>
                   </div>
 
-                </div> :
-              accountType === AccountType.TRAINER && <button className="btn btn-primary px-2 py-1 my-3" style={{ zIndex: 10, right: 5 }} onClick={() => setIsOpen(true)} >Add clip</button>
+                </div>
+              : accountType === AccountType.TRAINER ?
+                <button className="btn btn-primary px-2 py-1 my-3" style={{ zIndex: 10, right: 5 }} onClick={() => {
+                  setIsOpen(true)
+                }} >Add clip</button> :
+                <div className="no-user-joined font-weight-bold text-center">Clip Analysis Mode</div>
             }
             {renderCallActionButtons()}
           </div>
@@ -987,7 +1006,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
         {/* 3 */}
         < div className={"col-3"} style={{ textAlign: "end" }} >
-          <div style={!maxMin ? { display: "none" } : { width: "100%", textAlign: "center", display: "block" }}>
+          <div style={!maxMin ? { border: "red" } : { width: "100%", textAlign: "center", display: "block" }}>
             <video
               ref={remoteVideoRef}
               playsInline
@@ -1008,9 +1027,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
               />
             )}
           </div>
-
         </div>
-
       </div>
       {/* <div id="remote-user" className="remote-user">
         <canvas
