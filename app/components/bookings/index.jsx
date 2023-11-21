@@ -861,7 +861,7 @@ const Bookings = ({ accountType = null }) => {
       </div>
     </React.Fragment>
   );
-  const mediaQuery = window.matchMedia('(min-width: 768px)')
+  const mediaQuery = window.matchMedia('(min-width: 992px)')
 
   return (
     <React.Fragment>

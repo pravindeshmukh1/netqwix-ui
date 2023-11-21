@@ -43,62 +43,61 @@ export const CanvasMenuBar = ({
   const mediaQuery = window.matchMedia('(min-width: 768px)')
 
   return (
-    <div style={{ margin: "1rem 0", display: "flex", justifyContent: "center" }}>
+    <div style={{ margin: "1rem", display: "flex", justifyContent: "center" }}>
       <div className="creationBarItem " style={mediaQuery.matches ? { width: 52 } : { width: "100%" }}>
         <div className="CreationBarCustomizable">
           <span>
-            <div>
-              {/* {displayColorPicker ?
-               */}
-              <Popover
-                className="color-picker-popover"
-                isOpen={displayColorPicker}
-                positions={["left", "right"]} // if you'd like, you can limit the positions
-                padding={10} // adjust padding here!
-                reposition={true} // prevents automatic readjustment of content position that keeps your popover content within its parent's bounds
-                onClickOutside={() => setDisplayColorPicker(false)} // handle click events outside of the popover/target here!
-                content={(
-                  { position, nudgedLeft, nudgedTop } // you can also provide a render function that injects some useful stuff!
-                ) => (
-                  <div>
-                    <SketchPicker
-                      onChange={(color) => {
-                        const payload = {
-                          ...canvasConfigs,
-                          sender: {
-                            ...canvasConfigs.sender,
-                            strokeStyle: color.hex,
-                          },
-                        };
-                        setCanvasConfigs(payload);
-                        canvasConfigs = payload;
-                        // canvasConfigs.sender.strokeStyle = color.hex;
-                        setSketchPickerColor(color.rgb);
-                      }}
-                      color={sketchPickerColor}
-                    />
-                  </div>
-                )}
-              >
-                <div
-                  className="icon-btn m-5  button-effect btn-sm"
-                  onClick={() => {
-                    setDisplayColorPicker(true);
-                  }}
-                >
-                  <Image
-                    src="/icons/color-wheel.png"
-                    width={20}
-                    height={20}
-                    alt="color-picker"
-                  />
-                </div>
-              </Popover>
-              {/* : null} */}
-            </div>
+
           </span>
           {/* free hand */}
           <span>
+            {/* {displayColorPicker ?
+               */}
+            <Popover
+              className="color-picker-popover"
+              isOpen={displayColorPicker}
+              positions={["left", "right"]} // if you'd like, you can limit the positions
+              padding={10} // adjust padding here!
+              reposition={true} // prevents automatic readjustment of content position that keeps your popover content within its parent's bounds
+              onClickOutside={() => setDisplayColorPicker(false)} // handle click events outside of the popover/target here!
+              content={(
+                { position, nudgedLeft, nudgedTop } // you can also provide a render function that injects some useful stuff!
+              ) => (
+                <div>
+                  <SketchPicker
+                    onChange={(color) => {
+                      const payload = {
+                        ...canvasConfigs,
+                        sender: {
+                          ...canvasConfigs.sender,
+                          strokeStyle: color.hex,
+                        },
+                      };
+                      setCanvasConfigs(payload);
+                      canvasConfigs = payload;
+                      // canvasConfigs.sender.strokeStyle = color.hex;
+                      setSketchPickerColor(color.rgb);
+                    }}
+                    color={sketchPickerColor}
+                  />
+                </div>
+              )}
+            >
+              <div
+                className="icon-btn m-5  button-effect btn-sm"
+                onClick={() => {
+                  setDisplayColorPicker(true);
+                }}
+              >
+                <Image
+                  src="/icons/color-wheel.png"
+                  width={20}
+                  height={20}
+                  alt="color-picker"
+                />
+              </div>
+            </Popover>
+            {/* : null} */}
             <div
               className={`icon-btn m-5 my-3  button-effect btn-sm ${SHAPES.FREE_HAND === activeTab
                 ? "btn-outline-primary"

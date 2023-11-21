@@ -918,3 +918,21 @@ slick-slider .slick-list,
   overflow-y: scroll;
   overflow-x: hidden;
 }
+
+@media only screen and (max-width: 768px) {
+  #first {
+    order: 2;
+  }
+
+  #second {
+    order: 4;
+  }
+
+  #third {
+    order: 1;
+  }
+
+  #fourth {
+    order: 3;
+  }
+}
