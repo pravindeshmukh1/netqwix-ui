@@ -861,13 +861,14 @@ const Bookings = ({ accountType = null }) => {
       </div>
     </React.Fragment>
   );
+  const mediaQuery = window.matchMedia('(min-width: 768px)')
 
   return (
     <React.Fragment>
       {startMeeting.isOpenModal ? (
         <div
           id="bookings"
-          className="video_call custom-scroll"
+          className={mediaQuery.matches ? "video_call custom-scroll" : "custom-scroll scoll-content"}
           onScroll={() => {
             if (configs.sidebar.isMobileMode) {
               dispatch(isSidebarToggleEnabled(true));

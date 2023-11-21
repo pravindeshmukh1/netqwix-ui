@@ -40,10 +40,11 @@ export const CanvasMenuBar = ({
     var res2 = await traineeClips({})
     setTraineeClips(res2?.data)
   }
+  const mediaQuery = window.matchMedia('(min-width: 768px)')
 
   return (
     <div style={{ margin: "1rem 0", display: "flex", justifyContent: "center" }}>
-      <div className="creationBarItem">
+      <div className="creationBarItem " style={mediaQuery.matches ? { width: 52 } : { width: "100%" }}>
         <div className="CreationBarCustomizable">
           <span>
             <div>

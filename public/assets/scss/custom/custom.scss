@@ -413,7 +413,7 @@ slick-slider .slick-list,
 }
 
 .creationBarItem {
-  width: 52px;
+  // width: 52px;
   -ms-flex-flow: column nowrap;
   flex-flow: column nowrap;
   pointer-events: auto;
@@ -911,4 +911,10 @@ slick-slider .slick-list,
 .progress {
   width: 100%;
   height: 20px;
+}
+
+.scoll-content {
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }

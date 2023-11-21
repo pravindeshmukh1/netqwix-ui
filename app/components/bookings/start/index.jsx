@@ -13,9 +13,10 @@ const StartMeeting = ({ isClose, accountType, traineeInfo, trainerInfo }) => {
       isClose();
     }, 3000);
   });
+  const mediaQuery = window.matchMedia('(min-width: 768px)')
 
   return (
-    <div className="mr-3 full-height">
+    <div className={mediaQuery.matches ? "mr-3 full-height" : "mr-3"}>
       <HandleVideoCall
         isClose={isClose}
         accountType={accountType}

@@ -882,7 +882,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
         {/* 1 */}
         {accountType === AccountType.TRAINER ?
-          <div className="col-1">
+          <div className="col-lg-1 col-md-6 col-sm-12  ">
             <div>
               <CanvasMenuBar
                 isOpen={isOpen}
@@ -924,11 +924,12 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 setSelectedClips={setSelectedClips}
               />
             </div>
-          </div> : <div className="col-1"></div>
+          </div> :
+          <div className="col-lg-1 col-md-6 col-sm-12 "></div>
         }
         {/* 2 */}
         {!maxMin && selectedClips?.length === 0
-          ? <div className="col-8" style={{ position: "relative", height: "100%", display: "flex", alignItems: "center" }}>
+          ? <div className="col-lg-8 col-md-6 col-sm-12 " style={{ position: "relative", height: "100%", display: "flex", alignItems: "center" }}>
             {displayMsg.showMsg ? (
               <div className="no-user-joined font-weight-bold text-center">{displayMsg.msg}</div>
             ) : (
@@ -944,7 +945,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             {renderCallActionButtons()}
           </div>
           :
-          <div className="col-8" style={{ position: "relative", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div className="col-lg-8 col-md-6 col-sm-12 " style={{ position: "relative", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
             {displayMsg.showMsg ? (
               <div className="no-user-joined font-weight-bold text-center">{displayMsg.msg}</div>
             ) : (<></>)}
@@ -959,7 +960,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                   />
                 </div> :
                 <div className="row">
-                  <div className="col-6">
+                  <div className="col-lg-6">
                     <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate} >
                       <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
                     </video>
@@ -975,7 +976,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                       />
                     </div>
                   </div>
-                  <div className="col-6">
+                  <div className="col-lg-6">
                     <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate}>
                       <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
                     </video>
@@ -1005,7 +1006,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
 
         {/* 3 */}
-        < div className={"col-3"} style={{ textAlign: "end" }} >
+        < div className={"col-lg-3 col-md-6 col-sm-12 "} style={{ textAlign: "end" }} >
           <div style={!maxMin ? { border: "red" } : { width: "100%", textAlign: "center", display: "block" }}>
             <video
               ref={remoteVideoRef}
