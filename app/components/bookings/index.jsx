@@ -868,7 +868,7 @@ const Bookings = ({ accountType = null }) => {
       {startMeeting.isOpenModal ? (
         <div
           id="bookings"
-          className={mediaQuery.matches ? "video_call custom-scroll" : "custom-scroll scoll-content"}
+          className={mediaQuery.matches ? "video_call custom-scroll position-relative" : "custom-scroll scoll-content position-relative"}
           onScroll={() => {
             if (configs.sidebar.isMobileMode) {
               dispatch(isSidebarToggleEnabled(true));

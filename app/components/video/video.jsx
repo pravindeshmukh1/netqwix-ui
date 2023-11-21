@@ -875,10 +875,10 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
       </div> */}
       <canvas
         id="drawing-canvas"
-        // width={document.getElementById("bookings")?.clientWidth}
-        // height={document.getElementById("bookings")?.clientHeight}
+        width={document.getElementById("bookings")?.clientWidth}
+        height={document.getElementById("bookings")?.clientHeight}
         className="canvas-print absolute all-0"
-        ref={canvasRef} style={mediaQuery.matches ? { top: 60, left: 60 } : { top: 0, left: 90 }}
+        ref={canvasRef} style={{ left: 0, top: 0, width: "100%", height: "100%" }}
       />
       <div className="row" style={{ height: "100%", display: "flex", alignItems: "center" }}>
 
