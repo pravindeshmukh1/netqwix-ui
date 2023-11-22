@@ -9,6 +9,7 @@ import { myClips, traineeClips } from "./fileSection.api";
 import { LOCAL_STORAGE_KEYS } from "../../app/common/constants";
 import Modal from "../../app/common/modal";
 import VideoUpload from "../../app/components/videoupload";
+import { Tooltip } from "react-tippy";
 
 const fiveImageGallary = [
   {
@@ -229,9 +230,11 @@ const FileSection = (props) => {
                             setIsOpen(true)
                           }}
                         >
-                          <video style={{ width: "80%", height: "80%" }}  >
-                            <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
-                          </video>
+                          <Tooltip title={clp?.title} position="top" trigger="mouseenter">
+                            <video style={{ width: "80%", height: "80%" }}  >
+                              <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                            </video>
+                          </Tooltip>
                         </div>
                       ))}
                     </div>
@@ -273,9 +276,11 @@ const FileSection = (props) => {
                             setIsOpen(true)
                           }}
                         >
-                          <video style={{ width: "80%", height: "80%" }}  >
-                            <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?.clips?._id}`} type="video/mp4" />
-                          </video>
+                          <Tooltip title={clp?.clips?.title} position="top" trigger="mouseenter">
+                            <video style={{ width: "80%", height: "80%" }}  >
+                              <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?.clips?._id}`} type="video/mp4" />
+                            </video>
+                          </Tooltip>
                         </div>
                       ))}
                     </div>
@@ -595,9 +600,11 @@ const FileSection = (props) => {
                           setIsOpen(true)
                         }}
                       >
-                        <video style={{ width: "100%", height: "100%" }}  >
-                          <source src={"https://v.pinimg.com/videos/mc/720p/f6/88/88/f68888290d70aca3cbd4ad9cd3aa732f.mp4"} type="video/mp4" />
-                        </video>
+                        <Tooltip title="Title" position="top" trigger="mouseenter">
+                          <video style={{ width: "100%", height: "100%" }}  >
+                            <source src={"https://v.pinimg.com/videos/mc/720p/f6/88/88/f68888290d70aca3cbd4ad9cd3aa732f.mp4"} type="video/mp4" />
+                          </video>
+                        </Tooltip>
                       </div>
                     ))}
                   </div>
