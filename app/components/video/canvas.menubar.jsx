@@ -38,9 +38,16 @@ export const CanvasMenuBar = ({
     var res = await myClips({})
     setClips(res?.data)
     var res2 = await traineeClips({})
-    setTraineeClips(res2?.data)
+    var arr = res2?.data || [];
+    for (let index = 0; index < arr?.length; index++) {
+      var el = arr[index]?.clips;
+      arr[index].clips = [...new Map(el.map(item => [item.clips._id, item])).values()];
+    }
+    setTraineeClips(arr)
+    setSelectClips([])
   }
   const mediaQuery = window.matchMedia('(min-width: 768px)')
+  console.log("traineeCliptraineeClip", traineeClip);
 
   return (
     <div style={{ margin: "1rem", display: "flex", justifyContent: "center" }}>
@@ -389,18 +396,18 @@ export const CanvasMenuBar = ({
                           <div className={`block-content `}>
                             <div className="row">
                               {cl?.clips.map((clp, index) => {
-                                var sld = selectClips.find(val => val?._id === clp?._id)
+                                var sld = selectClips.find(val => val?._id === clp?.clips?._id)
                                 return <div
                                   key={index}
                                   className={`col-4 p-1`}
                                   style={{ borderRadius: 5 }}
                                   onClick={() => {
                                     if (!sld && selectClips?.length < 2) {
-                                      selectClips.push(clp);
+                                      selectClips.push(clp?.clips);
                                       setSelectClips([...selectClips]);
                                     } else {
                                       var temp = selectClips;
-                                      temp = temp.filter(val => val._id !== clp?._id)
+                                      temp = temp.filter(val => val._id !== clp?.clips?._id)
                                       setSelectClips([...temp]);
                                     }
                                   }}

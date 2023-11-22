@@ -34,7 +34,7 @@ import { TabContent, TabPane, Nav, NavItem, NavLink, Button } from "reactstrap";
 import classnames from "classnames";
 import VideoUpload from '../videoupload'
 import { myClips } from "../../../containers/rightSidebar/fileSection.api";
-import { traineeState } from "../trainee/trainee.slice";
+import { traineeAction, traineeState } from "../trainee/trainee.slice";
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
 const Bookings = ({ accountType = null }) => {
@@ -57,6 +57,7 @@ const Bookings = ({ accountType = null }) => {
   });
   const socket = useContext(SocketContext);
 
+  const { removeNewBookingData } = traineeAction;
 
   const { activeTab } = useAppSelector(bookingsState);
   const { scheduledMeetingDetails, addRatingModel } =
@@ -131,6 +132,7 @@ const Bookings = ({ accountType = null }) => {
   const addTraineeClipInBookedSession = async () => {
     const payload = { id: isOpenID, trainee_clip: selectedClips?.map(val => val?._id) };
     dispatch(addTraineeClipInBookedSessionAsync(payload));
+    dispatch(removeNewBookingData());
     setIsOpen(false)
   }
 
@@ -513,6 +515,7 @@ const Bookings = ({ accountType = null }) => {
                               <div className="media-body media-body text-right">
                                 <div className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => {
                                   setIsOpen(false)
+                                  dispatch(removeNewBookingData());
                                 }} > <X /> </div>
                               </div>
                             </div>

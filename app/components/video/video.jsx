@@ -17,6 +17,7 @@ import { AccountType, SHAPES } from "../../common/constants";
 import { CanvasMenuBar } from "./canvas.menubar";
 import { toast } from "react-toastify";
 import { max } from "lodash";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
 let storedLocalDrawPaths = { sender: [], receiver: [] };
 let selectedShape = null;
@@ -71,6 +72,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
   const [isPlaying, setIsPlaying] = useState({ isPlaying: false, number: "" });
   const [maxMin, setMaxMin] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenConfirm, setIsOpenConfirm] = useState(false);
 
   const remoteVideoRef = useRef(null);
   const peerRef = useRef(null);
@@ -774,21 +776,42 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         {(!displayMsg?.showMsg && accountType === AccountType.TRAINER) && <div
           className={!maxMin ? `icon-btn btn-light  button-effect  ${mediaQuery.matches ? "btn-xl" : "btn-sm"}  ml-3` : `icon-btn btn-danger  button-effect  ${mediaQuery.matches ? "btn-xl" : "btn-sm"}  ml-3`}
           onClick={() => {
-            socket.emit(EVENTS.ON_VIDEO_SHOW, {
-              userInfo: { from_user: fromUser._id, to_user: toUser._id },
-              isClicked: !maxMin,
-            });
-            setMaxMin(!maxMin)
+            // socket.emit(EVENTS.ON_VIDEO_SHOW, {
+            //   userInfo: { from_user: fromUser._id, to_user: toUser._id },
+            //   isClicked: !maxMin,
+            // });
+            // setMaxMin(!maxMin)
+            if (selectedClips?.length) {
+              setIsOpenConfirm(true)
+            } else {
+              setIsOpen(true)
+            }
           }}
         >
           <ExternalLink />
         </div>}
+
+        <Modal isOpen={isOpenConfirm} toggle={() => { setIsOpenConfirm(false) }}>
+          <ModalHeader toggle={() => { setIsOpenConfirm(false) }} close={() => <></>}>Confirm</ModalHeader>
+          <ModalBody>
+            Are you sure you want to exit clip analysis mode?
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={() => { setSelectedClips([]) }}>
+              Confirm
+            </Button>{' '}
+            <Button color="secondary" onClick={() => { setIsOpenConfirm(false) }}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Modal>
+
       </div>
     );
   };
 
   useEffect(() => {
-    if (selectedClips?.length) socket.emit(EVENTS.ON_VIDEO_SELECT, {
+    socket.emit(EVENTS.ON_VIDEO_SELECT, {
       userInfo: { from_user: fromUser._id, to_user: toUser._id },
       videos: selectedClips,
     });
@@ -952,55 +975,49 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
               <div className="no-user-joined font-weight-bold text-center">{displayMsg.msg}</div>
             ) : (<></>)}
             {selectedClips?.length ?
-              !maxMin ?
-                <div style={{ width: "100%", textAlign: "center", display: "block", border: "2px solid red", margin: "1rem", }}>
-                  <video
-                    playsInline
-                    autoPlay
-                    className="rounded " style={{ width: '100%' }}
-                    id="end-user-video"
-                  />
-                </div> :
-                <div className="row">
-                  <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate} >
-                      <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
-                    </video>
-                    <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <div className="external-control-bar">
-                        <button className="btn btn-primary px-1 py-1 my-3 mr-2" onClick={() => togglePlay("one")}>{(isPlaying?.isPlaying && isPlaying?.number === "one") ? <Pause style={{ verticalAlign: "middle" }} /> : <Play style={{ verticalAlign: "middle" }} />}</button>
-                      </div>
-                      <progress className="progress"
-                        ref={progressBarRef}
-                        value="0"
-                        max={selectedVideoRef1.current ? selectedVideoRef1.current.duration : 100}
-                        onClick={(e) => handleProgressBarClick(e, "one")}
-                      />
+              <div className="row">
+                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                  <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate} >
+                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
+                  </video>
+                  <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div className="external-control-bar">
+                      <button className="btn btn-primary px-1 py-1 my-3 mr-2" onClick={() => togglePlay("one")}>{(isPlaying?.isPlaying && isPlaying?.number === "one") ? <Pause style={{ verticalAlign: "middle" }} /> : <Play style={{ verticalAlign: "middle" }} />}</button>
                     </div>
+                    <progress className="progress"
+                      ref={progressBarRef}
+                      value="0"
+                      max={selectedVideoRef1.current ? selectedVideoRef1.current.duration : 100}
+                      onClick={(e) => handleProgressBarClick(e, "one")}
+                    />
                   </div>
-                  <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate}>
-                      <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
-                    </video>
-                    <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <div className="external-control-bar">
-                        <button className="btn btn-primary px-1 py-1 my-3 mr-2 " onClick={() => togglePlay("two")}>{(isPlaying?.isPlaying && isPlaying?.number === "two") ? <Pause style={{ verticalAlign: "middle" }} /> : <Play style={{ verticalAlign: "middle" }} />}</button>
-                      </div>
-                      <progress className="progress"
-                        ref={progressBarRef2}
-                        value="0"
-                        max={selectedVideoRef2.current ? selectedVideoRef2.current.duration : 100}
-                        onClick={(e) => handleProgressBarClick(e, "two")}
-                      />
-                    </div>
-                  </div>
-
                 </div>
-              : accountType === AccountType.TRAINER ?
-                <button className="btn btn-primary px-2 py-1 my-3" style={{ zIndex: 10, right: 5 }} onClick={() => {
-                  setIsOpen(true)
-                }} >Add clip</button> :
-                <div className="no-user-joined font-weight-bold text-center">Clip Analysis Mode</div>
+                <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                  <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate}>
+                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
+                  </video>
+                  <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div className="external-control-bar">
+                      <button className="btn btn-primary px-1 py-1 my-3 mr-2 " onClick={() => togglePlay("two")}>{(isPlaying?.isPlaying && isPlaying?.number === "two") ? <Pause style={{ verticalAlign: "middle" }} /> : <Play style={{ verticalAlign: "middle" }} />}</button>
+                    </div>
+                    <progress className="progress"
+                      ref={progressBarRef2}
+                      value="0"
+                      max={selectedVideoRef2.current ? selectedVideoRef2.current.duration : 100}
+                      onClick={(e) => handleProgressBarClick(e, "two")}
+                    />
+                  </div>
+                </div>
+              </div> :
+              <div style={{ width: "100%", textAlign: "center", display: "block", border: "2px solid red", margin: "1rem", }}>
+                <video
+                  // ref={remoteVideoRef}
+                  playsInline
+                  autoPlay
+                  className="rounded " style={{ width: '100%' }}
+                  id="end-user-video"
+                />
+              </div>
             }
             {renderCallActionButtons()}
           </div>

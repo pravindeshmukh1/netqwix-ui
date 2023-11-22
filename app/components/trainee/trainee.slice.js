@@ -82,6 +82,9 @@ export const traineeSlice = createSlice({
     removePaymentIntent: (state, action) => {
       state.transaction.intent = null;
     },
+    removeNewBookingData: (state, action) => {
+      state.newBookingData = {};
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -92,7 +95,6 @@ export const traineeSlice = createSlice({
         console.log("state, action", state, action);
         state.status = "fulfilled";
         state.getTraineeSlots = action.payload.data;
-
       })
       .addCase(getTraineeWithSlotsAsync.rejected, (state, action) => {
         state.status = "rejected";
