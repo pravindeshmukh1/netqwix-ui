@@ -877,7 +877,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         selectedVideoRef1?.current?.play();
         selectedVideoRef2?.current?.play();
       }
-      temp = { ...isPlaying, isPlayingAll: !isPlaying.isPlayingAll }
+      temp = { ...isPlaying, isPlayingAll: !isPlaying.isPlayingAll ,isPlaying1:  !isPlaying.isPlayingAll,isPlaying2:  !isPlaying.isPlayingAll}
     } else if (num === "one") {
       if (isPlaying.isPlaying1) selectedVideoRef1?.current?.pause();
       else selectedVideoRef1?.current?.play();
