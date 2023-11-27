@@ -79,8 +79,7 @@ export class Utils {
     const weekDateFormatted = [];
     if (weekDays[today.getDay() - 1]) {
       weekDateFormatted.push(
-        `${weekDays[today.getDay() - 1]} ${
-          today.getMonth() + 1
+        `${weekDays[today.getDay() - 1]} ${today.getMonth() + 1
         }/${today.getDate()}`
       );
       // weekDates.push(today);
@@ -95,9 +94,8 @@ export class Utils {
 
       if (dayOfWeek) {
         // Exclude weekends
-        const formattedDate = `${dayOfWeek} ${
-          today.getMonth() + 1
-        }/${today.getDate()}`;
+        const formattedDate = `${dayOfWeek} ${today.getMonth() + 1
+          }/${today.getDate()}`;
         weekDateFormatted.push(formattedDate);
         // weekDates.push(today);
         const date = new Date(today);
@@ -191,8 +189,8 @@ export class Utils {
   ) => {
     return (
       currentDate === bookedDate &&
-      currentFormattedTime >= sessionStartTime &&
-      currentFormattedTime <= sessionEndTime
+      Date.parse(`01/01/2023 ${currentFormattedTime}`) >= Date.parse(`01/01/2023 ${sessionStartTime}`) &&
+      Date.parse(`01/01/2023 ${currentFormattedTime}`) <= Date.parse(`01/01/2023 ${sessionEndTime}`)
     );
   };
 
@@ -392,10 +390,10 @@ export class Utils {
     const v2 =
       ((endTimeInMinutes - rangeStartInMinutes) /
         (rangeEndInMinutes - rangeStartInMinutes)) *
-        100 +
+      100 +
       ((startTimeInMinutes - rangeStartInMinutes) /
         (rangeEndInMinutes - rangeStartInMinutes)) *
-        100;
+      100;
 
     // Calculate the percentage
     const percentage =

@@ -877,7 +877,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         selectedVideoRef1?.current?.play();
         selectedVideoRef2?.current?.play();
       }
-      temp = { ...isPlaying, isPlayingAll: !isPlaying.isPlayingAll ,isPlaying1:  !isPlaying.isPlayingAll,isPlaying2:  !isPlaying.isPlayingAll}
+      temp = { ...isPlaying, isPlayingAll: !isPlaying.isPlayingAll, isPlaying1: !isPlaying.isPlayingAll, isPlaying2: !isPlaying.isPlayingAll }
     } else if (num === "one") {
       if (isPlaying.isPlaying1) selectedVideoRef1?.current?.pause();
       else selectedVideoRef1?.current?.play();
@@ -923,11 +923,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
   return (
     <React.Fragment>
-      {/* <div className="canvas-print absolute  " style={{ zIndex: 10, right: 5 }}>
-        <div style={{ textAlign: "end" }} onClick={(event) => { event.stopPropagation(); setMaxMin(!maxMin) }}>
-          <button className="btn btn-primary px-2 py-1 my-3" >{maxMin ? 'Minimise' : 'Maximise'}</button>
-        </div>
-      </div> */}
       <canvas
         id="drawing-canvas"
         width={document.getElementById("bookings")?.clientWidth}
@@ -984,29 +979,12 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
           </div> :
           <div className="col-lg-1 col-md-6 col-sm-12 "></div>
         }
+
         {/* 2 */}
-        {!maxMin && selectedClips?.length === 0
-          ? <div className="col-lg-8 col-md-8 col-sm-12 " id="third" style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "space-around", flexDirection: "column" }}>
-            {displayMsg.showMsg ? (
-              <div className="no-user-joined font-weight-bold text-center">{displayMsg.msg}</div>
-            ) : (
-              <div style={{ width: "100%", textAlign: "center", display: "block", border: "2px solid red", margin: "1rem", }}>
-                <video
-                  playsInline
-                  autoPlay
-                  className="rounded " style={{ width: '100%' }}
-                  id="end-user-video"
-                />
-              </div>
-            )}
-            {renderCallActionButtons()}
-          </div>
-          :
+        {
           <div className="col-lg-8 col-md-8 col-sm-12 " id="third" style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "space-around", flexDirection: "column" }}>
-            {displayMsg.showMsg ? (
-              <div className="no-user-joined font-weight-bold text-center">{displayMsg.msg}</div>
-            ) : (<></>)}
-            {selectedClips?.length ?
+            <div className="no-user-joined font-weight-bold text-center" style={{ margin: displayMsg?.msg ? 'auto' : '' }}>{displayMsg?.msg}</div>
+            {selectedClips?.length != 0 &&
               <div className="row">
                 <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                   <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate} >
@@ -1040,15 +1018,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                     />
                   </div>
                 </div>
-              </div> :
-              <div style={{ width: "100%", textAlign: "center", display: "block", border: "2px solid red", margin: "1rem", }}>
-                <video
-                  // ref={remoteVideoRef}
-                  playsInline
-                  autoPlay
-                  className="rounded " style={{ width: '100%' }}
-                  id="end-user-video"
-                />
               </div>
             }
             {renderCallActionButtons()}
@@ -1059,56 +1028,13 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         {/* 3 */}
         < div className={"col-lg-3 col-md-3 col-sm-12 "} style={mediaQuery.matches ? { textAlign: "end" } : { textAlign: "end", display: "flex", justifyContent: "space-between" }} >
           <div style={!maxMin ? {} : { width: "100%", textAlign: "center", display: "block" }}>
-            <video
-              ref={remoteVideoRef}
-              playsInline
-              autoPlay
-              className="rounded " style={{ width: '100%' }}
-              id="end-user-video"
-            />
+            <video ref={remoteVideoRef} playsInline autoPlay className="rounded " style={{ width: '100%' }} id="end-user-video" />
           </div>
           <div style={{ width: "100%", textAlign: "center" }}>
-            {videoRef && (
-              <video
-                id="end-user-video"
-                playsInline
-                muted
-                className="rounded " style={{ width: '100%' }}
-                ref={videoRef}
-                autoPlay
-              />
-            )}
+            {videoRef && (<video id="end-user-video" playsInline muted className="rounded " style={{ width: '100%' }} ref={videoRef} autoPlay />)}
           </div>
         </div>
       </div>
-      {/* <div id="remote-user" className="remote-user">
-        <canvas
-          id="drawing-canvas"
-          width={document.getElementById("bookings")?.clientWidth}
-          height={document.getElementById("bookings")?.clientHeight}
-          className="canvas-print absolute all-0"
-          ref={canvasRef}
-        />
-        <video
-          ref={remoteVideoRef}
-          playsInline
-          autoPlay
-          className="bg-video"
-          id="video"
-        />
-        {selectedClips?.length && <>
-          <video style={{ width: "50%", height: "35%", margin: "10px" }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate} >
-            <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
-          </video>
-          <video style={{ width: "50%", height: "35%", margin: "10px" }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate}>
-            <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
-          </video>
-        </>
-        }
-      </div> */}
-
-
-
     </React.Fragment >
   );
 };
