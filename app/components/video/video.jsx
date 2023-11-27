@@ -436,7 +436,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
       const clientX = event?.clientX || event?.touches[0]?.clientX;
       const clientY = event?.clientY || event?.touches[0]?.clientY;
       const { offsetLeft, offsetTop } = event.target;
-      const canvasX = clientX - (offsetLeft || 100);
+      const canvasX = clientX - (offsetLeft || (mediaQuery.matches ? 100 : 50));
       const canvasY = clientY - offsetTop;
       return { x: canvasX, y: canvasY };
     }
