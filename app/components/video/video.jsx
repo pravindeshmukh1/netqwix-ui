@@ -436,7 +436,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
       const clientX = event?.clientX || event?.touches[0]?.clientX;
       const clientY = event?.clientY || event?.touches[0]?.clientY;
       const { offsetLeft, offsetTop } = event.target;
-      const canvasX = clientX - offsetLeft;
+      const canvasX = clientX - (offsetLeft || 100);
       const canvasY = clientY - offsetTop;
       return { x: canvasX, y: canvasY };
     }
@@ -843,7 +843,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     }
     if (number === "two") {
       if (!isPlaying2) selectedVideoRef2?.current?.pause();
-      else selectedVideoRef2.current.play();
+      else selectedVideoRef2?.current?.play();
     }
     setIsPlaying({ isPlayingAll, number, isPlaying1, isPlaying2 })
   });
@@ -939,7 +939,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
         {/* 1 */}
         {accountType === AccountType.TRAINER ?
-          <div className="col-lg-1 col-md-1 col-sm-12">
+          <div className="col-lg-1 col-md-1 col-sm-12 z-50">
             <div>
               <CanvasMenuBar
                 isOpen={isOpen}
@@ -1058,7 +1058,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
 
         {/* 3 */}
         < div className={"col-lg-3 col-md-3 col-sm-12 "} style={mediaQuery.matches ? { textAlign: "end" } : { textAlign: "end", display: "flex", justifyContent: "space-between" }} >
-          <div style={!maxMin ? { border: "red", display: "none" } : { width: "100%", textAlign: "center", display: "block" }}>
+          <div style={!maxMin ? {} : { width: "100%", textAlign: "center", display: "block" }}>
             <video
               ref={remoteVideoRef}
               playsInline

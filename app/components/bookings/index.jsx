@@ -526,20 +526,20 @@ const Bookings = ({ accountType = null }) => {
                               <h5 className="block-title p-0"> Selected Clips<label className="badge badge-primary sm ml-2">{selectedClips?.length}</label></h5>
                               <div className={`block-content`}>
                                 <div className="row">
-                                  {selectedClips.map((clp, index) => (
-                                    <div key={index} style={{ borderRadius: 5, position: "relative" }}>
+                                  {selectedClips?.map((clp, index) => {
+                                    return <div key={index} style={{ borderRadius: 5, position: "relative" }}>
                                       <video style={{ width: "25vw" }} className="p-2">
                                         <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
                                       </video>
                                       <span style={{ position: "absolute", right: 5, top: -3, cursor: "pointer", background: "red", borderRadius: "50%", padding: "0px 6px", color: "#fff" }}
                                         onClick={() => {
-                                          var temp = selectedClips;
+                                          var temp = JSON.parse(JSON.stringify(selectedClips));
                                           temp = temp.filter(val => val._id !== clp?._id)
-                                          setSelectedClips([...temp]);
+                                          setSelectedClips(temp);
                                         }}
                                       >x</span>
                                     </div>
-                                  ))}
+                                  })}
                                 </div>
                               </div>
                             </div> : <></>}

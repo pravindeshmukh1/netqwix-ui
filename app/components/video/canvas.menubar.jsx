@@ -355,7 +355,7 @@ export const CanvasMenuBar = ({
                                       selectClips.push(clp);
                                       setSelectClips([...selectClips]);
                                     } else {
-                                      var temp = selectClips;
+                                      var temp = JSON.parse(JSON.stringify(selectClips));
                                       temp = temp.filter(val => val._id !== clp?._id)
                                       setSelectClips([...temp]);
                                     }
@@ -406,7 +406,7 @@ export const CanvasMenuBar = ({
                                       selectClips.push(clp?.clips);
                                       setSelectClips([...selectClips]);
                                     } else {
-                                      var temp = selectClips;
+                                      var temp = JSON.parse(JSON.stringify(selectClips));
                                       temp = temp.filter(val => val._id !== clp?.clips?._id)
                                       setSelectClips([...temp]);
                                     }
