@@ -63,7 +63,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     mousedown: false,
   };
   const [selectedClips, setSelectedClips] = useState([]);
-  const windowsRef = useRef(null);
 
   const selectedVideoRef1 = useRef(null);
   const selectedVideoRef2 = useRef(null);
@@ -84,8 +83,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
       if (typeof navigator !== "undefined") {
         Peer = require("peerjs").default;
       }
-
-      windowsRef.current = window;
       handleStartCall();
       listenSocketEvents();
       initializeLocalStates();
@@ -1020,15 +1017,17 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 </div>
               </div>
             }
+            <div className={selectedClips?.length != 0 && "scs"}>
+              <video ref={remoteVideoRef} playsInline autoPlay className="rounded " style={{ width: '100%', height:selectedClips?.length === 0 && '100%' }} id="end-user-video" />
+            </div>
             {renderCallActionButtons()}
           </div>
         }
 
-
+        {console.log(selectedClips?.length )}
         {/* 3 */}
         < div className={"col-lg-3 col-md-3 col-sm-12 "} style={mediaQuery.matches ? { textAlign: "end" } : { textAlign: "end", display: "flex", justifyContent: "space-between" }} >
-          <div style={!maxMin ? {} : { width: "100%", textAlign: "center", display: "block" }}>
-            <video ref={remoteVideoRef} playsInline autoPlay className="rounded " style={{ width: '100%' }} id="end-user-video" />
+          <div style={!maxMin ? {height:350 } : { width: "100%", textAlign: "center", display: "block"}}>
           </div>
           <div style={{ width: "100%", textAlign: "center" }}>
             {videoRef && (<video id="end-user-video" playsInline muted className="rounded " style={{ width: '100%' }} ref={videoRef} autoPlay />)}

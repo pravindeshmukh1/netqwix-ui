@@ -11,3 +11,9 @@
 .divider {
   margin-bottom: 48px !important;
 }
+
+.scs{
+  position: absolute;
+  right: -32%;
+  top: 20%
+}
