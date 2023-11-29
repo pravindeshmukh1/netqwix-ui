@@ -15,5 +15,11 @@
 .scs{
   position: absolute;
   right: -32%;
+  top: 50%
+}
+
+.scs2{
+  position: absolute;
+  right: -32%;
   top: 20%
 }

@@ -1020,6 +1020,9 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             <div className={selectedClips?.length != 0 && "scs"}>
               <video ref={remoteVideoRef} playsInline autoPlay className="rounded " style={{ width: '100%', height:selectedClips?.length === 0 && '100%' }} id="end-user-video" />
             </div>
+            <div className={"scs2"}>
+            {videoRef && (<video id="end-user-video" playsInline muted className="rounded " style={{ width: '100%' }} ref={videoRef} autoPlay />)}
+            </div>
             {renderCallActionButtons()}
           </div>
         }
@@ -1030,7 +1033,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
           <div style={!maxMin ? {height:350 } : { width: "100%", textAlign: "center", display: "block"}}>
           </div>
           <div style={{ width: "100%", textAlign: "center" }}>
-            {videoRef && (<video id="end-user-video" playsInline muted className="rounded " style={{ width: '100%' }} ref={videoRef} autoPlay />)}
+           
           </div>
         </div>
       </div>
