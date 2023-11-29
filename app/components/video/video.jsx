@@ -1026,17 +1026,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             {renderCallActionButtons()}
           </div>
         }
-
-        {console.log(selectedClips?.length)}
-        {/* 3 */}
-        < div className={"col-lg-3 col-md-3 col-sm-12 "} style={mediaQuery.matches ? { textAlign: "end" } : { textAlign: "end", display: "flex", justifyContent: "space-between" }} >
-          <div style={!maxMin ? { height: 350 } : { width: "100%", textAlign: "center", display: "block" }}>
-          </div>
-          <div style={{ width: "100%", textAlign: "center" }}>
-
-          </div>
-        </div>
-      </div>
     </React.Fragment >
   );
 };
