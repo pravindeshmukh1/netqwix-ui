@@ -1018,22 +1018,22 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
               </div>
             }
             <div className={selectedClips?.length != 0 && "scs"}>
-              <video ref={remoteVideoRef} playsInline autoPlay className="rounded " style={{ width: '100%', height:selectedClips?.length === 0 && '100%' }} id="end-user-video" />
+              <video ref={remoteVideoRef} playsInline autoPlay className="rounded " style={{ width: '100%' }} id="end-user-video" />
             </div>
             <div className={"scs2"}>
-            {videoRef && (<video id="end-user-video" playsInline muted className="rounded " style={{ width: '100%' }} ref={videoRef} autoPlay />)}
+              {videoRef && (<video id="end-user-video" playsInline muted className="rounded " style={{ width: '100%' }} ref={videoRef} autoPlay />)}
             </div>
             {renderCallActionButtons()}
           </div>
         }
 
-        {console.log(selectedClips?.length )}
+        {console.log(selectedClips?.length)}
         {/* 3 */}
         < div className={"col-lg-3 col-md-3 col-sm-12 "} style={mediaQuery.matches ? { textAlign: "end" } : { textAlign: "end", display: "flex", justifyContent: "space-between" }} >
-          <div style={!maxMin ? {height:350 } : { width: "100%", textAlign: "center", display: "block"}}>
+          <div style={!maxMin ? { height: 350 } : { width: "100%", textAlign: "center", display: "block" }}>
           </div>
           <div style={{ width: "100%", textAlign: "center" }}>
-           
+
           </div>
         </div>
       </div>
