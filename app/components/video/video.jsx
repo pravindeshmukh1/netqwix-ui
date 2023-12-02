@@ -69,6 +69,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
   const progressBarRef = useRef(null);
   const progressBarRef2 = useRef(null);
   const [isPlaying, setIsPlaying] = useState({ isPlayingAll: false, number: "", isPlaying1: false, isPlaying2: false });
+  const [videoTime, setVideoTime] = useState({ currentTime1: "00:00", currentTime2: "00:00", remainingTime1: "00:00", remainingTime2: "00:00", });
   const [maxMin, setMaxMin] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenConfirm, setIsOpenConfirm] = useState(false);
@@ -861,7 +862,8 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     setMaxMin(isClicked)
   });
 
-  console.log("isPlayingisPlaying", isPlaying);
+  console.log("isPlaying", isPlaying);
+
 
   const togglePlay = (num) => {
     var temp = isPlaying
@@ -892,13 +894,59 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     setIsPlaying({ ...temp })
   };
 
-  const handleTimeUpdate = () => {
+  const handleTimeUpdate1 = () => {
     progressBarRef.current.value = selectedVideoRef1?.current?.currentTime;
+    if (selectedVideoRef1.current.duration === selectedVideoRef1.current.currentTime) {
+      togglePlay("one")
+      selectedVideoRef1.current.currentTime = 0;
+      socket?.emit(EVENTS?.ON_VIDEO_TIME, {
+        userInfo: { from_user: fromUser?._id, to_user: toUser?._id },
+        clickedTime: 0,
+        number: "one"
+      });
+    }
+    const remainingTime = selectedVideoRef1.current.duration - selectedVideoRef1.current.currentTime;
+
+    setVideoTime({
+      ...videoTime,
+      currentTime1: `${String(Math?.floor(progressBarRef.current.value / 60)).padStart(2, '0')}:${String(Math?.floor(progressBarRef.current.value % 60)).padStart(2, '0')}`,
+      remainingTime1: `${String(Math?.floor(remainingTime / 60)).padStart(2, '0')}:${String(Math?.floor(remainingTime % 60)).padStart(2, '0')}`
+    })
+  };
+
+  // useEffect(() => {
+  //   var obj = {}
+  //   if (selectedVideoRef1?.current?.duration) {
+  //     const remainingTime = selectedVideoRef1.current.duration - selectedVideoRef1.current.currentTime;
+  //     obj.remainingTime1 = `${String(Math?.floor(remainingTime / 60)).padStart(2, '0')}:${String(Math?.floor(remainingTime % 60)).padStart(2, '0')}`
+  //   }
+  //   if (selectedVideoRef2?.current?.duration) {
+  //     const remainingTime2 = selectedVideoRef2.current.duration - selectedVideoRef2.current.currentTime;
+  //     obj.remainingTime2 = `${String(Math?.floor(remainingTime2 / 60)).padStart(2, '0')}:${String(Math?.floor(remainingTime2 % 60)).padStart(2, '0')}`
+  //   }
+  //   setVideoTime({
+  //     ...videoTime,
+  //     ...obj
+  //   })
+  // }, [selectedVideoRef2?.current?.duration, selectedVideoRef1?.current?.duration, selectedClips?.length])
+
+  const handleTimeUpdate2 = () => {
     progressBarRef2.current.value = selectedVideoRef2?.current?.currentTime;
-    // Convert currentTime to minutes and seconds
-    // const minutes = Math?.floor(progress / 60);
-    // const seconds = Math?.floor(progress % 60);
-    // console?.log(`Current Time: ${minutes}:${seconds}`);
+    if (selectedVideoRef2.current.duration === selectedVideoRef2.current.currentTime) {
+      togglePlay("two")
+      selectedVideoRef2.current.currentTime = 0;
+      socket?.emit(EVENTS?.ON_VIDEO_TIME, {
+        userInfo: { from_user: fromUser?._id, to_user: toUser?._id },
+        clickedTime: 0,
+        number: "two"
+      });
+    }
+    const remainingTime = selectedVideoRef2.current.duration - selectedVideoRef2.current.currentTime;
+    setVideoTime({
+      ...videoTime,
+      currentTime2: `${String(Math?.floor(progressBarRef2.current.value / 60)).padStart(2, '0')}:${String(Math?.floor(progressBarRef2.current.value % 60)).padStart(2, '0')}`,
+      remainingTime2: `${String(Math?.floor(remainingTime / 60)).padStart(2, '0')}:${String(Math?.floor(remainingTime % 60)).padStart(2, '0')}`
+    })
   };
 
   const handleProgressBarClick = (e, number) => {
@@ -971,6 +1019,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                 }}
                 selectedClips={selectedClips}
                 setSelectedClips={setSelectedClips}
+                toUser={toUser}
               />
             </div>
           </div> :
@@ -980,16 +1029,17 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         {/* 2 */}
         {
           <div className="col-lg-8 col-md-8 col-sm-12 " id="third" style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "space-around", flexDirection: "column" }}>
-            <div className="no-user-joined font-weight-bold text-center" style={{ margin: displayMsg?.msg ? 'auto' : '' }}>{displayMsg?.msg}</div>
+            <div className="no-user-joined font-weight-bold text-center" style={{ margin: displayMsg?.msg ? 'auto' : '', zIndex: displayMsg?.msg ? 8 : 1 }}>{displayMsg?.msg}</div>
             {selectedClips?.length != 0 &&
               <div className="row">
                 <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                  <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate} >
+                  <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate1} >
                     <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
                   </video>
                   <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div><p style={{ margin: 0, marginRight: "10px" }}>{videoTime?.currentTime1}</p> </div>
                     <div className="external-control-bar">
-                      <button className="btn btn-primary px-1 py-1 my-3 mr-2" onClick={() => togglePlay("one")}>{(isPlaying?.isPlaying1 || isPlaying?.isPlayingAll) ? <Pause style={{ verticalAlign: "middle" }} /> : <Play style={{ verticalAlign: "middle" }} />}</button>
+                      <button className="btn btn-primary px-1 py-1 my-3 mr-2" onClick={() => togglePlay("one")}>{(isPlaying?.isPlaying1) ? <Pause style={{ verticalAlign: "middle" }} /> : <Play style={{ verticalAlign: "middle" }} />}</button>
                     </div>
                     <progress className="progress"
                       ref={progressBarRef}
@@ -997,15 +1047,17 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                       max={selectedVideoRef1.current ? selectedVideoRef1.current.duration : 100}
                       onClick={(e) => handleProgressBarClick(e, "one")}
                     />
+                    <div><p style={{ margin: 0, marginLeft: "10px" }}>{videoTime?.remainingTime1}</p> </div>
                   </div>
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                  <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate}>
+                  <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate2}>
                     <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
                   </video>
                   <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div><p style={{ margin: 0, marginRight: "10px" }}>{videoTime?.currentTime2}</p> </div>
                     <div className="external-control-bar">
-                      <button className="btn btn-primary px-1 py-1 my-3 mr-2 " onClick={() => togglePlay("two")}>{(isPlaying?.isPlaying2 || isPlaying?.isPlayingAll) ? <Pause style={{ verticalAlign: "middle" }} /> : <Play style={{ verticalAlign: "middle" }} />}</button>
+                      <button className="btn btn-primary px-1 py-1 my-3 mr-2 " onClick={() => togglePlay("two")}>{(isPlaying?.isPlaying2) ? <Pause style={{ verticalAlign: "middle" }} /> : <Play style={{ verticalAlign: "middle" }} />}</button>
                     </div>
                     <progress className="progress"
                       ref={progressBarRef2}
@@ -1013,6 +1065,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
                       max={selectedVideoRef2.current ? selectedVideoRef2.current.duration : 100}
                       onClick={(e) => handleProgressBarClick(e, "two")}
                     />
+                    <div><p style={{ margin: 0, marginLeft: "10px" }}>{videoTime?.remainingTime2}</p> </div>
                   </div>
                 </div>
               </div>

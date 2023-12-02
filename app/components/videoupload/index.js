@@ -100,7 +100,7 @@ const VideoUpload = (props) => {
                     </div>
                 </div>
                 <div className="d-flex flex-column align-items-center p-3 justify-content-center h-100">
-                    <h2>Clip Upload</h2>
+                    <h2>Upload Clip</h2>
                     <div className="form-group">
                         <label className="col-form-label mt-2">Title</label>
                         <input

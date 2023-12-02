@@ -140,6 +140,8 @@ const FileSection = (props) => {
   }, [isOpen])
 
   const getMyClips = async () => {
+    setClips([])
+    setTraineeClips([])
     var res = await myClips({})
     setClips(res?.data)
     var res2 = await traineeClips({})
@@ -165,7 +167,7 @@ const FileSection = (props) => {
         </div>
       </div>
       <Button className="button-effect mb-3" style={{ width: "100%", justifyContent: 'center' }} color="primary" onClick={() => dispatch(videouploadAction.setIsOpen(true))} >
-        Clip Upload
+        Upload Clip
       </Button>
       <VideoUpload />
       <div className="theme-tab">
@@ -176,7 +178,7 @@ const FileSection = (props) => {
                 }`}
               onClick={() => setActiveTab("media")}
             >
-              My Locker
+              My Clips
             </NavLink>
           </NavItem>}
           {localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE) === "Trainer" && <NavItem className="ml-5px">

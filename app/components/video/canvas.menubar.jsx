@@ -7,7 +7,7 @@ import { SHAPES } from "../../common/constants";
 import Modal from "../../common/modal";
 import { Nav, NavLink, NavItem, TabContent, TabPane, Col, Button } from "reactstrap";
 import { myClips, traineeClips } from "../../../containers/rightSidebar/fileSection.api";
-
+import { Tooltip } from "react-tippy";
 
 export const CanvasMenuBar = ({
   isOpen,
@@ -20,7 +20,8 @@ export const CanvasMenuBar = ({
   setCanvasConfigs,
   drawShapes,
   selectedClips,
-  setSelectedClips
+  setSelectedClips,
+  toUser
 }) => {
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
   const [activeTab, setActiveTab] = useState(SHAPES.FREE_HAND);
@@ -32,7 +33,6 @@ export const CanvasMenuBar = ({
   useEffect(() => {
     if (isOpen) { getMyClips(); }
   }, [isOpen])
-
 
   const getMyClips = async () => {
     var res = await myClips({})
@@ -47,7 +47,6 @@ export const CanvasMenuBar = ({
     setSelectClips([])
   }
   const mediaQuery = window.matchMedia('(min-width: 768px)')
-  console.log("traineeCliptraineeClip", traineeClip);
 
   return (
     <div style={{ margin: "1rem", display: "flex", justifyContent: "center" }}>
@@ -284,25 +283,25 @@ export const CanvasMenuBar = ({
           <>
             <div className="container media-gallery portfolio-section grid-portfolio">
               <div className="theme-title  mb-5">
-                <div className="media">
-                  <div>
-                    <h2>Select up to 2 clips for analysis.</h2>
+                <div className="media-body media-body text-right" >
+                  <div
+                    className="icon-btn btn-sm btn-outline-light close-apps pointer"
+                    onClick={() => {
+                      setSelectedClips(selectClips)
+                      setIsOpen(false)
+                    }}
+                  >
+                    <X />
                   </div>
-                  <div className="media-body media-body text-right" >
-                    <div
-                      className="icon-btn btn-sm btn-outline-light close-apps pointer"
-                      onClick={() => {
-                        setSelectedClips(selectClips)
-                        setIsOpen(false)
-                      }}
-                    >
-                      <X />
-                    </div>
+                </div>
+                <div className="media d-flex flex-column  align-items-center">
+                  <div>
+                    <h2>Select 2 clips to share with {toUser?.fullname}</h2>
                   </div>
                 </div>
               </div>
               <div className="theme-tab">
-                <Nav tabs>
+                <Nav tabs className="justify-content-around">
                   <NavItem className="ml-5px">
                     <NavLink
                       className={`button-effect ${videoActiveTab === "media" ? "active" : ""
@@ -319,6 +318,15 @@ export const CanvasMenuBar = ({
                       onClick={() => setAideoActiveTab("trainee")}
                     >
                       Trainee
+                    </NavLink>
+                  </NavItem>
+                  <NavItem className="ml-5px">
+                    <NavLink
+                      className={`button-effect ${videoActiveTab === "docs" ? "active" : ""
+                        }`}
+                      onClick={() => setAideoActiveTab("docs")}
+                    >
+                      Netquix
                     </NavLink>
                   </NavItem>
                 </Nav>
@@ -423,6 +431,46 @@ export const CanvasMenuBar = ({
                       ) : <div style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}>
                         <h5 className="block-title">  No Data Found</h5>
                       </div>}
+                    </div>
+                  </TabPane>
+                  <TabPane tabId="docs">
+                    <div className="media-gallery portfolio-section grid-portfolio">
+                      <div className={`collapse-block open`}>
+                        <div className={`block-content `}>
+                          <div className="row">
+                            {[...Array(8).keys()].map((clps, index) => {
+                              var clp = {
+                                "_id": "656acd81cd2d7329ed0d8e91",
+                                "title": "Dog Activity",
+                                "category": "Acting",
+                                "user_id": "6533881d1e8775aaa25b3b6e",
+                                "createdAt": "2023-12-02T06:24:01.995Z",
+                                "updatedAt": "2023-12-02T06:24:01.995Z",
+                              }
+                              var sld = selectClips.find(val => val?._id === clp?._id)
+                              return <div
+                                key={index}
+                                className={`col-4 p-1`}
+                                style={{ borderRadius: 5 }}
+                                onClick={() => {
+                                  if (!sld && selectClips?.length < 2) {
+                                    selectClips.push(clp);
+                                    setSelectClips([...selectClips]);
+                                  } else {
+                                    var temp = JSON.parse(JSON.stringify(selectClips));
+                                    temp = temp.filter(val => val._id !== clp?._id)
+                                    setSelectClips([...temp]);
+                                  }
+                                }}
+                              >
+                                <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "80%", height: "80%", display: "flex", justifyContent: "center" }}  >
+                                  <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                                </video>
+                              </div>
+                            })}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </TabPane>
                 </TabContent>

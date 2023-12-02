@@ -268,14 +268,14 @@ const Index = (props) => {
               </Tooltip>
             </li>}
             <li>
-              <Tooltip title="Media" position="top" trigger="mouseenter">
+              <Tooltip title="Locker" position="top" trigger="mouseenter">
                 <NavLink
                   className={`icon-btn btn-light button-effect step2 ${activeTab === "file" ? "active" : ""
                     }`}
                   onClick={() => ToggleTab("file")}
                   data-intro=""
                 >
-                  <i className="fa fa-film" />
+                  <i className="fa fa-lock" />
                 </NavLink>
               </Tooltip>
             </li>

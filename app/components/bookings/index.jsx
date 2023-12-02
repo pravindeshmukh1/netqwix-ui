@@ -244,7 +244,7 @@ const Bookings = ({ accountType = null }) => {
           <h3 className="mt-1">Completed</h3>
         )}
         <span className="px-2">
-          <span>Trainee share video clips with you </span>
+          <span>{trainee_info?.fullname} share video clips with you </span>
           <span onClick={() => {
             if (trainee_clips?.length > 0) setSelectedClips(trainee_clips)
             setIsOpenID(_id);
@@ -385,16 +385,23 @@ const Bookings = ({ accountType = null }) => {
                   </div>
                 </div>
                 <div className="d-flex flex-column  align-items-center">
-                  <h2 className="p-3">Trainee share video clips with you.</h2>
+                  <h1 className="p-3">{trainee_info.fullname} share video clips with you.</h1>
                   {selectedClips?.length ? <div >
                     <div className={`block-content`}>
-                      <div className="d-flex">
-                        {selectedClips.map((clp, index) => (
-                          <div key={index} className="p-2">
-                            <video style={{ width: "40vw" }} controls>
+                      <div className="row">
+                        {selectedClips.map((clp, index) => (<>
+                          <div key={index} className="col-md-6 col-sm-12 col-xs-12 p-2" >
+                            <video className="videoStyle" controls>
                               <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
                             </video>
+                            <div className="col">
+                              <dl className="row">
+                                <dd className="ml-3">Title :</dd>
+                                <dt className="ml-1">{clp?.title || "-"}</dt>
+                              </dl>
+                            </div>
                           </div>
+                        </>
                         ))}
                       </div>
                     </div>
@@ -521,7 +528,7 @@ const Bookings = ({ accountType = null }) => {
                             </div>
                           </div>
                           <div className="container media-gallery portfolio-section grid-portfolio ">
-                            <h2 className="my-5">Select any 2 clips to share it with your Trainer.</h2>
+                            <h2 className="my-5">Select any 2 clips to share it with {trainer_info?.fullname}.</h2>
                             {selectedClips?.length ? <div >
                               <h5 className="block-title p-0"> Selected Clips<label className="badge badge-primary sm ml-2">{selectedClips?.length}</label></h5>
                               <div className={`block-content`}>
@@ -571,7 +578,7 @@ const Bookings = ({ accountType = null }) => {
                             )}
                           </div>
                           <div className="d-flex justify-content-around w-100 p-3">
-                            <Button color="primary" onClick={() => { addTraineeClipInBookedSession() }}>Add</Button>
+                            <Button color="success" onClick={() => { addTraineeClipInBookedSession() }}>Share</Button>
                           </div>
                         </div>
                       }
