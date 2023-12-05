@@ -391,15 +391,16 @@ const Bookings = ({ accountType = null }) => {
                       <div className="row">
                         {selectedClips.map((clp, index) => (<>
                           <div key={index} className="col-md-6 col-sm-12 col-xs-12 p-2" >
+                            <div className="col">
+                              <dl className="row">
+                                <h4 className="ml-3">Title :</h4>
+                                <h5 className="ml-1">{clp?.title || "-"}</h5>
+                              </dl>
+                            </div>
                             <video className="videoStyle" controls>
                               <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
                             </video>
-                            <div className="col">
-                              <dl className="row">
-                                <dd className="ml-3">Title :</dd>
-                                <dt className="ml-1">{clp?.title || "-"}</dt>
-                              </dl>
-                            </div>
+
                           </div>
                         </>
                         ))}

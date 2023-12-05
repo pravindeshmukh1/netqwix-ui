@@ -153,7 +153,7 @@ const FileSection = (props) => {
       <div className="theme-title">
         <div className="media">
           <div>
-            <h2>Clips</h2>
+            <h2>Locker</h2>
             {/* <h4>Shared Media</h4> */}
           </div>
           <div className="media-body media-body text-right">

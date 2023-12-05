@@ -1031,7 +1031,7 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
           <div className="col-lg-8 col-md-8 col-sm-12 " id="third" style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "space-around", flexDirection: "column" }}>
             <div className="no-user-joined font-weight-bold text-center" style={{ margin: displayMsg?.msg ? 'auto' : '', zIndex: displayMsg?.msg ? 8 : 1 }}>{displayMsg?.msg}</div>
             {selectedClips?.length != 0 &&
-              <div className="row">
+              <div className="row" style={{ alignItems: "center" }}>
                 <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                   <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate1} >
                     <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
