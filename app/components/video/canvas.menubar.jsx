@@ -48,6 +48,25 @@ export const CanvasMenuBar = ({
   }
   const mediaQuery = window.matchMedia('(min-width: 768px)')
 
+  var netquixVideos = [{
+    "_id": "656acd81cd2d7329ed0d8e91",
+    "title": "Dog Activity",
+    "category": "Acting",
+    "user_id": "6533881d1e8775aaa25b3b6e",
+    "createdAt": "2023-12-02T06:24:01.995Z",
+    "updatedAt": "2023-12-02T06:24:01.995Z",
+    "__v": 0
+  },
+  {
+    "_id": "657053c4c440a4d0d775e639",
+    "title": "Pupppy clip",
+    "category": "Golf",
+    "user_id": "64ad7aae6d668be38e53be1b",
+    "createdAt": "2023-12-06T10:58:12.080Z",
+    "updatedAt": "2023-12-06T10:58:12.080Z",
+    "__v": 0
+  }]
+
   return (
     <div style={{ margin: "1rem", display: "flex", justifyContent: "center" }}>
       <div className="creationBarItem " style={mediaQuery.matches ? { width: 52 } : { width: "100%" }}>
@@ -438,15 +457,7 @@ export const CanvasMenuBar = ({
                       <div className={`collapse-block open`}>
                         <div className={`block-content `}>
                           <div className="row">
-                            {[...Array(8).keys()].map((clps, index) => {
-                              var clp = {
-                                "_id": "656acd81cd2d7329ed0d8e91",
-                                "title": "Dog Activity",
-                                "category": "Acting",
-                                "user_id": "6533881d1e8775aaa25b3b6e",
-                                "createdAt": "2023-12-02T06:24:01.995Z",
-                                "updatedAt": "2023-12-02T06:24:01.995Z",
-                              }
+                            {netquixVideos.map((clp, index) => {
                               var sld = selectClips.find(val => val?._id === clp?._id)
                               return <div
                                 key={index}

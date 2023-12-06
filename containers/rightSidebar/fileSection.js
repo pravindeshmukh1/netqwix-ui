@@ -82,6 +82,26 @@ const eightImageGallary = [
     mediaClass: "media-small isotopeSelector filter",
   },
 ];
+
+var netquixVideos = [{
+  "_id": "656acd81cd2d7329ed0d8e91",
+  "title": "Dog Activity",
+  "category": "Acting",
+  "user_id": "6533881d1e8775aaa25b3b6e",
+  "createdAt": "2023-12-02T06:24:01.995Z",
+  "updatedAt": "2023-12-02T06:24:01.995Z",
+  "__v": 0
+},
+{
+  "_id": "657053c4c440a4d0d775e639",
+  "title": "Pupppy clip",
+  "category": "Golf",
+  "user_id": "64ad7aae6d668be38e53be1b",
+  "createdAt": "2023-12-06T10:58:12.080Z",
+  "updatedAt": "2023-12-06T10:58:12.080Z",
+  "__v": 0
+}]
+
 const FileSection = (props) => {
   const dispatch = useAppDispatch();
 
@@ -592,19 +612,19 @@ const FileSection = (props) => {
               <div className={`collapse-block ${collapse1 ? "" : "open"}`}>
                 <div className={`block-content ${collapse4 ? "d-none" : ""}`}>
                   <div className="row">
-                    {eightImageGallary.map((clp, index) => (
+                    {netquixVideos.map((clp, index) => (
                       <div
                         key={index}
                         className={`col-6 p-1`}
                         style={{ borderRadius: 5 }}
                         onClick={() => {
-                          setSelectedVideo("https://v.pinimg.com/videos/mc/720p/f6/88/88/f68888290d70aca3cbd4ad9cd3aa732f.mp4")
+                          setSelectedVideo(`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`)
                           setIsOpen(true)
                         }}
                       >
                         <Tooltip title="Title" position="top" trigger="mouseenter">
                           <video style={{ width: "100%", height: "100%" }}  >
-                            <source src={"https://v.pinimg.com/videos/mc/720p/f6/88/88/f68888290d70aca3cbd4ad9cd3aa732f.mp4"} type="video/mp4" />
+                            <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
                           </video>
                         </Tooltip>
                       </div>
