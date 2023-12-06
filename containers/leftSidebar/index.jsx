@@ -275,7 +275,11 @@ const Index = (props) => {
                   onClick={() => ToggleTab("file")}
                   data-intro=""
                 >
-                  <i className="fa fa-lock" />
+                  {activeTab === "file"
+                    ? <img src="../assets/images/lockers-white.png" style={{ width: 20 }} />
+                    : <img src="../assets/images/lockers.png" style={{ width: 20 }} />
+                  }
+                  {/* <i className="fa fa-lock" /> */}
                 </NavLink>
               </Tooltip>
             </li>

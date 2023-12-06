@@ -244,7 +244,7 @@ const Bookings = ({ accountType = null }) => {
           <h3 className="mt-1">Completed</h3>
         )}
         <span className="px-2">
-          <span>{trainee_info?.fullname} share video clips with you </span>
+          <span>{trainee_info?.fullname} shared the following clips with you, give them a look… </span>
           <span onClick={() => {
             if (trainee_clips?.length > 0) setSelectedClips(trainee_clips)
             setIsOpenID(_id);
@@ -385,7 +385,7 @@ const Bookings = ({ accountType = null }) => {
                   </div>
                 </div>
                 <div className="d-flex flex-column  align-items-center">
-                  <h1 className="p-3">{trainee_info.fullname} share video clips with you.</h1>
+                  <h1 className="p-3">{trainee_info.fullname} shared the following clips with you, give them a look…</h1>
                   {selectedClips?.length ? <div >
                     <div className={`block-content`}>
                       <div className="row">
@@ -393,8 +393,7 @@ const Bookings = ({ accountType = null }) => {
                           <div key={index} className="col-md-6 col-sm-12 col-xs-12 p-2" >
                             <div className="col">
                               <dl className="row">
-                                <h4 className="ml-3">Title :</h4>
-                                <h5 className="ml-1">{clp?.title || "-"}</h5>
+                                <h3 className="ml-1">{clp?.title || "-"}</h3>
                               </dl>
                             </div>
                             <video className="videoStyle" controls>
@@ -529,7 +528,7 @@ const Bookings = ({ accountType = null }) => {
                             </div>
                           </div>
                           <div className="container media-gallery portfolio-section grid-portfolio ">
-                            <h2 className="my-5">Select any 2 clips to share it with {trainer_info?.fullname}.</h2>
+                            <h2 className="my-5">Feel free to share upto 2 clips with the {trainer_info?.fullname}</h2>
                             {selectedClips?.length ? <div >
                               <h5 className="block-title p-0"> Selected Clips<label className="badge badge-primary sm ml-2">{selectedClips?.length}</label></h5>
                               <div className={`block-content`}>
