@@ -12,12 +12,16 @@ import { SocketContext } from "../socket";
 import { Popover } from "react-tiny-popover";
 import _debounce from "lodash/debounce";
 
-import { MicOff, PauseCircle, Phone, PlayCircle, ExternalLink, Play, Pause } from "react-feather";
+import { MicOff, PauseCircle, Phone, PlayCircle, ExternalLink, Play, Pause, Aperture, FilePlus, X, Trash2, Crop } from "react-feather";
 import { AccountType, SHAPES } from "../../common/constants";
 import { CanvasMenuBar } from "./canvas.menubar";
 import { toast } from "react-toastify";
 import { max } from "lodash";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import html2canvas from 'html2canvas';
+import CusotomModal from "../../common/modal";
+import CropImage from "./cropimage";
+import jsPDF from "jspdf";
 
 let storedLocalDrawPaths = { sender: [], receiver: [] };
 let selectedShape = null;
@@ -73,9 +77,13 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
   const [maxMin, setMaxMin] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenConfirm, setIsOpenConfirm] = useState(false);
-
   const remoteVideoRef = useRef(null);
   const peerRef = useRef(null);
+  const [isOpenReport, setIsOpenReport] = useState(false);
+  const [isOpenCrop, setIsOpenCrop] = useState(false);
+  const [screenShots, setScreenShots] = useState([]);
+  const [reportObj, setReportObj] = useState({ title: "", topic: "" });
+  const [selectImage, setSelectImage] = useState(0)
 
 
   useEffect(() => {
@@ -706,6 +714,33 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
       sendEmitUndoEvent();
     }
   };
+
+  const takeScreenshot = () => {
+    const targetElement = document.body;
+    html2canvas(targetElement, { useCORS: true }).then((canvas) => {
+      // document.body.appendChild(canvas);
+      const dataUrl = canvas.toDataURL('image/png');
+      screenShots.push({
+        title: "",
+        description: "",
+        imageUrl: dataUrl
+      })
+      setScreenShots([...screenShots])
+
+      toast.success("The screenshot taken successfully.", { type: "success" });
+
+      // const link = document.createElement('a');
+      // link.href = dataUrl;
+      // link.download = 'screenshot.png';
+      // document.body.appendChild(link);
+      // link.click();
+      // document.body.removeChild(link);
+    });
+  };
+
+  console.log("screenShots", screenShots);
+
+
   const mediaQuery = window.matchMedia('(min-width: 768px)')
 
   const renderCallActionButtons = () => {
@@ -796,6 +831,23 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
         >
           {(isPlaying?.isPlayingAll) ? <PauseCircle /> : <PlayCircle />}
         </div> : <></>}
+
+        {(accountType === AccountType.TRAINER) ? <div
+          className={`icon-btn btn-light  button-effect ${mediaQuery.matches ? "btn-xl" : "btn-sm"} ml-3`}
+          onClick={() => { takeScreenshot() }}
+        >
+          <Aperture />
+        </div> : <></>}
+
+        {(accountType === AccountType.TRAINER && screenShots?.length) ? <div
+          className={`icon-btn btn-light  button-effect ${mediaQuery.matches ? "btn-xl" : "btn-sm"} ml-3`}
+          onClick={() => { setIsOpenReport(true) }}
+        >
+          <FilePlus />
+        </div> : <></>}
+
+
+
 
         <Modal isOpen={isOpenConfirm} toggle={() => { setIsOpenConfirm(false) }}>
           <ModalHeader toggle={() => { setIsOpenConfirm(false) }} close={() => <></>}>Confirm</ModalHeader>
@@ -966,6 +1018,17 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
     });
   };
 
+  const generatePDF = () => {
+    const content = document.getElementById("generate-report")
+    html2canvas(content, { useCORS: true })
+      .then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, 'JPEG', 0, 0);
+        pdf.save("download.pdf");
+      })
+  };
+
   return (
     <React.Fragment>
       <canvas
@@ -1079,6 +1142,140 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
             {renderCallActionButtons()}
           </div>
         }
+
+        <CusotomModal
+          isOpen={isOpenReport}
+          element={
+            <>
+              <div id="generate-report" className="container media-gallery portfolio-section grid-portfolio">
+                <div className="theme-title  mb-5">
+                  <div className="media-body media-body text-right" >
+                    <div
+                      className="icon-btn btn-sm btn-outline-light close-apps pointer"
+                      onClick={() => {
+                        setIsOpenReport(false)
+                      }}
+                    >
+                      <X />
+                    </div>
+                  </div>
+                  <div className="media d-flex flex-column  align-items-center">
+                    <div>
+                      <h2>Report</h2>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="theme-tab">
+                  <div className="row">
+                    <div className="col-md-6 col-sm-12 col-xs-12 p-2" >
+                      <div className="form-group">
+                        <label className="col-form-label">Title</label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          name="title"
+                          placeholder="Title"
+                          onChange={(e) => {
+                            reportObj.title = e.target.value;
+                            setReportObj({ ...reportObj })
+                          }}
+                          value={reportObj.title}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="col-md-6 col-sm-12 col-xs-12 p-2" >
+                      <div className="form-group">
+                        <label className="col-form-label">Description</label>
+                        <input
+                          className="form-control"
+                          type="text"
+                          name="topic"
+                          placeholder="Topic"
+                          onChange={(e) => {
+                            reportObj.topic = e.target.value;
+                            setReportObj({ ...reportObj })
+                          }}
+                          value={reportObj.topic}
+                        />
+                      </div>
+                    </div>
+                    {screenShots?.map((sst, i) => {
+                      return <>
+                        <div className="col-md-6 col-sm-12 col-xs-12 p-2" style={{ position: "relative" }}>
+                          <img style={{ width: "100%", height: "100%", maxHeight: "280px", border: "1px solid #ced4da", marginTop: "10px" }}
+                            src={sst?.imageUrl}
+                            alt="Screen Shot"
+                          />
+                          <div style={{ position: "absolute", bottom: 0 }} >
+                            <div className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => {
+                              setSelectImage(i)
+                              setIsOpenCrop(true)
+                            }}>
+                              <Crop />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6 col-sm-12 col-xs-12 p-2" >
+                          <div className="media-body media-body text-right" >
+                            <div
+                              className="icon-btn btn-sm btn-outline-light close-apps pointer"
+                              onClick={() => {
+                                var temp = screenShots.filter((st, index) => index !== i)
+                                setScreenShots([...temp])
+                              }}
+                            >
+                              <Trash2 />
+                            </div>
+                          </div>
+                          <div className="form-group">
+                            <label className="col-form-label">Title</label>
+                            <input
+                              className="form-control"
+                              type="text"
+                              name="title"
+                              placeholder="Title"
+                              onChange={(e) => {
+                                screenShots[i].title = e.target.value;
+                                setScreenShots([...screenShots])
+                              }}
+                              value={screenShots[i]?.title}
+                            />
+                            <label className="col-form-label">Description</label>
+                            <textarea
+                              rows="4"
+                              className="form-control"
+                              type="text"
+                              name="description"
+                              placeholder="Description"
+                              onChange={(e) => {
+                                screenShots[i].description = e.target.value;
+                                setScreenShots([...screenShots])
+                              }}
+                              value={screenShots[i]?.description}
+                            />
+                          </div>
+                        </div>
+                      </>
+                    })}
+                  </div>
+                  <div className="d-flex justify-content-center w-100 p-3">
+                    <Button className="mx-3" color="primary" onClick={() => { generatePDF() }}>Save</Button>
+                  </div>
+                </div>
+              </div>
+            </>
+          }
+        />
+
+        <CropImage
+          isOpenCrop={isOpenCrop}
+          setIsOpenCrop={setIsOpenCrop}
+          selectImage={selectImage}
+          screenShots={screenShots}
+          setScreenShots={setScreenShots}
+        />
       </div>
     </React.Fragment >
   );
