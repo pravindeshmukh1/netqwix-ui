@@ -22,6 +22,8 @@ import html2canvas from 'html2canvas';
 import CusotomModal from "../../common/modal";
 import CropImage from "./cropimage";
 import jsPDF from "jspdf";
+import { getS3SignPdfUrl } from "./video.api";
+import axios from "axios";
 
 let storedLocalDrawPaths = { sender: [], receiver: [] };
 let selectedShape = null;
@@ -47,7 +49,9 @@ let strikes = [];
 let extraStream;
 let localVideoRef;
 let Peer;
-export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
+export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) => {
+
+
   // const dispatch = useAppDispatch();
   const socket = useContext(SocketContext);
   const [sketchPickerColor, setSketchPickerColor] = useState({
@@ -84,7 +88,6 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
   const [screenShots, setScreenShots] = useState([]);
   const [reportObj, setReportObj] = useState({ title: "", topic: "" });
   const [selectImage, setSelectImage] = useState(0)
-
 
   useEffect(() => {
     console.log(`fromUser && toUser --- `, fromUser, toUser);
@@ -1021,13 +1024,52 @@ export const HandleVideoCall = ({ accountType, fromUser, toUser, isClose }) => {
   const generatePDF = () => {
     const content = document.getElementById("generate-report")
     html2canvas(content, { useCORS: true })
-      .then((canvas) => {
+      .then(async (canvas) => {
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF();
         pdf.addImage(imgData, 'JPEG', 0, 0);
-        pdf.save("download.pdf");
+
+        // Get the data URL of the PDF
+        const generatedPdfDataUrl = pdf.output('dataurlstring');
+
+        // Convert data URL to Blob
+        const byteCharacters = atob(generatedPdfDataUrl.split(',')[1]);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const pdfBlob = new Blob([new Uint8Array(byteNumbers)], { type: 'application/pdf' });
+
+        // Create a File from the Blob
+        const pdfFile = new File([pdfBlob], 'generated_pdf.pdf', { type: 'application/pdf' });
+
+        var link = await createUploadLink()
+        if (link) pushProfilePhotoToS3(link, pdfFile)
       })
   };
+
+  async function pushProfilePhotoToS3(presignedUrl, uploadPdf) {
+    const myHeaders = new Headers({ 'Content-Type': 'application/pdf' });
+    axios.put(presignedUrl, uploadPdf, {
+      headers: myHeaders,
+      onUploadProgress: progressEvent => {
+        const { loaded, total } = progressEvent;
+        const percentCompleted = (loaded / total) * 100;
+        console.log("percentCompletedpercentCompleted", percentCompleted);
+      },
+    }).then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.error('Error:', error);
+    });
+  }
+
+  const createUploadLink = async () => {
+    var payload = { session_id: id };
+    const data = await getS3SignPdfUrl(payload);
+    if (data?.url) return data?.url
+    else return ""
+  }
 
   return (
     <React.Fragment>

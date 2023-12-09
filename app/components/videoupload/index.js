@@ -22,7 +22,6 @@ const VideoUpload = (props) => {
 
     useEffect(() => {
         getCategoryData();
-
     }, []);
 
     useEffect(() => {

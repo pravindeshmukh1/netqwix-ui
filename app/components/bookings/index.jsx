@@ -60,14 +60,15 @@ const Bookings = ({ accountType = null }) => {
   const { removeNewBookingData } = traineeAction;
 
   const { activeTab } = useAppSelector(bookingsState);
-  const { scheduledMeetingDetails, addRatingModel } =
-    useAppSelector(bookingsState);
+  const { scheduledMeetingDetails, addRatingModel } = useAppSelector(bookingsState);
   const { addRating } = bookingsAction;
 
 
   const [activeTabs, setActiveTab] = useState(bookingButton[0]);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenPDF, setIsOpenPDF] = useState(false);
+  const [selectedReport, setSelectedReport] = useState("");
   const [isOpenID, setIsOpenID] = useState("");
   const [clips, setClips] = useState([]);
   const [selectedClips, setSelectedClips] = useState([]);
@@ -162,7 +163,8 @@ const Bookings = ({ accountType = null }) => {
     trainee_info,
     trainer_info,
     ratings,
-    trainee_clips
+    trainee_clips,
+    report
   ) => {
     const availabilityInfo = Utils.meetingAvailability(
       booked_date,
@@ -195,6 +197,7 @@ const Bookings = ({ accountType = null }) => {
           trainee_clips,
           selectedClips,
           setSelectedClips,
+          report
         );
       case AccountType.TRAINEE:
         return TraineeRenderBooking(
@@ -217,7 +220,8 @@ const Bookings = ({ accountType = null }) => {
           setSelectedClips,
           setIsOpenID,
           addTraineeClipInBookedSession,
-          trainee_clips
+          trainee_clips,
+          report
         );
       default:
         break;
@@ -237,6 +241,7 @@ const Bookings = ({ accountType = null }) => {
     trainee_clips,
     selectedClips,
     setSelectedClips,
+    report
   ) => {
     return (
       <React.Fragment>
@@ -370,6 +375,18 @@ const Bookings = ({ accountType = null }) => {
             </React.Fragment>
           )
         }
+        {report &&
+          <button
+            className={`btn btn-success button-effect btn-sm ml-2`}
+            type="button"
+            onClick={() => {
+              setSelectedReport(report)
+              setIsOpenPDF(true)
+            }}
+          >
+            Report
+          </button>
+        }
 
         <Modal
           isOpen={isOpen}
@@ -416,7 +433,6 @@ const Bookings = ({ accountType = null }) => {
             </>
           }
         />
-
       </React.Fragment >
     );
   };
@@ -441,7 +457,8 @@ const Bookings = ({ accountType = null }) => {
     setSelectedClips,
     setIsOpenID,
     addTraineeClipInBookedSession,
-    trainee_clips
+    trainee_clips,
+    report
   ) => {
     const isCompleted =
       has24HoursPassedSinceBooking ||
@@ -640,6 +657,18 @@ const Bookings = ({ accountType = null }) => {
             )}
           </React.Fragment>
         )}
+        {report &&
+          <button
+            className={`btn btn-success button-effect btn-sm ml-2`}
+            type="button"
+            onClick={() => {
+              setSelectedReport(report)
+              setIsOpenPDF(true)
+            }}
+          >
+            Report
+          </button>
+        }
       </React.Fragment>
     );
   };
@@ -674,8 +703,10 @@ const Bookings = ({ accountType = null }) => {
         session_end_time,
         status,
         ratings,
-        trainee_clips
+        trainee_clips,
+        report
       } = bookingInfo;
+
       return (
         <div
           className="card mb-4 mt-5 trainer-bookings-card"
@@ -726,8 +757,10 @@ const Bookings = ({ accountType = null }) => {
                   trainee_info,
                   trainer_info,
                   ratings,
-                  trainee_clips
+                  trainee_clips,
+                  report
                 )}
+
               </div>
             </div>
           </div>
@@ -763,6 +796,7 @@ const Bookings = ({ accountType = null }) => {
 
   const renderVideoCall = () => (
     <StartMeeting
+      id={startMeeting.id}
       accountType={accountType}
       traineeInfo={startMeeting.traineeInfo}
       trainerInfo={startMeeting.trainerInfo}
@@ -865,10 +899,12 @@ const Bookings = ({ accountType = null }) => {
               ) : (
                 Bookings()
               )}
+
             </TabPane>
           </TabContent>
         </div>
       </div>
+
     </React.Fragment>
   );
   const mediaQuery = window.matchMedia('(min-width: 992px)')
@@ -940,6 +976,28 @@ const Bookings = ({ accountType = null }) => {
           ) : null}
         </div>
       )}
+      <Modal
+        isOpen={isOpenPDF}
+        element={
+          <>
+            <div className="container media-gallery portfolio-section grid-portfolio ">
+              <div className="theme-title">
+                <div className="media">
+                  <div className="media-body media-body text-right">
+                    <div className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { setIsOpenPDF(false) }} > <X /> </div>
+                  </div>
+                </div>
+              </div>
+              <div className="d-flex flex-column  align-items-center">
+                <h1 className="p-3">Report</h1>
+                <embed src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedReport}`} width="100%" height="500px" allowfullscreen />
+              </div>
+              <div className="justify-content-center">
+              </div>
+            </div>
+          </>
+        }
+      />
     </React.Fragment>
   );
 };

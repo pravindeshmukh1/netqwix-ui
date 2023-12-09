@@ -4,7 +4,7 @@ import { SocketContext } from "../../socket";
 import { EVENTS } from "../../../../helpers/events";
 import { AccountType } from "../../../common/constants";
 
-const StartMeeting = ({ isClose, accountType, traineeInfo, trainerInfo }) => {
+const StartMeeting = ({ id, isClose, accountType, traineeInfo, trainerInfo }) => {
   const socket = useContext(SocketContext);
 
   socket.on(EVENTS.VIDEO_CALL.ON_CLOSE, () => {
@@ -18,6 +18,7 @@ const StartMeeting = ({ isClose, accountType, traineeInfo, trainerInfo }) => {
   return (
     <div className={mediaQuery.matches ? "mr-3 full-height" : "mr-3"}>
       <HandleVideoCall
+        id={id}
         isClose={isClose}
         accountType={accountType}
         fromUser={
