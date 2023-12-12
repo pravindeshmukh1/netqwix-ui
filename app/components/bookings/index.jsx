@@ -408,8 +408,8 @@ const Bookings = ({ accountType = null }) => {
                       <div className="row">
                         {selectedClips.map((clp, index) => (<>
                           <div key={index} className="col-md-6 col-sm-12 col-xs-12 p-2" >
-                            <video className="videoStyle" controls>
-                              <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                            <video className="videoStyle" controls preload="metadata">
+                              <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}#t=0.01`} type="video/mp4" />
                             </video>
                             <div className="col">
                               <dl className="row">
@@ -551,13 +551,14 @@ const Bookings = ({ accountType = null }) => {
                               <div className={`block-content`}>
                                 <div className="row">
                                   {selectedClips?.map((clp, index) => {
-                                    return <div key={index} style={{ borderRadius: 5, position: "relative" }}>
-                                      <video style={{ width: "25vw" }} className="p-2">
-                                        <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                                    return <div key={index} style={{ borderRadius: 5, position: "relative", border: "1px solid #ebebeb", marginLeft: "15px" }} className={`col-5`}>
+                                      <video style={{ width: "100%", maxHeight: "200px", height: "100%" }} preload="metadata">
+                                        <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}#t=0.01`} type="video/mp4" />
                                       </video>
-                                      <span style={{ position: "absolute", right: 5, top: -3, cursor: "pointer", background: "red", borderRadius: "50%", padding: "0px 6px", color: "#fff" }}
+                                      <span style={{ position: "absolute", right: -5, top: -3, cursor: "pointer", background: "red", borderRadius: "50%", padding: "0px 6px", color: "#fff" }}
                                         onClick={() => {
                                           var temp = JSON.parse(JSON.stringify(selectedClips));
+                                          setSelectedClips([])
                                           temp = temp.filter(val => val._id !== clp?._id)
                                           setSelectedClips(temp);
                                         }}
@@ -567,6 +568,7 @@ const Bookings = ({ accountType = null }) => {
                                 </div>
                               </div>
                             </div> : <></>}
+                            <div style={{ marginTop: "30px" }}></div>
                             {clips?.length && clips?.map((cl, ind) => <div className={`collapse-block ${cl?.show ? "" : "open"}`}>
                               <h5 className="block-title pb-0"> {cl?._id}<label className="badge badge-primary sm ml-2">{cl?.clips?.length}</label></h5>
                               <div className={`block-content ${cl?.show ? "d-none" : ""}`}>
@@ -579,13 +581,13 @@ const Bookings = ({ accountType = null }) => {
                                       style={{ borderRadius: 5 }}
                                       onClick={() => {
                                         if (!sld && selectedClips?.length < 2) {
-                                          selectedClips.push(clp);
+                                          selectedClips?.push(clp);
                                           setSelectedClips([...selectedClips]);
                                         }
                                       }}
                                     >
-                                      <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "17vw" }} className="p-2"  >
-                                        <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                                      <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "98%", maxHeight: "150px", height: "100%" }} preload="metadata">
+                                        <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}#t=0.01`} type="video/mp4" />
                                       </video>
                                     </div>
                                   })}

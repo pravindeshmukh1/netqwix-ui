@@ -228,13 +228,13 @@ const FileSection = (props) => {
                           className={`col-4 p-1`}
                           style={{ borderRadius: 5 }}
                           onClick={() => {
-                            setSelectedVideo(`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`)
+                            setSelectedVideo(`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}#t=01`)
                             setIsOpen(true)
                           }}
                         >
                           <Tooltip title={clp?.title} position="top" trigger="mouseenter">
-                            <video style={{ width: "80%", height: "80%" }}  >
-                              <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                            <video style={{ width: "80%", height: "80%" }} preload="metadata">
+                              <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}#t=01`} type="video/mp4" />
                             </video>
                           </Tooltip>
                         </div>
@@ -274,13 +274,13 @@ const FileSection = (props) => {
                           className={`col-4 p-1`}
                           style={{ borderRadius: 5 }}
                           onClick={() => {
-                            setSelectedVideo(`https://netquix.s3.ap-south-1.amazonaws.com/${clp?.clips?._id}`)
+                            setSelectedVideo(`https://netquix.s3.ap-south-1.amazonaws.com/${clp?.clips?._id}#t=01`)
                             setIsOpen(true)
                           }}
                         >
                           <Tooltip title={clp?.clips?.title} position="top" trigger="mouseenter">
-                            <video style={{ width: "80%", height: "80%" }}  >
-                              <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?.clips?._id}`} type="video/mp4" />
+                            <video style={{ width: "80%", height: "80%" }} preload="metadata">
+                              <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?.clips?._id}#t=01`} type="video/mp4" />
                             </video>
                           </Tooltip>
                         </div>
@@ -598,13 +598,13 @@ const FileSection = (props) => {
                         className={`col-6 p-1`}
                         style={{ borderRadius: 5 }}
                         onClick={() => {
-                          setSelectedVideo("https://v.pinimg.com/videos/mc/720p/f6/88/88/f68888290d70aca3cbd4ad9cd3aa732f.mp4")
+                          setSelectedVideo("https://v.pinimg.com/videos/mc/720p/f6/88/88/f68888290d70aca3cbd4ad9cd3aa732f.mp4#t=01")
                           setIsOpen(true)
                         }}
                       >
                         <Tooltip title="Title" position="top" trigger="mouseenter">
-                          <video style={{ width: "100%", height: "100%" }}  >
-                            <source src={"https://v.pinimg.com/videos/mc/720p/f6/88/88/f68888290d70aca3cbd4ad9cd3aa732f.mp4"} type="video/mp4" />
+                          <video style={{ width: "100%", height: "100%" }} preload="metadata">
+                            <source src={"https://v.pinimg.com/videos/mc/720p/f6/88/88/f68888290d70aca3cbd4ad9cd3aa732f.mp4#t=01"} type="video/mp4" />
                           </video>
                         </Tooltip>
                       </div>
@@ -634,7 +634,7 @@ const FileSection = (props) => {
                     <X />
                   </div>
                 </div>
-                <video style={{ width: "100%", height: "70%" }} autoplay controls   >
+                <video style={{ width: "100%", height: "70%" }} autoplay controls preload="metadata">
                   <source src={selectedVideo} type="video/mp4" />
                 </video>
               </div>

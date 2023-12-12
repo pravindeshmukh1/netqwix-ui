@@ -950,7 +950,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
   };
 
   const handleTimeUpdate1 = () => {
-    progressBarRef.current.value = selectedVideoRef1?.current?.currentTime;
+    progressBarRef.current.value = selectedVideoRef1?.current?.currentTime || 0;
     if (selectedVideoRef1.current.duration === selectedVideoRef1.current.currentTime) {
       togglePlay("one")
       selectedVideoRef1.current.currentTime = 0;
@@ -986,7 +986,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
   // }, [selectedVideoRef2?.current?.duration, selectedVideoRef1?.current?.duration, selectedClips?.length])
 
   const handleTimeUpdate2 = () => {
-    progressBarRef2.current.value = selectedVideoRef2?.current?.currentTime;
+    progressBarRef2.current.value = selectedVideoRef2?.current?.currentTime || 0;
     if (selectedVideoRef2.current.duration === selectedVideoRef2.current.currentTime) {
       togglePlay("two")
       selectedVideoRef2.current.currentTime = 0;
@@ -1020,14 +1020,26 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
       number: number
     });
   };
+  var pdf = new jsPDF();
 
   const generatePDF = () => {
     const content = document.getElementById("generate-report")
     html2canvas(content, { useCORS: true })
       .then(async (canvas) => {
         const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF();
-        pdf.addImage(imgData, 'JPEG', 0, 0);
+
+        // Calculate the width of the page
+        var pageWidth = pdf.internal.pageSize.width;
+
+        // Calculate the aspect ratio of the canvas
+        var aspectRatio = canvas.width / canvas.height;
+
+        // Calculate the height to maintain the aspect ratio
+        var imgHeight = pageWidth / aspectRatio;
+
+        // Add the canvas as an image to the PDF
+        pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, imgHeight);
+        // pdf.save('yourDocument.pdf');
 
         // Get the data URL of the PDF
         const generatedPdfDataUrl = pdf.output('dataurlstring');
@@ -1156,7 +1168,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                   </div>
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                  <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate2}>
+                  <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate2} >
                     <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
                   </video>
                   <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>

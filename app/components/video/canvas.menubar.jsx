@@ -351,7 +351,7 @@ export const CanvasMenuBar = ({
                           </h5>
                           {/*  NORMAL  STRUCTURE END  */}
                           <div className={`block-content`}>
-                            <div className="row">
+                            <div className="row" style={{ margin: 0 }}>
                               {cl?.clips.map((clp, index) => {
                                 var sld = selectClips.find(val => val?._id === clp?._id)
                                 return <div
@@ -369,8 +369,8 @@ export const CanvasMenuBar = ({
                                     }
                                   }}
                                 >
-                                  <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "80%", height: "80%" }}  >
-                                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                                  <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "98%", maxHeight: "150px", height: "100%", marginBottom: "10px" }} preload="metadata">
+                                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}#t=01`} type="video/mp4" />
                                   </video>
                                 </div>
                               })}
@@ -402,7 +402,7 @@ export const CanvasMenuBar = ({
                           </h5>
                           {/*  NORMAL  STRUCTURE END  */}
                           <div className={`block-content `}>
-                            <div className="row">
+                            <div className="row" style={{ margin: 0 }}>
                               {cl?.clips.map((clp, index) => {
                                 var sld = selectClips.find(val => val?._id === clp?.clips?._id)
                                 return <div
@@ -420,8 +420,8 @@ export const CanvasMenuBar = ({
                                     }
                                   }}
                                 >
-                                  <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "80%", height: "80%" }}  >
-                                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?.clips?._id}`} type="video/mp4" />
+                                  <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "98%", maxHeight: "150px", height: "100%", marginBottom: "10px" }} preload="metadata">
+                                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?.clips?._id}#t=01`} type="video/mp4" />
                                   </video>
                                 </div>
                               })}
@@ -437,7 +437,7 @@ export const CanvasMenuBar = ({
                     <div className="media-gallery portfolio-section grid-portfolio">
                       <div className={`collapse-block open`}>
                         <div className={`block-content `}>
-                          <div className="row">
+                          <div className="row" style={{ margin: 0 }}>
                             {[...Array(8).keys()].map((clps, index) => {
                               var clp = {
                                 "_id": "656acd81cd2d7329ed0d8e91",
@@ -463,8 +463,8 @@ export const CanvasMenuBar = ({
                                   }
                                 }}
                               >
-                                <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "80%", height: "80%", display: "flex", justifyContent: "center" }}  >
-                                  <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                                <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "98%", maxHeight: "150px", height: "100%", marginBottom: "10px", display: "flex", justifyContent: "center" }} preload="metadata">
+                                  <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}#t=01`} type="video/mp4" />
                                 </video>
                               </div>
                             })}
