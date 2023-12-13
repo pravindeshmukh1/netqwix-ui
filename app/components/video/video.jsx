@@ -720,6 +720,28 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
 
   const takeScreenshot = () => {
     const targetElement = document.body;
+    const creationBarItem = document.querySelector('.creationBarItem');
+    const callActionButtons = document.querySelector('.call-action-buttons');
+    const mainNav = document.querySelector('.main-nav');
+
+
+    // Hide elements with a smooth transition
+    if (creationBarItem) {
+      creationBarItem.style.transition = 'opacity 2s'; // Adjust the duration based on your needs
+      creationBarItem.style.opacity = '0';
+    }
+
+    if (callActionButtons) {
+      callActionButtons.style.transition = 'opacity 2s'; // Adjust the duration based on your needs
+      callActionButtons.style.opacity = '0';
+    }
+    if (mainNav) {
+      mainNav.style.transition = 'opacity 2s'; // Set duration to 0s
+      mainNav.style.opacity = '0';
+    }
+
+
+
     html2canvas(targetElement, { useCORS: true }).then((canvas) => {
       // document.body.appendChild(canvas);
       const dataUrl = canvas.toDataURL('image/png');
@@ -729,6 +751,19 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
         imageUrl: dataUrl
       })
       setScreenShots([...screenShots])
+      if (creationBarItem) {
+        creationBarItem.style.transition = 'opacity 2s';
+        creationBarItem.style.opacity = '1';
+      }
+
+      if (callActionButtons) {
+        callActionButtons.style.transition = 'opacity 2s';
+        callActionButtons.style.opacity = '1';
+      }
+      if (mainNav) {
+        mainNav.style.transition = 'opacity 2s'; // Adjust the duration based on your needs
+        mainNav.style.opacity = '1';
+      }
 
       toast.success("The screenshot taken successfully.", { type: "success" });
 
@@ -1148,9 +1183,9 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
           <div className="col-lg-8 col-md-8 col-sm-12 " id="third" style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "space-around", flexDirection: "column" }}>
             <div className="no-user-joined font-weight-bold text-center" style={{ margin: displayMsg?.msg ? 'auto' : '', zIndex: displayMsg?.msg ? 8 : 1 }}>{displayMsg?.msg}</div>
             {selectedClips?.length != 0 &&
-              <div className="row">
+              <div className="row" style={mediaQuery.matches ? { height: "33vw" } : {}}>
                 <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                  <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate1} >
+                  <video style={{ height: "25vw", width: "inherit", borderRadius: 10 }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate1} >
                     <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
                   </video>
                   <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -1168,7 +1203,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                   </div>
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                  <video style={{ width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate2} >
+                  <video style={{ height: "25vw", width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate2} >
                     <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
                   </video>
                   <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>

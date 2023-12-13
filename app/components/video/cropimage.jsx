@@ -186,7 +186,7 @@ const CropImage = ({ isOpenCrop, setIsOpenCrop, selectImage, screenShots, setScr
                             )}
                             {!!completedCrop && (
                                 <>
-                                    <div>
+                                    <div style={{ display: "none" }}>
                                         <canvas
                                             ref={previewCanvasRef}
                                             style={{
