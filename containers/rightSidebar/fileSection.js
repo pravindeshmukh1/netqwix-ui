@@ -134,10 +134,15 @@ const FileSection = (props) => {
   const [isOpenPlayVideo, setIsOpen] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState("");
   const [traineeClip, setTraineeClips] = useState([]);
+  const [accountType, setAccountType] = useState("");
 
   useEffect(() => {
     if (!isOpen) getMyClips()
   }, [isOpen])
+
+  useEffect(() => {
+    setAccountType(localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE));
+  }, []);
 
   const getMyClips = async () => {
     setClips([])
@@ -172,7 +177,7 @@ const FileSection = (props) => {
       <VideoUpload />
       <div className="theme-tab">
         <Nav tabs>
-          {localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE) === "Trainer" && <NavItem className="ml-5px">
+          {accountType === "Trainer" && <NavItem className="ml-5px">
             <NavLink
               className={`button-effect ${activeTab === "media" ? "active" : ""
                 }`}
@@ -181,7 +186,7 @@ const FileSection = (props) => {
               My Clips
             </NavLink>
           </NavItem>}
-          {localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE) === "Trainer" && <NavItem className="ml-5px">
+          {accountType === "Trainer" && <NavItem className="ml-5px">
             <NavLink
               className={`button-effect ${activeTab === "trainee" ? "active" : ""
                 }`}
@@ -190,7 +195,7 @@ const FileSection = (props) => {
               Trainee
             </NavLink>
           </NavItem>}
-          {localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE) === "Trainer" && <NavItem className="ml-5px">
+          {accountType === "Trainer" && <NavItem className="ml-5px">
             <NavLink
               className={`button-effect ${activeTab === "docs" ? "active" : ""
                 }`}

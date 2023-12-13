@@ -52,9 +52,7 @@ const Index = () => {
   const CloseAppSidebar = () => {
     document.querySelector(".chitchat-main").classList.remove("small-sidebar");
     document.querySelector(".app-sidebar").classList.remove("active");
-    document.body.className = `main-page ${localStorage.getItem(
-      "layout_mode"
-    )}`;
+    document.body.className = `main-page ${localStorage.getItem("layout_mode")}`;
   };
 
   return (
