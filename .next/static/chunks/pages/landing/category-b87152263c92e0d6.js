@@ -1,0 +1,1 @@
+(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[2707],{35673:function(n,_,u){(window.__NEXT_P=window.__NEXT_P||[]).push(["/landing/category",function(){return u(80227)}])}},function(n){n.O(0,[9290,1312,8369,8781,23,5706,4193,227,9774,2888,179],function(){return n(n.s=35673)}),_N_E=n.O()}]);

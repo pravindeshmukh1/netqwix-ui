@@ -35,6 +35,7 @@ export default function MyAppComponent({ Component, pageProps }) {
     } else {
       setCurrentUser(localStorageUser);
     }
+
     // if (currentUser !== null) {
     //   router.push("/"); // you can get login user
     // } else {
