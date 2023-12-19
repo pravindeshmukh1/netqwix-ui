@@ -13,6 +13,7 @@ import { useDebounceEffect } from "./useDebounceEffect";
 import "react-image-crop/dist/ReactCrop.css";
 import { X } from "react-feather";
 import { Button } from "reactstrap";
+import { cropImage } from "../videoupload/videoupload.api";
 
 function centerAspectCrop(
     mediaWidth,
@@ -33,7 +34,7 @@ function centerAspectCrop(
         mediaHeight,
     );
 }
-const CropImage = ({ isOpenCrop, setIsOpenCrop, selectImage, screenShots, setScreenShots }) => {
+const CropImage = ({ isOpenCrop, setIsOpenCrop, selectImage, screenShots, setScreenShots, handleCropImage }) => {
     const [imgSrc, setImgSrc] = useState("");
     const previewCanvasRef = useRef(null);
     const imgRef = useRef(null);
@@ -46,7 +47,25 @@ const CropImage = ({ isOpenCrop, setIsOpenCrop, selectImage, screenShots, setScr
     const [aspect, setAspect] = useState(16 / 9);
 
     useEffect(() => {
-        if (screenShots[selectImage]?.imageUrl) setImgSrc(screenShots[selectImage]?.imageUrl)
+
+        const fetchImage = async () => {
+            try {
+                const response = await fetch(`https://netquix.s3.ap-south-1.amazonaws.com/${screenShots[selectImage]?.imageUrl}`);
+                const blob = await response.blob();
+                const reader = new FileReader();
+
+                reader.onloadend = () => {
+                    const base64data = reader.result.split(',')[1];
+                    setImgSrc(`data:image/jpeg;base64,${base64data}`);
+                };
+
+                reader.readAsDataURL(blob);
+            } catch (error) {
+                console.error('Error fetching or converting image:', error);
+            }
+        };
+        if (screenShots[selectImage]?.imageUrl) fetchImage();
+
     }, [selectImage, screenShots[selectImage]?.imageUrl])
 
     function onImageLoad(e) {
@@ -88,7 +107,7 @@ const CropImage = ({ isOpenCrop, setIsOpenCrop, selectImage, screenShots, setScr
         );
         // You might want { type: "image/jpeg", quality: <0 to 1> } to
         // reduce image size
-        const blob = await offscreen.convertToBlob({ type: "image/png" });
+        const blob = await offscreen?.convertToBlob({ type: "image/png" });
 
         if (blobUrlRef.current) {
             URL.revokeObjectURL(blobUrlRef.current);
@@ -99,15 +118,17 @@ const CropImage = ({ isOpenCrop, setIsOpenCrop, selectImage, screenShots, setScr
 
             reader.onloadend = () => {
                 const base64String = reader.result;
-                screenShots[selectImage].imageUrl = base64String
-                setScreenShots([...screenShots])
-                setIsOpenCrop(false)
+                // screenShots[selectImage].imageUrl = base64String
+                handleCropImage(screenShots[selectImage].imageUrl, blob)
+                // setScreenShots([...screenShots])
+                // setIsOpenCrop(false)
             };
             reader.readAsDataURL(blob);
         }
 
         blobUrlRef.current = URL.createObjectURL(blob);
     }
+
 
     useDebounceEffect(
         async () => {

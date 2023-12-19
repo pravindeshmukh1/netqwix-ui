@@ -24,6 +24,7 @@ import CropImage from "./cropimage";
 import jsPDF from "jspdf";
 import { getS3SignPdfUrl } from "./video.api";
 import axios from "axios";
+import { createReport, cropImage, getReport, removeImage, screenShotTake } from "../videoupload/videoupload.api";
 
 let storedLocalDrawPaths = { sender: [], receiver: [] };
 let selectedShape = null;
@@ -87,6 +88,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
   const [isOpenCrop, setIsOpenCrop] = useState(false);
   const [screenShots, setScreenShots] = useState([]);
   const [reportObj, setReportObj] = useState({ title: "", topic: "" });
+  const [reportArr, setReportArr] = useState([]);
   const [selectImage, setSelectImage] = useState(0)
 
   useEffect(() => {
@@ -718,6 +720,17 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
     }
   };
 
+  const getReportData = async () => {
+    var res = await getReport({ sessions: id, trainer: fromUser?._id, trainee: toUser?._id, })
+    setScreenShots(res?.data?.reportData)
+    setReportObj({ title: res?.data?.title, topic: res?.data?.description })
+  }
+
+  const showReportData = async () => {
+    getReportData()
+    setIsOpenReport(true)
+  }
+
   const takeScreenshot = () => {
     const targetElement = document.body;
     const creationBarItem = document.querySelector('.creationBarItem');
@@ -742,15 +755,15 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
 
 
 
-    html2canvas(targetElement, { useCORS: true }).then((canvas) => {
+    html2canvas(targetElement, { useCORS: true }).then(async (canvas) => {
       // document.body.appendChild(canvas);
       const dataUrl = canvas.toDataURL('image/png');
-      screenShots.push({
-        title: "",
-        description: "",
-        imageUrl: dataUrl
-      })
-      setScreenShots([...screenShots])
+      // screenShots.push({
+      //   title: "",
+      //   description: "",
+      //   imageUrl: dataUrl
+      // })
+      // setScreenShots([...screenShots])
       if (creationBarItem) {
         creationBarItem.style.transition = 'opacity 2s';
         creationBarItem.style.opacity = '1';
@@ -765,6 +778,10 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
         mainNav.style.opacity = '1';
       }
 
+      var res = await screenShotTake({ sessions: id, trainer: fromUser?._id, trainee: toUser?._id, })
+      const blob = await fetch(dataUrl).then((res) => res.blob());
+      if (res?.data?.url) pushProfilePhotoToS3(res?.data?.url, blob)
+
       toast.success("The screenshot taken successfully.", { type: "success" });
 
       // const link = document.createElement('a');
@@ -776,7 +793,14 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
     });
   };
 
-  console.log("screenShots", screenShots);
+
+  async function pushProfilePhotoToS3(presignedUrl, uploadPhoto) {
+    const myHeaders = new Headers({ 'Content-Type': 'image/*' });
+    await axios.put(presignedUrl, uploadPhoto, {
+      headers: myHeaders,
+    })
+    return true
+  }
 
 
   const mediaQuery = window.matchMedia('(min-width: 768px)')
@@ -877,14 +901,13 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
           <Aperture />
         </div> : <></>}
 
-        {(accountType === AccountType.TRAINER && screenShots?.length) ? <div
+        {(accountType === AccountType.TRAINER) ? <div
           className={`icon-btn btn-light  button-effect ${mediaQuery.matches ? "btn-xl" : "btn-sm"} ml-3`}
-          onClick={() => { setIsOpenReport(true) }}
+          onClick={showReportData}
         >
           <FilePlus />
-        </div> : <></>}
-
-
+        </div> : <></>
+        }
 
 
         <Modal isOpen={isOpenConfirm} toggle={() => { setIsOpenConfirm(false) }}>
@@ -904,7 +927,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
             </Button>
           </ModalFooter>
         </Modal>
-      </div>
+      </div >
     );
   };
 
@@ -951,8 +974,6 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
   socket.on(EVENTS.ON_VIDEO_SHOW, ({ isClicked }) => {
     setMaxMin(isClicked)
   });
-
-  console.log("isPlaying", isPlaying);
 
 
   const togglePlay = (num) => {
@@ -1055,47 +1076,90 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
       number: number
     });
   };
+
+  useEffect(() => {
+    setScreenShot();
+  }, [screenShots?.length])
+
+  const setScreenShot = async () => {
+
+    var newReportImages = [];
+
+    for (let index = 0; index < screenShots?.length; index++) {
+      const element = screenShots[index];
+      try {
+        const response = await fetch(`https://netquix.s3.ap-south-1.amazonaws.com/${element?.imageUrl}`);
+        const blob = await response.blob();
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64data = reader.result.split(',')[1];
+          newReportImages[index] = { ...element, imageUrl: `data:image/jpeg;base64,${base64data}` }
+        };
+        reader.readAsDataURL(blob);
+      } catch (error) {
+        console.error('Error fetching or converting image:', error);
+      }
+    }
+
+    setReportArr([...newReportImages])
+  }
+
   var pdf = new jsPDF();
 
-  const generatePDF = () => {
-    const content = document.getElementById("generate-report")
-    html2canvas(content, { useCORS: true })
-      .then(async (canvas) => {
-        const imgData = canvas.toDataURL('image/png');
+  const generatePDF = async () => {
 
-        // Calculate the width of the page
-        var pageWidth = pdf.internal.pageSize.width;
+    const content = document.getElementById("report-pdf")
+    content.style.removeProperty("display");
 
-        // Calculate the aspect ratio of the canvas
-        var aspectRatio = canvas.width / canvas.height;
+    html2canvas(content).then(async (canvas) => {
+      const imgData = canvas.toDataURL('image/png');
 
-        // Calculate the height to maintain the aspect ratio
-        var imgHeight = pageWidth / aspectRatio;
+      // Calculate the width of the page
+      var pageWidth = pdf.internal.pageSize.width;
 
-        // Add the canvas as an image to the PDF
-        pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, imgHeight);
-        // pdf.save('yourDocument.pdf');
+      // Calculate the aspect ratio of the canvas
+      var aspectRatio = canvas.width / canvas.height;
 
-        // Get the data URL of the PDF
-        const generatedPdfDataUrl = pdf.output('dataurlstring');
+      // Calculate the height to maintain the aspect ratio
+      var imgHeight = pageWidth / aspectRatio;
 
-        // Convert data URL to Blob
-        const byteCharacters = atob(generatedPdfDataUrl.split(',')[1]);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const pdfBlob = new Blob([new Uint8Array(byteNumbers)], { type: 'application/pdf' });
+      // Add the canvas as an image to the PDF
+      pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, imgHeight);
+      // pdf.save('yourDocument.pdf');
 
-        // Create a File from the Blob
-        const pdfFile = new File([pdfBlob], 'generated_pdf.pdf', { type: 'application/pdf' });
+      // Get the data URL of the PDF
+      const generatedPdfDataUrl = pdf.output('dataurlstring');
 
-        var link = await createUploadLink()
-        if (link) pushProfilePhotoToS3(link, pdfFile)
+      // Convert data URL to Blob
+      const byteCharacters = atob(generatedPdfDataUrl.split(',')[1]);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const pdfBlob = new Blob([new Uint8Array(byteNumbers)], { type: 'application/pdf' });
+
+      // Create a File from the Blob
+      const pdfFile = new File([pdfBlob], 'generated_pdf.pdf', { type: 'application/pdf' });
+
+      var link = await createUploadLink();
+      if (link) pushProfilePDFToS3(link, pdfFile);
+
+      content.style.display = "none";
+
+      var res = await createReport({
+        sessions: id,
+        trainer: fromUser?._id,
+        trainee: toUser?._id,
+        title: reportObj?.title,
+        topic: reportObj?.topic,
+        reportData: screenShots,
       })
+      setIsOpenReport(false)
+    })
   };
 
-  async function pushProfilePhotoToS3(presignedUrl, uploadPdf) {
+
+  async function pushProfilePDFToS3(presignedUrl, uploadPdf) {
     const myHeaders = new Headers({ 'Content-Type': 'application/pdf' });
     axios.put(presignedUrl, uploadPdf, {
       headers: myHeaders,
@@ -1117,6 +1181,22 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
     if (data?.url) return data?.url
     else return ""
   }
+
+
+  const handleRemoveImage = async (filename) => {
+    var res = await removeImage({ sessions: id, trainer: fromUser?._id, trainee: toUser?._id, filename: filename })
+    getReportData()
+  }
+
+
+
+  const handleCropImage = async (filename, blob) => {
+    var res = await cropImage({ sessions: id, trainer: fromUser?._id, trainee: toUser?._id, oldFile: filename })
+    if (res?.data?.url) await pushProfilePhotoToS3(res?.data?.url, blob)
+    getReportData()
+    setIsOpenCrop(false)
+  }
+
 
   return (
     <React.Fragment>
@@ -1294,7 +1374,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                       return <>
                         <div className="col-md-6 col-sm-12 col-xs-12 p-2" style={{ position: "relative" }}>
                           <img style={{ width: "100%", height: "100%", maxHeight: "280px", border: "1px solid #ced4da", marginTop: "10px" }}
-                            src={sst?.imageUrl}
+                            src={`https://netquix.s3.ap-south-1.amazonaws.com/${sst?.imageUrl}`}
                             alt="Screen Shot"
                           />
                           <div style={{ position: "absolute", bottom: 0 }} >
@@ -1311,8 +1391,9 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                             <div
                               className="icon-btn btn-sm btn-outline-light close-apps pointer"
                               onClick={() => {
-                                var temp = screenShots.filter((st, index) => index !== i)
-                                setScreenShots([...temp])
+                                handleRemoveImage(sst?.imageUrl)
+                                // var temp = screenShots.filter((st, index) => index !== i)
+                                // setScreenShots([...temp])
                               }}
                             >
                               <Trash2 />
@@ -1353,17 +1434,42 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                     <Button className="mx-3" color="primary" onClick={() => { generatePDF() }}>Save</Button>
                   </div>
                 </div>
+
+                <div id="report-pdf" style={{ display: "none", padding: "30px 0px" }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <p style={{ textTransform: 'uppercase', marginTop: '0px', fontSize: '40px', fontWeight: '600' }}>Game Plan</p>
+                  </div>
+                  <div>
+                    <h2 style={{ margin: '0px' }}>Topic: {reportObj?.title}</h2>
+                    <h2 style={{ margin: '0px' }}>NAME: {reportObj?.topic}</h2>
+                  </div>
+                  <hr style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: 'brown' }} />
+                  {reportArr?.map((sst, i) => {
+                    return <>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', alignItems: 'center' }}>
+                        <div style={{ textAlign: 'center' }}>
+                          <img src={sst?.imageUrl} alt="image" style={{ height: '260px', width: '240px', objectFit: 'cover' }} />
+                        </div>
+                        <div>
+                          <p style={{ fontSize: '30px', fontWeight: '600', margin: '0px' }}>TIP #{i + 1} {sst?.title}</p>
+                          <p>{sst?.description}</p>
+                        </div>
+                      </div>
+                      <hr style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: 'brown' }} />
+                    </>
+                  })}
+                </div>
               </div>
+              <CropImage
+                isOpenCrop={isOpenCrop}
+                setIsOpenCrop={setIsOpenCrop}
+                selectImage={selectImage}
+                screenShots={screenShots}
+                setScreenShots={setScreenShots}
+                handleCropImage={handleCropImage}
+              />
             </>
           }
-        />
-
-        <CropImage
-          isOpenCrop={isOpenCrop}
-          setIsOpenCrop={setIsOpenCrop}
-          selectImage={selectImage}
-          screenShots={screenShots}
-          setScreenShots={setScreenShots}
         />
       </div>
     </React.Fragment >
