@@ -2,20 +2,20 @@
   "../containers/rightSidebar/fileSection.js -> photoswipe": {
     "id": 15826,
     "files": [
-      "static/chunks/fe75db45.b48353c0b1964185.js"
+      "static/chunks/fe75db45.b1d3492393ff4bb4.js"
     ]
   },
   "../containers/rightSidebar/profileSection.js -> photoswipe": {
     "id": 15826,
     "files": [
-      "static/chunks/fe75db45.b48353c0b1964185.js"
+      "static/chunks/fe75db45.b1d3492393ff4bb4.js"
     ]
   },
   "../node_modules/jspdf/dist/jspdf.es.min.js -> canvg": {
     "id": 34668,
     "files": [
-      "static/chunks/72a30a16.b67c54773a19c787.js",
-      "static/chunks/3807.97ed84dfa9d23c68.js"
+      "static/chunks/72a30a16.585ed418152e5048.js",
+      "static/chunks/4828.6619d67167fe5392.js"
     ]
   },
   "../node_modules/jspdf/dist/jspdf.es.min.js -> dompurify": {
