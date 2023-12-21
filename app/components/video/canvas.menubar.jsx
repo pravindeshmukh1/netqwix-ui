@@ -369,8 +369,8 @@ export const CanvasMenuBar = ({
                                     }
                                   }}
                                 >
-                                  <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "98%", maxHeight: "150px", height: "100%", marginBottom: "10px" }} preload="metadata">
-                                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}#t=01`} type="video/mp4" />
+                                  <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "98%", maxHeight: "150px", height: "100%", marginBottom: "10px" }}  >
+                                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
                                   </video>
                                 </div>
                               })}
@@ -420,8 +420,8 @@ export const CanvasMenuBar = ({
                                     }
                                   }}
                                 >
-                                  <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "98%", maxHeight: "150px", height: "100%", marginBottom: "10px" }} preload="metadata">
-                                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?.clips?._id}#t=01`} type="video/mp4" />
+                                  <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "98%", maxHeight: "150px", height: "100%", marginBottom: "10px" }}  >
+                                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?.clips?._id}`} type="video/mp4" />
                                   </video>
                                 </div>
                               })}
@@ -463,8 +463,8 @@ export const CanvasMenuBar = ({
                                   }
                                 }}
                               >
-                                <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "98%", maxHeight: "150px", height: "100%", marginBottom: "10px", display: "flex", justifyContent: "center" }} preload="metadata">
-                                  <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}#t=01`} type="video/mp4" />
+                                <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "98%", maxHeight: "150px", height: "100%", marginBottom: "10px", display: "flex", justifyContent: "center" }}  >
+                                  <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
                                 </video>
                               </div>
                             })}
