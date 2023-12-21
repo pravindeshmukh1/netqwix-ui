@@ -67,8 +67,6 @@ const Bookings = ({ accountType = null }) => {
   const [activeTabs, setActiveTab] = useState(bookingButton[0]);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenPDF, setIsOpenPDF] = useState(false);
-  const [selectedReport, setSelectedReport] = useState("");
   const [isOpenID, setIsOpenID] = useState("");
   const [clips, setClips] = useState([]);
   const [selectedClips, setSelectedClips] = useState([]);
@@ -375,18 +373,6 @@ const Bookings = ({ accountType = null }) => {
             </React.Fragment>
           )
         }
-        {report &&
-          <button
-            className={`btn btn-success button-effect btn-sm ml-2`}
-            type="button"
-            onClick={() => {
-              setSelectedReport(report)
-              setIsOpenPDF(true)
-            }}
-          >
-            Report
-          </button>
-        }
 
         <Modal
           isOpen={isOpen}
@@ -659,18 +645,7 @@ const Bookings = ({ accountType = null }) => {
             )}
           </React.Fragment>
         )}
-        {report &&
-          <button
-            className={`btn btn-success button-effect btn-sm ml-2`}
-            type="button"
-            onClick={() => {
-              setSelectedReport(report)
-              setIsOpenPDF(true)
-            }}
-          >
-            Report
-          </button>
-        }
+
       </React.Fragment>
     );
   };
@@ -978,28 +953,6 @@ const Bookings = ({ accountType = null }) => {
           ) : null}
         </div>
       )}
-      <Modal
-        isOpen={isOpenPDF}
-        element={
-          <>
-            <div className="container media-gallery portfolio-section grid-portfolio ">
-              <div className="theme-title">
-                <div className="media">
-                  <div className="media-body media-body text-right">
-                    <div className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { setIsOpenPDF(false) }} > <X /> </div>
-                  </div>
-                </div>
-              </div>
-              <div className="d-flex flex-column  align-items-center">
-                <h1 className="p-3">Report</h1>
-                <embed src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedReport}`} width="100%" height="500px" allowfullscreen />
-              </div>
-              <div className="justify-content-center">
-              </div>
-            </div>
-          </>
-        }
-      />
     </React.Fragment>
   );
 };

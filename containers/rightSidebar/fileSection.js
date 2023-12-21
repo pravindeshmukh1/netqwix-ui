@@ -5,7 +5,7 @@ import PhotoSwipeLightbox from "photoswipe/lightbox";
 import "photoswipe/style.css";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import { videouploadAction, videouploadState } from "../../app/components/videoupload/videoupload.slice";
-import { myClips, traineeClips } from "./fileSection.api";
+import { myClips, reports, traineeClips } from "./fileSection.api";
 import { LOCAL_STORAGE_KEYS } from "../../app/common/constants";
 import Modal from "../../app/common/modal";
 import VideoUpload from "../../app/components/videoupload";
@@ -135,6 +135,10 @@ const FileSection = (props) => {
   const [selectedVideo, setSelectedVideo] = useState("");
   const [traineeClip, setTraineeClips] = useState([]);
   const [accountType, setAccountType] = useState("");
+  const [reportsData, setReportsData] = useState([]);
+  const [isOpenPDF, setIsOpenPDF] = useState(false);
+  const [reportName, setReportName] = useState("");
+
 
   useEffect(() => {
     if (!isOpen) getMyClips()
@@ -151,7 +155,11 @@ const FileSection = (props) => {
     setClips(res?.data)
     var res2 = await traineeClips({})
     setTraineeClips(res2?.data)
+    var res3 = await reports({})
+    setReportsData(res3?.result || [])
   }
+
+  console.log("reportsData", reportsData);
 
   return (
     <div className="apps-content" id="files">
@@ -177,7 +185,8 @@ const FileSection = (props) => {
       <VideoUpload />
       <div className="theme-tab">
         <Nav tabs>
-          {accountType === "Trainer" && <NavItem className="ml-5px">
+
+          <NavItem className="ml-5px">
             <NavLink
               className={`button-effect ${activeTab === "media" ? "active" : ""
                 }`}
@@ -185,7 +194,7 @@ const FileSection = (props) => {
             >
               My Clips
             </NavLink>
-          </NavItem>}
+          </NavItem>
           {accountType === "Trainer" && <NavItem className="ml-5px">
             <NavLink
               className={`button-effect ${activeTab === "trainee" ? "active" : ""
@@ -204,6 +213,15 @@ const FileSection = (props) => {
               Netquix
             </NavLink>
           </NavItem>}
+
+          <NavItem className="ml-5px" style={{ marginTop: accountType === "Trainer" ? "10px" : "0px" }}>
+            <NavLink
+              className={`button-effect ${activeTab === "report" ? "active" : ""}`}
+              onClick={() => setActiveTab("report")}
+            >
+              Reports
+            </NavLink>
+          </NavItem>
         </Nav>
       </div>
       <div className="file-tab">
@@ -619,6 +637,46 @@ const FileSection = (props) => {
               </div>
             </div>
           </TabPane>
+          <TabPane tabId="report">
+            <div className="media-gallery portfolio-section grid-portfolio">
+              {reportsData?.length ? reportsData?.map((cl, ind) =>
+                <div className={`collapse-block ${!cl?.show ? "" : "open"}`}>
+                  <h5
+                    className="block-title"
+                    onClick={() => {
+                      var temp = reportsData
+                      temp = temp.map(vl => { return { ...vl, show: false } })
+                      temp[ind].show = true
+                      setReportsData([...temp])
+                    }}
+                  >
+                    <label className="badge badge-primary sm ml-2">{`${cl?._id?.day}/${cl?._id?.month}/${cl?._id?.year}`}</label>
+                  </h5>
+                  {/*  NORMAL  STRUCTURE END  */}
+                  <div className={`block-content ${!cl?.show ? "d-none" : ""}`}>
+                    {cl?.report.map((clp, index) => (
+                      <div className="row" >
+                        <dd className="ml-3">{index + 1}. {accountType === "Trainer" ? "Trainee" : "Trainer"} :</dd>
+                        <dt className="ml-1">{clp?.[accountType === "Trainer" ? "trainee" : "trainer"]?.fullname}</dt>
+                        <dd className="ml-3" style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            if (accountType === "Trainer") {
+
+                            } else {
+                              setIsOpenPDF(true)
+                              setReportName(clp?.session?.report)
+                            }
+                          }}
+                        >{accountType === "Trainer" ? "edit" : "view"}</dd>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : <div style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}>
+                <h5 className="block-title">  No Data Found</h5>
+              </div>}
+            </div>
+          </TabPane>
         </TabContent>
       </div>
 
@@ -642,6 +700,30 @@ const FileSection = (props) => {
                 <video style={{ width: "100%", height: "70%" }} autoplay controls  >
                   <source src={selectedVideo} type="video/mp4" />
                 </video>
+              </div>
+            </div>
+          </>
+        }
+      />
+
+
+      <Modal
+        isOpen={isOpenPDF}
+        element={
+          <>
+            <div className="container media-gallery portfolio-section grid-portfolio ">
+              <div className="theme-title">
+                <div className="media">
+                  <div className="media-body media-body text-right">
+                    <div className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { setIsOpenPDF(false) }} > <X /> </div>
+                  </div>
+                </div>
+              </div>
+              <div className="d-flex flex-column  align-items-center">
+                <h1 className="p-3">Report</h1>
+                <embed src={`https://netquix.s3.ap-south-1.amazonaws.com/${reportName}`} width="100%" height="500px" allowfullscreen />
+              </div>
+              <div className="justify-content-center">
               </div>
             </div>
           </>
