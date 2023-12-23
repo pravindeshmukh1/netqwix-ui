@@ -19,12 +19,13 @@ import { toast } from "react-toastify";
 import { max } from "lodash";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import html2canvas from 'html2canvas';
-import CusotomModal from "../../common/modal";
+import CustomModal from "../../common/modal";
 import CropImage from "./cropimage";
 import jsPDF from "jspdf";
 import { getS3SignPdfUrl } from "./video.api";
 import axios from "axios";
 import { createReport, cropImage, getReport, removeImage, screenShotTake } from "../videoupload/videoupload.api";
+import ReportModal from "./reportModal";
 
 let storedLocalDrawPaths = { sender: [], receiver: [] };
 let selectedShape = null;
@@ -90,6 +91,11 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
   const [reportObj, setReportObj] = useState({ title: "", topic: "" });
   const [reportArr, setReportArr] = useState([]);
   const [selectImage, setSelectImage] = useState(0)
+  const [volume, setVolume] = useState(1);
+  const [volume2, setVolume2] = useState(1);
+
+  const volumeInputRef = useRef(null);
+  const volumeInputRef2 = useRef(null);
 
   useEffect(() => {
     console.log(`fromUser && toUser --- `, fromUser, toUser);
@@ -727,7 +733,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
   }
 
   const showReportData = async () => {
-    getReportData()
+    // getReportData()
     setIsOpenReport(true)
   }
 
@@ -1077,6 +1083,24 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
     });
   };
 
+
+
+  const handleVolumeChange = () => {
+    // Update the video volume based on the input value (0 to 1)
+    const newVolume = parseFloat(volumeInputRef.current.value);
+    selectedVideoRef1.current.volume = newVolume;
+    setVolume(newVolume); // Update state
+  };
+
+
+
+  const handleVolumeChange2 = () => {
+    // Update the video volume based on the input value (0 to 1)
+    const newVolume = parseFloat(volumeInputRef2.current.value);
+    selectedVideoRef2.current.volume = newVolume;
+    setVolume2(newVolume); // Update state
+  };
+
   useEffect(() => {
     setScreenShot();
   }, [screenShots?.length])
@@ -1281,6 +1305,19 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                     />
                     <div><p style={{ margin: 0, marginLeft: "10px" }}>{videoTime?.remainingTime1}</p> </div>
                   </div>
+                  <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div><p style={{ margin: 0, marginRight: "10px" }}>Volume</p> </div>
+                    <input
+                      className="progress"
+                      ref={volumeInputRef}
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.1"
+                      value={volume}
+                      onChange={handleVolumeChange}
+                    />
+                  </div>
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                   <video style={{ height: "25vw", width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate2} >
@@ -1299,6 +1336,20 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                     />
                     <div><p style={{ margin: 0, marginLeft: "10px" }}>{videoTime?.remainingTime2}</p> </div>
                   </div>
+                  <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div><p style={{ margin: 0, marginRight: "10px" }}>Volume</p> </div>
+                    <input
+                      className="progress"
+                      ref={volumeInputRef2}
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.1"
+                      value={volume2}
+                      onChange={handleVolumeChange2}
+                    />
+                  </div>
+
                 </div>
               </div>
             }
@@ -1312,7 +1363,14 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
           </div>
         }
 
-        <CusotomModal
+
+        <ReportModal
+          currentReportData={{ session: id, trainer: fromUser?._id, trainee: toUser?._id }}
+          isOpenReport={isOpenReport}
+          setIsOpenReport={setIsOpenReport}
+        />
+
+        {/* <CustomModal
           isOpen={isOpenReport}
           element={
             <>
@@ -1470,7 +1528,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
               />
             </>
           }
-        />
+        /> */}
       </div>
     </React.Fragment >
   );

@@ -543,10 +543,8 @@ const Bookings = ({ accountType = null }) => {
                                       </video>
                                       <span style={{ position: "absolute", right: -5, top: -3, cursor: "pointer", background: "red", borderRadius: "50%", padding: "0px 6px", color: "#fff" }}
                                         onClick={() => {
-                                          var temp = JSON.parse(JSON.stringify(selectedClips));
-                                          setSelectedClips([])
-                                          temp = temp.filter(val => val._id !== clp?._id)
-                                          setSelectedClips(temp);
+                                          const updatedVideos = selectedClips.filter((video) => video._id !== clp?._id);
+                                          setSelectedClips(updatedVideos);
                                         }}
                                       >x</span>
                                     </div>

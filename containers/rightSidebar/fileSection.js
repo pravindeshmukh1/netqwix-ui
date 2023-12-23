@@ -9,6 +9,8 @@ import { myClips, reports, traineeClips } from "./fileSection.api";
 import { LOCAL_STORAGE_KEYS } from "../../app/common/constants";
 import Modal from "../../app/common/modal";
 import VideoUpload from "../../app/components/videoupload";
+import ReportModal from "../../app/components/video/reportModal";
+
 import { Tooltip } from "react-tippy";
 
 const fiveImageGallary = [
@@ -138,7 +140,9 @@ const FileSection = (props) => {
   const [reportsData, setReportsData] = useState([]);
   const [isOpenPDF, setIsOpenPDF] = useState(false);
   const [reportName, setReportName] = useState("");
+  const [isOpenReport, setIsOpenReport] = useState(false);
 
+  const [currentReportData, setCurrentReportData] = useState({})
 
   useEffect(() => {
     if (!isOpen) getMyClips()
@@ -159,7 +163,6 @@ const FileSection = (props) => {
     setReportsData(res3?.result || [])
   }
 
-  console.log("reportsData", reportsData);
 
   return (
     <div className="apps-content" id="files">
@@ -661,7 +664,8 @@ const FileSection = (props) => {
                         <dd className="ml-3" style={{ cursor: "pointer" }}
                           onClick={() => {
                             if (accountType === "Trainer") {
-
+                              setCurrentReportData({ session: clp?.session?._id, trainer: clp?.trainer?._id, trainee: clp?.trainee?._id })
+                              setIsOpenReport(true)
                             } else {
                               setIsOpenPDF(true)
                               setReportName(clp?.session?.report)
@@ -706,7 +710,6 @@ const FileSection = (props) => {
         }
       />
 
-
       <Modal
         isOpen={isOpenPDF}
         element={
@@ -729,6 +732,15 @@ const FileSection = (props) => {
           </>
         }
       />
+
+
+      <ReportModal
+        currentReportData={currentReportData}
+        isOpenReport={isOpenReport}
+        setIsOpenReport={setIsOpenReport}
+      />
+
+
     </div>
   );
 };

@@ -46,27 +46,32 @@ const CropImage = ({ isOpenCrop, setIsOpenCrop, selectImage, screenShots, setScr
     const [rotate, setRotate] = useState(0);
     const [aspect, setAspect] = useState(16 / 9);
 
+
+    console.log("imgSrc", imgSrc);
+
     useEffect(() => {
+        setImgSrc("")
+        if (selectImage) fetchImage();
+    }, [selectImage]);
 
-        const fetchImage = async () => {
-            try {
-                const response = await fetch(`https://netquix.s3.ap-south-1.amazonaws.com/${screenShots[selectImage]?.imageUrl}`);
-                const blob = await response.blob();
-                const reader = new FileReader();
 
-                reader.onloadend = () => {
-                    const base64data = reader.result.split(',')[1];
-                    setImgSrc(`data:image/jpeg;base64,${base64data}`);
-                };
 
-                reader.readAsDataURL(blob);
-            } catch (error) {
-                console.error('Error fetching or converting image:', error);
-            }
-        };
-        if (screenShots[selectImage]?.imageUrl) fetchImage();
+    const fetchImage = async () => {
+        try {
+            const response = await fetch(`https://netquix.s3.ap-south-1.amazonaws.com/${selectImage}`);
+            const blob = await response.blob();
+            const reader = new FileReader();
 
-    }, [selectImage, screenShots[selectImage]?.imageUrl])
+            reader.onloadend = () => {
+                const base64data = reader.result.split(',')[1];
+                setImgSrc(`data:image/jpeg;base64,${base64data}`);
+            };
+
+            reader.readAsDataURL(blob);
+        } catch (error) {
+            console.error('Error fetching or converting image:', error);
+        }
+    };
 
     function onImageLoad(e) {
         if (aspect) {
@@ -119,7 +124,7 @@ const CropImage = ({ isOpenCrop, setIsOpenCrop, selectImage, screenShots, setScr
             reader.onloadend = () => {
                 const base64String = reader.result;
                 // screenShots[selectImage].imageUrl = base64String
-                handleCropImage(screenShots[selectImage].imageUrl, blob)
+                handleCropImage(selectImage, blob)
                 // setScreenShots([...screenShots])
                 // setIsOpenCrop(false)
             };
