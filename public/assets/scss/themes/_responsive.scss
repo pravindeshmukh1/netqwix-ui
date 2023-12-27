@@ -96,6 +96,29 @@
     }
   }
 }
+
+@media (max-width: 768px){
+ 
+.rounded{
+  width: 76% !important;
+}
+// .col-lg-8.col-md-8.col-sm-12 {
+//   position: relative !important;
+//   top: -100px !important;
+// }
+// .call-action-buttons.z-50.my-3 {
+//   position: relative !important;
+//   top: 270px !important;
+// }
+// .scs2{
+//   position: absolute !important;
+//   top:450px !important
+// }
+// .scs{
+//   position: absolute !important;
+//   top: 600px !important;
+// }
+}
 @media (max-width: 1366px) {
   .profile-box {
     .details.edit {

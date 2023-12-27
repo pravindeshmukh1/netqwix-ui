@@ -737,35 +737,12 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
     setIsOpenReport(true)
   }
 
-
-  function captureVideo1() {
-    let canvas = document.getElementById("video-canvas-1"); // declare a canvas element in your html
-    let ctx = canvas.getContext("2d");
-    let w, h;
-    const v = document.getElementById("selected-video-1");
-    try {
-      w = v.videoWidth;
-      h = v.videoHeight;
-      canvas.width = w;
-      canvas.height = h;
-      ctx.fillRect(0, 0, w, h);
-      ctx.drawImage(v, 0, 0, w, h);
-      const a = canvas.toDataURL();
-      v.style.backgroundImage = `url(${a})`;
-      v.style.backgroundSize = "cover";
-      ctx.clearRect(0, 0, w, h); // clean the canvas
-      return true;
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  const takeScreenshot = async () => {
-
+  const takeScreenshot = () => {
     const targetElement = document.body;
     const creationBarItem = document.querySelector('.creationBarItem');
     const callActionButtons = document.querySelector('.call-action-buttons');
     const mainNav = document.querySelector('.main-nav');
+
 
     // Hide elements with a smooth transition
     if (creationBarItem) {
@@ -782,7 +759,9 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
       mainNav.style.opacity = '0';
     }
 
-    html2canvas(targetElement, { useCORS: true }).then(async (canvas) => {
+
+
+    html2canvas(targetElement, { useCORS: true}).then(async (canvas) => {
       // document.body.appendChild(canvas);
       const dataUrl = canvas.toDataURL('image/png');
       // screenShots.push({
@@ -809,7 +788,10 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
       const blob = await fetch(dataUrl).then((res) => res.blob());
       if (res?.data?.url) pushProfilePhotoToS3(res?.data?.url, blob)
 
-      toast.success("The screenshot taken successfully.", { type: "success" });
+      setTimeout(() => {
+        // Success message after the screenshot is successfully taken and processed
+        toast.success("The screenshot taken successfully.", { type: "success" });
+      }, 2000);
 
       // const link = document.createElement('a');
       // link.href = dataUrl;
@@ -1308,19 +1290,12 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
           <div className="col-lg-8 col-md-8 col-sm-12 " id="third" style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "space-around", flexDirection: "column" }}>
             <div className="no-user-joined font-weight-bold text-center" style={{ margin: displayMsg?.msg ? 'auto' : '', zIndex: displayMsg?.msg ? 8 : 1 }}>{displayMsg?.msg}</div>
             {selectedClips?.length != 0 &&
-              <div className="row" style={mediaQuery.matches ? { height: "33vw" } : {}}>
+              <div className="row" style={mediaQuery.matches ? { height: "33vw" , width:"100%"} : {}}>
                 <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                  <video
-                    id="selected-video-1"
-                    // crossOrigin="anonymous"
-                    style={{ height: "25vw", width: "inherit", borderRadius: 10 }}
-                    ref={selectedVideoRef1}
-                    onTimeUpdate={handleTimeUpdate1}
-                    src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`}
-                  >
+                  <video style={{ height: "25vw", width: "inherit", borderRadius: 10 }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate1} >
+                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
                   </video>
-                  <canvas style={{ height: "25vw", width: "inherit", borderRadius: 10 }} id="video-canvas-1" hidden></canvas>
-                  <div style={{ position: "relative", zIndex: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div style={{ position: "relative", zIndex:10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <div><p style={{ margin: 0, marginRight: "10px" }}>{videoTime?.currentTime1}</p> </div>
                     <div className="external-control-bar">
                       <button className="btn btn-primary px-1 py-1 my-3 mr-2" onClick={() => togglePlay("one")}>{(isPlaying?.isPlaying1) ? <Pause style={{ verticalAlign: "middle" }} /> : <Play style={{ verticalAlign: "middle" }} />}</button>
@@ -1351,7 +1326,6 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                   <video style={{ height: "25vw", width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate2} >
                     <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
                   </video>
-                  <canvas style={{ height: "25vw", width: "inherit", borderRadius: 10 }} id="video-canvas-2" hidden></canvas>
                   <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <div><p style={{ margin: 0, marginRight: "10px" }}>{videoTime?.currentTime2}</p> </div>
                     <div className="external-control-bar">

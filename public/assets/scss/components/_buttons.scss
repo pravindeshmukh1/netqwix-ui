@@ -120,6 +120,46 @@
 			width: 12px;
 		}
 	}
+@media (max-width: 768px) {
+
+    &.btn-xl {
+      height: 30px;
+      width: 30px;
+      padding: 8px;
+
+      i {
+        font-size: 16px;
+      }
+
+      svg {
+        height: 16px;
+        width: 16px;
+      }
+    }
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	@each $btn-name, $btn-color in  (primary, $primary-color),
 					(success, $success-color),
 					(danger, $danger-color),
