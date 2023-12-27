@@ -144,6 +144,22 @@ const FileSection = (props) => {
 
   const [currentReportData, setCurrentReportData] = useState({})
 
+
+
+  const [videoDimensions, setVideoDimensions] = useState({ width: "470px", height: "587px" });
+
+  const handleVideoLoad = (event) => {
+    const video = event.target;
+    const aspectRatio = video.videoWidth / video.videoHeight;
+  
+    // Set width and height based on aspect ratio
+    if (aspectRatio > 1) {
+      setVideoDimensions({ width: "100%", height: "70%" });
+    } else {
+      setVideoDimensions({ width: "470px", height: "587px" });
+    }
+  };
+
   useEffect(() => {
     if (!isOpen) getMyClips()
   }, [isOpen])
@@ -259,7 +275,7 @@ const FileSection = (props) => {
                           }}
                         >
                           <Tooltip title={clp?.title} position="top" trigger="mouseenter">
-                            <video style={{ width: "80%", height: "80%" }}  >
+                            <video style={{ width: "5vw", height: "9vh" }}  >
                               <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
                             </video>
                           </Tooltip>
@@ -671,7 +687,7 @@ const FileSection = (props) => {
                               setReportName(clp?.session?.report)
                             }
                           }}
-                        >{accountType === "Trainer" ? "edit" : "view"}</dd>
+                        ><button id="btn1" style={{backgroundColor:"#000080", color:"#FFFFFF",borderRadius:"3px",border:"none" ,fontWeight:"bold"}}>{accountType === "Trainer" ? "edit" : "view"}</button></dd>
                       </div>
                     ))}
                   </div>
@@ -701,9 +717,14 @@ const FileSection = (props) => {
                     <X />
                   </div>
                 </div>
-                <video style={{ width: "100%", height: "70%" }} autoplay controls  >
-                  <source src={selectedVideo} type="video/mp4" />
-                </video>
+                <video
+  style={videoDimensions}
+  autoPlay
+  controls
+  onLoadedData={handleVideoLoad}
+>
+  <source src={selectedVideo} type="video/mp4" />
+</video>
               </div>
             </div>
           </>

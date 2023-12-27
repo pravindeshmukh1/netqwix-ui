@@ -29,8 +29,8 @@ const reportModal = ({
     }, [screenShots?.length])
 
     useEffect(() => {
-        if (currentReportData?.session) getReportData()
-    }, [currentReportData?.session])
+        if (currentReportData?.session && isOpenReport) getReportData()
+    }, [currentReportData?.session, isOpenReport])
 
     const setScreenShot = async () => {
 
