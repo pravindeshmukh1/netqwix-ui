@@ -761,7 +761,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
 
 
 
-    html2canvas(targetElement, { useCORS: true}).then(async (canvas) => {
+    html2canvas(targetElement, { useCORS: true }).then(async (canvas) => {
       // document.body.appendChild(canvas);
       const dataUrl = canvas.toDataURL('image/png');
       // screenShots.push({
@@ -1290,12 +1290,12 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
           <div className="col-lg-8 col-md-8 col-sm-12 " id="third" style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "space-around", flexDirection: "column" }}>
             <div className="no-user-joined font-weight-bold text-center" style={{ margin: displayMsg?.msg ? 'auto' : '', zIndex: displayMsg?.msg ? 8 : 1 }}>{displayMsg?.msg}</div>
             {selectedClips?.length != 0 &&
-              <div className="row" style={mediaQuery.matches ? { height: "33vw" , width:"100%"} : {}}>
+              <div className="row" style={mediaQuery.matches ? { height: "33vw", width: "100%" } : {}}>
                 <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                   <video style={{ height: "25vw", width: "inherit", borderRadius: 10 }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate1} >
                     <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
                   </video>
-                  <div style={{ position: "relative", zIndex:10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div style={{ position: "relative", zIndex: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <div><p style={{ margin: 0, marginRight: "10px" }}>{videoTime?.currentTime1}</p> </div>
                     <div className="external-control-bar">
                       <button className="btn btn-primary px-1 py-1 my-3 mr-2" onClick={() => togglePlay("one")}>{(isPlaying?.isPlaying1) ? <Pause style={{ verticalAlign: "middle" }} /> : <Play style={{ verticalAlign: "middle" }} />}</button>
@@ -1326,7 +1326,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                   <video style={{ height: "25vw", width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate2} >
                     <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
                   </video>
-                  <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div style={{ position: "relative", zIndex: 9, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <div><p style={{ margin: 0, marginRight: "10px" }}>{videoTime?.currentTime2}</p> </div>
                     <div className="external-control-bar">
                       <button className="btn btn-primary px-1 py-1 my-3 mr-2 " onClick={() => togglePlay("two")}>{(isPlaying?.isPlaying2) ? <Pause style={{ verticalAlign: "middle" }} /> : <Play style={{ verticalAlign: "middle" }} />}</button>
@@ -1353,8 +1353,8 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                     />
                   </div>
 
-                </div>
-              </div>
+                </div >
+              </div >
             }
             <div className={selectedClips?.length != 0 && mediaQuery.matches && "scs"}>
               <video ref={remoteVideoRef} playsInline autoPlay className="rounded " style={{ width: '100%', height: selectedClips?.length === 0 && 450 }} id="end-user-video" />
@@ -1363,7 +1363,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
               {videoRef && (<video id="end-user-video" playsInline muted className="rounded " style={{ width: '100%' }} ref={videoRef} autoPlay />)}
             </div>
             {renderCallActionButtons()}
-          </div>
+          </div >
         }
 
 
@@ -1532,7 +1532,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
             </>
           }
         /> */}
-      </div>
+      </div >
     </React.Fragment >
   );
 };
