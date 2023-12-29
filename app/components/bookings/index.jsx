@@ -536,19 +536,23 @@ const Bookings = ({ accountType = null }) => {
                               <h5 className="block-title p-0"> Selected Clips<label className="badge badge-primary sm ml-2">{selectedClips?.length}</label></h5>
                               <div className={`block-content`}>
                                 <div className="row">
-                                  {selectedClips?.map((clp, index) => {
-                                    return <div key={index} style={{ borderRadius: 5, position: "relative", border: "1px solid #ebebeb", marginLeft: "15px" }} className={`col-5`}>
-                                      <video style={{ width: "100%", maxHeight: "200px", height: "100%" }}  >
-                                        <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
-                                      </video>
-                                      <span style={{ position: "absolute", right: -5, top: -3, cursor: "pointer", background: "red", borderRadius: "50%", padding: "0px 6px", color: "#fff" }}
-                                        onClick={() => {
-                                          const updatedVideos = selectedClips.filter((video) => video._id !== clp?._id);
-                                          setSelectedClips(updatedVideos);
-                                        }}
-                                      >x</span>
-                                    </div>
-                                  })}
+                                {selectedClips?.map((clp) => (
+  <div key={clp?._id} style={{ borderRadius: 5, position: "relative", border: "1px solid #ebebeb", marginLeft: "15px" }} className={`col-5`}>
+    <video style={{ width: "100%", maxHeight: "200px", height: "100%" }}>
+      <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+    </video>
+    <span
+      style={{ position: "absolute", right: -5, top: -3, cursor: "pointer", background: "red", borderRadius: "50%", padding: "0px 6px", color: "#fff" }}
+      onClick={(e) => {
+        e.stopPropagation(); // Prevent the event from bubbling up
+        const updatedVideos = selectedClips.filter((video) => video._id !== clp?._id);
+        setSelectedClips(updatedVideos);
+      }}
+    >
+      x
+    </span>
+  </div>
+))}
                                 </div>
                               </div>
                             </div> : <></>}

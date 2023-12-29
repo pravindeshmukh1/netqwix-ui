@@ -783,8 +783,10 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
   }
 
   const takeScreenshot = () => {
-    captureVideo1()
-    captureVideo2();
+    if (selectedClips?.length) {
+      captureVideo1()
+      captureVideo2();
+    }
 
     const targetElement = document.body;
     const creationBarItem = document.querySelector('.creationBarItem');
@@ -860,7 +862,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
   }
 
 
-  const mediaQuery = window.matchMedia('(min-width: 768px)')
+  const mediaQuery = window.matchMedia('(min-width: 768px) and (min-width: 1024px)')
 
   const renderCallActionButtons = () => {
     return (
@@ -1376,7 +1378,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                     <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
                   </video>
                   <canvas id="video-canvas-2" hidden></canvas>
-                  <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div style={{ position: "relative", zIndex: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <div><p style={{ margin: 0, marginRight: "10px" }}>{videoTime?.currentTime2}</p> </div>
                     <div className="external-control-bar">
                       <button className="btn btn-primary px-1 py-1 my-3 mr-2 " onClick={() => togglePlay("two")}>{(isPlaying?.isPlaying2) ? <Pause style={{ verticalAlign: "middle" }} /> : <Play style={{ verticalAlign: "middle" }} />}</button>
@@ -1389,7 +1391,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                     />
                     <div><p style={{ margin: 0, marginLeft: "10px" }}>{videoTime?.remainingTime2}</p> </div>
                   </div>
-                  <div style={{ position: "relative", zIndex: 9999, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div style={{ position: "relative", zIndex: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <div><p style={{ margin: 0, marginRight: "10px" }}>Volume</p> </div>
                     <input
                       className="progress"
