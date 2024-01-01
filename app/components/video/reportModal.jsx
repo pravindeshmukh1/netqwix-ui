@@ -83,8 +83,6 @@ const reportModal = ({
         getReportData()
     }
 
-
-
     var pdf = new jsPDF();
 
     const generatePDF = async () => {

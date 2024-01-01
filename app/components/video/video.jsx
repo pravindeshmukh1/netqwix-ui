@@ -809,8 +809,6 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
       mainNav.style.opacity = '0';
     }
 
-
-
     html2canvas(targetElement, { useCORS: true }).then(async (canvas) => {
       // document.body.appendChild(canvas);
       const dataUrl = canvas.toDataURL('image/png');
@@ -854,6 +852,12 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
 
 
   async function pushProfilePhotoToS3(presignedUrl, uploadPhoto) {
+    const v = document.getElementById("selected-video-1");
+    v.style.backgroundImage = "";
+
+    const v2 = document.getElementById("selected-video-2");
+    v2.style.backgroundImage = "";
+
     const myHeaders = new Headers({ 'Content-Type': 'image/*' });
     await axios.put(presignedUrl, uploadPhoto, {
       headers: myHeaders,
