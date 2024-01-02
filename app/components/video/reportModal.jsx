@@ -23,36 +23,29 @@ const reportModal = ({
     const [reportObj, setReportObj] = useState({ title: "", topic: "" });
     const [screenShots, setScreenShots] = useState([]);
 
-
-    useEffect(() => {
-        setScreenShot();
-    }, [screenShots?.length])
-
     useEffect(() => {
         if (currentReportData?.session && isOpenReport) getReportData()
     }, [currentReportData?.session, isOpenReport])
 
-    const setScreenShot = async () => {
+    const setScreenShot = async (reportData) => {
+        var newReportImages = [];
 
-        // var newReportImages = [];
-
-        for (let index = 0; index < screenShots?.length; index++) {
-            const element = screenShots[index];
+        for (let index = 0; index < reportData?.length; index++) {
+            const element = reportData[index];
             try {
                 const response = await fetch(`https://netquix.s3.ap-south-1.amazonaws.com/${element?.imageUrl}`);
                 const blob = await response.blob();
                 const reader = new FileReader();
                 reader.onloadend = () => {
                     const base64data = reader.result.split(',')[1];
-                    reportArr.push({ ...element, imageUrl: `data:image/jpeg;base64,${base64data}` })
-                    setReportArr([...reportArr])
+                    newReportImages.push({ ...element, imageUrl: `data:image/jpeg;base64,${base64data}` })
+                    setReportArr([...newReportImages])
                 };
                 reader.readAsDataURL(blob);
             } catch (error) {
                 console.error('Error fetching or converting image:', error);
             }
         }
-        // setReportArr([...newReportImages])
     }
 
 
@@ -71,11 +64,11 @@ const reportModal = ({
         return true
     }
 
-
     const getReportData = async () => {
         var res = await getReport({ sessions: currentReportData?.session, trainer: currentReportData?.trainer, trainee: currentReportData?.trainee, })
         setScreenShots(res?.data?.reportData)
         setReportObj({ title: res?.data?.title, topic: res?.data?.description })
+        setScreenShot(res?.data?.reportData)
     }
 
     const handleRemoveImage = async (filename) => {
@@ -148,8 +141,6 @@ const reportModal = ({
         if (data?.url) return data?.url
         else return ""
     }
-
-
 
 
     async function pushProfilePDFToS3(presignedUrl, uploadPdf) {
@@ -306,7 +297,7 @@ const reportModal = ({
                                 return <>
                                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', alignItems: 'center' }}>
                                         <div style={{ textAlign: 'center' }}>
-                                            <img src={sst?.imageUrl} alt="image" style={{ height: '260px', width: '240px', objectFit: 'cover' }} />
+                                            <img src={sst?.imageUrl} alt="image" style={{ height: '260px', width: '-webkit-fill-available', objectFit: 'cover' }} />
                                         </div>
                                         <div>
                                             <p style={{ fontSize: '30px', fontWeight: '600', margin: '0px' }}>TIP #{i + 1} {screenShots[i]?.title}</p>

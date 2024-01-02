@@ -852,16 +852,15 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
 
 
   async function pushProfilePhotoToS3(presignedUrl, uploadPhoto) {
-    const v = document.getElementById("selected-video-1");
-    v.style.backgroundImage = "";
-
-    const v2 = document.getElementById("selected-video-2");
-    v2.style.backgroundImage = "";
-
     const myHeaders = new Headers({ 'Content-Type': 'image/*' });
     await axios.put(presignedUrl, uploadPhoto, {
       headers: myHeaders,
     })
+
+    const v = document.getElementById("selected-video-1");
+    if (v) v.style.backgroundImage = "";
+    const v2 = document.getElementById("selected-video-2");
+    if (v2) v2.style.backgroundImage = "";
     return true
   }
 
