@@ -692,25 +692,41 @@ const FileSection = (props) => {
                     <label className="badge badge-primary sm ml-2">{`${cl?._id?.day}/${cl?._id?.month}/${cl?._id?.year}`}</label>
                   </h5>
                   {/*  NORMAL  STRUCTURE END  */}
-                  <div className={`block-content ${!cl?.show ? "d-none" : ""}`}>
-                    {cl?.report.map((clp, index) => (
-                      <div className="row" >
-                        <dd className="ml-3">{index + 1}. {accountType === "Trainer" ? "Trainee" : "Trainer"} :</dd>
-                        <dt className="ml-1">{clp?.[accountType === "Trainer" ? "trainee" : "trainer"]?.fullname}</dt>
-                        <dd className="ml-3" style={{ cursor: "pointer" }}
-                          onClick={() => {
-                            if (accountType === "Trainer") {
-                              setCurrentReportData({ session: clp?.session?._id, trainer: clp?.trainer?._id, trainee: clp?.trainee?._id })
-                              setIsOpenReport(true)
-                            } else {
-                              setIsOpenPDF(true)
-                              setReportName(clp?.session?.report)
-                            }
-                          }}
-                        ><button id="btn1" style={{backgroundColor:"#000080", color:"#FFFFFF",borderRadius:"3px",border:"none" ,fontWeight:"bold"}}>{accountType === "Trainer" ? "edit" : "view"}</button></dd>
-                      </div>
-                    ))}
-                  </div>
+                  <div className={`block-content ${!cl?.show ? "d-none" : "d-flex flex-wrap"}`}>
+  {cl?.report.map((clp, index) => (
+     <div className={`col-6`} key={index} style={{ whiteSpace: "nowrap" }}>
+      <div className="ml-3" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div style={{ marginBottom: "5px" }}>
+          <dd
+            className="ml-3"
+            style={{ cursor: "pointer", textAlign: "center" }}
+            onClick={() => {
+              if (accountType === "Trainer") {
+                setCurrentReportData({ session: clp?.session?._id, trainer: clp?.trainer?._id, trainee: clp?.trainee?._id })
+                setIsOpenReport(true)
+              } else {
+                setIsOpenPDF(true)
+                setReportName(clp?.session?.report)
+              }
+            }}
+          >
+            <img
+              src="/icons/FileSee.png" // Adjust the path to your PNG icon
+              alt="FileSee Icon"
+              style={{ width: "30px", height: "30px" }} // Adjust the size accordingly
+            />
+            {accountType === "Trainer" ? "" : ""}
+          </dd>
+        </div>
+        <div>
+          <dd>{index + 1}. {accountType === "Trainer" ? "Trainee" : "Trainer"} : <strong>{clp?.[accountType === "Trainer" ? "trainee" : "trainer"]?.fullname}</strong></dd>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+
                 </div>
               ) : <div style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}>
                 <h5 className="block-title">  No Data Found</h5>
