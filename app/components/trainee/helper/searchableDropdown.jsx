@@ -88,19 +88,17 @@ const SearchableDropdown = ({
         <div className="row item-center">
           <div className="col-12 p-0 m-0">
             <div
-              className={`options ${
-                isOpen &&   (options).length ? "open" : ""
-              }`}
+              className={`options ${isOpen && (options).length ? "open" : ""
+                }`}
             >
               {filter(options).map((option, index) => {
                 return (
                   <div
-                    onClick={() =>
+                    onClick={() => {
                       selectOption(option) || selectedOption(option)
-                    }
-                    className={`option ${
-                      option[label] === selectedVal ? "selected" : ""
-                    }`}
+                    }}
+                    className={`option ${option[label] === selectedVal ? "selected" : ""
+                      }`}
                     key={`${id}-${index}`}
                   >
                     {/* {(option)} */}

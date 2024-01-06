@@ -193,11 +193,10 @@ const Category = (masterRecords) => {
           </div>
         </div>
         <div
-          className={`container ${
-            isMobileScreen
-              ? "d-flex justify-content-start"
-              : "d-flex justify-content-center"
-          } `}
+          className={`container ${isMobileScreen
+            ? "d-flex justify-content-start"
+            : "d-flex justify-content-center"
+            } `}
         >
           <div className="row my-5">
             <div className={`col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12`}>
