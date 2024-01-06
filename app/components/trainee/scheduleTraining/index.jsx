@@ -76,6 +76,7 @@ const ScheduleTraining = () => {
     trainer_id: null,
     data: {},
   });
+  
   const [query, setQuery] = useState("");
   const [isOpenInstantScheduleMeeting, setInstantScheduleMeeting] =
     useState(false);
@@ -682,13 +683,33 @@ const ScheduleTraining = () => {
       }}
       className="bookings custom-scroll custom-trainee-dashboard"
     >
+      <div className="card rounded trainer-profile-card" style={{margin:"auto",width:"80%",position:"relative",top:"90px"}}>
+        <div className="card-body">
+          <div className="row">
+            <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 d-flex justify-content-center align-items-center">
+              <img
+                src={
+                  "/assets/images/about/Coach.jpeg"
+                }
+                alt="trainer_image"
+                className="rounded trainer-profile"
+                style={{ maxWidth: "100%", height: "auto" }}
+              />
+            </div>
+            <div className="col-7 col-sm-6 col-md-7 col-lg-8 col-xl-9 card-trainer">
+              <h3 className="mt-3 ">Trainee</h3>
+            </div>
+          </div>
+        </div>
+      </div>
       <div
         id="dashboard"
         className="d-flex justify-content-center align-items-center dashboard-search-trainer"
         style={{
-          height: "94%",
+          height: "80%",
         }}
       >
+        
         <SearchableDropdown
           placeholder="Search Trainers..."
           options={[...listOfTrainers, ...categoryList]}

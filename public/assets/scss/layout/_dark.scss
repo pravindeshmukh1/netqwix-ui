@@ -10,6 +10,21 @@
     h5 {
         color: $white;
     }
+    h2{
+        color: $white;
+    }
+    h3{
+        color: $white;
+    }
+    .text-dark {
+        color: $white !important; /* You can use !important to ensure it takes precedence */
+      }
+      .text-dark:hover {
+        background-color: $white !important; /* You can use !important to ensure it takes precedence */
+      }
+      .card{
+        border-color:  $white !important;
+      }
 
     .chitchat-right-sidebar {
         .right-sidebar {

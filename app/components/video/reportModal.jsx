@@ -22,7 +22,23 @@ const reportModal = ({
     const [reportArr, setReportArr] = useState([]);
     const [reportObj, setReportObj] = useState({ title: "", topic: "" });
     const [screenShots, setScreenShots] = useState([]);
+    const [currentDate, setCurrentDate] = useState('');
 
+    useEffect(() => {
+        // Set the current date when the component mounts
+        updateCurrentDate();
+    }, []);
+    
+    const updateCurrentDate = () => {
+        const today = new Date();
+        const day = today.getDate();
+        const month = today.getMonth() + 1; // Months are zero-based, so add 1
+        const year = today.getFullYear();
+    
+        // Format the date as "day/month/year"
+        const formattedDate = `${day}/${month}/${year}`;
+        setCurrentDate(formattedDate);
+    };
     useEffect(() => {
         if (currentReportData?.session && isOpenReport) getReportData()
     }, [currentReportData?.session, isOpenReport])
@@ -99,10 +115,12 @@ const reportModal = ({
 
             pdf.internal.pageSize.height = imgHeight;
 
+            updateCurrentDate();
+
             // Add the canvas as an image to the PDF
             pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, imgHeight);
-            // pdf.save('yourDocument.pdf');
 
+            // pdf.save('yourDocument.pdf');
             // Get the data URL of the PDF
             const generatedPdfDataUrl = pdf.output('dataurlstring');
 
@@ -284,15 +302,22 @@ const reportModal = ({
                             </div>
                         </div>
 
-                        <div id="report-pdf" style={{ display: "none", padding: "30px 0px" }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <p style={{ textTransform: 'uppercase', marginTop: '0px', fontSize: '40px', fontWeight: '600' }}>Game Plan</p>
+                        <div id="report-pdf" style={{ display: "none", padding: "20px ", border: '10px solid green',borderColor: 'green' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between' ,alignItems:"center"}}>
+                                <p style={{ textTransform: 'uppercase', marginTop: '0px', fontSize: '40px', fontWeight: '600',color:"green" }}>Game Plan</p>
+                                <div style={{ textAlign: 'right' }}>
+                            <img src="/assets/images/logo/netquix-logo.png" alt="Logo" style={{ height: '180px', width: '180px', objectFit: 'cover'}} />
+                          
                             </div>
-                            <div>
-                                <h2 style={{ margin: '0px' }}>Topic: {reportObj?.title}</h2>
-                                <h2 style={{ margin: '0px' }}>NAME: {reportObj?.topic}</h2>
                             </div>
-                            <hr style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: 'brown' }} />
+                            <div style={{display:"flex"}}>
+                                <div style={{width:"40%"}}>
+                                <h2 style={{ margin: '0px',fontWeight:"normal" }}>Topic: {reportObj?.title}</h2>
+                                <h2 style={{ margin: '0px', fontWeight:"normal",color:"gray"}}>Name: {reportObj?.topic}</h2>
+                                </div>
+                                <div style={{ fontSize: '18px', fontWeight: '400',width:"70%", fontWeight:"bold"  ,textAlign:"center" ,position:"relative",top:'20px'}}>Date: {currentDate}</div>
+                            </div>
+                            <hr style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: 'black' }} />
                             {reportArr?.map((sst, i) => {
                                 return <>
                                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', alignItems: 'center' }}>
@@ -300,13 +325,23 @@ const reportModal = ({
                                             <img src={sst?.imageUrl} alt="image" style={{ height: '260px', width: '-webkit-fill-available', objectFit: 'cover' }} />
                                         </div>
                                         <div>
-                                            <p style={{ fontSize: '30px', fontWeight: '600', margin: '0px' }}>TIP #{i + 1} {screenShots[i]?.title}</p>
+                                            <p style={{ fontSize: '30px', fontWeight:'normal' }}>TIP #{i + 1} {screenShots[i]?.title}</p>
                                             <p>{screenShots[i]?.description}</p>
                                         </div>
                                     </div>
-                                    <hr style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: 'brown' }} />
+                                    <hr style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: 'black' }} />
                                 </>
                             })}
+                         <div style={{ display: 'flex', justifyContent: 'space-between'}}>
+  <div style={{ textAlign: 'left', marginRight: '20px' }}>
+    <h2 style={{color:"green"}}>Coach</h2>
+    <p>Coaching is a form of development in which an experienced person, called a coach, supports a learner or client in achieving a specific personal or professional goal by providing training.</p>
+  </div>
+  <div>
+    <h2 style={{color:"yellowgreen"}}>John</h2>
+    <img src="/assets/images/about/Coach.jpeg" alt="John Image" style={{ width: '205.8px', height: '154.4px', marginRight:"20px"}} />
+  </div>
+</div>
                         </div>
                     </div>
                     <CropImage

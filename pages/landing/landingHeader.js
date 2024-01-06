@@ -157,7 +157,7 @@ const LandingHeader = (masterRecords) => {
                 }}
                 onClick={() => router.push(routingPaths.signUp)}
               >
-                SignUp
+                Sign Up
               </button>
               <button
                 type="button"

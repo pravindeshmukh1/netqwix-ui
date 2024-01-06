@@ -23,8 +23,11 @@ export class Utils {
   };
 
   static getFormattedTime = (time) => {
-    return moment(time, timeFormat);
+    if(time){
+      return moment(time, timeFormat);
+    }
   };
+
 
   static getFormattedDateDb = (value) => {
     return moment(value.format("h:mm A"), "'hh:mm A'").format("HH:mm:ss");

@@ -168,8 +168,8 @@ const Category = (masterRecords) => {
               </div>
               <div className="col-lg-6">
                 <button className="btn btn-primary d-flex mb-4 mt-5">
-                  <div>Get Started</div>
-                  <div className="pl-2">
+                  <div style={{margin:"auto"}}>Get Started</div>
+                  <div className="pl-2" style={{position:"relative", top:"3px"}}>
                     <ChevronRight />
                   </div>
                 </button>

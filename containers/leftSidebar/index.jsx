@@ -188,13 +188,15 @@ const Index = (props) => {
         {/* logo section */}
         <div className="logo-warpper">
           <Link href="/landing">
-            <img
+            <img id="Net"
               src="/assets/images/logo/netquix-logo.png"
               alt="logo"
               className="custom-image"
+              
             />
           </Link>
         </div>
+        
 
         <div className="app-list sidebar-main">
           {/* <ul className="sidebar-top  custom-scroll">

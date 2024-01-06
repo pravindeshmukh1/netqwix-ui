@@ -788,11 +788,44 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
       captureVideo2();
     }
 
-    const targetElement = document.body;
+    // const targetElement = document.body;
+    let targetElement;
+    let hideElements = false;
+    if (selectedClips?.length) {
+      // If clips are selected, use element with id 'third'
+      targetElement = document.getElementById('third');
+      hideElements = true;
+    } else {
+      // If no clips selected, use document.body
+      targetElement = document.body;
+    }
     const creationBarItem = document.querySelector('.creationBarItem');
     const callActionButtons = document.querySelector('.call-action-buttons');
     const mainNav = document.querySelector('.main-nav');
-
+    const Pause = document.querySelector('.Pause');
+    const Pause2 = document.querySelector('.Pause2');
+    const progress1 = document.querySelector('.progress1');
+    const progress2 = document.querySelector('.progress2');
+    // const scs = document.querySelector('.scs');
+    // const scs2 = document.querySelector('.scs2');
+if(hideElements){
+  if (Pause) {
+    Pause.style.transition = 'opacity 2s';
+    Pause.style.opacity = '0';
+  }
+  if (progress1) {
+    progress1.style.transition = 'opacity 2s';
+    progress1.style.opacity = '0';
+  }
+  if (Pause2) {
+    Pause2.style.transition = 'opacity 2s';
+    Pause2.style.opacity = '0';
+  }
+  if (progress2) {
+    progress2.style.transition = 'opacity 2s';
+    progress2.style.opacity = '0';
+  }
+}
 
     // Hide elements with a smooth transition
     if (creationBarItem) {
@@ -808,6 +841,31 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
       mainNav.style.transition = 'opacity 2s'; // Set duration to 0s
       mainNav.style.opacity = '0';
     }
+    
+    // if(Pause){
+    //   Pause.style.transition = 'opacity 2s'
+    //   Pause.style.opacity = '0';
+    // }
+    // if(progress1){
+    //   progress1.style.transition = 'opacity 2s'
+    //   progress1.style.opacity = '0';
+    // }
+    // if(Pause2){
+    //   Pause2.style.transition = 'opacity 2s'
+    //   Pause2.style.opacity = '0';
+    // }
+    // if(progress2){
+    //   progress2.style.transition = 'opacity 2s'
+    //   progress2.style.opacity = '0';
+    // }
+    // if(scs){
+    //   scs.style.transition = 'opacity 2s'
+    //   scs.style.opacity = '0';
+    // }
+    // if(scs2){
+    //   scs2.style.transition = 'opacity 2s'
+    //   scs2.style.opacity = '0';
+    // }
 
     html2canvas(targetElement, { useCORS: true }).then(async (canvas) => {
       // document.body.appendChild(canvas);
@@ -831,6 +889,31 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
         mainNav.style.transition = 'opacity 2s'; // Adjust the duration based on your needs
         mainNav.style.opacity = '1';
       }
+      if(Pause){
+        Pause.style.transition = 'opacity 2s'
+        Pause.style.opacity = '1';
+      }
+      if(progress1){
+        progress1.style.transition = 'opacity 2s'
+        progress1.style.opacity = '1';
+      }
+      if(Pause2){
+        Pause2.style.transition = 'opacity 2s'
+        Pause2.style.opacity = '1';
+      }
+      if(progress2){
+        progress2.style.transition = 'opacity 2s'
+        progress2.style.opacity = '1';
+      }
+      // if(scs){
+      //   scs.style.transition = 'opacity 2s'
+      //   scs.style.opacity = '1';
+      // }
+      // if(scs2){
+      //   scs2.style.transition = 'opacity 2s'
+      //   scs2.style.opacity = '1';
+      // }
+  
 
       var res = await screenShotTake({ sessions: id, trainer: fromUser?._id, trainee: toUser?._id, })
       const blob = await fetch(dataUrl).then((res) => res.blob());
@@ -1349,7 +1432,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                     <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
                   </video>
                   <canvas id="video-canvas-1" hidden></canvas>
-                  <div style={{ position: "relative", zIndex: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div className="Pause"   style={{ position: "relative", zIndex: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <div><p style={{ margin: 0, marginRight: "10px" }}>{videoTime?.currentTime1}</p> </div>
                     <div className="external-control-bar">
                       <button className="btn btn-primary px-1 py-1 my-3 mr-2" onClick={() => togglePlay("one")}>{(isPlaying?.isPlaying1) ? <Pause style={{ verticalAlign: "middle" }} /> : <Play style={{ verticalAlign: "middle" }} />}</button>
@@ -1362,7 +1445,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                     />
                     <div><p style={{ margin: 0, marginLeft: "10px" }}>{videoTime?.remainingTime1}</p> </div>
                   </div>
-                  <div style={{ position: "relative", zIndex: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div className="progress1" style={{ position: "relative", zIndex: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <div><p style={{ margin: 0, marginRight: "10px" }}>Volume</p> </div>
                     <input
                       className="progress"
@@ -1381,7 +1464,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                     <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
                   </video>
                   <canvas id="video-canvas-2" hidden></canvas>
-                  <div style={{ position: "relative", zIndex: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div className="Pause2" style={{ position: "relative", zIndex: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <div><p style={{ margin: 0, marginRight: "10px" }}>{videoTime?.currentTime2}</p> </div>
                     <div className="external-control-bar">
                       <button className="btn btn-primary px-1 py-1 my-3 mr-2 " onClick={() => togglePlay("two")}>{(isPlaying?.isPlaying2) ? <Pause style={{ verticalAlign: "middle" }} /> : <Play style={{ verticalAlign: "middle" }} />}</button>
@@ -1394,7 +1477,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                     />
                     <div><p style={{ margin: 0, marginLeft: "10px" }}>{videoTime?.remainingTime2}</p> </div>
                   </div>
-                  <div style={{ position: "relative", zIndex: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div className="progress2" style={{ position: "relative", zIndex: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <div><p style={{ margin: 0, marginRight: "10px" }}>Volume</p> </div>
                     <input
                       className="progress"

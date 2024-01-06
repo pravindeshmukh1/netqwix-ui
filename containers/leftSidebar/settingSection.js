@@ -40,6 +40,7 @@ import { Utils } from "../../utils/utils";
 import { UpdateHourlyRateForm } from "../../app/components/trainer/settings/hourly_rate";
 import TimePicker from "rc-time-picker";
 
+
 const SettingSection = (props) => {
   const dispatch = useAppDispatch();
   const socialFormRef = useRef(null);
@@ -827,7 +828,7 @@ const SettingSection = (props) => {
                             className={`ml-2 mt-2 ${
                               isTimeConflicts ? `border border-danger` : ``
                             }  rounded`}
-                            placeholder="09:00"
+                            placeholder="09:00 am"
                             clearIcon={true}
                             showSecond={false}
                             minuteStep={5}
@@ -880,7 +881,7 @@ const SettingSection = (props) => {
                                   )
                                 : null
                             }
-                            placeholder="07:00"
+                            placeholder="10:00 pm"
                             showSecond={false}
                             minuteStep={5}
                             use12Hours
@@ -913,7 +914,8 @@ const SettingSection = (props) => {
                             className="timezone_offset mt-2 ml-2"
                             value={
                               workingHours.time_zone ||
-                              userInfo?.extraInfo?.working_hours?.time_zone
+                              userInfo?.extraInfo?.working_hours?.time_zone ||
+                              "(GMT -5:00) Eastern Time (US & Canada)"
                             }
                             onChange={(event) => {
                               const { value } = event.target;
