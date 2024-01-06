@@ -27,7 +27,7 @@ import { SocketContext } from "../socket";
 import Ratings from "./ratings";
 import Rating from "react-rating";
 import { Star, X } from "react-feather";
-import { authState } from "../auth/auth.slice";
+import { authAction, authState } from "../auth/auth.slice";
 import SocialMediaIcons from "../../common/socialMediaIcons";
 import { bookingButton } from "../../common/constants";
 import { TabContent, TabPane, Nav, NavItem, NavLink, Button } from "reactstrap";
@@ -536,23 +536,23 @@ const Bookings = ({ accountType = null }) => {
                               <h5 className="block-title p-0"> Selected Clips<label className="badge badge-primary sm ml-2">{selectedClips?.length}</label></h5>
                               <div className={`block-content`}>
                                 <div className="row">
-                                {selectedClips?.map((clp) => (
-  <div key={clp?._id} style={{ borderRadius: 5, position: "relative", border: "1px solid #ebebeb", marginLeft: "15px" }} className={`col-5`}>
-    <video style={{ width: "100%", maxHeight: "200px", height: "100%" }}>
-      <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
-    </video>
-    <span
-      style={{ position: "absolute", right: -5, top: -3, cursor: "pointer", background: "red", borderRadius: "50%", padding: "0px 6px", color: "#fff" }}
-      onClick={(e) => {
-        e.stopPropagation(); // Prevent the event from bubbling up
-        const updatedVideos = selectedClips.filter((video) => video._id !== clp?._id);
-        setSelectedClips(updatedVideos);
-      }}
-    >
-      x
-    </span>
-  </div>
-))}
+                                  {selectedClips?.map((clp) => (
+                                    <div key={clp?._id} style={{ borderRadius: 5, position: "relative", border: "1px solid #ebebeb", marginLeft: "15px" }} className={`col-5`}>
+                                      <video style={{ width: "100%", maxHeight: "200px", height: "100%" }}>
+                                        <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                                      </video>
+                                      <span
+                                        style={{ position: "absolute", right: -5, top: -3, cursor: "pointer", background: "red", borderRadius: "50%", padding: "0px 6px", color: "#fff" }}
+                                        onClick={(e) => {
+                                          e.stopPropagation(); // Prevent the event from bubbling up
+                                          const updatedVideos = selectedClips.filter((video) => video._id !== clp?._id);
+                                          setSelectedClips(updatedVideos);
+                                        }}
+                                      >
+                                        x
+                                      </span>
+                                    </div>
+                                  ))}
                                 </div>
                               </div>
                             </div> : <></>}
@@ -888,6 +888,20 @@ const Bookings = ({ accountType = null }) => {
   );
   const mediaQuery = window.matchMedia('(min-width: 992px)')
 
+
+  const TogglTab = (value) => {
+    dispatch(authAction.setActiveTab(value));
+    if (
+      window.innerWidth < 800 &&
+      document &&
+      document.querySelector &&
+      document.querySelector(".app-sidebar")
+    ) {
+      document.querySelector(".app-sidebar").classList.remove("active");
+    }
+  };
+
+
   return (
     <React.Fragment>
       {startMeeting.isOpenModal ? (
@@ -937,20 +951,25 @@ const Bookings = ({ accountType = null }) => {
             ) : null}
           </div>
           {accountType === AccountType.TRAINEE ? (
-            !scheduledMeetingDetails && !scheduledMeetingDetails.length ? (
-              <h2
-                className="d-flex 
-        justify-content-center mt-4"
-              >
-                No Bookings available
-              </h2>
-            ) : (
+            scheduledMeetingDetails.length ? (
               <React.Fragment>
                 <h3 className="mt-2 p-3 mb-2 bg-primary text-white rounded">
                   Bookings
                 </h3>
                 {Bookings()}
               </React.Fragment>
+            ) : (
+              <>
+                <h3 className="mt-2 p-3 mb-2 bg-primary text-white rounded">
+                  Bookings
+                </h3>
+                <h3 className="d-flex justify-content-center mt-4" >
+                  Its empty here, search for trainers on the homepage and get started on your learning journey !
+                </h3>
+                <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "50px" }}>
+                  <button onClick={() => TogglTab("home")} className={`btn btn-primary button-effect btn-sm mr-2 btn_cancel`}>Search</button>
+                </div>
+              </>
             )
           ) : null}
         </div>

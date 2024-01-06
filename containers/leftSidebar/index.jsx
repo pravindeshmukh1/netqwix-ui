@@ -58,7 +58,7 @@ const Index = (props) => {
   const { sidebarActiveTab } = useAppSelector(authState);
   const [width, setWidth] = useState(0);
   const [opentour, setopentour] = useState(true);
-  let [activeTab, setActiveTab] = useState(sidebarActiveTab);
+  let [activeTab, setActiveTab] = useState();
   const [mode, setMode] = useState(false);
   const router = useRouter();
   const [size, setSize] = useState([0, 0]);
@@ -118,8 +118,12 @@ const Index = (props) => {
     )}`;
   };
 
+  useEffect(() => {
+    setActiveTab(sidebarActiveTab);
+  }, [sidebarActiveTab])
+
   const TogglTab = (value) => {
-    setActiveTab(value);
+
     dispatch(authAction.setActiveTab(value));
     // // document.querySelector(".recent-default").classList.remove("active");
     if (
@@ -239,7 +243,7 @@ const Index = (props) => {
           <ul className="sidebar-top">
             <li>
               <Tooltip title="Home" position="top" trigger="mouseenter">
-                <NavLink
+                <NavLink id="sidebar-item-home"
                   className={`icon-btn btn-light button-effect ${activeTab === "home" ? "active" : ""
                     }`}
                   onClick={() => TogglTab("home")}
@@ -258,7 +262,7 @@ const Index = (props) => {
                 position="right-end"
                 trigger="mouseenter"
               >
-                <NavLink
+                <NavLink id="sidebar-item-booking"
                   className={`icon-btn btn-light button-effect ${activeTab === leftSideBarOptions.SCHEDULE_TRAINING
                     ? "active"
                     : ""
@@ -271,7 +275,7 @@ const Index = (props) => {
             </li>}
             <li>
               <Tooltip title="Locker" position="top" trigger="mouseenter">
-                <NavLink
+                <NavLink id="sidebar-item-locker"
                   className={`icon-btn btn-light button-effect step2 ${activeTab === "file" ? "active" : ""
                     }`}
                   onClick={() => ToggleTab("file")}
@@ -383,7 +387,7 @@ const Index = (props) => {
                   size="small"
                   trigger="mouseenter"
                 >
-                  <NavLink
+                  <NavLink id="sidebar-item-notification"
                     className={`icon-btn btn-light button-effect ${activeTab === "notification" ? "active" : ""
                       }`}
                     onClick={() => ToggleTab("notification")}
@@ -396,7 +400,7 @@ const Index = (props) => {
 
             <li>
               <Tooltip title="Settings" position="top" trigger="mouseenter">
-                <NavLink
+                <NavLink id="sidebar-item-setting"
                   className={`icon-btn btn-light button-effect step2 ${activeTab === "setting" ? "active" : ""
                     }`}
                   onClick={() => ToggleTab("setting")}
@@ -416,6 +420,7 @@ const Index = (props) => {
                 trigger="mouseenter"
               >
                 <NavLink
+                  id="sidebar-item-mode"
                   className="icon-btn btn-light button-effect mode step3"
                   data-intro="Change mode"
                   onClick={() => toggleLightMode(mode)}
@@ -427,6 +432,7 @@ const Index = (props) => {
             <li>
               <Tooltip title="Logout" position="top" trigger="mouseenter">
                 <NavLink
+                  id="sidebar-item-logout"
                   className="icon-btn btn-light"
                   onClick={() => Logout()}
                 >
