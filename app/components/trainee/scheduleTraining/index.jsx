@@ -736,22 +736,25 @@ const ScheduleTraining = () => {
       className="bookings custom-scroll custom-trainee-dashboard"
     >
 
-      <div style={{ textAlign: "right", marginRight: "20px" }}>
-        <button style={{ width: '50px', height: '50px', borderRadius: '50%', overflow: 'hidden' }} onClick={togglePopup}>
-          <img
-            src={userInfo?.profile_picture}
-            alt={userInfo?.fullname}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
-        </button>
+      <div className="row">
+
+        <div className="trainer-recommended" style={{ marginTop: "5%", maxWidth: "75%" }}>
+          <h1 style={{ marginBottom: "10px" }}>Book Your Lesson now</h1>
+          <p>Are you ready to embark on a transformative journey towards your personal and professional development? We are here to revolutionize the way you learn and connect with expert trainers. Our cutting-edge platform.</p>
+        </div>
+
+        <div style={{ textAlign: "right", marginRight: "20px" }}>
+          <button style={{ width: '50px', height: '50px', borderRadius: '50%', overflow: 'hidden' }} onClick={togglePopup}>
+            <img
+              src={userInfo?.profile_picture}
+              alt={userInfo?.fullname}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          </button>
+        </div>
       </div>
 
       {popup && <PopupContent onClose={closePopup} userInfo={userInfo} Logout={Logout} />}
-
-      <div className="trainer-recommended" style={{ marginTop: "5%", maxWidth: "75%" }}>
-        <h1 style={{ marginBottom: "10px" }}>Book Your Lesson now</h1>
-        <p>Are you ready to embark on a transformative journey towards your personal and professional development? We are here to revolutionize the way you learn and connect with expert trainers. Our cutting-edge platform.</p>
-      </div>
 
       <div
         id="dashboard"
