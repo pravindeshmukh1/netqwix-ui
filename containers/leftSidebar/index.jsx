@@ -192,11 +192,11 @@ const Index = (props) => {
               src="/assets/images/logo/netquix-logo.png"
               alt="logo"
               className="custom-image"
-              
+
             />
           </Link>
         </div>
-        
+
 
         <div className="app-list sidebar-main">
           {/* <ul className="sidebar-top  custom-scroll">
