@@ -44,9 +44,19 @@ import {
 import CustomRangePicker from "../../../common/timeRangeSlider";
 import { getTrainersAsync, trainerState } from "../../trainer/trainer.slice";
 import { authAction } from "../../auth/auth.slice";
+import Category from "../../../../pages/landing/category";
 const { isSidebarToggleEnabled } = bookingsAction;
 const { removePaymentIntent } = traineeAction;
 const ScheduleTraining = () => {
+  const masterRecords = useAppSelector(masterState).master;
+  const [data, setData] = useState();
+
+  console.log("datadata", data);
+
+  useEffect(() => {
+    setData(masterRecords?.masterData);
+  }, [masterRecords]);
+
   const dispatch = useAppDispatch();
   const { status, getTraineeSlots, transaction } = useAppSelector(traineeState);
   const { trainersList } = useAppSelector(trainerState);
@@ -682,12 +692,15 @@ const ScheduleTraining = () => {
       }}
       className="bookings custom-scroll custom-trainee-dashboard"
     >
+      <div className="trainer-recommended" style={{ marginTop: "5%", maxWidth: "75%" }}>
+        <h1 style={{ marginBottom: "10px" }}>Book Your Lesson now</h1>
+        <p>Are you ready to embark on a transformative journey towards your personal and professional development? We are here to revolutionize the way you learn and connect with expert trainers. Our cutting-edge platform.</p>
+      </div>
+
       <div
         id="dashboard"
         className="d-flex justify-content-center align-items-center dashboard-search-trainer"
-        style={{
-          height: "94%",
-        }}
+        style={{ marginTop: "5%", marginBottom: "2%" }}
       >
         <SearchableDropdown
           placeholder="Search Trainers..."
@@ -732,6 +745,43 @@ const ScheduleTraining = () => {
           }}
         />
       </div>
+      <div className="trainer-recommended" style={{ marginBottom: "2%" }}>
+        <div className="row">
+          <div className="col d-none d-sm-block">
+            {data?.category?.map((item, index) => {
+              return (
+                <span
+                  key={`category_item${index}`}
+                  className="badge badge-light lg"
+                  style={{
+                    margin: "12px",
+                    padding: "18px",
+                    alignItems: "center",
+                    fontSize: "14px",
+                    color: "black",
+                    cursor: "pointer"
+                  }}
+                  onClick={() => {
+                    setTrainerInfo((prev) => ({
+                      ...prev,
+                      userInfo: {
+                        id: item,
+                        isCategory: true,
+                        name: item
+                      },
+                      selected_category: item,
+                    }));
+                    setParams({ search: item })
+                  }}
+                >
+                  {item}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
       <div className="trainer-recommended">
         <h2>Recommended</h2>
         <TrainerSlider list={trainers} />
