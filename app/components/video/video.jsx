@@ -788,17 +788,8 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
       captureVideo2();
     }
 
-    // const targetElement = document.body;
-    let targetElement;
-    let hideElements = false;
-    if (selectedClips?.length) {
-      // If clips are selected, use element with id 'third'
-      targetElement = document.getElementById('third');
-      hideElements = true;
-    } else {
-      // If no clips selected, use document.body
-      targetElement = document.body;
-    }
+    const targetElement = document.body;
+
     const creationBarItem = document.querySelector('.creationBarItem');
     const callActionButtons = document.querySelector('.call-action-buttons');
     const mainNav = document.querySelector('.main-nav');
@@ -806,28 +797,34 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
     const Pause2 = document.querySelector('.Pause2');
     const progress1 = document.querySelector('.progress1');
     const progress2 = document.querySelector('.progress2');
-    // const scs = document.querySelector('.scs');
-    // const scs2 = document.querySelector('.scs2');
-if(hideElements){
-  if (Pause) {
-    Pause.style.transition = 'opacity 2s';
-    Pause.style.opacity = '0';
-  }
-  if (progress1) {
-    progress1.style.transition = 'opacity 2s';
-    progress1.style.opacity = '0';
-  }
-  if (Pause2) {
-    Pause2.style.transition = 'opacity 2s';
-    Pause2.style.opacity = '0';
-  }
-  if (progress2) {
-    progress2.style.transition = 'opacity 2s';
-    progress2.style.opacity = '0';
-  }
-}
+    const userVideo1 = document.getElementById("user-video-1")
+    const userVideo2 = document.getElementById("user-video-2")
 
-    // Hide elements with a smooth transition
+    if (Pause) {
+      Pause.style.transition = 'opacity 2s';
+      Pause.style.opacity = '0';
+    }
+    if (progress1) {
+      progress1.style.transition = 'opacity 2s';
+      progress1.style.opacity = '0';
+    }
+    if (Pause2) {
+      Pause2.style.transition = 'opacity 2s';
+      Pause2.style.opacity = '0';
+    }
+    if (progress2) {
+      progress2.style.transition = 'opacity 2s';
+      progress2.style.opacity = '0';
+    }
+    if (userVideo1) {
+      userVideo1.style.transition = 'opacity 2s';
+      userVideo1.style.opacity = '0';
+    }
+    if (userVideo2) {
+      userVideo2.style.transition = 'opacity 2s';
+      userVideo2.style.opacity = '0';
+    }
+
     if (creationBarItem) {
       creationBarItem.style.transition = 'opacity 2s'; // Adjust the duration based on your needs
       creationBarItem.style.opacity = '0';
@@ -841,7 +838,7 @@ if(hideElements){
       mainNav.style.transition = 'opacity 2s'; // Set duration to 0s
       mainNav.style.opacity = '0';
     }
-    
+
     // if(Pause){
     //   Pause.style.transition = 'opacity 2s'
     //   Pause.style.opacity = '0';
@@ -870,12 +867,7 @@ if(hideElements){
     html2canvas(targetElement, { useCORS: true }).then(async (canvas) => {
       // document.body.appendChild(canvas);
       const dataUrl = canvas.toDataURL('image/png');
-      // screenShots.push({
-      //   title: "",
-      //   description: "",
-      //   imageUrl: dataUrl
-      // })
-      // setScreenShots([...screenShots])
+
       if (creationBarItem) {
         creationBarItem.style.transition = 'opacity 2s';
         creationBarItem.style.opacity = '1';
@@ -889,22 +881,32 @@ if(hideElements){
         mainNav.style.transition = 'opacity 2s'; // Adjust the duration based on your needs
         mainNav.style.opacity = '1';
       }
-      if(Pause){
+      if (Pause) {
         Pause.style.transition = 'opacity 2s'
         Pause.style.opacity = '1';
       }
-      if(progress1){
+      if (progress1) {
         progress1.style.transition = 'opacity 2s'
         progress1.style.opacity = '1';
       }
-      if(Pause2){
+      if (Pause2) {
         Pause2.style.transition = 'opacity 2s'
         Pause2.style.opacity = '1';
       }
-      if(progress2){
+      if (progress2) {
         progress2.style.transition = 'opacity 2s'
         progress2.style.opacity = '1';
       }
+
+      if (userVideo1) {
+        userVideo1.style.transition = 'opacity 2s'
+        userVideo1.style.opacity = '1';
+      }
+      if (userVideo2) {
+        userVideo2.style.transition = 'opacity 2s'
+        userVideo2.style.opacity = '1';
+      }
+
       // if(scs){
       //   scs.style.transition = 'opacity 2s'
       //   scs.style.opacity = '1';
@@ -913,7 +915,6 @@ if(hideElements){
       //   scs2.style.transition = 'opacity 2s'
       //   scs2.style.opacity = '1';
       // }
-  
 
       var res = await screenShotTake({ sessions: id, trainer: fromUser?._id, trainee: toUser?._id, })
       const blob = await fetch(dataUrl).then((res) => res.blob());
@@ -1432,7 +1433,7 @@ if(hideElements){
                     <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
                   </video>
                   <canvas id="video-canvas-1" hidden></canvas>
-                  <div className="Pause"   style={{ position: "relative", zIndex: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div className="Pause" style={{ position: "relative", zIndex: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <div><p style={{ margin: 0, marginRight: "10px" }}>{videoTime?.currentTime1}</p> </div>
                     <div className="external-control-bar">
                       <button className="btn btn-primary px-1 py-1 my-3 mr-2" onClick={() => togglePlay("one")}>{(isPlaying?.isPlaying1) ? <Pause style={{ verticalAlign: "middle" }} /> : <Play style={{ verticalAlign: "middle" }} />}</button>
@@ -1494,10 +1495,10 @@ if(hideElements){
                 </div >
               </div >
             }
-            <div className={selectedClips?.length != 0 && mediaQuery.matches && "scs"}>
+            <div id="user-video-1" className={selectedClips?.length != 0 && mediaQuery.matches && "scs"}>
               <video ref={remoteVideoRef} playsInline autoPlay className="rounded " style={{ width: '100%', height: selectedClips?.length === 0 && 450 }} id="end-user-video" />
             </div>
-            <div className={mediaQuery.matches && "scs2"}>
+            <div id="user-video-2" className={mediaQuery.matches && "scs2"}>
               {videoRef && (<video id="end-user-video" playsInline muted className="rounded " style={{ width: '100%' }} ref={videoRef} autoPlay />)}
             </div>
             {renderCallActionButtons()}

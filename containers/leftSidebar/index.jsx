@@ -243,9 +243,8 @@ const Index = (props) => {
           <ul className="sidebar-top">
             <li>
               <Tooltip title="Home" position="top" trigger="mouseenter">
-                <NavLink id="sidebar-item-home"
-                  className={`icon-btn btn-light button-effect ${activeTab === "home" ? "active" : ""
-                    }`}
+                <NavLink
+                  className={`icon-btn btn-light button-effect ${activeTab === "home" ? "active" : ""}`}
                   onClick={() => TogglTab("home")}
                 >
                   <i className="fa fa-home" />
