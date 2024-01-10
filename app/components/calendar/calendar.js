@@ -7,7 +7,7 @@ export default function CalendarPage() {
       <FullCalendar
         plugins={[dayGridPlugin]}
         headerToolbar={{
-          left: 'prevYear,prev,next,nextYear',
+          left: 'prev,next',
           center: 'title',
           right: 'dayGridMonth',
         }}
