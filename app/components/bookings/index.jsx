@@ -36,6 +36,7 @@ import classnames from "classnames";
 import VideoUpload from '../videoupload'
 import { myClips } from "../../../containers/rightSidebar/fileSection.api";
 import { traineeAction, traineeState } from "../trainee/trainee.slice";
+import CalendarPage from "../calendar/calendar";
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
 const Bookings = ({ accountType = null }) => {
@@ -1000,8 +1001,8 @@ const Bookings = ({ accountType = null }) => {
                 {/* <h2 className="d-flex justify-content-center mt-2 p-5 mb-2 bg-primary text-white rounded">
                   Bookings
                 </h2> */}
+                <CalendarPage />
                 <h2 className="d-flex justify-content-center p-5">Bookings</h2>
-
                 <div className="mb-2">{bookingTabs()}</div>
               </React.Fragment>
             ) : null}
