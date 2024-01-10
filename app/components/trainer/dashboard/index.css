@@ -48,3 +48,7 @@
   max-height: 300px;
   height: 100%;
 }
+
+.calendar-container {
+  margin: 30px;
+}
