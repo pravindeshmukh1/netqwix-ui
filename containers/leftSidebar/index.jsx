@@ -186,8 +186,8 @@ const Index = (props) => {
       <nav
         className={`main-nav on custom-scroll ${accountType === AccountType.TRAINEE &&
           POSITION_FIXED_SIDEBAR_MENU.includes(activeTab) &&
-          "custom-sidebar"
-          }`}
+          "custom-sidebar" 
+          }`} style={{zIndex:'9999'}}
       >
         {/* logo section */}
         <div className="logo-warpper">
@@ -243,8 +243,9 @@ const Index = (props) => {
           <ul className="sidebar-top">
             <li>
               <Tooltip title="Home" position="top" trigger="mouseenter">
-                <NavLink
-                  className={`icon-btn btn-light button-effect ${activeTab === "home" ? "active" : ""}`}
+                <NavLink id="sidebar-item-home"
+                  className={`icon-btn btn-light button-effect ${activeTab === "home" ? "active" : ""
+                    }`}
                   onClick={() => TogglTab("home")}
                 >
                   <i className="fa fa-home" />

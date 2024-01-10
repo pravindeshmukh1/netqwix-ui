@@ -12,6 +12,9 @@ $canvas-z-index: 8;
 .react-datepicker-popper {
   z-index: 12 !important;
 }
+ .trainee-dashboard{
+  position: absolute !important;
+}
 
 .parent-container {
   display: flex !important;
@@ -50,7 +53,7 @@ $canvas-z-index: 8;
   //     justify-content: start !important;
   //   }
   .col-sm-6 {
-    padding-left: 40px !important;
+    padding-left: 40px;
   }
 }
 
@@ -655,7 +658,7 @@ slick-slider .slick-list,
 
 @media (min-width: 768px) {
   .trainer-recommended {
-    margin-left: 200px;
+    margin: 0px 10% 0px 10%;
   }
 }
 
@@ -776,7 +779,7 @@ slick-slider .slick-list,
 .trainer-profile {
   width: 348px;
   // margin-top: 12px;
-  margin: 12px;
+  margin: 5px;
   height: auto;
   min-height: 200px;
   min-width: 80px;

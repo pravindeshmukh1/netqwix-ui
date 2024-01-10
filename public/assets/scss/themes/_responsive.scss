@@ -1355,6 +1355,43 @@
     }
   }
 }
+
+@media (max-width: 767px){
+  .trainer-Pro{
+    display: block !important;
+  }
+  .card.rounded.trainer-profile-card {
+    width: 60% !important;
+    margin: auto;
+  }
+  .card.rounded.trainer-profile-card.Select {
+    margin-top: 10px !important;
+}
+.welcome-text{
+  text-align: center;
+}
+.Report{
+  margin-top: 0 !important;
+}
+}
+@media(width:768px){
+  .bookings{
+    width: 86vw !important;
+
+  }
+  .col-sm-6{
+    padding-left: 14px !important;
+  }
+  
+}
+
+
+
+
+
+
+
+
 @media (max-width: 800px) {
   .chitchat-left-sidebar .search-form .form-group .icon-close {
     top: 3px;

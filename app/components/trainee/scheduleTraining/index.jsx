@@ -5,6 +5,10 @@ import "../scheduleTraining/index.scss";
 import { Popover } from "react-tiny-popover";
 import PopupContent from "./PopupContent";
 import { useRouter } from "next/router";
+import Slider from "react-slick";
+import ShareModalTrainee from "../../bookings/start/Share modal Trainee";
+
+
 import {
   BookedSession,
   DefaultTimeRange,
@@ -48,6 +52,56 @@ import { getTrainersAsync, trainerState } from "../../trainer/trainer.slice";
 import { authAction, authState } from "../../auth/auth.slice";
 import { SocketContext } from "../../socket";
 import Category from "../../../../pages/landing/category";
+import { myClips, traineeClips } from "../../../../containers/rightSidebar/fileSection.api";
+import { addTraineeClipInBookedSessionAsync } from "../../common/common.slice";
+const settings = {
+  autoplay: true,
+  infinite: true,
+  speed: 2000,
+  slidesToShow: 3,
+  slidesToScroll: 1,
+  swipetoslide: true,
+  autoplaySpeed: 1000,
+  // arrows:false,
+  responsive: [
+    {
+      breakpoint: 1366,
+      settings: {
+        autoplay: true,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+      },
+    },
+    {
+      breakpoint: 800,
+      settings: {
+        autoplay: true,
+
+        slidesToShow: 7,
+      },
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        autoplay: true,
+
+        slidesToShow: 5,
+      },
+    },
+    {
+      breakpoint: 700,
+      settings: {
+        autoplay: true,
+        slidesToShow: 1,
+      },
+    },
+  ],
+};
+
+
+
+
+
 const { isSidebarToggleEnabled } = bookingsAction;
 const { removePaymentIntent } = traineeAction;
 const ScheduleTraining = () => {
@@ -82,6 +136,33 @@ const ScheduleTraining = () => {
     startTime: "",
     endTime: "",
   });
+  const [clips, setClips] = useState([]);
+  const [selectedClips, setSelectedClips] = useState([]);
+  const[trainee , setTrainee]=useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleSelectClip = () => {
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    getmyClips()
+  }, [])
+
+  const addTraineeClipInBookedSession = async () => {
+    const payload = { id: isOpenID, trainee_clip: selectedClips?.map(val => val?._id) };
+    dispatch(addTraineeClipInBookedSessionAsync(payload));
+    dispatch(removeNewBookingData());
+    setIsOpen(false)
+    setIsModalOpen(false);
+  }
+  
+  const getmyClips = async () => {
+    var res = await myClips({})
+    setClips(res?.data)
+  }
 
   const [popup, setPopup] = useState(false)
   const router = useRouter();
@@ -117,6 +198,7 @@ const ScheduleTraining = () => {
   });
 
   const [query, setQuery] = useState("");
+  
   const [isOpenInstantScheduleMeeting, setInstantScheduleMeeting] =
     useState(false);
   const [trainerInfo, setTrainerInfo] = useState({
@@ -734,11 +816,12 @@ const ScheduleTraining = () => {
         return;
       }}
       className="bookings custom-scroll custom-trainee-dashboard"
+      style={{ width: "75% !important"}}
     >
 
       <div className="row">
 
-        <div className="trainer-recommended" style={{ marginTop: "5%", maxWidth: "75%" }}>
+        <div className="trainer-recommended" style={{ marginTop:"3%", maxWidth: "75%" }}>
           <h1 style={{ marginBottom: "10px" }}>Book Your Lesson now</h1>
           <p>Are you ready to embark on a transformative journey towards your personal and professional development? We are here to revolutionize the way you learn and connect with expert trainers. Our cutting-edge platform.</p>
         </div>
@@ -805,42 +888,91 @@ const ScheduleTraining = () => {
           }}
         />
       </div>
-      <div className="trainer-recommended" style={{ marginBottom: "2%" }}>
+      <div className="trainer-recommended" style={{height:'90px'}}>
         <div className="row">
-          <div className="col d-none d-sm-block">
-            {data?.category?.map((item, index) => {
-              return (
-                <span
-                  key={`category_item${index}`}
-                  className="badge badge-light lg"
-                  style={{
-                    margin: "12px",
-                    padding: "18px",
-                    alignItems: "center",
-                    fontSize: "14px",
-                    color: "black",
-                    cursor: "pointer"
-                  }}
-                  onClick={() => {
-                    setTrainerInfo((prev) => ({
-                      ...prev,
-                      userInfo: {
-                        id: item,
-                        isCategory: true,
-                        name: item
-                      },
-                      selected_category: item,
-                    }));
-                    setParams({ search: item })
-                  }}
-                >
-                  {item}
-                </span>
-              );
-            })}
-          </div>
+        <div className="col d-none d-sm-block">
+  <Slider {...settings}>
+    {data?.category?.map((item, index) => (
+      <div key={`slider-item-${index}`} >
+        <span
+          className="badge badge-light lg"
+          style={{
+            margin: "12px",
+            padding: "18px", // Add your desired padding here
+            alignItems: "center",
+            fontSize: "14px",
+            color: "black",
+            cursor: "pointer",
+            width: "80%",
+            height: "0",
+          
+            display: "flex",
+            justifyContent: "center", // Center content horizontally
+            flexDirection: "column", 
+          }}
+          onClick={() => {
+            setTrainerInfo((prev) => ({
+              ...prev,
+              userInfo: {
+                id: item,
+                isCategory: true,
+                name: item,
+              },
+              selected_category: item,
+            }));
+            setParams({ search: item })
+          }}
+        >
+          {item}
+        </span>
+      </div>
+    ))}
+  </Slider>
+</div>
         </div>
       </div>
+
+<div style={{display:"flex",justifyContent:"right"}}>
+<div className="card rounded trainer-profile-card" style={{width:"28%"}}>
+    <div className="card-body" style={{margin:"auto"}}>
+    <div className="row" style={{justifyContent:"center"}}>
+            <h3 className="mt-3">Select clip</h3>
+        </div>
+        <div className="row" style={{justifyContent:"center"}}>
+            <h3 className="mt-3">Trainee text</h3>
+        </div>
+        <div className="row" style={{justifyContent:"center", marginTop:"10px"}}>
+            <button
+                type="button"
+                className="btn btn-primary btn-sm"
+                onClick={handleSelectClip}
+            >
+                Select Clip
+            </button>
+        </div>
+        {isModalOpen && (
+    // Content for the modal
+    <ShareModalTrainee
+    isOpen={isModalOpen}
+    onClose={closeModal}
+    selectedClips={selectedClips}
+    clips={clips} 
+    addTraineeClipInBookedSession={addTraineeClipInBookedSession}
+    setSelectedClips={setSelectedClips}
+    />
+  )}
+        <div className="row" style={{justifyContent:"center", paddingTop:"10px", margin:"auto"}}>
+        <input className="form-control" type="email" placeholder="Email"></input>
+        </div>
+        <div className="row" style={{justifyContent:"center", marginTop:"10px"}}>
+            <button className="btn btn-success button-effect btn-sm btn_cancel">Share</button>
+        </div>
+    </div>
+</div>
+
+
+</div>
+      
 
       <div className="trainer-recommended">
         <h2>Recommended</h2>
@@ -1199,7 +1331,7 @@ const ScheduleTraining = () => {
         (trainerInfo && trainerInfo.userInfo) ? (
         <div className="custom-scroll">{renderUserDetails()}</div>
       ) : (
-        <div className="custom-scroll trainee-dashboard" style={{ position: 'relative !important' }}>
+        <div className="custom-scroll trainee-dashboard">
           {renderSearchMenu()}
         </div>
       )}

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import ReactStrapModal from "../../common/modal";
+import ShareModalTrainer from "./start/Share modal Trainer";
 import { Formik } from "formik";
 import {
   bookingsAction,
@@ -70,6 +71,15 @@ const Bookings = ({ accountType = null }) => {
   const [isOpenID, setIsOpenID] = useState("");
   const [clips, setClips] = useState([]);
   const [selectedClips, setSelectedClips] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+  const handleSelectClip = () => {
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     getMyClips()
@@ -133,6 +143,7 @@ const Bookings = ({ accountType = null }) => {
     dispatch(addTraineeClipInBookedSessionAsync(payload));
     dispatch(removeNewBookingData());
     setIsOpen(false)
+    setIsModalOpen(false);
   }
 
   const toggle = () => setStartMeeting(!startMeeting);
@@ -811,7 +822,8 @@ const Bookings = ({ accountType = null }) => {
   };
   const trainerInfo = () => (
     <React.Fragment>
-      <div className="card rounded trainer-profile-card">
+      <div className="trainer-Pro" style={{display:"flex",justifyContent:"space-between"}}>
+      <div className="card rounded trainer-profile-card" style={{width:"60%"}}>
         <div className="card-body">
           <div className="row">
             <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 d-flex justify-content-center align-items-center">
@@ -841,7 +853,51 @@ const Bookings = ({ accountType = null }) => {
           </div>
         </div>
       </div>
+
+
+      <div className="card rounded trainer-profile-card Select" style={{width:"39%"}}>
+    <div className="card-body" style={{margin:"auto"}}>
+    <div className="row" style={{justifyContent:"center"}}>
+            <h3 className="mt-3">Select clip</h3>
+        </div>
+        <div className="row" style={{justifyContent:"center"}}>
+            <h3 className="mt-3">Trainee text</h3>
+        </div>
+        <div className="row" style={{justifyContent:"center", marginTop:"10px"}}>
+            <button
+                type="button"
+                className="btn btn-primary btn-sm"
+                onClick={handleSelectClip}
+            >
+                Select Clip
+            </button>
+        </div>
+        {isModalOpen && (
+    // Content for the modal
+    <ShareModalTrainer
+      isOpen={isModalOpen}
+      onClose={closeModal}
+      selectedClips={selectedClips}
+      clips={clips} 
+      addTraineeClipInBookedSession={addTraineeClipInBookedSession}
+      setSelectedClips={setSelectedClips}
+    />
+  )}
+        <div className="row" style={{justifyContent:"center", paddingTop:"10px", margin:"auto"}}>
+        <input className="form-control" type="email" placeholder="Email"></input>
+        </div>
+        <div className="row" style={{justifyContent:"center", marginTop:"10px"}}>
+            <button className="btn btn-success button-effect btn-sm btn_cancel">Share</button>
+        </div>
+    </div>
+</div>
+
+      </div>
+      
+      
+
     </React.Fragment>
+    
   );
 
   const bookingTabs = () => (

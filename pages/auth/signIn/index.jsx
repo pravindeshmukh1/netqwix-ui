@@ -161,7 +161,7 @@ const Auth_SignIn = () => {
                           className="btn button-effect btn-signup"
                           href={routingPaths.signUp}
                         >
-                          SignUp
+                          Sign Up
                         </Link>
                       </div>
                     </div>

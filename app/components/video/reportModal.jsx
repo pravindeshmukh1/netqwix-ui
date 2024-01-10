@@ -8,6 +8,10 @@ import { Crop, Trash2, X } from "react-feather";
 import { Button } from "reactstrap";
 import html2canvas from "html2canvas";
 import { getS3SignPdfUrl } from "./video.api";
+import { useAppSelector, useAppDispatch } from "../../store";
+import { authState } from "../auth/auth.slice";
+import { values } from "lodash";
+
 
 
 
@@ -23,6 +27,7 @@ const reportModal = ({
     const [reportObj, setReportObj] = useState({ title: "", topic: "" });
     const [screenShots, setScreenShots] = useState([]);
     const [currentDate, setCurrentDate] = useState('');
+    const { userInfo } = useAppSelector(authState);
 
     useEffect(() => {
         // Set the current date when the component mounts
@@ -306,16 +311,17 @@ const reportModal = ({
                             <div style={{ display: 'flex', justifyContent: 'space-between' ,alignItems:"center"}}>
                                 <p style={{ textTransform: 'uppercase', marginTop: '0px', fontSize: '40px', fontWeight: '600',color:"green" }}>Game Plan</p>
                                 <div style={{ textAlign: 'right' }}>
-                            <img src="/assets/images/logo/netquix-logo.png" alt="Logo" style={{ height: '180px', width: '180px', objectFit: 'cover'}} />
+                            <img src="/assets/images/logo/netqwix_logo real.png" alt="Logo" style={{ height: '180px', width: '300px', objectFit: 'cover'}} />
                           
                             </div>
                             </div>
                             <div style={{display:"flex"}}>
                                 <div style={{width:"40%"}}>
-                                <h2 style={{ margin: '0px',fontWeight:"normal" }}>Topic: {reportObj?.title}</h2>
+                                <div style={{ fontSize: '18px', fontWeight: '400',width:"70%", fontWeight:"bold"}}>Date: {currentDate}</div>
+                                <h2 style={{ margin: '0px',fontWeight:"normal",paddingTop:"10px" }}>Topic: {reportObj?.title}</h2>
                                 <h2 style={{ margin: '0px', fontWeight:"normal",color:"gray"}}>Name: {reportObj?.topic}</h2>
                                 </div>
-                                <div style={{ fontSize: '18px', fontWeight: '400',width:"70%", fontWeight:"bold"  ,textAlign:"center" ,position:"relative",top:'20px'}}>Date: {currentDate}</div>
+                               
                             </div>
                             <hr style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: 'black' }} />
                             {reportArr?.map((sst, i) => {
@@ -325,7 +331,7 @@ const reportModal = ({
                                             <img src={sst?.imageUrl} alt="image" style={{ height: '260px', width: '-webkit-fill-available', objectFit: 'cover' }} />
                                         </div>
                                         <div>
-                                            <p style={{ fontSize: '30px', fontWeight:'normal' }}>TIP #{i + 1} {screenShots[i]?.title}</p>
+                                            <p style={{ fontSize: '30px', fontWeight:'normal' }}>{screenShots[i]?.title}</p>
                                             <p>{screenShots[i]?.description}</p>
                                         </div>
                                     </div>
@@ -335,11 +341,16 @@ const reportModal = ({
                          <div style={{ display: 'flex', justifyContent: 'space-between'}}>
   <div style={{ textAlign: 'left', marginRight: '20px' }}>
     <h2 style={{color:"green"}}>Coach</h2>
-    <p>Coaching is a form of development in which an experienced person, called a coach, supports a learner or client in achieving a specific personal or professional goal by providing training.</p>
+    <p>{userInfo?.about}</p>
   </div>
   <div>
-    <h2 style={{color:"yellowgreen"}}>John</h2>
-    <img src="/assets/images/about/Coach.jpeg" alt="John Image" style={{ width: '205.8px', height: '154.4px', marginRight:"20px"}} />
+  <h2 style={{color:"yellowgreen"}}>{userInfo && userInfo?.fullname}</h2>
+  <img src={userInfo?.profile_picture || "/assets/images/avtar/user.png"} 
+    
+    alt="John Image" 
+    style={{ width: '205.8px', height: '154.4px', marginRight:"20px"}}
+    
+     />
   </div>
 </div>
                         </div>

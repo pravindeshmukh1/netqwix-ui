@@ -55,6 +55,7 @@ const SettingSection = (props) => {
   const [deleteAcct, setDeleteDisable] = useState(false);
   const [settingTab, setSettingTab] = useState("");
   const [isError, setIsError] = useState(false);
+  const [defaultTimeZone] = useState("(GMT -5:00) Eastern Time (US & Canada)");
   const [workingHours, setWorkingHours] = useState({
     from: "",
     to: "",
@@ -820,6 +821,7 @@ const SettingSection = (props) => {
                   >
                     <div className="card-body change-number">
                       <h5>Add your working hours...</h5>
+                  
                       <div className="row">
                         <div className="col-6 col-sm-3 col-md-3 col-lg-2">
                           <p className="ml-2">From</p>
@@ -915,7 +917,7 @@ const SettingSection = (props) => {
                             value={
                               workingHours.time_zone ||
                               userInfo?.extraInfo?.working_hours?.time_zone ||
-                              "(GMT -5:00) Eastern Time (US & Canada)"
+                               defaultTimeZone
                             }
                             onChange={(event) => {
                               const { value } = event.target;

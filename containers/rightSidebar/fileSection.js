@@ -253,7 +253,7 @@ const FileSection = (props) => {
             </NavLink>
           </NavItem>}
 
-          <NavItem className="ml-5px" style={{ marginTop: accountType === "Trainer" ? "10px" : "0px" }}>
+          <NavItem className="Report ml-5px " style={{ marginTop: accountType === "Trainer" ? "10px" : "0px" }}>
             <NavLink
               className={`button-effect ${activeTab === "report" ? "active" : ""}`}
               onClick={() => setActiveTab("report")}

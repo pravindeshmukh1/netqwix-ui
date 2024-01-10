@@ -897,11 +897,17 @@
       }
     }
   }
-
-
-  
-
 }
+@media(max-width: 1440px) {
+  /* Adjustments for screens with a width of 1440 pixels or less go here */
+  .btn-signup {
+    margin-left: 10px !important; /* Adjust the margin for smaller screens */
+  }
+  .buttons{
+  
+  }
+}
+
 @media (max-width: 320px){
   .login-content{
     .line{
