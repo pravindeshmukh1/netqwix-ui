@@ -55,11 +55,10 @@ const SettingSection = (props) => {
   const [deleteAcct, setDeleteDisable] = useState(false);
   const [settingTab, setSettingTab] = useState("");
   const [isError, setIsError] = useState(false);
-  const [defaultTimeZone] = useState("(GMT -5:00) Eastern Time (US & Canada)");
   const [workingHours, setWorkingHours] = useState({
-    from: "",
-    to: "",
-    time_zone: "",
+    from: "09:00:00",
+    to: "22:00:00",
+    time_zone: "(GMT -5:00) Eastern Time (US & Canada)",
   });
   const [isTimeConflicts, setIsTimeConflicts] = useState(false);
   const [profile, setProfile] = useState({
@@ -169,7 +168,9 @@ const SettingSection = (props) => {
       wallet_amount: userInfo.wallet_amount,
       profile_picture: userInfo.profile_picture,
     }));
+    setWorkingHours(userInfo?.extraInfo?.working_hours)
   }, [userInfo]);
+
 
   // useEffect(())
 
@@ -234,6 +235,7 @@ const SettingSection = (props) => {
     }
   };
 
+
   const closeLeftSide = () => {
     // document.querySelector(".settings-tab").classList.remove("active");
     // document.querySelector(".recent-default").classList.add("active");
@@ -297,9 +299,8 @@ const SettingSection = (props) => {
 
   return (
     <div
-      className={`settings-tab submenu-width dynemic-sidebar custom-scroll ${
-        props.tab === "setting" ? "active" : ""
-      }`}
+      className={`settings-tab submenu-width dynemic-sidebar custom-scroll ${props.tab === "setting" ? "active" : ""
+        }`}
       id="settings"
     >
       <div className="theme-title">
@@ -341,9 +342,8 @@ const SettingSection = (props) => {
                   }}
                 />
                 <img
-                  className={`bg-img rounded ${
-                    accountType === !AccountType.TRAINEE && "mt-1"
-                  }`}
+                  className={`bg-img rounded ${accountType === !AccountType.TRAINEE && "mt-1"
+                    }`}
                   src={profile.profile_picture}
                   alt="Avatar"
                   width={44}
@@ -364,9 +364,8 @@ const SettingSection = (props) => {
                   </>
                 ) : (
                   <img
-                    className={`bg-img rounded ${
-                      accountType === AccountType.TRAINEE ? "mt-2" : "mt-3"
-                    }`}
+                    className={`bg-img rounded ${accountType === AccountType.TRAINEE ? "mt-2" : "mt-3"
+                      }`}
                     src={
                       profile.profile_picture
                         ? profile.profile_picture
@@ -438,9 +437,8 @@ const SettingSection = (props) => {
 
       <div className="setting-block">
         <div
-          className={`block ${
-            settingTab === "account" ? "open custom-block-height" : ""
-          }`}
+          className={`block ${settingTab === "account" ? "open custom-block-height" : ""
+            }`}
         >
           <div className="media">
             <div className="media-body">
@@ -691,9 +689,8 @@ const SettingSection = (props) => {
                 </a>
               </div>
               <div
-                className={`collapse ${
-                  collapseShow.changeNumber ? "show" : ""
-                }`}
+                className={`collapse ${collapseShow.changeNumber ? "show" : ""
+                  }`}
               >
                 <div className="card-body change-number">
                   <h5>Your old country code & phone number</h5>
@@ -769,9 +766,8 @@ const SettingSection = (props) => {
                     </a>
                   </div>
                   <div
-                    className={`collapse ${
-                      collapseShow.hourlyRate ? "show" : ""
-                    }`}
+                    className={`collapse ${collapseShow.hourlyRate ? "show" : ""
+                      }`}
                   >
                     <div className="card-body change-number">
                       <UpdateHourlyRateForm
@@ -815,34 +811,34 @@ const SettingSection = (props) => {
                     </a>
                   </div>
                   <div
-                    className={`collapse ${
-                      collapseShow.workingHours ? "show" : ""
-                    }`}
+                    className={`collapse ${collapseShow.workingHours ? "show" : ""
+                      }`}
                   >
                     <div className="card-body change-number">
                       <h5>Add your working hours...</h5>
-                  
+
                       <div className="row">
                         <div className="col-6 col-sm-3 col-md-3 col-lg-2">
                           <p className="ml-2">From</p>
                           <TimePicker
+
                             name="from"
-                            className={`ml-2 mt-2 ${
-                              isTimeConflicts ? `border border-danger` : ``
-                            }  rounded`}
+                            className={`ml-2 mt-2 ${isTimeConflicts ? `border border-danger` : ``
+                              }  rounded`}
                             placeholder="09:00 am"
                             clearIcon={true}
                             showSecond={false}
                             minuteStep={5}
-                            defaultValue={
-                              userInfo &&
-                              userInfo?.extraInfo &&
-                              userInfo?.extraInfo?.working_hours
-                                ? Utils.getFormattedTime(
-                                    userInfo?.extraInfo?.working_hours.from
-                                  )
-                                : null
-                            }
+                            defaultValue={Utils.getFormattedTime(workingHours?.from)}
+                            // defaultValue={
+                            //   userInfo &&
+                            //     userInfo?.extraInfo &&
+                            //     userInfo?.extraInfo?.working_hours
+                            //     ? Utils.getFormattedTime(
+                            //       userInfo?.extraInfo?.working_hours.from
+                            //     )
+                            //     : null
+                            // }
                             use12Hours
                             onChange={(value) => {
                               if (value) {
@@ -870,19 +866,19 @@ const SettingSection = (props) => {
                           <p className="ml-2">To</p>
                           <TimePicker
                             name="to"
-                            className={`ml-2 mt-2 ${
-                              isTimeConflicts ? `border border-danger` : ``
-                            }  rounded`}
+                            className={`ml-2 mt-2 ${isTimeConflicts ? `border border-danger` : ``
+                              }  rounded`}
                             clearIcon={true}
-                            defaultValue={
-                              userInfo &&
-                              userInfo?.extraInfo &&
-                              userInfo?.extraInfo?.working_hours
-                                ? Utils.getFormattedTime(
-                                    userInfo?.extraInfo?.working_hours.to
-                                  )
-                                : null
-                            }
+                            defaultValue={Utils.getFormattedTime(workingHours?.to)}
+                            // defaultValue={
+                            //   userInfo &&
+                            //     userInfo?.extraInfo &&
+                            //     userInfo?.extraInfo?.working_hours
+                            //     ? Utils.getFormattedTime(
+                            //       userInfo?.extraInfo?.working_hours.to
+                            //     )
+                            //     : null
+                            // }
                             placeholder="10:00 pm"
                             showSecond={false}
                             minuteStep={5}
@@ -914,11 +910,7 @@ const SettingSection = (props) => {
                             name="timezone_offset"
                             id="timezone-offset"
                             className="timezone_offset mt-2 ml-2"
-                            value={
-                              workingHours.time_zone ||
-                              userInfo?.extraInfo?.working_hours?.time_zone ||
-                               defaultTimeZone
-                            }
+                            value={workingHours.time_zone}
                             onChange={(event) => {
                               const { value } = event.target;
                               setWorkingHours((prev) => ({
@@ -989,9 +981,8 @@ const SettingSection = (props) => {
       {accountType === AccountType.TRAINER ? (
         <div className="setting-block">
           <div
-            className={`block ${
-              settingTab === "my-profile" ? "open custom-block-height" : ""
-            }`}
+            className={`block ${settingTab === "my-profile" ? "open custom-block-height" : ""
+              }`}
           >
             <div className="media">
               <div className="media-body">
@@ -1228,13 +1219,12 @@ const SettingSection = (props) => {
         </div>
       </div> */}
       {!settingMenuFilterSection.includes(settingTab) &&
-      accountType === AccountType.TRAINER ? (
+        accountType === AccountType.TRAINER ? (
         <>
           <div className="setting-block">
             <div
-              className={`block ${
-                settingTab === "integratin" ? "open custom-block-height" : ""
-              }`}
+              className={`block ${settingTab === "integratin" ? "open custom-block-height" : ""
+                }`}
             >
               <div className="media">
                 <div className="media-body">
@@ -1667,7 +1657,7 @@ const SettingSection = (props) => {
                                   }}
                                   isError={
                                     touched.profile_image_url &&
-                                    errors.profile_image_url
+                                      errors.profile_image_url
                                       ? true
                                       : false
                                   }
@@ -1721,7 +1711,7 @@ const SettingSection = (props) => {
                                     isError={errors.profile_image_url}
                                     isTouched={
                                       touched.profile_image_url &&
-                                      errors.profile_image_url
+                                        errors.profile_image_url
                                         ? true
                                         : false
                                     }
@@ -1779,9 +1769,8 @@ const SettingSection = (props) => {
       {!settingMenuFilterSection.includes(settingTab) && (
         <div className="setting-block">
           <div
-            className={`block ${
-              settingTab === "help" ? "open custom-block-height" : ""
-            }`}
+            className={`block ${settingTab === "help" ? "open custom-block-height" : ""
+              }`}
           >
             <div className="media">
               <div className="media-body">

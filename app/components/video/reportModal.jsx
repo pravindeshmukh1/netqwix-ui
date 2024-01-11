@@ -33,13 +33,14 @@ const reportModal = ({
         // Set the current date when the component mounts
         updateCurrentDate();
     }, []);
-    
+
+
     const updateCurrentDate = () => {
         const today = new Date();
         const day = today.getDate();
         const month = today.getMonth() + 1; // Months are zero-based, so add 1
         const year = today.getFullYear();
-    
+
         // Format the date as "day/month/year"
         const formattedDate = `${day}/${month}/${year}`;
         setCurrentDate(formattedDate);
@@ -307,21 +308,21 @@ const reportModal = ({
                             </div>
                         </div>
 
-                        <div id="report-pdf" style={{ display: "none", padding: "20px ", border: '10px solid green',borderColor: 'green' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between' ,alignItems:"center"}}>
-                                <p style={{ textTransform: 'uppercase', marginTop: '0px', fontSize: '40px', fontWeight: '600',color:"green" }}>Game Plan</p>
+                        <div id="report-pdf" style={{ display: "none", padding: "20px ", border: '10px solid green', borderColor: 'green' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: "center" }}>
+                                <p style={{ textTransform: 'uppercase', marginTop: '0px', fontSize: '40px', fontWeight: '600', color: "green" }}>Game Plan</p>
                                 <div style={{ textAlign: 'right' }}>
-                            <img src="/assets/images/logo/netqwix_logo real.png" alt="Logo" style={{ height: '180px', width: '300px', objectFit: 'cover'}} />
-                          
-                            </div>
-                            </div>
-                            <div style={{display:"flex"}}>
-                                <div style={{width:"40%"}}>
-                                <div style={{ fontSize: '18px', fontWeight: '400',width:"70%", fontWeight:"bold"}}>Date: {currentDate}</div>
-                                <h2 style={{ margin: '0px',fontWeight:"normal",paddingTop:"10px" }}>Topic: {reportObj?.title}</h2>
-                                <h2 style={{ margin: '0px', fontWeight:"normal",color:"gray"}}>Name: {reportObj?.topic}</h2>
+                                    <img src="/assets/images/logo/netqwix_logo real.png" alt="Logo" style={{ height: '180px', width: '300px', objectFit: 'cover' }} />
+
                                 </div>
-                               
+                            </div>
+                            <div style={{ display: "flex" }}>
+                                <div style={{ width: "40%" }}>
+                                    <div style={{ fontSize: '18px', fontWeight: '400', width: "70%", fontWeight: "bold" }}>Date: {currentDate}</div>
+                                    <h2 style={{ margin: '0px', fontWeight: "normal", paddingTop: "10px" }}>Topic: {reportObj?.title}</h2>
+                                    <h2 style={{ margin: '0px', fontWeight: "normal", color: "gray" }}>Name: {reportObj?.topic}</h2>
+                                </div>
+
                             </div>
                             <hr style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: 'black' }} />
                             {reportArr?.map((sst, i) => {
@@ -331,28 +332,26 @@ const reportModal = ({
                                             <img src={sst?.imageUrl} alt="image" style={{ height: '260px', width: '-webkit-fill-available', objectFit: 'cover' }} />
                                         </div>
                                         <div>
-                                            <p style={{ fontSize: '30px', fontWeight:'normal' }}>{screenShots[i]?.title}</p>
+                                            <p style={{ fontSize: '30px', fontWeight: 'normal' }}>{screenShots[i]?.title}</p>
                                             <p>{screenShots[i]?.description}</p>
                                         </div>
                                     </div>
                                     <hr style={{ borderWidth: '2px', borderStyle: 'solid', borderColor: 'black' }} />
                                 </>
                             })}
-                         <div style={{ display: 'flex', justifyContent: 'space-between'}}>
-  <div style={{ textAlign: 'left', marginRight: '20px' }}>
-    <h2 style={{color:"green"}}>Coach</h2>
-    <p>{userInfo?.about}</p>
-  </div>
-  <div>
-  <h2 style={{color:"yellowgreen"}}>{userInfo && userInfo?.fullname}</h2>
-  <img src={userInfo?.profile_picture || "/assets/images/avtar/user.png"} 
-    
-    alt="John Image" 
-    style={{ width: '205.8px', height: '154.4px', marginRight:"20px"}}
-    
-     />
-  </div>
-</div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <div style={{ textAlign: 'left', marginRight: '20px' }}>
+                                    <h2 style={{ color: "green" }}>Trainer</h2>
+                                    <p>{userInfo?.extraInfo?.about}</p>
+                                </div>
+                                <div>
+                                    <h2 style={{ color: "yellowgreen" }}>{userInfo?.fullname}</h2>
+                                    <img src={userInfo?.profile_picture}
+                                        alt="John Image"
+                                        style={{ width: '205.8px', height: '154.4px', marginRight: "20px" }}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <CropImage

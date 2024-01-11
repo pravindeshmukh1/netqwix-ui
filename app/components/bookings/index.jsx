@@ -823,82 +823,82 @@ const Bookings = ({ accountType = null }) => {
   };
   const trainerInfo = () => (
     <React.Fragment>
-      <div className="trainer-Pro" style={{display:"flex",justifyContent:"space-between"}}>
-      <div className="card rounded trainer-profile-card" style={{width:"60%"}}>
-        <div className="card-body">
-          <div className="row">
-            <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 d-flex justify-content-center align-items-center">
-              <img
-                src={
-                  userInfo?.profile_picture || "/assets/images/avtar/user.png"
-                }
-                alt="trainer_image"
-                className="rounded trainer-profile"
-                style={{ maxWidth: "100%", height: "auto" }}
-              />
-            </div>
-            <div className="col-7 col-sm-6 col-md-7 col-lg-8 col-xl-9 card-trainer">
-              <h3 className="mt-3 ">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
-              {showRatings([], "mt-3 d-flex ml-n2")}
-              {userInfo &&
-                userInfo.extraInfo &&
-                userInfo.extraInfo.social_media_links &&
-                userInfo.extraInfo.social_media_links ? (
-                <SocialMediaIcons
-                  profileImageURL={""}
-                  social_media_links={userInfo.extraInfo.social_media_links}
-                  isvisible={false}
+      <div className="trainer-Pro" style={{ display: "flex", justifyContent: "space-between" }}>
+        <div className="card rounded trainer-profile-card" style={{ width: "60%" }}>
+          <div className="card-body">
+            <div className="row">
+              <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 d-flex justify-content-center align-items-center">
+                <img
+                  src={
+                    userInfo?.profile_picture || "/assets/images/avtar/user.png"
+                  }
+                  alt="trainer_image"
+                  className="rounded trainer-profile"
+                  style={{ maxWidth: "100%", height: "auto" }}
                 />
-              ) : null}
+              </div>
+              <div className="col-7 col-sm-6 col-md-7 col-lg-8 col-xl-9 card-trainer">
+                <h3 className="mt-3 ">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
+                {showRatings([], "mt-3 d-flex ml-n2")}
+                {userInfo &&
+                  userInfo.extraInfo &&
+                  userInfo.extraInfo.social_media_links &&
+                  userInfo.extraInfo.social_media_links ? (
+                  <SocialMediaIcons
+                    profileImageURL={""}
+                    social_media_links={userInfo.extraInfo.social_media_links}
+                    isvisible={false}
+                  />
+                ) : null}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
 
-      <div className="card rounded trainer-profile-card Select" style={{width:"39%"}}>
-    <div className="card-body" style={{margin:"auto"}}>
-    <div className="row" style={{justifyContent:"center"}}>
-            <h3 className="mt-3">Select clip</h3>
-        </div>
-        <div className="row" style={{justifyContent:"center"}}>
-            <h3 className="mt-3">Trainee text</h3>
-        </div>
-        <div className="row" style={{justifyContent:"center", marginTop:"10px"}}>
-            <button
+        <div className="card rounded trainer-profile-card Select" style={{ width: "39%" }}>
+          <div className="card-body" style={{ margin: "auto" }}>
+            <div className="row" style={{ justifyContent: "center" }}>
+              <h3 className="mt-3">Select clip</h3>
+            </div>
+            <div className="row" style={{ justifyContent: "center" }}>
+              <h3 className="mt-3">Trainee text</h3>
+            </div>
+            <div className="row" style={{ justifyContent: "center", marginTop: "10px" }}>
+              <button
                 type="button"
                 className="btn btn-primary btn-sm"
                 onClick={handleSelectClip}
-            >
+              >
                 Select Clip
-            </button>
+              </button>
+            </div>
+            {isModalOpen && (
+              // Content for the modal
+              <ShareModalTrainer
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                selectedClips={selectedClips}
+                clips={clips}
+                addTraineeClipInBookedSession={addTraineeClipInBookedSession}
+                setSelectedClips={setSelectedClips}
+              />
+            )}
+            <div className="row" style={{ justifyContent: "center", paddingTop: "10px", margin: "auto" }}>
+              <input className="form-control" type="email" placeholder="Email"></input>
+            </div>
+            <div className="row" style={{ justifyContent: "center", marginTop: "10px" }}>
+              <button className="btn btn-success button-effect btn-sm btn_cancel">Share</button>
+            </div>
+          </div>
         </div>
-        {isModalOpen && (
-    // Content for the modal
-    <ShareModalTrainer
-      isOpen={isModalOpen}
-      onClose={closeModal}
-      selectedClips={selectedClips}
-      clips={clips} 
-      addTraineeClipInBookedSession={addTraineeClipInBookedSession}
-      setSelectedClips={setSelectedClips}
-    />
-  )}
-        <div className="row" style={{justifyContent:"center", paddingTop:"10px", margin:"auto"}}>
-        <input className="form-control" type="email" placeholder="Email"></input>
-        </div>
-        <div className="row" style={{justifyContent:"center", marginTop:"10px"}}>
-            <button className="btn btn-success button-effect btn-sm btn_cancel">Share</button>
-        </div>
-    </div>
-</div>
 
       </div>
-      
-      
+
+
 
     </React.Fragment>
-    
+
   );
 
   const bookingTabs = () => (
@@ -1024,7 +1024,7 @@ const Bookings = ({ accountType = null }) => {
                   Its empty here, search for trainers on the homepage and get started on your learning journey !
                 </h3>
                 <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "50px" }}>
-                  <button onClick={() => TogglTab("home")} className={`btn btn-primary button-effect btn-sm mr-2 btn_cancel`}>Search</button>
+                  <button onClick={() => TogglTab("home")} className={`btn btn-primary button-effect btn-sm mr-2 btn_cancel`}>Go To Home Page</button>
                 </div>
               </>
             )
