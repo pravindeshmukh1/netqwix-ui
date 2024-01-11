@@ -23,7 +23,7 @@ export class Utils {
   };
 
   static getFormattedTime = (time) => {
-    if(time){
+    if (time) {
       return moment(time, timeFormat);
     }
   };
@@ -345,67 +345,100 @@ export class Utils {
   };
 
   static isTimeRangeAvailable = (timeRanges, start_time, end_time) => {
-    for (const range of timeRanges) {
-      const rangeStartTime = new Date(`2000-01-01T${range.start_time}:00`);
-      const rangeEndTime = new Date(`2000-01-01T${range.end_time}:00`);
-      const inputStartTime = new Date(`2000-01-01T${start_time}:00`);
-      const inputEndTime = new Date(`2000-01-01T${end_time}:00`);
 
-      // Check if the input start time is within the range
-      if (inputStartTime >= rangeStartTime && inputStartTime < rangeEndTime) {
-        return false; // Time conflict
+    var status = false
+    if (timeRanges && timeRanges?.length > 0) {
+      for (const range of timeRanges) {
+        const rangeStartTime = new Date(range?.start_time)?.getTime();
+        const rangeEndTime = new Date(range?.end_time)?.getTime();
+
+        var start_time_date = new Date();
+        start_time_date.setHours(Number(start_time.split(":")[0]));
+        start_time_date.setMinutes(Number(start_time.split(":")[1]));
+        start_time_date = start_time_date?.getTime()
+
+        var end_time_date = new Date();
+        end_time_date.setHours(Number(end_time.split(":")[0]));
+        end_time_date.setMinutes(Number(end_time.split(":")[1]));
+        end_time_date = end_time_date?.getTime()
+
+
+        if (start_time_date <= rangeStartTime && rangeStartTime <= end_time_date) {
+          status = true;
+          break;
+        }
+        if (start_time_date <= rangeEndTime && rangeEndTime <= end_time_date) {
+          status = true;
+          break;
+        }
+
+        if (start_time_date >= rangeStartTime && end_time_date <= rangeEndTime) {
+          status = true;
+          break;
+        }
+
       }
 
-      // Check if the input end time is within the range
-      if (inputEndTime > rangeStartTime && inputEndTime <= rangeEndTime) {
-        return false; // Time conflict
-      }
-
-      if (inputStartTime < rangeEndTime && inputEndTime > rangeStartTime) {
-        return false; // Time conflict
-      }
+      return status; // No time conflict
     }
 
-    return true; // No time conflict
   };
 
+  static getMinutesFromTime(time) {
+    const [hours, minutes] = time.split(':').map(Number);
+    return hours * 60 + minutes;
+  }
+
+  static getMinutesFromISOString(isoTimeString) {
+    const isoTime = new Date(isoTimeString);
+    return isoTime.getHours() * 60 + isoTime.getMinutes();
+  }
+
   static getPercentageForSlot = (startTime, endTime, fromTime, toTime) => {
-    const [startHour, startMinute] = startTime.split(":").map(Number);
-    const [endHour, endMinute] = endTime.split(":").map(Number);
-    const startTimeInMinutes = startHour * 60 + startMinute;
-    const endTimeInMinutes = endHour * 60 + endMinute;
+    // const [startHour, startMinute] = startTime.split(":").map(Number);
+    // const [endHour, endMinute] = endTime.split(":").map(Number);
+    // const startTimeInMinutes = startHour * 60 + startMinute;
+    // const endTimeInMinutes = endHour * 60 + endMinute;
 
-    const [rangeStartHour, rangeStartMinute] = fromTime.split(":").map(Number);
-    const [rangeEndHour, rangeEndMinute] = toTime.split(":").map(Number);
-    const rangeStartInMinutes = rangeStartHour * 60 + rangeStartMinute;
-    const rangeEndInMinutes = rangeEndHour * 60 + rangeEndMinute;
+    // const [rangeStartHour, rangeStartMinute] = fromTime.split(":").map(Number);
+    // const [rangeEndHour, rangeEndMinute] = toTime.split(":").map(Number);
+    // const rangeStartInMinutes = rangeStartHour * 60 + rangeStartMinute;
+    // const rangeEndInMinutes = rangeEndHour * 60 + rangeEndMinute;
 
-    // Calculate the duration in minutes
-    const durationInMinutes = endTimeInMinutes - startTimeInMinutes;
-    const startPos =
-      ((startTimeInMinutes - rangeStartInMinutes) /
-        (rangeEndInMinutes - rangeStartInMinutes)) *
-      100;
-    const endPos =
-      ((endTimeInMinutes - rangeStartInMinutes) /
-        (rangeEndInMinutes - rangeStartInMinutes)) *
-      100;
-    const v2 =
-      ((endTimeInMinutes - rangeStartInMinutes) /
-        (rangeEndInMinutes - rangeStartInMinutes)) *
-      100 +
-      ((startTimeInMinutes - rangeStartInMinutes) /
-        (rangeEndInMinutes - rangeStartInMinutes)) *
-      100;
+    // // Calculate the duration in minutes
+    // const durationInMinutes = endTimeInMinutes - startTimeInMinutes;
+    // const startPos =
+    //   ((startTimeInMinutes - rangeStartInMinutes) /
+    //     (rangeEndInMinutes - rangeStartInMinutes)) *
+    //   100;
+    // const endPos =
+    //   ((endTimeInMinutes - rangeStartInMinutes) /
+    //     (rangeEndInMinutes - rangeStartInMinutes)) *
+    //   100;
+    // const v2 =
+    //   ((endTimeInMinutes - rangeStartInMinutes) /
+    //     (rangeEndInMinutes - rangeStartInMinutes)) *
+    //   100 +
+    //   ((startTimeInMinutes - rangeStartInMinutes) /
+    //     (rangeEndInMinutes - rangeStartInMinutes)) *
+    //   100;
 
-    // Calculate the percentage
-    const percentage =
-      (durationInMinutes / (rangeEndInMinutes - rangeStartInMinutes)) * 100;
-    return {
-      startPos,
-      endPos,
-      percentage,
-    };
+    // // Calculate the percentage
+    // const percentage =
+    //   (durationInMinutes / (rangeEndInMinutes - rangeStartInMinutes)) * 100;
+    // return {
+    //   startPos,
+    //   endPos,
+    //   percentage,
+    // };
+    const start = new Date(startTime);
+    const end = new Date(endTime);
+    const totalRange = 24 * 60; // Total minutes in a 24-hour range
+
+    const startPos = (start.getHours() * 60 + start.getMinutes()) / totalRange * 100;
+    const endPos = (end.getHours() * 60 + end.getMinutes()) / totalRange * 100;
+
+    return { startPos, endPos };
   };
 
   static isValidTimeDuration = (fromTime, toTime, minTimeRequired) => {

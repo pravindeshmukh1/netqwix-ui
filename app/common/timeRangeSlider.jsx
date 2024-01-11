@@ -20,6 +20,8 @@ const CustomRangePicker = ({
   const [draggingEnd, setDraggingEnd] = useState(false);
   const [time, setTime] = useState({});
 
+  useEffect(() => { }, [availableSlots?.length])
+
   useEffect(() => {
     const changeStartTime = (startPosition / 100) * (endTime - startTime);
     const changeEndTime = (endPosition / 100) * (endTime - startTime);
@@ -37,11 +39,11 @@ const CustomRangePicker = ({
     });
     for (const slot of availableSlots) {
       const slotStart =
-        parseInt(slot.start_time.split(":")[0]) * 60 +
-        parseInt(slot.start_time.split(":")[1]);
+        parseInt(slot?.start_time?.split(":")[0]) * 60 +
+        parseInt(slot?.start_time?.split(":")[1]);
       const slotEnd =
-        parseInt(slot.end_time.split(":")[0]) * 60 +
-        parseInt(slot.end_time.split(":")[1]);
+        parseInt(slot?.end_time?.split(":")[0]) * 60 +
+        parseInt(slot?.end_time?.split(":")[1]);
       if (changeStartTime < slotEnd && changeEndTime > slotStart) {
         setIsSlotAvailable(false);
         return;
@@ -103,9 +105,8 @@ const CustomRangePicker = ({
     <React.Fragment>
       <div
         id="custom-range-picker"
-        className={`${"custom-range-picker"} ${
-          isSlotAvailable ? "" : "unavailable"
-        }`}
+        className={`${"custom-range-picker"} ${isSlotAvailable ? "" : "unavailable"
+          }`}
         onMouseMove={handleDrag}
         onMouseUp={handleMouseUp}
         onTouchMove={handleDrag} // Handle touch events
@@ -129,13 +130,17 @@ const CustomRangePicker = ({
             className={"end-range"}
           />
         </div>
-        {availableSlots.map((slot, index) => {
+        {availableSlots?.map((slot, index) => {
           const { startPos, endPos } = Utils.getPercentageForSlot(
             slot.start_time,
-            slot.end_time,
-            trainerHourlyRate.from,
-            trainerHourlyRate.to
+            slot.end_time
           );
+          // const { startPos, endPos } = Utils.getPercentageForSlot(
+          //   slot.start_time,
+          //   slot.end_time,
+          //   trainerHourlyRate.from,
+          //   trainerHourlyRate.to
+          // );
 
           return (
             <div

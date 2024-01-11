@@ -349,16 +349,14 @@ const TrainersDetails = ({
 
   const renderTable = () => (
     <div
-      className={`${
-        trainerInfo && trainerInfo.userInfo
-          ? "table-responsive-width"
-          : "table-responsive-width"
-      }`}
+      className={`${trainerInfo && trainerInfo.userInfo
+        ? "table-responsive-width"
+        : "table-responsive-width"
+        }`}
     >
       <table
-        className={`${
-          screenWidth <= 767 ? "table-responsive overflow-x-auto" : "table"
-        } custom-table-scroll-width ml-30 mr-30 border border-dark`}
+        className={`${screenWidth <= 767 ? "table-responsive overflow-x-auto" : "table"
+          } custom-table-scroll-width ml-30 mr-30 border border-dark`}
         style={{
           width: "91.5%",
         }}
@@ -657,11 +655,10 @@ const TrainersDetails = ({
           </div>
         ) : (
           <div
-            className={`d-flex ${
-              trainerInfo.isCategory && trainerDetails.select_trainer
-                ? `justify-content-start`
-                : `justify-content-end`
-            }`}
+            className={`d-flex ${trainerInfo.isCategory && trainerDetails.select_trainer
+              ? `justify-content-start`
+              : `justify-content-end`
+              }`}
           >
             {!trainerInfo.isCategory && (
               <X
@@ -865,9 +862,9 @@ const TrainerInfo = ({
               "mt-3 mb-3 d-flex"
             )}
             {trainer &&
-            trainer.extraInfo &&
-            trainer.extraInfo.media &&
-            trainer.extraInfo.social_media_links ? (
+              trainer.extraInfo &&
+              trainer.extraInfo.media &&
+              trainer.extraInfo.social_media_links ? (
               <SocialMediaIcons
                 profileImageURL={
                   trainer &&
@@ -900,32 +897,32 @@ const TrainerInfo = ({
         >
           {accordionData.length
             ? accordionData.map((data, index) => {
-                return (
-                  <Accordion key={`accordion_${index}`} className="mb-5">
-                    <Accordion.Item>
-                      <Accordion.Header
-                        index={index}
-                        activeAccordion={activeAccordion}
-                        onAClick={() => {
-                          if (activeAccordion[index]) {
-                            delete activeAccordion[index];
-                          } else if (!activeAccordion[index]) {
-                            activeAccordion[index] = true;
-                          } else {
-                            activeAccordion[index] = !activeAccordion[index];
-                          }
-                          setActiveAccordion(activeAccordion);
-                        }}
-                      >
-                        {data.label}
-                      </Accordion.Header>
-                      <Accordion.Body>
-                        {!data.value ? Message.notFound : data.value}
-                      </Accordion.Body>
-                    </Accordion.Item>
-                  </Accordion>
-                );
-              })
+              return (
+                <Accordion key={`accordion_${index}`} className="mb-5">
+                  <Accordion.Item>
+                    <Accordion.Header
+                      index={index}
+                      activeAccordion={activeAccordion}
+                      onAClick={() => {
+                        if (activeAccordion[index]) {
+                          delete activeAccordion[index];
+                        } else if (!activeAccordion[index]) {
+                          activeAccordion[index] = true;
+                        } else {
+                          activeAccordion[index] = !activeAccordion[index];
+                        }
+                        setActiveAccordion(activeAccordion);
+                      }}
+                    >
+                      {data.label}
+                    </Accordion.Header>
+                    <Accordion.Body>
+                      {!data.value ? Message.notFound : data.value}
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
+              );
+            })
             : Message.notFound}
         </div>
       </div>
@@ -959,11 +956,11 @@ const TrainerInfo = ({
                 availableSlots
                   ? availableSlots
                   : [
-                      {
-                        start_time: "",
-                        end_time: "",
-                      },
-                    ]
+                    {
+                      start_time: "",
+                      end_time: "",
+                    },
+                  ]
               }
               startTime={
                 trainer?.extraInfo?.working_hours?.from
@@ -1184,9 +1181,8 @@ const SelectedCategory = ({
                         className="badge badge-pill badge-primary mb-2 p-2"
                         style={{ fontSize: "15px" }}
                       >
-                        {`$${
-                          data?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD
-                        }.00`}
+                        {`$${data?.extraInfo?.hourly_rate || TRAINER_AMOUNT_USD
+                          }.00`}
                         {`/ ${TRAINER_MEETING_TIME}`}
                       </p>
                       <h4
@@ -1199,8 +1195,8 @@ const SelectedCategory = ({
                       </h4>
                       <div>
                         {data &&
-                        data.extraInfo &&
-                        data.extraInfo.social_media_links ? (
+                          data.extraInfo &&
+                          data.extraInfo.social_media_links ? (
                           <SocialMediaIcons
                             profileImageURL={
                               data &&

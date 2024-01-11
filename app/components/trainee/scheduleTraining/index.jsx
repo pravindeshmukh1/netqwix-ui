@@ -53,6 +53,8 @@ import { authAction, authState } from "../../auth/auth.slice";
 import { SocketContext } from "../../socket";
 import Category from "../../../../pages/landing/category";
 import { myClips, traineeClips } from "../../../../containers/rightSidebar/fileSection.api";
+import { getAvailability } from "../../calendar/calendar.api";
+
 import { addTraineeClipInBookedSessionAsync } from "../../common/common.slice";
 const settings = {
   autoplay: true,
@@ -118,7 +120,8 @@ const ScheduleTraining = () => {
   const { status, getTraineeSlots, transaction } = useAppSelector(traineeState);
   const { trainersList } = useAppSelector(trainerState);
   const { configs } = useAppSelector(bookingsState);
-  const { isSlotAvailable, session_durations, availableSlots } =
+  const [availableSlots, setAvailableSlots] = useState([])
+  const { isSlotAvailable, session_durations } =
     useAppSelector(commonState);
   const { selectedTrainerId } = useAppSelector(bookingsState);
   const { master } = useAppSelector(masterState);
@@ -138,7 +141,7 @@ const ScheduleTraining = () => {
   });
   const [clips, setClips] = useState([]);
   const [selectedClips, setSelectedClips] = useState([]);
-  const[trainee , setTrainee]=useState([])
+  const [trainee, setTrainee] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleSelectClip = () => {
     setIsModalOpen(true);
@@ -158,7 +161,7 @@ const ScheduleTraining = () => {
     setIsOpen(false)
     setIsModalOpen(false);
   }
-  
+
   const getmyClips = async () => {
     var res = await myClips({})
     setClips(res?.data)
@@ -196,9 +199,35 @@ const ScheduleTraining = () => {
     trainer_id: null,
     data: {},
   });
+  useEffect(() => {
+    const currentDateAndtime = () => {
+      // Create a new Date object for the current date
+      const currentDate = new Date(startDate);
+
+      // Get the year, month, and day components
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Adding 1 because months are zero-based
+      const day = String(currentDate.getDate()).padStart(2, '0');
+
+      // Format the date in the desired format
+      const formattedDate = `${year}-${month}-${day}`;
+
+      return formattedDate
+    }
+    if (selectedTrainer?.trainer_id) {
+      getAvailability({
+        trainer_id: selectedTrainer?.trainer_id,
+        start_time: currentDateAndtime() + "T00:00:00.000Z",
+        end_time: currentDateAndtime() + "T23:59:59.000Z"
+      }).then((res) => { setAvailableSlots(res?.data?.[0]?.availabilities); })
+    }
+    console.log("currentDateAndtime() + T23:59:59.000Z", currentDateAndtime() + "T23:59:59.000Z")
+  }, [selectedTrainer?.trainer_id, startDate])
+
+
 
   const [query, setQuery] = useState("");
-  
+
   const [isOpenInstantScheduleMeeting, setInstantScheduleMeeting] =
     useState(false);
   const [trainerInfo, setTrainerInfo] = useState({
@@ -816,12 +845,12 @@ const ScheduleTraining = () => {
         return;
       }}
       className="bookings custom-scroll custom-trainee-dashboard"
-      style={{ width: "75% !important"}}
+      style={{ width: "75% !important" }}
     >
 
       <div className="row">
 
-        <div className="trainer-recommended" style={{ marginTop:"3%", maxWidth: "75%" }}>
+        <div className="trainer-recommended" style={{ marginTop: "3%", maxWidth: "75%" }}>
           <h1 style={{ marginBottom: "10px" }}>Book Your Lesson now</h1>
           <p>Are you ready to embark on a transformative journey towards your personal and professional development? We are here to revolutionize the way you learn and connect with expert trainers. Our cutting-edge platform.</p>
         </div>
@@ -888,91 +917,91 @@ const ScheduleTraining = () => {
           }}
         />
       </div>
-      <div className="trainer-recommended" style={{height:'90px'}}>
+      <div className="trainer-recommended" style={{ height: '90px' }}>
         <div className="row">
-        <div className="col d-none d-sm-block">
-  <Slider {...settings}>
-    {data?.category?.map((item, index) => (
-      <div key={`slider-item-${index}`} >
-        <span
-          className="badge badge-light lg"
-          style={{
-            margin: "12px",
-            padding: "18px", // Add your desired padding here
-            alignItems: "center",
-            fontSize: "14px",
-            color: "black",
-            cursor: "pointer",
-            width: "80%",
-            height: "0",
-          
-            display: "flex",
-            justifyContent: "center", // Center content horizontally
-            flexDirection: "column", 
-          }}
-          onClick={() => {
-            setTrainerInfo((prev) => ({
-              ...prev,
-              userInfo: {
-                id: item,
-                isCategory: true,
-                name: item,
-              },
-              selected_category: item,
-            }));
-            setParams({ search: item })
-          }}
-        >
-          {item}
-        </span>
-      </div>
-    ))}
-  </Slider>
-</div>
+          <div className="col d-none d-sm-block">
+            <Slider {...settings}>
+              {data?.category?.map((item, index) => (
+                <div key={`slider-item-${index}`} >
+                  <span
+                    className="badge badge-light lg"
+                    style={{
+                      margin: "12px",
+                      padding: "18px", // Add your desired padding here
+                      alignItems: "center",
+                      fontSize: "14px",
+                      color: "black",
+                      cursor: "pointer",
+                      width: "80%",
+                      height: "0",
+
+                      display: "flex",
+                      justifyContent: "center", // Center content horizontally
+                      flexDirection: "column",
+                    }}
+                    onClick={() => {
+                      setTrainerInfo((prev) => ({
+                        ...prev,
+                        userInfo: {
+                          id: item,
+                          isCategory: true,
+                          name: item,
+                        },
+                        selected_category: item,
+                      }));
+                      setParams({ search: item })
+                    }}
+                  >
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </Slider>
+          </div>
         </div>
       </div>
 
-<div style={{display:"flex",justifyContent:"right"}}>
-<div className="card rounded trainer-profile-card" style={{width:"28%"}}>
-    <div className="card-body" style={{margin:"auto"}}>
-    <div className="row" style={{justifyContent:"center"}}>
-            <h3 className="mt-3">Select clip</h3>
-        </div>
-        <div className="row" style={{justifyContent:"center"}}>
-            <h3 className="mt-3">Trainee text</h3>
-        </div>
-        <div className="row" style={{justifyContent:"center", marginTop:"10px"}}>
-            <button
+      <div style={{ display: "flex", justifyContent: "right" }}>
+        <div className="card rounded trainer-profile-card" style={{ width: "28%" }}>
+          <div className="card-body" style={{ margin: "auto" }}>
+            <div className="row" style={{ justifyContent: "center" }}>
+              <h3 className="mt-3">Select clip</h3>
+            </div>
+            <div className="row" style={{ justifyContent: "center" }}>
+              <h3 className="mt-3">Trainee text</h3>
+            </div>
+            <div className="row" style={{ justifyContent: "center", marginTop: "10px" }}>
+              <button
                 type="button"
                 className="btn btn-primary btn-sm"
                 onClick={handleSelectClip}
-            >
+              >
                 Select Clip
-            </button>
+              </button>
+            </div>
+            {isModalOpen && (
+              // Content for the modal
+              <ShareModalTrainee
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                selectedClips={selectedClips}
+                clips={clips}
+                addTraineeClipInBookedSession={addTraineeClipInBookedSession}
+                setSelectedClips={setSelectedClips}
+              />
+            )}
+            <div className="row" style={{ justifyContent: "center", paddingTop: "10px", margin: "auto" }}>
+              <input className="form-control" type="email" placeholder="Email"></input>
+            </div>
+            <div className="row" style={{ justifyContent: "center", marginTop: "10px" }}>
+              <button className="btn btn-success button-effect btn-sm btn_cancel">Share</button>
+            </div>
+          </div>
         </div>
-        {isModalOpen && (
-    // Content for the modal
-    <ShareModalTrainee
-    isOpen={isModalOpen}
-    onClose={closeModal}
-    selectedClips={selectedClips}
-    clips={clips} 
-    addTraineeClipInBookedSession={addTraineeClipInBookedSession}
-    setSelectedClips={setSelectedClips}
-    />
-  )}
-        <div className="row" style={{justifyContent:"center", paddingTop:"10px", margin:"auto"}}>
-        <input className="form-control" type="email" placeholder="Email"></input>
-        </div>
-        <div className="row" style={{justifyContent:"center", marginTop:"10px"}}>
-            <button className="btn btn-success button-effect btn-sm btn_cancel">Share</button>
-        </div>
-    </div>
-</div>
 
 
-</div>
-      
+      </div>
+
 
       <div className="trainer-recommended">
         <h2>Recommended</h2>
@@ -1022,9 +1051,8 @@ const ScheduleTraining = () => {
   };
 
   const renderBookingTable = () => {
-    const { data: { extraInfo } = {} } = selectedTrainer || {};
+    const { data: { extraInfo } = {}, trainer_id } = selectedTrainer || {};
     const { from, to } = extraInfo?.working_hours || {};
-
     const fromHours = from ? Utils.getTimeFormate(from) : null;
     const toHours = to ? Utils.getTimeFormate(to) : null;
     const formateStartTime = Utils.getTimeFormate(
@@ -1048,6 +1076,7 @@ const ScheduleTraining = () => {
                 className="mt-1"
                 minDate={moment().toDate()}
                 onChange={(date) => {
+                  console.log("datedatedatedatedate", date)
                   if (date) {
                     const booked_date = Utils.getDateInFormat(date);
                     const payload = {
@@ -1093,12 +1122,7 @@ const ScheduleTraining = () => {
                     availableSlots={
                       availableSlots
                         ? availableSlots
-                        : [
-                          {
-                            start_time: "",
-                            end_time: "",
-                          },
-                        ]
+                        : []
                     }
                     startTime={
                       trainerInfo?.userInfo?.extraInfo?.working_hours?.from
@@ -1142,10 +1166,10 @@ const ScheduleTraining = () => {
                   <button
                     type="button"
                     disabled={
-                      !Utils.isTimeRangeAvailable(
+                      Utils.isTimeRangeAvailable(
                         availableSlots,
                         timeRange.startTime,
-                        timeRange.endTime || status === STATUS.pending
+                        timeRange.endTime
                       )
                     }
                     className="mt-3 btn btn-sm btn-primary"
