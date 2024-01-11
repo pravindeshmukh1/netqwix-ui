@@ -1,6 +1,6 @@
 import Slider from "react-slick";
 
-const TrainerSlider = ({ list }) => {
+const TrainerSlider = ({ list, isRecommended = false }) => {
   const settings = {
     autoplay: true,
     infinite: true,
@@ -46,7 +46,7 @@ const TrainerSlider = ({ list }) => {
   };
 
   return (
-    <div className="recent-slider slider-container recent-chat">
+    <div style={{ width: isRecommended ? "70%" : "80vw" }} className="recent-slider slider-container recent-chat">
       <Slider {...settings}>
         {list.map((contentInfo, index) => {
           return (

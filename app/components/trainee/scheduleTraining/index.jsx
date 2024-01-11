@@ -873,7 +873,6 @@ const ScheduleTraining = () => {
         className="d-flex justify-content-center align-items-center dashboard-search-trainer"
         style={{ marginTop: "5%", marginBottom: "2%" }}
       >
-
         <SearchableDropdown
           placeholder="Search Trainers..."
           options={[...listOfTrainers, ...categoryList]}
@@ -934,7 +933,6 @@ const ScheduleTraining = () => {
                       cursor: "pointer",
                       width: "80%",
                       height: "0",
-
                       display: "flex",
                       justifyContent: "center", // Center content horizontally
                       flexDirection: "column",
@@ -961,51 +959,44 @@ const ScheduleTraining = () => {
         </div>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "right" }}>
-        <div className="card rounded trainer-profile-card" style={{ width: "28%" }}>
-          <div className="card-body" style={{ margin: "auto" }}>
-            <div className="row" style={{ justifyContent: "center" }}>
-              <h3 className="mt-3">Select clip</h3>
-            </div>
-            <div className="row" style={{ justifyContent: "center" }}>
-              <h3 className="mt-3">Trainee text</h3>
-            </div>
-            <div className="row" style={{ justifyContent: "center", marginTop: "10px" }}>
-              <button
-                type="button"
-                className="btn btn-primary btn-sm"
-                onClick={handleSelectClip}
-              >
-                Select Clip
-              </button>
-            </div>
-            {isModalOpen && (
-              // Content for the modal
-              <ShareModalTrainee
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                selectedClips={selectedClips}
-                clips={clips}
-                addTraineeClipInBookedSession={addTraineeClipInBookedSession}
-                setSelectedClips={setSelectedClips}
-              />
-            )}
-            <div className="row" style={{ justifyContent: "center", paddingTop: "10px", margin: "auto" }}>
-              <input className="form-control" type="email" placeholder="Email"></input>
-            </div>
-            <div className="row" style={{ justifyContent: "center", marginTop: "10px" }}>
-              <button className="btn btn-success button-effect btn-sm btn_cancel">Share</button>
+      <div className="trainer-recommended" style={{ margin: "0px 0% 0px 10%" }}>
+        <h2>Recommended</h2>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <TrainerSlider list={trainers} isRecommended={true} />
+          <div className="card rounded trainer-profile-card" style={{ width: "30%" }}>
+            <div className="card-body" style={{ margin: "auto" }}>
+              <div className="row" style={{ justifyContent: "center" }}>
+                <h3 className="mt-3">Share clips</h3>
+              </div>
+              <div className="row" style={{ justifyContent: "center", marginTop: "10px" }}>
+                <button
+                  type="button"
+                  className="btn btn-primary btn-sm"
+                  onClick={handleSelectClip}
+                >
+                  Select Clip
+                </button>
+              </div>
+              {isModalOpen && (
+                // Content for the modal
+                <ShareModalTrainee
+                  isOpen={isModalOpen}
+                  onClose={closeModal}
+                  selectedClips={selectedClips}
+                  clips={clips}
+                  addTraineeClipInBookedSession={addTraineeClipInBookedSession}
+                  setSelectedClips={setSelectedClips}
+                />
+              )}
+              <div className="row" style={{ justifyContent: "center", paddingTop: "10px", margin: "auto" }}>
+                <input className="form-control" type="email" placeholder="Email"></input>
+              </div>
+              <div className="row" style={{ justifyContent: "center", marginTop: "10px" }}>
+                <button className="btn btn-success button-effect btn-sm btn_cancel">Share</button>
+              </div>
             </div>
           </div>
         </div>
-
-
-      </div>
-
-
-      <div className="trainer-recommended">
-        <h2>Recommended</h2>
-        <TrainerSlider list={trainers} />
       </div>
       <div style={{ height: "11vh" }} />
     </div >

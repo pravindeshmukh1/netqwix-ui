@@ -72,6 +72,29 @@ export default function CalendarPage() {
           )
         }}
       />}
+      {!data?.length && <FullCalendar
+        plugins={[dayGridPlugin]}
+        headerToolbar={{ left: 'prev,next', center: 'title', right: '' }}
+        initialView='dayGridMonth'
+        nowIndicator={true}
+        editable={true}
+        selectable={true}
+        selectMirror={true}
+        initialEvents={data}
+        datesSet={(e) => getData(e)}
+        eventContent={(e) => {
+          return (
+            <>
+              {/* <button>+ Add New</button> */}
+              <div onClick={() => { }} style={{ display: "flex", width: "100%", justifyContent: "space-between", margin: "0px 10px", textAlign: "center" }}>
+                <div >
+                  <b>{moment(e.event.start).format('h:mm a')} - {moment(e.event.end).format('h:mm a')}</b>
+                </div>
+              </div>
+            </>
+          )
+        }}
+      />}
     </div>
   )
 }
