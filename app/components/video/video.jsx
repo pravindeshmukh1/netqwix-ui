@@ -828,11 +828,11 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
       progress2.style.transition = 'opacity 2s';
       progress2.style.opacity = '0';
     }
-    if (userVideo1) {
+    if (userVideo1 && selectedClips?.length) {
       userVideo1.style.transition = 'opacity 2s';
       userVideo1.style.opacity = '0';
     }
-    if (userVideo2) {
+    if (userVideo2 && selectedClips?.length) {
       userVideo2.style.transition = 'opacity 2s';
       userVideo2.style.opacity = '0';
     }
@@ -916,11 +916,11 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
         progress2.style.transition = 'opacity 2s'
         progress2.style.opacity = '1';
       }
-      if (userVideo1) {
+      if (userVideo1 && selectedClips?.length) {
         userVideo1.style.transition = 'opacity 2s'
         userVideo1.style.opacity = '1';
       }
-      if (userVideo2) {
+      if (userVideo2 && selectedClips?.length) {
         userVideo2.style.transition = 'opacity 2s'
         userVideo2.style.opacity = '1';
       }
