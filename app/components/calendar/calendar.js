@@ -329,6 +329,7 @@ export default function CalendarPage() {
         selectable={true}
         selectMirror={true}
         initialEvents={data}
+        height={600}
         dateClick={function (e) {
           var date = currentDateAndtime(e?.date)
           handleSelectedModal(date)
@@ -368,6 +369,7 @@ export default function CalendarPage() {
         selectable={true}
         selectMirror={true}
         initialEvents={[]}
+        height={600}
         datesSet={(e) => getData(e)}
         dateClick={function (e) {
           var date = currentDateAndtime(e?.date)
