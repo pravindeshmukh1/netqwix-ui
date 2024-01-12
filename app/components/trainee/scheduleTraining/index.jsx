@@ -1239,13 +1239,23 @@ const ScheduleTraining = () => {
                 <div className="row" style={{ display: "flex", width: "100%", justifyContent: "space-between", margin: "0px 10px", textAlign: "center" }}>
                   {availableSlots?.map((item, i) => {
                     return <div onClick={() => {
-                      var temp = availableSlots?.map(slt => {
-                        return { ...slt, isSelected: false }
-                      })
-                      temp[i].isSelected = true
-                      setAvailableSlots([...temp])
-                    }} className="col-6" style={{ border: item?.isSelected ? "2px solid green" : "1px solid", cursor: "pointer", padding: "10px 0px" }}>
-                      <b style={{ color: "#000080" }}>{moment(item?.start_time).format('h:mm a')} - {moment(item?.end_time).format('h:mm a')}</b>
+                      if (!item?.status) {
+                        var temp = availableSlots?.map(slt => {
+                          return { ...slt, isSelected: false }
+                        })
+                        temp[i].isSelected = true
+                        setAvailableSlots([...temp])
+                      }
+                    }} className="col-6" style={{
+                      border:
+                        item?.status
+                          ? "2px solid grey" :
+                          item?.isSelected ? "2px solid green"
+                            : "1px solid",
+                      cursor: "pointer",
+                      padding: "10px 0px"
+                    }}>
+                      <b style={{ color: item?.status ? "grey" : "#000080" }}>{moment(item?.start_time).format('h:mm a')} - {moment(item?.end_time).format('h:mm a')}</b>
                     </div>
                   })}
                 </div>
@@ -1279,6 +1289,7 @@ const ScheduleTraining = () => {
                           );
                         } else {
                           const payload = {
+                            slot_id: slot?._id,
                             charging_price: amountPayable,
                             trainer_id:
                               trainerInfo?.userInfo?.trainer_id ||
