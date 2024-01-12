@@ -6,6 +6,7 @@ import { addTrainerSlot, deleteTrainerSlot, getAvailability } from './calendar.a
 import React from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Star, X, Plus, Check } from "react-feather";
+import interactionPlugin from '@fullcalendar/interaction'
 
 const staticData = [
   { start: new Date('2024-01-11T10:04:00.840Z'), end: new Date('2024-01-11T11:05:00.840Z') },
@@ -17,23 +18,32 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
   const [disabledHourTime, setDisabledHourTime] = useState(["00", "04", "10"])
   const [disabledMinuteTime, setDisabledMinuteTime] = useState([])
 
-  const [selectedStartHour, setSelectedStartHour] = useState("Select Hour");
-  const [selectedStartMinute, setSelectedStartMinute] = useState('Select Minute');
+  const [selectedStartHour, setSelectedStartHour] = useState("");
+  const [selectedStartMinute, setSelectedStartMinute] = useState("");
 
-  const [selectedEndHour, setSelectedEndHour] = useState("Select Hour");
-  const [selectedEndMinute, setSelectedEndMinute] = useState('Select Minute');
-
+  const [selectedEndHour, setSelectedEndHour] = useState("");
+  const [selectedEndMinute, setSelectedEndMinute] = useState("");
+  const [error, setError] = useState(false);
 
   const addTrainerSlotAPI = async () => {
-    let start_time = new Date(`${selectedModalDate}T${selectedStartHour}:${selectedStartMinute}`)?.toISOString()
-    let end_time = new Date(`${selectedModalDate}T${selectedEndHour}:${selectedEndMinute}`)?.toISOString()
-    try {
-      let res = await addTrainerSlot({ start_time, end_time })
-      let updatedData = data
-      data?.push(res?.data)
-      setData([...data])
-    } catch (error) {
-      console.log(error)
+    var date = selectedModalDate?.split("-")
+    if ((!selectedStartHour || !selectedStartMinute || !selectedEndHour || !selectedEndMinute)) setError(true)
+    else {
+      let start_time = new Date(Number(date[0]), Number(date[1]) - 1, Number(date[2]), Number(selectedStartHour), Number(selectedStartMinute), 0, 0).toISOString()
+      let end_time = new Date(Number(date[0]), Number(date[1]) - 1, Number(date[2]), Number(selectedEndHour), Number(selectedEndMinute), 0, 0).toISOString()
+      try {
+        let res = await addTrainerSlot({ start_time, end_time })
+        let updatedData = data
+        data?.push(res?.data)
+        setData([...data])
+        setSelectedStartHour("")
+        setSelectedStartMinute("")
+        setSelectedEndHour("")
+        setSelectedEndMinute("")
+        setError(false)
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 
@@ -91,16 +101,17 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
       <Modal isOpen={modal} toggle={toggle} {...args}>
         <ModalBody>
           <div style={{ position: "relative" }}>
-            <p>{selectedModalDate}</p>
-            <div style={{ position: "absolute", top: "0px", right: "0px", background: "none" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { toggle() }} > <X /> </div>
-            <div style={{ marginBottom: "20px" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { setShowSelectTimeDiv(true) }} > <Plus /> </div>
-            {showSelectTimeDiv && <div style={containerStyle}>
-              <div style={{ display: "flex", justifyContent: "flex-start", gap: "20px" }}>
+            <div style={{ position: "absolute", top: "-10px", right: "0px", background: "none" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { toggle() }} > <X /> </div>
+            <div style={{ marginTop: "10px", marginBottom: "40px" }}><b>{selectedModalDate}</b></div>
+
+            {/* <div style={{ marginBottom: "20px" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { setShowSelectTimeDiv(true) }} > <Plus /> </div> */}
+            <div style={containerStyle}>
+              <div style={{ display: "flex", justifyContent: "flex-start", gap: "18px" }}>
                 <div style={selectcontainerStyle}>
                   <label style={labelStyle}>Hour:</label>
                   <select style={selectStyle} value={selectedStartHour} onChange={(e) => setSelectedStartHour(e.target.value)}>
                     <option hidden>
-                      .
+                      HH
                     </option>
                     {Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0')).map((hour) => (
                       <option disabled={disabledHourTime?.find((el) => el === hour) ? true : false} key={hour} value={hour}>
@@ -112,8 +123,8 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                 <div style={selectcontainerStyle}>
                   <label style={labelStyle}>Minute:</label>
                   <select style={selectStyle} value={selectedStartMinute} onChange={(e) => setSelectedStartMinute(e.target.value)}>
-                    <option hidden>
-                      .
+                    <option hidden >
+                      MM
                     </option>
                     {Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0')).map((minute) => (
                       <option disabled={disabledMinuteTime?.find((el) => el === minute) ? true : false} key={minute} value={minute}>
@@ -129,7 +140,7 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                   <label style={labelStyle}>Hour:</label>
                   <select style={selectStyle} value={selectedEndHour} onChange={(e) => setSelectedEndHour(e.target.value)}>
                     <option hidden>
-                      .
+                      HH
                     </option>
                     {Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0')).map((hour) => (
                       <option disabled={disabledHourTime?.find((el) => el === hour) ? true : false} key={hour} value={hour}>
@@ -142,7 +153,7 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                   <label style={labelStyle}>Minute:</label>
                   <select style={selectStyle} value={selectedEndMinute} onChange={(e) => setSelectedEndMinute(e.target.value)}>
                     <option hidden>
-                      .
+                      MM
                     </option>
                     {Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0')).map((minute) => (
                       <option disabled={disabledMinuteTime?.find((el) => el === minute) ? true : false} key={minute} value={minute}>
@@ -158,8 +169,8 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                   <div style={{ marginTop: "20px" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => addTrainerSlotAPI()} > <Plus /> </div>
                 </div>
               </div>
-
-            </div>}
+              {error && <div> <p style={{ color: "red", margin: "3px 0px -4px 2px" }}>Please select a valid start time and end time.</p></div>}
+            </div>
 
             {showSelectTimeDiv && <hr />}
             {
@@ -275,25 +286,29 @@ export default function CalendarPage() {
 
   function extractAvailabilities(availabilitiesList) {
     const result = [];
-    availabilitiesList.forEach(day => {
-      day.availabilities.forEach(availability => {
-        const startTime = new Date(availability.start_time);
-        const endTime = new Date(availability.end_time);
-        result.push({
-          start: startTime,
-          end: endTime
-        });
+    availabilitiesList.forEach(availability => {
+      const startTime = new Date(availability.start_time);
+      const endTime = new Date(availability.end_time);
+      result.push({
+        start: startTime,
+        end: endTime
       });
     });
     return result;
   }
 
-  const handleSelectedModal = (e) => {
-    let date = currentDateAndtime(e?.event?.start)
-    let find = availabilityData?.find((el) => el?._id === date)
-    setSelectedDateEvent(find?.availabilities)
-    setSelectedModalDate(find?._id)
-    console.log("datedatedatedatedate", find?.availabilities)
+  const handleSelectedModal = (date) => {
+    // let find = availabilityData?.find((el) => el?._id === date)
+    var dateArr = date?.split("-");
+    let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0).toISOString()
+    let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0).toISOString()
+
+    const filteredData = availabilityData.filter(item => {
+      return new Date(start_time) <= new Date(item.start_time) && new Date(item?.start_time) <= new Date(end_time)
+    });
+
+    setSelectedDateEvent(filteredData)
+    setSelectedModalDate(date)
     setModal(true);
   }
 
@@ -303,14 +318,10 @@ export default function CalendarPage() {
     console.log(e.end);
   }
 
-  const handleDateSelect = (selectInfo) => {
-    console.log("selectInfo", selectInfo);
-  }
-
   return (
     <div className='calendar-container'>
       {data?.length && <FullCalendar
-        plugins={[dayGridPlugin]}
+        plugins={[dayGridPlugin, interactionPlugin]}
         headerToolbar={{ left: 'prev,next', center: 'title', right: '' }}
         initialView='dayGridMonth'
         nowIndicator={true}
@@ -318,12 +329,15 @@ export default function CalendarPage() {
         selectable={true}
         selectMirror={true}
         initialEvents={data}
+        dateClick={function (e) {
+          var date = currentDateAndtime(e?.date)
+          handleSelectedModal(date)
+        }}
         datesSet={(e) => getData(e)}
-        select={handleDateSelect}
         eventContent={(e) => {
           return (
             <>
-              <button style={{
+              {/* <button style={{
                 borderRadius: "50px",
                 width: "20px",
                 height: "20px",
@@ -332,7 +346,10 @@ export default function CalendarPage() {
                 border: "0px",
                 fontSize: "large",
                 textAlign: "cente"
-              }} onClick={() => handleSelectedModal(e)}>+</button>
+              }} onClick={() => {
+                var date = currentDateAndtime(e?.event?.start)
+                handleSelectedModal(date)
+              }}>+</button> */}
               <div style={{ display: "flex", width: "100%", justifyContent: "space-between", margin: "0px 10px", textAlign: "center" }}>
                 <div >
                   <b>{moment(e.event.start).format('h:mm a')} - {moment(e.event.end).format('h:mm a')}</b>
@@ -343,7 +360,7 @@ export default function CalendarPage() {
         }}
       />}
       {!data?.length && <FullCalendar
-        plugins={[dayGridPlugin]}
+        plugins={[dayGridPlugin, interactionPlugin]}
         headerToolbar={{ left: 'prev,next', center: 'title', right: '' }}
         initialView='dayGridMonth'
         nowIndicator={true}
@@ -352,8 +369,9 @@ export default function CalendarPage() {
         selectMirror={true}
         initialEvents={[]}
         datesSet={(e) => getData(e)}
-        select={(e) => {
-          console.log('Date clicked: ' + e);
+        dateClick={function (e) {
+          var date = currentDateAndtime(e?.date)
+          handleSelectedModal(date)
         }}
         eventContent={(e) => {
           return (
