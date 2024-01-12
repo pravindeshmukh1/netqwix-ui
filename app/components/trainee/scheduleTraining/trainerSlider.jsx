@@ -56,14 +56,15 @@ const TrainerSlider = ({ list, isRecommended = false }) => {
                 <div
                   className="recent-profile"
                   style={{
-                    backgroundImage: `url(${contentInfo.background_image})`,
-                    backgroundSize: "cover",
+                    backgroundImage: `url(${contentInfo?.background_image})`,
+                    backgroundSize: "contain",
+                    backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
                     display: "block",
                   }}
                 >
                   {/* <img className="bg-img" src="/assets/images/avtar/1.jpg" alt="Avatar" style={{display:"none"}}/> */}
-                  <h6> {contentInfo.name}</h6>
+                  <h6> {contentInfo?.name}</h6>
                 </div>
               </div>
             </div>

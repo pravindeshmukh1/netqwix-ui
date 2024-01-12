@@ -12,7 +12,8 @@ $canvas-z-index: 8;
 .react-datepicker-popper {
   z-index: 12 !important;
 }
- .trainee-dashboard{
+
+.trainee-dashboard {
   position: absolute !important;
 }
 
@@ -384,7 +385,7 @@ slick-slider .slick-list,
 }
 
 .slick-list {
-  height: 14vw;
+  height: auto;
 }
 
 .slider-container {

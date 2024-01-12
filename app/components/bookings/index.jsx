@@ -863,10 +863,10 @@ const Bookings = ({ accountType = null }) => {
         <div className="card rounded trainer-profile-card Select" style={{ width: "39%" }}>
           <div className="card-body" style={{ margin: "auto" }}>
             <div className="row" style={{ justifyContent: "center" }}>
-              <h3 className="mt-3">Select clip</h3>
+              <h3 className="mt-3">Share clips</h3>
             </div>
             <div className="row" style={{ justifyContent: "center" }}>
-              <h3 className="mt-3">Trainee text</h3>
+              {/* <h3 className="mt-3">Trainee text</h3> */}
             </div>
             <div className="row" style={{ justifyContent: "center", marginTop: "10px" }}>
               <button
