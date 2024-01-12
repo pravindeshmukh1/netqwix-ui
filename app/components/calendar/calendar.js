@@ -319,7 +319,7 @@ export default function CalendarPage() {
   }
 
   return (
-    <div className='calendar-container'>
+    <div className='calendar-container' >
       {data?.length && <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         headerToolbar={{ left: 'prev,next', center: 'title', right: '' }}

@@ -345,43 +345,35 @@ export class Utils {
   };
 
   static isTimeRangeAvailable = (timeRanges, start_time, end_time) => {
+    var date = new Date().toISOString().split("T")[0];
+    var dateArr = date?.split("-");
+    var status = true;
+    if (timeRanges?.length) {
+      let start_time_date = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), Number(start_time.split(":")[0]), Number(start_time.split(":")[1]), 0, 0)
+      let end_time_date = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), Number(end_time.split(":")[0]), Number(end_time.split(":")[1]), 0, 0)
 
-    var status = false
-    if (timeRanges && timeRanges?.length > 0) {
-      for (const range of timeRanges) {
-        const rangeStartTime = new Date(range?.start_time)?.getTime();
-        const rangeEndTime = new Date(range?.end_time)?.getTime();
+      const filteredData = timeRanges.find(item => {
+        return (new Date(item.start_time) <= start_time_date && start_time_date >= new Date(item?.end_time)) &&
+          (new Date(item.start_time) <= end_time_date && end_time_date >= new Date(item?.end_time))
+      });
 
-        var start_time_date = new Date();
-        start_time_date.setHours(Number(start_time.split(":")[0]));
-        start_time_date.setMinutes(Number(start_time.split(":")[1]));
-        start_time_date = start_time_date?.getTime()
+      console.log("filteredData", start_time, end_time);
 
-        var end_time_date = new Date();
-        end_time_date.setHours(Number(end_time.split(":")[0]));
-        end_time_date.setMinutes(Number(end_time.split(":")[1]));
-        end_time_date = end_time_date?.getTime()
+      if (filteredData?.start_time) status = false
 
+      return status
 
-        if (start_time_date <= rangeStartTime && rangeStartTime <= end_time_date) {
-          status = true;
-          break;
-        }
-        if (start_time_date <= rangeEndTime && rangeEndTime <= end_time_date) {
-          status = true;
-          break;
-        }
+      // var start_time_date = new Date();
+      // start_time_date.setHours(Number(start_time.split(":")[0]));
+      // start_time_date.setMinutes(Number(start_time.split(":")[1]));
+      // start_time_date = start_time_date?.getTime()
 
-        if (start_time_date >= rangeStartTime && end_time_date <= rangeEndTime) {
-          status = true;
-          break;
-        }
+      // var end_time_date = new Date();
+      // end_time_date.setHours(Number(end_time.split(":")[0]));
+      // end_time_date.setMinutes(Number(end_time.split(":")[1]));
+      // end_time_date = end_time_date?.getTime()
 
-      }
-
-      return status; // No time conflict
     }
-
   };
 
   static getMinutesFromTime(time) {

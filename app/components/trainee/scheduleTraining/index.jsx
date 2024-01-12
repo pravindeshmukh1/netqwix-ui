@@ -216,11 +216,17 @@ const ScheduleTraining = () => {
       return formattedDate
     }
     if (selectedTrainer?.trainer_id) {
+
+      var date = new Date().toISOString().split("T")[0];
+      var dateArr = date?.split("-");
+      let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0).toISOString()
+      let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0).toISOString()
+
       getAvailability({
         trainer_id: selectedTrainer?.trainer_id,
-        start_time: currentDateAndtime() + "T00:00:00.000Z",
-        end_time: currentDateAndtime() + "T23:59:59.000Z"
-      }).then((res) => { setAvailableSlots(res?.data?.[0]?.availabilities); })
+        start_time: start_time,
+        end_time: end_time
+      }).then((res) => { setAvailableSlots(res?.data); })
     }
     console.log("currentDateAndtime() + T23:59:59.000Z", currentDateAndtime() + "T23:59:59.000Z")
   }, [selectedTrainer?.trainer_id, startDate])
@@ -1121,7 +1127,7 @@ const ScheduleTraining = () => {
                 <label className="mt-1 ml-3" style={{ fontSize: "13px" }}>
                   Session Duration :{" "}
                 </label>
-                <div className="col-12 col-sm-12 col-md-11 col-lg-12 col-xl-8 col-xxl-8 mt-1 mb-2 ml-2 ">
+                {/* <div className="col-12 col-sm-12 col-md-11 col-lg-12 col-xl-8 col-xxl-8 mt-1 mb-2 ml-2 ">
                   <CustomRangePicker
                     availableSlots={
                       availableSlots
@@ -1169,13 +1175,7 @@ const ScheduleTraining = () => {
                 <div className="col-12 mb-3 d-flex justify-content-center align-items-center">
                   <button
                     type="button"
-                    disabled={
-                      Utils.isTimeRangeAvailable(
-                        availableSlots,
-                        timeRange.startTime,
-                        timeRange.endTime
-                      )
-                    }
+                    disabled={Utils.isTimeRangeAvailable(availableSlots, timeRange.startTime, timeRange.endTime)}
                     className="mt-3 btn btn-sm btn-primary"
                     onClick={() => {
                       const amountPayable = Utils.getMinutesFromHourMM(
@@ -1229,6 +1229,78 @@ const ScheduleTraining = () => {
                           );
                         }
                       } else {
+                        toast.error("Invalid slot timing...");
+                      }
+                    }}
+                  >
+                    Book Slot Now
+                  </button>
+                </div> */}
+                <div className="row" style={{ display: "flex", width: "100%", justifyContent: "space-between", margin: "0px 10px", textAlign: "center" }}>
+                  {availableSlots?.map((item, i) => {
+                    return <div onClick={() => {
+                      var temp = availableSlots?.map(slt => {
+                        return { ...slt, isSelected: false }
+                      })
+                      temp[i].isSelected = true
+                      setAvailableSlots([...temp])
+                    }} className="col-6" style={{ border: item?.isSelected ? "2px solid green" : "1px solid", cursor: "pointer", padding: "10px 0px" }}>
+                      <b style={{ color: "#000080" }}>{moment(item?.start_time).format('h:mm a')} - {moment(item?.end_time).format('h:mm a')}</b>
+                    </div>
+                  })}
+                </div>
+
+                <div className="col-12 mb-3 d-flex justify-content-center align-items-center">
+                  <button
+                    type="button"
+                    disabled={!availableSlots?.find(slt => slt?.isSelected)}
+                    className="mt-3 btn btn-sm btn-primary"
+                    onClick={() => {
+                      var slot = availableSlots?.find(slt => slt?.isSelected)
+
+                      var start_time = `${new Date(slot?.start_time).getHours().toString().padStart(2, '0')}:${new Date(slot?.start_time).getMinutes().toString().padStart(2, '0')}`
+                      var end_time = `${new Date(slot?.end_time).getHours().toString().padStart(2, '0')}:${new Date(slot?.end_time).getMinutes().toString().padStart(2, '0')}`
+
+                      const amountPayable = Utils.getMinutesFromHourMM(
+                        start_time,
+                        end_time,
+                        trainerInfo?.userInfo?.extraInfo?.hourly_rate
+                      );
+                      if (amountPayable > 0) {
+                        if (
+                          Utils.isInRange(
+                            startDate,
+                            start_time,
+                            end_time,
+                          )
+                        ) {
+                          toast.error(
+                            "The specified time has elapsed. Please select another time..."
+                          );
+                        } else {
+                          const payload = {
+                            charging_price: amountPayable,
+                            trainer_id:
+                              trainerInfo?.userInfo?.trainer_id ||
+                              selectedTrainer?.trainer_id,
+                            trainer_info: trainerInfo || selectedTrainer.data,
+                            hourly_rate:
+                              trainerInfo?.userInfo?.extraInfo?.hourly_rate ||
+                              selectedTrainer?.data?.extraInfo?.hourly_rate,
+                            status: BookedSession.booked,
+                            booked_date: startDate,
+                            session_start_time: start_time,
+                            session_end_time: end_time,
+                          };
+                          setBookSessionPayload(payload);
+                          dispatch(
+                            createPaymentIntentAsync({
+                              amount: +amountPayable.toFixed(1),
+                            })
+                          );
+                        }
+                      }
+                      else {
                         toast.error("Invalid slot timing...");
                       }
                     }}

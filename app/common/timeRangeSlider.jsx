@@ -131,10 +131,7 @@ const CustomRangePicker = ({
           />
         </div>
         {availableSlots?.map((slot, index) => {
-          const { startPos, endPos } = Utils.getPercentageForSlot(
-            slot.start_time,
-            slot.end_time
-          );
+          const { startPos, endPos } = Utils.getPercentageForSlot(slot.start_time, slot.end_time);
           // const { startPos, endPos } = Utils.getPercentageForSlot(
           //   slot.start_time,
           //   slot.end_time,
