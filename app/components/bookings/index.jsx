@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import ReactStrapModal from "../../common/modal";
 import ShareModalTrainer from "./start/Share modal Trainer";
 import { Formik } from "formik";
+import Slider from "react-slick";
 import {
   bookingsAction,
   bookingsState,
@@ -37,6 +38,8 @@ import VideoUpload from '../videoupload'
 import { myClips } from "../../../containers/rightSidebar/fileSection.api";
 import { traineeAction, traineeState } from "../trainee/trainee.slice";
 import CalendarPage from "../calendar/calendar";
+import { masterState } from "../master/master.slice";
+import { trainerAction, trainerState } from "../trainer/trainer.slice";
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
 const Bookings = ({ accountType = null }) => {
@@ -46,6 +49,7 @@ const Bookings = ({ accountType = null }) => {
   const { newBookingData } = useAppSelector(traineeState);
   const { isLoading, configs } = useAppSelector(bookingsState);
   const { userInfo } = useAppSelector(authState);
+  const { trainersList, selectedTrainerInfo } = useAppSelector(trainerState);
   const [bookedSession, setBookedSession] = useState({
     id: "",
     booked_status: "",
@@ -959,6 +963,55 @@ const Bookings = ({ accountType = null }) => {
   };
 
 
+  const [data, setData] = useState();
+  const masterRecords = useAppSelector(masterState).master;
+  useEffect(() => {
+    setData(masterRecords?.masterData);
+  }, [masterRecords]);
+  const settings = {
+    autoplay: true,
+    infinite: true,
+    speed: 2000,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    swipetoslide: true,
+    autoplaySpeed: 1000,
+    // arrows:false,
+    responsive: [
+      {
+        breakpoint: 1366,
+        settings: {
+          autoplay: true,
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 800,
+        settings: {
+          autoplay: true,
+
+          slidesToShow: 7,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          autoplay: true,
+
+          slidesToShow: 5,
+        },
+      },
+      {
+        breakpoint: 700,
+        settings: {
+          autoplay: true,
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
+
   return (
     <React.Fragment>
       {startMeeting.isOpenModal ? (
@@ -1024,8 +1077,51 @@ const Bookings = ({ accountType = null }) => {
                   Its empty here, search for trainers on the homepage and get started on your learning journey !
                 </h3>
                 <div style={{ width: "100%", display: "flex", justifyContent: "center", marginTop: "50px" }}>
-                  <button onClick={() => TogglTab("home")} className={`btn btn-primary button-effect btn-sm mr-2 btn_cancel`}>Go To Home Page</button>
+                  <button onClick={() => { TogglTab("home"); dispatch(trainerAction?.setSelectedTrainerInfo(null)) }} className={`btn btn-primary button-effect btn-sm mr-2 btn_cancel`}>Go To Home Page</button>
                 </div>
+
+                <div className="trainer-recommended" style={{ height: '90px' }}>
+                  <div className="row">
+                    <div className="col d-none d-sm-block">
+                      <Slider {...settings}>
+                        {data?.category?.map((item, index) => (
+                          <div key={`slider-item-${index}`} >
+                            <span
+                              className="badge badge-light lg"
+                              style={{
+                                margin: "12px",
+                                padding: "18px", // Add your desired padding here
+                                alignItems: "center",
+                                fontSize: "14px",
+                                color: "black",
+                                cursor: "pointer",
+                                width: "80%",
+                                height: "0",
+                                display: "flex",
+                                justifyContent: "center", // Center content horizontally
+                                flexDirection: "column",
+                              }}
+                              onClick={() => {
+                                TogglTab("home");
+                                dispatch(trainerAction?.setSelectedTrainerInfo({
+                                  userInfo: {
+                                    id: item,
+                                    isCategory: true,
+                                    name: item,
+                                  },
+                                  selected_category: item,
+                                }))
+                              }}
+                            >
+                              {item}
+                            </span>
+                          </div>
+                        ))}
+                      </Slider>
+                    </div>
+                  </div>
+                </div>
+
               </>
             )
           ) : null}

@@ -156,7 +156,7 @@ export const TrainerDetails = ({
         </div>
       )}
       <div className={`custom-trainer-scroll`} style={{ marginTop: "24px" }}>
-        {trainerDetails.select_trainer ? (
+        {trainerDetails?.select_trainer ? (
           <TrainerInfo
             accordionData={accordionData}
             activeAccordion={activeAccordion}

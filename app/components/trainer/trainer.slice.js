@@ -6,6 +6,7 @@ import { getMeAsync } from "../auth/auth.slice";
 const initialState = {
   status: "idle",
   trainersList: [],
+  selectedTrainerInfo: null
 };
 
 export const updateDrawingAsync = createAsyncThunk(
@@ -53,6 +54,9 @@ export const trainerSlice = createSlice({
     trainer: (state) => {
       return state;
     },
+    setSelectedTrainerInfo: (state, action) => {
+      state.selectedTrainerInfo = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder

@@ -48,7 +48,7 @@ import {
   commonState,
 } from "../../../common/common.slice";
 import CustomRangePicker from "../../../common/timeRangeSlider";
-import { getTrainersAsync, trainerState } from "../../trainer/trainer.slice";
+import { getTrainersAsync, trainerAction, trainerState } from "../../trainer/trainer.slice";
 import { authAction, authState } from "../../auth/auth.slice";
 import { SocketContext } from "../../socket";
 import Category from "../../../../pages/landing/category";
@@ -56,6 +56,7 @@ import { myClips, traineeClips } from "../../../../containers/rightSidebar/fileS
 import { getAvailability } from "../../calendar/calendar.api";
 
 import { addTraineeClipInBookedSessionAsync } from "../../common/common.slice";
+import { useSelector } from "react-redux";
 const settings = {
   autoplay: true,
   infinite: true,
@@ -118,7 +119,7 @@ const ScheduleTraining = () => {
 
   const dispatch = useAppDispatch();
   const { status, getTraineeSlots, transaction } = useAppSelector(traineeState);
-  const { trainersList } = useAppSelector(trainerState);
+  const { trainersList, selectedTrainerInfo } = useAppSelector(trainerState);
   const { configs } = useAppSelector(bookingsState);
   const [availableSlots, setAvailableSlots] = useState([])
   const { isSlotAvailable, session_durations } =
@@ -234,6 +235,14 @@ const ScheduleTraining = () => {
     userInfo: null,
     selected_category: null,
   });
+
+
+  useEffect(() => {
+    selectedTrainerInfo && setTrainerInfo(JSON.parse(JSON.stringify(selectedTrainerInfo)))
+    selectedTrainerInfo?.selected_category && setParams({ search: selectedTrainerInfo?.selected_category });
+  }, [selectedTrainerInfo?.selected_category])
+
+
   const [bookSessionPayload, setBookSessionPayload] = useState({});
   const toggle = () => setInstantScheduleMeeting(!isOpenInstantScheduleMeeting);
 
@@ -320,18 +329,22 @@ const ScheduleTraining = () => {
   }, [transaction]);
 
   useEffect(() => {
-    setTrainerInfo((prev) => ({
-      ...prev,
-      userInfo: null,
-    }));
+    if (!selectedTrainerInfo) {
+      setTrainerInfo((prev) => ({
+        ...prev,
+        userInfo: null,
+      }));
+    }
   }, []);
 
   useEffect(() => {
-    setTrainerInfo((prev) => ({
-      ...prev,
-      userInfo: undefined,
-      selected_category: undefined,
-    }));
+    if (!selectedTrainerInfo) {
+      setTrainerInfo((prev) => ({
+        ...prev,
+        userInfo: undefined,
+        selected_category: undefined,
+      }));
+    }
   }, []);
 
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -602,7 +615,7 @@ const ScheduleTraining = () => {
   const renderTable = () => {
     return (
       <div
-        className={`${trainerInfo.userInfo
+        className={`${trainerInfo?.userInfo
           ? "table-responsive-width"
           : "table-responsive-width"
           }`}
@@ -632,7 +645,7 @@ const ScheduleTraining = () => {
               {bookingTableData
                 .filter(({ trainer_info }) => {
                   return (
-                    trainer_info._id === trainerInfo.userInfo?.id ||
+                    trainer_info._id === trainerInfo?.userInfo?.id ||
                     trainer_info._id === selectedTrainer.id
                   );
                 })
@@ -848,7 +861,7 @@ const ScheduleTraining = () => {
       style={{ width: "75% !important" }}
     >
 
-      <div className="row">
+      <div className="row" style={{ flexWrap: "nowrap" }}>
 
         <div className="trainer-recommended" style={{ marginTop: "3%", maxWidth: "75%" }}>
           <h1 style={{ marginBottom: "10px" }}>Book Your Lesson now</h1>
@@ -1010,7 +1023,7 @@ const ScheduleTraining = () => {
         categoryList={categoryList}
         key={`trainerDetails`}
         searchQuery={query}
-        trainerInfo={trainerInfo.userInfo}
+        trainerInfo={trainerInfo?.userInfo}
         selectTrainer={(_id, trainer_id, data) => {
           if (_id) {
             setSelectedTrainer({
