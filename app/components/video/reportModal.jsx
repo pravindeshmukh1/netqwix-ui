@@ -320,7 +320,7 @@ const reportModal = ({
                                 })}
                             </div>
                             <div className="d-flex justify-content-center w-100 p-3">
-                                <Button className="mx-3" color="primary" onClick={() => { getReportData().then((res) => generatePDF()) }}>Save</Button>
+                                <Button className="mx-3" color="primary" onClick={() => { getReportData().then((res) => generatePDF().then(() => setIsOpenReport(false))) }}>Save</Button>
                             </div>
                         </div>
 
