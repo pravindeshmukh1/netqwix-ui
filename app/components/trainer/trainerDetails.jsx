@@ -452,8 +452,8 @@ const TrainerInfo = ({
       }}
     >
       <div className="col-md-6">
-        <div className="row">
-          <div className="col-4 col-md-3 col-lg-2">
+        <div className="d-flex justify-content-start" style={{ gap: "20px" }}>
+          <div>
             <img
               src={
                 trainer && trainer.profilePicture
@@ -470,7 +470,7 @@ const TrainerInfo = ({
               alt="profile-picture"
             />
           </div>
-          <div className="col-8 col-md-8 col-lg-8">
+          <div>
             <h2 className="mt-3">
               {trainer && trainer ? trainer.fullname : null}
             </h2>
