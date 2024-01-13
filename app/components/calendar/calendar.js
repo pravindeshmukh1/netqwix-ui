@@ -13,36 +13,46 @@ const staticData = [
   { start: new Date('2024-01-11T11:06:00.840Z'), end: new Date('2024-01-11T11:08:00.840Z') }
 ]
 
-function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData, ...args }) {
+function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData, options, ...args }) {
+
+  console.log("data", data);
+  console.log("options", options);
+
   const [showSelectTimeDiv, setShowSelectTimeDiv] = useState(false)
   const [disabledHourTime, setDisabledHourTime] = useState(["00", "04", "10"])
   const [disabledMinuteTime, setDisabledMinuteTime] = useState([])
 
-  const [selectedStartHour, setSelectedStartHour] = useState("");
-  const [selectedStartMinute, setSelectedStartMinute] = useState("");
+  const [selectedStartTime, setSelectedStartTime] = useState("");
+  const [selectedEndTime, setSelectedEndTime] = useState("");
 
-  const [selectedEndHour, setSelectedEndHour] = useState("");
-  const [selectedEndMinute, setSelectedEndMinute] = useState("");
   const [error, setError] = useState(false);
 
   const addTrainerSlotAPI = async () => {
     var date = selectedModalDate?.split("-")
-    if ((!selectedStartHour || !selectedStartMinute || !selectedEndHour || !selectedEndMinute)) setError(true)
+    if ((!selectedStartTime || !selectedEndTime) || (selectedStartTime === selectedEndTime) || (new Date(selectedStartTime) < new Date(selectedEndTime))) setError(true)
     else {
-      let start_time = new Date(Number(date[0]), Number(date[1]) - 1, Number(date[2]), Number(selectedStartHour), Number(selectedStartMinute), 0, 0).toISOString()
-      let end_time = new Date(Number(date[0]), Number(date[1]) - 1, Number(date[2]), Number(selectedEndHour), Number(selectedEndMinute), 0, 0).toISOString()
-      try {
-        let res = await addTrainerSlot({ start_time, end_time })
-        let updatedData = data
-        data?.push(res?.data)
-        setData([...data])
-        setSelectedStartHour("")
-        setSelectedStartMinute("")
-        setSelectedEndHour("")
-        setSelectedEndMinute("")
-        setError(false)
-      } catch (error) {
-        console.log(error)
+      const filteredData = data.find(item => {
+        var status = (new Date(item.start_time) <= new Date(selectedStartTime) && new Date(selectedStartTime) <= new Date(item?.end_time)) ||
+          (new Date(item.start_time) <= new Date(selectedEndTime) && new Date(selectedEndTime) <= new Date(item?.end_time))
+
+        var status2 = (new Date(selectedStartTime) <= new Date(item.start_time) && new Date(item?.end_time) >= new Date(selectedStartTime)) ||
+          (new Date(selectedEndTime) <= new Date(item.start_time) && new Date(item?.end_time) >= new Date(selectedEndTime))
+
+        return status && status2
+      });
+      if (filteredData?.start_time) setError(true)
+      else {
+        try {
+          let res = await addTrainerSlot({ start_time: selectedStartTime, end_time: selectedEndTime })
+          let updatedData = data
+          data?.push(res?.data)
+          setData([...data])
+          setSelectedStartTime("")
+          setSelectedEndTime("")
+          setError(false)
+        } catch (error) {
+          console.log(error)
+        }
       }
     }
   }
@@ -94,8 +104,6 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
   }, [data])
 
 
-
-
   return (
     <div>
       <Modal isOpen={modal} toggle={toggle} {...args}>
@@ -108,65 +116,34 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
             <div style={containerStyle}>
               <div style={{ display: "flex", justifyContent: "flex-start", gap: "18px" }}>
                 <div style={selectcontainerStyle}>
-                  <label style={labelStyle}>Hour:</label>
-                  <select style={selectStyle} value={selectedStartHour} onChange={(e) => setSelectedStartHour(e.target.value)}>
+                  <select style={selectStyle} value={selectedStartTime} onChange={(e) => setSelectedStartTime(e.target.value)}>
                     <option hidden>
-                      HH
+                      Start  Time
                     </option>
-                    {Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0')).map((hour) => (
-                      <option disabled={disabledHourTime?.find((el) => el === hour) ? true : false} key={hour} value={hour}>
-                        {hour}
+                    {options.map((time) => (
+                      <option key={time} value={time}>
+                        {moment(time).format('h:mm a')}
                       </option>
                     ))}
                   </select>
                 </div>
                 <div style={selectcontainerStyle}>
-                  <label style={labelStyle}>Minute:</label>
-                  <select style={selectStyle} value={selectedStartMinute} onChange={(e) => setSelectedStartMinute(e.target.value)}>
-                    <option hidden >
-                      MM
-                    </option>
-                    {Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0')).map((minute) => (
-                      <option disabled={disabledMinuteTime?.find((el) => el === minute) ? true : false} key={minute} value={minute}>
-                        {minute}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {/* ---------------------- */}
-                <p>To</p>
-                {/* ----------------------------- */}
-                <div style={selectcontainerStyle}>
-                  <label style={labelStyle}>Hour:</label>
-                  <select style={selectStyle} value={selectedEndHour} onChange={(e) => setSelectedEndHour(e.target.value)}>
+                  <select style={selectStyle} value={selectedEndTime} onChange={(e) => setSelectedEndTime(e.target.value)}>
                     <option hidden>
-                      HH
+                      End Time
                     </option>
-                    {Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0')).map((hour) => (
-                      <option disabled={disabledHourTime?.find((el) => el === hour) ? true : false} key={hour} value={hour}>
-                        {hour}
+                    {options.map((time) => (
+                      <option key={time} value={time}>
+                        {moment(time).format('h:mm a')}
                       </option>
                     ))}
                   </select>
                 </div>
                 <div style={selectcontainerStyle}>
-                  <label style={labelStyle}>Minute:</label>
-                  <select style={selectStyle} value={selectedEndMinute} onChange={(e) => setSelectedEndMinute(e.target.value)}>
-                    <option hidden>
-                      MM
-                    </option>
-                    {Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0')).map((minute) => (
-                      <option disabled={disabledMinuteTime?.find((el) => el === minute) ? true : false} key={minute} value={minute}>
-                        {minute}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { setShowSelectTimeDiv() }} > <X /> </div>
                 </div>
                 <div style={selectcontainerStyle}>
-                  <div style={{ marginTop: "20px" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { setShowSelectTimeDiv() }} > <X /> </div>
-                </div>
-                <div style={selectcontainerStyle}>
-                  <div style={{ marginTop: "20px" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => addTrainerSlotAPI()} > <Plus /> </div>
+                  <div className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => addTrainerSlotAPI()} > <Plus /> </div>
                 </div>
               </div>
               {error && <div> <p style={{ color: "red", margin: "3px 0px -4px 2px" }}>Please select a valid start time and end time.</p></div>}
@@ -175,52 +152,24 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
             {showSelectTimeDiv && <hr />}
             {
               data?.map((e, index) => {
-                let startTime = moment(e?.start_time).format('h:mm a')
-                let preFillhoursStart = startTime?.split(" ")[0]?.split(":")[0].toString().padStart(2, 0)
-                let preFillminutesStart = startTime.split(" ")[0]?.split(":")[1].toString().padStart(2, 0)
-
-                let endTime = moment(e?.end_time).format('h:mm a')
-                let preFillhoursEnd = endTime?.split(" ")[0]?.split(":")[0].toString().padStart(2, 0)
-                let preFillminutesEnd = endTime.split(" ")[0]?.split(":")[1].toString().padStart(2, 0)
                 return <div style={containerStyle}>
                   <div style={{ display: "flex", justifyContent: "flex-start", gap: "20px" }}>
                     <div style={selectcontainerStyle}>
-                      <label style={labelStyle}>Hour:</label>
-                      <select style={selectStyle} value={preFillhoursStart}>
-                        {Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0')).map((hour) => (
-                          <option key={hour} value={hour}>
-                            {hour}
+                      <label style={labelStyle}>Start  Time</label>
+                      <select style={selectStyle} value={e?.start_time}>
+                        {options.map((time) => (
+                          <option key={time} value={time}>
+                            {moment(time).format('h:mm a')}
                           </option>
                         ))}
                       </select>
                     </div>
                     <div style={selectcontainerStyle}>
-                      <label style={labelStyle}>Minute:</label>
-                      <select style={selectStyle} value={preFillminutesStart}>
-                        {Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0')).map((minute) => (
-                          <option key={minute} value={minute}>
-                            {minute}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <p>To</p>
-                    <div style={selectcontainerStyle}>
-                      <label style={labelStyle}>Hour:</label>
-                      <select style={selectStyle} value={preFillhoursEnd}>
-                        {Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0')).map((hour) => (
-                          <option key={hour} value={hour}>
-                            {hour}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div style={selectcontainerStyle}>
-                      <label style={labelStyle}>Minute:</label>
-                      <select style={selectStyle} value={preFillminutesEnd}>
-                        {Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0')).map((minute) => (
-                          <option key={minute} value={minute}>
-                            {minute}
+                      <label style={labelStyle}>End  Time</label>
+                      <select style={selectStyle} value={e?.end_time}>
+                        {options.map((time) => (
+                          <option key={time} value={time}>
+                            {moment(time).format('h:mm a')}
                           </option>
                         ))}
                       </select>
@@ -249,13 +198,13 @@ export default function CalendarPage() {
   const [selectedDateEvent, setSelectedDateEvent] = useState([])
   const [modal, setModal] = useState(false);
   const [selectedModalDate, setSelectedModalDate] = useState("")
+  const [options, setOptions] = useState([])
 
   const toggle = () => {
     setModal(!modal)
     setData([])
     getAllAvailability()
   };
-
 
   useEffect(() => {
     getAllAvailability();
@@ -297,6 +246,22 @@ export default function CalendarPage() {
     return result;
   }
 
+
+
+  function generateTimeArray(selectedDate) {
+    var date = new Date(selectedDate).toISOString().split("T")[0];
+    var dateArr = date?.split("-");
+    let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0)
+    let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0)
+
+    const timeArray = [];
+    while (start_time <= end_time) {
+      timeArray.push(start_time.toISOString());
+      start_time.setMinutes(start_time.getMinutes() + 15);
+    }
+    setOptions([...timeArray])
+  }
+
   const handleSelectedModal = (date) => {
     // let find = availabilityData?.find((el) => el?._id === date)
     var dateArr = date?.split("-");
@@ -309,6 +274,7 @@ export default function CalendarPage() {
 
     setSelectedDateEvent(filteredData)
     setSelectedModalDate(date)
+    generateTimeArray(date)
     setModal(true);
   }
 
@@ -388,7 +354,7 @@ export default function CalendarPage() {
           )
         }}
       />}
-      <EventModal modal={modal} setModal={setModal} toggle={toggle} setData={setAvailabilityData} data={selectedDateEvent} selectedModalDate={selectedModalDate} />
+      <EventModal modal={modal} setModal={setModal} toggle={toggle} setData={setAvailabilityData} data={selectedDateEvent} selectedModalDate={selectedModalDate} options={options} />
     </div>
   )
 }
