@@ -52,7 +52,7 @@ import { getTrainersAsync, trainerAction, trainerState } from "../../trainer/tra
 import { authAction, authState } from "../../auth/auth.slice";
 import { SocketContext } from "../../socket";
 import Category from "../../../../pages/landing/category";
-import { myClips, traineeClips } from "../../../../containers/rightSidebar/fileSection.api";
+import { myClips, shareClips, traineeClips } from "../../../../containers/rightSidebar/fileSection.api";
 import { getAvailability } from "../../calendar/calendar.api";
 
 import { addTraineeClipInBookedSessionAsync } from "../../common/common.slice";
@@ -144,6 +144,9 @@ const ScheduleTraining = () => {
   const [selectedClips, setSelectedClips] = useState([]);
   const [trainee, setTrainee] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  const [err, setErr] = useState({ email: false, video: false });
+
   const handleSelectClip = () => {
     setIsModalOpen(true);
   };
@@ -194,6 +197,21 @@ const ScheduleTraining = () => {
     };
   }, [popup]);
   // const [isSlotAvailable, setIsSlotAvailable] = useState(true);
+
+
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const onShare = async () => {
+    if (!emailRegex.test(userEmail)) setErr({ email: true, video: false });
+    else
+      if (!selectedClips?.length) setErr({ email: false, video: true });
+      else {
+        var res = await shareClips({ user_email: userEmail, clips: selectedClips })
+        toast.success("Email sent successfully.", { type: "success" })
+        setErr({ email: false, video: false })
+      }
+  }
 
   const [selectedTrainer, setSelectedTrainer] = useState({
     id: null,
@@ -1008,10 +1026,13 @@ const ScheduleTraining = () => {
                 />
               )}
               <div className="row" style={{ justifyContent: "center", paddingTop: "10px", margin: "auto" }}>
-                <input className="form-control" type="email" placeholder="Email"></input>
+                <input value={userEmail} onChange={(e) => setUserEmail(e?.target?.value)} className="form-control" type="email" placeholder="Email"></input>
               </div>
+
+              {err?.video && <p style={{ color: "red", marginTop: "5px" }}>Please select video.</p>}
+              {err?.email && <p style={{ color: "red", marginTop: "5px" }}>Invalid Email.</p>}
               <div className="row" style={{ justifyContent: "center", marginTop: "10px" }}>
-                <button className="btn btn-success button-effect btn-sm btn_cancel">Share</button>
+                <button onClick={() => { onShare() }} className="btn btn-success button-effect btn-sm btn_cancel">Share</button>
               </div>
             </div>
           </div>

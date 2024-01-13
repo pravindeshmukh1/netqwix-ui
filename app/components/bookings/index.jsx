@@ -35,11 +35,12 @@ import { bookingButton } from "../../common/constants";
 import { TabContent, TabPane, Nav, NavItem, NavLink, Button } from "reactstrap";
 import classnames from "classnames";
 import VideoUpload from '../videoupload'
-import { myClips } from "../../../containers/rightSidebar/fileSection.api";
+import { myClips, shareClips } from "../../../containers/rightSidebar/fileSection.api";
 import { traineeAction, traineeState } from "../trainee/trainee.slice";
 import CalendarPage from "../calendar/calendar";
 import { masterState } from "../master/master.slice";
 import { trainerAction, trainerState } from "../trainer/trainer.slice";
+import { toast } from "react-toastify";
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 
 const Bookings = ({ accountType = null }) => {
@@ -77,7 +78,8 @@ const Bookings = ({ accountType = null }) => {
   const [clips, setClips] = useState([]);
   const [selectedClips, setSelectedClips] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [userEmail, setUserEmail] = useState("");
+  const [err, setErr] = useState({ email: false, video: false });
 
   const handleSelectClip = () => {
     setIsModalOpen(true);
@@ -97,8 +99,6 @@ const Bookings = ({ accountType = null }) => {
       setIsOpen(true);
     }
   }, [newBookingData])
-
-  console.log("isOpenID", isOpenID, newBookingData);
 
   const getMyClips = async () => {
     var res = await myClips({})
@@ -149,6 +149,19 @@ const Bookings = ({ accountType = null }) => {
     dispatch(removeNewBookingData());
     setIsOpen(false)
     setIsModalOpen(false);
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const onShare = async () => {
+    if (!emailRegex.test(userEmail)) setErr({ email: true, video: false });
+    else
+      if (!selectedClips?.length) setErr({ email: false, video: true });
+      else {
+        var res = await shareClips({ user_email: userEmail, clips: selectedClips })
+        toast.success("Email sent successfully.", { type: "success" })
+        setErr({ email: false, video: false })
+      }
   }
 
   const toggle = () => setStartMeeting(!startMeeting);
@@ -859,7 +872,6 @@ const Bookings = ({ accountType = null }) => {
           </div>
         </div>
 
-
         <div className="card rounded trainer-profile-card Select" style={{ width: "39%" }}>
           <div className="card-body" style={{ margin: "auto" }}>
             <div className="row" style={{ justifyContent: "center" }}>
@@ -889,20 +901,18 @@ const Bookings = ({ accountType = null }) => {
               />
             )}
             <div className="row" style={{ justifyContent: "center", paddingTop: "10px", margin: "auto" }}>
-              <input className="form-control" type="email" placeholder="Email"></input>
+              <input value={userEmail} onChange={(e) => setUserEmail(e?.target?.value)} className="form-control" type="email" placeholder="Email"></input>
             </div>
+
+            {err?.video && <p style={{ color: "red", marginTop: "5px" }}>Please select video.</p>}
+            {err?.email && <p style={{ color: "red", marginTop: "5px" }}>Invalid Email.</p>}
             <div className="row" style={{ justifyContent: "center", marginTop: "10px" }}>
-              <button className="btn btn-success button-effect btn-sm btn_cancel">Share</button>
+              <button onClick={() => { onShare() }} className="btn btn-success button-effect btn-sm btn_cancel">Share</button>
             </div>
           </div>
         </div>
-
       </div>
-
-
-
     </React.Fragment>
-
   );
 
   const bookingTabs = () => (

@@ -13,7 +13,6 @@ const Modal = ({
   overflowHidden = false,
   minHeight = false,
 }) => {
-  console.log(element)
   return (
     <ReactStrapModal
       className={`${allowFullWidth
