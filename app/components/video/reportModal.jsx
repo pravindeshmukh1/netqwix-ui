@@ -51,24 +51,30 @@ const reportModal = ({
 
     const setScreenShot = async (reportData) => {
         var newReportImages = [];
-
-        for (let index = 0; index < reportData?.length; index++) {
-            const element = reportData[index];
-            try {
-                const response = await fetch(`https://netquix.s3.ap-south-1.amazonaws.com/${element?.imageUrl}`);
-                const blob = await response.blob();
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    const base64data = reader.result.split(',')[1];
-                    newReportImages.push({ ...element, imageUrl: `data:image/jpeg;base64,${base64data}` })
-                    setReportArr([...newReportImages])
-                };
-                reader.readAsDataURL(blob);
-            } catch (error) {
-                console.error('Error fetching or converting image:', error);
+        if (reportData && reportData?.length > 0) {
+            for (let index = 0; index < reportData?.length; index++) {
+                const element = reportData[index];
+                try {
+                    const response = await fetch(`https://netquix.s3.ap-south-1.amazonaws.com/${element?.imageUrl}`);
+                    const blob = await response.blob();
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        const base64data = reader.result.split(',')[1];
+                        newReportImages.push({ ...element, imageUrl: `data:image/jpeg;base64,${base64data}` })
+                        setReportArr([...newReportImages])
+                    };
+                    reader.readAsDataURL(blob);
+                } catch (error) {
+                    console.error('Error fetching or converting image:', error);
+                }
             }
+        } else {
+            setReportArr([...newReportImages])
         }
+
     }
+
+    // console.log("reportArrreportArrreportArrreportArrreportArr", reportArr)
 
 
     const handleCropImage = async (filename, blob) => {
@@ -90,6 +96,7 @@ const reportModal = ({
         var res = await getReport({ sessions: currentReportData?.session, trainer: currentReportData?.trainer, trainee: currentReportData?.trainee, })
         setScreenShots(res?.data?.reportData)
         setReportObj({ title: res?.data?.title, topic: res?.data?.description })
+        // console.log("res?.data?.reportDatares?.data?.reportDatares?.data?.reportData", res, res?.data?.reportData)
         setScreenShot(res?.data?.reportData)
     }
 
@@ -104,6 +111,7 @@ const reportModal = ({
 
         const content = document.getElementById("report-pdf")
         content.style.removeProperty("display");
+        // console.log("contentcontentcontentcontentcontentcontent", content)
 
         html2canvas(content).then(async (canvas) => {
             const imgData = canvas.toDataURL('image/png');
@@ -144,7 +152,7 @@ const reportModal = ({
             var link = await createUploadLink();
             if (link) pushProfilePDFToS3(link, pdfFile);
 
-            content.style.display = "none";
+            // content.style.display = "none";
 
             var res = await createReport({
                 sessions: currentReportData?.session,
@@ -154,7 +162,15 @@ const reportModal = ({
                 topic: reportObj?.topic,
                 reportData: [...screenShots],
             })
-            setIsOpenReport(false)
+
+            // console.log("resresresresresresresresresres", res, {
+            //     sessions: currentReportData?.session,
+            //     trainer: currentReportData?.trainer,
+            //     trainee: currentReportData?.trainee,
+            //     title: reportObj?.title,
+            //     topic: reportObj?.topic,
+            //     reportData: [...screenShots],
+            // })
         })
     };
 
@@ -304,7 +320,7 @@ const reportModal = ({
                                 })}
                             </div>
                             <div className="d-flex justify-content-center w-100 p-3">
-                                <Button className="mx-3" color="primary" onClick={() => { generatePDF() }}>Save</Button>
+                                <Button className="mx-3" color="primary" onClick={() => { getReportData().then((res) => generatePDF()) }}>Save</Button>
                             </div>
                         </div>
 
