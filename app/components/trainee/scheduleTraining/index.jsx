@@ -244,9 +244,20 @@ const ScheduleTraining = () => {
         trainer_id: selectedTrainer?.trainer_id,
         start_time: start_time,
         end_time: end_time
-      }).then((res) => { setAvailableSlots(res?.data); })
+      }).then((res) => {
+        let filterdAvailbleItems = res?.data?.filter((el) => moment(new Date(el?.createdAt).toISOString()).format('YYYY-MM-DD') === moment(new Date(`${startDate}`).toISOString()).format('YYYY-MM-DD'))
+        //   console.log("filterdAvailbleItemsfilterdAvailbleItemsfilterdAvailbleItemsfilterdAvailbleItems", filterdAvailbleItems)
+        setAvailableSlots(filterdAvailbleItems);
+      })
+
+      // getAvailability({
+      //   trainer_id: selectedTrainer?.trainer_id,
+      //   start_time: start_time,
+      //   end_time: end_time
+      // }).then((res) => { setAvailableSlots(res?.data); })
     }
-    console.log("currentDateAndtime() + T23:59:59.000Z", currentDateAndtime() + "T23:59:59.000Z")
+
+    //   // console.log("new Date(startDate).toISOStringnew Date(startDate).toISOString", moment(new Date(`${startDate}`).toISOString()).format('YYYY-MM-DD'))
   }, [selectedTrainer?.trainer_id, startDate])
 
 
