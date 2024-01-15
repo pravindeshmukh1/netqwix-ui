@@ -344,7 +344,7 @@ const SettingSection = (props) => {
                 <img
                   className={`bg-img rounded ${accountType === !AccountType.TRAINEE && "mt-1"
                     }`}
-                  src={profile.profile_picture}
+                  src={Utils?.dynamicImageURL(profile?.profile_picture)}
                   alt="Avatar"
                   width={44}
                   height={38}
@@ -368,7 +368,7 @@ const SettingSection = (props) => {
                       }`}
                     src={
                       profile.profile_picture
-                        ? profile.profile_picture
+                        ? Utils?.dynamicImageURL(profile?.profile_picture)
                         : "/assets/images/avtar/user.png"
                     }
                     alt="Avatar"

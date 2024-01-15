@@ -297,8 +297,8 @@ const SelectedCategory = ({
                     <div className="col-sm-3 col-md-3 col-lg-2 col-xl-2">
                       <img
                         src={
-                          data.profilePicture
-                            ? data.profilePicture
+                          data?.profilePicture
+                            ? Utils?.dynamicImageURL(data?.profilePicture)
                             : "/assets/images/avtar/statusMenuIcon.jpeg"
                         }
                         className="cardimg"
@@ -350,8 +350,7 @@ const SelectedCategory = ({
                               data &&
                               data.extraInfo &&
                               data.extraInfo.social_media_links &&
-                              data.extraInfo.social_media_links
-                                .profile_image_url
+                              Utils?.dynamicImageURL(data.extraInfo?.social_media_links?.profile_image_url)
                             }
                             social_media_links={
                               data &&
@@ -457,7 +456,7 @@ const TrainerInfo = ({
             <img
               src={
                 trainer && trainer.profilePicture
-                  ? trainer.profilePicture
+                  ? Utils?.dynamicImageURL(trainer.profilePicture)
                   : "/assets/images/avtar/statusMenuIcon.jpeg"
               }
               width={100}
@@ -491,7 +490,7 @@ const TrainerInfo = ({
                   trainer &&
                   trainer?.extraInfo &&
                   trainer?.extraInfo?.social_media_links &&
-                  trainer?.extraInfo?.social_media_links?.profile_image_url
+                  Utils?.dynamicImageURL(trainer?.extraInfo?.social_media_links?.profile_image_url)
                 }
                 social_media_links={
                   trainer &&
