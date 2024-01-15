@@ -846,7 +846,7 @@ const Bookings = ({ accountType = null }) => {
               <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 d-flex justify-content-center align-items-center">
                 <img
                   src={
-                    userInfo?.profile_picture || "/assets/images/avtar/user.png"
+                    Utils?.dynamicImageURL(userInfo?.profile_picture) || "/assets/images/avtar/user.png"
                   }
                   alt="trainer_image"
                   className="rounded trainer-profile"

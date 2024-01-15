@@ -344,36 +344,118 @@ export class Utils {
     return totalMinutes;
   };
 
-  static isTimeRangeAvailable = (timeRanges, start_time, end_time) => {
-    var date = new Date().toISOString().split("T")[0];
-    var dateArr = date?.split("-");
-    var status = true;
-    if (timeRanges?.length) {
-      let start_time_date = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), Number(start_time.split(":")[0]), Number(start_time.split(":")[1]), 0, 0)
-      let end_time_date = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), Number(end_time.split(":")[0]), Number(end_time.split(":")[1]), 0, 0)
+  static isTimeRangeAvailable = (timeRanges, start_time, end_time, originalDate = null, rangeBarBtn = false) => {
 
-      const filteredData = timeRanges.find(item => {
-        return (new Date(item.start_time) <= start_time_date && start_time_date >= new Date(item?.end_time)) &&
-          (new Date(item.start_time) <= end_time_date && end_time_date >= new Date(item?.end_time))
+
+    if (rangeBarBtn) {
+      // let date = new Date().toISOString().split("T")[0];
+      // let dateArr = date?.split("-");
+      // let status = true;
+      // if (timeRanges?.length) {
+      //   let start_time_date = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), Number(start_time.split(":")[0]), Number(start_time.split(":")[1]), 0, 0)
+      //   let end_time_date = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), Number(end_time.split(":")[0]), Number(end_time.split(":")[1]), 0, 0)
+
+      //   const filteredData = timeRanges.find(item => {
+      //     return (new Date(item.start_time) <= start_time_date && start_time_date >= new Date(item?.end_time)) &&
+      //       (new Date(item.start_time) <= end_time_date && end_time_date >= new Date(item?.end_time))
+      //   });
+
+      //   console.log("filteredData", start_time, end_time);
+
+      //   if (filteredData?.start_time) status = false
+
+      //   return status
+
+      let status = false;
+
+      const selectedStartTime = moment(originalDate)?.set({
+        hour: parseInt(start_time?.split(':')[0]),
+        minute: parseInt(start_time?.split(':')[1]),
+        second: 0, // Optional, depending on your requirements
+        millisecond: 0 // Optional, depending on your requirements
       });
+      const selectedEndTime = moment(originalDate)?.set({
+        hour: parseInt(end_time?.split(':')[0]),
+        minute: parseInt(end_time?.split(':')[1]),
+        second: 0, // Optional, depending on your requirements
+        millisecond: 0 // Optional, depending on your requirements
+      });
+      // Check for overlap
+      for (const session of timeRanges) {
+        const sessionStartTime = moment(session.start_time);
+        const sessionEndTime = moment(session.end_time);
 
-      console.log("filteredData", start_time, end_time);
+        if (
+          selectedStartTime?.isBetween(
+            sessionStartTime,
+            sessionEndTime,
+            null,
+            "[]"
+          ) ||
+          selectedEndTime?.isBetween(
+            sessionStartTime,
+            sessionEndTime,
+            null,
+            "[]"
+          ) ||
+          (selectedStartTime?.isSameOrBefore(sessionStartTime) && selectedEndTime?.isSameOrAfter(sessionEndTime))
+        ) {
+          if (selectedStartTime?.isSame(sessionEndTime) || selectedEndTime?.isSame(sessionStartTime)) {
+          } else {
+            status = true;
+            break; // Exit the loop if overlap is detected
+          }
+        }
+      }
+      if (status) {
+        console.log("error not booked you")
+      }
+      else {
+        console.log("booking succeusjfuly")
+      }
+      return status;
 
-      if (filteredData?.start_time) status = false
 
-      return status
+    } else {
+      for (const range of timeRanges) {
+        const rangeStartTime = new Date(`2000-01-01T${range.start_time}:00`);
+        const rangeEndTime = new Date(`2000-01-01T${range.end_time}:00`);
+        const inputStartTime = new Date(`2000-01-01T${start_time}:00`);
+        const inputEndTime = new Date(`2000-01-01T${end_time}:00`);
 
-      // var start_time_date = new Date();
-      // start_time_date.setHours(Number(start_time.split(":")[0]));
-      // start_time_date.setMinutes(Number(start_time.split(":")[1]));
-      // start_time_date = start_time_date?.getTime()
+        // Check if the input start time is within the range
+        if (inputStartTime >= rangeStartTime && inputStartTime < rangeEndTime) {
+          return false; // Time conflict
+        }
 
-      // var end_time_date = new Date();
-      // end_time_date.setHours(Number(end_time.split(":")[0]));
-      // end_time_date.setMinutes(Number(end_time.split(":")[1]));
-      // end_time_date = end_time_date?.getTime()
+        // Check if the input end time is within the range
+        if (inputEndTime > rangeStartTime && inputEndTime <= rangeEndTime) {
+          return false; // Time conflict
+        }
 
+        if (inputStartTime < rangeEndTime && inputEndTime > rangeStartTime) {
+          return false; // Time conflict
+        }
+      }
+
+      return true; // No time conflict
     }
+
+
+
+
+
+
+    // var start_time_date = new Date();
+    // start_time_date.setHours(Number(start_time.split(":")[0]));
+    // start_time_date.setMinutes(Number(start_time.split(":")[1]));
+    // start_time_date = start_time_date?.getTime()
+
+    // var end_time_date = new Date();
+    // end_time_date.setHours(Number(end_time.split(":")[0]));
+    // end_time_date.setMinutes(Number(end_time.split(":")[1]));
+    // end_time_date = end_time_date?.getTime()
+
   };
 
   static getMinutesFromTime(time) {
@@ -477,6 +559,14 @@ export class Utils {
     return `https://netquix.s3.ap-south-1.amazonaws.com/${clip?.file_name}`
   }
 
+  static dynamicImageURL = (url) => {
+    let updatedURL = url?.toString()?.split("public")[1]
+    if (updatedURL === undefined) {
+      return url
+    }
+    updatedURL = process?.env?.NEXT_PUBLIC_API_BASE_URL + "/public" + url?.toString()?.split("public")[1]
+    return updatedURL
+  }
 }
 
 

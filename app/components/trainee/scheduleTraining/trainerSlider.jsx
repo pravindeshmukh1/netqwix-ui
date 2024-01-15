@@ -1,4 +1,5 @@
 import Slider from "react-slick";
+import { Utils } from "../../../../utils/utils";
 
 const TrainerSlider = ({ list, isRecommended = false }) => {
   const settings = {
@@ -56,7 +57,7 @@ const TrainerSlider = ({ list, isRecommended = false }) => {
                 <div
                   className="recent-profile"
                   style={{
-                    backgroundImage: `url(${contentInfo?.background_image})`,
+                    backgroundImage: `url(${Utils?.dynamicImageURL(contentInfo?.background_image)})`,
                     backgroundSize: "contain",
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
