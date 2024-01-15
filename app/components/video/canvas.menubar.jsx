@@ -8,6 +8,7 @@ import Modal from "../../common/modal";
 import { Nav, NavLink, NavItem, TabContent, TabPane, Col, Button } from "reactstrap";
 import { myClips, traineeClips } from "../../../containers/rightSidebar/fileSection.api";
 import { Tooltip } from "react-tippy";
+import { Utils } from "../../../utils/utils";
 
 export const CanvasMenuBar = ({
   isOpen,
@@ -389,7 +390,7 @@ export const CanvasMenuBar = ({
                                   }}
                                 >
                                   <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "98%", maxHeight: "150px", height: "100%", marginBottom: "10px" }}  >
-                                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                                    <source src={Utils?.generateVideoURL(clp)} type="video/mp4" />
                                   </video>
                                 </div>
                               })}
@@ -440,7 +441,7 @@ export const CanvasMenuBar = ({
                                   }}
                                 >
                                   <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "98%", maxHeight: "150px", height: "100%", marginBottom: "10px" }}  >
-                                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?.clips?._id}`} type="video/mp4" />
+                                    <source src={Utils?.generateVideoURL(clp)} type="video/mp4" />
                                   </video>
                                 </div>
                               })}
@@ -475,7 +476,7 @@ export const CanvasMenuBar = ({
                                 }}
                               >
                                 <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "98%", maxHeight: "150px", height: "100%", marginBottom: "10px", display: "flex", justifyContent: "center" }}  >
-                                  <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                                  <source src={Utils?.generateVideoURL(clp)} type="video/mp4" />
                                 </video>
                               </div>
                             })}

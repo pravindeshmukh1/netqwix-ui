@@ -429,9 +429,8 @@ const Bookings = ({ accountType = null }) => {
                               </dl>
                             </div>
                             <video className="videoStyle" controls>
-                              <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                              <source src={Utils?.generateVideoURL(clp)} type="video/mp4" />
                             </video>
-
                           </div>
                         </>
                         ))}
@@ -568,7 +567,7 @@ const Bookings = ({ accountType = null }) => {
                                   {selectedClips?.map((clp) => (
                                     <div key={clp?._id} style={{ borderRadius: 5, position: "relative", border: "1px solid #ebebeb", marginLeft: "15px" }} className={`col-5`}>
                                       <video style={{ width: "100%", maxHeight: "200px", height: "100%" }}>
-                                        <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                                        <source src={Utils?.generateVideoURL(clp)} type="video/mp4" />
                                       </video>
                                       <span
                                         style={{ position: "absolute", right: -5, top: -3, cursor: "pointer", background: "red", borderRadius: "50%", padding: "0px 6px", color: "#fff" }}
@@ -604,7 +603,7 @@ const Bookings = ({ accountType = null }) => {
                                       }}
                                     >
                                       <video style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "98%", maxHeight: "150px", height: "100%" }}  >
-                                        <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                                        <source src={Utils?.generateVideoURL(clp)} type="video/mp4" />
                                       </video>
                                     </div>
                                   })}

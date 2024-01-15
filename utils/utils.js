@@ -471,4 +471,12 @@ export class Utils {
       currentTime.isSameOrAfter(endDateTime) // Check if current time is after the end time
     );
   };
+
+
+  static generateVideoURL(clip) {
+    return `https://netquix.s3.ap-south-1.amazonaws.com/${clip?.file_name}`
+  }
+
 }
+
+

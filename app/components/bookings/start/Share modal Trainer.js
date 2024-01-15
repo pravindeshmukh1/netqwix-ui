@@ -3,10 +3,11 @@
 import React from 'react';
 import { Button, Modal } from 'reactstrap'; // Adjust based on your library
 import { X } from "react-feather";
+import { Utils } from '../../../../utils/utils';
 
 
 
-const ShareModalTrainer = ({ isOpen, onClose, selectedClips, clips,isTrainer, userInfo, addTraineeClipInBookedSession, setSelectedClips }) => {
+const ShareModalTrainer = ({ isOpen, onClose, selectedClips, clips, isTrainer, userInfo, addTraineeClipInBookedSession, setSelectedClips }) => {
   return (
     <Modal isOpen={isOpen} toggle={onClose} size="xl">
       <div className="modal-content">
@@ -16,15 +17,15 @@ const ShareModalTrainer = ({ isOpen, onClose, selectedClips, clips,isTrainer, us
           </button>
         </div>
         <div className="modal-body">
-          <h2 className="my" style={{marginBottom:"20px"}}>Feel free to select clips with the Trainee</h2>
+          <h2 className="my" style={{ marginBottom: "20px" }}>Feel free to select clips with the Trainee</h2>
 
           <h5 className="block-title p-0"> Selected Clips<label className="badge badge-primary sm ml-2">{selectedClips?.length}</label></h5>
-          <div className={`block-content`} style={{marginTop:"10px"}}>
+          <div className={`block-content`} style={{ marginTop: "10px" }}>
             <div className="row">
               {selectedClips?.map((clp) => (
                 <div key={clp?._id} style={{ borderRadius: 5, position: "relative", border: "1px solid #ebebeb", marginLeft: "15px" }} className={`col-5`}>
                   <video style={{ width: "100%", maxHeight: "200px", height: "100%" }}>
-                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                    <source src={Utils?.generateVideoURL(clp)} type="video/mp4" />
                   </video>
                   <span
                     style={{ position: "absolute", right: -5, top: -3, cursor: "pointer", background: "red", borderRadius: "50%", padding: "0px 6px", color: "#fff" }}
@@ -58,16 +59,16 @@ const ShareModalTrainer = ({ isOpen, onClose, selectedClips, clips,isTrainer, us
                         style={{ borderRadius: 5 }}
                         onClick={() => {
                           const updatedClips = sld
-                  ? selectedClips.filter(val => val._id !== clp._id)
-                  : [...selectedClips, clp];
+                            ? selectedClips.filter(val => val._id !== clp._id)
+                            : [...selectedClips, clp];
 
-                setSelectedClips(updatedClips);
+                          setSelectedClips(updatedClips);
                         }}
                       >
                         <video
                           style={{ border: `${sld ? "2px" : "0px"} solid green`, width: "100%", maxHeight: "150px", height: "100%" }}
                         >
-                          <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                          <source src={Utils?.generateVideoURL(clp)} type="video/mp4" />
                         </video>
                       </div>
                     );

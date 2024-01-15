@@ -12,6 +12,7 @@ import VideoUpload from "../../app/components/videoupload";
 import ReportModal from "../../app/components/video/reportModal";
 
 import { Tooltip } from "react-tippy";
+import { Utils } from "../../utils/utils";
 
 const fiveImageGallary = [
   {
@@ -171,7 +172,7 @@ const FileSection = (props) => {
   const handleVideoLoad = (event) => {
     const video = event.target;
     const aspectRatio = video.videoWidth / video.videoHeight;
-  
+
     // Set width and height based on aspect ratio
     if (aspectRatio > 1) {
       setVideoDimensions({ width: "100%", height: "70%" });
@@ -290,13 +291,13 @@ const FileSection = (props) => {
                           className={`col-4 p-1`}
                           style={{ borderRadius: 5 }}
                           onClick={() => {
-                            setSelectedVideo(`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`)
+                            setSelectedVideo(Utils?.generateVideoURL(clp))
                             setIsOpen(true)
                           }}
                         >
                           <Tooltip title={clp?.title} position="top" trigger="mouseenter">
                             <video style={{ width: "5vw", height: "9vh" }}  >
-                              <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                              <source src={Utils?.generateVideoURL(clp)} type="video/mp4" />
                             </video>
                           </Tooltip>
                         </div>
@@ -336,13 +337,13 @@ const FileSection = (props) => {
                           className={`col-4 p-1`}
                           style={{ borderRadius: 5 }}
                           onClick={() => {
-                            setSelectedVideo(`https://netquix.s3.ap-south-1.amazonaws.com/${clp?.clips?._id}`)
+                            setSelectedVideo(Utils?.generateVideoURL(clp?.clips))
                             setIsOpen(true)
                           }}
                         >
                           <Tooltip title={clp?.clips?.title} position="top" trigger="mouseenter">
                             <video style={{ width: "80%", height: "80%" }}  >
-                              <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?.clips?._id}`} type="video/mp4" />
+                              <source src={Utils?.generateVideoURL(clp?.clips)} type="video/mp4" />
                             </video>
                           </Tooltip>
                         </div>
@@ -660,13 +661,13 @@ const FileSection = (props) => {
                         className={`col-6 p-1`}
                         style={{ borderRadius: 5 }}
                         onClick={() => {
-                          setSelectedVideo(`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`)
+                          setSelectedVideo(Utils?.generateVideoURL(clp))
                           setIsOpen(true)
                         }}
                       >
                         <Tooltip title="Title" position="top" trigger="mouseenter">
                           <video style={{ width: "100%", height: "100%" }}  >
-                            <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${clp?._id}`} type="video/mp4" />
+                            <source src={Utils?.generateVideoURL(clp)} type="video/mp4" />
                           </video>
                         </Tooltip>
                       </div>
@@ -693,38 +694,38 @@ const FileSection = (props) => {
                   </h5>
                   {/*  NORMAL  STRUCTURE END  */}
                   <div className={`block-content ${!cl?.show ? "d-none" : "d-flex flex-wrap"}`}>
-  {cl?.report.map((clp, index) => (
-     <div className={`col-6`} key={index} style={{ whiteSpace: "nowrap" }}>
-      <div className="ml-3" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <div style={{ marginBottom: "5px" }}>
-          <dd
-            className="ml-3"
-            style={{ cursor: "pointer", textAlign: "center" }}
-            onClick={() => {
-              if (accountType === "Trainer") {
-                setCurrentReportData({ session: clp?.session?._id, trainer: clp?.trainer?._id, trainee: clp?.trainee?._id })
-                setIsOpenReport(true)
-              } else {
-                setIsOpenPDF(true)
-                setReportName(clp?.session?.report)
-              }
-            }}
-          >
-            <img
-              src="/icons/FileSee.png" // Adjust the path to your PNG icon
-              alt="FileSee Icon"
-              style={{ width: "30px", height: "30px" }} // Adjust the size accordingly
-            />
-            {accountType === "Trainer" ? "" : ""}
-          </dd>
-        </div>
-        <div>
-          <dd>{index + 1}. {accountType === "Trainer" ? "Trainee" : "Trainer"} : <strong>{clp?.[accountType === "Trainer" ? "trainee" : "trainer"]?.fullname}</strong></dd>
-        </div>
-      </div>
-    </div>
-  ))}
-</div>
+                    {cl?.report.map((clp, index) => (
+                      <div className={`col-6`} key={index} style={{ whiteSpace: "nowrap" }}>
+                        <div className="ml-3" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                          <div style={{ marginBottom: "5px" }}>
+                            <dd
+                              className="ml-3"
+                              style={{ cursor: "pointer", textAlign: "center" }}
+                              onClick={() => {
+                                if (accountType === "Trainer") {
+                                  setCurrentReportData({ session: clp?.session?._id, trainer: clp?.trainer?._id, trainee: clp?.trainee?._id })
+                                  setIsOpenReport(true)
+                                } else {
+                                  setIsOpenPDF(true)
+                                  setReportName(clp?.session?.report)
+                                }
+                              }}
+                            >
+                              <img
+                                src="/icons/FileSee.png" // Adjust the path to your PNG icon
+                                alt="FileSee Icon"
+                                style={{ width: "30px", height: "30px" }} // Adjust the size accordingly
+                              />
+                              {accountType === "Trainer" ? "" : ""}
+                            </dd>
+                          </div>
+                          <div>
+                            <dd>{index + 1}. {accountType === "Trainer" ? "Trainee" : "Trainer"} : <strong>{clp?.[accountType === "Trainer" ? "trainee" : "trainer"]?.fullname}</strong></dd>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
 
 
                 </div>
@@ -754,13 +755,13 @@ const FileSection = (props) => {
                   </div>
                 </div>
                 <video
-  style={videoDimensions}
-  autoPlay
-  controls
-  onLoadedData={handleVideoLoad}
->
-  <source src={selectedVideo} type="video/mp4" />
-</video>
+                  style={videoDimensions}
+                  autoPlay
+                  controls
+                  onLoadedData={handleVideoLoad}
+                >
+                  <source src={selectedVideo} type="video/mp4" />
+                </video>
               </div>
             </div>
           </>

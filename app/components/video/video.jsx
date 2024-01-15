@@ -26,6 +26,7 @@ import { getS3SignPdfUrl } from "./video.api";
 import axios from "axios";
 import { createReport, cropImage, getReport, removeImage, screenShotTake } from "../videoupload/videoupload.api";
 import ReportModal from "./reportModal";
+import { Utils } from "../../../utils/utils";
 
 let storedLocalDrawPaths = { sender: [], receiver: [] };
 let selectedShape = null;
@@ -1448,7 +1449,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
               <div className="row" style={mediaQuery.matches ? { height: "33vw", width: "100%" } : {}}>
                 <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                   <video crossOrigin="anonymous" id="selected-video-1" style={{ height: "25vw", width: "inherit", borderRadius: 10 }} ref={selectedVideoRef1} onTimeUpdate={handleTimeUpdate1} >
-                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[0]?._id}`} type="video/mp4" />
+                    <source src={Utils?.generateVideoURL(selectedClips[0])} type="video/mp4" />
                   </video>
                   <canvas id="video-canvas-1" hidden></canvas>
                   <div className="Pause" style={{ position: "relative", zIndex: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -1480,7 +1481,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                 </div>
                 <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                   <video crossOrigin="anonymous" id="selected-video-2" style={{ height: "25vw", width: "inherit", borderRadius: 10 }} ref={selectedVideoRef2} onTimeUpdate={handleTimeUpdate2} >
-                    <source src={`https://netquix.s3.ap-south-1.amazonaws.com/${selectedClips[1]?._id}`} type="video/mp4" />
+                    <source src={Utils?.generateVideoURL(selectedClips[1])} type="video/mp4" />
                   </video>
                   <canvas id="video-canvas-2" hidden></canvas>
                   <div className="Pause2" style={{ position: "relative", zIndex: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
