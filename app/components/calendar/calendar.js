@@ -406,7 +406,7 @@ export default function CalendarPage() {
           return (
             <>
               {/* <button>+ Add New</button> */}
-              <div onClick={() => { }} style={{ display: "flex", width: "100%", justifyContent: "space-between", margin: "0px 10px", textAlign: "center" }}>
+              <div onClick={() => { }} style={{ display: "flex", width: "100%", justifyContent: "space-between", margin: "0px 10px", textAlign: "center", background: "red" }}>
                 <div >
                   <b>{moment(e.event.start).format('h:mm a')} - {moment(e.event.end).format('h:mm a')}</b>
                 </div>
