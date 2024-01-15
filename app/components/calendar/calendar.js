@@ -22,37 +22,98 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
   const [disabledHourTime, setDisabledHourTime] = useState(["00", "04", "10"])
   const [disabledMinuteTime, setDisabledMinuteTime] = useState([])
 
-  const [selectedStartTime, setSelectedStartTime] = useState("");
-  const [selectedEndTime, setSelectedEndTime] = useState("");
+  let [selectedStartTime, setSelectedStartTime] = useState("");
+  let [selectedEndTime, setSelectedEndTime] = useState("");
 
   const [error, setError] = useState(false);
 
   const addTrainerSlotAPI = async () => {
-    var date = selectedModalDate?.split("-")
-    if ((!selectedStartTime || !selectedEndTime) || (selectedStartTime === selectedEndTime) || (new Date(selectedStartTime) < new Date(selectedEndTime))) setError(true)
-    else {
-      const filteredData = data.find(item => {
-        var status = (new Date(item.start_time) <= new Date(selectedStartTime) && new Date(selectedStartTime) <= new Date(item?.end_time)) ||
-          (new Date(item.start_time) <= new Date(selectedEndTime) && new Date(selectedEndTime) <= new Date(item?.end_time))
 
-        var status2 = (new Date(selectedStartTime) <= new Date(item.start_time) && new Date(item?.end_time) >= new Date(selectedStartTime)) ||
-          (new Date(selectedEndTime) <= new Date(item.start_time) && new Date(item?.end_time) >= new Date(selectedEndTime))
+    // var date = selectedModalDate?.split("-")
+    //   if ((!selectedStartTime || !selectedEndTime) || (selectedStartTime === selectedEndTime) || (new Date(selectedStartTime) < new Date(selectedEndTime))) setError(true)
+    //   else {
+    //     const filteredData = data.find(item => {
+    //       var status = (new Date(item.start_time) <= new Date(selectedStartTime) && new Date(selectedStartTime) <= new Date(item?.end_time)) ||
+    //         (new Date(item.start_time) <= new Date(selectedEndTime) && new Date(selectedEndTime) <= new Date(item?.end_time))
 
-        return status && status2
-      });
-      if (filteredData?.start_time) setError(true)
-      else {
-        try {
-          let res = await addTrainerSlot({ start_time: selectedStartTime, end_time: selectedEndTime })
-          let updatedData = data
-          data?.push(res?.data)
-          setData([...data])
-          setSelectedStartTime("")
-          setSelectedEndTime("")
-          setError(false)
-        } catch (error) {
-          console.log(error)
+    //       var status2 = (new Date(selectedStartTime) <= new Date(item.start_time) && new Date(item?.end_time) >= new Date(selectedStartTime)) ||
+    //         (new Date(selectedEndTime) <= new Date(item.start_time) && new Date(item?.end_time) >= new Date(selectedEndTime))
+
+    //       return status && status2
+    //     });
+    //     if (filteredData?.start_time) setError(true)
+    //     else {
+    //       try {
+    //         let res = await addTrainerSlot({ start_time: selectedStartTime, end_time: selectedEndTime })
+    //         let updatedData = data
+    //         data?.push(res?.data)
+    //         setData([...data])
+    //         setSelectedStartTime("")
+    //         setSelectedEndTime("")
+    //         setError(false)
+    //       } catch (error) {
+    //         console.log(error)
+    //       }
+    //     }
+    //   }
+    // Check for overlap
+    const overlap = () => {
+      let status = false;
+
+      if (!selectedStartTime && !selectedEndTime) {
+        status = true;
+        return status
+      }
+
+      selectedStartTime = moment(selectedStartTime);
+      selectedEndTime = moment(selectedEndTime);
+      // Check for overlap
+      for (const session of data) {
+        const sessionStartTime = moment(session.start_time);
+        const sessionEndTime = moment(session.end_time);
+
+        if (
+          selectedStartTime?.isBetween(
+            sessionStartTime,
+            sessionEndTime,
+            null,
+            "[]"
+          ) ||
+          selectedEndTime?.isBetween(
+            sessionStartTime,
+            sessionEndTime,
+            null,
+            "[]"
+          ) ||
+          (selectedStartTime?.isSameOrBefore(sessionStartTime) && selectedEndTime?.isSameOrAfter(sessionEndTime))
+        ) {
+          if (selectedStartTime?.isSame(sessionEndTime) || selectedEndTime?.isSame(sessionStartTime)) {
+          } else {
+            status = true;
+            break; // Exit the loop if overlap is detected
+          }
         }
+      }
+      return status;
+    };
+
+
+    if (overlap()) {
+      setError(true)
+      console.log("error not booked you")
+    }
+    else {
+      console.log("booking succeusjfuly")
+      try {
+        let res = await addTrainerSlot({ start_time: selectedStartTime, end_time: selectedEndTime })
+        let updatedData = data
+        data?.push(res?.data)
+        setData([...data])
+        setSelectedStartTime("")
+        setSelectedEndTime("")
+        setError(false)
+      } catch (error) {
+        console.log(error)
       }
     }
   }
@@ -60,7 +121,7 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
   const deleteTrainerSlotAPI = async (id, index) => {
     try {
       let res = await deleteTrainerSlot({ _id: id })
-      data.splice(1, 1)
+      data.splice(index, 1)
       setData([...data])
     } catch (error) {
       console.log(error)
@@ -121,7 +182,7 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                       Start  Time
                     </option>
                     {options.map((time) => (
-                      <option key={time} value={time}>
+                      <option disabled={moment(time)?.isBefore(moment(new Date().toISOString()))} key={time} value={time}>
                         {moment(time).format('h:mm a')}
                       </option>
                     ))}
@@ -133,7 +194,7 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                       End Time
                     </option>
                     {options.map((time) => (
-                      <option key={time} value={time}>
+                      <option disabled={moment(time)?.isBefore(moment(new Date().toISOString()))} key={time} value={time}>
                         {moment(time).format('h:mm a')}
                       </option>
                     ))}
