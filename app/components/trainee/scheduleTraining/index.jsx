@@ -1268,6 +1268,8 @@ const ScheduleTraining = () => {
                     Book Slot Now
                   </button>
                 </div> */}
+
+                {/* Book slot by given slot and time */}
                 <div className="row" style={{ display: "flex", width: "100%", justifyContent: "space-between", margin: "0px 10px", textAlign: "center" }}>
                   {availableSlots?.map((item, i) => {
                     return <div onClick={() => {
@@ -1321,7 +1323,7 @@ const ScheduleTraining = () => {
                           );
                         } else {
                           const payload = {
-                            slot_id: slot?._id,
+                            // slot_id: slot?._id,
                             charging_price: amountPayable,
                             trainer_id:
                               trainerInfo?.userInfo?.trainer_id ||
@@ -1352,7 +1354,7 @@ const ScheduleTraining = () => {
                   </button>
                 </div>
 
-
+                {/* Book Slot time range bar  */}
                 <div className="col-11">
                   {(getParams.search && getParams.search.length) ||
                     !bookingColumns.length ? (
@@ -1443,6 +1445,7 @@ const ScheduleTraining = () => {
                                   );
                                 } else {
                                   const payload = {
+                                    // slot_id: slot?._id,
                                     charging_price: amountPayable,
                                     trainer_id:
                                       trainerInfo?.userInfo?.trainer_id ||
@@ -1462,6 +1465,59 @@ const ScheduleTraining = () => {
                                       amount: +amountPayable.toFixed(1),
                                     })
                                   );
+                                  let temp = availableSlots?.map(slt => {
+                                    return { ...slt, isSelected: false }
+                                  })
+                                  const selectedStartTime = moment(startDate)?.set({
+                                    hour: parseInt(timeRange?.startTime?.split(':')[0]),
+                                    minute: parseInt(timeRange?.startTime?.split(':')[1]),
+                                    second: 0, // Optional, depending on your requirements
+                                    millisecond: 0 // Optional, depending on your requirements
+                                  });
+                                  const selectedEndTime = moment(startDate)?.set({
+                                    hour: parseInt(timeRange?.endTime?.split(':')[0]),
+                                    minute: parseInt(timeRange?.endTime?.split(':')[1]),
+                                    second: 0, // Optional, depending on your requirements
+                                    millisecond: 0 // Optional, depending on your requirements
+                                  });
+                                  // Check for overlap
+                                  // console.log("selectedStartTime,selectedEndTime", selectedStartTime, selectedEndTime)
+                                  temp = temp?.map((session, i) => {
+                                    // console.log("sessionsessionsessionsessionsession", session)
+                                    if (!session?.status) {
+                                      const sessionStartTime = moment(session?.start_time);
+                                      const sessionEndTime = moment(session?.end_time);
+                                      // console.log("sessionStartTime,sessionEndTime", sessionStartTime, sessionEndTime)
+
+                                      if (
+                                        selectedStartTime?.isBetween(
+                                          sessionStartTime,
+                                          sessionEndTime,
+                                          null,
+                                          "[]"
+                                        ) ||
+                                        selectedEndTime?.isBetween(
+                                          sessionStartTime,
+                                          sessionEndTime,
+                                          null,
+                                          "[]"
+                                        ) ||
+                                        (selectedStartTime?.isSameOrBefore(sessionStartTime) && selectedEndTime?.isSameOrAfter(sessionEndTime))
+                                      ) {
+                                        if (!selectedStartTime?.isSame(sessionEndTime) || !selectedEndTime?.isSame(sessionStartTime)) {
+                                          return { ...session, isSelected: true }
+                                        } else {
+                                          return session
+                                        }
+                                      } else {
+                                        return session
+                                      }
+                                    } else {
+                                      return session
+                                    }
+                                  })
+                                  console.log("temptemptemptemptemptemptemptemp", temp)
+                                  setAvailableSlots([...temp])
                                 }
                               } else {
                                 toast.error(

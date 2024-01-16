@@ -382,36 +382,32 @@ export class Utils {
       });
       // Check for overlap
       for (const session of timeRanges) {
-        const sessionStartTime = moment(session.start_time);
-        const sessionEndTime = moment(session.end_time);
+        if (session?.isSelected || session?.status) {
+          const sessionStartTime = moment(session.start_time);
+          const sessionEndTime = moment(session.end_time);
 
-        if (
-          selectedStartTime?.isBetween(
-            sessionStartTime,
-            sessionEndTime,
-            null,
-            "[]"
-          ) ||
-          selectedEndTime?.isBetween(
-            sessionStartTime,
-            sessionEndTime,
-            null,
-            "[]"
-          ) ||
-          (selectedStartTime?.isSameOrBefore(sessionStartTime) && selectedEndTime?.isSameOrAfter(sessionEndTime))
-        ) {
-          if (selectedStartTime?.isSame(sessionEndTime) || selectedEndTime?.isSame(sessionStartTime)) {
-          } else {
-            status = true;
-            break; // Exit the loop if overlap is detected
+          if (
+            selectedStartTime?.isBetween(
+              sessionStartTime,
+              sessionEndTime,
+              null,
+              "[]"
+            ) ||
+            selectedEndTime?.isBetween(
+              sessionStartTime,
+              sessionEndTime,
+              null,
+              "[]"
+            ) ||
+            (selectedStartTime?.isSameOrBefore(sessionStartTime) && selectedEndTime?.isSameOrAfter(sessionEndTime))
+          ) {
+            if (selectedStartTime?.isSame(sessionEndTime) || selectedEndTime?.isSame(sessionStartTime)) {
+            } else {
+              status = true;
+              break; // Exit the loop if overlap is detected
+            }
           }
         }
-      }
-      if (status) {
-        console.log("error not booked you")
-      }
-      else {
-        console.log("booking succeusjfuly")
       }
       return status;
 
@@ -468,7 +464,7 @@ export class Utils {
     return isoTime.getHours() * 60 + isoTime.getMinutes();
   }
 
-  static getPercentageForSlot = (startTime, endTime, fromTime, toTime) => {
+  static getPercentageForSlot = (startTime, endTime, isSelected, status, fromTime, toTime) => {
     // const [startHour, startMinute] = startTime.split(":").map(Number);
     // const [endHour, endMinute] = endTime.split(":").map(Number);
     // const startTimeInMinutes = startHour * 60 + startMinute;
@@ -505,14 +501,21 @@ export class Utils {
     //   endPos,
     //   percentage,
     // };
-    const start = new Date(startTime);
-    const end = new Date(endTime);
-    const totalRange = 24 * 60; // Total minutes in a 24-hour range
+    let startPos = 0;
+    let endPos = 0;
+    if (isSelected || status) {
+      const start = new Date(startTime);
+      const end = new Date(endTime);
+      const totalRange = 24 * 60; // Total minutes in a 24-hour range
 
-    const startPos = (start.getHours() * 60 + start.getMinutes()) / totalRange * 100;
-    const endPos = (end.getHours() * 60 + end.getMinutes()) / totalRange * 100;
+      startPos = (start.getHours() * 60 + start.getMinutes()) / totalRange * 100;
+      endPos = (end.getHours() * 60 + end.getMinutes()) / totalRange * 100;
+
+      return { startPos, endPos };
+    }
 
     return { startPos, endPos };
+
   };
 
   static isValidTimeDuration = (fromTime, toTime, minTimeRequired) => {
