@@ -344,6 +344,34 @@ export class Utils {
     return totalMinutes;
   };
 
+
+  static isTimeRangeAvailableForRangeBarBtn = (timeRanges, start_time, end_time) => {
+    for (const range of timeRanges) {
+      const rangeStartTime = new Date(`2000-01-01T${range.start_time}:00`);
+      const rangeEndTime = new Date(`2000-01-01T${range.end_time}:00`);
+      const inputStartTime = new Date(`2000-01-01T${start_time}:00`);
+      const inputEndTime = new Date(`2000-01-01T${end_time}:00`);
+
+      // Check if the input start time is within the range
+      if (inputStartTime >= rangeStartTime && inputStartTime < rangeEndTime) {
+        return false; // Time conflict
+      }
+
+      // Check if the input end time is within the range
+      if (inputEndTime > rangeStartTime && inputEndTime <= rangeEndTime) {
+        return false; // Time conflict
+      }
+
+      if (inputStartTime < rangeEndTime && inputEndTime > rangeStartTime) {
+        return false; // Time conflict
+      }
+    }
+
+    return true; // No time conflict
+  };
+
+
+
   static isTimeRangeAvailable = (timeRanges, start_time, end_time, originalDate = null, rangeBarBtn = false) => {
 
 
@@ -463,6 +491,50 @@ export class Utils {
     const isoTime = new Date(isoTimeString);
     return isoTime.getHours() * 60 + isoTime.getMinutes();
   }
+
+
+
+  static getPercentageForSlotForRangeBar = (startTime, endTime, fromTime, toTime) => {
+
+    console.log("startTime, endTime, fromTime, toTimestartTime, endTime, fromTime, toTime", startTime, endTime, fromTime, toTime)
+    const [startHour, startMinute] = startTime.split(":").map(Number);
+    const [endHour, endMinute] = endTime.split(":").map(Number);
+    const startTimeInMinutes = startHour * 60 + startMinute;
+    const endTimeInMinutes = endHour * 60 + endMinute;
+
+    const [rangeStartHour, rangeStartMinute] = fromTime.split(":").map(Number);
+    const [rangeEndHour, rangeEndMinute] = toTime.split(":").map(Number);
+    const rangeStartInMinutes = rangeStartHour * 60 + rangeStartMinute;
+    const rangeEndInMinutes = rangeEndHour * 60 + rangeEndMinute;
+
+    // Calculate the duration in minutes
+    const durationInMinutes = endTimeInMinutes - startTimeInMinutes;
+    const startPos =
+      ((startTimeInMinutes - rangeStartInMinutes) /
+        (rangeEndInMinutes - rangeStartInMinutes)) *
+      100;
+    const endPos =
+      ((endTimeInMinutes - rangeStartInMinutes) /
+        (rangeEndInMinutes - rangeStartInMinutes)) *
+      100;
+    const v2 =
+      ((endTimeInMinutes - rangeStartInMinutes) /
+        (rangeEndInMinutes - rangeStartInMinutes)) *
+      100 +
+      ((startTimeInMinutes - rangeStartInMinutes) /
+        (rangeEndInMinutes - rangeStartInMinutes)) *
+      100;
+
+    // Calculate the percentage
+    const percentage =
+      (durationInMinutes / (rangeEndInMinutes - rangeStartInMinutes)) * 100;
+    return {
+      startPos,
+      endPos,
+      percentage,
+    };
+  };
+
 
   static getPercentageForSlot = (startTime, endTime, isSelected, status, fromTime, toTime) => {
     // const [startHour, startMinute] = startTime.split(":").map(Number);

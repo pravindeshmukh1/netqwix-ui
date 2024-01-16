@@ -121,8 +121,8 @@ const ScheduleTraining = () => {
   const { status, getTraineeSlots, transaction } = useAppSelector(traineeState);
   const { trainersList, selectedTrainerInfo } = useAppSelector(trainerState);
   const { configs } = useAppSelector(bookingsState);
-  const [availableSlots, setAvailableSlots] = useState([])
-  const { isSlotAvailable, session_durations } =
+  const [availableSlotsState, setAvailableSlotsState] = useState([])
+  const { isSlotAvailable, session_durations, availableSlots } =
     useAppSelector(commonState);
   const { selectedTrainerId } = useAppSelector(bookingsState);
   const { master } = useAppSelector(masterState);
@@ -244,21 +244,27 @@ const ScheduleTraining = () => {
         trainer_id: selectedTrainer?.trainer_id,
         start_time: start_time,
         end_time: end_time
-      }).then((res) => {
-        let filterdAvailbleItems = res?.data?.filter((el) => moment(new Date(el?.createdAt).toISOString()).format('YYYY-MM-DD') === moment(new Date(`${startDate}`).toISOString()).format('YYYY-MM-DD'))
-        //   console.log("filterdAvailbleItemsfilterdAvailbleItemsfilterdAvailbleItemsfilterdAvailbleItems", filterdAvailbleItems)
-        setAvailableSlots(filterdAvailbleItems);
-      })
-
-      // getAvailability({
-      //   trainer_id: selectedTrainer?.trainer_id,
-      //   start_time: start_time,
-      //   end_time: end_time
-      // }).then((res) => { setAvailableSlots(res?.data); })
+      }).then((res) => { setAvailableSlotsState(res?.data); })
     }
 
     //   // console.log("new Date(startDate).toISOStringnew Date(startDate).toISOString", moment(new Date(`${startDate}`).toISOString()).format('YYYY-MM-DD'))
-  }, [selectedTrainer?.trainer_id, startDate])
+  }, [selectedTrainer?.trainer_id])
+
+  useEffect(() => {
+    if (selectedTrainer?.trainer_id) {
+      let date = new Date(startDate).toISOString().split("T")[0];
+      let dateArr = date?.split("-");
+      let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0).toISOString()
+      let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0).toISOString()
+      getAvailability({
+        trainer_id: selectedTrainer?.trainer_id,
+        start_time: start_time,
+        end_time: end_time
+      }).then((res) => {
+        setAvailableSlotsState(res?.data);
+      })
+    }
+  }, [startDate])
 
 
 
@@ -362,6 +368,8 @@ const ScheduleTraining = () => {
       setShowTransactionModal(true);
     }
   }, [transaction]);
+
+  console.log("transactiontransactiontransactiontransactiontransaction", transaction)
 
   useEffect(() => {
     if (!selectedTrainerInfo) {
@@ -1271,14 +1279,14 @@ const ScheduleTraining = () => {
 
                 {/* Book slot by given slot and time */}
                 <div className="row" style={{ display: "flex", width: "100%", justifyContent: "space-between", margin: "0px 10px", textAlign: "center" }}>
-                  {availableSlots?.map((item, i) => {
+                  {availableSlotsState?.map((item, i) => {
                     return <div onClick={() => {
                       if (!item?.status) {
-                        var temp = availableSlots?.map(slt => {
+                        var temp = availableSlotsState?.map(slt => {
                           return { ...slt, isSelected: false }
                         })
                         temp[i].isSelected = true
-                        setAvailableSlots([...temp])
+                        setAvailableSlotsState([...temp])
                       }
                     }} className="col-6" style={{
                       border:
@@ -1297,10 +1305,10 @@ const ScheduleTraining = () => {
                 <div className="col-12 mb-3 d-flex justify-content-center align-items-center">
                   <button
                     type="button"
-                    disabled={!availableSlots?.find(slt => slt?.isSelected)}
+                    disabled={!availableSlotsState?.find(slt => slt?.isSelected)}
                     className="mt-3 btn btn-sm btn-primary"
                     onClick={() => {
-                      var slot = availableSlots?.find(slt => slt?.isSelected)
+                      var slot = availableSlotsState?.find(slt => slt?.isSelected)
 
                       var start_time = `${new Date(slot?.start_time).getHours().toString().padStart(2, '0')}:${new Date(slot?.start_time).getMinutes().toString().padStart(2, '0')}`
                       var end_time = `${new Date(slot?.end_time).getHours().toString().padStart(2, '0')}:${new Date(slot?.end_time).getMinutes().toString().padStart(2, '0')}`
@@ -1416,7 +1424,11 @@ const ScheduleTraining = () => {
                         <button
                           type="button"
                           disabled={
-                            Utils.isTimeRangeAvailable(availableSlots, timeRange.startTime, timeRange.endTime, startDate, true)
+                            !Utils.isTimeRangeAvailableForRangeBarBtn(
+                              availableSlots,
+                              timeRange.startTime,
+                              timeRange.endTime || status === STATUS.pending
+                            )
                           }
                           className="mt-3 btn btn-sm btn-primary"
                           onClick={() => {
@@ -1445,7 +1457,6 @@ const ScheduleTraining = () => {
                                   );
                                 } else {
                                   const payload = {
-                                    // slot_id: slot?._id,
                                     charging_price: amountPayable,
                                     trainer_id:
                                       trainerInfo?.userInfo?.trainer_id ||
@@ -1465,59 +1476,6 @@ const ScheduleTraining = () => {
                                       amount: +amountPayable.toFixed(1),
                                     })
                                   );
-                                  let temp = availableSlots?.map(slt => {
-                                    return { ...slt, isSelected: false }
-                                  })
-                                  const selectedStartTime = moment(startDate)?.set({
-                                    hour: parseInt(timeRange?.startTime?.split(':')[0]),
-                                    minute: parseInt(timeRange?.startTime?.split(':')[1]),
-                                    second: 0, // Optional, depending on your requirements
-                                    millisecond: 0 // Optional, depending on your requirements
-                                  });
-                                  const selectedEndTime = moment(startDate)?.set({
-                                    hour: parseInt(timeRange?.endTime?.split(':')[0]),
-                                    minute: parseInt(timeRange?.endTime?.split(':')[1]),
-                                    second: 0, // Optional, depending on your requirements
-                                    millisecond: 0 // Optional, depending on your requirements
-                                  });
-                                  // Check for overlap
-                                  // console.log("selectedStartTime,selectedEndTime", selectedStartTime, selectedEndTime)
-                                  temp = temp?.map((session, i) => {
-                                    // console.log("sessionsessionsessionsessionsession", session)
-                                    if (!session?.status) {
-                                      const sessionStartTime = moment(session?.start_time);
-                                      const sessionEndTime = moment(session?.end_time);
-                                      // console.log("sessionStartTime,sessionEndTime", sessionStartTime, sessionEndTime)
-
-                                      if (
-                                        selectedStartTime?.isBetween(
-                                          sessionStartTime,
-                                          sessionEndTime,
-                                          null,
-                                          "[]"
-                                        ) ||
-                                        selectedEndTime?.isBetween(
-                                          sessionStartTime,
-                                          sessionEndTime,
-                                          null,
-                                          "[]"
-                                        ) ||
-                                        (selectedStartTime?.isSameOrBefore(sessionStartTime) && selectedEndTime?.isSameOrAfter(sessionEndTime))
-                                      ) {
-                                        if (!selectedStartTime?.isSame(sessionEndTime) || !selectedEndTime?.isSame(sessionStartTime)) {
-                                          return { ...session, isSelected: true }
-                                        } else {
-                                          return session
-                                        }
-                                      } else {
-                                        return session
-                                      }
-                                    } else {
-                                      return session
-                                    }
-                                  })
-                                  console.log("temptemptemptemptemptemptemptemp", temp)
-                                  setAvailableSlots([...temp])
                                 }
                               } else {
                                 toast.error(

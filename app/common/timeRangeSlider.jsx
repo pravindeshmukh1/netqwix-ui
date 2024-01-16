@@ -101,6 +101,8 @@ const CustomRangePicker = ({
     const newPosition = (offsetX / rangeRect.width) * 100;
     return newPosition;
   };
+
+  console.log("availableSlotsavailableSlotsavailableSlotsavailableSlotsavailableSlots", availableSlots)
   return (
     <React.Fragment>
       <div
@@ -131,13 +133,13 @@ const CustomRangePicker = ({
           />
         </div>
         {availableSlots?.map((slot, index) => {
-          const { startPos, endPos } = Utils.getPercentageForSlot(slot?.start_time, slot?.end_time, slot?.isSelected, slot?.status);
-          // const { startPos, endPos } = Utils.getPercentageForSlot(
-          //   slot.start_time,
-          //   slot.end_time,
-          //   trainerHourlyRate.from,
-          //   trainerHourlyRate.to
-          // );
+          // const { startPos, endPos } = Utils.getPercentageForSlot(slot?.start_time, slot?.end_time, slot?.isSelected, slot?.status);
+          const { startPos, endPos } = Utils.getPercentageForSlotForRangeBar(
+            slot.start_time,
+            slot.end_time,
+            trainerHourlyRate.from,
+            trainerHourlyRate.to
+          );
 
           return (
             <div
