@@ -328,7 +328,7 @@ const reportModal = ({
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: "center" }}>
                                 <p style={{ textTransform: 'uppercase', marginTop: '0px', fontSize: '40px', fontWeight: '600', color: "green" }}>Game Plan</p>
                                 <div style={{ textAlign: 'right' }}>
-                                    <img src="/assets/images/logo/netqwix_logo real.png" alt="Logo" style={{ height: '180px', width: '300px', objectFit: 'cover' }} />
+                                    <img src="/assets/images/logo/netqwix_logo real.png" alt="Logo" style={{ width: '200px', objectFit: 'cover' }} />
 
                                 </div>
                             </div>

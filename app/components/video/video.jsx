@@ -879,7 +879,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
     //   scs2.style.opacity = '0';
     // }
 
-    html2canvas(targetElement, { useCORS: true }).then(async (canvas) => {
+    html2canvas(targetElement, { type: 'png' }).then(async (canvas) => {
       // document.body.appendChild(canvas);
       const dataUrl = canvas.toDataURL('image/png');
       // screenShots.push({
@@ -1294,7 +1294,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
     const content = document.getElementById("report-pdf")
     content.style.removeProperty("display");
 
-    html2canvas(content).then(async (canvas) => {
+    html2canvas(content, { type: 'png' }).then(async (canvas) => {
       const imgData = canvas.toDataURL('image/png');
 
       // Calculate the width of the page
