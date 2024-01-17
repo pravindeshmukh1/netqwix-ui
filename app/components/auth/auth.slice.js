@@ -25,6 +25,8 @@ const initialState = {
     email: null,
   },
   sidebarActiveTab: leftSideBarOptions.HOME,
+  sidebarModalActiveTab: null,
+  sidebarLockerActiveTab: null,
 };
 
 export const signupAsync = createAsyncThunk("signup", async (payload) => {
@@ -121,6 +123,12 @@ export const authSlice = createSlice({
     },
     setActiveTab: (state, action) => {
       state.sidebarActiveTab = action.payload;
+    },
+    setActiveModalTab: (state, action) => {
+      state.sidebarModalActiveTab = action.payload;
+    },
+    setActiveLockerTab: (state, action) => {
+      state.sidebarLockerActiveTab = action.payload;
     },
     updateIsGoogleForm: (state) => {
       state.showGoogleRegistrationForm.isFromGoogle = false;

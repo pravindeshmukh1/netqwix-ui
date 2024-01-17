@@ -1,0 +1,27 @@
+.sidebar-top .menu-name {
+    margin: 0px;
+    margin-top: 10px;
+    color: black;
+    font-weight: 500;
+
+}
+
+#left-nav-wrapper.left-nav-wrapper {
+    position: relative;
+
+    .collapse-left-drawer-icon {
+        position: absolute;
+        top: 50vh;
+        background: #000080;
+        border-radius: 50px;
+        width: 30px;
+        height: 30px;
+        color: white;
+        z-index: 9999;
+        cursor: pointer;
+    }
+}
+
+.custom-mobile-menu.active {
+    left: 90px !important;
+}

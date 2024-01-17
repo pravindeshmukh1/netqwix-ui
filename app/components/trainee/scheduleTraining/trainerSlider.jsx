@@ -3,7 +3,7 @@ import { Utils } from "../../../../utils/utils";
 
 const TrainerSlider = ({ list, isRecommended = false }) => {
   const settings = {
-    autoplay: true,
+    autoplay: false,
     infinite: true,
     speed: 2000,
     slidesToShow: 3,
@@ -15,7 +15,7 @@ const TrainerSlider = ({ list, isRecommended = false }) => {
       {
         breakpoint: 1366,
         settings: {
-          autoplay: true,
+          autoplay: false,
           slidesToShow: 3,
           slidesToScroll: 1,
         },
@@ -23,7 +23,7 @@ const TrainerSlider = ({ list, isRecommended = false }) => {
       {
         breakpoint: 800,
         settings: {
-          autoplay: true,
+          autoplay: false,
 
           slidesToShow: 7,
         },
@@ -31,7 +31,7 @@ const TrainerSlider = ({ list, isRecommended = false }) => {
       {
         breakpoint: 768,
         settings: {
-          autoplay: true,
+          autoplay: false,
 
           slidesToShow: 5,
         },
@@ -39,7 +39,7 @@ const TrainerSlider = ({ list, isRecommended = false }) => {
       {
         breakpoint: 700,
         settings: {
-          autoplay: true,
+          autoplay: false,
           slidesToShow: 1,
         },
       },

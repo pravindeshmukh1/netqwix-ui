@@ -1,0 +1,29 @@
+#navbar-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 92%;
+
+    .menu-container {
+        display: flex;
+        justify-content: flex-start;
+        gap: 10px;
+        align-items: center;
+        width: 100%;
+        height: fit-content;
+
+        p {
+            background: green;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            margin: 0px;
+            cursor: pointer;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    #navbar-wrapper {
+        display: none;
+    }
+}

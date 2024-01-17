@@ -18,6 +18,7 @@ import {
   TRAINER_AMOUNT_USD,
   TimeRange,
   debouncedConfigs,
+  leftSideBarOptions,
   minimumMeetingDurationInMin,
   params,
   weekDays,
@@ -111,7 +112,7 @@ const ScheduleTraining = () => {
   const socket = useContext(SocketContext);
   const masterRecords = useAppSelector(masterState).master;
   const [data, setData] = useState();
-  const { userInfo } = useAppSelector(authState);
+  const { userInfo, sidebarModalActiveTab } = useAppSelector(authState);
 
   useEffect(() => {
     setData(masterRecords?.masterData);
@@ -196,7 +197,6 @@ const ScheduleTraining = () => {
       document.body.style.overflow = 'visible'; // Ensure the default behavior is restored
     };
   }, [popup]);
-  // const [isSlotAvailable, setIsSlotAvailable] = useState(true);
 
 
 
@@ -369,7 +369,6 @@ const ScheduleTraining = () => {
     }
   }, [transaction]);
 
-  console.log("transactiontransactiontransactiontransactiontransaction", transaction)
 
   useEffect(() => {
     if (!selectedTrainerInfo) {
@@ -891,7 +890,26 @@ const ScheduleTraining = () => {
     );
 
 
-
+  const TogglTab = (value) => {
+    if (value == "file") {
+      dispatch(authAction?.setActiveModalTab(value));
+      if (window.innerWidth > 1640 && document.querySelector(".chitchat-main")) {
+        document
+          .querySelector(".chitchat-main")
+          .classList.remove("small-sidebar");
+      }
+    } else {
+      dispatch(authAction.setActiveTab(value));
+      if (
+        window.innerWidth < 800 &&
+        document &&
+        document.querySelector &&
+        document.querySelector(".app-sidebar")
+      ) {
+        document.querySelector(".app-sidebar").classList.remove("active");
+      }
+    }
+  };
   const renderSearchMenu = () => (
     <div
       onScroll={() => {
@@ -904,21 +922,30 @@ const ScheduleTraining = () => {
       style={{ width: "75% !important" }}
     >
 
-      <div className="row" style={{ flexWrap: "nowrap" }}>
+      <div className="row" >
+        <div id="navbar-wrapper">
+          <div className='menu-container'>
+            <p onClick={() => TogglTab("home")}>Home</p>
+            <p onClick={() => TogglTab("file")}>My Locker</p>
+            <p onClick={() => TogglTab(leftSideBarOptions.SCHEDULE_TRAINING)}>Upcoming Lessons</p>
+            <p >My Community</p>
+            <p >About Us</p>
+            <p >Contact Us</p>
+          </div>
+          <div>
+            <button style={{ width: '50px', height: '50px', borderRadius: '50%', overflow: 'hidden' }} onClick={togglePopup}>
+              <img
+                src={Utils?.dynamicImageURL(userInfo?.profile_picture)}
+                alt={userInfo?.fullname}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </button>
+          </div>
+        </div>
 
         <div className="trainer-recommended" style={{ marginTop: "3%", maxWidth: "75%" }}>
           <h1 style={{ marginBottom: "10px" }}>Book Your Lesson now</h1>
           <p>Are you ready to embark on a transformative journey towards your personal and professional development? We are here to revolutionize the way you learn and connect with expert trainers. Our cutting-edge platform.</p>
-        </div>
-
-        <div style={{ textAlign: "right", marginRight: "20px" }}>
-          <button style={{ width: '50px', height: '50px', borderRadius: '50%', overflow: 'hidden' }} onClick={togglePopup}>
-            <img
-              src={Utils?.dynamicImageURL(userInfo?.profile_picture)}
-              alt={userInfo?.fullname}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-          </button>
         </div>
       </div>
 
@@ -981,7 +1008,6 @@ const ScheduleTraining = () => {
                   <span
                     className="badge badge-light lg"
                     style={{
-                      margin: "12px",
                       padding: "18px", // Add your desired padding here
                       alignItems: "center",
                       fontSize: "14px",
@@ -1015,7 +1041,7 @@ const ScheduleTraining = () => {
         </div>
       </div>
 
-      <div className="trainer-recommended" style={{ margin: "0px 0% 0px 10%" }}>
+      <div className="trainer-recommended">
         <h2>Recommended</h2>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <TrainerSlider list={trainers} isRecommended={true} />
@@ -1331,7 +1357,7 @@ const ScheduleTraining = () => {
                           );
                         } else {
                           const payload = {
-                            // slot_id: slot?._id,
+                            slot_id: slot?._id,
                             charging_price: amountPayable,
                             trainer_id:
                               trainerInfo?.userInfo?.trainer_id ||
@@ -1432,59 +1458,109 @@ const ScheduleTraining = () => {
                           }
                           className="mt-3 btn btn-sm btn-primary"
                           onClick={() => {
-                            const amountPayable = Utils.getMinutesFromHourMM(
-                              timeRange.startTime,
-                              timeRange.endTime,
-                              trainerInfo?.userInfo?.extraInfo?.hourly_rate
-                            );
-                            if (amountPayable > 0) {
-                              if (
-                                Utils.isValidTimeDuration(
+
+
+                            let temp = [...availableSlotsState];
+
+                            const selectedStartTime = moment(startDate)?.set({
+                              hour: parseInt(timeRange?.startTime?.split(':')[0]),
+                              minute: parseInt(timeRange?.startTime?.split(':')[1]),
+                              second: 0,
+                              millisecond: 0
+                            });
+                            const selectedEndTime = moment(startDate)?.set({
+                              hour: parseInt(timeRange?.endTime?.split(':')[0]),
+                              minute: parseInt(timeRange?.endTime?.split(':')[1]),
+                              second: 0,
+                              millisecond: 0
+                            });
+
+                            // Check for overlap
+                            temp = temp.map((session) => {
+                              if (!session?.status) {
+                                const sessionStartTime = moment(session?.start_time);
+                                const sessionEndTime = moment(session?.end_time);
+
+                                if (
+                                  selectedStartTime.isBetween(sessionStartTime, sessionEndTime, null, "[]") ||
+                                  selectedEndTime.isBetween(sessionStartTime, sessionEndTime, null, "[]") ||
+                                  (selectedStartTime.isSameOrBefore(sessionStartTime) && selectedEndTime.isSameOrAfter(sessionEndTime))
+                                ) {
+                                  // Mark the session as selected
+                                  return { ...session, isSelected: true };
+                                }
+                              }
+
+                              // If no overlap or session is unavailable, return the original session
+                              return session;
+                            });
+                            console.log("temptemptemptemptemptemptemptemp", temp)
+                            // Update the state with the modified temp array
+                            setAvailableSlotsState([...temp]);
+                            for (let slt of temp) {
+                              if (slt?.isSelected) {
+                                console.log("apihittingapihittingapihittingapihittingapihitting", slt)
+
+                                const amountPayable = Utils.getMinutesFromHourMM(
                                   timeRange.startTime,
                                   timeRange.endTime,
-                                  minimumMeetingDurationInMin
-                                )
-                              ) {
-                                if (
-                                  Utils.isInRange(
-                                    startDate,
-                                    timeRange.startTime,
-                                    timeRange.endTime
-                                  )
-                                ) {
-                                  toast.error(
-                                    "The specified time has elapsed. Please select another time..."
-                                  );
+                                  trainerInfo?.userInfo?.extraInfo?.hourly_rate
+                                );
+                                if (amountPayable > 0) {
+                                  if (
+                                    Utils.isValidTimeDuration(
+                                      timeRange.startTime,
+                                      timeRange.endTime,
+                                      minimumMeetingDurationInMin
+                                    )
+                                  ) {
+                                    if (
+                                      Utils.isInRange(
+                                        startDate,
+                                        timeRange.startTime,
+                                        timeRange.endTime
+                                      )
+                                    ) {
+                                      toast.error(
+                                        "The specified time has elapsed. Please select another time..."
+                                      );
+                                    } else {
+
+
+                                    }
+                                  } else {
+                                    toast.error(
+                                      `Session duration must be greater then ${minimumMeetingDurationInMin} minutes...`
+                                    );
+                                  }
                                 } else {
-                                  const payload = {
-                                    charging_price: amountPayable,
-                                    trainer_id:
-                                      trainerInfo?.userInfo?.trainer_id ||
-                                      selectedTrainer?.trainer_id,
-                                    trainer_info: trainerInfo || selectedTrainer.data,
-                                    hourly_rate:
-                                      trainerInfo?.userInfo?.extraInfo?.hourly_rate ||
-                                      selectedTrainer?.data?.extraInfo?.hourly_rate,
-                                    status: BookedSession.booked,
-                                    booked_date: startDate,
-                                    session_start_time: timeRange.startTime,
-                                    session_end_time: timeRange.endTime,
-                                  };
-                                  setBookSessionPayload(payload);
-                                  dispatch(
-                                    createPaymentIntentAsync({
-                                      amount: +amountPayable.toFixed(1),
-                                    })
-                                  );
+                                  toast.error("Invalid slot timing...");
                                 }
-                              } else {
-                                toast.error(
-                                  `Session duration must be greater then ${minimumMeetingDurationInMin} minutes...`
+                                const payload = {
+                                  slot_id: slt?._id,
+                                  charging_price: amountPayable,
+                                  trainer_id:
+                                    trainerInfo?.userInfo?.trainer_id ||
+                                    selectedTrainer?.trainer_id,
+                                  trainer_info: trainerInfo || selectedTrainer.data,
+                                  hourly_rate:
+                                    trainerInfo?.userInfo?.extraInfo?.hourly_rate ||
+                                    selectedTrainer?.data?.extraInfo?.hourly_rate,
+                                  status: BookedSession.booked,
+                                  booked_date: startDate,
+                                  session_start_time: timeRange.startTime,
+                                  session_end_time: timeRange.endTime,
+                                };
+                                setBookSessionPayload(payload);
+                                dispatch(
+                                  createPaymentIntentAsync({
+                                    amount: +amountPayable.toFixed(1),
+                                  })
                                 );
                               }
-                            } else {
-                              toast.error("Invalid slot timing...");
                             }
+
+
                           }}
                         >
                           Book Slot Now
@@ -1618,7 +1694,7 @@ const ScheduleTraining = () => {
         (trainerInfo && trainerInfo.userInfo) ? (
         <div className="custom-scroll">{renderUserDetails()}</div>
       ) : (
-        <div className="custom-scroll trainee-dashboard">
+        <div className="custom-scroll trainee-dashboard" style={{ marginLeft: "10%" }}>
           {renderSearchMenu()}
         </div>
       )}

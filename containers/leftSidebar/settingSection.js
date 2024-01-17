@@ -910,7 +910,7 @@ const SettingSection = (props) => {
                             name="timezone_offset"
                             id="timezone-offset"
                             className="timezone_offset mt-2 ml-2"
-                            value={workingHours.time_zone}
+                            value={workingHours?.time_zone}
                             onChange={(event) => {
                               const { value } = event.target;
                               setWorkingHours((prev) => ({
