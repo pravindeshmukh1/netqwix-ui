@@ -346,7 +346,7 @@ export default function CalendarPage() {
   }
 
   return (
-    <div className='calendar-container'style={{boxShadow:'rgba(0, 0, 0, 0.24) 0px 3px 8px'}} >
+    <div className='calendar-container' style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} >
       {data?.length && <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         headerToolbar={{ left: 'prev,next', center: 'title', right: '' }}
@@ -357,6 +357,7 @@ export default function CalendarPage() {
         selectMirror={true}
         initialEvents={data}
         height={600}
+        width={500}
         dateClick={function (e) {
           var date = currentDateAndtime(e?.date)
           handleSelectedModal(date)
