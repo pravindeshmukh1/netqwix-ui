@@ -1,10 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState,useRef } from "react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import ReactStrapModal from "../../common/modal";
 import ShareModalTrainer from "./start/Share modal Trainer";
 import { Formik } from "formik";
 import Slider from "react-slick";
+import Addworkinghour from "../../../containers/leftSidebar/Addworkinghour";
+
 import {
   bookingsAction,
   bookingsState,
@@ -42,7 +44,9 @@ import { masterState } from "../master/master.slice";
 import { trainerAction, trainerState } from "../trainer/trainer.slice";
 import { toast } from "react-toastify";
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
+const images = [...Array().keys()]; 
 
+ 
 const Bookings = ({ accountType = null }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -254,6 +258,42 @@ const Bookings = ({ accountType = null }) => {
         break;
     }
   };
+  // const TRAINER_AMOUNT_USD = 10;
+  // const [isEditing, setEditing] = useState(false);
+  // const [editedRate, setEditedRate] = useState(() => {
+  //   const storedRate = localStorage.getItem('editedRate');
+  //   return storedRate ? parseFloat(storedRate) : TRAINER_AMOUNT_USD;
+  // });
+  // const inputRef = useRef(null);
+
+  // const handleEditClick = () => {
+  //   setEditing(true);
+  // };
+
+  // const handleRateChange = (e) => {
+  //   setEditedRate(e.target.value);
+  // };
+
+  // const handleSaveClick = () => {
+  //   localStorage.setItem('editedRate', editedRate.toString());
+  //   setEditing(false);
+  // };
+
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (inputRef.current && !inputRef.current.contains(event.target)) {
+  //       handleSaveClick();
+  //     }
+  //   };
+
+  //   document.addEventListener('mousedown', handleClickOutside);
+
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, [handleSaveClick]);
+
+
 
   const TrainerRenderBooking = (
     _id,
@@ -855,6 +895,23 @@ const Bookings = ({ accountType = null }) => {
               </div>
               <div className="col-7 col-sm-6 col-md-7 col-lg-8 col-xl-9 card-trainer">
                 <h3 className="mt-3 ">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
+                {/* {isEditing ? (
+        <div>
+          <input
+            type="number"
+            value={editedRate}
+            onChange={handleRateChange}
+            onBlur={handleSaveClick}
+            ref={inputRef}
+          />
+          <button onClick={handleSaveClick} disabled={!editedRate}>
+            Save
+          </button>
+        </div>
+      ) : (
+        <button onClick={handleEditClick}>Edit</button>
+      )} */}
+                
                 {showRatings([], "mt-3 d-flex ml-n2")}
                 {userInfo &&
                   userInfo.extraInfo &&
@@ -1063,7 +1120,58 @@ const Bookings = ({ accountType = null }) => {
                 {/* <h2 className="d-flex justify-content-center mt-2 p-5 mb-2 bg-primary text-white rounded">
                   Bookings
                 </h2> */}
-                <CalendarPage />
+             <div className="Content-Trainer" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+             <div className="RecentStudent" style={{ width: '26%',marginTop:'32px',height:'82vh',boxShadow:'rgba(0, 0, 0, 0.24) 0px 3px 8px' }}>
+  <div className="card-body">
+    <div className="row" style={{ justifyContent: 'center' }}>
+      <h2>Recent Students</h2>
+    </div>
+    <div className="row" style={{ justifyContent: 'center' }}>
+  <div className="image-gallery" style={{ display: 'flex', flexWrap: 'wrap', paddingTop: '15px', width: '85%', justifyContent: 'space-between', overflowY: 'auto', maxHeight: '60vh' }}>
+    <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+    <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+    <img src="/assets/images/about/Coach.jpeg" alt="Student 2" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+    <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+    <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+    <img src="/assets/images/about/Coach.jpeg" alt="Student 2" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+
+    <img src="/assets/images/about/Coach.jpeg" alt="Student 2" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+     <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+    <img src="/assets/images/about/Coach.jpeg" alt="Student 2" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+     <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+    {/* Add more images as needed */}
+    {images.map((index) => (
+        <img
+        key={index}
+        src={`/assets/images/about/Coach${index + 1}.jpeg`}
+        alt={`Student ${index + 1}`}
+        style={{
+          width: '8vw',
+          height: '20vh',
+          marginBottom: '10px',
+          flexGrow: '0',
+          flexShrink: '0',
+          flexBasis: 'calc(33.3333% - 20px)', // 33.3333% for 3 images in a row with 20px margin
+        }}
+      />
+        ))}
+  </div>
+</div>
+
+    {/* Additional content for Recent Students section can be added here */}
+  </div>
+</div>
+
+  <div className="calendar-container" style={{ width: '70%' }}>
+    {/* Set width and height of CalendarPage */}
+    <Addworkinghour />
+    <CalendarPage />
+  </div>
+</div>
+
+
+
+              
                 <h2 className="d-flex justify-content-center p-5">Bookings</h2>
                 <div className="mb-2">{bookingTabs()}</div>
               </React.Fragment>

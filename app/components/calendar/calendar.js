@@ -346,7 +346,7 @@ export default function CalendarPage() {
   }
 
   return (
-    <div className='calendar-container' >
+    <div className='calendar-container'style={{boxShadow:'rgba(0, 0, 0, 0.24) 0px 3px 8px'}} >
       {data?.length && <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         headerToolbar={{ left: 'prev,next', center: 'title', right: '' }}
@@ -396,7 +396,7 @@ export default function CalendarPage() {
         selectable={true}
         selectMirror={true}
         initialEvents={[]}
-        height={600}
+        height={370}
         datesSet={(e) => getData(e)}
         dateClick={function (e) {
           var date = currentDateAndtime(e?.date)
