@@ -1121,10 +1121,10 @@ const Bookings = ({ accountType = null }) => {
                   Bookings
                 </h2> */}
              <div className="Content-Trainer" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-             <div className="RecentStudent" style={{ width: '26%',marginTop:'32px',height:'82vh',boxShadow:'rgba(0, 0, 0, 0.24) 0px 3px 8px' }}>
+             <div className="card rounded trainer-profile-card Select Recent Student" style={{ width: '26%',marginTop:'32px',height:'82vh',boxShadow:'rgba(0, 0, 0, 0.24) 0px 3px 8px' }}>
   <div className="card-body">
     <div className="row" style={{ justifyContent: 'center' }}>
-      <h2>Recent Students</h2>
+      <h2 className="Recent-Heading">Recent Students</h2>
     </div>
     <div className="row" style={{ justifyContent: 'center' }}>
   <div className="image-gallery" style={{ display: 'flex', flexWrap: 'wrap', paddingTop: '15px', width: '85%', justifyContent: 'space-between', overflowY: 'auto', maxHeight: '60vh' }}>
@@ -1162,7 +1162,7 @@ const Bookings = ({ accountType = null }) => {
   </div>
 </div>
 
-  <div className="calendar-container" style={{ width: '70%' }}>
+  <div className="calendar-container Child" style={{ width: '70%' }}>
     {/* Set width and height of CalendarPage */}
     <Addworkinghour />
     <CalendarPage />

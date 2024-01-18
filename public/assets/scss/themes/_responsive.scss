@@ -1367,11 +1367,66 @@
   .card.rounded.trainer-profile-card.Select {
     margin-top: 10px !important;
 }
+.card.rounded.trainer-profile-card.Select.Recent.Student{
+  width: 60% !important;
+  margin: auto;
+  overflow-x: auto;
+}
+.card.rounded.trainer-profile-card.Select.Working.Hour{
+  width: 60% !important;
+  margin: auto;
+}
+// .calendar-container{
+//   margin: 45px !important;
+//   padding: 0;
+// }
+.Recent-Heading{
+  font-size: 16px;
+}
+.rc-time-picker.ml-2.mt-2.rounded{
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+
+}
+.col-12.Save-button{
+margin-top: 0 !important;
+}
+#timezone-offset{
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+}
+.ml-2.From{
+  margin-bottom: 0 !important;
+  margin-top: 5px !important;
+}
+.ml-2.To{
+  margin-bottom: 0 !important;
+  margin-top: 5px !important;
+}
+.ml-2.TimeZone{
+  margin-bottom: 0 !important;
+  padding-top: 10px !important;
+}
+.calendar-container{
+  width: 95% !important;
+  margin-top: 16px !important;
+  margin-left: 11px !important;
+}
+.card-body.change-number{
+margin: 4px !important;
+margin-left: 11px !important;
+}
+.timezone_offset{
+  width: 50vw !important;
+}
 .welcome-text{
   text-align: center;
 }
 .Report{
   margin-top: 0 !important;
+}
+.Content-Trainer{
+  display: block !important;
 }
 }
 @media(width:768px){
@@ -1379,8 +1434,36 @@
     width: 86vw !important;
 
   }
+  .ml-2.From{
+    margin-bottom: 0 !important;
+    margin-top: 5px !important;
+  }
+  .ml-2.To{
+    margin-bottom: 0 !important;
+    margin-top: 5px !important;
+  }
+  .ml-2.TimeZone{
+    margin-bottom: 0 !important;
+    padding-top: 10px !important;
+  }
+  .Recent-Heading{
+    font-size: 18px;
+  }
+  .card.rounded.trainer-profile-card.Select.Recent.Student{
+    width: 50% !important;
+    overflow-x: auto;
+  }
+  .calendar-container{
+    width: 95% !important;
+  }
+  .timezone_offset{
+    width: 22vw !important;
+  }
   .col-sm-6{
     padding-left: 14px !important;
+  }
+  .ml-2.TimeZone{
+    margin-bottom: 0 !important;
   }
   
 }

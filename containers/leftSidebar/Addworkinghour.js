@@ -25,12 +25,12 @@ const Addworkinghour = ()=>{
       const [isTimeConflicts, setIsTimeConflicts] = useState(false);
 
     return(
-<div className="card-body" style={{padding:'20px',width:'100%',boxShadow:'rgba(0, 0, 0, 0.24) 0px 3px 8px',maxWidth: '95%', margin:'5px 28px'}}>
+<div className="card-body change-number" style={{padding:'20px',width:'95%',boxShadow:'rgba(0, 0, 0, 0.24) 0px 3px 8px', margin:'5px 28px'}}>
                       <h5>Add your working hours...</h5>
 
                       <div className="row">
                         <div className="col-6 col-sm-3 col-md-3 col-lg-2">
-                          <p className="ml-2">From</p>
+                          <p className="ml-2 From">From</p>
                           <TimePicker
 
                             name="from"
@@ -74,7 +74,7 @@ const Addworkinghour = ()=>{
                           )}
                         </div>
                         <div className="col-6 col-sm-3 col-md-3 col-lg-2">
-                          <p className="ml-2">To</p>
+                          <p className="ml-2 To">To</p>
                           <TimePicker
                             name="to"
                             className={`ml-2 mt-2 ${isTimeConflicts ? `border border-danger` : ``
@@ -116,7 +116,7 @@ const Addworkinghour = ()=>{
                           )}
                         </div>
                         <div className="col-6 col-sm-3 col-md-3 col-lg-2">
-                          <p className="ml-2">Time Zone</p>
+                          <p className="ml-2 TimeZone">Time Zone</p>
                           <select
                             name="timezone_offset"
                             id="timezone-offset"
@@ -139,7 +139,7 @@ const Addworkinghour = ()=>{
                             })}
                           </select>
                         </div>
-                        <div className="col-12" style={{marginTop:'10px'}}>
+                        <div className="col-12 Save-button" style={{marginTop:'10px'}}>
                           <button
                             type="button"
                             className="ml-2 btn btn-sm btn-primary"
