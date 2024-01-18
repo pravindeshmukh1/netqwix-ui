@@ -33,6 +33,7 @@ import {
   bookingsAction,
   bookingsState,
 } from "../../app/components/common/common.slice";
+import { useMediaQuery } from "../../app/hook/useMediaQuery";
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 const steps = [
   {
@@ -98,7 +99,7 @@ const Index = (props) => {
   useEffect(() => {
     if (activeTab) {
       if (bookingState.configs?.sidebar?.isMobileMode) {
-        document.querySelector(".main-nav").classList.remove("on");
+        document?.querySelector(".main-nav")?.classList?.remove("on");
       }
       dispatch(handleActiveTab(activeTab));
     }
@@ -180,8 +181,8 @@ const Index = (props) => {
     setActiveTab("");
   };
 
+  const isMobile = useMediaQuery(500)
   const [openCloseToggleSideNav, setOpenCloseToggleSideNav] = useState(true)
-
 
   useEffect(() => {
     let traineeDashboard = document.querySelector(".trainee-dashboard");
@@ -191,12 +192,21 @@ const Index = (props) => {
       lockerDrawer.style.setProperty('left', openCloseToggleSideNav ? '90px' : '0px', 'important');
     }
     if (traineeDashboard) {
-      traineeDashboard.style.marginLeft = openCloseToggleSideNav ? '5%' : "0px";
+      traineeDashboard.style.marginLeft = openCloseToggleSideNav ? '105px' : "0px";
     }
     if (customSidebarContentBooking) {
       customSidebarContentBooking.style.setProperty('left', openCloseToggleSideNav ? '103px' : '0px', 'important');
     }
   }, [openCloseToggleSideNav, sidebarModalActiveTab, sidebarActiveTab])
+
+  useEffect(() => {
+    if (isMobile) {
+      setOpenCloseToggleSideNav(false)
+    } else {
+      setOpenCloseToggleSideNav(true)
+    }
+  }, [isMobile])
+
 
   return (
     <Fragment>
@@ -472,8 +482,8 @@ const Index = (props) => {
             </ul>
           </div>
         </aside>}
-        {openCloseToggleSideNav ? <ChevronLeft style={{ left: "83px" }} className="collapse-left-drawer-icon" onClick={() => setOpenCloseToggleSideNav(!openCloseToggleSideNav)} /> :
-          <ChevronRight style={{ left: "0px" }} className="collapse-left-drawer-icon" onClick={() => setOpenCloseToggleSideNav(!openCloseToggleSideNav)} />}
+        {!isMobile ? openCloseToggleSideNav ? <ChevronLeft style={{ left: "83px" }} className="collapse-left-drawer-icon" onClick={() => setOpenCloseToggleSideNav(!openCloseToggleSideNav)} /> :
+          <ChevronRight style={{ left: "0px" }} className="collapse-left-drawer-icon" onClick={() => setOpenCloseToggleSideNav(!openCloseToggleSideNav)} /> : null}
 
       </div>
       {activeTab !== leftSideBarOptions.HOME &&
@@ -594,7 +604,7 @@ const Index = (props) => {
             </div>
           </aside>
         )}
-      {bookingState.configs?.sidebar?.isMobileMode && <RecentSection />}
+      {bookingState.configs?.sidebar?.isMobileMode && <RecentSection openCloseToggleSideNav={openCloseToggleSideNav} setOpenCloseToggleSideNav={setOpenCloseToggleSideNav} />}
     </Fragment>
   );
 };
