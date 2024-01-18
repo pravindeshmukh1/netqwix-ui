@@ -349,7 +349,7 @@ export default function CalendarPage() {
     <div className='calendar-container' style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} >
       {data?.length && <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
-        headerToolbar={{ left: 'prev,next', center: 'title', right: '' }}
+        headerToolbar={{ left: 'prev,next', center: 'title', right: ''}}
         initialView='dayGridMonth'
         nowIndicator={true}
         editable={true}
