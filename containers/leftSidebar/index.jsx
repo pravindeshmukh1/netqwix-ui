@@ -191,7 +191,7 @@ const Index = (props) => {
       lockerDrawer.style.setProperty('left', openCloseToggleSideNav ? '90px' : '0px', 'important');
     }
     if (traineeDashboard) {
-      traineeDashboard.style.marginLeft = openCloseToggleSideNav ? '10%' : "0px";
+      traineeDashboard.style.marginLeft = openCloseToggleSideNav ? '5%' : "0px";
     }
     if (customSidebarContentBooking) {
       customSidebarContentBooking.style.setProperty('left', openCloseToggleSideNav ? '103px' : '0px', 'important');
