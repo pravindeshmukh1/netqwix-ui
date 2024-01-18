@@ -1633,7 +1633,7 @@ const ScheduleTraining = () => {
         (trainerInfo && trainerInfo.userInfo) ? (
         <div className="custom-scroll">{renderUserDetails()}</div>
       ) : (
-        <div className="custom-scroll trainee-dashboard" style={{ marginLeft: "10%" }}>
+        <div className="custom-scroll trainee-dashboard" style={{ marginLeft: "5%" }}>
           {renderSearchMenu()}
         </div>
       )}

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState,useRef } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import moment from "moment";
 import { useRouter } from "next/router";
 import ReactStrapModal from "../../common/modal";
@@ -45,9 +45,9 @@ import { trainerAction, trainerState } from "../trainer/trainer.slice";
 import { toast } from "react-toastify";
 import PopupContent from "../trainee/scheduleTraining/PopupContent";
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
-const images = [...Array().keys()]; 
+const images = [...Array().keys()];
 
- 
+
 const Bookings = ({ accountType = null }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -912,7 +912,7 @@ const Bookings = ({ accountType = null }) => {
       ) : (
         <button onClick={handleEditClick}>Edit</button>
       )} */}
-                
+
                 {showRatings([], "mt-3 d-flex ml-n2")}
                 {userInfo &&
                   userInfo.extraInfo &&
@@ -1194,58 +1194,58 @@ const Bookings = ({ accountType = null }) => {
                 {/* <h2 className="d-flex justify-content-center mt-2 p-5 mb-2 bg-primary text-white rounded">
                   Bookings
                 </h2> */}
-             <div className="Content-Trainer" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-             <div className="card rounded trainer-profile-card Select Recent Student" style={{ width: '26%',marginTop:'32px',height:'82vh',boxShadow:'rgba(0, 0, 0, 0.24) 0px 3px 8px' }}>
-  <div className="card-body">
-    <div className="row" style={{ justifyContent: 'center' }}>
-      <h2 className="Recent-Heading">Recent Students</h2>
-    </div>
-    <div className="row" style={{ justifyContent: 'center' }}>
-  <div className="image-gallery" style={{ display: 'flex', flexWrap: 'wrap', paddingTop: '15px', width: '85%', justifyContent: 'space-between', overflowY: 'auto', maxHeight: '60vh' }}>
-    <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-    <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-    <img src="/assets/images/about/Coach.jpeg" alt="Student 2" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-    <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-    <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-    <img src="/assets/images/about/Coach.jpeg" alt="Student 2" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+                <div className="Content-Trainer" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                  <div className="card rounded trainer-profile-card Select Recent Student" style={{ width: '26%', marginTop: '32px', height: '82vh', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }}>
+                    <div className="card-body">
+                      <div className="row" style={{ justifyContent: 'center' }}>
+                        <h2 className="Recent-Heading">Recent Students</h2>
+                      </div>
+                      <div className="row" style={{ justifyContent: 'center' }}>
+                        <div className="image-gallery" style={{ display: 'flex', flexWrap: 'wrap', paddingTop: '15px', width: '85%', justifyContent: 'space-between', overflowY: 'auto', maxHeight: '60vh' }}>
+                          <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+                          <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+                          <img src="/assets/images/about/Coach.jpeg" alt="Student 2" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+                          <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+                          <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+                          <img src="/assets/images/about/Coach.jpeg" alt="Student 2" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
 
-    <img src="/assets/images/about/Coach.jpeg" alt="Student 2" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-     <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-    <img src="/assets/images/about/Coach.jpeg" alt="Student 2" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-     <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-    {/* Add more images as needed */}
-    {images.map((index) => (
-        <img
-        key={index}
-        src={`/assets/images/about/Coach${index + 1}.jpeg`}
-        alt={`Student ${index + 1}`}
-        style={{
-          width: '8vw',
-          height: '20vh',
-          marginBottom: '10px',
-          flexGrow: '0',
-          flexShrink: '0',
-          flexBasis: 'calc(33.3333% - 20px)', // 33.3333% for 3 images in a row with 20px margin
-        }}
-      />
-        ))}
-  </div>
-</div>
+                          <img src="/assets/images/about/Coach.jpeg" alt="Student 2" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+                          <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+                          <img src="/assets/images/about/Coach.jpeg" alt="Student 2" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+                          <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
+                          {/* Add more images as needed */}
+                          {images.map((index) => (
+                            <img
+                              key={index}
+                              src={`/assets/images/about/Coach${index + 1}.jpeg`}
+                              alt={`Student ${index + 1}`}
+                              style={{
+                                width: '8vw',
+                                height: '20vh',
+                                marginBottom: '10px',
+                                flexGrow: '0',
+                                flexShrink: '0',
+                                flexBasis: 'calc(33.3333% - 20px)', // 33.3333% for 3 images in a row with 20px margin
+                              }}
+                            />
+                          ))}
+                        </div>
+                      </div>
 
-    {/* Additional content for Recent Students section can be added here */}
-  </div>
-</div>
+                      {/* Additional content for Recent Students section can be added here */}
+                    </div>
+                  </div>
 
-  <div className="calendar-container Child" style={{ width: '70%' }}>
-    {/* Set width and height of CalendarPage */}
-    <Addworkinghour />
-    <CalendarPage />
-  </div>
-</div>
+                  <div className="calendar-container Child" style={{ width: '70%' }}>
+                    {/* Set width and height of CalendarPage */}
+                    <Addworkinghour />
+                    <CalendarPage />
+                  </div>
+                </div>
 
 
 
-              
+
                 <h2 className="d-flex justify-content-center p-5">Bookings</h2>
                 <div className="mb-2">{bookingTabs()}</div>
               </React.Fragment>
@@ -1272,7 +1272,7 @@ const Bookings = ({ accountType = null }) => {
                 </div>
 
                 <div className="trainer-recommended" style={{ height: '90px' }}>
-                  <div className="row">
+                  <div className="row" style={{ width: "95%" }}>
                     <div className="col d-none d-sm-block">
                       <Slider {...settings}>
                         {data?.category?.map((item, index) => (
