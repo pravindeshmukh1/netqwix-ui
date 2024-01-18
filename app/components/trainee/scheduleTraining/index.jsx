@@ -18,6 +18,7 @@ import {
   TRAINER_AMOUNT_USD,
   TimeRange,
   debouncedConfigs,
+  leftSideBarOptions,
   minimumMeetingDurationInMin,
   params,
   weekDays,
@@ -111,7 +112,7 @@ const ScheduleTraining = () => {
   const socket = useContext(SocketContext);
   const masterRecords = useAppSelector(masterState).master;
   const [data, setData] = useState();
-  const { userInfo } = useAppSelector(authState);
+  const { userInfo, sidebarModalActiveTab } = useAppSelector(authState);
 
   useEffect(() => {
     setData(masterRecords?.masterData);
@@ -196,7 +197,6 @@ const ScheduleTraining = () => {
       document.body.style.overflow = 'visible'; // Ensure the default behavior is restored
     };
   }, [popup]);
-  // const [isSlotAvailable, setIsSlotAvailable] = useState(true);
 
 
 
@@ -369,7 +369,6 @@ const ScheduleTraining = () => {
     }
   }, [transaction]);
 
-  console.log("transactiontransactiontransactiontransactiontransaction", transaction)
 
   useEffect(() => {
     if (!selectedTrainerInfo) {
@@ -891,7 +890,26 @@ const ScheduleTraining = () => {
     );
 
 
-
+  const TogglTab = (value) => {
+    if (value == "file") {
+      dispatch(authAction?.setActiveModalTab(value));
+      if (window.innerWidth > 1640 && document.querySelector(".chitchat-main")) {
+        document
+          .querySelector(".chitchat-main")
+          .classList.remove("small-sidebar");
+      }
+    } else {
+      dispatch(authAction.setActiveTab(value));
+      if (
+        window.innerWidth < 800 &&
+        document &&
+        document.querySelector &&
+        document.querySelector(".app-sidebar")
+      ) {
+        document.querySelector(".app-sidebar").classList.remove("active");
+      }
+    }
+  };
   const renderSearchMenu = () => (
     <div
       onScroll={() => {
@@ -904,21 +922,30 @@ const ScheduleTraining = () => {
       style={{ width: "75% !important" }}
     >
 
-      <div className="row" style={{ flexWrap: "nowrap" }}>
+      <div className="row" >
+        <div id="navbar-wrapper">
+          <div className='menu-container'>
+            <p onClick={() => TogglTab("home")}>Home</p>
+            <p onClick={() => TogglTab("file")}>My Locker</p>
+            <p onClick={() => TogglTab(leftSideBarOptions.SCHEDULE_TRAINING)}>Upcoming Lessons</p>
+            <p >My Community</p>
+            <p >About Us</p>
+            <p >Contact Us</p>
+          </div>
+          <div>
+            <button style={{ width: '50px', height: '50px', borderRadius: '50%', overflow: 'hidden' }} onClick={togglePopup}>
+              <img
+                src={Utils?.dynamicImageURL(userInfo?.profile_picture)}
+                alt={userInfo?.fullname}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </button>
+          </div>
+        </div>
 
         <div className="trainer-recommended" style={{ marginTop: "3%", maxWidth: "75%" }}>
           <h1 style={{ marginBottom: "10px" }}>Book Your Lesson now</h1>
           <p>Are you ready to embark on a transformative journey towards your personal and professional development? We are here to revolutionize the way you learn and connect with expert trainers. Our cutting-edge platform.</p>
-        </div>
-
-        <div style={{ textAlign: "right", marginRight: "20px" }}>
-          <button style={{ width: '50px', height: '50px', borderRadius: '50%', overflow: 'hidden' }} onClick={togglePopup}>
-            <img
-              src={Utils?.dynamicImageURL(userInfo?.profile_picture)}
-              alt={userInfo?.fullname}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-          </button>
         </div>
       </div>
 
@@ -981,7 +1008,6 @@ const ScheduleTraining = () => {
                   <span
                     className="badge badge-light lg"
                     style={{
-                      margin: "12px",
                       padding: "18px", // Add your desired padding here
                       alignItems: "center",
                       fontSize: "14px",
@@ -1015,7 +1041,7 @@ const ScheduleTraining = () => {
         </div>
       </div>
 
-      <div className="trainer-recommended" style={{ margin: "0px 0% 0px 10%" }}>
+      <div className="trainer-recommended">
         <h2>Recommended</h2>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <TrainerSlider list={trainers} isRecommended={true} />
@@ -1165,7 +1191,7 @@ const ScheduleTraining = () => {
               !bookingColumns.length ? (
               <div className="row">
                 <label className="mt-1 ml-3" style={{ fontSize: "13px" }}>
-                  Session Duration :{" "}
+                  Select Slot :{" "}
                 </label>
                 {/* <div className="col-12 col-sm-12 col-md-11 col-lg-12 col-xl-8 col-xxl-8 mt-1 mb-2 ml-2 ">
                   <CustomRangePicker
@@ -1279,221 +1305,220 @@ const ScheduleTraining = () => {
 
                 {/* Book slot by given slot and time */}
                 <div className="row" style={{ display: "flex", width: "100%", justifyContent: "space-between", margin: "0px 10px", textAlign: "center" }}>
-                  {availableSlotsState?.map((item, i) => {
-                    return <div onClick={() => {
-                      if (!item?.status) {
-                        var temp = availableSlotsState?.map(slt => {
-                          return { ...slt, isSelected: false }
-                        })
-                        temp[i].isSelected = true
-                        setAvailableSlotsState([...temp])
-                      }
-                    }} className="col-6" style={{
-                      border:
-                        item?.status
-                          ? "2px solid grey" :
-                          item?.isSelected ? "2px solid green"
-                            : "1px solid",
-                      cursor: "pointer",
-                      padding: "10px 0px"
-                    }}>
-                      <b style={{ color: item?.status ? "grey" : "#000080" }}>{moment(item?.start_time).format('h:mm a')} - {moment(item?.end_time).format('h:mm a')}</b>
-                    </div>
-                  })}
+                  {availableSlotsState?.length ?
+                    <> {
+                      availableSlotsState?.map((item, i) => {
+                        return <div onClick={() => {
+                          if (!item?.status) {
+                            var temp = availableSlotsState?.map(slt => {
+                              return { ...slt, isSelected: false }
+                            })
+                            temp[i].isSelected = true
+                            setAvailableSlotsState([...temp])
+                          }
+                        }} className="col-6" style={{
+                          border:
+                            item?.status
+                              ? "2px solid grey" :
+                              item?.isSelected ? "2px solid green"
+                                : "1px solid",
+                          cursor: "pointer",
+                          padding: "10px 0px"
+                        }}>
+                          <b style={{ color: item?.status ? "grey" : "#000080" }}>{moment(item?.start_time).format('h:mm a')} - {moment(item?.end_time).format('h:mm a')}</b>
+                        </div>
+                      })}
+                      <div className="col-12 mb-3 d-flex justify-content-center align-items-center">
+                        <button
+                          type="button"
+                          disabled={!availableSlotsState?.find(slt => slt?.isSelected)}
+                          className="mt-3 btn btn-sm btn-primary"
+                          onClick={() => {
+                            var slot = availableSlotsState?.find(slt => slt?.isSelected)
+
+                            var start_time = `${new Date(slot?.start_time).getHours().toString().padStart(2, '0')}:${new Date(slot?.start_time).getMinutes().toString().padStart(2, '0')}`
+                            var end_time = `${new Date(slot?.end_time).getHours().toString().padStart(2, '0')}:${new Date(slot?.end_time).getMinutes().toString().padStart(2, '0')}`
+
+                            const amountPayable = Utils.getMinutesFromHourMM(
+                              start_time,
+                              end_time,
+                              trainerInfo?.userInfo?.extraInfo?.hourly_rate
+                            );
+                            if (amountPayable > 0) {
+                              if (
+                                Utils.isInRange(
+                                  startDate,
+                                  start_time,
+                                  end_time
+                                )
+                              ) {
+                                toast.error(
+                                  "The specified time has elapsed. Please select another time..."
+                                );
+                              } else {
+                                const payload = {
+                                  slot_id: slot?._id,
+                                  charging_price: amountPayable,
+                                  trainer_id:
+                                    trainerInfo?.userInfo?.trainer_id ||
+                                    selectedTrainer?.trainer_id,
+                                  trainer_info: trainerInfo || selectedTrainer.data,
+                                  hourly_rate:
+                                    trainerInfo?.userInfo?.extraInfo?.hourly_rate ||
+                                    selectedTrainer?.data?.extraInfo?.hourly_rate,
+                                  status: BookedSession.booked,
+                                  booked_date: startDate,
+                                  session_start_time: start_time,
+                                  session_end_time: end_time,
+                                };
+                                setBookSessionPayload(payload);
+                                dispatch(
+                                  createPaymentIntentAsync({
+                                    amount: +amountPayable.toFixed(1),
+                                  })
+                                );
+                              }
+                            }
+
+
+                          }}
+                        >
+                          Book Slot Now
+                        </button>
+                      </div>
+                    </>
+                    : <div className="mt-1 ml-3" style={{ fontSize: "13px" }}>
+                      <span>
+                        Trainer is not available.
+                      </span>
+                    </div>}
                 </div>
 
+
+                {/* Book Slot time range bar  */}
+
+                <label className="mt-1 ml-3" style={{ fontSize: "13px" }}>
+                  Session Duration :{" "}
+                </label>
+                <div className="col-12 col-sm-12 col-md-11 col-lg-12 col-xl-8 col-xxl-8 mt-1 mb-2 ml-2 ">
+                  <CustomRangePicker
+                    availableSlots={
+                      availableSlots
+                        ? availableSlots
+                        : [
+                          {
+                            start_time: "",
+                            end_time: "",
+                          },
+                        ]
+                    }
+                    startTime={
+                      trainerInfo?.userInfo?.extraInfo?.working_hours?.from
+                        ? Utils.convertHoursToMinutes(formateStartTime)
+                        : TimeRange.start
+                    }
+                    endTime={
+                      trainerInfo?.userInfo?.extraInfo?.working_hours?.to
+                        ? Utils.convertHoursToMinutes(formateEndTime)
+                        : TimeRange.end
+                    }
+                    trainerHourlyRate={
+                      trainerInfo?.userInfo?.extraInfo?.working_hours
+                    }
+                    onChange={(time) => {
+                      const startTime = time.startTime;
+                      const endTime = time.endTime;
+                      if (startTime && endTime) {
+                        const payload = {
+                          booked_date: startDate,
+                          trainer_id:
+                            trainerInfo?.userInfo?.trainer_id ||
+                            selectedTrainer?.trainer_id,
+                          slotTime: { from: startTime, to: endTime },
+                        };
+                        setTimeRange({ ...timeRange, startTime, endTime });
+                        const debouncedAPI = debounce(() => {
+                          // dispatch(checkSlotAsync(payload));
+                        }, debouncedConfigs.towSec);
+                        debouncedAPI();
+                      }
+                      // if (!isSlotAvailable) {
+                      //   toast.error(Message.notAvailable, { type: "error" });
+                      // }
+                    }}
+                    isSlotAvailable={isSlotAvailable}
+                    key={"time-range-slider"}
+                  />
+                </div>
                 <div className="col-12 mb-3 d-flex justify-content-center align-items-center">
                   <button
                     type="button"
-                    disabled={!availableSlotsState?.find(slt => slt?.isSelected)}
+                    disabled={
+                      !Utils.isTimeRangeAvailableForRangeBarBtn(
+                        availableSlots,
+                        timeRange.startTime,
+                        timeRange.endTime || status === STATUS.pending
+                      )
+                    }
                     className="mt-3 btn btn-sm btn-primary"
                     onClick={() => {
-                      var slot = availableSlotsState?.find(slt => slt?.isSelected)
-
-                      var start_time = `${new Date(slot?.start_time).getHours().toString().padStart(2, '0')}:${new Date(slot?.start_time).getMinutes().toString().padStart(2, '0')}`
-                      var end_time = `${new Date(slot?.end_time).getHours().toString().padStart(2, '0')}:${new Date(slot?.end_time).getMinutes().toString().padStart(2, '0')}`
-
                       const amountPayable = Utils.getMinutesFromHourMM(
-                        start_time,
-                        end_time,
+                        timeRange.startTime,
+                        timeRange.endTime,
                         trainerInfo?.userInfo?.extraInfo?.hourly_rate
                       );
                       if (amountPayable > 0) {
                         if (
-                          Utils.isInRange(
-                            startDate,
-                            start_time,
-                            end_time,
+                          Utils.isValidTimeDuration(
+                            timeRange.startTime,
+                            timeRange.endTime,
+                            minimumMeetingDurationInMin
                           )
                         ) {
-                          toast.error(
-                            "The specified time has elapsed. Please select another time..."
-                          );
+                          if (
+                            Utils.isInRange(
+                              startDate,
+                              timeRange.startTime,
+                              timeRange.endTime
+                            )
+                          ) {
+                            toast.error(
+                              "The specified time has elapsed. Please select another time..."
+                            );
+                          } else {
+                            const payload = {
+                              charging_price: amountPayable,
+                              trainer_id:
+                                trainerInfo?.userInfo?.trainer_id ||
+                                selectedTrainer?.trainer_id,
+                              trainer_info: trainerInfo || selectedTrainer.data,
+                              hourly_rate:
+                                trainerInfo?.userInfo?.extraInfo?.hourly_rate ||
+                                selectedTrainer?.data?.extraInfo?.hourly_rate,
+                              status: BookedSession.booked,
+                              booked_date: startDate,
+                              session_start_time: timeRange.startTime,
+                              session_end_time: timeRange.endTime,
+                            };
+                            setBookSessionPayload(payload);
+                            dispatch(
+                              createPaymentIntentAsync({
+                                amount: +amountPayable.toFixed(1),
+                              })
+                            );
+                          }
                         } else {
-                          const payload = {
-                            // slot_id: slot?._id,
-                            charging_price: amountPayable,
-                            trainer_id:
-                              trainerInfo?.userInfo?.trainer_id ||
-                              selectedTrainer?.trainer_id,
-                            trainer_info: trainerInfo || selectedTrainer.data,
-                            hourly_rate:
-                              trainerInfo?.userInfo?.extraInfo?.hourly_rate ||
-                              selectedTrainer?.data?.extraInfo?.hourly_rate,
-                            status: BookedSession.booked,
-                            booked_date: startDate,
-                            session_start_time: start_time,
-                            session_end_time: end_time,
-                          };
-                          setBookSessionPayload(payload);
-                          dispatch(
-                            createPaymentIntentAsync({
-                              amount: +amountPayable.toFixed(1),
-                            })
+                          toast.error(
+                            `Session duration must be greater then ${minimumMeetingDurationInMin} minutes...`
                           );
                         }
-                      }
-                      else {
+                      } else {
                         toast.error("Invalid slot timing...");
                       }
                     }}
                   >
                     Book Slot Now
                   </button>
-                </div>
-
-                {/* Book Slot time range bar  */}
-                <div className="col-11">
-                  {(getParams.search && getParams.search.length) ||
-                    !bookingColumns.length ? (
-                    <div className="row">
-                      <label className="mt-1 ml-3" style={{ fontSize: "13px" }}>
-                        Session Duration :{" "}
-                      </label>
-                      <div className="col-12 col-sm-12 col-md-11 col-lg-12 col-xl-8 col-xxl-8 mt-1 mb-2 ml-2 ">
-                        <CustomRangePicker
-                          availableSlots={
-                            availableSlots
-                              ? availableSlots
-                              : [
-                                {
-                                  start_time: "",
-                                  end_time: "",
-                                },
-                              ]
-                          }
-                          startTime={
-                            trainerInfo?.userInfo?.extraInfo?.working_hours?.from
-                              ? Utils.convertHoursToMinutes(formateStartTime)
-                              : TimeRange.start
-                          }
-                          endTime={
-                            trainerInfo?.userInfo?.extraInfo?.working_hours?.to
-                              ? Utils.convertHoursToMinutes(formateEndTime)
-                              : TimeRange.end
-                          }
-                          trainerHourlyRate={
-                            trainerInfo?.userInfo?.extraInfo?.working_hours
-                          }
-                          onChange={(time) => {
-                            const startTime = time.startTime;
-                            const endTime = time.endTime;
-                            if (startTime && endTime) {
-                              const payload = {
-                                booked_date: startDate,
-                                trainer_id:
-                                  trainerInfo?.userInfo?.trainer_id ||
-                                  selectedTrainer?.trainer_id,
-                                slotTime: { from: startTime, to: endTime },
-                              };
-                              setTimeRange({ ...timeRange, startTime, endTime });
-                              const debouncedAPI = debounce(() => {
-                                // dispatch(checkSlotAsync(payload));
-                              }, debouncedConfigs.towSec);
-                              debouncedAPI();
-                            }
-                            // if (!isSlotAvailable) {
-                            //   toast.error(Message.notAvailable, { type: "error" });
-                            // }
-                          }}
-                          isSlotAvailable={isSlotAvailable}
-                          key={"time-range-slider"}
-                        />
-                      </div>
-                      <div className="col-12 mb-3 d-flex justify-content-center align-items-center">
-                        <button
-                          type="button"
-                          disabled={
-                            !Utils.isTimeRangeAvailableForRangeBarBtn(
-                              availableSlots,
-                              timeRange.startTime,
-                              timeRange.endTime || status === STATUS.pending
-                            )
-                          }
-                          className="mt-3 btn btn-sm btn-primary"
-                          onClick={() => {
-                            const amountPayable = Utils.getMinutesFromHourMM(
-                              timeRange.startTime,
-                              timeRange.endTime,
-                              trainerInfo?.userInfo?.extraInfo?.hourly_rate
-                            );
-                            if (amountPayable > 0) {
-                              if (
-                                Utils.isValidTimeDuration(
-                                  timeRange.startTime,
-                                  timeRange.endTime,
-                                  minimumMeetingDurationInMin
-                                )
-                              ) {
-                                if (
-                                  Utils.isInRange(
-                                    startDate,
-                                    timeRange.startTime,
-                                    timeRange.endTime
-                                  )
-                                ) {
-                                  toast.error(
-                                    "The specified time has elapsed. Please select another time..."
-                                  );
-                                } else {
-                                  const payload = {
-                                    charging_price: amountPayable,
-                                    trainer_id:
-                                      trainerInfo?.userInfo?.trainer_id ||
-                                      selectedTrainer?.trainer_id,
-                                    trainer_info: trainerInfo || selectedTrainer.data,
-                                    hourly_rate:
-                                      trainerInfo?.userInfo?.extraInfo?.hourly_rate ||
-                                      selectedTrainer?.data?.extraInfo?.hourly_rate,
-                                    status: BookedSession.booked,
-                                    booked_date: startDate,
-                                    session_start_time: timeRange.startTime,
-                                    session_end_time: timeRange.endTime,
-                                  };
-                                  setBookSessionPayload(payload);
-                                  dispatch(
-                                    createPaymentIntentAsync({
-                                      amount: +amountPayable.toFixed(1),
-                                    })
-                                  );
-                                }
-                              } else {
-                                toast.error(
-                                  `Session duration must be greater then ${minimumMeetingDurationInMin} minutes...`
-                                );
-                              }
-                            } else {
-                              toast.error("Invalid slot timing...");
-                            }
-                          }}
-                        >
-                          Book Slot Now
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <TrainerSlider list={listOfTrainers} />
-                  )}
                 </div>
               </div>
             ) : (
@@ -1618,7 +1643,7 @@ const ScheduleTraining = () => {
         (trainerInfo && trainerInfo.userInfo) ? (
         <div className="custom-scroll">{renderUserDetails()}</div>
       ) : (
-        <div className="custom-scroll trainee-dashboard">
+        <div className="custom-scroll trainee-dashboard" style={{ marginLeft: "10%" }}>
           {renderSearchMenu()}
         </div>
       )}

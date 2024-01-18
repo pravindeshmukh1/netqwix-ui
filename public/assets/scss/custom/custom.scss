@@ -484,7 +484,7 @@ slick-slider .slick-list,
 
 // booking sections
 .bookings {
-  margin: 30px;
+  padding: 30px;
   width: 92vw;
   overflow-x: auto;
   overflow-y: auto;
@@ -657,11 +657,7 @@ slick-slider .slick-list,
   max-width: 100%;
 }
 
-@media (min-width: 768px) {
-  .trainer-recommended {
-    margin: 0px 10% 0px 10%;
-  }
-}
+@media (min-width: 768px) {}
 
 // trainee-dashboard
 .custom-trainee-dashboard {

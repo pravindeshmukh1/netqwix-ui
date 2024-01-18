@@ -9,6 +9,7 @@ import RecentSection from "./recentSection";
 import { Fragment, useState } from "react";
 import { NavLink, TabContent, TabPane } from "reactstrap";
 import { useRouter } from "next/router";
+import "./index.scss"
 import { Tooltip } from "react-tippy";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "../../app/store";
@@ -27,7 +28,7 @@ import ReminderSection from "../rightSidebar/reminderSection";
 import NoteSection from "../rightSidebar/noteSection";
 import FileSection from "../rightSidebar/fileSection";
 import AppListSection from "../rightSidebar/appList";
-import { Book, File } from "react-feather";
+import { Book, File, ChevronLeft, ChevronRight } from "react-feather";
 import {
   bookingsAction,
   bookingsState,
@@ -55,7 +56,7 @@ const steps = [
 const Index = (props) => {
   // const width = useWindowSize();
   const socket = useContext(SocketContext);
-  const { sidebarActiveTab } = useAppSelector(authState);
+  const { sidebarActiveTab, sidebarModalActiveTab } = useAppSelector(authState);
   const [width, setWidth] = useState(0);
   const [opentour, setopentour] = useState(true);
   let [activeTab, setActiveTab] = useState();
@@ -122,6 +123,10 @@ const Index = (props) => {
     setActiveTab(sidebarActiveTab);
   }, [sidebarActiveTab])
 
+  useEffect(() => {
+    setActiveTab(sidebarModalActiveTab);
+  }, [sidebarModalActiveTab])
+
   const TogglTab = (value) => {
 
     dispatch(authAction.setActiveTab(value));
@@ -137,7 +142,7 @@ const Index = (props) => {
   };
 
   const ToggleTab = (tab) => {
-    setActiveTab(tab);
+    dispatch(authAction?.setActiveModalTab(tab));
     if (width > 1640 && document.querySelector(".chitchat-main")) {
       document
         .querySelector(".chitchat-main")
@@ -175,6 +180,24 @@ const Index = (props) => {
     setActiveTab("");
   };
 
+  const [openCloseToggleSideNav, setOpenCloseToggleSideNav] = useState(true)
+
+
+  useEffect(() => {
+    let traineeDashboard = document.querySelector(".trainee-dashboard");
+    let customSidebarContentBooking = document.querySelector(".custom-sidebar-content-booking");
+    let lockerDrawer = document.querySelector(".custom-mobile-menu.active")
+    if (lockerDrawer) {
+      lockerDrawer.style.setProperty('left', openCloseToggleSideNav ? '90px' : '0px', 'important');
+    }
+    if (traineeDashboard) {
+      traineeDashboard.style.marginLeft = openCloseToggleSideNav ? '10%' : "0px";
+    }
+    if (customSidebarContentBooking) {
+      customSidebarContentBooking.style.setProperty('left', openCloseToggleSideNav ? '103px' : '0px', 'important');
+    }
+  }, [openCloseToggleSideNav, sidebarModalActiveTab, sidebarActiveTab])
+
   return (
     <Fragment>
       {/* <AppListSection
@@ -182,28 +205,28 @@ const Index = (props) => {
           CloseAppSidebar={CloseAppSidebar}
           ToggleTab={ToggleTab}
         /> */}
+      <div id="left-nav-wrapper" className="left-nav-wrapper">
+        {openCloseToggleSideNav && <aside
+          className={`main-nav on custom-scroll ${openCloseToggleSideNav && "open"} ${accountType === AccountType.TRAINEE &&
+            POSITION_FIXED_SIDEBAR_MENU.includes(activeTab) &&
+            "custom-sidebar"
+            }`} style={{ zIndex: '9999' }}
+        >
+          {/* logo section */}
+          <div className="logo-warpper">
+            <Link href="/landing">
+              <img id="Net"
+                src="/assets/images/logo/netquix-logo.png"
+                alt="logo"
+                className="custom-image"
 
-      <nav
-        className={`main-nav on custom-scroll ${accountType === AccountType.TRAINEE &&
-          POSITION_FIXED_SIDEBAR_MENU.includes(activeTab) &&
-          "custom-sidebar" 
-          }`} style={{zIndex:'9999'}}
-      >
-        {/* logo section */}
-        <div className="logo-warpper">
-          <Link href="/landing">
-            <img id="Net"
-              src="/assets/images/logo/netquix-logo.png"
-              alt="logo"
-              className="custom-image"
-
-            />
-          </Link>
-        </div>
+              />
+            </Link>
+          </div>
 
 
-        <div className="app-list sidebar-main">
-          {/* <ul className="sidebar-top  custom-scroll">
+          <div className="app-list sidebar-main">
+            {/* <ul className="sidebar-top  custom-scroll">
             <li>
               <Tooltip title="Home" position="top" trigger="mouseenter">
                 <NavLink
@@ -240,56 +263,59 @@ const Index = (props) => {
             </li>
 
           </ul> */}
-          <ul className="sidebar-top">
-            <li>
-              <Tooltip title="Home" position="top" trigger="mouseenter">
-                <NavLink id="sidebar-item-home"
-                  className={`icon-btn btn-light button-effect ${activeTab === "home" ? "active" : ""
-                    }`}
-                  onClick={() => TogglTab("home")}
-                >
-                  <i className="fa fa-home" />
-                </NavLink>
-              </Tooltip>
-            </li>
-            {accountType === AccountType.TRAINEE && <li>
-              <Tooltip
-                title={
-                  accountType === AccountType.TRAINEE
-                    ? "Booking"
-                    : "Schedule Slots"
-                }
-                position="right-end"
-                trigger="mouseenter"
-              >
-                <NavLink id="sidebar-item-booking"
-                  className={`icon-btn btn-light button-effect ${activeTab === leftSideBarOptions.SCHEDULE_TRAINING
-                    ? "active"
-                    : ""
-                    }`}
-                  onClick={() => TogglTab(leftSideBarOptions.SCHEDULE_TRAINING)}
-                >
-                  <i className="fa fa-calendar" />
-                </NavLink>
-              </Tooltip>
-            </li>}
-            <li>
-              <Tooltip title="Locker" position="top" trigger="mouseenter">
-                <NavLink id="sidebar-item-locker"
-                  className={`icon-btn btn-light button-effect step2 ${activeTab === "file" ? "active" : ""
-                    }`}
-                  onClick={() => ToggleTab("file")}
-                  data-intro=""
-                >
-                  {activeTab === "file"
-                    ? <img src="../assets/images/lockers-white.png" style={{ width: 20 }} />
-                    : <img src="../assets/images/lockers.png" style={{ width: 20 }} />
+            <ul className="sidebar-top">
+              <li>
+                <Tooltip title="Home" position="top" trigger="mouseenter">
+                  <NavLink id="sidebar-item-home"
+                    className={`icon-btn btn-light button-effect ${activeTab === "home" ? "active" : ""
+                      }`}
+                    onClick={() => TogglTab("home")}
+                  >
+                    <i className="fa fa-home" />
+                  </NavLink>
+                </Tooltip>
+                <p className="menu-name">Home</p>
+              </li>
+              {accountType === AccountType.TRAINEE && <li>
+                <Tooltip
+                  title={
+                    accountType === AccountType.TRAINEE
+                      ? "Booking"
+                      : "Schedule Slots"
                   }
-                  {/* <i className="fa fa-lock" /> */}
-                </NavLink>
-              </Tooltip>
-            </li>
-            {/* <li>
+                  position="right-end"
+                  trigger="mouseenter"
+                >
+                  <NavLink id="sidebar-item-booking"
+                    className={`icon-btn btn-light button-effect ${activeTab === leftSideBarOptions.SCHEDULE_TRAINING
+                      ? "active"
+                      : ""
+                      }`}
+                    onClick={() => TogglTab(leftSideBarOptions.SCHEDULE_TRAINING)}
+                  >
+                    <i className="fa fa-calendar" />
+                  </NavLink>
+                </Tooltip>
+                <p className="menu-name">Booking</p>
+              </li>}
+              <li>
+                <Tooltip title="Locker" position="top" trigger="mouseenter">
+                  <NavLink id="sidebar-item-locker"
+                    className={`icon-btn btn-light button-effect step2 ${activeTab === "file" ? "active" : ""
+                      }`}
+                    onClick={() => ToggleTab("file")}
+                    data-intro=""
+                  >
+                    {activeTab === "file"
+                      ? <img src="../assets/images/lockers-white.png" style={{ width: 20 }} />
+                      : <img src="../assets/images/lockers.png" style={{ width: 20 }} />
+                    }
+                    {/* <i className="fa fa-lock" /> */}
+                  </NavLink>
+                </Tooltip>
+                <p className="menu-name">Locker</p>
+              </li>
+              {/* <li>
               <Tooltip title="Chats" position="top" trigger="mouseenter">
                 <NavLink
                   className={`icon-btn btn-light button-effect ${
@@ -302,8 +328,8 @@ const Index = (props) => {
               </Tooltip>
             </li> */}
 
-            {/* some menu hide feedback changes */}
-            {/* <li>
+              {/* some menu hide feedback changes */}
+              {/* <li>
               <Tooltip title="Todo" position="top" trigger="mouseenter">
                 <NavLink
                   className={`icon-btn btn-light button-effect ${
@@ -352,7 +378,7 @@ const Index = (props) => {
               </Tooltip>
             </li> */}
 
-            {/* <li>
+              {/* <li>
               <Tooltip title="Document" position="top" trigger="mouseenter">
                 <NavLink
                   className={`icon-btn btn-light button-effect ${
@@ -365,7 +391,7 @@ const Index = (props) => {
                 </NavLink>
               </Tooltip>
             </li> */}
-            {/* <li>
+              {/* <li>
               <Tooltip title="Contact" position="top" trigger="mouseenter">
                 <NavLink
                   className={`icon-btn btn-light button-effect ${
@@ -379,71 +405,77 @@ const Index = (props) => {
               </Tooltip>
             </li> */}
 
-            <li>
-              <div className="dot-btn dot-danger grow">
-                <Tooltip
-                  title="Notification"
-                  position="top-end"
-                  size="small"
-                  trigger="mouseenter"
-                >
-                  <NavLink id="sidebar-item-notification"
-                    className={`icon-btn btn-light button-effect ${activeTab === "notification" ? "active" : ""
-                      }`}
-                    onClick={() => ToggleTab("notification")}
+              <li>
+                <div className="dot-btn dot-danger grow">
+                  <Tooltip
+                    title="Notification"
+                    position="top-end"
+                    size="small"
+                    trigger="mouseenter"
                   >
-                    <i className="fa fa-bell" />
+                    <NavLink id="sidebar-item-notification"
+                      className={`icon-btn btn-light button-effect ${activeTab === "notification" ? "active" : ""
+                        }`}
+                      onClick={() => ToggleTab("notification")}
+                    >
+                      <i className="fa fa-bell" />
+                    </NavLink>
+                  </Tooltip>
+                </div>
+                <p className="menu-name">Notification</p>
+              </li>
+
+              <li>
+                <Tooltip title="Settings" position="top" trigger="mouseenter">
+                  <NavLink id="sidebar-item-setting"
+                    className={`icon-btn btn-light button-effect step2 ${activeTab === "setting" ? "active" : ""
+                      }`}
+                    onClick={() => ToggleTab("setting")}
+                    data-intro="You can change settings by clicking here"
+                  >
+                    <i className="fa fa-cog" />
                   </NavLink>
                 </Tooltip>
-              </div>
-            </li>
+                <p className="menu-name">Setting</p>
+              </li>
+            </ul>
+            <ul className="sidebar-bottom">
+              <li>
+                <Tooltip
+                  title="Change Mode"
+                  size="small"
+                  position="top-end"
+                  trigger="mouseenter"
+                >
+                  <NavLink
+                    id="sidebar-item-mode"
+                    className="icon-btn btn-light button-effect mode step3"
+                    data-intro="Change mode"
+                    onClick={() => toggleLightMode(mode)}
+                  >
+                    <i className={mode ? "fa fa-lightbulb-o" : "fa fa-moon-o"} />
+                  </NavLink>
+                </Tooltip>
+              </li>
+              <li>
+                <Tooltip title="Logout" position="top" trigger="mouseenter">
+                  <NavLink
+                    id="sidebar-item-logout"
+                    className="icon-btn btn-light"
+                    onClick={() => Logout()}
+                  >
+                    {" "}
+                    <i className="fa fa-power-off"> </i>
+                  </NavLink>
+                </Tooltip>
+              </li>
+            </ul>
+          </div>
+        </aside>}
+        {openCloseToggleSideNav ? <ChevronLeft style={{ left: "83px" }} className="collapse-left-drawer-icon" onClick={() => setOpenCloseToggleSideNav(!openCloseToggleSideNav)} /> :
+          <ChevronRight style={{ left: "0px" }} className="collapse-left-drawer-icon" onClick={() => setOpenCloseToggleSideNav(!openCloseToggleSideNav)} />}
 
-            <li>
-              <Tooltip title="Settings" position="top" trigger="mouseenter">
-                <NavLink id="sidebar-item-setting"
-                  className={`icon-btn btn-light button-effect step2 ${activeTab === "setting" ? "active" : ""
-                    }`}
-                  onClick={() => ToggleTab("setting")}
-                  data-intro="You can change settings by clicking here"
-                >
-                  <i className="fa fa-cog" />
-                </NavLink>
-              </Tooltip>
-            </li>
-          </ul>
-          <ul className="sidebar-bottom">
-            <li>
-              <Tooltip
-                title="Change Mode"
-                size="small"
-                position="top-end"
-                trigger="mouseenter"
-              >
-                <NavLink
-                  id="sidebar-item-mode"
-                  className="icon-btn btn-light button-effect mode step3"
-                  data-intro="Change mode"
-                  onClick={() => toggleLightMode(mode)}
-                >
-                  <i className={mode ? "fa fa-lightbulb-o" : "fa fa-moon-o"} />
-                </NavLink>
-              </Tooltip>
-            </li>
-            <li>
-              <Tooltip title="Logout" position="top" trigger="mouseenter">
-                <NavLink
-                  id="sidebar-item-logout"
-                  className="icon-btn btn-light"
-                  onClick={() => Logout()}
-                >
-                  {" "}
-                  <i className="fa fa-power-off"> </i>
-                </NavLink>
-              </Tooltip>
-            </li>
-          </ul>
-        </div>
-      </nav>
+      </div>
       {activeTab !== leftSideBarOptions.HOME &&
         activeTab !== leftSideBarOptions.SCHEDULE_TRAINING && (
           <aside className="app-sidebar active">
@@ -502,7 +534,7 @@ const Index = (props) => {
                   </TabPane>
                   <TabPane
                     tabId="file"
-                    className={`${activeTab === "file" ? "left-90 custom-mobile-menu" : ""
+                    className={`${activeTab === "file" ? "custom-mobile-menu" : ""
                       }`}
                   >
                     <FileSection smallSideBarToggle={smallSideBarToggle} />
@@ -521,7 +553,7 @@ const Index = (props) => {
                   <TabPane
                     tabId="notification"
                     className={`${activeTab === "notification"
-                      ? "left-90 custom-mobile-menu"
+                      ? "custom-mobile-menu"
                       : ""
                       }`}
                   >
@@ -534,7 +566,7 @@ const Index = (props) => {
                   <TabPane
                     tabId="setting"
                     className={`${activeTab === "setting"
-                      ? "left-90 custom-mobile-menu"
+                      ? "custom-mobile-menu"
                       : ""
                       } ${accountType === AccountType.TRAINER
                         ? "sidebar-full-width"

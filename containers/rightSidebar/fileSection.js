@@ -13,6 +13,7 @@ import ReportModal from "../../app/components/video/reportModal";
 
 import { Tooltip } from "react-tippy";
 import { Utils } from "../../utils/utils";
+import { authAction, authState } from "../../app/components/auth/auth.slice";
 
 const fiveImageGallary = [
   {
@@ -162,12 +163,16 @@ const FileSection = (props) => {
   const [isOpenPDF, setIsOpenPDF] = useState(false);
   const [reportName, setReportName] = useState("");
   const [isOpenReport, setIsOpenReport] = useState(false);
-
+  const { sidebarLockerActiveTab } = useAppSelector(authState);
   const [currentReportData, setCurrentReportData] = useState({})
 
 
 
   const [videoDimensions, setVideoDimensions] = useState({ width: "470px", height: "587px" });
+
+  useEffect(() => {
+    setActiveTab(sidebarLockerActiveTab)
+  }, [sidebarLockerActiveTab])
 
   const handleVideoLoad = (event) => {
     const video = event.target;
@@ -212,7 +217,7 @@ const FileSection = (props) => {
           <div className="media-body media-body text-right">
             <div
               className="icon-btn btn-sm btn-outline-light close-apps pointer"
-              onClick={() => props.smallSideBarToggle()}
+              onClick={() => { dispatch(authAction?.setActiveModalTab(null)); dispatch(authAction?.setActiveLockerTab(null)); props.smallSideBarToggle() }}
             >
               <X />
             </div>

@@ -496,7 +496,6 @@ export class Utils {
 
   static getPercentageForSlotForRangeBar = (startTime, endTime, fromTime, toTime) => {
 
-    console.log("startTime, endTime, fromTime, toTimestartTime, endTime, fromTime, toTime", startTime, endTime, fromTime, toTime)
     const [startHour, startMinute] = startTime.split(":").map(Number);
     const [endHour, endMinute] = endTime.split(":").map(Number);
     const startTimeInMinutes = startHour * 60 + startMinute;
