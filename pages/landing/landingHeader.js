@@ -96,9 +96,8 @@ const LandingHeader = (masterRecords) => {
           >
             <Nav
               navbar={isMobileScreen && isMenuOpen ? true : false}
-              className={`border-0 d-flex  mr-4 navbaritem ${
-                isMenuOpen ? "d-none" : "" // Hide the Nav when the menu is open
-              }`}
+              className={`border-0 d-flex  mr-4 navbaritem ${isMenuOpen ? "d-none" : "" // Hide the Nav when the menu is open
+                }`}
               style={{
                 marginLeft: isMobileScreen ? "0%" : "8%",
                 marginTop: isMobileScreen ? "25%" : "40px",
@@ -144,6 +143,9 @@ const LandingHeader = (masterRecords) => {
                   </NavItem>
                 );
               })}
+              <NavItem>
+                <NavLink href={"my-dashboard"}>My Dashboard</NavLink>
+              </NavItem>
               <button
                 type="button"
                 className="btn btn-primary btn-sm"

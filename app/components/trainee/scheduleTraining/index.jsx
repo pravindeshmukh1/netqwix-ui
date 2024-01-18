@@ -59,43 +59,33 @@ import { getAvailability } from "../../calendar/calendar.api";
 import { addTraineeClipInBookedSessionAsync } from "../../common/common.slice";
 import { useSelector } from "react-redux";
 const settings = {
-  autoplay: true,
+  autoplay: false,
   infinite: true,
   speed: 2000,
-  slidesToShow: 3,
+  slidesToShow: 6,
   slidesToScroll: 1,
   swipetoslide: true,
   autoplaySpeed: 1000,
   // arrows:false,
   responsive: [
     {
-      breakpoint: 1366,
+      breakpoint: 1000,
       settings: {
-        autoplay: true,
-        slidesToShow: 3,
-        slidesToScroll: 1,
+        autoplay: false,
+        slidesToShow: 4,
       },
     },
     {
-      breakpoint: 800,
+      breakpoint: 500,
       settings: {
-        autoplay: true,
-
-        slidesToShow: 7,
+        autoplay: false,
+        slidesToShow: 2,
       },
     },
     {
-      breakpoint: 768,
+      breakpoint: 350,
       settings: {
-        autoplay: true,
-
-        slidesToShow: 5,
-      },
-    },
-    {
-      breakpoint: 700,
-      settings: {
-        autoplay: true,
+        autoplay: false,
         slidesToShow: 1,
       },
     },
@@ -1001,7 +991,7 @@ const ScheduleTraining = () => {
       </div>
       <div className="trainer-recommended" style={{ height: '90px' }}>
         <div className="row">
-          <div className="col d-none d-sm-block">
+          <div className="col">
             <Slider {...settings}>
               {data?.category?.map((item, index) => (
                 <div key={`slider-item-${index}`} >
