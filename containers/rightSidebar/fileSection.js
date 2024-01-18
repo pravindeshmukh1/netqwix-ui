@@ -172,6 +172,11 @@ const FileSection = (props) => {
 
   useEffect(() => {
     setActiveTab(sidebarLockerActiveTab)
+    if (sidebarLockerActiveTab === "report") {
+      var temp = reportsData
+      temp = temp.map((vl, i) => { return i === 0 ? { ...vl, show: true } : { ...vl, show: false } })
+      setReportsData([...temp])
+    }
   }, [sidebarLockerActiveTab])
 
   const handleVideoLoad = (event) => {
@@ -204,7 +209,6 @@ const FileSection = (props) => {
     var res3 = await reports({})
     setReportsData(res3?.result || [])
   }
-
 
   return (
     <div className="apps-content" id="files">
