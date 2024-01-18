@@ -397,7 +397,7 @@ export default function CalendarPage() {
         selectable={true}
         selectMirror={true}
         initialEvents={[]}
-        height={370}
+        height={410}
         datesSet={(e) => getData(e)}
         dateClick={function (e) {
           var date = currentDateAndtime(e?.date)

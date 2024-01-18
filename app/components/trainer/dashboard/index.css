@@ -49,9 +49,9 @@
   height: 100%;
 }
 
-.calendar-container {
+/* .calendar-container {
   margin: 30px;
-}
+} */
 
 .calendar-container .fc-prev-button span,
 .calendar-container .fc-next-button span {

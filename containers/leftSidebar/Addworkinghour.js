@@ -5,7 +5,7 @@ import { useAppDispatch , useAppSelector } from "../../app/store";
 import { authState } from "../../app/components/auth/auth.slice";
 import { Utils } from "../../utils/utils";
 import { TimeZone } from "../../app/common/constants";
-
+import { updateProfileAsync } from "../../app/components/trainer/trainer.slice";
 
 
 
@@ -23,9 +23,10 @@ const Addworkinghour = ()=>{
         time_zone: "(GMT -5:00) Eastern Time (US & Canada)",
       });
       const [isTimeConflicts, setIsTimeConflicts] = useState(false);
+      const dispatch = useAppDispatch();
 
     return(
-<div className="card-body change-number" style={{padding:'20px',width:'95%',boxShadow:'rgba(0, 0, 0, 0.24) 0px 3px 8px', margin:'5px 28px'}}>
+<div className="card-body change-number" style={{padding:'20px',width:'100%',boxShadow:'rgba(0, 0, 0, 0.24) 0px 3px 8px', margin:'35px 0px 10px 0px'}}>
                       <h5>Add your working hours...</h5>
 
                       <div className="row">

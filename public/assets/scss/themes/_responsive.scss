@@ -99,12 +99,23 @@
 
 @media (max-width: 1024px){
 
-
+  .menu-container p {
+    padding: 5px 14px !important; /* Apply different padding for 1024px and larger screens */
+  }
   .scs{
     width: 31% !important;
   }
   .scs2{
     width: 31% !important;
+  }
+  .ml-2.TimeZone{
+    margin-left:  0 !important;
+  }
+  .Recent-Heading{
+    font-size: 20px;
+  }
+  .image-gallery{
+    min-height: 113vh !important;
   }
 }
 
@@ -1414,7 +1425,8 @@ margin-top: 0 !important;
 }
 .card-body.change-number{
 margin: 4px !important;
-margin-left: 11px !important;
+margin-left: 10px !important;
+width: 96% !important;
 }
 .timezone_offset{
   width: 50vw !important;
@@ -1434,6 +1446,12 @@ margin-left: 11px !important;
     width: 86vw !important;
 
   }
+  .image-gallery{
+    min-height: 120vh !important;
+  }
+  .calendar-container.Child{
+    margin-left: 10px !important;
+  }
   .ml-2.From{
     margin-bottom: 0 !important;
     margin-top: 5px !important;
@@ -1443,21 +1461,22 @@ margin-left: 11px !important;
     margin-top: 5px !important;
   }
   .ml-2.TimeZone{
-    margin-bottom: 0 !important;
-    padding-top: 10px !important;
+    margin-left:  0 !important;
+    margin-top: 5px !important;
   }
   .Recent-Heading{
-    font-size: 18px;
+    font-size: 17px;
   }
   .card.rounded.trainer-profile-card.Select.Recent.Student{
     width: 50% !important;
     overflow-x: auto;
   }
   .calendar-container{
-    width: 95% !important;
+    width: 100% !important;
   }
   .timezone_offset{
     width: 22vw !important;
+    margin-left: 0px !important;
   }
   .col-sm-6{
     padding-left: 14px !important;
@@ -1474,9 +1493,21 @@ margin-left: 11px !important;
   background-color:#000080 !important;
   border-color: #00004d !important;
 }
+.fc .fc-button-primary:focus,
+.fc .fc-button-primary:hover {
+  outline: none !important;
+}
 
-
-
+.ml-2.From{
+  margin-bottom: 0;
+}
+.ml-2.To{
+  margin-bottom: 0;
+}
+.ml-2.TimeZone{
+  margin-bottom: 0;
+  
+}
 
 @media (max-width: 800px) {
   .chitchat-left-sidebar .search-form .form-group .icon-close {

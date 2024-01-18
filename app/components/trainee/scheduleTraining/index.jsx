@@ -7,6 +7,7 @@ import PopupContent from "./PopupContent";
 import { useRouter } from "next/router";
 import Slider from "react-slick";
 import ShareModalTrainee from "../../bookings/start/Share modal Trainee";
+import Header from "./Header";
 
 
 import {
@@ -912,32 +913,7 @@ const ScheduleTraining = () => {
       style={{ width: "75% !important" }}
     >
 
-      <div className="row" >
-        <div id="navbar-wrapper">
-          <div className='menu-container'>
-            <p onClick={() => TogglTab("home")}>Home</p>
-            <p onClick={() => TogglTab("file")}>My Locker</p>
-            <p onClick={() => TogglTab(leftSideBarOptions.SCHEDULE_TRAINING)}>Upcoming Lessons</p>
-            <p >My Community</p>
-            <p >About Us</p>
-            <p >Contact Us</p>
-          </div>
-          <div>
-            <button style={{ width: '50px', height: '50px', borderRadius: '50%', overflow: 'hidden' }} onClick={togglePopup}>
-              <img
-                src={Utils?.dynamicImageURL(userInfo?.profile_picture)}
-                alt={userInfo?.fullname}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-            </button>
-          </div>
-        </div>
-
-        <div className="trainer-recommended" style={{ marginTop: "3%", maxWidth: "75%" }}>
-          <h1 style={{ marginBottom: "10px" }}>Book Your Lesson now</h1>
-          <p>Are you ready to embark on a transformative journey towards your personal and professional development? We are here to revolutionize the way you learn and connect with expert trainers. Our cutting-edge platform.</p>
-        </div>
-      </div>
+     <Header />
 
       {popup && <PopupContent onClose={closePopup} userInfo={userInfo} Logout={Logout} />}
 
