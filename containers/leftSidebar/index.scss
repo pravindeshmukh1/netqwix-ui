@@ -9,6 +9,10 @@
 #left-nav-wrapper.left-nav-wrapper {
     position: relative;
 
+    aside {
+        position: fixed;
+    }
+
     .collapse-left-drawer-icon {
         position: absolute;
         top: 50vh;
