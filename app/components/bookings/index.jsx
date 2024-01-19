@@ -6,6 +6,7 @@ import ShareModalTrainer from "./start/Share modal Trainer";
 import { Formik } from "formik";
 import Slider from "react-slick";
 import Addworkinghour from "../../../containers/leftSidebar/Addworkinghour";
+import { Edit } from "react-feather";
 
 import {
   bookingsAction,
@@ -259,40 +260,27 @@ const Bookings = ({ accountType = null }) => {
         break;
     }
   };
-  // const TRAINER_AMOUNT_USD = 10;
-  // const [isEditing, setEditing] = useState(false);
-  // const [editedRate, setEditedRate] = useState(() => {
-  //   const storedRate = localStorage.getItem('editedRate');
-  //   return storedRate ? parseFloat(storedRate) : TRAINER_AMOUNT_USD;
-  // });
-  // const inputRef = useRef(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedRate, setEditedRate] = useState(TRAINER_AMOUNT_USD);
+  const [storedRate, setStoredRate] = useState(TRAINER_AMOUNT_USD);
+  
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
 
-  // const handleEditClick = () => {
-  //   setEditing(true);
-  // };
+  const handleRateChange = (e) => {
+    setEditedRate(e.target.value);
+  };
 
-  // const handleRateChange = (e) => {
-  //   setEditedRate(e.target.value);
-  // };
+  const handleSaveClick = () => {
+    setIsEditing(false);
+    // Save the edited rate value
+    setStoredRate(editedRate);
+  };
 
-  // const handleSaveClick = () => {
-  //   localStorage.setItem('editedRate', editedRate.toString());
-  //   setEditing(false);
-  // };
 
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (inputRef.current && !inputRef.current.contains(event.target)) {
-  //       handleSaveClick();
-  //     }
-  //   };
 
-  //   document.addEventListener('mousedown', handleClickOutside);
 
-  //   return () => {
-  //     document.removeEventListener('mousedown', handleClickOutside);
-  //   };
-  // }, [handleSaveClick]);
 
 
 
@@ -895,23 +883,29 @@ const Bookings = ({ accountType = null }) => {
                 />
               </div>
               <div className="col-7 col-sm-6 col-md-7 col-lg-8 col-xl-9 card-trainer">
-                <h3 className="mt-3 ">Hourly Rate: ${TRAINER_AMOUNT_USD}</h3>
-                {/* {isEditing ? (
-        <div>
-          <input
-            type="number"
-            value={editedRate}
-            onChange={handleRateChange}
-            onBlur={handleSaveClick}
-            ref={inputRef}
-          />
-          <button onClick={handleSaveClick} disabled={!editedRate}>
-            Save
-          </button>
-        </div>
-      ) : (
-        <button onClick={handleEditClick}>Edit</button>
-      )} */}
+                <div style={{display:'flex'}}>
+                <h3 className="mt-3" style={{width:'35%'}}>
+          Hourly Rate: ${isEditing ? (
+            <input style={{borderRadius:'0.25rem',border:"1px solid #ced4da",padding:'2px 2px',width:'30%'}}
+              type="number"
+              value={editedRate}
+              onChange={handleRateChange}
+              onBlur={handleSaveClick}
+            />
+          ) : (
+            storedRate
+          )}
+        </h3>
+        <a
+          className="icon-btn btn-outline-light btn-sm edit-btn"
+          style={{ marginLeft: '5px', marginTop: '10px' }}
+          href="#"
+          onClick={isEditing ? handleSaveClick : handleEditClick}
+        >
+          {isEditing ? 'Save' : <Edit />}
+        </a>
+                </div>
+              
 
                 {showRatings([], "mt-3 d-flex ml-n2")}
                 {userInfo &&
