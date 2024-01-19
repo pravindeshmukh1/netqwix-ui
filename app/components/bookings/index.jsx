@@ -44,6 +44,7 @@ import { masterState } from "../master/master.slice";
 import { trainerAction, trainerState } from "../trainer/trainer.slice";
 import { toast } from "react-toastify";
 import PopupContent from "../trainee/scheduleTraining/PopupContent";
+import Header from "../Header";
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 const images = [...Array().keys()];
 
@@ -1161,28 +1162,7 @@ const Bookings = ({ accountType = null }) => {
         >
           {addRatingModel.isOpen ? renderRating() : null}
           <div>
-            <div id="navbar-wrapper">
-              <div className='menu-container'>
-                <p onClick={() => TogglTab("home")}>Home</p>
-                <p onClick={() => TogglTab("file")}>My Locker</p>
-                <p onClick={() => TogglTab(leftSideBarOptions.SCHEDULE_TRAINING)}>Upcoming Lessons</p>
-                <p >My Community</p>
-                <p onClick={() => { TogglTab("file"); dispatch(authAction?.setActiveLockerTab("report")); }}>Game Plan</p>
-                <p >About Us</p>
-                <p >Contact Us</p>
-              </div>
-              <div>
-                <button style={{ width: '50px', height: '50px', borderRadius: '50%', overflow: 'hidden' }}
-                  onClick={togglePopup}
-                >
-                  <img
-                    src={Utils?.dynamicImageURL(userInfo?.profile_picture)}
-                    alt={userInfo?.fullname}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
-                </button>
-              </div>
-            </div>
+            <Header />
             {popup && <PopupContent onClose={closePopup} userInfo={userInfo} Logout={Logout} />}
             {accountType === AccountType.TRAINER ? (
               <React.Fragment>

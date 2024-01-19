@@ -58,6 +58,7 @@ import { getAvailability } from "../../calendar/calendar.api";
 
 import { addTraineeClipInBookedSessionAsync } from "../../common/common.slice";
 import { useSelector } from "react-redux";
+import Header from "../../Header";
 const settings = {
   autoplay: false,
   infinite: true,
@@ -913,25 +914,7 @@ const ScheduleTraining = () => {
     >
 
       <div className="row" >
-        <div id="navbar-wrapper">
-          <div className='menu-container'>
-            <p onClick={() => TogglTab("home")}>Home</p>
-            <p onClick={() => TogglTab("file")}>My Locker</p>
-            <p onClick={() => TogglTab(leftSideBarOptions.SCHEDULE_TRAINING)}>Upcoming Lessons</p>
-            <p >My Community</p>
-            <p >About Us</p>
-            <p >Contact Us</p>
-          </div>
-          <div>
-            <button style={{ width: '50px', height: '50px', borderRadius: '50%', overflow: 'hidden' }} onClick={togglePopup}>
-              <img
-                src={Utils?.dynamicImageURL(userInfo?.profile_picture)}
-                alt={userInfo?.fullname}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-            </button>
-          </div>
-        </div>
+        <Header />
 
         <div className="trainer-recommended" style={{ marginTop: "3%", maxWidth: "75%" }}>
           <h1 style={{ marginBottom: "10px" }}>Book Your Lesson now</h1>
