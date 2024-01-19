@@ -45,6 +45,7 @@ import { masterState } from "../master/master.slice";
 import { trainerAction, trainerState } from "../trainer/trainer.slice";
 import { toast } from "react-toastify";
 import PopupContent from "../trainee/scheduleTraining/PopupContent";
+import Header from "../Header";
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
 const images = [...Array().keys()];
 
@@ -263,7 +264,7 @@ const Bookings = ({ accountType = null }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedRate, setEditedRate] = useState(TRAINER_AMOUNT_USD);
   const [storedRate, setStoredRate] = useState(TRAINER_AMOUNT_USD);
-  
+
   const handleEditClick = () => {
     setIsEditing(true);
   };
@@ -883,29 +884,29 @@ const Bookings = ({ accountType = null }) => {
                 />
               </div>
               <div className="col-7 col-sm-6 col-md-7 col-lg-8 col-xl-9 card-trainer">
-                <div style={{display:'flex'}}>
-                <h3 className="mt-3" style={{width:'35%'}}>
-          Hourly Rate: ${isEditing ? (
-            <input style={{borderRadius:'0.25rem',border:"1px solid #ced4da",padding:'2px 2px',width:'30%'}}
-              type="number"
-              value={editedRate}
-              onChange={handleRateChange}
-              onBlur={handleSaveClick}
-            />
-          ) : (
-            storedRate
-          )}
-        </h3>
-        <a
-          className="icon-btn btn-outline-light btn-sm edit-btn"
-          style={{ marginLeft: '5px', marginTop: '10px' }}
-          href="#"
-          onClick={isEditing ? handleSaveClick : handleEditClick}
-        >
-          {isEditing ? 'Save' : <Edit />}
-        </a>
+                <div style={{ display: 'flex' }}>
+                  <h3 className="mt-3" style={{ width: '35%' }}>
+                    Hourly Rate: ${isEditing ? (
+                      <input style={{ borderRadius: '0.25rem', border: "1px solid #ced4da", padding: '2px 2px', width: '30%' }}
+                        type="number"
+                        value={editedRate}
+                        onChange={handleRateChange}
+                        onBlur={handleSaveClick}
+                      />
+                    ) : (
+                      storedRate
+                    )}
+                  </h3>
+                  <a
+                    className="icon-btn btn-outline-light btn-sm edit-btn"
+                    style={{ marginLeft: '5px', marginTop: '10px' }}
+                    href="#"
+                    onClick={isEditing ? handleSaveClick : handleEditClick}
+                  >
+                    {isEditing ? 'Save' : <Edit />}
+                  </a>
                 </div>
-              
+
 
                 {showRatings([], "mt-3 d-flex ml-n2")}
                 {userInfo &&
@@ -1155,28 +1156,7 @@ const Bookings = ({ accountType = null }) => {
         >
           {addRatingModel.isOpen ? renderRating() : null}
           <div>
-            <div id="navbar-wrapper">
-              <div className='menu-container'>
-                <p onClick={() => TogglTab("home")}>Home</p>
-                <p onClick={() => TogglTab("file")}>My Locker</p>
-                <p onClick={() => TogglTab(leftSideBarOptions.SCHEDULE_TRAINING)}>Upcoming Lessons</p>
-                <p >My Community</p>
-                <p onClick={() => { TogglTab("file"); dispatch(authAction?.setActiveLockerTab("report")); }}>Game Plan</p>
-                <p >About Us</p>
-                <p >Contact Us</p>
-              </div>
-              <div>
-                <button style={{ width: '50px', height: '50px', borderRadius: '50%', overflow: 'hidden' }}
-                  onClick={togglePopup}
-                >
-                  <img
-                    src={Utils?.dynamicImageURL(userInfo?.profile_picture)}
-                    alt={userInfo?.fullname}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
-                </button>
-              </div>
-            </div>
+            <Header />
             {popup && <PopupContent onClose={closePopup} userInfo={userInfo} Logout={Logout} />}
             {accountType === AccountType.TRAINER ? (
               <React.Fragment>
@@ -1192,7 +1172,7 @@ const Bookings = ({ accountType = null }) => {
                   <div className="card rounded trainer-profile-card Select Recent Student" style={{ width: '26%', marginTop: '32px', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }}>
                     <div className="card-body">
                       <div style={{ justifyContent: 'center' }}>
-                        <h2 className="Recent-Heading" style={{textAlign:'center'}}>Recent Students</h2>
+                        <h2 className="Recent-Heading" style={{ textAlign: 'center' }}>Recent Students</h2>
                       </div>
                       <div className="row" style={{ justifyContent: 'center', paddingTop: '15px' }}>
                         <div className="image-gallery" style={{ display: 'flex', flexWrap: 'wrap', paddingTop: '15px', width: '85%', justifyContent: 'space-between', overflowY: 'auto', maxHeight: '75vh' }}>
@@ -1266,7 +1246,7 @@ const Bookings = ({ accountType = null }) => {
                 </div>
 
                 <div className="trainer-recommended" style={{ height: '90px' }}>
-                  <div className="row">
+                  <div className="row" style={{ width: "95%" }}>
                     <div className="col d-none d-sm-block">
                       <Slider {...settings}>
                         {data?.category?.map((item, index) => (

@@ -59,6 +59,7 @@ import { getAvailability } from "../../calendar/calendar.api";
 
 import { addTraineeClipInBookedSessionAsync } from "../../common/common.slice";
 import { useSelector } from "react-redux";
+import Header from "../../Header";
 const settings = {
   autoplay: false,
   infinite: true,
@@ -913,7 +914,14 @@ const ScheduleTraining = () => {
       style={{ width: "75% !important" }}
     >
 
-     <Header />
+      <div className="row" >
+        <Header />
+
+        <div className="trainer-recommended" style={{ marginTop: "3%", maxWidth: "75%" }}>
+          <h1 style={{ marginBottom: "10px" }}>Book Your Lesson now</h1>
+          <p>Are you ready to embark on a transformative journey towards your personal and professional development? We are here to revolutionize the way you learn and connect with expert trainers. Our cutting-edge platform.</p>
+        </div>
+      </div>
 
       {popup && <PopupContent onClose={closePopup} userInfo={userInfo} Logout={Logout} />}
 
@@ -1609,7 +1617,7 @@ const ScheduleTraining = () => {
         (trainerInfo && trainerInfo.userInfo) ? (
         <div className="custom-scroll">{renderUserDetails()}</div>
       ) : (
-        <div className="custom-scroll trainee-dashboard" style={{ marginLeft: "10%" }}>
+        <div className="custom-scroll trainee-dashboard" style={{ marginLeft: "105px" }}>
           {renderSearchMenu()}
         </div>
       )}

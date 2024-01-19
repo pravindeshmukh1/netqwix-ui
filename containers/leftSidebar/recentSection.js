@@ -19,10 +19,12 @@ const RecentSection = (props) => {
     dispatch(isSidebarToggleEnabled(!sidebar));
     if (sidebar) {
       setSidebarToggle(!sidebar);
-      document.querySelector(".main-nav").classList.add("on");
+      props?.setOpenCloseToggleSideNav(true)
+      document.querySelector(".main-nav")?.classList?.add("on");
     } else {
       setSidebarToggle(!sidebar);
-      document.querySelector(".main-nav").classList.remove("on");
+      props?.setOpenCloseToggleSideNav(false)
+      document.querySelector(".main-nav")?.classList?.remove("on");
     }
   };
 
@@ -66,11 +68,10 @@ const RecentSection = (props) => {
                 style={{
                   marginTop: "10px",
                 }}
-                className={`icon-btn ml-3 button-effect pull-right mainnav  ${
-                  sidebarToggle ? "btn-primary" : "btn-outline-light"
-                }`}
+                className={`icon-btn ml-3 button-effect pull-right mainnav  ${sidebarToggle ? "btn-primary" : "btn-outline-light"
+                  }`}
                 href="#"
-                onClick={() => OpenCloseSidebar(sidebarToggle)}
+                onClick={() => { OpenCloseSidebar(sidebarToggle) }}
               >
                 <i className="fa fa-bars" />
               </Link>
