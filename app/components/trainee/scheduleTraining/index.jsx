@@ -7,7 +7,6 @@ import PopupContent from "./PopupContent";
 import { useRouter } from "next/router";
 import Slider from "react-slick";
 import ShareModalTrainee from "../../bookings/start/Share modal Trainee";
-import Header from "./Header";
 
 
 import {

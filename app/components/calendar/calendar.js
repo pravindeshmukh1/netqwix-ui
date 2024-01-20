@@ -1,22 +1,24 @@
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { useEffect, useState } from 'react';
 import { addTrainerSlot, deleteTrainerSlot, getAvailability } from './calendar.api';
 import React from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Star, X, Plus, Check } from "react-feather";
 import interactionPlugin from '@fullcalendar/interaction'
+import { useAppSelector } from '../../store';
+import { authState } from '../auth/auth.slice';
+import momentTimezonePlugin from '@fullcalendar/moment-timezone'
+import { Utils } from '../../../utils/utils';
+import axios from 'axios';
 
 const staticData = [
   { start: new Date('2024-01-11T10:04:00.840Z'), end: new Date('2024-01-11T11:05:00.840Z') },
   { start: new Date('2024-01-11T11:06:00.840Z'), end: new Date('2024-01-11T11:08:00.840Z') }
 ]
 
-function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData, options, ...args }) {
-
-  console.log("data", data);
-  console.log("options", options);
+function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData, options, userTimeZone, ...args }) {
 
   const [showSelectTimeDiv, setShowSelectTimeDiv] = useState(false)
   const [disabledHourTime, setDisabledHourTime] = useState(["00", "04", "10"])
@@ -183,7 +185,7 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                     </option>
                     {options.map((time) => (
                       <option disabled={moment(time)?.isBefore(moment(new Date().toISOString()))} key={time} value={time}>
-                        {moment(time).format('h:mm a')}
+                        {moment(time).tz(userTimeZone).format('h:mm a')}
                       </option>
                     ))}
                   </select>
@@ -195,7 +197,7 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                     </option>
                     {options.map((time) => (
                       <option disabled={moment(time)?.isBefore(moment(new Date().toISOString()))} key={time} value={time}>
-                        {moment(time).format('h:mm a')}
+                        {moment(time).tz(userTimeZone).format('h:mm a')}
                       </option>
                     ))}
                   </select>
@@ -220,7 +222,7 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                       <select style={selectStyle} value={e?.start_time}>
                         {options.map((time) => (
                           <option key={time} value={time}>
-                            {moment(time).format('h:mm a')}
+                            {moment(time).tz(userTimeZone).format('h:mm a')}
                           </option>
                         ))}
                       </select>
@@ -230,7 +232,7 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                       <select style={selectStyle} value={e?.end_time}>
                         {options.map((time) => (
                           <option key={time} value={time}>
-                            {moment(time).format('h:mm a')}
+                            {moment(time).tz(userTimeZone).format('h:mm a')}
                           </option>
                         ))}
                       </select>
@@ -254,12 +256,23 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
 
 export default function CalendarPage() {
 
+
+  const { userInfo } = useAppSelector(authState);
+
+
   const [data, setData] = useState([])
   const [availabilityData, setAvailabilityData] = useState([])
   const [selectedDateEvent, setSelectedDateEvent] = useState([])
   const [modal, setModal] = useState(false);
   const [selectedModalDate, setSelectedModalDate] = useState("")
   const [options, setOptions] = useState([])
+  const [userTimeZone, setUserTimeZone] = useState("")
+
+  useEffect(() => {
+    if (userInfo?.extraInfo?.working_hours?.time_zone) {
+      getIANATimeZone(userInfo?.extraInfo?.working_hours?.time_zone)
+    }
+  }, [userInfo?.extraInfo?.working_hours?.time_zone])
 
   const toggle = () => {
     setModal(!modal)
@@ -270,6 +283,16 @@ export default function CalendarPage() {
   useEffect(() => {
     getAllAvailability();
   }, [])
+
+
+  const getIANATimeZone = async (timezoneString) => {
+    const matches = timezoneString.match(/\(GMT ([\+\-]\d+:\d+)\)/);
+    const utcOffset = matches ? matches[1] : null;
+    const response = await axios.get('https://fullcalendar.io/api/demo-feeds/timezones.json');
+    var timeZones = response.data;
+    const ianaTimeZone = utcOffset ? timeZones.find((tz) => moment.tz(tz).utcOffset() === moment.duration(utcOffset).asMinutes()) : '';
+    setUserTimeZone(ianaTimeZone)
+  };
 
   const currentDateAndtime = (startDate) => {
     // Create a new Date object for the current date
@@ -307,27 +330,42 @@ export default function CalendarPage() {
     return result;
   }
 
-
-
   function generateTimeArray(selectedDate) {
-    var date = new Date(selectedDate).toISOString().split("T")[0];
-    var dateArr = date?.split("-");
-    let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0)
-    let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0)
+
+    const start_time = moment.tz(selectedDate, userTimeZone).startOf('day');
+    const end_time = moment.tz(selectedDate, userTimeZone).endOf('day');
 
     const timeArray = [];
     while (start_time <= end_time) {
       timeArray.push(start_time.toISOString());
-      start_time.setMinutes(start_time.getMinutes() + 15);
+      start_time.add(15, 'minutes');
     }
     setOptions([...timeArray])
   }
 
+
+  // function generateTimeArray(selectedDate) {
+  //   var date = new Date(selectedDate).toISOString().split("T")[0];
+  //   var dateArr = date?.split("-");
+  //   let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0)
+  //   let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0)
+
+  //   const timeArray = [];
+  //   while (start_time <= end_time) {
+  //     timeArray.push(start_time.toISOString());
+  //     start_time.setMinutes(start_time.getMinutes() + 15);
+  //   }
+  //   setOptions([...timeArray])
+  // }
+
   const handleSelectedModal = (date) => {
     // let find = availabilityData?.find((el) => el?._id === date)
-    var dateArr = date?.split("-");
-    let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0).toISOString()
-    let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0).toISOString()
+    // var dateArr = date?.split("-");
+    // let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0).toISOString()
+    // let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0).toISOString()
+
+    const start_time = moment.tz(date, userTimeZone).startOf('day');
+    const end_time = moment.tz(date, userTimeZone).endOf('day');
 
     const filteredData = availabilityData.filter(item => {
       return new Date(start_time) <= new Date(item.start_time) && new Date(item?.start_time) <= new Date(end_time)
@@ -340,16 +378,11 @@ export default function CalendarPage() {
   }
 
 
-  const getData = (e) => {
-    console.log(e.start);
-    console.log(e.end);
-  }
-
   return (
     <div className='calendar-container' style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} >
-      {data?.length && <FullCalendar
-        plugins={[dayGridPlugin, interactionPlugin]}
-        headerToolbar={{ left: 'prev,next', center: 'title', right: ''}}
+      {data?.length && userTimeZone && <FullCalendar
+        plugins={[dayGridPlugin, interactionPlugin, momentTimezonePlugin]}
+        headerToolbar={{ left: 'prev,next', center: 'title', right: '' }}
         initialView='dayGridMonth'
         nowIndicator={true}
         editable={true}
@@ -358,11 +391,11 @@ export default function CalendarPage() {
         initialEvents={data}
         height={600}
         width={500}
+        timeZone={userTimeZone}
         dateClick={function (e) {
           var date = currentDateAndtime(e?.date)
           handleSelectedModal(date)
         }}
-        datesSet={(e) => getData(e)}
         eventContent={(e) => {
           return (
             <>
@@ -381,7 +414,7 @@ export default function CalendarPage() {
               }}>+</button> */}
               <div style={{ display: "flex", width: "100%", justifyContent: "space-between", margin: "0px 10px", textAlign: "center" }}>
                 <div >
-                  <b>{moment(e.event.start).format('h:mm a')} - {moment(e.event.end).format('h:mm a')}</b>
+                  <b>{moment(e.event.start).tz(userTimeZone).format('h:mm a')} - {moment(e.event.end).tz(userTimeZone).format('h:mm a')}</b>
                 </div>
               </div>
             </>
@@ -398,7 +431,6 @@ export default function CalendarPage() {
         selectMirror={true}
         initialEvents={[]}
         height={410}
-        datesSet={(e) => getData(e)}
         dateClick={function (e) {
           var date = currentDateAndtime(e?.date)
           handleSelectedModal(date)
@@ -416,7 +448,7 @@ export default function CalendarPage() {
           )
         }}
       />}
-      <EventModal modal={modal} setModal={setModal} toggle={toggle} setData={setAvailabilityData} data={selectedDateEvent} selectedModalDate={selectedModalDate} options={options} />
+      <EventModal modal={modal} setModal={setModal} toggle={toggle} setData={setAvailabilityData} data={selectedDateEvent} selectedModalDate={selectedModalDate} options={options} userTimeZone={userTimeZone} />
     </div>
   )
 }
