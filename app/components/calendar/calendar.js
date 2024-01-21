@@ -2,7 +2,7 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import moment from 'moment-timezone';
 import { useEffect, useState } from 'react';
-import { addTrainerSlot, deleteTrainerSlot, getAvailability } from './calendar.api';
+import { addTrainerSlot, deleteTrainerSlot, getAvailability, updateTrainerSlot } from './calendar.api';
 import React from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Star, X, Plus, Check } from "react-feather";
@@ -12,6 +12,7 @@ import { authState } from '../auth/auth.slice';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone'
 import { Utils } from '../../../utils/utils';
 import axios from 'axios';
+import { toast } from "react-toastify";
 
 const staticData = [
   { start: new Date('2024-01-11T10:04:00.840Z'), end: new Date('2024-01-11T11:05:00.840Z') },
@@ -28,6 +29,87 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
   let [selectedEndTime, setSelectedEndTime] = useState("");
 
   const [error, setError] = useState(false);
+  const [indexErr, setIndexErr] = useState("");
+
+  const overlap = () => {
+    let status = false;
+
+    if (!selectedStartTime && !selectedEndTime) {
+      status = true;
+      return status
+    }
+
+    selectedStartTime = moment(selectedStartTime);
+    selectedEndTime = moment(selectedEndTime);
+
+    // Check for overlap
+    for (const session of data) {
+      const sessionStartTime = moment(session.start_time);
+      const sessionEndTime = moment(session.end_time);
+
+      if (
+        selectedStartTime?.isBetween(
+          sessionStartTime,
+          sessionEndTime,
+          null,
+          "[]"
+        ) ||
+        selectedEndTime?.isBetween(
+          sessionStartTime,
+          sessionEndTime,
+          null,
+          "[]"
+        ) ||
+        (selectedStartTime?.isSameOrBefore(sessionStartTime) && selectedEndTime?.isSameOrAfter(sessionEndTime))
+      ) {
+        if (selectedStartTime?.isSame(sessionEndTime) || selectedEndTime?.isSame(sessionStartTime)) {
+        } else {
+          status = true;
+          break; // Exit the loop if overlap is detected
+        }
+      }
+    }
+    return status;
+  };
+
+
+  const overlapEdit = (index) => {
+    var newData = JSON.parse(JSON.stringify(data));
+    newData.splice(index, 1)
+    let status = false;
+
+    selectedStartTime = moment(data[index]?.start_time);
+    selectedEndTime = moment(data[index]?.end_time);
+
+    // Check for overlap
+    for (const session of newData) {
+      const sessionStartTime = moment(session.start_time);
+      const sessionEndTime = moment(session.end_time);
+
+      if (
+        selectedStartTime?.isBetween(
+          sessionStartTime,
+          sessionEndTime,
+          null,
+          "[]"
+        ) ||
+        selectedEndTime?.isBetween(
+          sessionStartTime,
+          sessionEndTime,
+          null,
+          "[]"
+        ) ||
+        (selectedStartTime?.isSameOrBefore(sessionStartTime) && selectedEndTime?.isSameOrAfter(sessionEndTime))
+      ) {
+        if (selectedStartTime?.isSame(sessionEndTime) || selectedEndTime?.isSame(sessionStartTime)) {
+        } else {
+          status = true;
+          break; // Exit the loop if overlap is detected
+        }
+      }
+    }
+    return status;
+  };
 
   const addTrainerSlotAPI = async () => {
 
@@ -59,45 +141,7 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
     //     }
     //   }
     // Check for overlap
-    const overlap = () => {
-      let status = false;
 
-      if (!selectedStartTime && !selectedEndTime) {
-        status = true;
-        return status
-      }
-
-      selectedStartTime = moment(selectedStartTime);
-      selectedEndTime = moment(selectedEndTime);
-      // Check for overlap
-      for (const session of data) {
-        const sessionStartTime = moment(session.start_time);
-        const sessionEndTime = moment(session.end_time);
-
-        if (
-          selectedStartTime?.isBetween(
-            sessionStartTime,
-            sessionEndTime,
-            null,
-            "[]"
-          ) ||
-          selectedEndTime?.isBetween(
-            sessionStartTime,
-            sessionEndTime,
-            null,
-            "[]"
-          ) ||
-          (selectedStartTime?.isSameOrBefore(sessionStartTime) && selectedEndTime?.isSameOrAfter(sessionEndTime))
-        ) {
-          if (selectedStartTime?.isSame(sessionEndTime) || selectedEndTime?.isSame(sessionStartTime)) {
-          } else {
-            status = true;
-            break; // Exit the loop if overlap is detected
-          }
-        }
-      }
-      return status;
-    };
 
 
     if (overlap()) {
@@ -130,6 +174,20 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
     }
   }
 
+
+  const updateTrainerSlotAPI = async (id, index) => {
+    try {
+      if (overlapEdit(index)) {
+        setIndexErr(index)
+      } else {
+        let res = await updateTrainerSlot(data[index])
+        toast.success("Slot updated successfully.", { type: "success" });
+        setIndexErr("")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const containerStyle = {
     display: 'flex',
@@ -202,9 +260,9 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                     ))}
                   </select>
                 </div>
-                <div style={selectcontainerStyle}>
+                {/* <div style={selectcontainerStyle}>
                   <div className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { setShowSelectTimeDiv() }} > <X /> </div>
-                </div>
+                </div> */}
                 <div style={selectcontainerStyle}>
                   <div className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => addTrainerSlotAPI()} > <Plus /> </div>
                 </div>
@@ -219,7 +277,10 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                   <div style={{ display: "flex", justifyContent: "flex-start", gap: "20px" }}>
                     <div style={selectcontainerStyle}>
                       <label style={labelStyle}>Start  Time</label>
-                      <select style={selectStyle} value={e?.start_time}>
+                      <select style={selectStyle} value={e?.start_time} onChange={(ev) => {
+                        data[index].start_time = ev?.target?.value;
+                        setData([...data])
+                      }}>
                         {options.map((time) => (
                           <option key={time} value={time}>
                             {moment(time).tz(userTimeZone).format('h:mm a')}
@@ -229,7 +290,10 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                     </div>
                     <div style={selectcontainerStyle}>
                       <label style={labelStyle}>End  Time</label>
-                      <select style={selectStyle} value={e?.end_time}>
+                      <select style={selectStyle} value={e?.end_time} onChange={(ev) => {
+                        data[index].end_time = ev?.target?.value;
+                        setData([...data])
+                      }}>
                         {options.map((time) => (
                           <option key={time} value={time}>
                             {moment(time).tz(userTimeZone).format('h:mm a')}
@@ -241,9 +305,10 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                       <div style={{ marginTop: "20px" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { deleteTrainerSlotAPI(e?._id, index) }} > <X /> </div>
                     </div>
                     <div style={selectcontainerStyle}>
-                      <div style={{ marginTop: "20px" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { console.log("click") }} > <Check /> </div>
+                      <div style={{ marginTop: "20px" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { updateTrainerSlotAPI(e?._id, index) }} > <Check /> </div>
                     </div>
                   </div>
+                  {indexErr === index && <div> <p style={{ color: "red", margin: "3px 0px -4px 2px" }}>Please select a valid start time and end time.</p></div>}
                 </div>
               })
             }

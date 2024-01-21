@@ -1,10 +1,12 @@
 import React from "react"
 import { Utils } from "../../../utils/utils";
-import { useAppSelector } from "../../store";
-import { authState } from "../auth/auth.slice";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { authAction, authState } from "../auth/auth.slice";
+import { leftSideBarOptions } from "../../common/constants";
 
 const Header = () => {
 
+  const dispatch = useAppDispatch();
   const TogglTab = (value) => {
     if (value == "file") {
       dispatch(authAction?.setActiveModalTab(value));
