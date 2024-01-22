@@ -39,6 +39,11 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
       return status
     }
 
+    if (selectedStartTime >= selectedEndTime) {
+      status = true
+      return status;
+    }
+
     selectedStartTime = moment(selectedStartTime);
     selectedEndTime = moment(selectedEndTime);
 
@@ -80,6 +85,11 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
 
     selectedStartTime = moment(data[index]?.start_time);
     selectedEndTime = moment(data[index]?.end_time);
+
+    if (selectedStartTime >= selectedEndTime) {
+      status = true
+      return status;
+    }
 
     // Check for overlap
     for (const session of newData) {
@@ -227,10 +237,17 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
 
   return (
     <div>
-      <Modal isOpen={modal} toggle={toggle} {...args}>
+      <Modal isOpen={modal} toggle={() => {
+        setIndexErr("");
+        setError(false);
+        toggle();
+      }} {...args}>
         <ModalBody>
           <div style={{ position: "relative" }}>
-            <div style={{ position: "absolute", top: "-10px", right: "0px", background: "none" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { toggle() }} > <X /> </div>
+            <div style={{ position: "absolute", top: "-10px", right: "0px", background: "none" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => {
+              setIndexErr("")
+              toggle()
+            }} > <X /> </div>
             <div style={{ marginTop: "10px", marginBottom: "40px" }}><b>{selectedModalDate}</b></div>
 
             {/* <div style={{ marginBottom: "20px" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { setShowSelectTimeDiv(true) }} > <Plus /> </div> */}
