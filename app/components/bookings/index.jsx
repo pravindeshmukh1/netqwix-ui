@@ -42,7 +42,7 @@ import { myClips, shareClips } from "../../../containers/rightSidebar/fileSectio
 import { traineeAction, traineeState } from "../trainee/trainee.slice";
 import CalendarPage from "../calendar/calendar";
 import { masterState } from "../master/master.slice";
-import { trainerAction, trainerState } from "../trainer/trainer.slice";
+import { trainerAction, trainerState, updateProfileAsync } from "../trainer/trainer.slice";
 import { toast } from "react-toastify";
 import PopupContent from "../trainee/scheduleTraining/PopupContent";
 import Header from "../Header";
@@ -273,17 +273,23 @@ const Bookings = ({ accountType = null }) => {
     setEditedRate(e.target.value);
   };
 
+  useEffect(() => {
+    setEditedRate(Number(userInfo?.extraInfo?.hourly_rate))
+    setStoredRate(Number(userInfo?.extraInfo?.hourly_rate))
+  }, [userInfo?.extraInfo?.hourly_rate])
+
   const handleSaveClick = () => {
+    dispatch(
+      updateProfileAsync({
+        extraInfo: {
+          ...userInfo?.extraInfo,
+          hourly_rate: Number(editedRate),
+        },
+      })
+    );
     setIsEditing(false);
-    // Save the edited rate value
-    setStoredRate(editedRate);
+    // setStoredRate(editedRate);
   };
-
-
-
-
-
-
 
   const TrainerRenderBooking = (
     _id,
@@ -906,8 +912,6 @@ const Bookings = ({ accountType = null }) => {
                     {isEditing ? 'Save' : <Edit />}
                   </a>
                 </div>
-
-
                 {showRatings([], "mt-3 d-flex ml-n2")}
                 {userInfo &&
                   userInfo.extraInfo &&
