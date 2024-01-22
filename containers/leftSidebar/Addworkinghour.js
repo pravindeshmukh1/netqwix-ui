@@ -38,7 +38,7 @@ const Addworkinghour = () => {
             clearIcon={true}
             showSecond={false}
             minuteStep={5}
-            defaultValue={Utils.getFormattedTime(workingHours?.from)}
+            value={Utils.getFormattedTime(workingHours?.from)}
             // defaultValue={
             //   userInfo &&
             //     userInfo?.extraInfo &&
@@ -78,7 +78,7 @@ const Addworkinghour = () => {
             className={`ml-2 mt-2 ${isTimeConflicts ? `border border-danger` : ``
               }  rounded`}
             clearIcon={true}
-            defaultValue={Utils.getFormattedTime(workingHours?.to)}
+            value={Utils.getFormattedTime(workingHours?.to)}
             // defaultValue={
             //   userInfo &&
             //     userInfo?.extraInfo &&
