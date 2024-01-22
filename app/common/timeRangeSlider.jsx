@@ -20,6 +20,7 @@ const CustomRangePicker = ({
   const [draggingEnd, setDraggingEnd] = useState(false);
   const [time, setTime] = useState({});
 
+
   useEffect(() => { }, [availableSlots?.length])
 
   useEffect(() => {
