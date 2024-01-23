@@ -1,12 +1,14 @@
-import React from "react"
+import React, { useState } from "react"
 import { Utils } from "../../../utils/utils";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { authAction, authState } from "../auth/auth.slice";
 import { leftSideBarOptions } from "../../common/constants";
+import PopupContent from "../trainee/scheduleTraining/PopupContent";
 
 const Header = () => {
 
   const dispatch = useAppDispatch();
+  const [popup, setPopup] = useState(false)
   const TogglTab = (value) => {
     if (value == "file") {
       dispatch(authAction?.setActiveModalTab(value));
@@ -30,6 +32,20 @@ const Header = () => {
   const togglePopup = () => {
     setPopup(!popup);
   };
+
+
+
+  const Logout = () => {
+    socket.disconnect();
+    localStorage.clear();
+    router.push("/auth/signIn");
+    dispatch(authAction?.updateIsUserLoggedIn());
+  };
+
+  const closePopup = () => {
+    setPopup(false);
+  };
+
   const { userInfo, sidebarModalActiveTab } = useAppSelector(authState);
 
   return (
@@ -50,6 +66,7 @@ const Header = () => {
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
         </button>
+        {popup && <PopupContent onClose={closePopup} userInfo={userInfo} Logout={Logout} />}
       </div>
     </div>
   )
