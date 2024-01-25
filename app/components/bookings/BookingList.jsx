@@ -8,7 +8,7 @@ import TraineeRenderBooking from './TraineeRenderBooking';
 import TrainerRenderBooking from './TrainerRenderBooking';
 import StartMeeting from './start';
 import Modal from '../../common/modal';
-import { X } from 'react-feather';
+import { Star, X } from 'react-feather';
 
 
 export var meetingRoom = () => <></>
