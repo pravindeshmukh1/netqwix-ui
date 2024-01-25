@@ -1,24 +1,30 @@
 .custom-scroll {
   scroll-behavior: smooth;
+
   &::-webkit-scrollbar-track {
     box-shadow: inset 0 0 6px $light-color;
   }
+
   &::-webkit-scrollbar {
     width: 5px;
   }
+
   &::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background-color: rgba($primary-color, 0.15);
   }
 }
+
 .scroll-invisiable {
   &::-webkit-scrollbar {
     width: 0;
   }
 }
+
 .owl-carousel {
   position: unset;
 }
+
 // Sidebar position fixed
 .custom-sidebar {
   @extend .custom-scroll;
@@ -26,13 +32,13 @@
 }
 
 .custom-sidebar-content-booking {
-  position: absolute;
+  // position: absolute;
   padding: 10px;
   max-width: 100%;
   width: 90%;
-  margin: 0px !important;
   left: 103px !important;
   margin: 0;
+
   @media (max-width: 576px) {
     left: 0 !important;
     width: 100% !important;
@@ -40,6 +46,7 @@
     margin-top: 45px !important;
   }
 }
+
 .custom-trainer-scroll {
   height: 97vh !important;
   overflow-x: hidden !important;
@@ -49,6 +56,7 @@
   max-width: 93%;
   width: 93%;
 }
+
 @media (max-width: 576px) {
   .custom-trainer-scroll {
     position: absolute;
@@ -69,6 +77,7 @@
   padding: 10px;
   max-width: 100% !important;
   width: 96% !important;
+
   @media (max-width: 576px) {
     margin: 10px;
     padding: 4px;

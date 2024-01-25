@@ -320,6 +320,7 @@ const FileSection = (props) => {
                 </div>
               </>}
             </div>
+
           </TabPane>
           <TabPane tabId="trainee">
             <div className="media-gallery portfolio-section grid-portfolio">
@@ -806,8 +807,6 @@ const FileSection = (props) => {
         isOpenReport={isOpenReport}
         setIsOpenReport={setIsOpenReport}
       />
-
-
     </div>
   );
 };

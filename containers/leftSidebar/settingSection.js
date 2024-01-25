@@ -829,7 +829,7 @@ const SettingSection = (props) => {
                             clearIcon={true}
                             showSecond={false}
                             minuteStep={5}
-                            value={Utils.getFormattedTime(workingHours?.from)}
+                            defaultValue={Utils.getFormattedTime(workingHours?.from)}
                             // defaultValue={
                             //   userInfo &&
                             //     userInfo?.extraInfo &&
@@ -869,7 +869,7 @@ const SettingSection = (props) => {
                             className={`ml-2 mt-2 ${isTimeConflicts ? `border border-danger` : ``
                               }  rounded`}
                             clearIcon={true}
-                            value={Utils.getFormattedTime(workingHours?.to)}
+                            defaultValue={Utils.getFormattedTime(workingHours?.to)}
                             // defaultValue={
                             //   userInfo &&
                             //     userInfo?.extraInfo &&

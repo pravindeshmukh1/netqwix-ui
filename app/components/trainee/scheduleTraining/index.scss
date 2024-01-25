@@ -199,6 +199,157 @@
   min-height: 100px !important;
 }
 
+.card.rounded.trainer-profile-card.Profile {
+  width: 20%;
+}
+
+.Image-Trainer-Profile {
+  width: 40%;
+  margin: 10px auto;
+}
+
+.trainer-Pro {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Hourly-up {
+  display: flex;
+}
+
+.col-7.col-sm-6.col-md-7.col-lg-8.col-xl-9.card-trainer {
+  margin: auto;
+}
+
+.Rate-input-box {
+  border-radius: 0.25rem;
+  border: 1px solid #ced4da;
+  padding: 2px 2px;
+  width: 40%;
+}
+
+.Hourly-rate {
+  width: 80%;
+  margin: auto;
+}
+
+.icon-btn.btn-outline-light.btn-sm.edit-btn.Trainer {
+  margin: auto;
+}
+
+.Change-up-button {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+
+.calendar-container {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.card.trainer-profile-card.Home-main-Cont {
+  width: 58%;
+  margin: 5px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border: 0;
+  border-radius: 10px !important;
+}
+
+.card.rounded.trainer-profile-card.Profile.Box {
+  border: 0;
+  border-radius: 0 !important;
+
+}
+
+.card.rounded.trainer-profile-card.Select.Recent.Student {
+  border: 0;
+  border-radius: 0 !important;
+}
+
+.Recent-Heading {
+  text-align: center;
+  font-size: 23px;
+}
+
+.Content-Trainer.Recent-stu {
+  margin: 5px;
+  margin-top: 14px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.image-gallery.Recent-stu {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 15px;
+  width: 100%;
+  justify-content: space-between;
+  overflow-y: auto;
+  max-height: 50vh;
+}
+
+.file-tab.Nav-Home {
+  height: 700px;
+  overflow: auto;
+}
+
+.Checkbox-up {
+  display: flex;
+  gap: 20px;
+  padding: 10px;
+}
+
+.Inv-freind {
+  text-align: center;
+  padding: 15px 0px
+}
+
+.Invite-freind {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.Button-up {
+  display: flex;
+  padding-top: 20px;
+}
+
+.Checkbox-up {
+
+  p {
+    margin: auto;
+  }
+
+  .Lab-1 {
+    display: flex;
+    gap: 10px;
+  }
+
+  .Lab-2 {
+    display: flex;
+    gap: 10px;
+  }
+
+  .Checkbox-up {
+    gap: 60px;
+  }
+}
+
+.card.rounded.trainer-profile-card.ShareClip {
+  border: 0;
+  border-radius: 0 !important;
+}
+
+
+
+
+
+
+
+
+
 @media only screen and (min-width: 1024px) and (max-width: 1280px) {
   .header {
     width: 97%;

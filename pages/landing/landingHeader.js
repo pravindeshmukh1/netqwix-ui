@@ -143,6 +143,9 @@ const LandingHeader = (masterRecords) => {
                   </NavItem>
                 );
               })}
+              <NavItem>
+                <NavLink href={"my-dashboard"}>My Dashboard</NavLink>
+              </NavItem>
               <button
                 type="button"
                 className="btn btn-primary btn-sm"

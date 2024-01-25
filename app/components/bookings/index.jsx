@@ -42,12 +42,14 @@ import { myClips, shareClips } from "../../../containers/rightSidebar/fileSectio
 import { traineeAction, traineeState } from "../trainee/trainee.slice";
 import CalendarPage from "../calendar/calendar";
 import { masterState } from "../master/master.slice";
-import { trainerAction, trainerState, updateProfileAsync } from "../trainer/trainer.slice";
+import { trainerAction, trainerState } from "../trainer/trainer.slice";
 import { toast } from "react-toastify";
 import PopupContent from "../trainee/scheduleTraining/PopupContent";
 import Header from "../Header";
+import TrainerInfo from "./trainerInfo";
+import RecentUsers from "../recent-users";
 const { isMobileFriendly, isSidebarToggleEnabled } = bookingsAction;
-const images = [...Array().keys()];
+
 
 
 const Bookings = ({ accountType = null }) => {
@@ -261,35 +263,11 @@ const Bookings = ({ accountType = null }) => {
         break;
     }
   };
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedRate, setEditedRate] = useState(TRAINER_AMOUNT_USD);
-  const [storedRate, setStoredRate] = useState(TRAINER_AMOUNT_USD);
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
 
-  const handleRateChange = (e) => {
-    setEditedRate(e.target.value);
-  };
 
-  useEffect(() => {
-    setEditedRate(Number(userInfo?.extraInfo?.hourly_rate))
-    setStoredRate(Number(userInfo?.extraInfo?.hourly_rate))
-  }, [userInfo?.extraInfo?.hourly_rate])
 
-  const handleSaveClick = () => {
-    dispatch(
-      updateProfileAsync({
-        extraInfo: {
-          ...userInfo?.extraInfo,
-          hourly_rate: Number(editedRate),
-        },
-      })
-    );
-    setIsEditing(false);
-    // setStoredRate(editedRate);
-  };
+
 
   const TrainerRenderBooking = (
     _id,
@@ -861,115 +839,107 @@ const Bookings = ({ accountType = null }) => {
     document.querySelector(".sidebar-toggle").classList.remove("none");
   };
 
-  const showRatings = (ratings, extraClasses = "") => {
-    const { ratingRatio, totalRating } = Utils.getRatings(ratings);
-    return (
-      <>
-        <div className={extraClasses}>
-          <Star color="#FFC436" size={28} className="star-container star-svg" />
-          <p className="ml-1 mt-1 mr-1 font-weight-light">{ratingRatio || 0}</p>
-          <p className="mt-1">({totalRating || 0})</p>
-        </div>
-      </>
-    );
-  };
-  const trainerInfo = () => (
-    <React.Fragment>
-      <div className="trainer-Pro" style={{ display: "flex", justifyContent: "space-between" }}>
-        <div className="card rounded trainer-profile-card" style={{ width: "60%" }}>
-          <div className="card-body">
-            <div className="row">
-              <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 d-flex justify-content-center align-items-center">
-                <img
-                  src={
-                    Utils?.dynamicImageURL(userInfo?.profile_picture) || "/assets/images/avtar/user.png"
-                  }
-                  alt="trainer_image"
-                  className="rounded trainer-profile"
-                  style={{ maxWidth: "100%", height: "auto" }}
-                />
-              </div>
-              <div className="col-7 col-sm-6 col-md-7 col-lg-8 col-xl-9 card-trainer">
-                <div style={{ display: 'flex' }}>
-                  <h3 className="mt-3" style={{ width: '35%' }}>
-                    Hourly Rate: ${isEditing ? (
-                      <input style={{ borderRadius: '0.25rem', border: "1px solid #ced4da", padding: '2px 2px', width: '30%' }}
-                        type="number"
-                        value={editedRate}
-                        onChange={handleRateChange}
-                        onBlur={handleSaveClick}
-                      />
-                    ) : (
-                      storedRate
-                    )}
-                  </h3>
-                  <a
-                    className="icon-btn btn-outline-light btn-sm edit-btn"
-                    style={{ marginLeft: '5px', marginTop: '10px' }}
-                    href="#"
-                    onClick={isEditing ? handleSaveClick : handleEditClick}
-                  >
-                    {isEditing ? 'Save' : <Edit />}
-                  </a>
-                </div>
-                {showRatings([], "mt-3 d-flex ml-n2")}
-                {userInfo &&
-                  userInfo.extraInfo &&
-                  userInfo.extraInfo.social_media_links &&
-                  userInfo.extraInfo.social_media_links ? (
-                  <SocialMediaIcons
-                    profileImageURL={""}
-                    social_media_links={userInfo.extraInfo.social_media_links}
-                    isvisible={false}
-                  />
-                ) : null}
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div className="card rounded trainer-profile-card Select" style={{ width: "39%" }}>
-          <div className="card-body" style={{ margin: "auto" }}>
-            <div className="row" style={{ justifyContent: "center" }}>
-              <h3 className="mt-3">Share clips</h3>
-            </div>
-            <div className="row" style={{ justifyContent: "center" }}>
-              {/* <h3 className="mt-3">Trainee text</h3> */}
-            </div>
-            <div className="row" style={{ justifyContent: "center", marginTop: "10px" }}>
-              <button
-                type="button"
-                className="btn btn-primary btn-sm"
-                onClick={handleSelectClip}
-              >
-                Select Clip
-              </button>
-            </div>
-            {isModalOpen && (
-              // Content for the modal
-              <ShareModalTrainer
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                selectedClips={selectedClips}
-                clips={clips}
-                addTraineeClipInBookedSession={addTraineeClipInBookedSession}
-                setSelectedClips={setSelectedClips}
-              />
-            )}
-            <div className="row" style={{ justifyContent: "center", paddingTop: "10px", margin: "auto" }}>
-              <input value={userEmail} onChange={(e) => setUserEmail(e?.target?.value)} className="form-control" type="email" placeholder="Email"></input>
-            </div>
+  // const trainerInfo = () => (
+  //   <React.Fragment>
+  //     <div className="trainer-Pro" style={{ display: "flex", justifyContent: "space-between" }}>
+  //       <div className="card rounded trainer-profile-card" style={{ width: "20%" }}>
+  //         <div className="card-body">
+  //           <div className="row" style={{display:'block'}}>
+  //             <div className="col-12 col-sm-6 col-md-5 col-lg-4 col-xl-3 d-flex justify-content-center align-items-center" style={{margin:'auto',paddingLeft:'0'}}>
+  //               <img
+  //                 src={
+  //                   Utils?.dynamicImageURL(userInfo?.profile_picture) || "/assets/images/avtar/user.png"
+  //                 }
+  //                 alt="trainer_image"
+  //                 className="rounded trainer-profile"
+  //                 style={{ maxWidth: "100%", height: "auto" }}
+  //               />
+  //             </div>
+  //             <div className="col-7 col-sm-6 col-md-7 col-lg-8 col-xl-9 card-trainer">
+  //               <div style={{ display: 'flex' }}>
+  //                 <h3 className="mt-3" style={{ width: '35%' }}>
+  //                   Hourly Rate: ${isEditing ? (
+  //                     <input style={{ borderRadius: '0.25rem', border: "1px solid #ced4da", padding: '2px 2px', width: '30%' }}
+  //                       type="number"
+  //                       value={editedRate}
+  //                       onChange={handleRateChange}
+  //                       onBlur={handleSaveClick}
+  //                     />
+  //                   ) : (
+  //                     storedRate
+  //                   )}
+  //                 </h3>
+  //                 <a
+  //                   className="icon-btn btn-outline-light btn-sm edit-btn"
+  //                   style={{ marginLeft: '5px', marginTop: '10px' }}
+  //                   href="#"
+  //                   onClick={isEditing ? handleSaveClick : handleEditClick}
+  //                 >
+  //                   {isEditing ? 'Save' : <Edit />}
+  //                 </a>
+  //               </div>
 
-            {err?.video && <p style={{ color: "red", marginTop: "5px" }}>Please select video.</p>}
-            {err?.email && <p style={{ color: "red", marginTop: "5px" }}>Invalid Email.</p>}
-            <div className="row" style={{ justifyContent: "center", marginTop: "10px" }}>
-              <button onClick={() => { onShare() }} className="btn btn-success button-effect btn-sm btn_cancel">Share</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </React.Fragment>
-  );
+
+  //               {showRatings([], "mt-3 d-flex ml-n2")}
+  //               {userInfo &&
+  //                 userInfo.extraInfo &&
+  //                 userInfo.extraInfo.social_media_links &&
+  //                 userInfo.extraInfo.social_media_links ? (
+  //                 <SocialMediaIcons
+  //                   profileImageURL={""}
+  //                   social_media_links={userInfo.extraInfo.social_media_links}
+  //                   isvisible={false}
+  //                 />
+  //               ) : null}
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </div>
+
+  //       <div className="card rounded trainer-profile-card Select" style={{ width: "39%" }}>
+  //         <div className="card-body" style={{ margin: "auto" }}>
+  //           <div className="row" style={{ justifyContent: "center" }}>
+  //             <h3 className="mt-3">Share clips</h3>
+  //           </div>
+  //           <div className="row" style={{ justifyContent: "center" }}>
+  //             {/* <h3 className="mt-3">Trainee text</h3> */}
+  //           </div>
+  //           <div className="row" style={{ justifyContent: "center", marginTop: "10px" }}>
+  //             <button
+  //               type="button"
+  //               className="btn btn-primary btn-sm"
+  //               onClick={handleSelectClip}
+  //             >
+  //               Select Clip
+  //             </button>
+  //           </div>
+  //           {isModalOpen && (
+  //             // Content for the modal
+  //             <ShareModalTrainer
+  //               isOpen={isModalOpen}
+  //               onClose={closeModal}
+  //               selectedClips={selectedClips}
+  //               clips={clips}
+  //               addTraineeClipInBookedSession={addTraineeClipInBookedSession}
+  //               setSelectedClips={setSelectedClips}
+  //             />
+  //           )}
+  //           <div className="row" style={{ justifyContent: "center", paddingTop: "10px", margin: "auto" }}>
+  //             <input value={userEmail} onChange={(e) => setUserEmail(e?.target?.value)} className="form-control" type="email" placeholder="Email"></input>
+  //           </div>
+
+  //           {err?.video && <p style={{ color: "red", marginTop: "5px" }}>Please select video.</p>}
+  //           {err?.email && <p style={{ color: "red", marginTop: "5px" }}>Invalid Email.</p>}
+  //           <div className="row" style={{ justifyContent: "center", marginTop: "10px" }}>
+  //             <button onClick={() => { onShare() }} className="btn btn-success button-effect btn-sm btn_cancel">Share</button>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   </React.Fragment>
+  // );
+  // <TrainerInfo />
 
   const bookingTabs = () => (
     <React.Fragment>
@@ -1087,43 +1057,6 @@ const Bookings = ({ accountType = null }) => {
     ],
   };
 
-  const Logout = () => {
-    socket.disconnect();
-    localStorage.clear();
-    router.push("/auth/signIn");
-    dispatch(authAction.updateIsUserLoggedIn());
-  };
-
-
-  const [popup, setPopup] = useState(false)
-
-  const togglePopup = () => {
-    setPopup(!popup);
-  };
-
-  const closePopup = () => {
-    setPopup(false);
-  };
-
-
-  useEffect(() => {
-    const handleScroll = () => {
-      // You can add more logic here if needed
-      // For now, just prevent the default behavior of scrolling
-      if (popup) {
-        document.body.style.overflow = 'hidden';
-      } else {
-        document.body.style.overflow = 'visible';
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      document.body.style.overflow = 'visible'; // Ensure the default behavior is restored
-    };
-  }, [popup]);
-
 
 
 
@@ -1145,7 +1078,7 @@ const Bookings = ({ accountType = null }) => {
         </div>
       ) : (
         <div
-          id="bookings"
+          id="bookingsTab"
           onScroll={() => {
             if (configs.sidebar.isMobileMode) {
               dispatch(isSidebarToggleEnabled(true));
@@ -1160,72 +1093,26 @@ const Bookings = ({ accountType = null }) => {
         >
           {addRatingModel.isOpen ? renderRating() : null}
           <div>
-            <Header />
-            {popup && <PopupContent onClose={closePopup} userInfo={userInfo} Logout={Logout} />}
+
             {accountType === AccountType.TRAINER ? (
               <React.Fragment>
-                <div className="welcome-text mb-3">
-                  Welcome, <br /> {userInfo && userInfo?.fullname}
-                  <VideoUpload />
+                {/* Welcome, <br /> {userInfo && userInfo?.fullname} */}
+                {/* <VideoUpload /> */}
+                <div>
+                  {<TrainerInfo />}
                 </div>
-                <div>{trainerInfo()}</div>
                 {/* <h2 className="d-flex justify-content-center mt-2 p-5 mb-2 bg-primary text-white rounded">
                   Bookings
                 </h2> */}
                 <div className="Content-Trainer" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-                  <div className="card rounded trainer-profile-card Select Recent Student" style={{ width: '26%', marginTop: '32px', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }}>
-                    <div className="card-body">
-                      <div style={{ justifyContent: 'center' }}>
-                        <h2 className="Recent-Heading" style={{ textAlign: 'center' }}>Recent Students</h2>
-                      </div>
-                      <div className="row" style={{ justifyContent: 'center', paddingTop: '15px' }}>
-                        <div className="image-gallery" style={{ display: 'flex', flexWrap: 'wrap', paddingTop: '15px', width: '85%', justifyContent: 'space-between', overflowY: 'auto', maxHeight: '75vh' }}>
-                          <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-                          <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-                          <img src="/assets/images/about/Coach.jpeg" alt="Student 2" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-                          <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-                          <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-                          <img src="/assets/images/about/Coach.jpeg" alt="Student 2" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-
-                          <img src="/assets/images/about/Coach.jpeg" alt="Student 2" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-                          <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-                          <img src="/assets/images/about/Coach.jpeg" alt="Student 2" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-                          <img src="/assets/images/about/Coach.jpeg" alt="Student 1" style={{ width: '8vw', height: '20vh', marginBottom: '10px', marginRight: '10px' }} />
-                          {/* Add more images as needed */}
-                          {images.map((index) => (
-                            <img
-                              key={index}
-                              src={`/assets/images/about/Coach${index + 1}.jpeg`}
-                              alt={`Student ${index + 1}`}
-                              style={{
-                                width: '8vw',
-                                height: '20vh',
-                                marginBottom: '10px',
-                                flexGrow: '0',
-                                flexShrink: '0',
-                                flexBasis: 'calc(33.3333% - 20px)', // 33.3333% for 3 images in a row with 20px margin
-                              }}
-                            />
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Additional content for Recent Students section can be added here */}
-                    </div>
-                  </div>
-
-                  <div className="calendar-container Child" style={{ width: '70%' }}>
-                    {/* Set width and height of CalendarPage */}
-                    <Addworkinghour />
-                    <CalendarPage />
-                  </div>
+                  {/* <RecentUsers /> */}
                 </div>
 
 
 
 
-                <h2 className="d-flex justify-content-center p-5">Bookings</h2>
-                <div className="mb-2">{bookingTabs()}</div>
+                {/* <h2 className="d-flex justify-content-center p-5">Bookings</h2>
+                <div className="mb-2">{bookingTabs()}</div> */}
               </React.Fragment>
             ) : null}
           </div>

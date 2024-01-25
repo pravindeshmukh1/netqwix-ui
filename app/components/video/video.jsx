@@ -132,7 +132,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
       event.preventDefault();
       isDrawing = true;
       if (!context) return;
-      savedPos = context.getImageData(
+      savedPos = context?.getImageData(
         0,
         0,
         document.getElementById("bookings")?.clientWidth,
@@ -327,7 +327,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
       video?.removeEventListener("play", drawFrame);
       cutCall();
     };
-  }, []);
+  }, [canvasRef]);
 
   useMemo(() => {
     if (
@@ -446,18 +446,26 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
   };
 
   const getMosuePositionOnCanvas = (event) => {
-    if (
-      event.clientX ||
-      event.clientY ||
-      (event?.touches && event?.touches[0])
-    ) {
-      const clientX = event?.clientX || event?.touches[0]?.clientX;
-      const clientY = event?.clientY || event?.touches[0]?.clientY;
-      const { offsetLeft, offsetTop } = event.target;
-      const canvasX = clientX - (offsetLeft || (mediaQuery.matches ? 100 : 50));
-      const canvasY = clientY - offsetTop;
-      return { x: canvasX, y: canvasY };
-    }
+    const canvas = canvasRef.current;
+    var rect = canvas.getBoundingClientRect();
+    var x = event?.clientX - rect?.left;
+    var y = event?.clientY - rect?.top;
+    return {
+      x: x || 0,
+      y: y || 0
+    };
+
+    // if (
+    //   event.clientX ||
+    //   event.clientY ||
+    //   (event?.touches && event?.touches[0])
+    // ) {
+    //   const clientX = event?.clientX || event?.touches[0]?.clientX;
+    //   const clientY = event?.clientY || event?.touches[0]?.clientY;
+    //   const { offsetLeft, offsetTop } = event.target;
+    //   const canvasX = clientX - (offsetLeft || (mediaQuery.matches ? 100 : 50));
+    //   const canvasY = clientY - offsetTop;
+    // }
   };
 
   const clearCanvas = () => {
@@ -812,70 +820,82 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
 
     const userVideo1 = document.getElementById("user-video-1")
     const userVideo2 = document.getElementById("user-video-2")
+    const ChevronLeft = document.getElementById("ChevronLeft")
+    const ChevronRight = document.getElementById("ChevronRight")
+
+    if (ChevronLeft) {
+      ChevronLeft.style.transition = 'opacity 1s';
+      ChevronLeft.style.opacity = '0';
+      ChevronLeft.style.background = "#fff"
+    } if (ChevronRight) {
+      ChevronRight.style.transition = 'opacity 1s';
+      ChevronRight.style.opacity = '0';
+      ChevronRight.style.background = "#fff"
+    }
 
     if (Pause) {
-      Pause.style.transition = 'opacity 2s';
+      Pause.style.transition = 'opacity 1s';
       Pause.style.opacity = '0';
     }
     if (progress1) {
-      progress1.style.transition = 'opacity 2s';
+      progress1.style.transition = 'opacity 1s';
       progress1.style.opacity = '0';
     }
     if (Pause2) {
-      Pause2.style.transition = 'opacity 2s';
+      Pause2.style.transition = 'opacity 1s';
       Pause2.style.opacity = '0';
     }
     if (progress2) {
-      progress2.style.transition = 'opacity 2s';
+      progress2.style.transition = 'opacity 1s';
       progress2.style.opacity = '0';
     }
     if (userVideo1 && selectedClips?.length) {
-      userVideo1.style.transition = 'opacity 2s';
+      userVideo1.style.transition = 'opacity 1s';
       userVideo1.style.opacity = '0';
     }
     if (userVideo2 && selectedClips?.length) {
-      userVideo2.style.transition = 'opacity 2s';
+      userVideo2.style.transition = 'opacity 1s';
       userVideo2.style.opacity = '0';
     }
 
 
     // Hide elements with a smooth transition
     if (creationBarItem) {
-      creationBarItem.style.transition = 'opacity 2s'; // Adjust the duration based on your needs
+      creationBarItem.style.transition = 'opacity 1s'; // Adjust the duration based on your needs
       creationBarItem.style.opacity = '0';
     }
 
     if (callActionButtons) {
-      callActionButtons.style.transition = 'opacity 2s'; // Adjust the duration based on your needs
+      callActionButtons.style.transition = 'opacity 1s'; // Adjust the duration based on your needs
       callActionButtons.style.opacity = '0';
     }
     if (mainNav) {
-      mainNav.style.transition = 'opacity 2s'; // Set duration to 0s
+      mainNav.style.transition = 'opacity 1s'; // Set duration to 0s
       mainNav.style.opacity = '0';
     }
 
     // if(Pause){
-    //   Pause.style.transition = 'opacity 2s'
+    //   Pause.style.transition = 'opacity 1s'
     //   Pause.style.opacity = '0';
     // }
     // if(progress1){
-    //   progress1.style.transition = 'opacity 2s'
+    //   progress1.style.transition = 'opacity 1s'
     //   progress1.style.opacity = '0';
     // }
     // if(Pause2){
-    //   Pause2.style.transition = 'opacity 2s'
+    //   Pause2.style.transition = 'opacity 1s'
     //   Pause2.style.opacity = '0';
     // }
     // if(progress2){
-    //   progress2.style.transition = 'opacity 2s'
+    //   progress2.style.transition = 'opacity 1s'
     //   progress2.style.opacity = '0';
     // }
     // if(scs){
-    //   scs.style.transition = 'opacity 2s'
+    //   scs.style.transition = 'opacity 1s'
     //   scs.style.opacity = '0';
     // }
     // if(scs2){
-    //   scs2.style.transition = 'opacity 2s'
+    //   scs2.style.transition = 'opacity 1s'
     //   scs2.style.opacity = '0';
     // }
 
@@ -889,51 +909,61 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
       // })
       // setScreenShots([...screenShots])
       if (creationBarItem) {
-        creationBarItem.style.transition = 'opacity 2s';
+        creationBarItem.style.transition = 'opacity 1s';
         creationBarItem.style.opacity = '1';
       }
 
       if (callActionButtons) {
-        callActionButtons.style.transition = 'opacity 2s';
+        callActionButtons.style.transition = 'opacity 1s';
         callActionButtons.style.opacity = '1';
       }
       if (mainNav) {
-        mainNav.style.transition = 'opacity 2s'; // Adjust the duration based on your needs
+        mainNav.style.transition = 'opacity 1s'; // Adjust the duration based on your needs
         mainNav.style.opacity = '1';
       }
       if (Pause) {
-        Pause.style.transition = 'opacity 2s'
+        Pause.style.transition = 'opacity 1s'
         Pause.style.opacity = '1';
       }
       if (progress1) {
-        progress1.style.transition = 'opacity 2s'
+        progress1.style.transition = 'opacity 1s'
         progress1.style.opacity = '1';
       }
       if (Pause2) {
-        Pause2.style.transition = 'opacity 2s'
+        Pause2.style.transition = 'opacity 1s'
         Pause2.style.opacity = '1';
       }
       if (progress2) {
-        progress2.style.transition = 'opacity 2s'
+        progress2.style.transition = 'opacity 1s'
         progress2.style.opacity = '1';
       }
       if (userVideo1 && selectedClips?.length) {
-        userVideo1.style.transition = 'opacity 2s'
+        userVideo1.style.transition = 'opacity 1s'
         userVideo1.style.opacity = '1';
       }
       if (userVideo2 && selectedClips?.length) {
-        userVideo2.style.transition = 'opacity 2s'
+        userVideo2.style.transition = 'opacity 1s'
         userVideo2.style.opacity = '1';
       }
+
+      if (ChevronLeft) {
+        ChevronLeft.style.transition = 'opacity 1s'
+        ChevronLeft.style.opacity = '1';
+        ChevronLeft.style.background = "#000080"
+      }
+      if (ChevronRight) {
+        ChevronRight.style.transition = 'opacity 1s'
+        ChevronRight.style.opacity = '1';
+        ChevronRight.style.background = "#000080"
+      }
       // if(scs){
-      //   scs.style.transition = 'opacity 2s'
+      //   scs.style.transition = 'opacity 1s'
       //   scs.style.opacity = '1';
       // }
       // if(scs2){
-      //   scs2.style.transition = 'opacity 2s'
+      //   scs2.style.transition = 'opacity 1s'
       //   scs2.style.opacity = '1';
       // }
-
 
       var res = await screenShotTake({ sessions: id, trainer: fromUser?._id, trainee: toUser?._id, })
       const blob = await fetch(dataUrl).then((res) => res.blob());
@@ -1384,11 +1414,12 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
   return (
     <React.Fragment>
       <canvas
+        ref={canvasRef}
         id="drawing-canvas"
         width={document.getElementById("bookings")?.clientWidth}
         height={document.getElementById("bookings")?.clientHeight}
         className="canvas-print absolute all-0"
-        ref={canvasRef} style={{ left: 0, top: 0, width: "100%", height: "100%" }}
+        style={{ left: 0, top: 0, width: "100%", height: "100%" }}
       />
       <div className="row" style={{ height: "100%", display: "flex", alignItems: "center" }}>
 

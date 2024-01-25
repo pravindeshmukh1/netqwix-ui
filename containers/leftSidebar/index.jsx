@@ -21,6 +21,7 @@ import {
   POSITION_FIXED_SIDEBAR_MENU,
   leftSideBarOptions,
   routingPaths,
+  topNavbarOptions,
 } from "../../app/common/constants";
 import { SocketContext } from "../../app/components/socket";
 import TodoSection from "../rightSidebar/todoSection";
@@ -57,10 +58,10 @@ const steps = [
 const Index = (props) => {
   // const width = useWindowSize();
   const socket = useContext(SocketContext);
-  const { sidebarActiveTab, sidebarModalActiveTab } = useAppSelector(authState);
+  const { sidebarActiveTab, sidebarModalActiveTab, topNavbarActiveTab } = useAppSelector(authState);
   const [width, setWidth] = useState(0);
   const [opentour, setopentour] = useState(true);
-  let [activeTab, setActiveTab] = useState();
+  let [activeTab, setActiveTab] = useState(null);
   const [mode, setMode] = useState(false);
   const router = useRouter();
   const [size, setSize] = useState([0, 0]);
@@ -70,7 +71,7 @@ const Index = (props) => {
   const { handleActiveTab } = bookingsAction;
   useEffect(() => {
     setAccountType(localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE));
-  });
+  }, []);
 
   useEffect(() => {
     if (localStorage.getItem("layout_mode") === "dark") {
@@ -121,8 +122,8 @@ const Index = (props) => {
   };
 
   useEffect(() => {
-    setActiveTab(sidebarActiveTab);
-  }, [sidebarActiveTab])
+    setActiveTab(sidebarActiveTab === leftSideBarOptions?.TOPNAVBAR ? topNavbarActiveTab : sidebarActiveTab);
+  }, [sidebarActiveTab, topNavbarActiveTab])
 
   useEffect(() => {
     setActiveTab(sidebarModalActiveTab);
@@ -185,19 +186,29 @@ const Index = (props) => {
   const [openCloseToggleSideNav, setOpenCloseToggleSideNav] = useState(true)
 
   useEffect(() => {
-    let traineeDashboard = document.querySelector(".trainee-dashboard");
+    let getDashboard = document.querySelector("#get-dashboard");
+    let getNavbarTabs = document.querySelector("#get-navbar-tabs");
+    let getBookings = document.querySelector("#bookingsTab");
+
     let customSidebarContentBooking = document.querySelector(".custom-sidebar-content-booking");
     let lockerDrawer = document.querySelector(".custom-mobile-menu.active")
+
     if (lockerDrawer) {
-      lockerDrawer.style.setProperty('left', openCloseToggleSideNav ? '90px' : '0px', 'important');
+      lockerDrawer.style?.setProperty('left', openCloseToggleSideNav ? '100px' : '0px', 'important');
     }
-    if (traineeDashboard) {
-      traineeDashboard.style.marginLeft = openCloseToggleSideNav ? '105px' : "0px";
+    if (getBookings) {
+      getBookings.style.marginLeft = openCloseToggleSideNav ? '105px' : "30px";
+    }
+    if (getDashboard) {
+      getDashboard.style.marginLeft = openCloseToggleSideNav ? '105px' : "30px";
+    }
+    if (getNavbarTabs) {
+      getNavbarTabs.style.marginLeft = openCloseToggleSideNav ? '105px' : "30px";
     }
     if (customSidebarContentBooking) {
-      customSidebarContentBooking.style.setProperty('left', openCloseToggleSideNav ? '103px' : '0px', 'important');
+      customSidebarContentBooking?.style?.setProperty('left', openCloseToggleSideNav ? '100px' : '0px', 'important');
     }
-  }, [openCloseToggleSideNav, sidebarModalActiveTab, sidebarActiveTab])
+  }, [openCloseToggleSideNav, sidebarModalActiveTab, sidebarActiveTab, activeTab])
 
   useEffect(() => {
     if (isMobile) {
@@ -207,6 +218,7 @@ const Index = (props) => {
     }
   }, [isMobile])
 
+  const width1000 = useMediaQuery(1000)
 
   return (
     <Fragment>
@@ -216,27 +228,29 @@ const Index = (props) => {
           ToggleTab={ToggleTab}
         /> */}
       <div id="left-nav-wrapper" className="left-nav-wrapper">
-        {openCloseToggleSideNav && <aside
-          className={`main-nav on custom-scroll ${openCloseToggleSideNav && "open"} ${accountType === AccountType.TRAINEE &&
-            POSITION_FIXED_SIDEBAR_MENU.includes(activeTab) &&
-            "custom-sidebar"
-            }`} style={{ zIndex: '9999' }}
-        >
-          {/* logo section */}
-          <div className="logo-warpper">
-            <Link href="/landing">
-              <img id="Net"
-                src="/assets/images/logo/netquix-logo.png"
-                alt="logo"
-                className="custom-image"
+        {openCloseToggleSideNav &&
+          <aside
+            className={`main-nav on custom-scroll ${openCloseToggleSideNav && "open"} ${accountType === AccountType.TRAINEE &&
+              POSITION_FIXED_SIDEBAR_MENU.includes(activeTab) &&
+              "custom-sidebar"
+              }`}
+            style={(width1000 || topNavbarActiveTab === topNavbarOptions?.MEETING_ROOM) ? {} : { paddingTop: "0px" }}
+          >
+            {/* logo section */}
+            {(width1000 || topNavbarActiveTab === topNavbarOptions?.MEETING_ROOM) && <div className="logo-warpper">
+              <Link href="/landing">
+                <img id="Net"
+                  src="/assets/images/logo/netquix-logo.png"
+                  alt="logo"
+                  className="custom-image"
 
-              />
-            </Link>
-          </div>
+                />
+              </Link>
+            </div>}
 
 
-          <div className="app-list sidebar-main">
-            {/* <ul className="sidebar-top  custom-scroll">
+            <div className="app-list sidebar-main">
+              {/* <ul className="sidebar-top  custom-scroll">
             <li>
               <Tooltip title="Home" position="top" trigger="mouseenter">
                 <NavLink
@@ -273,59 +287,78 @@ const Index = (props) => {
             </li>
 
           </ul> */}
-            <ul className="sidebar-top">
-              <li>
-                <Tooltip title="Home" position="top" trigger="mouseenter">
-                  <NavLink id="sidebar-item-home"
-                    className={`icon-btn btn-light button-effect ${activeTab === "home" ? "active" : ""
-                      }`}
-                    onClick={() => TogglTab("home")}
-                  >
-                    <i className="fa fa-home" />
-                  </NavLink>
-                </Tooltip>
-                <p className="menu-name">Home</p>
-              </li>
-              {accountType === AccountType.TRAINEE && <li>
-                <Tooltip
-                  title={
-                    accountType === AccountType.TRAINEE
-                      ? "Booking"
-                      : "Schedule Slots"
-                  }
-                  position="right-end"
-                  trigger="mouseenter"
-                >
-                  <NavLink id="sidebar-item-booking"
-                    className={`icon-btn btn-light button-effect ${activeTab === leftSideBarOptions.SCHEDULE_TRAINING
-                      ? "active"
-                      : ""
-                      }`}
-                    onClick={() => TogglTab(leftSideBarOptions.SCHEDULE_TRAINING)}
-                  >
-                    <i className="fa fa-calendar" />
-                  </NavLink>
-                </Tooltip>
-                <p className="menu-name">Booking</p>
-              </li>}
-              <li>
-                <Tooltip title="Locker" position="top" trigger="mouseenter">
-                  <NavLink id="sidebar-item-locker"
-                    className={`icon-btn btn-light button-effect step2 ${activeTab === "file" ? "active" : ""
-                      }`}
-                    onClick={() => ToggleTab("file")}
-                    data-intro=""
-                  >
-                    {activeTab === "file"
-                      ? <img src="../assets/images/lockers-white.png" style={{ width: 20 }} />
-                      : <img src="../assets/images/lockers.png" style={{ width: 20 }} />
+              <ul className="sidebar-top">
+                <li>
+                  <Tooltip title="Home" position="top" trigger="mouseenter">
+                    <NavLink id="sidebar-item-home"
+                      className={`icon-btn btn-light button-effect ${activeTab === topNavbarOptions?.HOME ? "active" : ""
+                        }`}
+                      onClick={() => { dispatch(authAction?.setTopNavbarActiveTab(topNavbarOptions?.HOME)) }}
+                    >
+                      <i className="fa fa-home" />
+                    </NavLink>
+                  </Tooltip>
+                  <p className="menu-name">Home</p>
+                </li>
+                {accountType === AccountType.TRAINEE && <li>
+                  <Tooltip
+                    title={
+                      accountType === AccountType.TRAINEE
+                        ? "Booking"
+                        : "Schedule Slots"
                     }
-                    {/* <i className="fa fa-lock" /> */}
-                  </NavLink>
-                </Tooltip>
-                <p className="menu-name">Locker</p>
-              </li>
-              {/* <li>
+                    position="right-end"
+                    trigger="mouseenter"
+                  >
+                    <NavLink id="sidebar-item-booking"
+                      className={`icon-btn btn-light button-effect ${activeTab === leftSideBarOptions.SCHEDULE_TRAINING
+                        ? "active"
+                        : ""
+                        }`}
+                      onClick={() => TogglTab(leftSideBarOptions.SCHEDULE_TRAINING)}
+                    >
+                      <i className="fa fa-calendar" />
+                    </NavLink>
+                  </Tooltip>
+                  <p className="menu-name">Booking</p>
+                </li>}
+                {accountType === AccountType?.TRAINEE && <li>
+                  <Tooltip title="Book Lessons" position="top" trigger="mouseenter">
+                    <NavLink id="sidebar-item-locker"
+                      className={`icon-btn btn-light button-effect step2 ${activeTab === topNavbarOptions?.BOOK_LESSON ? "active" : ""
+                        }`}
+                      onClick={() => { dispatch(authAction?.setTopNavbarActiveTab(topNavbarOptions?.BOOK_LESSON)) }}
+                      data-intro=""
+                    >
+                      {/* {activeTab === topNavbarOptions?.BOOK_LESSON
+                        ? <img src="../assets/images/lockers-white.png" style={{ width: 20 }} />
+                        : <img src="../assets/images/lockers.png" style={{ width: 20 }} />
+                      } */}
+                      <i className="bi bi-calendar-check" />
+
+
+                    </NavLink>
+                  </Tooltip>
+                  <p className="menu-name">Book Lessons</p>
+                </li>}
+                <li>
+                  <Tooltip title="Locker" position="top" trigger="mouseenter">
+                    <NavLink id="sidebar-item-locker"
+                      className={`icon-btn btn-light button-effect step2 ${activeTab === "file" ? "active" : ""
+                        }`}
+                      onClick={() => ToggleTab("file")}
+                      data-intro=""
+                    >
+                      {activeTab === "file"
+                        ? <img src="../assets/images/lockers-white.png" style={{ width: 20 }} />
+                        : <img src="../assets/images/lockers.png" style={{ width: 20 }} />
+                      }
+                      {/* <i className="fa fa-lock" /> */}
+                    </NavLink>
+                  </Tooltip>
+                  <p className="menu-name">Locker</p>
+                </li>
+                {/* <li>
               <Tooltip title="Chats" position="top" trigger="mouseenter">
                 <NavLink
                   className={`icon-btn btn-light button-effect ${
@@ -338,8 +371,8 @@ const Index = (props) => {
               </Tooltip>
             </li> */}
 
-              {/* some menu hide feedback changes */}
-              {/* <li>
+                {/* some menu hide feedback changes */}
+                {/* <li>
               <Tooltip title="Todo" position="top" trigger="mouseenter">
                 <NavLink
                   className={`icon-btn btn-light button-effect ${
@@ -388,7 +421,7 @@ const Index = (props) => {
               </Tooltip>
             </li> */}
 
-              {/* <li>
+                {/* <li>
               <Tooltip title="Document" position="top" trigger="mouseenter">
                 <NavLink
                   className={`icon-btn btn-light button-effect ${
@@ -401,7 +434,7 @@ const Index = (props) => {
                 </NavLink>
               </Tooltip>
             </li> */}
-              {/* <li>
+                {/* <li>
               <Tooltip title="Contact" position="top" trigger="mouseenter">
                 <NavLink
                   className={`icon-btn btn-light button-effect ${
@@ -415,75 +448,109 @@ const Index = (props) => {
               </Tooltip>
             </li> */}
 
-              <li>
-                <div className="dot-btn dot-danger grow">
-                  <Tooltip
-                    title="Notification"
-                    position="top-end"
-                    size="small"
-                    trigger="mouseenter"
-                  >
-                    <NavLink id="sidebar-item-notification"
-                      className={`icon-btn btn-light button-effect ${activeTab === "notification" ? "active" : ""
-                        }`}
-                      onClick={() => ToggleTab("notification")}
+                <li>
+                  <div className="dot-btn dot-danger grow">
+                    <Tooltip
+                      title="Notification"
+                      position="top-end"
+                      size="small"
+                      trigger="mouseenter"
                     >
-                      <i className="fa fa-bell" />
+                      <NavLink id="sidebar-item-notification"
+                        className={`icon-btn btn-light button-effect ${activeTab === "notification" ? "active" : ""
+                          }`}
+                        onClick={() => ToggleTab("notification")}
+                      >
+                        <i className="fa fa-bell" />
+                      </NavLink>
+                    </Tooltip>
+                  </div>
+                  <p className="menu-name">Notification</p>
+                </li>
+
+                <li>
+                  <Tooltip title="Settings" position="top" trigger="mouseenter">
+                    <NavLink id="sidebar-item-setting"
+                      className={`icon-btn btn-light button-effect step2 ${activeTab === "setting" ? "active" : ""
+                        }`}
+                      onClick={() => ToggleTab("setting")}
+                      data-intro="You can change settings by clicking here"
+                    >
+                      <i className="fa fa-cog" />
                     </NavLink>
                   </Tooltip>
-                </div>
-                <p className="menu-name">Notification</p>
-              </li>
-
-              <li>
-                <Tooltip title="Settings" position="top" trigger="mouseenter">
-                  <NavLink id="sidebar-item-setting"
-                    className={`icon-btn btn-light button-effect step2 ${activeTab === "setting" ? "active" : ""
-                      }`}
-                    onClick={() => ToggleTab("setting")}
-                    data-intro="You can change settings by clicking here"
+                  <p className="menu-name">Setting</p>
+                </li>
+                <li>
+                  <Tooltip
+                    title="Change Mode"
+                    size="small"
+                    position="top-end"
+                    trigger="mouseenter"
                   >
-                    <i className="fa fa-cog" />
-                  </NavLink>
-                </Tooltip>
-                <p className="menu-name">Setting</p>
-              </li>
-            </ul>
-            <ul className="sidebar-bottom">
-              <li>
-                <Tooltip
-                  title="Change Mode"
-                  size="small"
-                  position="top-end"
-                  trigger="mouseenter"
-                >
-                  <NavLink
-                    id="sidebar-item-mode"
-                    className="icon-btn btn-light button-effect mode step3"
-                    data-intro="Change mode"
-                    onClick={() => toggleLightMode(mode)}
+                    <NavLink
+                      id="sidebar-item-mode"
+                      className="icon-btn btn-light button-effect mode step3"
+                      data-intro="Change mode"
+                      onClick={() => toggleLightMode(mode)}
+                    >
+                      <i className={mode ? "fa fa-lightbulb-o" : "fa fa-moon-o"} />
+                    </NavLink>
+                  </Tooltip>
+                  <p className="menu-name" style={{ color: "black", fontWeight: "500" }}>Change Mode</p>
+                </li>
+                <li>
+                  <Tooltip title="Logout" position="top" trigger="mouseenter">
+                    <NavLink
+                      id="sidebar-item-logout"
+                      className="icon-btn btn-light"
+                      onClick={() => Logout()}
+                    >
+                      {" "}
+                      <i className="fa fa-power-off"> </i>
+                    </NavLink>
+                  </Tooltip>
+                  <p className="menu-name" style={{ color: "black", fontWeight: "500" }}>Logout</p>
+                </li>
+              </ul>
+              {/* <ul className="sidebar-bottom">
+                <li>
+                  <Tooltip
+                    title="Change Mode"
+                    size="small"
+                    position="top-end"
+                    trigger="mouseenter"
                   >
-                    <i className={mode ? "fa fa-lightbulb-o" : "fa fa-moon-o"} />
-                  </NavLink>
-                </Tooltip>
-              </li>
-              <li>
-                <Tooltip title="Logout" position="top" trigger="mouseenter">
-                  <NavLink
-                    id="sidebar-item-logout"
-                    className="icon-btn btn-light"
-                    onClick={() => Logout()}
-                  >
-                    {" "}
-                    <i className="fa fa-power-off"> </i>
-                  </NavLink>
-                </Tooltip>
-              </li>
-            </ul>
-          </div>
-        </aside>}
-        {!isMobile ? openCloseToggleSideNav ? <ChevronLeft style={{ left: "83px" }} className="collapse-left-drawer-icon" onClick={() => setOpenCloseToggleSideNav(!openCloseToggleSideNav)} /> :
-          <ChevronRight style={{ left: "0px" }} className="collapse-left-drawer-icon" onClick={() => setOpenCloseToggleSideNav(!openCloseToggleSideNav)} /> : null}
+                    <NavLink
+                      id="sidebar-item-mode"
+                      className="icon-btn btn-light button-effect mode step3"
+                      data-intro="Change mode"
+                      onClick={() => toggleLightMode(mode)}
+                    >
+                      <i className={mode ? "fa fa-lightbulb-o" : "fa fa-moon-o"} />
+                    </NavLink>
+                  </Tooltip>
+                  <p className="menu-name" style={{ color: "black", fontWeight: "500" }}>Change Mode</p>
+                </li>
+                <li>
+                  <Tooltip title="Logout" position="top" trigger="mouseenter">
+                    <NavLink
+                      id="sidebar-item-logout"
+                      className="icon-btn btn-light"
+                      onClick={() => Logout()}
+                    >
+                      {" "}
+                      <i className="fa fa-power-off"> </i>
+                    </NavLink>
+                  </Tooltip>
+                  <p className="menu-name" style={{ color: "black", fontWeight: "500" }}>Logout</p>
+                </li>
+              </ul> */}
+            </div>
+          </aside>}
+        {!isMobile ? openCloseToggleSideNav ?
+          <ChevronLeft id="ChevronLeft" style={{ left: "83px" }} className="collapse-left-drawer-icon" onClick={() => setOpenCloseToggleSideNav(false)} /> :
+          <ChevronRight id="ChevronRight" style={{ left: "0px" }} className="collapse-left-drawer-icon" onClick={() => setOpenCloseToggleSideNav(true)} /> : null}
 
       </div>
       {activeTab !== leftSideBarOptions.HOME &&

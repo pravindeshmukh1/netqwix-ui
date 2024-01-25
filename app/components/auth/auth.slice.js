@@ -12,6 +12,7 @@ import {
   LOCAL_STORAGE_KEYS,
   SuccessMsgs,
   leftSideBarOptions,
+  topNavbarOptions,
 } from "../../common/constants";
 
 const initialState = {
@@ -25,8 +26,10 @@ const initialState = {
     email: null,
   },
   sidebarActiveTab: leftSideBarOptions.HOME,
+  topNavbarActiveTab: null,
   sidebarModalActiveTab: null,
   sidebarLockerActiveTab: null,
+  accountType: null
 };
 
 export const signupAsync = createAsyncThunk("signup", async (payload) => {
@@ -121,8 +124,16 @@ export const authSlice = createSlice({
       state.isUserLoggedIn = false;
       state.sidebarActiveTab = "";
     },
+    setAccountType: (state, action) => {
+      state.accountType = action?.payload || localStorage.getItem(LOCAL_STORAGE_KEYS?.ACC_TYPE)
+    },
     setActiveTab: (state, action) => {
+      state.topNavbarActiveTab = null;
       state.sidebarActiveTab = action.payload;
+    },
+    setTopNavbarActiveTab: (state, action) => {
+      state.sidebarActiveTab = leftSideBarOptions?.TOPNAVBAR;
+      state.topNavbarActiveTab = action.payload;
     },
     setActiveModalTab: (state, action) => {
       state.sidebarModalActiveTab = action.payload;

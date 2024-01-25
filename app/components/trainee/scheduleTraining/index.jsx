@@ -6,7 +6,8 @@ import { Popover } from "react-tiny-popover";
 import PopupContent from "./PopupContent";
 import { useRouter } from "next/router";
 import Slider from "react-slick";
-import ShareModalTrainee from "../../bookings/start/Share modal Trainee";
+import ShareModalTrainee from "../../bookings/start/SelectClips";
+
 
 
 import {
@@ -59,6 +60,7 @@ import { getAvailability } from "../../calendar/calendar.api";
 import { addTraineeClipInBookedSessionAsync } from "../../common/common.slice";
 import { useSelector } from "react-redux";
 import Header from "../../Header";
+import ShareClipsCard from "../../share-clips";
 const settings = {
   autoplay: false,
   infinite: true,
@@ -209,7 +211,6 @@ const ScheduleTraining = () => {
     trainer_id: null,
     data: {},
   });
-
   useEffect(() => {
     const currentDateAndtime = () => {
       // Create a new Date object for the current date
@@ -242,21 +243,23 @@ const ScheduleTraining = () => {
     //   // console.log("new Date(startDate).toISOStringnew Date(startDate).toISOString", moment(new Date(`${startDate}`).toISOString()).format('YYYY-MM-DD'))
   }, [selectedTrainer?.trainer_id])
 
-  // useEffect(() => {
-  //   if (selectedTrainer?.trainer_id) {
-  //     let date = new Date(startDate).toISOString().split("T")[0];
-  //     let dateArr = date?.split("-");
-  //     let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0).toISOString()
-  //     let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0).toISOString()
-  //     getAvailability({
-  //       trainer_id: selectedTrainer?.trainer_id,
-  //       start_time: start_time,
-  //       end_time: end_time
-  //     }).then((res) => {
-  //       setAvailableSlotsState(res?.data);
-  //     })
-  //   }
-  // }, [startDate])
+  useEffect(() => {
+    if (selectedTrainer?.trainer_id) {
+      let date = new Date(startDate).toISOString().split("T")[0];
+      let dateArr = date?.split("-");
+      let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0).toISOString()
+      let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0).toISOString()
+      getAvailability({
+        trainer_id: selectedTrainer?.trainer_id,
+        start_time: start_time,
+        end_time: end_time
+      }).then((res) => {
+        setAvailableSlotsState(res?.data);
+      })
+    }
+  }, [startDate])
+
+
 
   const [query, setQuery] = useState("");
 
@@ -266,8 +269,6 @@ const ScheduleTraining = () => {
     userInfo: null,
     selected_category: null,
   });
-
-  console.log("trainerInfo----->", trainerInfo);
 
 
   useEffect(() => {
@@ -415,20 +416,6 @@ const ScheduleTraining = () => {
             : DefaultTimeRange.endTime,
         },
       };
-
-
-      let date = new Date(startDate).toISOString().split("T")[0];
-      let dateArr = date?.split("-");
-      let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0).toISOString()
-      let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0).toISOString()
-      getAvailability({
-        trainer_id: trainerInfo?.userInfo?.trainer_id || selectedTrainer?.trainer_id,
-        start_time: start_time,
-        end_time: end_time
-      }).then((res) => {
-        setAvailableSlotsState(res?.data);
-      })
-
       dispatch(checkSlotAsync(payload));
     }
   }, [selectedTrainer, trainerInfo]);
@@ -450,18 +437,6 @@ const ScheduleTraining = () => {
               : DefaultTimeRange.endTime,
           },
         };
-
-        let date = new Date(startDate).toISOString().split("T")[0];
-        let dateArr = date?.split("-");
-        let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0).toISOString()
-        let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0).toISOString()
-        getAvailability({
-          trainer_id: trainerInfo?.userInfo?.trainer_id || selectedTrainer?.trainer_id,
-          start_time: start_time,
-          end_time: end_time
-        }).then((res) => {
-          setAvailableSlotsState(res?.data);
-        })
         dispatch(checkSlotAsync(payload));
       }
     }
@@ -941,7 +916,6 @@ const ScheduleTraining = () => {
     >
 
       <div className="row" >
-        <Header />
 
         <div className="trainer-recommended" style={{ marginTop: "3%", maxWidth: "75%" }}>
           <h1 style={{ marginBottom: "10px" }}>Book Your Lesson now</h1>
@@ -1045,40 +1019,9 @@ const ScheduleTraining = () => {
         <h2>Recommended</h2>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <TrainerSlider list={trainers} isRecommended={true} />
-          <div className="card rounded trainer-profile-card" style={{ width: "30%" }}>
-            <div className="card-body" style={{ margin: "auto" }}>
-              <div className="row" style={{ justifyContent: "center" }}>
-                <h3 className="mt-3">Share clips</h3>
-              </div>
-              <div className="row" style={{ justifyContent: "center", marginTop: "10px" }}>
-                <button
-                  type="button"
-                  className="btn btn-primary btn-sm"
-                  onClick={handleSelectClip}
-                >
-                  Select Clip
-                </button>
-              </div>
-              {isModalOpen && (
-                // Content for the modal
-                <ShareModalTrainee
-                  isOpen={isModalOpen}
-                  onClose={closeModal}
-                  selectedClips={selectedClips}
-                  clips={clips}
-                  addTraineeClipInBookedSession={addTraineeClipInBookedSession}
-                  setSelectedClips={setSelectedClips}
-                />
-              )}
-              <div className="row" style={{ justifyContent: "center", paddingTop: "10px", margin: "auto" }}>
-                <input value={userEmail} onChange={(e) => setUserEmail(e?.target?.value)} className="form-control" type="email" placeholder="Email"></input>
-              </div>
-
-              {err?.video && <p style={{ color: "red", marginTop: "5px" }}>Please select video.</p>}
-              {err?.email && <p style={{ color: "red", marginTop: "5px" }}>Invalid Email.</p>}
-              <div className="row" style={{ justifyContent: "center", marginTop: "10px" }}>
-                <button onClick={() => { onShare() }} className="btn btn-success button-effect btn-sm btn_cancel">Share</button>
-              </div>
+          <div className='card trainer-profile-card Home-main-Cont' style={{ height: "100%", width: "100%" }}>
+            <div className='card-body'>
+              <ShareClipsCard />
             </div>
           </div>
         </div>
@@ -1104,16 +1047,6 @@ const ScheduleTraining = () => {
               trainer_id,
               data,
             });
-
-            setTrainerInfo((pre => {
-              return {
-                ...pre,
-                userInfo: {
-                  ...pre?.userInfo,
-                  ...data
-                }
-              }
-            }))
           }
         }}
         onClose={() => {
@@ -1141,10 +1074,12 @@ const ScheduleTraining = () => {
     const { from, to } = extraInfo?.working_hours || {};
     const fromHours = from ? Utils.getTimeFormate(from) : null;
     const toHours = to ? Utils.getTimeFormate(to) : null;
-
-    const formateStartTime = Utils.getTimeFormate(trainerInfo?.userInfo?.extraInfo?.working_hours?.from);
-    const formateEndTime = Utils.getTimeFormate(trainerInfo?.userInfo?.extraInfo?.working_hours?.to);
-
+    const formateStartTime = Utils.getTimeFormate(
+      trainerInfo?.userInfo?.extraInfo?.working_hours?.from
+    );
+    const formateEndTime = Utils.getTimeFormate(
+      trainerInfo?.userInfo?.extraInfo?.working_hours?.to
+    );
     return (
       <React.Fragment>
         <div className="row">
@@ -1160,6 +1095,7 @@ const ScheduleTraining = () => {
                 className="mt-1"
                 minDate={moment().toDate()}
                 onChange={(date) => {
+                  console.log("datedatedatedatedate", date)
                   if (date) {
                     const booked_date = Utils.getDateInFormat(date);
                     const payload = {
@@ -1178,21 +1114,8 @@ const ScheduleTraining = () => {
                           DefaultTimeRange.endTime,
                       },
                     };
-
                     dispatch(checkSlotAsync(payload));
                     setStartDate(date);
-
-                    date = new Date(date).toISOString().split("T")[0];
-                    let dateArr = date?.split("-");
-                    let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0).toISOString()
-                    let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0).toISOString()
-                    getAvailability({
-                      trainer_id: trainerInfo?.userInfo?.trainer_id || selectedTrainer?.trainer_id,
-                      start_time: start_time,
-                      end_time: end_time
-                    }).then((res) => {
-                      setAvailableSlotsState(res?.data);
-                    })
                   }
                   const todaySDate = Utils.getDateInFormat(date.toString());
                   const { weekDateFormatted, weekDates } =
@@ -1663,7 +1586,7 @@ const ScheduleTraining = () => {
         (trainerInfo && trainerInfo.userInfo) ? (
         <div className="custom-scroll">{renderUserDetails()}</div>
       ) : (
-        <div className="custom-scroll trainee-dashboard" style={{ marginLeft: "105px" }}>
+        <div className="custom-scroll trainee-dashboard">
           {renderSearchMenu()}
         </div>
       )}

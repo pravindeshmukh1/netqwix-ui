@@ -1379,9 +1379,8 @@
     margin-top: 10px !important;
 }
 .card.rounded.trainer-profile-card.Select.Recent.Student{
-  width: 60% !important;
+  width: 100% !important;
   margin: auto;
-  overflow-x: auto;
 }
 .card.rounded.trainer-profile-card.Select.Working.Hour{
   width: 60% !important;
@@ -1440,14 +1439,67 @@ width: 96% !important;
 .Content-Trainer{
   display: block !important;
 }
+.bookings{
+  padding: 0 !important;
 }
+.custom-sidebar-content-booking{
+  width: 90% !important;
+}
+.image-gallery{
+  width: 100% !important;
+  justify-content: center !important;
+}
+.Stude-img{
+  width: 19vw !important;
+}
+.Recent-Heading{
+  font-size: 16px !important;
+}
+.card-body.Recent{
+  padding: 0 !important;
+}
+.card.trainer-profile-card.Home-main-Cont{
+width: 40% !important;
+}
+#Nav-T{
+  margin: 11px !important ;
+}
+.Trainer-box-1{
+  width: 40% !important;
+}
+.card-body-Share-clip{
+  padding: 2px !important;
+}
+.Invite-freind{
+  padding: 16px !important;
+}
+.btn.btn-primary.btn-sm-Change-Picture{
+  padding: 11px 6px !important;
+}
+
+}
+
+
+
+
+
+.active.nav-link:hover{
+  background-color: white !important;
+  color: #000080 !important;
+}
+
+
+
+
 @media(width:768px){
   .bookings{
-    width: 86vw !important;
+    width: 100vw !important;
 
   }
   .image-gallery{
     min-height: 120vh !important;
+    justify-content: center !important;
+    gap: 10px !important;
   }
   .calendar-container.Child{
     margin-left: 10px !important;
@@ -1465,10 +1517,10 @@ width: 96% !important;
     margin-top: 5px !important;
   }
   .Recent-Heading{
-    font-size: 17px;
+    font-size: 20px !important;
   }
   .card.rounded.trainer-profile-card.Select.Recent.Student{
-    width: 50% !important;
+    width: 100% !important;
     overflow-x: auto;
   }
   .calendar-container{
@@ -1480,13 +1532,33 @@ width: 96% !important;
   }
   .col-sm-6{
     padding-left: 14px !important;
+    margin-top: 0 !important;
   }
   .ml-2.TimeZone{
     margin-bottom: 0 !important;
   }
-  
-}
+  .card.trainer-profile-card.Home-main-Cont{
+    margin: 10px !important;
+  }
 
+  .card.trainer-profile-card.Home-main-Cont{
+    height: auto !important;
+  }
+  .btn.btn-primary.btn-sm{
+    padding: 10px 15px !important;
+  }
+  .active.nav-link{
+    padding: 10px !important;
+  }
+  #navHomePageCenterContainer{
+    .nav-link{
+      padding: 1px 10px !important;
+    }
+  }
+  .Rate-input-box{
+    width: 50% !important;
+  }
+}
 
 
 .fc .fc-button-primary {
@@ -1507,6 +1579,10 @@ width: 96% !important;
 .ml-2.TimeZone{
   margin-bottom: 0;
   
+}
+
+.btn.btn-primary.btn-sm-Change-Picture{
+  padding: 15px 40px;
 }
 
 @media (max-width: 800px) {

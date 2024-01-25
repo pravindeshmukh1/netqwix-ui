@@ -112,7 +112,18 @@ export const leftSideBarOptions = {
   STATUS: "status",
   SCHEDULE_TRAINING: "scheduleTraining",
   CHATS: "chats",
+  TOPNAVBAR: "topNavbar"
 };
+
+export const topNavbarOptions = {
+  HOME: "topNavHome",
+  MY_COMMUNITY: "myCommunity",
+  ABOUT_US: "aboutUs",
+  CONTACT_US: "contactUs",
+  STUDENT: "student",
+  BOOK_LESSON: "bookLesson",
+  MEETING_ROOM: "meetingRoom"
+}
 export const filterOption = {
   day: "Day",
   week: "Week",

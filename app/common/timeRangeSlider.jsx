@@ -20,7 +20,6 @@ const CustomRangePicker = ({
   const [draggingEnd, setDraggingEnd] = useState(false);
   const [time, setTime] = useState({});
 
-
   useEffect(() => { }, [availableSlots?.length])
 
   useEffect(() => {
@@ -103,6 +102,7 @@ const CustomRangePicker = ({
     return newPosition;
   };
 
+  console.log("availableSlotsavailableSlotsavailableSlotsavailableSlotsavailableSlots", availableSlots)
   return (
     <React.Fragment>
       <div

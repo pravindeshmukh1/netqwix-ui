@@ -29,10 +29,10 @@ const RecentSection = (props) => {
   };
 
   useEffect(() => {
-    if (configs.sidebar.isToggleEnable) {
+    if (configs.sidebar.isMobileMode) {
       OpenCloseSidebar(false);
     }
-  }, [configs.sidebar.isToggleEnable]);
+  }, [configs.sidebar.isMobileMode]);
 
   const hangleRightClick = () => {
     handleClickRight(!mainMenu);
