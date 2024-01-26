@@ -67,7 +67,7 @@ const Dashboard = () => {
         return <ContactUs />;
       }
       case topNavbarOptions?.BOOK_LESSON: {
-        return <div id='get-dashboard' className='get-dashboard' style={{ marginLeft: "105px" }}>{getDashboard()}</div>;
+        return <div id='get-dashboard' className='get-dashboard'>{getDashboard()}</div>;
       }
       case topNavbarOptions?.MEETING_ROOM: {
         return meetingRoom();

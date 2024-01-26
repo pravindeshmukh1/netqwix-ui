@@ -1,12 +1,12 @@
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { addTrainerSlot, deleteTrainerSlot, getAvailability } from './calendar.api';
 import React from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Star, X, Plus, Check } from "react-feather";
-import interactionPlugin from '@fullcalendar/interaction'
 
 const staticData = [
   { start: new Date('2024-01-11T10:04:00.840Z'), end: new Date('2024-01-11T11:05:00.840Z') },
@@ -349,7 +349,7 @@ export default function CalendarPage() {
     <div className='calendar-container'>
       {data?.length && <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
-        headerToolbar={{ left: 'prev,next', center: 'title', right: ''}}
+        headerToolbar={{ left: 'prev,next', center: 'title', right: '' }}
         initialView='dayGridMonth'
         nowIndicator={true}
         editable={true}

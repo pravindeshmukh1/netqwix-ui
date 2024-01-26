@@ -16,6 +16,7 @@ import { SocketContext, getSocket } from "../app/components/socket";
 import { LOCAL_STORAGE_KEYS, routingPaths } from "../app/common/constants";
 import { bookingsAction } from "../app/components/common/common.slice";
 
+
 export default function MyAppComponent({ Component, pageProps }) {
   const router = useRouter();
   const path = router.asPath;
@@ -68,7 +69,6 @@ export default function MyAppComponent({ Component, pageProps }) {
           <link rel="icon" href="/favicon.png" />
           <link rel="shortcut icon" href="/favicon.png" />
           <link rel="stylesheet" href="path/to/custom.css" />
-
           <title>Netqwix</title>
         </Head>
         <Provider store={store}>

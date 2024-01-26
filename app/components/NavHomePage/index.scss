@@ -10,7 +10,10 @@
         background-color: whitesmoke !important;
         color: black !important;
         border-radius: 0 !important;
-        width: max-content;
+        min-width: 100px;
+    }
+    .theme-tab.nav-tabs{
+        justify-content: space-around !important;
     }
 
     .nav-link:hover,
@@ -22,7 +25,7 @@
 
     .nav.nav-tabs {
         flex-wrap: nowrap;
-        overflow: auto;
+        // overflow: auto;
     }
 
     .nav-tabs.nav-link {
@@ -70,6 +73,7 @@
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     border: 0;
     border-radius: 10px !important;
+    width: 100%;
 }
 
 .card-body.upload {

@@ -48,6 +48,8 @@ const RecentUsers = () => {
         setRecentStudentClips(null);
         setIsOpen(true);
         getTraineeClipsApi(id)
+       
+
     };
 
     const handleCloseModal = () => {
@@ -83,12 +85,13 @@ const RecentUsers = () => {
                         {/* Render images dynamically */}
                         {accountType === AccountType?.TRAINER && recentStudent?.map((item, index) => (
                             <img
+                            className='Image-Division'
                                 key={index}
                                 src={item?.profile_picture}
                                 alt={`Recent Trainee ${index + 1}`}
                                 style={{
-                                    width: '6vw',
-                                    height: '20vh',
+                                    maxWidth: '6vw',
+                                    maxHeight: '20vh',
                                     marginBottom: '10px',
                                     marginRight: '10px',
                                     cursor: 'pointer'
@@ -103,6 +106,7 @@ const RecentUsers = () => {
 
                         {accountType === AccountType?.TRAINEE && recentFriends?.map((item, index) => (
                             <img
+                            className='Image-Division'
                                 key={index}
                                 src={item}
                                 alt={`Recent Trainee ${index + 1}`}

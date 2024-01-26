@@ -244,7 +244,7 @@ const MyClips = () => {
                                         }}
                                     >
                                         <Tooltip title={clp?.title} position="top" trigger="mouseenter">
-                                            <video style={{ width: "5vw", height: "9vh" }}  >
+                                            <video style={{ width: "12vw", height: "12vh" }}  >
                                                 <source src={Utils?.generateVideoURL(clp)} type="video/mp4" />
                                             </video>
                                         </Tooltip>

@@ -8,6 +8,7 @@ import { LIST_OF_ACCOUNT_TYPE } from "../../common/constants";
 import { getMasterData } from "../master/master.api";
 import axios from "axios";
 import { X } from "react-feather";
+import { toast } from "react-toastify";
 
 const UploadClipCard = () => {
 
@@ -19,9 +20,6 @@ const UploadClipCard = () => {
     const dispatch = useAppDispatch()
     const [progress, setProgress] = useState(0);
     const { isOpen } = useAppSelector(videouploadState)
-
-
-
 
 
     const handleFileChange = (e) => {
@@ -38,22 +36,20 @@ const UploadClipCard = () => {
     }
 
     const handleUpload = async () => {
+        if (!selectedFile) {
+            toast.error("Please select a video file.");
+            return;
+        }
         var payload = { filename: selectedFile?.name, fileType: selectedFile?.type, title: title, category: category };
         const data = await getS3SignUrl(payload);
         if (data?.url) {
             await pushProfilePhotoToS3(data.url, selectedFile);
-            // Reset the form fields after successful upload
-            setTitle("");
-            setCategory({});
-            setSelectedFile(false);
-
             // Create a new file input element
             const newFileInput = document.createElement("input");
             newFileInput.type = "file";
             newFileInput.id = "fileUpload";
             newFileInput.name = "file";
             newFileInput.style.width = "67%";
-
             // Replace the existing file input with the new one
             const existingFileInput = document.getElementById("fileUpload");
             existingFileInput.parentNode.replaceChild(newFileInput, existingFileInput);
@@ -67,7 +63,7 @@ const UploadClipCard = () => {
             onUploadProgress: progressEvent => {
                 const { loaded, total } = progressEvent;
                 const percentCompleted = (loaded / total) * 100;
-                setProgress(Math.trunc(percentCompleted))
+                setProgress(Math.trunc(percentCompleted === 100 ? 0 : percentCompleted))
             },
         }).then(response => {
             dispatch(videouploadAction.uploadVideoS3(selectedFile));
@@ -107,9 +103,6 @@ const UploadClipCard = () => {
         }
     }, [isOpen])
 
-
-
-
     return (
         <div className="d-flex flex-column align-items-center justify-content-center">
             <h2>Upload Clip</h2>
@@ -147,9 +140,9 @@ const UploadClipCard = () => {
 
             </div>
             <div className="d-flex justify-content-center">
-                <Button className="mx-3" color="primary" disabled={!selectedFile || progress} onClick={handleUpload}>Upload</Button>
+                <Button className="mx-3" color="primary" onClick={handleUpload}>Upload</Button>
             </div>
-            <label className="col-form-label mt-2" htmlFor="account_type">
+            <label style={{ color: "black" }} className="col-form-label mt-2" htmlFor="account_type">
                 {progress ? <> Uploading... {progress}%</> : <></>}
             </label>
         </div>

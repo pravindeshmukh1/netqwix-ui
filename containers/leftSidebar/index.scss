@@ -64,3 +64,11 @@
         /* Change to the desired color and style */
     }
 }
+ @media (max-width: 768px) {
+    .card.trainer-profile-card.Home-main-Cont{
+        width: 94% !important;
+    }
+    .Image-Division{
+        width: 12vw !important;
+    }
+  }

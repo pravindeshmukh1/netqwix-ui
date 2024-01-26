@@ -186,7 +186,7 @@ const Index = (props) => {
   const [openCloseToggleSideNav, setOpenCloseToggleSideNav] = useState(true)
 
   useEffect(() => {
-    let getDashboard = document.querySelector("#get-dashboard");
+    // let getDashboard = document.querySelector("#get-dashboard");
     let getNavbarTabs = document.querySelector("#get-navbar-tabs");
     let getBookings = document.querySelector("#bookingsTab");
 
@@ -199,9 +199,9 @@ const Index = (props) => {
     if (getBookings) {
       getBookings.style.marginLeft = openCloseToggleSideNav ? '105px' : "30px";
     }
-    if (getDashboard) {
-      getDashboard.style.marginLeft = openCloseToggleSideNav ? '105px' : "30px";
-    }
+    // if (getDashboard) {
+    //   getDashboard.style.marginLeft = openCloseToggleSideNav ? '105px' : "30px";
+    // }
     if (getNavbarTabs) {
       getNavbarTabs.style.marginLeft = openCloseToggleSideNav ? '105px' : "30px";
     }
@@ -307,7 +307,7 @@ const Index = (props) => {
                         ? "Booking"
                         : "Schedule Slots"
                     }
-                    position="right-end"
+                    position="top"
                     trigger="mouseenter"
                   >
                     <NavLink id="sidebar-item-booking"
@@ -323,7 +323,8 @@ const Index = (props) => {
                   <p className="menu-name">Booking</p>
                 </li>}
                 {accountType === AccountType?.TRAINEE && <li>
-                  <Tooltip title="Book Lessons" position="top" trigger="mouseenter">
+                  <Tooltip title="Book Lessons" trigger="mouseenter" position="top-end"
+                    size="small">
                     <NavLink id="sidebar-item-locker"
                       className={`icon-btn btn-light button-effect step2 ${activeTab === topNavbarOptions?.BOOK_LESSON ? "active" : ""
                         }`}
@@ -549,7 +550,7 @@ const Index = (props) => {
             </div>
           </aside>}
         {!isMobile ? openCloseToggleSideNav ?
-          <ChevronLeft id="ChevronLeft" style={{ left: "83px" }} className="collapse-left-drawer-icon" onClick={() => setOpenCloseToggleSideNav(false)} /> :
+          <ChevronLeft id="ChevronLeft" style={{ left: "79px" }} className="collapse-left-drawer-icon" onClick={() => setOpenCloseToggleSideNav(false)} /> :
           <ChevronRight id="ChevronRight" style={{ left: "0px" }} className="collapse-left-drawer-icon" onClick={() => setOpenCloseToggleSideNav(true)} /> : null}
 
       </div>

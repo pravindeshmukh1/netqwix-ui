@@ -16,7 +16,7 @@ const StudentDetail = ({ videoClips, data }) => {
       <div style={{ display: "flex", flexWrap: "wrap", margin: '20px 20px', overflow: 'auto', justifyContent: 'space-between' }}>
         {videoClips?.map((clp, index) => (
           <div key={`video_clip_${index}`}>
-            <video controls width="200" height="100">
+            <video controls style={{ width: "15vw", height:'30vh' }}>
               <source src={Utils?.generateVideoURL(clp)} type="video/mp4" />
 
             </video>

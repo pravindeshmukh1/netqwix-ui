@@ -19,9 +19,7 @@ const UserInfoCard = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [imgURL, setImgURL] = useState("")
     const [selectedImage, setSelectedImage] = useState(null);
-    const [displayedImage, setDisplayedImage] = useState(
-        Utils?.dynamicImageURL(userInfo?.profile_picture) || "/assets/images/avtar/user.png"
-    );
+    const [displayedImage, setDisplayedImage] = useState("/assets/images/avtar/user.png");
     const dispatch = useAppDispatch()
     const { profile_picture, profile_image_url } = useAppSelector(bookingsState);
     const [profile, setProfile] = useState({
@@ -48,6 +46,7 @@ const UserInfoCard = () => {
             ...profile,
             ...userInfo
         })
+        setDisplayedImage(Utils?.dynamicImageURL(userInfo?.profile_picture))
     }, [userInfo])
 
 
@@ -188,7 +187,7 @@ const UserInfoCard = () => {
                     </div>}
 
 
-                    {accountType === AccountType?.TRAINER && showRatings([], "mt-3 d-flex ml-n2")}
+                    {accountType === AccountType?.TRAINER && showRatings(profile && profile?.ratings, "mt-3 d-flex ml-n2")}
                     {userInfo &&
                         userInfo.extraInfo &&
                         userInfo.extraInfo.social_media_links &&

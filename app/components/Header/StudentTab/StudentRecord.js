@@ -76,7 +76,7 @@ const StudentRecord = () => {
                 }}
                 style={{ cursor: "pointer" }}
               >
-                <div className="Top-img" style={{minHeight:'182px',overflow:'hidden'}}>
+                <div className="Top-img" style={{height:'182px',overflow:'hidden'}}>
                 <img
                   className="card-img-top"
                   src={data?.profile_picture}
