@@ -58,3 +58,9 @@
   color: white;
   font-weight: 600;
 }
+
+.sub-item {
+  display: flex;
+  align-items: center;
+  min-height: 58px;
+}

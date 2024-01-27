@@ -243,21 +243,21 @@ const ScheduleTraining = () => {
     //   // console.log("new Date(startDate).toISOStringnew Date(startDate).toISOString", moment(new Date(`${startDate}`).toISOString()).format('YYYY-MM-DD'))
   }, [selectedTrainer?.trainer_id])
 
-  useEffect(() => {
-    if (selectedTrainer?.trainer_id) {
-      let date = new Date(startDate).toISOString().split("T")[0];
-      let dateArr = date?.split("-");
-      let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0).toISOString()
-      let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0).toISOString()
-      getAvailability({
-        trainer_id: selectedTrainer?.trainer_id,
-        start_time: start_time,
-        end_time: end_time
-      }).then((res) => {
-        setAvailableSlotsState(res?.data);
-      })
-    }
-  }, [startDate])
+  // useEffect(() => {
+  //   if (selectedTrainer?.trainer_id) {
+  //     let date = new Date(startDate).toISOString().split("T")[0];
+  //     let dateArr = date?.split("-");
+  //     let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0).toISOString()
+  //     let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0).toISOString()
+  //     getAvailability({
+  //       trainer_id: selectedTrainer?.trainer_id,
+  //       start_time: start_time,
+  //       end_time: end_time
+  //     }).then((res) => {
+  //       setAvailableSlotsState(res?.data);
+  //     })
+  //   }
+  // }, [startDate])
 
 
 
@@ -416,6 +416,18 @@ const ScheduleTraining = () => {
             : DefaultTimeRange.endTime,
         },
       };
+      let date = new Date(startDate).toISOString().split("T")[0];
+      let dateArr = date?.split("-");
+      let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0).toISOString()
+      let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0).toISOString()
+      getAvailability({
+        trainer_id: trainerInfo?.userInfo?.trainer_id || selectedTrainer?.trainer_id,
+        start_time: start_time,
+        end_time: end_time
+      }).then((res) => {
+        setAvailableSlotsState(res?.data);
+      })
+
       dispatch(checkSlotAsync(payload));
     }
   }, [selectedTrainer, trainerInfo]);
@@ -437,6 +449,18 @@ const ScheduleTraining = () => {
               : DefaultTimeRange.endTime,
           },
         };
+
+        let date = new Date(startDate).toISOString().split("T")[0];
+        let dateArr = date?.split("-");
+        let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0).toISOString()
+        let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0).toISOString()
+        getAvailability({
+          trainer_id: trainerInfo?.userInfo?.trainer_id || selectedTrainer?.trainer_id,
+          start_time: start_time,
+          end_time: end_time
+        }).then((res) => {
+          setAvailableSlotsState(res?.data);
+        })
         dispatch(checkSlotAsync(payload));
       }
     }
@@ -911,13 +935,12 @@ const ScheduleTraining = () => {
         }
         return;
       }}
-      className="bookings custom-scroll custom-trainee-dashboard"
-      style={{ width: "75% !important" }}
+      className="bookings custom-scroll custom-trainee-dashboard booking-container"
     >
 
       <div className="row" >
 
-        <div className="trainer-recommended" style={{ margin: "auto", marginTop: "20px", maxWidth: "57%" }}>
+        <div className="trainer-recommended"  >
           <h1 style={{ marginBottom: "10px" }}>Book Your Lesson now</h1>
           <p>Are you ready to embark on a transformative journey towards your personal and professional development? We are here to revolutionize the way you learn and connect with expert trainers. Our cutting-edge platform.</p>
         </div>
@@ -1048,6 +1071,15 @@ const ScheduleTraining = () => {
               data,
             });
           }
+          setTrainerInfo((pre => {
+            return {
+              ...pre,
+              userInfo: {
+                ...pre?.userInfo,
+                ...data
+              }
+            }
+          }))
         }}
         onClose={() => {
           setTrainerInfo((prev) => ({
@@ -1074,12 +1106,9 @@ const ScheduleTraining = () => {
     const { from, to } = extraInfo?.working_hours || {};
     const fromHours = from ? Utils.getTimeFormate(from) : null;
     const toHours = to ? Utils.getTimeFormate(to) : null;
-    const formateStartTime = Utils.getTimeFormate(
-      trainerInfo?.userInfo?.extraInfo?.working_hours?.from
-    );
-    const formateEndTime = Utils.getTimeFormate(
-      trainerInfo?.userInfo?.extraInfo?.working_hours?.to
-    );
+    const formateStartTime = Utils.getTimeFormate(trainerInfo?.userInfo?.extraInfo?.working_hours?.from);
+    const formateEndTime = Utils.getTimeFormate(trainerInfo?.userInfo?.extraInfo?.working_hours?.to);
+
     return (
       <React.Fragment>
         <div className="row">
@@ -1116,6 +1145,18 @@ const ScheduleTraining = () => {
                     };
                     dispatch(checkSlotAsync(payload));
                     setStartDate(date);
+
+                    date = new Date(date).toISOString().split("T")[0];
+                    let dateArr = date?.split("-");
+                    let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0).toISOString()
+                    let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0).toISOString()
+                    getAvailability({
+                      trainer_id: trainerInfo?.userInfo?.trainer_id || selectedTrainer?.trainer_id,
+                      start_time: start_time,
+                      end_time: end_time
+                    }).then((res) => {
+                      setAvailableSlotsState(res?.data);
+                    })
                   }
                   const todaySDate = Utils.getDateInFormat(date.toString());
                   const { weekDateFormatted, weekDates } =

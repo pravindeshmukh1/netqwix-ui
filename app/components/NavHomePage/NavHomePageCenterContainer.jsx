@@ -48,7 +48,7 @@ const NavHomePageCenterContainer = () => {
                         {allTabs?.map((el) => (
                             el?.accessBy?.includes(accountType) && <NavItem key={el.value}>
                                 <NavLink
-                                    className={activeTab === el?.value ? 'activelink' : ''}
+                                    className={activeTab === el?.value ? 'activelink sub-item' : 'sub-item'}
                                     onClick={() => toggleTab(el?.value)}
                                 >
                                     {el?.name}
