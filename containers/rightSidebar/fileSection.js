@@ -203,12 +203,17 @@ const FileSection = (props) => {
     setClips([])
     setTraineeClips([])
     var res = await myClips({})
-    setClips(res?.data)
+    let temp = res?.data
+    temp = temp.map(vl => { return { ...vl, show: false } })
+    if (temp.length > 0) temp[0].show = true
+    setClips([...temp])
     var res2 = await traineeClips({})
     setTraineeClips(res2?.data)
     var res3 = await reports({})
     setReportsData(res3?.result || [])
   }
+
+  useEffect(() => { setActiveTab("media") }, [])
 
   return (
     <div className="apps-content" id="files">
@@ -790,9 +795,9 @@ const FileSection = (props) => {
                   </div>
                 </div>
               </div>
-              <div className="d-flex flex-column  align-items-center">
+              <div className="d-flex flex-column  align-items-center" style={{ height: "calc(100vh - 81px)" }}>
                 <h1 className="p-3">Report</h1>
-                <embed src={`https://netquix.s3.ap-south-1.amazonaws.com/${reportName}`} width="100%" height="500px" allowfullscreen />
+                <embed src={`https://netquix.s3.ap-south-1.amazonaws.com/${reportName}`} width="100%" height="100%" allowfullscreen />
               </div>
               <div className="justify-content-center">
               </div>

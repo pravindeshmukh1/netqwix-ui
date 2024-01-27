@@ -30,6 +30,7 @@ import NoteSection from "../rightSidebar/noteSection";
 import FileSection from "../rightSidebar/fileSection";
 import AppListSection from "../rightSidebar/appList";
 import { Book, File, ChevronLeft, ChevronRight } from "react-feather";
+import BookLessonIcon from "../../public/assets/images/online-lesson.png"
 import {
   bookingsAction,
   bookingsState,
@@ -331,12 +332,10 @@ const Index = (props) => {
                       onClick={() => { dispatch(authAction?.setTopNavbarActiveTab(topNavbarOptions?.BOOK_LESSON)) }}
                       data-intro=""
                     >
-                      {/* {activeTab === topNavbarOptions?.BOOK_LESSON
-                        ? <img src="../assets/images/lockers-white.png" style={{ width: 20 }} />
-                        : <img src="../assets/images/lockers.png" style={{ width: 20 }} />
-                      } */}
-                      <i className="bi bi-calendar-check" />
-
+                      {activeTab === topNavbarOptions?.BOOK_LESSON
+                        ? <img src={"../assets/images/online-lesson-white.png"} alt="Book Lesson" style={{ width: 20 }} />
+                        : <img src={"../assets/images/online-lesson.png"} alt="Book Lesson" style={{ width: 20 }} />
+                      }
 
                     </NavLink>
                   </Tooltip>

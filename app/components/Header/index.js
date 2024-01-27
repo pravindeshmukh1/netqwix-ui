@@ -119,6 +119,7 @@ const Header = () => {
 
   useEffect(() => {
     setActiveNav(sidebarActiveTab === leftSideBarOptions?.TOPNAVBAR ? topNavbarActiveTab : sidebarActiveTab);
+    dispatch(authAction?.setActiveModalTab(null));
   }, [topNavbarActiveTab, sidebarActiveTab])
 
   return (

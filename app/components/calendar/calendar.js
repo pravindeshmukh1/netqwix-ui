@@ -1,22 +1,25 @@
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { useEffect, useState } from 'react';
-import { addTrainerSlot, deleteTrainerSlot, getAvailability } from './calendar.api';
+import { addTrainerSlot, deleteTrainerSlot, getAvailability, updateTrainerSlot } from './calendar.api';
 import React from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Star, X, Plus, Check } from "react-feather";
+import interactionPlugin from '@fullcalendar/interaction'
+import { useAppSelector } from '../../store';
+import { authState } from '../auth/auth.slice';
+import momentTimezonePlugin from '@fullcalendar/moment-timezone'
+import { Utils } from '../../../utils/utils';
+import axios from 'axios';
+import { toast } from "react-toastify";
 
 const staticData = [
   { start: new Date('2024-01-11T10:04:00.840Z'), end: new Date('2024-01-11T11:05:00.840Z') },
   { start: new Date('2024-01-11T11:06:00.840Z'), end: new Date('2024-01-11T11:08:00.840Z') }
 ]
 
-function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData, options, ...args }) {
-
-  console.log("data", data);
-  console.log("options", options);
+function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData, options, userTimeZone, ...args }) {
 
   const [showSelectTimeDiv, setShowSelectTimeDiv] = useState(false)
   const [disabledHourTime, setDisabledHourTime] = useState(["00", "04", "10"])
@@ -26,6 +29,97 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
   let [selectedEndTime, setSelectedEndTime] = useState("");
 
   const [error, setError] = useState(false);
+  const [indexErr, setIndexErr] = useState("");
+
+  const overlap = () => {
+    let status = false;
+
+    if (!selectedStartTime && !selectedEndTime) {
+      status = true;
+      return status
+    }
+
+    if (selectedStartTime >= selectedEndTime) {
+      status = true
+      return status;
+    }
+
+    selectedStartTime = moment(selectedStartTime);
+    selectedEndTime = moment(selectedEndTime);
+
+    // Check for overlap
+    for (const session of data) {
+      const sessionStartTime = moment(session.start_time);
+      const sessionEndTime = moment(session.end_time);
+
+      if (
+        selectedStartTime?.isBetween(
+          sessionStartTime,
+          sessionEndTime,
+          null,
+          "[]"
+        ) ||
+        selectedEndTime?.isBetween(
+          sessionStartTime,
+          sessionEndTime,
+          null,
+          "[]"
+        ) ||
+        (selectedStartTime?.isSameOrBefore(sessionStartTime) && selectedEndTime?.isSameOrAfter(sessionEndTime))
+      ) {
+        if (selectedStartTime?.isSame(sessionEndTime) || selectedEndTime?.isSame(sessionStartTime)) {
+        } else {
+          status = true;
+          break; // Exit the loop if overlap is detected
+        }
+      }
+    }
+    return status;
+  };
+
+
+  const overlapEdit = (index) => {
+    var newData = JSON.parse(JSON.stringify(data));
+    newData.splice(index, 1)
+    let status = false;
+
+    selectedStartTime = moment(data[index]?.start_time);
+    selectedEndTime = moment(data[index]?.end_time);
+
+    if (selectedStartTime >= selectedEndTime) {
+      status = true
+      return status;
+    }
+
+    // Check for overlap
+    for (const session of newData) {
+      const sessionStartTime = moment(session.start_time);
+      const sessionEndTime = moment(session.end_time);
+
+      if (
+        selectedStartTime?.isBetween(
+          sessionStartTime,
+          sessionEndTime,
+          null,
+          "[]"
+        ) ||
+        selectedEndTime?.isBetween(
+          sessionStartTime,
+          sessionEndTime,
+          null,
+          "[]"
+        ) ||
+        (selectedStartTime?.isSameOrBefore(sessionStartTime) && selectedEndTime?.isSameOrAfter(sessionEndTime))
+      ) {
+        if (selectedStartTime?.isSame(sessionEndTime) || selectedEndTime?.isSame(sessionStartTime)) {
+        } else {
+          status = true;
+          break; // Exit the loop if overlap is detected
+        }
+      }
+    }
+    return status;
+  };
 
   const addTrainerSlotAPI = async () => {
 
@@ -57,45 +151,7 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
     //     }
     //   }
     // Check for overlap
-    const overlap = () => {
-      let status = false;
 
-      if (!selectedStartTime && !selectedEndTime) {
-        status = true;
-        return status
-      }
-
-      selectedStartTime = moment(selectedStartTime);
-      selectedEndTime = moment(selectedEndTime);
-      // Check for overlap
-      for (const session of data) {
-        const sessionStartTime = moment(session.start_time);
-        const sessionEndTime = moment(session.end_time);
-
-        if (
-          selectedStartTime?.isBetween(
-            sessionStartTime,
-            sessionEndTime,
-            null,
-            "[]"
-          ) ||
-          selectedEndTime?.isBetween(
-            sessionStartTime,
-            sessionEndTime,
-            null,
-            "[]"
-          ) ||
-          (selectedStartTime?.isSameOrBefore(sessionStartTime) && selectedEndTime?.isSameOrAfter(sessionEndTime))
-        ) {
-          if (selectedStartTime?.isSame(sessionEndTime) || selectedEndTime?.isSame(sessionStartTime)) {
-          } else {
-            status = true;
-            break; // Exit the loop if overlap is detected
-          }
-        }
-      }
-      return status;
-    };
 
 
     if (overlap()) {
@@ -128,6 +184,20 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
     }
   }
 
+
+  const updateTrainerSlotAPI = async (id, index) => {
+    try {
+      if (overlapEdit(index)) {
+        setIndexErr(index)
+      } else {
+        let res = await updateTrainerSlot(data[index])
+        toast.success("Slot updated successfully.", { type: "success" });
+        setIndexErr("")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const containerStyle = {
     display: 'flex',
@@ -167,10 +237,17 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
 
   return (
     <div>
-      <Modal isOpen={modal} toggle={toggle} {...args}>
+      <Modal isOpen={modal} toggle={() => {
+        setIndexErr("");
+        setError(false);
+        toggle();
+      }} {...args}>
         <ModalBody>
           <div style={{ position: "relative" }}>
-            <div style={{ position: "absolute", top: "-10px", right: "0px", background: "none" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { toggle() }} > <X /> </div>
+            <div style={{ position: "absolute", top: "-10px", right: "0px", background: "none" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => {
+              setIndexErr("")
+              toggle()
+            }} > <X /> </div>
             <div style={{ marginTop: "10px", marginBottom: "40px" }}><b>{selectedModalDate}</b></div>
 
             {/* <div style={{ marginBottom: "20px" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { setShowSelectTimeDiv(true) }} > <Plus /> </div> */}
@@ -182,8 +259,8 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                       Start  Time
                     </option>
                     {options.map((time) => (
-                      <option disabled={moment(time)?.isBefore(moment(new Date().toISOString()))} key={time} value={time}>
-                        {moment(time).format('h:mm a')}
+                      <option disabled={moment(time)?.tz(userTimeZone)?.isBefore(moment(new Date().toISOString())?.tz(userTimeZone))} key={time} value={time}>
+                        {moment(time)?.tz(userTimeZone).format('h:mm a')}
                       </option>
                     ))}
                   </select>
@@ -194,15 +271,15 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                       End Time
                     </option>
                     {options.map((time) => (
-                      <option disabled={moment(time)?.isBefore(moment(new Date().toISOString()))} key={time} value={time}>
-                        {moment(time).format('h:mm a')}
+                      <option disabled={moment(time)?.tz(userTimeZone)?.isBefore(moment(new Date().toISOString())?.tz(userTimeZone))} key={time} value={time}>
+                        {moment(time).tz(userTimeZone).format('h:mm a')}
                       </option>
                     ))}
                   </select>
                 </div>
-                <div style={selectcontainerStyle}>
+                {/* <div style={selectcontainerStyle}>
                   <div className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { setShowSelectTimeDiv() }} > <X /> </div>
-                </div>
+                </div> */}
                 <div style={selectcontainerStyle}>
                   <div className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => addTrainerSlotAPI()} > <Plus /> </div>
                 </div>
@@ -217,20 +294,26 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                   <div style={{ display: "flex", justifyContent: "flex-start", gap: "20px" }}>
                     <div style={selectcontainerStyle}>
                       <label style={labelStyle}>Start  Time</label>
-                      <select style={selectStyle} value={e?.start_time}>
+                      <select style={selectStyle} value={e?.start_time} onChange={(ev) => {
+                        data[index].start_time = ev?.target?.value;
+                        setData([...data])
+                      }}>
                         {options.map((time) => (
-                          <option key={time} value={time}>
-                            {moment(time).format('h:mm a')}
+                          <option disabled={moment(time)?.tz(userTimeZone)?.isBefore(moment(new Date().toISOString())?.tz(userTimeZone))} key={time} value={time}>
+                            {moment(time).tz(userTimeZone).format('h:mm a')}
                           </option>
                         ))}
                       </select>
                     </div>
                     <div style={selectcontainerStyle}>
                       <label style={labelStyle}>End  Time</label>
-                      <select style={selectStyle} value={e?.end_time}>
+                      <select style={selectStyle} value={e?.end_time} onChange={(ev) => {
+                        data[index].end_time = ev?.target?.value;
+                        setData([...data])
+                      }}>
                         {options.map((time) => (
-                          <option key={time} value={time}>
-                            {moment(time).format('h:mm a')}
+                          <option disabled={moment(time)?.tz(userTimeZone)?.isBefore(moment(new Date().toISOString())?.tz(userTimeZone))} key={time} value={time}>
+                            {moment(time).tz(userTimeZone).format('h:mm a')}
                           </option>
                         ))}
                       </select>
@@ -239,9 +322,10 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
                       <div style={{ marginTop: "20px" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { deleteTrainerSlotAPI(e?._id, index) }} > <X /> </div>
                     </div>
                     <div style={selectcontainerStyle}>
-                      <div style={{ marginTop: "20px" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { console.log("click") }} > <Check /> </div>
+                      <div style={{ marginTop: "20px" }} className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={() => { updateTrainerSlotAPI(e?._id, index) }} > <Check /> </div>
                     </div>
                   </div>
+                  {indexErr === index && <div> <p style={{ color: "red", margin: "3px 0px -4px 2px" }}>Please select a valid start time and end time.</p></div>}
                 </div>
               })
             }
@@ -254,12 +338,23 @@ function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData,
 
 export default function CalendarPage() {
 
+
+  const { userInfo } = useAppSelector(authState);
+
+
   const [data, setData] = useState([])
   const [availabilityData, setAvailabilityData] = useState([])
   const [selectedDateEvent, setSelectedDateEvent] = useState([])
   const [modal, setModal] = useState(false);
   const [selectedModalDate, setSelectedModalDate] = useState("")
   const [options, setOptions] = useState([])
+  const [userTimeZone, setUserTimeZone] = useState("")
+
+  useEffect(() => {
+    if (userInfo?.extraInfo?.working_hours?.time_zone) {
+      getIANATimeZone(userInfo?.extraInfo?.working_hours?.time_zone)
+    }
+  }, [userInfo?.extraInfo?.working_hours?.time_zone])
 
   const toggle = () => {
     setModal(!modal)
@@ -270,6 +365,16 @@ export default function CalendarPage() {
   useEffect(() => {
     getAllAvailability();
   }, [])
+
+
+  const getIANATimeZone = async (timezoneString) => {
+    const matches = timezoneString.match(/\(GMT ([\+\-]\d+:\d+)\)/);
+    const utcOffset = matches ? matches[1] : null;
+    const response = await axios.get('https://fullcalendar.io/api/demo-feeds/timezones.json');
+    var timeZones = response.data;
+    const ianaTimeZone = utcOffset ? timeZones.find((tz) => moment.tz(tz).utcOffset() === moment.duration(utcOffset).asMinutes()) : '';
+    setUserTimeZone(ianaTimeZone)
+  };
 
   const currentDateAndtime = (startDate) => {
     // Create a new Date object for the current date
@@ -307,27 +412,42 @@ export default function CalendarPage() {
     return result;
   }
 
-
-
   function generateTimeArray(selectedDate) {
-    var date = new Date(selectedDate).toISOString().split("T")[0];
-    var dateArr = date?.split("-");
-    let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0)
-    let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0)
+
+    const start_time = moment.tz(selectedDate, userTimeZone).startOf('day');
+    const end_time = moment.tz(selectedDate, userTimeZone).endOf('day');
 
     const timeArray = [];
     while (start_time <= end_time) {
       timeArray.push(start_time.toISOString());
-      start_time.setMinutes(start_time.getMinutes() + 15);
+      start_time.add(15, 'minutes');
     }
     setOptions([...timeArray])
   }
 
+
+  // function generateTimeArray(selectedDate) {
+  //   var date = new Date(selectedDate).toISOString().split("T")[0];
+  //   var dateArr = date?.split("-");
+  //   let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0)
+  //   let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0)
+
+  //   const timeArray = [];
+  //   while (start_time <= end_time) {
+  //     timeArray.push(start_time.toISOString());
+  //     start_time.setMinutes(start_time.getMinutes() + 15);
+  //   }
+  //   setOptions([...timeArray])
+  // }
+
   const handleSelectedModal = (date) => {
     // let find = availabilityData?.find((el) => el?._id === date)
-    var dateArr = date?.split("-");
-    let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0).toISOString()
-    let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0).toISOString()
+    // var dateArr = date?.split("-");
+    // let start_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 0, 0, 0, 0).toISOString()
+    // let end_time = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), 23, 59, 0, 0).toISOString()
+
+    const start_time = moment.tz(date, userTimeZone).startOf('day');
+    const end_time = moment.tz(date, userTimeZone).endOf('day');
 
     const filteredData = availabilityData.filter(item => {
       return new Date(start_time) <= new Date(item.start_time) && new Date(item?.start_time) <= new Date(end_time)
@@ -339,16 +459,10 @@ export default function CalendarPage() {
     setModal(true);
   }
 
-
-  const getData = (e) => {
-    console.log(e.start);
-    console.log(e.end);
-  }
-
   return (
-    <div className='calendar-container'>
-      {data?.length && <FullCalendar
-        plugins={[dayGridPlugin, interactionPlugin]}
+    <div className='calendar-container' style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} >
+      {data?.length && userTimeZone && <FullCalendar
+        plugins={[dayGridPlugin, interactionPlugin, momentTimezonePlugin]}
         headerToolbar={{ left: 'prev,next', center: 'title', right: '' }}
         initialView='dayGridMonth'
         nowIndicator={true}
@@ -357,12 +471,12 @@ export default function CalendarPage() {
         selectMirror={true}
         initialEvents={data}
         height={600}
-        width={250}
+        width={500}
+        timeZone={userTimeZone}
         dateClick={function (e) {
           var date = currentDateAndtime(e?.date)
           handleSelectedModal(date)
         }}
-        datesSet={(e) => getData(e)}
         eventContent={(e) => {
           return (
             <>
@@ -381,7 +495,7 @@ export default function CalendarPage() {
               }}>+</button> */}
               <div style={{ display: "flex", width: "100%", justifyContent: "space-between", margin: "0px 10px", textAlign: "center" }}>
                 <div >
-                  <b>{moment(e.event.start).format('h:mm a')} - {moment(e.event.end).format('h:mm a')}</b>
+                  <b>{moment(e.event.start).tz(userTimeZone).format('h:mm a')} - {moment(e.event.end).tz(userTimeZone).format('h:mm a')}</b>
                 </div>
               </div>
             </>
@@ -398,7 +512,6 @@ export default function CalendarPage() {
         selectMirror={true}
         initialEvents={[]}
         height={410}
-        datesSet={(e) => getData(e)}
         dateClick={function (e) {
           var date = currentDateAndtime(e?.date)
           handleSelectedModal(date)
@@ -416,7 +529,7 @@ export default function CalendarPage() {
           )
         }}
       />}
-      <EventModal modal={modal} setModal={setModal} toggle={toggle} setData={setAvailabilityData} data={selectedDateEvent} selectedModalDate={selectedModalDate} options={options} />
+      <EventModal modal={modal} setModal={setModal} toggle={toggle} setData={setAvailabilityData} data={selectedDateEvent} selectedModalDate={selectedModalDate} options={options} userTimeZone={userTimeZone} />
     </div>
   )
 }

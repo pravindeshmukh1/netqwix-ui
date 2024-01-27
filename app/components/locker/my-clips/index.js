@@ -108,7 +108,7 @@ import Modal from "../../../common/modal";
 // }]
 
 
-const MyClips = () => {
+const MyClips = ({ activeCenterContainerTab }) => {
     // const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -195,7 +195,7 @@ const MyClips = () => {
 
     useEffect(() => {
         if (!isOpen) getMyClips()
-    }, [isOpen])
+    }, [isOpen, activeCenterContainerTab])
 
     // useEffect(() => {
     //     setAccountType(localStorage.getItem(LOCAL_STORAGE_KEYS.ACC_TYPE));

@@ -7,14 +7,6 @@ import { Utils } from "../../utils/utils";
 import { TimeZone } from "../../app/common/constants";
 import { updateProfileAsync } from "../../app/components/trainer/trainer.slice";
 
-
-
-
-
-
-
-
-
 const Addworkinghour = () => {
   const { userInfo } = useAppSelector(authState);
   const [workingHours, setWorkingHours] = useState({
@@ -24,6 +16,11 @@ const Addworkinghour = () => {
   });
   const [isTimeConflicts, setIsTimeConflicts] = useState(false);
   const dispatch = useAppDispatch();
+
+
+  useEffect(() => {
+    setWorkingHours(userInfo?.extraInfo?.working_hours)
+  }, [userInfo]);
 
   return (
     <div className="card-body change-number Home" >
@@ -41,7 +38,7 @@ const Addworkinghour = () => {
             clearIcon={true}
             showSecond={false}
             minuteStep={5}
-            defaultValue={Utils.getFormattedTime(workingHours?.from)}
+            value={Utils.getFormattedTime(workingHours?.from)}
             // defaultValue={
             //   userInfo &&
             //     userInfo?.extraInfo &&
@@ -81,7 +78,7 @@ const Addworkinghour = () => {
             className={`ml-2 mt-2 ${isTimeConflicts ? `border border-danger` : ``
               }  rounded`}
             clearIcon={true}
-            defaultValue={Utils.getFormattedTime(workingHours?.to)}
+            value={Utils.getFormattedTime(workingHours?.to)}
             // defaultValue={
             //   userInfo &&
             //     userInfo?.extraInfo &&
@@ -122,7 +119,7 @@ const Addworkinghour = () => {
             name="timezone_offset"
             id="timezone-offset"
             className="timezone_offset mt-2 ml-2"
-            value={workingHours.time_zone}
+            value={workingHours?.time_zone}
             onChange={(event) => {
               const { value } = event.target;
               setWorkingHours((prev) => ({

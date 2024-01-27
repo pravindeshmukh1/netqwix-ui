@@ -63,7 +63,7 @@ const ShareClipsCard = () => {
     return (
         <div style={{ margin: "auto" }}>
             <div className="row" style={{ justifyContent: "center" }}>
-                <h3 className="mt-3">Share clips</h3>
+                <h3 className="mt-3">Refer a Friend</h3>
             </div>
 
             {isModalOpen && (

@@ -9,7 +9,9 @@ import MyClips from '../locker/my-clips';
 import Reports from '../locker/reports';
 import BookingList from '../bookings/BookingList';
 
-const Schedule = () => {
+const Schedule = ({ activeCenterContainerTab }) => {
+    useEffect(() => {
+    }, [activeCenterContainerTab])
     return (
         <>
             <Addworkinghour />
@@ -17,18 +19,20 @@ const Schedule = () => {
         </>
     )
 }
-
-
 const allTabs = [
-    { name: 'My Clips', value: 'myClips', accessBy: [AccountType?.TRAINEE, AccountType?.TRAINER], component: <MyClips /> },
-    { name: 'Schedule', value: 'schedule', accessBy: [AccountType?.TRAINER], component: <Schedule /> },
-    { name: 'Upcoming Lesson', value: 'upcomingLesson', accessBy: [AccountType?.TRAINEE, AccountType?.TRAINER], component: <BookingList /> },
-    { name: 'Game Plans', value: 'gamePlans', accessBy: [AccountType?.TRAINER, AccountType?.TRAINEE], component: <Reports /> },
+    { name: 'My Clips', value: 'myClips', accessBy: [AccountType?.TRAINEE, AccountType?.TRAINER], component: MyClips },
+    { name: 'Schedule', value: 'schedule', accessBy: [AccountType?.TRAINER], component: Schedule },
+    { name: 'Upcoming Session', value: 'upcomingLesson', accessBy: [AccountType?.TRAINEE, AccountType?.TRAINER], component: BookingList },
+    { name: 'Game Plans', value: 'gamePlans', accessBy: [AccountType?.TRAINER, AccountType?.TRAINEE], component: Reports },
 ];
+
+
 
 const NavHomePageCenterContainer = () => {
     const { accountType } = useAppSelector(authState);
     const [activeTab, setActiveTab] = useState(allTabs[0]?.value);
+
+
 
     const toggleTab = (tabValue) => {
         if (activeTab !== tabValue) {
@@ -55,10 +59,10 @@ const NavHomePageCenterContainer = () => {
                 </div>
                 <div className="file-tab Nav-Home" style={{ color: "black" }}>
                     <TabContent activeTab={activeTab}>
-                        {allTabs?.map((el) => {
+                        {allTabs?.map((el, index) => {
                             return (
-                                <TabPane key={el?.value} tabId={el?.value}>
-                                    {el?.component || <h1>{el?.name}</h1>}
+                                <TabPane key={index} tabId={el?.value}>
+                                    {el?.component ? <el.component key={index} activeCenterContainerTab={activeTab} /> : <h1>{el?.name}</h1>}
                                 </TabPane>
                             )
                         })}

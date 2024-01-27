@@ -20,12 +20,22 @@
     }
 
     .sidebar-main {
-      // height: calc(100vh - 186px);
-      height: 100%;
+      height: calc(100vh - 80px);
       display: inline-flex;
       flex-direction: column;
       width: 100%;
       justify-content: space-between;
+
+      .sidebar-top {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 23px;
+        padding-top: 20px;
+        height: 100%;
+        overflow: auto;
+      }
 
       .sidebar-top,
       .sidebar-bottom {
@@ -41,7 +51,7 @@
 
         li {
           text-align: center;
-          padding-top: 30px;
+          // padding-top: 30px;
           position: relative;
         }
       }

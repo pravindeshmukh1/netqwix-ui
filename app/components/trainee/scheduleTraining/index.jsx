@@ -917,7 +917,7 @@ const ScheduleTraining = () => {
 
       <div className="row" >
 
-        <div className="trainer-recommended" style={{ marginTop: "3%", maxWidth: "75%" }}>
+        <div className="trainer-recommended" style={{ margin: "auto", marginTop: "20px", maxWidth: "57%" }}>
           <h1 style={{ marginBottom: "10px" }}>Book Your Lesson now</h1>
           <p>Are you ready to embark on a transformative journey towards your personal and professional development? We are here to revolutionize the way you learn and connect with expert trainers. Our cutting-edge platform.</p>
         </div>

@@ -12,7 +12,8 @@
         border-radius: 0 !important;
         min-width: 100px;
     }
-    .theme-tab.nav-tabs{
+
+    .theme-tab.nav-tabs {
         justify-content: space-around !important;
     }
 
@@ -33,7 +34,8 @@
     }
 
 }
-.theme-tab.sub-nav{
+
+.theme-tab.sub-nav {
     border: 0;
 }
 
@@ -65,7 +67,7 @@
     display: flex;
     min-height: 150px;
     min-width: 80px;
-
+    position: relative;
 }
 
 .Trainer-box-1 {
@@ -74,6 +76,12 @@
     border: 0;
     border-radius: 10px !important;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 10px;
+    gap: 10px;
 }
 
 .card-body.upload {
@@ -105,11 +113,13 @@
 #navHomePageCenterContainer.nav-link:active {
     background-color: white;
 }
+
 // .col-lg-4{
 //  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 //   border: 1px solid black;
 //   border-radius: 10px !important;
 // }
 .selected-course {
-    border: 2px solid #007bff; /* Change the color as needed */
-  }
+    border: 2px solid #007bff;
+    /* Change the color as needed */
+}

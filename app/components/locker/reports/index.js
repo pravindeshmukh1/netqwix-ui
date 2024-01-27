@@ -11,7 +11,7 @@ import ReportModal from "../../../../app/components/video/reportModal";
 import { X } from "react-feather";
 
 
-const Reports = () => {
+const Reports = ({ activeCenterContainerTab }) => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -89,7 +89,7 @@ const Reports = () => {
 
     useEffect(() => {
         if (!isOpen) getMyClips()
-    }, [isOpen])
+    }, [isOpen, activeCenterContainerTab])
 
 
     const getMyClips = async () => {

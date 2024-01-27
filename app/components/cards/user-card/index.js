@@ -8,7 +8,7 @@ import SocialMediaIcons from '../../../common/socialMediaIcons';
 import { myClips } from '../../../../containers/rightSidebar/fileSection.api';
 import { bookingsAction, bookingsState, uploadProfilePictureAsync } from '../../common/common.slice';
 import { toast } from 'react-toastify';
-import { updateTraineeProfileAsync } from '../../trainee/trainee.slice';
+import { getTraineeWithSlotsAsync, traineeState, updateTraineeProfileAsync } from '../../trainee/trainee.slice';
 
 
 
@@ -30,6 +30,8 @@ const UserInfoCard = () => {
         editStatus: false,
         profile_picture: undefined,
     });
+    const { getTraineeSlots } = useAppSelector(traineeState);
+    const [trainerRatings, setTrainerRatings] = useState([])
 
     useEffect(() => {
         getMeAsync()
@@ -55,6 +57,11 @@ const UserInfoCard = () => {
         setIsEditing(true);
     };
 
+    const handleSaveClick = (e) => {
+        setIsEditing(false);
+        dispatch(updateTraineeProfileAsync(profile))
+    };
+
     const handleRateChange = (e) => {
         setProfile({
             ...profile,
@@ -63,11 +70,6 @@ const UserInfoCard = () => {
                 hourly_rate: e.target.value
             }
         })
-    };
-
-    const handleSaveClick = (e) => {
-        setIsEditing(false);
-        dispatch(updateTraineeProfileAsync(profile))
     };
 
     const showRatings = (ratings, extraClasses = "") => {
@@ -128,7 +130,6 @@ const UserInfoCard = () => {
                 console.error("Invalid file selected.");
             }
         }
-        event.stopPropagation();
     };
 
     useEffect(() => {
@@ -137,33 +138,109 @@ const UserInfoCard = () => {
         }
     }, [imgURL])
 
+    useEffect(() => {
+        const findByTrainerId = getTraineeSlots.find(
+            (trainer) => trainer && trainer?._id === profile?._id
+        );
+        setTrainerRatings(findByTrainerId?.trainer_ratings)
+    }, [getTraineeSlots])
+
+    useEffect(() => {
+        const searchTerm = profile && profile?.fullname;
+        const filterParams = {
+            date: new Date(),
+            day: new Date().getDay(),
+            time: new Date().getTime(),
+        }
+        if (searchTerm && filterParams) {
+            const filterPayload = {
+                time: filterParams.time,
+                day: filterParams.day,
+                search: searchTerm,
+            };
+            dispatch(getTraineeWithSlotsAsync(filterPayload));
+        }
+    }, [profile]);
 
     return (
         <div className="Trainer-box-1">
-            <div className="Abc align-items-center justify-content-center">
-                <div className="Image-Trainer-Profile">
-                    {selectedImage ? (
-                        <div className="preview-image">
-                            <img
-                                src={URL.createObjectURL(selectedImage)}
-                                alt="Selected"
-                                className="selected-image"
-                                style={{ maxWidth: "100%", height: "auto" }}
+            {selectedImage ? (
+                <div className="preview-image">
+                    <img
+                        src={URL.createObjectURL(selectedImage)}
+                        alt="Selected"
+                        className="selected-image"
+                        style={{ maxWidth: "200px", minWidth: "200px", minHeight: "200px", maxHeight: "200px" }}
+                    />
+                    <button className="icon-btn btn-sm btn-outline-light close-apps pointer position-absolute" style={{ right: "0px" }} onClick={handleRemovePreview}>
+                        <X />
+                    </button>
+                </div>
+            ) : (
+                <img
+                    src={displayedImage}
+                    alt="trainer_image"
+                    className="rounded"
+                    style={{ maxWidth: "200px", minWidth: "200px", minHeight: "200px", maxHeight: "200px" }}
+                />
+            )}
+            <div className="">
+                {accountType === AccountType?.TRAINER && <div div className="Hourly-up">
+                    <h3 className="Hourly-rate">
+                        Hourly Rate: ${isEditing ? (
+                            <input className="Rate-input-box"
+                                type="number"
+                                value={profile?.extraInfo?.hourly_rate}
+                                onChange={handleRateChange}
+                                onBlur={handleSaveClick}
                             />
-                            <button className="icon-btn btn-sm btn-outline-light close-apps pointer" onClick={handleRemovePreview}>
-                                <X />
-                            </button>
-                        </div>
-                    ) : (
-                        <img
-                            src={displayedImage}
-                            alt="trainer_image"
-                            className="rounded trainer-profile"
-                            style={{ maxWidth: "100%", height: "auto" }}
-                        />
+                        ) : (
+                            profile?.extraInfo?.hourly_rate
+                        )}
+                    </h3>
+                    <a
+                        className="icon-btn btn-outline-light btn-sm edit-btn Trainer"
+                        href="#"
+                        onClick={isEditing ? handleSaveClick : handleEditClick}
+                    >
+                        {isEditing ? <Save /> : <Edit />}
+                    </a>
+                </div>}
+
+
+                {accountType === AccountType?.TRAINER && showRatings(trainerRatings, "d-flex")}
+                {userInfo &&
+                    userInfo.extraInfo &&
+                    userInfo.extraInfo.social_media_links &&
+                    userInfo.extraInfo.social_media_links ? (
+                    <SocialMediaIcons
+                        profileImageURL={""}
+                        social_media_links={userInfo.extraInfo.social_media_links}
+                        isvisible={false}
+                    />
+                ) : null}
+                <div className="Change-up-button">
+                    {!selectedImage && (
+                        <>
+                            <label htmlFor="profilePictureInput" className="btn btn-primary btn-sm">
+                                Change Picture
+                            </label>
+                            <input
+                                id="profilePictureInput"
+                                type="file"
+                                accept="image/*"
+                                style={{ display: "none" }}
+                                onChange={handlePictureChange}
+                            />
+                        </>
+                    )}
+                    {selectedImage && (
+                        <button type="button" className="btn btn-success btn-sm" onClick={handleSavePicture}>
+                            Save Picture
+                        </button>
                     )}
                 </div>
-                <div className="col-7 col-sm-6 col-md-7 col-lg-8 col-xl-9 card-trainer">
+                {/* <div className="col-7 col-sm-6 col-md-7 col-lg-8 col-xl-9 card-trainer">
                     {accountType === AccountType?.TRAINER && <div div className="Hourly-up">
                         <h3 className="Hourly-rate">
                             Hourly Rate: ${isEditing ? (
@@ -219,7 +296,7 @@ const UserInfoCard = () => {
                             </button>
                         )}
                     </div>
-                </div>
+                </div> */}
 
             </div>
         </div >

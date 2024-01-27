@@ -14,7 +14,7 @@ import { Star, X } from 'react-feather';
 export var meetingRoom = () => <></>
 
 
-const BookingList = () => {
+const BookingList = ({ activeCenterContainerTab }) => {
     const [tabBook, setTabBook] = useState(bookingButton[0]);
     const [isOpen, setIsOpen] = useState(false);
     const [clips, setClips] = useState([]);
@@ -48,7 +48,7 @@ const BookingList = () => {
         } else {
             dispatch(getScheduledMeetingDetailsAsync());
         }
-    }, [tabBook]);
+    }, [tabBook, activeCenterContainerTab]);
     const showRatingLabel = (ratingInfo) => {
         // for trainee we're showing recommends
         return ratingInfo &&
@@ -84,11 +84,6 @@ const BookingList = () => {
         dispatch(removeNewBookingData());
         setIsOpen(false)
         setIsModalOpen(false);
-    }
-
-    const getMyClips = async () => {
-        var res = await myClips({})
-        setClips(res?.data)
     }
 
     const renderBooking = (

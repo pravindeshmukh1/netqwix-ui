@@ -12,6 +12,8 @@ import {
   minimumMeetingDurationInMin,
 } from "../app/common/constants";
 import moment from "moment";
+import axios from "axios";
+import momenttz from 'moment-timezone';
 
 export class Utils {
   static isEmailValid = (email) => {
@@ -649,6 +651,15 @@ export class Utils {
     updatedURL = process?.env?.NEXT_PUBLIC_API_BASE_URL + "/public" + url?.toString()?.split("public")[1]
     return updatedURL
   }
+
+  static getIANATimeZone = async (timezoneString) => {
+    const matches = timezoneString.match(/\(GMT ([\+\-]\d+:\d+)\)/);
+    const utcOffset = matches ? matches[1] : null;
+    const response = await axios.get('https://fullcalendar.io/api/demo-feeds/timezones.json');
+    var timeZones = response.data;
+    const ianaTimeZone = utcOffset ? timeZones.find((tz) => momenttz.tz(tz).utcOffset() === momenttz.duration(utcOffset).asMinutes()) : '';
+    return ianaTimeZone || ""
+  };
 }
 
 
