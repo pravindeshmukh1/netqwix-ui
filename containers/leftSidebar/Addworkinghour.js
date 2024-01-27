@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/store";
 import { authState } from "../../app/components/auth/auth.slice";
 import { Utils } from "../../utils/utils";
-import { TimeZone } from "../../app/common/constants";
 import { Message, TimeZone } from "../../app/common/constants";
 import { updateProfileAsync } from "../../app/components/trainer/trainer.slice";
 
