@@ -118,6 +118,7 @@ const Addworkinghour = () => {
           <select
             name="timezone_offset"
             id="timezone-offset"
+            style={{ marginRight: "10px", maxWidth: "100%" }}
             className="timezone_offset mt-2 ml-2"
             value={workingHours?.time_zone}
             onChange={(event) => {
