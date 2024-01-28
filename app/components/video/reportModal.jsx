@@ -183,22 +183,13 @@ const reportModal = ({
     }
 
 
-    async function pushProfilePDFToS3(presignedUrl, uploadPdf) {
-        const myHeaders = new Headers({ 'Content-Type': 'application/pdf' });
-        axios.put(presignedUrl, uploadPdf, {
-            headers: myHeaders,
-            onUploadProgress: progressEvent => {
-                // const { loaded, total } = progressEvent;
-                // const percentCompleted = (loaded / total) * 100;
-                // console.log("percentCompletedpercentCompleted", percentCompleted);
-            },
-        }).then(response => {
-            console.log(response);
-        }).catch(error => {
-            console.error('Error:', error);
-        });
+    const pushProfilePDFToS3 = async (presignedUrl, uploadPdf) => {
+        try {
+            await axios({ method: 'put', url: presignedUrl, data: uploadPdf, headers: { "Content-Type": 'application/pdf' } });
+        } catch (e) {
+            console.log(e);
+        }
     }
-
 
     return <>
         <Modal
