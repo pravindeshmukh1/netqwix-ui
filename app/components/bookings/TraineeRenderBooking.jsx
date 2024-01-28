@@ -163,7 +163,7 @@ const TraineeRenderBooking = ({
                                                         </div>
                                                     </div> : <></>}
                                                     <div style={{ marginTop: "30px" }}></div>
-                                                    {clips?.length && clips?.map((cl, ind) => <div className={`collapse-block ${cl?.show ? "" : "open"}`}>
+                                                    {clips?.length ? clips?.map((cl, ind) => <div className={`collapse-block ${cl?.show ? "" : "open"}`}>
                                                         <h5 className="block-title pb-0"> {cl?._id}<label className="badge badge-primary sm ml-2">{cl?.clips?.length}</label></h5>
                                                         <div className={`block-content ${cl?.show ? "d-none" : ""}`}>
                                                             <div className="row">
@@ -188,11 +188,16 @@ const TraineeRenderBooking = ({
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    )}
+                                                    ) :
+                                                        <>
+                                                            <div style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}>
+                                                                <h5 className="block-title">  No Data Found</h5>
+                                                            </div>
+                                                        </>}
                                                 </div>
-                                                <div className="d-flex justify-content-around w-100 p-3">
+                                                {clips?.length ? <div className="d-flex justify-content-around w-100 p-3">
                                                     <Button color="success" onClick={() => { addTraineeClipInBookedSession() }}>Share</Button>
-                                                </div>
+                                                </div> : <></>}
                                             </div>
                                         }
                                     />
