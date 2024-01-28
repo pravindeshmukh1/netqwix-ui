@@ -48,7 +48,7 @@ const RecentUsers = () => {
         setRecentStudentClips(null);
         setIsOpen(true);
         getTraineeClipsApi(id)
-       
+
 
     };
 
@@ -84,29 +84,35 @@ const RecentUsers = () => {
                     >
                         {/* Render images dynamically */}
                         {accountType === AccountType?.TRAINER && recentStudent?.map((item, index) => (
-                            <img
-                            className='Image-Division'
-                                key={index}
-                                src={item?.profile_picture}
-                                alt={`Recent Trainee ${index + 1}`}
-                                style={{
-                                    maxWidth: '6vw',
-                                    maxHeight: '20vh',
-                                    marginBottom: '10px',
-                                    marginRight: '10px',
-                                    cursor: 'pointer'
-                                }}
-                                onClick={() => {
-                                    handleStudentClick(item)
-                                    SetselectedStudentData({ ...item })
-                                }}
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center"
+                            }}>
+                                <img
+                                    className='Image-Division'
+                                    key={index}
+                                    src={item?.profile_picture}
+                                    alt={`Recent Trainee ${index + 1}`}
+                                    style={{
+                                        maxWidth: '8vw',
+                                        maxHeight: '20vh',
+                                        marginBottom: '10px',
+                                        marginRight: '10px',
+                                        cursor: 'pointer'
+                                    }}
+                                    onClick={() => {
+                                        handleStudentClick(item)
+                                        SetselectedStudentData({ ...item })
+                                    }}
 
-                            />
+                                />
+                                <h5 className="card-title text-truncate">{item?.fullname}</h5>
+                            </div>
                         ))}
-
                         {accountType === AccountType?.TRAINEE && recentFriends?.map((item, index) => (
                             <img
-                            className='Image-Division'
+                                className='Image-Division'
                                 key={index}
                                 src={item}
                                 alt={`Recent Trainee ${index + 1}`}
@@ -120,6 +126,7 @@ const RecentUsers = () => {
                                 onClick={() => handleStudentClick({ profile_picture: item })}
                             />
                         ))}
+
                     </div>
                 </div>
                 {/* Additional content for Recent Students section can be added here */}

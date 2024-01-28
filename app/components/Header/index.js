@@ -132,7 +132,7 @@ const Header = () => {
             className="header-image-logo"
           />
         </div>
-        <div className='menu-container'>
+        <div className='menu-container' style={{ marginLeft: 40 }}>
           {menuItems?.map((item, index) => (
             item?.accessBy?.includes(accountType) && <p
               key={index}
