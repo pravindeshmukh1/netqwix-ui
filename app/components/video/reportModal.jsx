@@ -28,6 +28,7 @@ const reportModal = ({
     const [screenShots, setScreenShots] = useState([]);
     const [currentDate, setCurrentDate] = useState('');
     const { userInfo } = useAppSelector(authState);
+    const [uploadPercentage, setUploadPercentage] = useState(0);
 
     useEffect(() => {
         // Set the current date when the component mounts
@@ -46,7 +47,10 @@ const reportModal = ({
         setCurrentDate(formattedDate);
     };
     useEffect(() => {
-        if (currentReportData?.session && isOpenReport) getReportData()
+        if (currentReportData?.session && isOpenReport) {
+            getReportData()
+            setUploadPercentage(0)
+        }
     }, [currentReportData?.session, isOpenReport])
 
     const setScreenShot = async (reportData) => {
@@ -149,10 +153,10 @@ const reportModal = ({
             // Create a File from the Blob
             const pdfFile = new File([pdfBlob], 'generated_pdf.pdf', { type: 'application/pdf' });
 
+            content.style.display = "none";
             var link = await createUploadLink();
             if (link) pushProfilePDFToS3(link, pdfFile);
 
-            // content.style.display = "none";
 
             var res = await createReport({
                 sessions: currentReportData?.session,
@@ -185,7 +189,12 @@ const reportModal = ({
 
     const pushProfilePDFToS3 = async (presignedUrl, uploadPdf) => {
         try {
-            await axios({ method: 'put', url: presignedUrl, data: uploadPdf, headers: { "Content-Type": 'application/pdf' } });
+            await axios({
+                method: 'put', url: presignedUrl, data: uploadPdf, headers: { "Content-Type": 'application/pdf' }, onUploadProgress: (progressEvent) => {
+                    const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+                    setUploadPercentage(progress === 100 ? 0 : progress)
+                },
+            });
             setIsOpenReport(false)
         } catch (e) {
             console.log(e);
@@ -311,8 +320,11 @@ const reportModal = ({
                                     </>
                                 })}
                             </div>
+                            <label style={{ color: "black", fontWeight: "500" }} className="col-form-label mt-2" htmlFor="account_type">
+                                {uploadPercentage ? <> Uploading... {uploadPercentage}%</> : <></>}
+                            </label>
                             <div className="d-flex justify-content-center w-100 p-3">
-                                <Button className="mx-3" color="primary" onClick={() => { getReportData().then((res) => generatePDF()) }}>Save</Button>
+                                <Button className="mx-3" color="primary" disabled={uploadPercentage} onClick={() => { getReportData().then((res) => generatePDF()) }}>Save</Button>
                             </div>
                         </div>
 
