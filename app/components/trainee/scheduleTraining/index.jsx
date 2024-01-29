@@ -120,7 +120,7 @@ const ScheduleTraining = () => {
     useAppSelector(commonState);
   const { selectedTrainerId } = useAppSelector(bookingsState);
   const { master } = useAppSelector(masterState);
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState();
   const [isPopoverOpen, setIsPopoverOpen] = useState(null);
   const [getParams, setParams] = useState(params);
   const [categoryList, setCategoryList] = useState([]);
@@ -161,6 +161,7 @@ const ScheduleTraining = () => {
   }
 
   const getmyClips = async () => {
+    setStartDate(new Date())
     var res = await myClips({})
     setClips(res?.data)
   }
@@ -430,7 +431,7 @@ const ScheduleTraining = () => {
 
       dispatch(checkSlotAsync(payload));
     }
-  }, [selectedTrainer, trainerInfo]);
+  }, [selectedTrainer]);
 
   useEffect(() => {
     if (status === STATUS.fulfilled) {

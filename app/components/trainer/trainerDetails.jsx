@@ -70,7 +70,7 @@ export const TrainerDetails = ({
       }));
       selectTrainer(trainerInfo && trainerInfo._id);
     }
-  }, [trainerInfo]);
+  }, []);
 
   useEffect(() => {
     const searchTerm = trainerInfo ? trainerInfo.name : searchQuery;
