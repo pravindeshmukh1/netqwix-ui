@@ -186,6 +186,7 @@ const reportModal = ({
     const pushProfilePDFToS3 = async (presignedUrl, uploadPdf) => {
         try {
             await axios({ method: 'put', url: presignedUrl, data: uploadPdf, headers: { "Content-Type": 'application/pdf' } });
+            setIsOpenReport(false)
         } catch (e) {
             console.log(e);
         }
@@ -311,7 +312,7 @@ const reportModal = ({
                                 })}
                             </div>
                             <div className="d-flex justify-content-center w-100 p-3">
-                                <Button className="mx-3" color="primary" onClick={() => { getReportData().then((res) => generatePDF().then(() => setIsOpenReport(false))) }}>Save</Button>
+                                <Button className="mx-3" color="primary" onClick={() => { getReportData().then((res) => generatePDF()) }}>Save</Button>
                             </div>
                         </div>
 
