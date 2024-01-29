@@ -47,17 +47,19 @@ const NavHomePage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className={`${width600 ? "col-sm-12" : width1200 ? "col-sm-6" : width2000 ? "col-sm-12" : ""} my-3`}>
-                        <div className='card trainer-profile-card Home-main-Cont' style={{ height: "100%", width: "100%" }}>
-                            <div className='card-body'>
-                                <ShareClipsCard />
-                            </div>
-                        </div>
-                    </div>
+
                     <div className={`${width600 ? "col-sm-12" : width1200 ? "col-sm-6" : width2000 ? "col-sm-12" : ""} my-3`}>
                         <div className='card trainer-profile-card Home-main-Cont' style={{ height: "100%", width: "100%" }}>
                             <div className='card-body'>
                                 <InviteFriendsCard />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={`${width600 ? "col-sm-12" : width1200 ? "col-sm-6" : width2000 ? "col-sm-12" : ""} my-3`}>
+                        <div className='card trainer-profile-card Home-main-Cont' style={{ height: "100%", width: "100%" }}>
+                            <div className='card-body'>
+                                <ShareClipsCard />
                             </div>
                         </div>
                     </div>

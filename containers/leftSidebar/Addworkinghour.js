@@ -27,7 +27,7 @@ const Addworkinghour = () => {
       <h5>Add your working hours...</h5>
 
       <div className="row">
-        <div className="col-12 col-sm-12 col-md-12 col-lg-2">
+        <div className="col-12 col-sm-12 col-md-12 col-lg-2" style={{ padding: 0 }}>
           <p className="ml-2 From">From</p>
           <TimePicker
 
@@ -71,7 +71,7 @@ const Addworkinghour = () => {
             </label>
           )}
         </div>
-        <div className="col-12 col-sm-12 col-md-12 col-lg-2">
+        <div className="col-12 col-sm-12 col-md-12 col-lg-2" style={{ padding: 0 }}>
           <p className="ml-2 To">To</p>
           <TimePicker
             name="to"

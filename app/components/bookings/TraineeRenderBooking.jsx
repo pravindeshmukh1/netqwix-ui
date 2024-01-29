@@ -69,7 +69,7 @@ const TraineeRenderBooking = ({
             {isCompleted ? <h3>Completed</h3> : null}
             {canShowRatingButton ? (
                 <button
-                    className={`btn btn-success button-effect btn-sm mr-4`}
+                    className={`btn btn-success button-effect btn-sm mr-4 my-1`}
                     type="button"
                     onClick={() => {
                         const payload = {
@@ -88,7 +88,7 @@ const TraineeRenderBooking = ({
                             {status !== BookedSession.canceled && (
                                 <React.Fragment>
                                     <button
-                                        className="btn btn-success button-effect btn-sm mr-4 btn_cancel"
+                                        className="btn btn-success button-effect btn-sm mr-4 btn_cancel my-1"
                                         type="button"
                                         onClick={() => {
                                             if (trainee_clips?.length > 0) setSelectedClips(trainee_clips)
@@ -100,7 +100,7 @@ const TraineeRenderBooking = ({
                                     </button>
                                     {status === BookedSession.booked ? (
                                         <button
-                                            className="btn btn-dark button-effect btn-sm mr-4 btn_cancel"
+                                            className="btn btn-dark button-effect btn-sm mr-4 btn_cancel my-1"
                                             type="button"
                                             style={{
                                                 cursor:
@@ -112,7 +112,7 @@ const TraineeRenderBooking = ({
                                         </button>
                                     ) : (
                                         <button
-                                            className="btn btn-primary button-effect btn-sm mr-4"
+                                            className="btn btn-primary button-effect btn-sm mr-4 my-1"
                                             type="button"
                                             style={{
                                                 cursor:

@@ -70,18 +70,18 @@ const TrainerRenderBooking = ({
             {status !== BookedSession.canceled && isMeetingDone && (
                 <h3 className="mt-1">Completed</h3>
             )}
-            <span className="px-2">
+            <span >
                 <span>{trainee_info?.fullname} shared the following clips with you, give them a look… </span>
                 <span onClick={() => {
                     if (trainee_clips?.length > 0) setSelectedClips(trainee_clips)
                     setIsOpenID(_id);
                     setIsOpen(!isOpen);
                 }} style={{ textDecoration: 'underline', cursor: 'pointer' }} >click here</span> to view Clip
-            </span>
+            </span><br />
             {
                 status === BookedSession.canceled && isMeetingDone && (
                     <button
-                        className="btn btn-danger button-effect btn-sm ml-4"
+                        className="btn btn-danger button-effect btn-sm ml-4 my-1"
                         type="button"
                         style={{
                             cursor:
@@ -121,7 +121,7 @@ const TrainerRenderBooking = ({
                             <React.Fragment>
                                 {status !== BookedSession.canceled && (
                                     <button
-                                        className={`btn btn-primary button-effect btn-sm mr-2 btn_cancel`}
+                                        className={`btn btn-primary button-effect btn-sm mr-2 btn_cancel my-1`}
                                         type="button"
                                         style={{
                                             cursor:
@@ -144,7 +144,7 @@ const TrainerRenderBooking = ({
                                 )}
                                 {status === BookedSession.confirmed && (
                                     <button
-                                        className={`btn btn-primary button-effect btn-sm mr-2 btn_cancel`}
+                                        className={`btn btn-primary button-effect btn-sm mr-2 btn_cancel my-1`}
                                         type="button"
                                         disabled={!isStartButtonEnabled}
                                         style={{
@@ -164,7 +164,7 @@ const TrainerRenderBooking = ({
                                     </button>
                                 )}
                                 <button
-                                    className={`btn btn-danger button-effect btn-sm btn_cancel`}
+                                    className={`btn btn-danger button-effect btn-sm btn_cancel my-1`}
                                     type="button"
                                     style={{
                                         cursor:

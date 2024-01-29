@@ -328,7 +328,7 @@ const reportModal = ({
                             </div>
                         </div>
 
-                        <div id="report-pdf" style={{ display: "none", padding: "20px ", border: '10px solid green', borderColor: 'green' }}>
+                        <div id="report-pdf" style={{ display: "none", padding: "20px ", border: '10px solid #000080', borderColor: 'green' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: "center" }}>
                                 <p style={{ textTransform: 'uppercase', marginTop: '0px', fontSize: '40px', fontWeight: '600', color: "green" }}>Game Plan</p>
                                 <div style={{ textAlign: 'right' }}>

@@ -908,8 +908,8 @@ export const TimeZone = [
   {
     id: 23,
     offset: "+05:50",
-    timezone: "(GMT +5:30) Bombay",
-    value: "(GMT +5:30) Bombay",
+    timezone: "(GMT +5:30) New Delhi",
+    value: "(GMT +5:30) New Delhi",
   },
   {
     id: 24,
