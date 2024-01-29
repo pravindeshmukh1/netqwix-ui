@@ -466,7 +466,6 @@ export default function CalendarPage() {
         selectable={true}
         selectMirror={true}
         initialEvents={data}
-        height={600}
         width={500}
         timeZone={userTimeZone}
         dateClick={function (e) {

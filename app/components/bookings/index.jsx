@@ -40,7 +40,6 @@ import classnames from "classnames";
 import VideoUpload from '../videoupload'
 import { myClips, shareClips } from "../../../containers/rightSidebar/fileSection.api";
 import { traineeAction, traineeState } from "../trainee/trainee.slice";
-import CalendarPage from "../calendar/calendar";
 import { masterState } from "../master/master.slice";
 import { trainerAction, trainerState } from "../trainer/trainer.slice";
 import { toast } from "react-toastify";
