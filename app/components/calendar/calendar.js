@@ -10,14 +10,9 @@ import interactionPlugin from '@fullcalendar/interaction'
 import { useAppSelector } from '../../store';
 import { authState } from '../auth/auth.slice';
 import momentTimezonePlugin from '@fullcalendar/moment-timezone'
-import { Utils } from '../../../utils/utils';
 import axios from 'axios';
 import { toast } from "react-toastify";
-
-const staticData = [
-  { start: new Date('2024-01-11T10:04:00.840Z'), end: new Date('2024-01-11T11:05:00.840Z') },
-  { start: new Date('2024-01-11T11:06:00.840Z'), end: new Date('2024-01-11T11:08:00.840Z') }
-]
+import Script from 'next/script';
 
 function EventModal({ modal, setModal, toggle, data, selectedModalDate, setData, options, userTimeZone, ...args }) {
 
@@ -461,16 +456,16 @@ export default function CalendarPage() {
 
   return (
     <div className='calendar-container' style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} >
+      <Script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js" />
       {data?.length && userTimeZone && <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin, momentTimezonePlugin]}
-        headerToolbar={{ left: 'prev,next', center: 'title', right: '' }}
+        headerToolbar={{ left: 'prev,next', center: 'title', right: 'dayGridMonth,dayGridWeek,dayGridDay' }}
         initialView='dayGridMonth'
         nowIndicator={true}
         editable={true}
         selectable={true}
         selectMirror={true}
         initialEvents={data}
-        height={600}
         width={500}
         timeZone={userTimeZone}
         dateClick={function (e) {
@@ -480,21 +475,8 @@ export default function CalendarPage() {
         eventContent={(e) => {
           return (
             <>
-              {/* <button style={{
-                borderRadius: "50px",
-                width: "20px",
-                height: "20px",
-                backgroundColor: "blue",
-                color: "#fff",
-                border: "0px",
-                fontSize: "large",
-                textAlign: "cente"
-              }} onClick={() => {
-                var date = currentDateAndtime(e?.event?.start)
-                handleSelectedModal(date)
-              }}>+</button> */}
               <div style={{ display: "flex", width: "100%", justifyContent: "space-between", margin: "0px 10px", textAlign: "center" }}>
-                <div >
+                <div style={{ textWrap: 'pretty' }}>
                   <b>{moment(e.event.start).tz(userTimeZone).format('h:mm a')} - {moment(e.event.end).tz(userTimeZone).format('h:mm a')}</b>
                 </div>
               </div>
@@ -521,7 +503,7 @@ export default function CalendarPage() {
             <>
               {/* <button>+ Add New</button> */}
               <div onClick={() => { }} style={{ display: "flex", width: "100%", justifyContent: "space-between", margin: "0px 10px", textAlign: "center", background: "red" }}>
-                <div >
+                <div style={{ textWrap: 'pretty' }}>
                   <b>{moment(e.event.start).format('h:mm a')} - {moment(e.event.end).format('h:mm a')}</b>
                 </div>
               </div>

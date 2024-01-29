@@ -21,7 +21,7 @@ const Schedule = ({ activeCenterContainerTab }) => {
 }
 const allTabs = [
     { name: 'My Clips', value: 'myClips', accessBy: [AccountType?.TRAINEE, AccountType?.TRAINER], component: MyClips },
-    { name: 'Schedule', value: 'schedule', accessBy: [AccountType?.TRAINER], component: Schedule },
+    { name: "Schedule", value: 'schedule', accessBy: [AccountType?.TRAINER], component: Schedule },
     { name: 'Upcoming Session', value: 'upcomingLesson', accessBy: [AccountType?.TRAINEE, AccountType?.TRAINER], component: BookingList },
     { name: 'Game Plans', value: 'gamePlans', accessBy: [AccountType?.TRAINER, AccountType?.TRAINEE], component: Reports },
 ];
@@ -51,7 +51,7 @@ const NavHomePageCenterContainer = () => {
                                     className={activeTab === el?.value ? 'activelink sub-item' : 'sub-item'}
                                     onClick={() => toggleTab(el?.value)}
                                 >
-                                    {el?.name}
+                                    {el?.name === "Schedule" ? <>&nbsp;&nbsp;Schedule  &nbsp;  </> : el?.name}
                                 </NavLink>
                             </NavItem>
                         ))}

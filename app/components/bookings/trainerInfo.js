@@ -148,7 +148,7 @@ const TrainerInfo = () => {
         </div>
         {/* Middle */}
         <div className={`${width600 ? "col-sm-12" : width1200 ? "col-sm-12" : width2000 ? "col-sm-6" : ""} my-3`} id="Nav-T" style={{ width: "auto !important" }}>
-          <div className='card trainer-profile-card Home-main-Cont' style={{ height: "100%", width: "100%" }}>
+          <div className='card trainer-profile-card Home-main-Cont' style={{ width: "100%" }}>
             <div className='card-body'>
               <NavHomePageCenterContainer />
             </div>
