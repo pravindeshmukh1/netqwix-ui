@@ -6,6 +6,7 @@ import { Button } from 'reactstrap';
 import { X } from 'react-feather';
 import Modal from '../../common/modal';
 import { authState } from '../auth/auth.slice';
+import { Utils } from '../../../utils/utils';
 
 
 

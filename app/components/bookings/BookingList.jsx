@@ -9,6 +9,7 @@ import TrainerRenderBooking from './TrainerRenderBooking';
 import StartMeeting from './start';
 import Modal from '../../common/modal';
 import { Star, X } from 'react-feather';
+import { myClips } from '../../../containers/rightSidebar/fileSection.api';
 
 
 export var meetingRoom = () => <></>
@@ -48,6 +49,7 @@ const BookingList = ({ activeCenterContainerTab }) => {
         } else {
             dispatch(getScheduledMeetingDetailsAsync());
         }
+        getMyClips()
     }, [tabBook, activeCenterContainerTab]);
     const showRatingLabel = (ratingInfo) => {
         // for trainee we're showing recommends
@@ -77,6 +79,12 @@ const BookingList = ({ activeCenterContainerTab }) => {
                 detail.ratings[accountType.toLowerCase()].sessionRating)
         );
     };
+
+
+    const getMyClips = async () => {
+        var res = await myClips({})
+        setClips(res?.data)
+    }
 
     const addTraineeClipInBookedSession = async () => {
         const payload = { id: isOpenID, trainee_clip: selectedClips?.map(val => val?._id) };

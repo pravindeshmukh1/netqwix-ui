@@ -7,6 +7,7 @@ import { authState } from '../auth/auth.slice';
 import { Button } from 'reactstrap';
 import { X } from 'react-feather';
 import Modal from '../../common/modal';
+import { traineeAction } from '../trainee/trainee.slice';
 
 const TraineeRenderBooking = ({
     _id,
@@ -34,7 +35,8 @@ const TraineeRenderBooking = ({
 }) => {
 
     const { scheduledMeetingDetails, addRatingModel } = useAppSelector(bookingsState);
-
+    const { removeNewBookingData } = traineeAction;
+    const dispatch = useAppDispatch();
     const isCompleted =
         has24HoursPassedSinceBooking ||
         scheduledMeetingDetails[booking_index]?.ratings?.trainee;
@@ -61,7 +63,6 @@ const TraineeRenderBooking = ({
             dispatch(updateBookedSessionScheduledMeetingAsync(payload));
         }
     }
-
 
     return (
         <React.Fragment>
