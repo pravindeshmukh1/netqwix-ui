@@ -459,7 +459,7 @@ export default function CalendarPage() {
       <Script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js" />
       {data?.length && userTimeZone && <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin, momentTimezonePlugin]}
-        headerToolbar={{ left: 'prev,next', center: 'title', right: '' }}
+        headerToolbar={{ left: 'prev,next', center: 'title', right: 'dayGridMonth,dayGridWeek,dayGridDay' }}
         initialView='dayGridMonth'
         nowIndicator={true}
         editable={true}
