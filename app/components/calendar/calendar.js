@@ -343,7 +343,7 @@ export default function CalendarPage() {
   const [modal, setModal] = useState(false);
   const [selectedModalDate, setSelectedModalDate] = useState("")
   const [options, setOptions] = useState([])
-  const [userTimeZone, setUserTimeZone] = useState("")
+  const [userTimeZone, setUserTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone)
 
   useEffect(() => {
     if (userInfo?.extraInfo?.working_hours?.time_zone) {

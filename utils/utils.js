@@ -198,13 +198,27 @@ export class Utils {
     currentDate,
     currentFormattedTime,
     sessionStartTime,
-    sessionEndTime
+    sessionEndTime,
+    userTimeZone
   ) => {
-    return (
-      currentDate === bookedDate &&
-      Date.parse(`01/01/2023 ${currentFormattedTime}`) >= Date.parse(`01/01/2023 ${sessionStartTime}`) &&
-      Date.parse(`01/01/2023 ${currentFormattedTime}`) <= Date.parse(`01/01/2023 ${sessionEndTime}`)
-    );
+
+
+    const currentDateTime = momenttz(new Date()).tz(userTimeZone);
+    const customStartDateTime = momenttz(`${bookedDate} ${sessionStartTime}`, 'YYYY-MM-DD HH:mm').tz(userTimeZone);
+    const customEndDateTime = momenttz(`${bookedDate} ${sessionEndTime}`, 'YYYY-MM-DD HH:mm').tz(userTimeZone);
+
+    // return (
+    //   currentDate === bookedDate &&
+    //   Date.parse(`01/01/2023 ${currentFormattedTime}`) >= Date.parse(`01/01/2023 ${sessionStartTime}`) &&
+    //   Date.parse(`01/01/2023 ${currentFormattedTime}`) <= Date.parse(`01/01/2023 ${sessionEndTime}`)
+    // );
+
+    return currentDateTime?.isBetween(
+      customStartDateTime,
+      customEndDateTime,
+      null,
+      "[]"
+    )
   };
 
   static isUpcomingSession = (bookedDate, sessionStartTime, sessionEndTime) => {
@@ -241,8 +255,10 @@ export class Utils {
   static meetingAvailability = (
     booked_date,
     session_start_time,
-    session_end_time
+    session_end_time,
+    userTimeZone = Intl.DateTimeFormat().resolvedOptions()?.timeZone
   ) => {
+
     const bookedDate = this.getDateInFormat(booked_date);
     const sessionStartTime = this.convertToAmPm(session_start_time);
     const sessionEndTime = this.convertToAmPm(session_end_time);
@@ -254,8 +270,9 @@ export class Utils {
       bookedDate,
       currentDate,
       currentFormattedTime,
-      sessionStartTime,
-      sessionEndTime
+      session_start_time,
+      session_end_time,
+      userTimeZone
     );
     const has24HoursPassedSinceBooking = this.has24HoursPassedSinceBooking(
       bookedDate,

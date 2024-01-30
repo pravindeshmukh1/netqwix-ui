@@ -71,7 +71,7 @@ const TrainerRenderBooking = ({
                 <h3 className="mt-1">Completed</h3>
             )}
             <span >
-                <span>{trainee_info?.fullname} shared the following clips with you, give them a look… </span>
+                <span>{trainee_info?.fullname} shared the following clips with you. </span>
                 <span onClick={() => {
                     if (trainee_clips?.length > 0) setSelectedClips(trainee_clips)
                     setIsOpenID(_id);
@@ -214,7 +214,7 @@ const TrainerRenderBooking = ({
                                 </div>
                             </div>
                             <div className="d-flex flex-column  align-items-center">
-                                <h1 className="p-3">{trainee_info.fullname} shared the following clips with you, give them a look…</h1>
+                                <h1 className="p-3">{trainee_info.fullname} shared the following clips with you.</h1>
                                 {selectedClips?.length ? <div >
                                     <div className={`block-content`}>
                                         <div className="row">

@@ -289,7 +289,7 @@ const Bookings = ({ accountType = null }) => {
           <h3 className="mt-1">Completed</h3>
         )}
         <span className="px-2">
-          <span>{trainee_info?.fullname} shared the following clips with you, give them a look… </span>
+          <span>{trainee_info?.fullname} shared the following clips with you. </span>
           <span onClick={() => {
             if (trainee_clips?.length > 0) setSelectedClips(trainee_clips)
             setIsOpenID(_id);
@@ -430,7 +430,7 @@ const Bookings = ({ accountType = null }) => {
                   </div>
                 </div>
                 <div className="d-flex flex-column  align-items-center">
-                  <h1 className="p-3">{trainee_info.fullname} shared the following clips with you, give them a look…</h1>
+                  <h1 className="p-3">{trainee_info.fullname} shared the following clips with you.</h1>
                   {selectedClips?.length ? <div >
                     <div className={`block-content`}>
                       <div className="row">
@@ -772,7 +772,7 @@ const Bookings = ({ accountType = null }) => {
           <div className="card-footer">
             <div className="row">
               <div className="col-11">{showRatingLabel(ratings)}</div>
-              <div className="col-12 col-lg-auto ml-lg-auto">
+              <div className="col-12 col-lg-auto">
                 {renderBooking(
                   status,
                   booking_index,
@@ -786,7 +786,6 @@ const Bookings = ({ accountType = null }) => {
                   trainee_clips,
                   report
                 )}
-
               </div>
             </div>
           </div>

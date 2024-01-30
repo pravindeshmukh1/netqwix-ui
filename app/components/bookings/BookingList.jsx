@@ -10,6 +10,8 @@ import StartMeeting from './start';
 import Modal from '../../common/modal';
 import { Star, X } from 'react-feather';
 import { myClips } from '../../../containers/rightSidebar/fileSection.api';
+import moment from 'moment-timezone';
+import axios from 'axios';
 
 
 export var meetingRoom = () => <></>
@@ -29,8 +31,25 @@ const BookingList = ({ activeCenterContainerTab }) => {
         booked_status: "",
     });
     const { isLoading, configs } = useAppSelector(bookingsState);
-
+    const { userInfo } = useAppSelector(authState);
     const mediaQuery = window.matchMedia('(min-width: 992px)')
+    const [userTimeZone, setUserTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone)
+
+    useEffect(() => {
+        if (userInfo?.extraInfo?.working_hours?.time_zone) {
+            getIANATimeZone(userInfo?.extraInfo?.working_hours?.time_zone)
+        }
+    }, [userInfo?.extraInfo?.working_hours?.time_zone])
+
+    const getIANATimeZone = async (timezoneString) => {
+        const matches = timezoneString.match(/\(GMT ([\+\-]\d+:\d+)\)/);
+        const utcOffset = matches ? matches[1] : null;
+        const response = await axios.get('https://fullcalendar.io/api/demo-feeds/timezones.json');
+        var timeZones = response.data;
+        const ianaTimeZone = utcOffset ? timeZones.find((tz) => moment.tz(tz).utcOffset() === moment.duration(utcOffset).asMinutes()) : '';
+        setUserTimeZone(ianaTimeZone ? ianaTimeZone : Intl.DateTimeFormat().resolvedOptions().timeZone)
+    };
+
 
     const [startMeeting, setStartMeeting] = useState({
         trainerInfo: null,
@@ -107,10 +126,12 @@ const BookingList = ({ activeCenterContainerTab }) => {
         trainee_clips,
         report
     ) => {
+
         const availabilityInfo = Utils.meetingAvailability(
             booked_date,
             session_start_time,
-            session_end_time
+            session_end_time,
+            userTimeZone
         );
         const {
             isStartButtonEnabled,
@@ -189,6 +210,7 @@ const BookingList = ({ activeCenterContainerTab }) => {
 
 
     const BookingCard = ({ bookingInfo, booking_index }) => {
+
         const {
             _id,
             trainee_info,
@@ -201,6 +223,12 @@ const BookingList = ({ activeCenterContainerTab }) => {
             trainee_clips,
             report
         } = bookingInfo;
+
+        const customStartDateTime = moment(`${booked_date} ${session_start_time}`, 'YYYY-MM-DD HH:mm').tz(userTimeZone).format('h:mm a');
+        const customEndDateTime = moment(`${booked_date} ${session_end_time}`, 'YYYY-MM-DD HH:mm').tz(userTimeZone).format('h:mm a');
+
+        console.log(customStartDateTime, customEndDateTime);
+
         return <div
             className="card mb-4 mt-5 trainer-bookings-card"
             key={`booking-schedule-training${booking_index}`}
@@ -229,9 +257,10 @@ const BookingList = ({ activeCenterContainerTab }) => {
                     <div className="col">
                         <dl className="row">
                             <dd className="ml-3">Time Durations :</dd>
-                            <dt className="ml-1">{`${Utils.convertToAmPm(
+                            {/* <dt className="ml-1">{`${Utils.convertToAmPm(
                                 session_start_time
-                            )}-${Utils.convertToAmPm(session_end_time)}`}</dt>
+                            )}-${Utils.convertToAmPm(session_end_time)}`}</dt> */}
+                            <dt className="ml-1">{`${customStartDateTime}-${customEndDateTime}`}</dt>
                         </dl>
                     </div>
                 </div>
@@ -239,7 +268,7 @@ const BookingList = ({ activeCenterContainerTab }) => {
             <div className="card-footer">
                 <div className="row">
                     <div className="col-11">{showRatingLabel(ratings)}</div>
-                    <div className="col-12 col-lg-auto ml-lg-auto">
+                    <div className="col-12 col-lg-auto">
                         {renderBooking(
                             status,
                             booking_index,
