@@ -887,7 +887,7 @@ const ScheduleTraining = () => {
               handlePaymentSuccess={async () => {
                 setShowTransactionModal(false);
                 const payload = bookSessionPayload;
-                var res = await dispatch(bookSessionAsync(payload));
+                var res = await dispatch(bookSessionAsync({ ...payload, time_zone: Intl.DateTimeFormat().resolvedOptions().timeZone }));
                 setIsPopoverOpen(null);
                 setBookSessionPayload({});
                 dispatch(authAction.setActiveTab("scheduleTraining"));
@@ -1355,6 +1355,8 @@ const ScheduleTraining = () => {
                                   booked_date: startDate,
                                   session_start_time: start_time,
                                   session_end_time: end_time,
+                                  start_time: slot?.start_time,
+                                  end_time: slot?.end_time,
                                 };
                                 setBookSessionPayload(payload);
                                 dispatch(
@@ -1471,6 +1473,12 @@ const ScheduleTraining = () => {
                               "The specified time has elapsed. Please select another time..."
                             );
                           } else {
+
+                            var date = new Date(startDate).toISOString().split("T")[0];
+                            var dateArr = date?.split("-");
+                            let start_time_date = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), Number(timeRange?.startTime?.split(":")[0]), Number(timeRange?.startTime?.split(":")[1]), 0, 0)?.toISOString()
+                            let end_time_date = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), Number(timeRange?.endTime?.split(":")[0]), Number(timeRange?.endTime?.split(":")[1]), 0, 0)?.toISOString()
+
                             const payload = {
                               charging_price: amountPayable,
                               trainer_id:
@@ -1484,6 +1492,8 @@ const ScheduleTraining = () => {
                               booked_date: startDate,
                               session_start_time: timeRange.startTime,
                               session_end_time: timeRange.endTime,
+                              start_time: start_time_date,
+                              end_time: end_time_date,
                             };
                             setBookSessionPayload(payload);
                             dispatch(

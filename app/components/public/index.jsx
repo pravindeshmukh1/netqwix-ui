@@ -255,7 +255,7 @@ const TrainersDetails = ({
               handlePaymentSuccess={() => {
                 setShowTransactionModal(false);
                 const payload = bookSessionPayload;
-                dispatch(bookSessionAsync(payload));
+                dispatch(bookSessionAsync({ ...payload, time_zone: Intl.DateTimeFormat().resolvedOptions().timeZone }));
                 setIsPopoverOpen(null);
                 setBookSessionPayload({});
               }}

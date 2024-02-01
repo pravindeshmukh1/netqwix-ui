@@ -35,6 +35,7 @@ const BookingList = ({ activeCenterContainerTab }) => {
     const mediaQuery = window.matchMedia('(min-width: 992px)')
     const [userTimeZone, setUserTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone)
 
+
     useEffect(() => {
         if (userInfo?.extraInfo?.working_hours?.time_zone) {
             getIANATimeZone(userInfo?.extraInfo?.working_hours?.time_zone)
@@ -124,14 +125,18 @@ const BookingList = ({ activeCenterContainerTab }) => {
         trainer_info,
         ratings,
         trainee_clips,
-        report
+        report,
+        start_time,
+        end_time
     ) => {
 
         const availabilityInfo = Utils.meetingAvailability(
             booked_date,
             session_start_time,
             session_end_time,
-            userTimeZone
+            userTimeZone,
+            start_time,
+            end_time
         );
         const {
             isStartButtonEnabled,
@@ -221,13 +226,13 @@ const BookingList = ({ activeCenterContainerTab }) => {
             status,
             ratings,
             trainee_clips,
-            report
+            report,
+            start_time,
+            end_time
         } = bookingInfo;
 
-        const customStartDateTime = moment(`${booked_date} ${session_start_time}`, 'YYYY-MM-DD HH:mm').tz(userTimeZone).format('h:mm a');
-        const customEndDateTime = moment(`${booked_date} ${session_end_time}`, 'YYYY-MM-DD HH:mm').tz(userTimeZone).format('h:mm a');
-
-        console.log(customStartDateTime, customEndDateTime);
+        const customStartDateTime = moment(start_time)?.tz(userTimeZone)?.format('h:mm a');
+        const customEndDateTime = moment(end_time)?.tz(userTimeZone)?.format('h:mm a');
 
         return <div
             className="card mb-4 mt-5 trainer-bookings-card"
@@ -257,10 +262,7 @@ const BookingList = ({ activeCenterContainerTab }) => {
                     <div className="col">
                         <dl className="row">
                             <dd className="ml-3">Time Durations :</dd>
-                            {/* <dt className="ml-1">{`${Utils.convertToAmPm(
-                                session_start_time
-                            )}-${Utils.convertToAmPm(session_end_time)}`}</dt> */}
-                            <dt className="ml-1">{`${customStartDateTime}-${customEndDateTime}`}</dt>
+                            <dt className="ml-1">{`${customStartDateTime} - ${customEndDateTime}`}</dt>
                         </dl>
                     </div>
                 </div>
@@ -280,7 +282,9 @@ const BookingList = ({ activeCenterContainerTab }) => {
                             trainer_info,
                             ratings,
                             trainee_clips,
-                            report
+                            report,
+                            start_time,
+                            end_time
                         )}
 
                     </div>

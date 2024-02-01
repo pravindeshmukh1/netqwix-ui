@@ -199,13 +199,13 @@ export class Utils {
     currentFormattedTime,
     sessionStartTime,
     sessionEndTime,
-    userTimeZone
+    userTimeZone,
+    start_time,
+    end_time
   ) => {
-
-
     const currentDateTime = momenttz(new Date()).tz(userTimeZone);
-    const customStartDateTime = momenttz(`${bookedDate} ${sessionStartTime}`, 'YYYY-MM-DD HH:mm').tz(userTimeZone);
-    const customEndDateTime = momenttz(`${bookedDate} ${sessionEndTime}`, 'YYYY-MM-DD HH:mm').tz(userTimeZone);
+    const customStartDateTime = momenttz(start_time).tz(userTimeZone);
+    const customEndDateTime = momenttz(end_time).tz(userTimeZone);
 
     // return (
     //   currentDate === bookedDate &&
@@ -256,7 +256,9 @@ export class Utils {
     booked_date,
     session_start_time,
     session_end_time,
-    userTimeZone = Intl.DateTimeFormat().resolvedOptions()?.timeZone
+    userTimeZone = Intl.DateTimeFormat().resolvedOptions()?.timeZone,
+    start_time,
+    end_time
   ) => {
 
     const bookedDate = this.getDateInFormat(booked_date);
@@ -272,7 +274,9 @@ export class Utils {
       currentFormattedTime,
       session_start_time,
       session_end_time,
-      userTimeZone
+      userTimeZone,
+      start_time,
+      end_time
     );
     const has24HoursPassedSinceBooking = this.has24HoursPassedSinceBooking(
       bookedDate,

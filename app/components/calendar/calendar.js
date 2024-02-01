@@ -353,7 +353,7 @@ export default function CalendarPage() {
 
   const toggle = () => {
     setModal(!modal)
-    setData([])
+    // setData([])
     getAllAvailability()
   };
 
