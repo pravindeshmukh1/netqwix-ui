@@ -337,20 +337,18 @@ const BookingList = ({ activeCenterContainerTab }) => {
 
     return (
         <div>
-            {/* <Modal isOpen={startMeeting?.isOpenModal}
-                element={
-                    <div>
-                        {renderVideoCall()}
+        {scheduledMeetingDetails.length === 0 ? (
+            // Show a message when there are no upcoming sessions
+           <div style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}>
+                        <h5 className="block-title">No upcoming Session</h5>
                     </div>
-                }
-            /> */}
-
-            {
-                scheduledMeetingDetails?.map((bookingInfo, booking_index) => {
-                    return <BookingCard bookingInfo={bookingInfo} key={booking_index} booking_index={booking_index} />
-                })
-            }
-        </div>
+        ) : (
+            // Render scheduled meetings if there are any
+            scheduledMeetingDetails?.map((bookingInfo, booking_index) => (
+                <BookingCard bookingInfo={bookingInfo} key={booking_index} booking_index={booking_index} />
+            ))
+        )}
+    </div>
     )
 }
 
