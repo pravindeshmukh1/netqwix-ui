@@ -16,6 +16,7 @@
 
 #left-nav-wrapper.left-nav-wrapper {
     position: fixed;
+    z-index: 9999;
 
     aside {
         background-color: white;
@@ -65,10 +66,35 @@
     }
 }
  @media (max-width: 768px) {
-    .card.trainer-profile-card.Home-main-Cont{
-        width: 94% !important;
-    }
     .Image-Division{
         width: 12vw !important;
     }
   }
+
+  @media (max-width: 767px) {
+    .Recommended{
+        display: block !important;
+    }
+    .recent-slider.slider-container.recent-chat{
+        max-width: 70% !important;
+        margin: auto !important;
+        padding: 0 !important;
+    }
+    #dashboard{
+        max-width: 82% !important;
+        margin: 10px auto !important;
+        }
+
+  }
+
+  .Image-Division{
+    max-width: 100px;
+    min-width: 100px;
+    max-height: 100px;
+    min-height: 100px;
+    margin-bottom:10px;
+    margin-right:10px;
+    cursor: pointer;
+  }
+
+ 

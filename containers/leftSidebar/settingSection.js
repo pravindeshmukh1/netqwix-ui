@@ -301,7 +301,7 @@ const SettingSection = (props) => {
     <div
       className={`settings-tab submenu-width dynemic-sidebar custom-scroll ${props.tab === "setting" ? "active" : ""
         }`}
-      id="settings"
+      id="settings" 
     >
       <div className="theme-title">
         <div className="media">
@@ -439,7 +439,7 @@ const SettingSection = (props) => {
         <div
           className={`block ${settingTab === "account" ? "open custom-block-height" : ""
             }`}
-        >
+         style={{maxWidth:'90%'}}>
           <div className="media">
             <div className="media-body">
               <h3>Account</h3>
@@ -819,7 +819,7 @@ const SettingSection = (props) => {
 
                       <div className="row">
                         <div className="col-6 col-sm-3 col-md-3 col-lg-2">
-                          <p className="ml-2">From</p>
+                          <p className="ml-2" style={{paddingTop:'10px',margin:'auto'}}>From</p>
                           <TimePicker
 
                             name="from"
@@ -863,7 +863,7 @@ const SettingSection = (props) => {
                           )}
                         </div>
                         <div className="col-6 col-sm-3 col-md-3 col-lg-2">
-                          <p className="ml-2">To</p>
+                          <p className="ml-2" style={{paddingTop:'10px',margin:'auto'}}>To</p>
                           <TimePicker
                             name="to"
                             className={`ml-2 mt-2 ${isTimeConflicts ? `border border-danger` : ``
@@ -905,7 +905,7 @@ const SettingSection = (props) => {
                           )}
                         </div>
                         <div className="col-6 col-sm-3 col-md-3 col-lg-2">
-                          <p className="ml-2">Time Zone</p>
+                          <p className="ml-2" >Time Zone</p>
                           <select
                             name="timezone_offset"
                             id="timezone-offset"
@@ -980,11 +980,11 @@ const SettingSection = (props) => {
         </div>
       </div>
       {accountType === AccountType.TRAINER ? (
-        <div className="setting-block">
+        <div className="setting-block"> 
           <div
             className={`block ${settingTab === "my-profile" ? "open custom-block-height" : ""
               }`}
-          >
+           style={{maxWidth:'90%'}}>
             <div className="media">
               <div className="media-body">
                 <h3>My profile</h3>
@@ -1226,7 +1226,7 @@ const SettingSection = (props) => {
             <div
               className={`block ${settingTab === "integratin" ? "open custom-block-height" : ""
                 }`}
-            >
+             style={{maxWidth:'90%'}}>
               <div className="media">
                 <div className="media-body">
                   <h3>Integration</h3>
@@ -1772,7 +1772,7 @@ const SettingSection = (props) => {
           <div
             className={`block ${settingTab === "help" ? "open custom-block-height" : ""
               }`}
-          >
+         style={{maxWidth:'90%'}} >
             <div className="media">
               <div className="media-body">
                 <h3>Help</h3>

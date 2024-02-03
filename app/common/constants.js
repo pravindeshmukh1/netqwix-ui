@@ -121,6 +121,7 @@ export const topNavbarOptions = {
   ABOUT_US: "aboutUs",
   CONTACT_US: "contactUs",
   STUDENT: "student",
+  UPCOMING_SESSION:"Upcoming Session",
   BOOK_LESSON: "bookLesson",
   MEETING_ROOM: "meetingRoom"
 }

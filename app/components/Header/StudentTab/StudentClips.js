@@ -108,7 +108,7 @@ import Modal from "../../../common/modal";
 // }]
 
 
-const MyClips = ({ activeCenterContainerTab }) => {
+const StudentClips = ({ activeCenterContainerTab }) => {
     // const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -294,4 +294,4 @@ const MyClips = ({ activeCenterContainerTab }) => {
     )
 }
 
-export default MyClips
+export default StudentClips;

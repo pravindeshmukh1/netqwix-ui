@@ -289,7 +289,7 @@
 
 .file-tab.Nav-Home {
   height: 700px;
-  overflow: auto;
+  // overflow: auto;
 }
 
 .Checkbox-up {
@@ -344,7 +344,10 @@
 
 
 
-
+#Image-G{
+  min-height: 0px;
+  max-height: 250px;
+}
 
 
 
@@ -480,3 +483,26 @@ table.table-bordered>tbody>tr>td {
   overflow-x: auto;
   overflow-y: auto;
 }
+
+@media (max-width:480px){
+  .theme-tab>.nav-tabs>.nav-item .nav-link {
+    padding: 7px 30px;
+  }
+}
+
+@media (max-width:800px){
+  .theme-tab {
+    >.nav-tabs {
+      >.nav-item {
+        .nav-link {
+          padding: 12px 20px;
+          font-size: calc(14px + (22 - 14) * ((100vw - 320px) / (1920 - 320)));
+        }
+      }
+    }
+  }
+}
+
+
+
+

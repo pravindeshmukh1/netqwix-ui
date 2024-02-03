@@ -1112,9 +1112,6 @@ const Bookings = ({ accountType = null }) => {
                   {/* <RecentUsers /> */}
                 </div>
 
-
-
-
                 {/* <h2 className="d-flex justify-content-center p-5">Bookings</h2>
                 <div className="mb-2">{bookingTabs()}</div> */}
               </React.Fragment>

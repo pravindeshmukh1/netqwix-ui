@@ -65,7 +65,7 @@ const StudentRecord = () => {
             <div
               key={`courses_list${index}`}
               className={`col-lg-2 col-sm-12 ${selectedCourseIndex === index ? "selected-course" : ""}`}
-              
+              style={{maxWidth:'237px',minWidth:'237px'}}
             >
               <div
                 className="card m-2"
@@ -76,12 +76,13 @@ const StudentRecord = () => {
                 }}
                 style={{ cursor: "pointer" }}
               >
-                <div className="Top-img" style={{height:'182px',overflow:'hidden'}}>
+                <div className="Top-img" style={{maxHeight:'200px',overflow:'hidden',minHeight:'200px'}}>
                 <img
                   className="card-img-top"
                   src={data?.profile_picture}
                   alt="Card image cap"
-                  style={{ padding: "10px", borderRadius: "20px", height:'100%' , objectFit:'cover' }}
+                  style={{ padding: "10px", borderRadius: "20px", height:'100%' , objectFit:'cover',maxHeight:'200px', 
+                  minHeight:'200px',maxWidth:'190px',minWidth:'190px'}}
                 />
                 </div>
                 

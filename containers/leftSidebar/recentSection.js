@@ -19,20 +19,42 @@ const RecentSection = (props) => {
     dispatch(isSidebarToggleEnabled(!sidebar));
     if (sidebar) {
       setSidebarToggle(!sidebar);
-      props?.setOpenCloseToggleSideNav(true)
+      props?.setOpenCloseToggleSideNav(true);
       document.querySelector(".main-nav")?.classList?.add("on");
     } else {
       setSidebarToggle(!sidebar);
-      props?.setOpenCloseToggleSideNav(false)
+      props?.setOpenCloseToggleSideNav(false);
       document.querySelector(".main-nav")?.classList?.remove("on");
     }
   };
 
+  // Add an event listener to close the sidebar when scrolling
+  useEffect(() => {
+    const handleScroll = () => {
+      OpenCloseSidebar(false);
+    };
+  
+    window.addEventListener('scroll', handleScroll);
+  
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+
   useEffect(() => {
     if (configs.sidebar.isMobileMode) {
-      OpenCloseSidebar(false);
+      OpenCloseSidebar(true);
     }
   }, [configs.sidebar.isMobileMode]);
+
+  useEffect(()=>{
+    if(!props?.openCloseToggleSideNav){
+      dispatch(isSidebarToggleEnabled(true));
+      setSidebarToggle(true);
+      document.querySelector(".main-nav")?.classList?.remove("on");
+    }
+  }, [props?.openCloseToggleSideNav]);
 
   const hangleRightClick = () => {
     handleClickRight(!mainMenu);
@@ -64,17 +86,22 @@ const RecentSection = (props) => {
 								onClick={() => hangleRightClick()}
 							></i>
 						</Link> */}
-              <Link
-                style={{
-                  marginTop: "10px",
-                }}
-                className={`icon-btn ml-3 button-effect pull-right mainnav  ${sidebarToggle ? "btn-primary" : "btn-outline-light"
-                  }`}
-                href="#"
-                onClick={() => { OpenCloseSidebar(sidebarToggle) }}
-              >
-                <i className="fa fa-bars" />
-              </Link>
+             <Link
+        style={{
+          marginTop: "10px",
+        }}
+        className={`icon-btn ml-3 button-effect pull-right mainnav  ${sidebarToggle ? "btn-primary" : "btn-outline-light"
+        }`}
+        href="#"
+        onClick={() => { OpenCloseSidebar(sidebarToggle) }}
+      >
+        <i className="fa fa-bars" />
+      </Link>
+
+      {/* Your sidebar component */}
+      <div className={`recent sidebar-toggle ${sidebarToggle ? 'open' : ''}`}>
+        {/* Sidebar content */}
+      </div>
             </div>
           )}
         </div>

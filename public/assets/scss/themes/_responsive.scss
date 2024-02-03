@@ -131,9 +131,9 @@
     font-size: 20px;
   }
 
-  .image-gallery {
-    min-height: 113vh !important;
-  }
+  // .image-gallery {
+  //   min-height: 113vh !important;
+  // }
 }
 
 @media (max-width:768px) {
@@ -1559,150 +1559,6 @@
   }
 }
 
-@media (max-width: 767px) {
-  .trainer-Pro {
-    display: block !important;
-  }
-
-  .card.rounded.trainer-profile-card {
-    width: 60% !important;
-    margin: auto;
-  }
-
-  .card.rounded.trainer-profile-card.Select {
-    margin-top: 10px !important;
-  }
-
-  .card.rounded.trainer-profile-card.Select.Recent.Student {
-    width: 100% !important;
-    margin: auto;
-  }
-
-  .card.rounded.trainer-profile-card.Select.Working.Hour {
-    width: 60% !important;
-    margin: auto;
-  }
-
-  // .calendar-container{
-  //   margin: 45px !important;
-  //   padding: 0;
-  // }
-  .Recent-Heading {
-    font-size: 16px;
-  }
-
-  .rc-time-picker.ml-2.mt-2.rounded {
-    margin-left: 0 !important;
-    margin-top: 0 !important;
-
-  }
-
-  .col-12.Save-button {
-    margin-top: 0 !important;
-  }
-
-  #timezone-offset {
-    margin-left: 0 !important;
-    margin-top: 0 !important;
-  }
-
-  .ml-2.From {
-    margin-bottom: 0 !important;
-    margin-top: 5px !important;
-  }
-
-  .ml-2.To {
-    margin-bottom: 0 !important;
-    margin-top: 5px !important;
-  }
-
-  .ml-2.TimeZone {
-    margin-bottom: 0 !important;
-    padding-top: 10px !important;
-  }
-
-  .calendar-container {
-    width: 95% !important;
-    margin-top: 16px !important;
-    margin-left: 11px !important;
-  }
-
-  .card-body.change-number {
-    margin: 4px !important;
-    margin-left: 10px !important;
-    width: 96% !important;
-  }
-
-  .timezone_offset {
-    width: 50vw !important;
-  }
-
-  .welcome-text {
-    text-align: center;
-  }
-
-  .Report {
-    margin-top: 0 !important;
-  }
-
-  .Content-Trainer {
-    display: block !important;
-  }
-
-  .bookings {
-    padding: 0 !important;
-  }
-
-  .custom-sidebar-content-booking {
-    width: 90% !important;
-  }
-
-  .image-gallery {
-    width: 100% !important;
-    justify-content: center !important;
-  }
-
-  .Stude-img {
-    width: 19vw !important;
-  }
-
-  .Recent-Heading {
-    font-size: 16px !important;
-  }
-
-  .card-body.Recent {
-    padding: 0 !important;
-  }
-
-  .card.trainer-profile-card.Home-main-Cont {
-    width: 40% !important;
-  }
-
-  #Nav-T {
-    margin: 11px !important;
-  }
-
-  .Trainer-box-1 {
-    width: 40% !important;
-  }
-
-  .card-body-Share-clip {
-    padding: 2px !important;
-  }
-
-  .Invite-freind {
-    padding: 16px !important;
-  }
-
-  .btn.btn-primary.btn-sm-Change-Picture {
-    padding: 11px 6px !important;
-  }
-
-}
-
-
-
-
 
 .active.nav-link:hover {
   background-color: white !important;
@@ -1909,16 +1765,7 @@
     }
   }
 
-  .theme-tab {
-    >.nav-tabs {
-      >.nav-item {
-        .nav-link {
-          padding: 12px 60px;
-          font-size: calc(14px + (22 - 14) * ((100vw - 320px) / (1920 - 320)));
-        }
-      }
-    }
-  }
+ 
 
   .chitchat-container {
     .main-nav {
@@ -3821,9 +3668,6 @@
     }
   }
 
-  .theme-tab>.nav-tabs>.nav-item .nav-link {
-    padding: 7px 40px;
-  }
 
   .chat-main {
     li {

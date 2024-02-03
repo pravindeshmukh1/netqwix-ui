@@ -11,12 +11,13 @@ import StudentRecord from "./StudentTab/StudentRecord";
 
 
 const menuItems = [
-  { label: 'Home', value: topNavbarOptions?.HOME, topNavbarTab: topNavbarOptions?.HOME, accessBy: [AccountType?.TRAINEE, AccountType?.TRAINER] },
-  { label: 'My Locker', value: 'file', leftSideBarTab: 'file', accessBy: [AccountType?.TRAINEE, AccountType?.TRAINER] },
+  { label: 'My Locker', value: topNavbarOptions?.HOME, topNavbarTab: topNavbarOptions?.HOME, accessBy: [AccountType?.TRAINEE, AccountType?.TRAINER] },
+  { label: 'My Uploads', value: 'file', leftSideBarTab: 'file', accessBy: [AccountType?.TRAINEE, AccountType?.TRAINER] },
   // { label: 'Upcoming Lessons', value: "scheduleTraining", leftSideBarTab: leftSideBarOptions?.SCHEDULE_TRAINING, accessBy: [] },
   { label: 'Book Lessons', value: topNavbarOptions?.BOOK_LESSON, topNavbarTab: topNavbarOptions?.BOOK_LESSON, accessBy: [AccountType?.TRAINEE,] },
   // { label: 'Upcoming Lessons', value: "scheduleTraining", leftSideBarTab: leftSideBarOptions?.SCHEDULE_TRAINING, accessBy: [AccountType?.TRAINEE] },
   { label: 'Students', value: 'Student', topNavbarTab: topNavbarOptions?.STUDENT, accessBy: [AccountType?.TRAINER] },
+  { label: 'Upcoming Session', value: 'Upcoming Session', topNavbarTab: topNavbarOptions?.UPCOMING_SESSION, accessBy: [AccountType?.TRAINER] },
   { label: 'My Community', value: "myCommunity", topNavbarTab: topNavbarOptions?.MY_COMMUNITY, accessBy: [AccountType?.TRAINEE, AccountType?.TRAINER] },
   { label: 'About Us', value: "aboutUs", topNavbarTab: topNavbarOptions?.ABOUT_US, accessBy: [AccountType?.TRAINEE, AccountType?.TRAINER] },
   { label: 'Contact Us', value: "contactUs", topNavbarTab: topNavbarOptions?.CONTACT_US, accessBy: [AccountType?.TRAINEE, AccountType?.TRAINER] },

@@ -14,7 +14,7 @@ $canvas-z-index: 8;
 }
 
 .trainee-dashboard {
-  position: absolute !important;
+  // position: absolute !important;
   display: flex;
   justify-content: center;
   width: -webkit-fill-available;
@@ -489,7 +489,7 @@ slick-slider .slick-list,
 // booking sections
 .bookings {
   padding: 30px;
-  width: 92vw;
+  width: 100%;
   overflow: auto;
 }
 

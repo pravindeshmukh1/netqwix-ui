@@ -353,7 +353,7 @@ export default function CalendarPage() {
 
   const toggle = () => {
     setModal(!modal)
-    // setData([])
+    setData([])
     getAllAvailability()
   };
 
@@ -467,6 +467,7 @@ export default function CalendarPage() {
         selectMirror={true}
         initialEvents={data}
         width={500}
+        height={680}
         timeZone={userTimeZone}
         dateClick={function (e) {
           var date = currentDateAndtime(e?.date)

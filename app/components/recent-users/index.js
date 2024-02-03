@@ -63,12 +63,13 @@ const RecentUsers = () => {
 
     return (
         <div className="card rounded trainer-profile-card Select Recent Student">
-            <div className="card-body Recent">
-                <div style={{ justifyContent: 'center' }}>
+             <div style={{ justifyContent: 'center' }}>
                     <h2 className="Recent-Heading" style={{ textAlign: 'center' }}>
                         Recent {accountType === AccountType?.TRAINER ? 'Students' : 'Friends'}
                     </h2>
                 </div>
+            <div className="card-body Recent" style={{maxHeight:'220px',overflow:'scroll'}}>
+               
                 <div className="row" style={{ justifyContent: 'center', paddingTop: '15px' }}>
                     <div
                         className="image-gallery"
@@ -78,8 +79,8 @@ const RecentUsers = () => {
                             paddingTop: '15px',
                             width: '100%',
                             justifyContent: 'center',
-                            overflowY: 'auto',
-                            maxHeight: '53vh',
+                            overflow:'scroll',
+                            
                         }}
                     >
                         {/* Render images dynamically */}
@@ -94,13 +95,13 @@ const RecentUsers = () => {
                                     key={index}
                                     src={item?.profile_picture}
                                     alt={`Recent Trainee ${index + 1}`}
-                                    style={{
-                                        maxWidth: '8vw',
-                                        maxHeight: '20vh',
-                                        marginBottom: '10px',
-                                        marginRight: '10px',
-                                        cursor: 'pointer'
-                                    }}
+                                    // style={{
+                                    //     maxWidth: '8vw',
+                                    //     maxHeight: '20vh',
+                                    //     marginBottom: '10px',
+                                    //     marginRight: '10px',
+                                    //     cursor: 'pointer'
+                                    // }}
                                     onClick={() => {
                                         handleStudentClick(item)
                                         SetselectedStudentData({ ...item })
@@ -116,13 +117,13 @@ const RecentUsers = () => {
                                 key={index}
                                 src={item}
                                 alt={`Recent Trainee ${index + 1}`}
-                                style={{
-                                    width: '6vw',
-                                    height: '20vh',
-                                    marginBottom: '10px',
-                                    marginRight: '10px',
-                                    cursor: 'pointer',
-                                }}
+                                // style={{
+                                //     width: '6vw',
+                                //     height: '20vh',
+                                //     marginBottom: '10px',
+                                //     marginRight: '10px',
+                                //     cursor: 'pointer',
+                                // }}
                                 onClick={() => handleStudentClick({ profile_picture: item })}
                             />
                         ))}

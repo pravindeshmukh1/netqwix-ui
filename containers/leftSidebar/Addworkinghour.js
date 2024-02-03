@@ -23,12 +23,12 @@ const Addworkinghour = () => {
   }, [userInfo]);
 
   return (
-    <div className="card-body change-number Home" >
+    <div className="card-body change-number" style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' , margin:'3px',maxWidth:'99%'}}>
       <h5>Add your working hours...</h5>
 
       <div className="row">
-        <div className="col-12 col-sm-12 col-md-12 col-lg-2" style={{ padding: 0 }}>
-          <p className="ml-2 From">From</p>
+      <div className="col-6 col-sm-3 col-md-3 col-lg-2">
+          <p className="ml-2" style={{paddingTop:'10px',margin:'auto'}}>From</p>
           <TimePicker
 
             name="from"
@@ -38,7 +38,7 @@ const Addworkinghour = () => {
             clearIcon={true}
             showSecond={false}
             minuteStep={5}
-            value={Utils.getFormattedTime(workingHours?.from)}
+            defaultValue={Utils.getFormattedTime(workingHours?.from)}
             // defaultValue={
             //   userInfo &&
             //     userInfo?.extraInfo &&
@@ -67,18 +67,18 @@ const Addworkinghour = () => {
           />
           {isTimeConflicts && (
             <label className="mt-2 ml-2 text-danger">
-              {Message.timeConflicts}
+              {/* {Message ? Message?.timeConflicts : ""} */}
             </label>
           )}
         </div>
-        <div className="col-12 col-sm-12 col-md-12 col-lg-2" style={{ padding: 0 }}>
-          <p className="ml-2 To">To</p>
+        <div className="col-6 col-sm-3 col-md-3 col-lg-2">
+        <p className="ml-2" style={{paddingTop:'10px',margin:'auto'}}>To</p>
           <TimePicker
             name="to"
             className={`ml-2 mt-2 ${isTimeConflicts ? `border border-danger` : ``
               }  rounded`}
             clearIcon={true}
-            value={Utils.getFormattedTime(workingHours?.to)}
+            defaultValue={Utils.getFormattedTime(workingHours?.to)}
             // defaultValue={
             //   userInfo &&
             //     userInfo?.extraInfo &&
@@ -109,17 +109,16 @@ const Addworkinghour = () => {
           />
           {isTimeConflicts && (
             <label className="mt-2 ml-2 text-danger">
-              {Message.timeConflicts}
+              {/* {Message ? Message?.timeConflicts : ""} */}
             </label>
           )}
         </div>
-        <div className="col-8 col-sm-8 col-md-8 col-lg-8">
-          <p className="ml-2 TimeZone">Time Zone</p>
+        <div className="col-6 col-sm-3 col-md-3 col-lg-2" style={{maxWidth:'30%'}}>
+          <p className="ml-2" style={{paddingTop:'10px',margin:'auto'}}>Time Zone</p>
           <select
             name="timezone_offset"
             id="timezone-offset"
-            style={{ marginRight: "10px", maxWidth: "100%" }}
-            className="timezone_offset mt-2 ml-2"
+            className="timezone_offset mt-2 ml-2" style={{maxWidth:'270px'}}
             value={workingHours?.time_zone}
             onChange={(event) => {
               const { value } = event.target;
@@ -138,7 +137,7 @@ const Addworkinghour = () => {
             })}
           </select>
         </div>
-        <div className="col-12 Save-button" style={{ marginTop: '10px' }}>
+        <div className="col-12">
           <button
             type="button"
             className="ml-2 btn btn-sm btn-primary"
@@ -163,7 +162,7 @@ const Addworkinghour = () => {
           </button>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 export default Addworkinghour;

@@ -24,6 +24,8 @@ import ContactUs from '../../app/components/contactUs';
 import { useMediaQuery } from '../../app/hook/useMediaQuery';
 import StudentRecord from '../../app/components/Header/StudentTab/StudentRecord';
 import { meetingRoom } from '../../app/components/bookings/BookingList';
+import Upcomingbooking from '../../app/components/bookings/UpcomingSession';
+import UpcomingSession from '../../app/components/bookings/UpcomingSession';
 const Dashboard = () => {
   const dispatch = useAppDispatch();
   const { sidebarActiveTab, topNavbarActiveTab } = useAppSelector(authState);
@@ -60,6 +62,9 @@ const Dashboard = () => {
       case topNavbarOptions?.STUDENT: {
         return <StudentRecord />;
       }
+      case topNavbarOptions?.UPCOMING_SESSION: {
+        return <UpcomingSession />;
+      }
       case topNavbarOptions?.ABOUT_US: {
         return <AboutUs />;
       }
@@ -89,7 +94,7 @@ const Dashboard = () => {
 
 
       case leftSideBarOptions.TOPNAVBAR: {
-        return <div id='get-navbar-tabs' className='get-navbar-tabs' style={{ marginLeft: "105px", width: "100%" }}>{getNavbarTabs()}</div>;
+        return <div id='get-navbar-tabs' className='get-navbar-tabs' >{getNavbarTabs()}</div>;
       }
 
       case leftSideBarOptions.SCHEDULE_TRAINING:

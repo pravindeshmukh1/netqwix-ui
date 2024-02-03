@@ -170,7 +170,7 @@ const UserInfoCard = () => {
                         src={URL.createObjectURL(selectedImage)}
                         alt="Selected"
                         className="selected-image"
-                        style={{ maxWidth: "200px", minWidth: "200px", minHeight: "200px", maxHeight: "200px" }}
+                        style={{ maxWidth: "200px", minWidth: "200px", minHeight: "200px", maxHeight: "200px"}}
                     />
                     <button className="icon-btn btn-sm btn-outline-light close-apps pointer position-absolute" style={{ right: "0px" }} onClick={handleRemovePreview}>
                         <X />
@@ -181,7 +181,7 @@ const UserInfoCard = () => {
                     src={displayedImage}
                     alt="trainer_image"
                     className="rounded"
-                    style={{ maxWidth: "200px", minWidth: "200px", minHeight: "200px", maxHeight: "200px" }}
+                    style={{ maxWidth: "200px", minWidth: "200px", minHeight: "200px", maxHeight: "200px" , border:"2px solid #000080" }}
                 />
             )}
             <div className="">

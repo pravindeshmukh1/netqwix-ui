@@ -183,7 +183,7 @@ const Index = (props) => {
     setActiveTab("");
   };
 
-  const isMobile = useMediaQuery(500)
+  const isMobile = useMediaQuery(450)
   const [openCloseToggleSideNav, setOpenCloseToggleSideNav] = useState(true)
 
   useEffect(() => {
@@ -195,7 +195,8 @@ const Index = (props) => {
     let lockerDrawer = document.querySelector(".custom-mobile-menu.active")
 
     if (lockerDrawer) {
-      lockerDrawer.style?.setProperty('left', openCloseToggleSideNav ? '100px' : '0px', 'important');
+      lockerDrawer.style?.setProperty('margin-left', '105px', ''); // Set margin-left to 105px
+      lockerDrawer.style?.setProperty('max-width', 'calc(100vw - 105px)', ''); // Set max-width to calc(100vw - 105px)
     }
     if (getBookings) {
       getBookings.style.marginLeft = openCloseToggleSideNav ? '105px' : "30px";
@@ -204,7 +205,11 @@ const Index = (props) => {
     //   getDashboard.style.marginLeft = openCloseToggleSideNav ? '105px' : "30px";
     // }
     if (getNavbarTabs) {
-      getNavbarTabs.style.marginLeft = openCloseToggleSideNav ? '105px' : "30px";
+      if (isMobile) {
+        getNavbarTabs.style.marginLeft ="100px";
+      } else {
+        getNavbarTabs.style.marginLeft = openCloseToggleSideNav ? '105px' : '30px';
+      }
     }
     if (customSidebarContentBooking) {
       customSidebarContentBooking?.style?.setProperty('left', openCloseToggleSideNav ? '100px' : '0px', 'important');
@@ -213,7 +218,7 @@ const Index = (props) => {
 
   useEffect(() => {
     if (isMobile) {
-      setOpenCloseToggleSideNav(false)
+      setOpenCloseToggleSideNav(true)
     } else {
       setOpenCloseToggleSideNav(true)
     }
@@ -290,7 +295,8 @@ const Index = (props) => {
           </ul> */}
               <ul className="sidebar-top">
                 <li>
-                  <Tooltip title="Home" position="top" trigger="mouseenter">
+                  <Tooltip title="My Locker" position="top-end"
+                      size="small" trigger="mouseenter">
                     <NavLink id="sidebar-item-home"
                       className={`icon-btn btn-light button-effect ${activeTab === topNavbarOptions?.HOME ? "active" : ""
                         }`}
@@ -299,7 +305,7 @@ const Index = (props) => {
                       <i className="fa fa-home" />
                     </NavLink>
                   </Tooltip>
-                  <p className="menu-name">Home</p>
+                  <p className="menu-name">My Locker</p>
                 </li>
                 {accountType === AccountType.TRAINEE && <li>
                   <Tooltip
@@ -342,7 +348,8 @@ const Index = (props) => {
                   <p className="menu-name">Book Lessons</p>
                 </li>}
                 <li>
-                  <Tooltip title="Locker" position="top" trigger="mouseenter">
+                  <Tooltip title="My Uploads"  position="top-end"
+                      size="small" trigger="mouseenter">
                     <NavLink id="sidebar-item-locker"
                       className={`icon-btn btn-light button-effect step2 ${activeTab === "file" ? "active" : ""
                         }`}
@@ -356,7 +363,7 @@ const Index = (props) => {
                       {/* <i className="fa fa-lock" /> */}
                     </NavLink>
                   </Tooltip>
-                  <p className="menu-name">Locker</p>
+                  <p className="menu-name">My Uploads</p>
                 </li>
                 {/* <li>
               <Tooltip title="Chats" position="top" trigger="mouseenter">
@@ -447,6 +454,33 @@ const Index = (props) => {
                 </NavLink>
               </Tooltip>
             </li> */}
+
+                  {accountType === AccountType?.TRAINER && <li>
+                  <Tooltip title="Upcoming Sessions" trigger="mouseenter" position="top-end" size="small"
+                    >
+                    <NavLink id="sidebar-item-upcoming"
+                      className={`icon-btn btn-light button-effect step2 ${activeTab === topNavbarOptions?.UPCOMING_SESSION ? "active" : ""
+                        }`}
+                      onClick={() => { dispatch(authAction?.setTopNavbarActiveTab(topNavbarOptions?.UPCOMING_SESSION)) }}
+                      data-intro=""
+                    >
+                      {activeTab === topNavbarOptions?.UPCOMING_SESSION
+                        ? <img src={"../assets/images/online-lesson-white.png"} alt="Book Lesson" style={{ width: 20 }} />
+                        : <img src={"../assets/images/online-lesson.png"} alt="Book Lesson" style={{ width: 20 }} />
+                      }
+
+                    </NavLink>
+                  </Tooltip>
+                  <p className="menu-name">Upcoming Sessions</p>
+                </li>}
+
+
+
+
+
+
+
+
 
                 <li>
                   <div className="dot-btn dot-danger grow">
@@ -548,9 +582,12 @@ const Index = (props) => {
               </ul> */}
             </div>
           </aside>}
-        {!isMobile ? openCloseToggleSideNav ?
+        {openCloseToggleSideNav ?
           <ChevronLeft id="ChevronLeft" style={{ left: "79px" }} className="collapse-left-drawer-icon" onClick={() => setOpenCloseToggleSideNav(false)} /> :
-          <ChevronRight id="ChevronRight" style={{ left: "0px" }} className="collapse-left-drawer-icon" onClick={() => setOpenCloseToggleSideNav(true)} /> : null}
+          !isMobile &&  <ChevronRight id="ChevronRight" style={{ left: "0px" }} className="collapse-left-drawer-icon" onClick={() => setOpenCloseToggleSideNav(true)} /> }
+          
+          
+
 
       </div>
       {activeTab !== leftSideBarOptions.HOME &&

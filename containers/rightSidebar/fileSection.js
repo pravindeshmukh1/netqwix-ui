@@ -310,7 +310,7 @@ const FileSection = (props) => {
                           }}
                         >
                           <Tooltip title={clp?.title} position="top" trigger="mouseenter">
-                            <video style={{ width: "5vw", height: "9vh" }}  >
+                            <video className="Sidebar-video" style={{ maxHeight:'60px',maxWidth:'140px',minWidth:'140px',minHeight:'60px' }}  >
                               <source src={Utils?.generateVideoURL(clp)} type="video/mp4" />
                             </video>
                           </Tooltip>
@@ -357,7 +357,7 @@ const FileSection = (props) => {
                           }}
                         >
                           <Tooltip title={clp?.clips?.title} position="top" trigger="mouseenter">
-                            <video style={{ width: "80%", height: "80%" }}  >
+                            <video style={{ maxHeight:'60px',maxWidth:'140px',minWidth:'140px',minHeight:'60px' }} >
                               <source src={Utils?.generateVideoURL(clp?.clips)} type="video/mp4" />
                             </video>
                           </Tooltip>
