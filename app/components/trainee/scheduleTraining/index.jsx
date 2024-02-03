@@ -1043,7 +1043,7 @@ const ScheduleTraining = () => {
         <h2>Recommended</h2>
         <div className="Recommended" style={{ display: "flex", flexDirection: "row" }}>
           <TrainerSlider list={trainers} isRecommended={true} />
-          <div className='card trainer-profile-card Home-main-Cont' style={{ height: "100%", width: "100%" , maxWidth:'300px',margin:'auto'}}>
+          <div className='card trainer-profile-card Home-main-Cont' style={{ height: "100%", width: "100%", maxWidth: '300px', margin: 'auto' }}>
             <div className='card-body'>
               <ShareClipsCard />
             </div>
@@ -1355,6 +1355,8 @@ const ScheduleTraining = () => {
                                   booked_date: startDate,
                                   session_start_time: start_time,
                                   session_end_time: end_time,
+                                  start_time: slot?.start_time,
+                                  end_time: slot?.end_time,
                                 };
                                 setBookSessionPayload(payload);
                                 dispatch(
@@ -1364,8 +1366,6 @@ const ScheduleTraining = () => {
                                 );
                               }
                             }
-
-
                           }}
                         >
                           Book Slot Now
@@ -1471,6 +1471,11 @@ const ScheduleTraining = () => {
                               "The specified time has elapsed. Please select another time..."
                             );
                           } else {
+                            var date = new Date(startDate).toISOString().split("T")[0];
+                            var dateArr = date?.split("-");
+                            let start_time_date = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), Number(timeRange?.startTime?.split(":")[0]), Number(timeRange?.startTime?.split(":")[1]), 0, 0)?.toISOString()
+                            let end_time_date = new Date(Number(dateArr[0]), Number(dateArr[1]) - 1, Number(dateArr[2]), Number(timeRange?.endTime?.split(":")[0]), Number(timeRange?.endTime?.split(":")[1]), 0, 0)?.toISOString()
+
                             const payload = {
                               charging_price: amountPayable,
                               trainer_id:
@@ -1484,6 +1489,8 @@ const ScheduleTraining = () => {
                               booked_date: startDate,
                               session_start_time: timeRange.startTime,
                               session_end_time: timeRange.endTime,
+                              start_time: start_time_date,
+                              end_time: end_time_date,
                             };
                             setBookSessionPayload(payload);
                             dispatch(

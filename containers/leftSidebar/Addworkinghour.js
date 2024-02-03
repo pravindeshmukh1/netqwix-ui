@@ -23,12 +23,12 @@ const Addworkinghour = () => {
   }, [userInfo]);
 
   return (
-    <div className="card-body change-number" style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' , margin:'3px',maxWidth:'99%'}}>
+    <div className="card-body change-number" style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', margin: '3px', maxWidth: '99%' }}>
       <h5>Add your working hours...</h5>
 
       <div className="row">
-      <div className="col-6 col-sm-3 col-md-3 col-lg-2">
-          <p className="ml-2" style={{paddingTop:'10px',margin:'auto'}}>From</p>
+        <div className="col-6 col-sm-3 col-md-3 col-lg-2" style={{ padding: "0px 10px" }}>
+          <p className="ml-2" style={{ paddingTop: '10px', margin: 'auto' }}>From</p>
           <TimePicker
 
             name="from"
@@ -71,8 +71,8 @@ const Addworkinghour = () => {
             </label>
           )}
         </div>
-        <div className="col-6 col-sm-3 col-md-3 col-lg-2">
-        <p className="ml-2" style={{paddingTop:'10px',margin:'auto'}}>To</p>
+        <div className="col-6 col-sm-3 col-md-3 col-lg-2" style={{ padding: "0px 10px" }}>
+          <p className="ml-2" style={{ paddingTop: '10px', margin: 'auto' }}>To</p>
           <TimePicker
             name="to"
             className={`ml-2 mt-2 ${isTimeConflicts ? `border border-danger` : ``
@@ -113,12 +113,12 @@ const Addworkinghour = () => {
             </label>
           )}
         </div>
-        <div className="col-6 col-sm-3 col-md-3 col-lg-2" style={{maxWidth:'30%'}}>
-          <p className="ml-2" style={{paddingTop:'10px',margin:'auto'}}>Time Zone</p>
+        <div className="col-6 col-sm-3 col-md-3 col-lg-2" style={{ maxWidth: '30%' }}>
+          <p className="ml-2" style={{ paddingTop: '10px', margin: 'auto' }}>Time Zone</p>
           <select
             name="timezone_offset"
             id="timezone-offset"
-            className="timezone_offset mt-2 ml-2" style={{maxWidth:'270px'}}
+            className="timezone_offset mt-2 ml-2" style={{ maxWidth: '270px' }}
             value={workingHours?.time_zone}
             onChange={(event) => {
               const { value } = event.target;
