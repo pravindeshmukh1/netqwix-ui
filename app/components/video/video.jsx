@@ -27,6 +27,12 @@ import axios from "axios";
 import { createReport, cropImage, getReport, removeImage, screenShotTake } from "../videoupload/videoupload.api";
 import ReportModal from "./reportModal";
 import { Utils } from "../../../utils/utils";
+import RecordRTC from 'recordrtc';
+import ScreenRecording from "./ScreeRecording";
+import { ScreenRecordingInterface } from "./VideoRecorder";
+import ScreenRecorder from "./ScreenRecorder";
+
+
 
 let storedLocalDrawPaths = { sender: [], receiver: [] };
 let selectedShape = null;
@@ -97,6 +103,11 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
 
   const volumeInputRef = useRef(null);
   const volumeInputRef2 = useRef(null);
+
+
+  const [recorder, setRecorder] = useState(null);
+  const [isRecording, setIsRecording] = useState(false);
+
 
   useEffect(() => {
     console.log(`fromUser && toUser --- `, fromUser, toUser);
@@ -1003,6 +1014,11 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
   const renderCallActionButtons = () => {
     return (
       <div className="call-action-buttons z-50 my-3 " >
+       <div>
+       <ScreenRecording />
+       {/* <ScreenRecordingInterface /> */}
+       {/* <ScreenRecorder /> */}
+        </div>
         <div
           className={`icon-btn ${isMuted ? "btn-danger" : "btn-light"
             } ${mediaQuery.matches ? "btn-xl" : "btn-sm"} button-effect mic`}
@@ -1122,9 +1138,11 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
             </Button>
           </ModalFooter>
         </Modal>
-      </div >
+      </div>
     );
   };
+
+
 
   useEffect(() => {
     socket.emit(EVENTS.ON_VIDEO_SELECT, {
@@ -1542,8 +1560,8 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
                     />
                   </div>
 
-                </div >
-              </div >
+                </div>
+              </div>
             }
             <div id="user-video-1" className={selectedClips?.length != 0 && mediaQuery.matches && "scs"}>
               <video ref={remoteVideoRef} playsInline autoPlay className="rounded " style={{ width: '100%', height: selectedClips?.length === 0 && 450 }} id="end-user-video" />
@@ -1552,7 +1570,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
               {videoRef && (<video id="end-user-video" playsInline muted className="rounded " style={{ width: '100%' }} ref={videoRef} autoPlay />)}
             </div>
             {renderCallActionButtons()}
-          </div >
+          </div>
         }
 
 
@@ -1721,7 +1739,7 @@ export const HandleVideoCall = ({ id, accountType, fromUser, toUser, isClose }) 
             </>
           }
         /> */}
-      </div >
-    </React.Fragment >
+      </div>
+    </React.Fragment>
   );
 };
